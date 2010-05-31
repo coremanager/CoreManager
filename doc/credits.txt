@@ -1,0 +1,49 @@
+CoreManager Project Team:
+- this_is_junk
+
+
+THANKS:
+
+- CoreManager is based off ArcManager which was based off MiniManager. https://www.ohloh.net/p/arcmanager
+
+- To the ArcManager, MaNGOS, and Trinity Core project teams.
+
+- The MiniManager Team for providing the original work http://mangos.osh.nu/forums/
+
+- BBCode to HTML parser by Louai Munajim from http://elouai.com/scripts.php
+
+- GeoLite Country database by MaxMind from http://www.maxmind.com/
+
+- Mark James of famfamfam.com for the beautiful Flags set & `Mini` icons. http://famfamfam.com/
+
+- Captcha Security Images by Simon Jarvis from http://www.white-hat-web-design.co.uk/articles/php-captcha.php
+
+- reCAPTCHA Captcha Tool from http://recaptcha.net/
+
+- PHPMailer by codeworxtech from http://phpmailer.sourceforge.net/
+
+- JavaScript implementation of SHA-1 by Paul Johnston from http://pajhome.org.uk/crypt/md5/
+
+- Javascript tabs based on function by Jonathan Hedley from http://jonathanhedley.com/
+
+- getBrowserWidth javascript based on function by Cameron Adams from http://themaninblue.com/
+
+- changeLayout javascript based on function by Paul Sowdon from http://www.alistapart.com/articles/alternate/
+
+- Dynamic Resolution Dependent Layout based on javascript from http://particletree.com/
+
+- Js-ToolTip based on javascript by Gerd Tentler from http://www.gerd-tentler.de/tools/
+
+- IRC java applet by Plouf from http://www.pjirc.com/
+
+- SSH/Telnet terminal by Matthias L. Jugel and Marcus Meiﬂner (no longer used) from http://www.javassh.org/
+
+- PHPTelnet by Antone Roundy (no longer used).
+
+- ip2nation database by Per Gustafsson (no longer used) from http://www.ip2nation.com/
+
+
+LANGUAGE PACK TRANSLATORS:
+
+- German -- Marcus <Knight>
+- Persian -- Lurker

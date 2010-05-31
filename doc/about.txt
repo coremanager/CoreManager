@@ -1,0 +1,53 @@
+CoreManager for ArcEmu, MaNGOS, and Trinity Core Servers
+
+
+ABOUT:
+
+   CoreManager is a PHP, web front end for Multiple Cores that
+ provides easy access to managing MMORPG servers. Manage/add/remove/edit/
+ mute/ban/etc. user accounts, characters, database and server itself.
+ It is a small, easy to use, flexible tool.
+
+   CoreManager uses data on databases provided by the server core, but it also
+ requires additional data provided in /SQL/ folder.
+
+   The user Security Level is NOT based on the accounts' gm level from the server core.
+ Highest access level, by CoreManager default is 4 (SysOp).
+ Default page configuration allows players to view most pages, all as read-only,
+ while SysOp level has full access.
+ 
+   If you like CoreManager, add yourself as a user on Ohloh. (https://www.ohloh.net/p/CoreManager)
+
+
+TECHNICAL NOTES:
+
+ Developed and tested with:
+  Debian GNU/Linux 5.0.2 / Mandriva Linux 2008 Spring / Windows XP SP3 / Windows 2003 SP2
+  MySQL 5.0.51a / 5.0.67 / 5.1.36
+  Apache 2.2.8 / 2.2.11 / NetworkActiv-Web-Server 3.5.16
+  PHP 5.2.5 / 5.2.10
+  Opera 9.62 / 10
+  FireFox 3.5.2
+  Maxthon 1.6.5
+  IE 8.0.6
+  Java SE 5.0
+  TextPad 5.2.0 / 5.3.1
+
+LICENSE
+/*
+    CoreManager, PHP Front End for ArcEmu, MaNGOS, and TrinityCore
+    Copyright (C) 2010  CoreManager Project
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
