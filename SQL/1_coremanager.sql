@@ -275,6 +275,7 @@ CREATE TABLE `config_servers` (
 
 LOCK TABLES `config_servers` WRITE;
 /*!40000 ALTER TABLE `config_servers` DISABLE KEYS */;
+INSERT INTO `config_servers` VALUES (1,'127.0.0.1',8129,1,'./stats.xml');
 /*!40000 ALTER TABLE `config_servers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -301,6 +302,29 @@ LOCK TABLES `config_top_menus` WRITE;
 /*!40000 ALTER TABLE `config_top_menus` DISABLE KEYS */;
 INSERT INTO `config_top_menus` VALUES (0,'index.php','main'),(1,'#','tools'),(3,'#','system'),(4,'#','invisible');
 /*!40000 ALTER TABLE `config_top_menus` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `config_valid_ip_mask`
+--
+
+DROP TABLE IF EXISTS `config_valid_ip_mask`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `config_valid_ip_mask` (
+  `Index` int(11) NOT NULL DEFAULT '0',
+  `ValidIPMask` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`Index`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `config_valid_ip_mask`
+--
+
+LOCK TABLES `config_valid_ip_mask` WRITE;
+/*!40000 ALTER TABLE `config_valid_ip_mask` DISABLE KEYS */;
+/*!40000 ALTER TABLE `config_valid_ip_mask` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -498,6 +522,7 @@ CREATE TABLE `realmlist` (
 
 LOCK TABLES `realmlist` WRITE;
 /*!40000 ALTER TABLE `realmlist` DISABLE KEYS */;
+INSERT INTO `realmlist` VALUES (1,'DEFAULT','127.0.0.1',8129,1,0,2,0,0);
 /*!40000 ALTER TABLE `realmlist` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
