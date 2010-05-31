@@ -35,6 +35,11 @@ else
   exit('<center><br><code>\'scripts/config.php\'</code> not found,<br>
         please copy <code>\'scripts/config.dist.php\'</code> to
         <code>\'scripts/config.php\'</code> and make appropriate changes.');
+        
+//----------------- Make sure a valid core has been selected ------------------
+
+if ( ( $core < 1 ) || ( $core > 3 ) )
+  die("Invalid Core selected.");
 
 //---------------------Error reports for Debugging-----------------------------
 if ($debug) $tot_queries = 0;
