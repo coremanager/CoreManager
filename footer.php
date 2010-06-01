@@ -54,25 +54,6 @@
           <!-- start of footer.php -->
           </div>
         <div id="body_bottom">';
-  // show login and register button at bottom of every page if guest mode is activated
-  if($allow_anony && empty($_SESSION['logged_in']))
-  {
-    //$lang_login = lang_login();
-    $output .= '
-          <center>
-            <table>
-              <tr>
-                <td>
-                  <a class="button" id="footer_register_login" href="register.php">Register</a>
-                  <a class="button" id="footer_register_login" href="login.php">Login</a>
-                </td>
-              </tr>
-            </table>
-            <br />
-          </center>';
-    //unset($lang_login);
-    unset($allow_anony);
-  }
   $output .= '
           <table class="table_bottom">
             <tr>

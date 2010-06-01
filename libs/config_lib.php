@@ -23,14 +23,6 @@ require_once 'db_lib.php';
 $sqlm = new SQL;
 $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
 
-$show_version['show']        = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Show_Version_Show"'), 0, "Value");
-$show_version['version']     = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Show_Version_Version"'), 0, "Value");
-$show_version['version_lvl'] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Show_Version_Version_Lvl"'), 0, "Value");
-$show_version['svnrev']      = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Show_Version_SVNRev"'), 0, "Value");
-$show_version['svnrev_lvl']  = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Show_Version_SVNRev_Lvl"'), 0, "Value");
-
-$sql_search_limit = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "SQL_Search_Limit"'), 0, "Value");
-
 $temp = $sqlm->fetch_assoc($sqlm->query('SELECT * FROM config_dbc_database'));
 $dbc_db['addr']     = $temp["Address"].":".$temp["Port"];
 $dbc_db['user']     = $temp["User"];
@@ -77,112 +69,11 @@ while ($servers = $sqlm->fetch_assoc($temp))
   $server[$servers['Index']]['stats.xml']     = $servers["Stats_XML"];
 }
 
-$admin_mail  = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Mail_Admin_Email"'), 0, "Value");
-$mailer_type = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Mail_Mailer_Type"'), 0, "Value");
-$from_mail   = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Mail_From_Email"'), 0, "Value");
-$GMailSender = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Mail_GMailSender"'), 0, "Value");
-
-$from_char   = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "PM_From_Char"'), 0, "Value");
-$stationary  = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Show_Version_Show"'), 0, "Value");
-
-$smtp_cfg['host'] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "SMTP_Host"'), 0, "Value");
-$smtp_cfg['port'] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "SMTP_Port"'), 0, "Value");
-$smtp_cfg['user'] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "SMTP_User"'), 0, "Value");
-$smtp_cfg['pass'] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "SMTP_Pass"'), 0, "Value");
-
-$irc_cfg['server']  = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "IRC_Server"'), 0, "Value");
-$irc_cfg['port']    = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "IRC_Port"'), 0, "Value");
-$irc_cfg['channel'] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "IRC_Channel"'), 0, "Value");
-$irc_cfg['helppage'] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "IRC_HelpPage"'), 0, "Value");
-
-$proxy_cfg['addr'] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Proxy_Addr"'), 0, "Value");
-$proxy_cfg['port'] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Proxy_Port"'), 0, "Value");
-$proxy_cfg['user'] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Proxy_User"'), 0, "Value");
-$proxy_cfg['pass'] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Proxy_Pass"'), 0, "Value");
-
-$item_datasite        = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Datasite_Item"'), 0, "Value");
-$quest_datasite       = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Datasite_Quest"'), 0, "Value");
-$creature_datasite    = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Datasite_Creature"'), 0, "Value");
-$spell_datasite       = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Datasite_Spell"'), 0, "Value");
-$skill_datasite       = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Datasite_Skill"'), 0, "Value");
-$go_datasite          = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Datasite_GO"'), 0, "Value");
-$achievement_datasite = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Datasite_Achievement"'), 0, "Value");
-
-$item_icons           = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Item_Icons"'), 0, "Value");
-
-$disable_acc_creation  = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Disable_Acc_Creation"'), 0, "Value");
-$expansion_select      = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Expansion_Select"'), 0, "Value");
-$defaultoption         = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Default_Expansion"'), 0, "Value");
-$enable_captcha        = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Enabled_Captcha"'), 0, "Value");
-$use_recaptcha         = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Use_Recaptcha"'), 0, "Value");
-$recaptcha_public_key  = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Recaptcha_Public_Key"'), 0, "Value");
-$recaptcha_private_key = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Recaptcha_Private_Key"'), 0, "Value");
-
-$send_mail_on_creation = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Send_Mail_On_Creation"'), 0, "Value");
-$format_mail_html      = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Format_Mail_HTML"'), 0, "Value");
-$validate_mail_host    = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Validate_Mail_Host"'), 0, "Value");
-$limit_acc_per_ip      = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Limit_Acc_Per_IP"'), 0, "Value");
-
 $temp = $sqlm->query('SELECT * FROM config_valid_ip_mask');
 while ($mask = $sqlm->fetch_assoc($temp))
 {
   $valid_ip_mask[$mask['Index']] = $mask['ValidIPMask'];
 }
-
-$remember_me_checked  = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Remember_Me_Checked"'), 0, "Value");
-
-$allow_anony         = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Allow_Anony"'), 0, "Value");
-$anony_uname         = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Anony_Name"'), 0, "Value");
-$anony_realm_id      = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Anony_Realm_ID"'), 0, "Value");
-
-$title               = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Site_Title"'), 0, "Value");
-
-$itemperpage         = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Item_Per_Page"'), 0, "Value");
-$showcountryflag     = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Show_Country_Flags"'), 0, "Value");
-
-$theme               = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Default_Theme"'), 0, "Value");
-$language            = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Default_Language"'), 0, "Value");
-$timezone            = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Timezone"'), 0, "Value");
-$gm_online           = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "GM_Online"'), 0, "Value");
-$gm_online_count     = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "GM_Online_Count"'), 0, "Value");
-
-$hide_max_players    = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Hide_Max_Players"'), 0, "Value");
-$hide_avg_latency    = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Hide_Avg_Latency"'), 0, "Value");
-$hide_server_mem     = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Hide_Server_Mem"'), 0, "Value");
-$hide_plr_latency    = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Hide_Plr_Latency"'), 0, "Value");
-
-$quest_item['levelMul'] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Quest_Item_Vendor_Level_Mul"'), 0, "Value");
-$quest_item['rewMul']   = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Quest_Item_Vendor_Rew_Mul"'), 0, "Value");
-
-$ultra_mult[0] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Ultra_Vendor_Mult_0"'), 0, "Value");
-$ultra_mult[1] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Ultra_Vendor_Mult_1"'), 0, "Value");
-$ultra_mult[2] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Ultra_Vendor_Mult_2"'), 0, "Value");
-$ultra_mult[3] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Ultra_Vendor_Mult_3"'), 0, "Value");
-$ultra_mult[4] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Ultra_Vendor_Mult_4"'), 0, "Value");
-$ultra_mult[5] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Ultra_Vendor_Mult_5"'), 0, "Value");
-$ultra_mult[6] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Ultra_Vendor_Mult_6"'), 0, "Value");
-$ultra_mult[7] = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Ultra_Vendor_Mult_7"'), 0, "Value");
-$ultra_base    = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Ultra_Vendor_Base"'), 0, "Value");
-
-$map_gm_show_online_only_gmoff     = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Map_GM_Show_Online_Only_GMOff"'), 0, "Value");
-$map_gm_show_online_only_gmvisible = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Map_GM_Show_Online_Only_GMVisible"'), 0, "Value");
-$map_gm_add_suffix                 = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Map_GM_Add_Suffix"'), 0, "Value");
-$map_status_gm_include_all         = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Map_Status_GM_Include_All"'), 0, "Value");
-
-$map_show_status = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Map_Show_Status"'), 0, "Value");
-$map_show_time   = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Map_Show_Timer"'), 0, "Value");
-$map_time        = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Map_Timer"'), 0, "Value");
-
-$map_show_online = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Map_Show_Online"'), 0, "Value");
-
-$map_time_to_show_uptime    = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Map_Time_To_Show_Uptime"'), 0, "Value");
-$map_time_to_show_maxonline = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Map_Time_To_Show_MaxOnline"'), 0, "Value");
-$map_time_to_show_gmonline  = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Map_Time_To_Show_GMOnline"'), 0, "Value");
-
-$locales_search_option = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Language_Locales_Search_Option"'), 0, "Value");
-$site_encoding         = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Language_Site_Encoding"'), 0, "Value");
-
-$backup_dir = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Backup_Dir"'), 0, "Value");
 
 $temp = $sqlm->query('SELECT * FROM config_gm_level_names');
 while ($levels = $sqlm->fetch_assoc($temp))
@@ -221,9 +112,447 @@ while ($tmenus = $sqlm->fetch_assoc($temp))
   array_push($menu_array, $top);
 }
 
-$debug = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Debug"'), 0, "Value");
-
-$developer_test_mode = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Test_Mode"'), 0, "Value");
-$multi_realm_mode    = $sqlm->result($sqlm->query('SELECT * FROM config_misc WHERE `Key` = "Multi_Realm"'), 0, "Value");
+$misc = $sqlm->query("SELECT * FROM config_misc");
+while ( $misc_row = $sqlm->fetch_assoc($misc) )
+{
+  switch ( $misc_row['Key'] )
+  {
+    case "Show_Version_Show":
+    {
+      $show_version['show'] = $misc_row['Value'];
+      break;
+    }
+    case "Show_Version_Version":
+    {
+      $show_version['version'] = $misc_row['Value'];
+      break;
+    }
+    case "Show_Version_Version_Lvl":
+    {
+      $show_version['version_lvl'] = $misc_row['Value'];
+      break;
+    }
+    case "Show_Version_SVNRev":
+    {
+      $show_version['svnrev'] = $misc_row['Value'];
+      break;
+    }
+    case "Show_Version_SVNRev_Lvl":
+    {
+      $show_version['svnrev_lvl'] = $misc_row['Value'];
+      break;
+    }
+    case "SQL_Search_Limit":
+    {
+      $sql_search_limit = $misc_row['Value'];
+      break;
+    }
+    case "Mail_Admin_Email":
+    {
+      $admin_mail = $misc_row['Value'];
+      break;
+    }
+    case "Mail_Mailer_Type":
+    {
+      $mailer_type = $misc_row['Value'];
+      break;
+    }
+    case "Mail_From_Email":
+    {
+      $from_mail = $misc_row['Value'];
+      break;
+    }
+    case "Mail_GMailSender":
+    {
+      $GMailSender = $misc_row['Value'];
+      break;
+    }
+    case "PM_From_Char":
+    {
+      $from_char = $misc_row['Value'];
+      break;
+    }
+    case "Show_Version_Show":
+    {
+      $stationary = $misc_row['Value'];
+      break;
+    }
+    case "SMTP_Host":
+    {
+      $smtp_cfg['host'] = $misc_row['Value'];
+      break;
+    }
+    case "SMTP_Port":
+    {
+      $smtp_cfg['port'] = $misc_row['Value'];
+      break;
+    }
+    case "SMTP_User":
+    {
+      $smtp_cfg['user'] = $misc_row['Value'];
+      break;
+    }
+    case "SMTP_Pass":
+    {
+      $smtp_cfg['pass'] = $misc_row['Value'];
+      break;
+    }
+    case "IRC_Server":
+    {
+      $irc_cfg['server'] = $misc_row['Value'];
+      break;
+    }
+    case "IRC_Port":
+    {
+      $irc_cfg['port'] = $misc_row['Value'];
+      break;
+    }
+    case "IRC_Channel":
+    {
+      $irc_cfg['channel'] = $misc_row['Value'];
+      break;
+    }
+    case "IRC_HelpPage":
+    {
+      $irc_cfg['helppage'] = $misc_row['Value'];
+      break;
+    }
+    case "Proxy_Addr":
+    {
+      $proxy_cfg['addr'] = $misc_row['Value'];
+      break;
+    }
+    case "Proxy_Port":
+    {
+      $proxy_cfg['port'] = $misc_row['Value'];
+      break;
+    }
+    case "Proxy_User":
+    {
+      $proxy_cfg['user'] = $misc_row['Value'];
+      break;
+    }
+    case "Proxy_Pass":
+    {
+      $proxy_cfg['pass'] = $misc_row['Value'];
+      break;
+    }
+    case "Datasite_Item":
+    {
+      $item_datasite = $misc_row['Value'];
+      break;
+    }
+    case "Datasite_Quest":
+    {
+      $quest_datasite = $misc_row['Value'];
+      break;
+    }
+    case "Datasite_Creature":
+    {
+      $creature_datasite = $misc_row['Value'];
+      break;
+    }
+    case "Datasite_Spell":
+    {
+      $spell_datasite = $misc_row['Value'];
+      break;
+    }
+    case "Datasite_Skill":
+    {
+      $skill_datasite = $misc_row['Value'];
+      break;
+    }
+    case "Datasite_GO":
+    {
+      $go_datasite = $misc_row['Value'];
+      break;
+    }
+    case "Datasite_Achievement":
+    {
+      $achievement_datasite = $misc_row['Value'];
+      break;
+    }
+    case "Item_Icons":
+    {
+      $item_icons = $misc_row['Value'];
+      break;
+    }
+    case "Disable_Acc_Creation":
+    {
+      $disable_acc_creation = $misc_row['Value'];
+      break;
+    }
+    case "Expansion_Select":
+    {
+      $expansion_select = $misc_row['Value'];
+      break;
+    }
+    case "Default_Expansion":
+    {
+      $defaultoption = $misc_row['Value'];
+      break;
+    }
+    case "Enabled_Captcha":
+    {
+      $enable_captcha = $misc_row['Value'];
+      break;
+    }
+    case "Use_Recaptcha":
+    {
+      $use_recaptcha = $misc_row['Value'];
+      break;
+    }
+    case "Recaptcha_Public_Key":
+    {
+      $recaptcha_public_key = $misc_row['Value'];
+      break;
+    }
+    case "Recaptcha_Private_Key":
+    {
+      $recaptcha_private_key = $misc_row['Value'];
+      break;
+    }
+    case "Send_Mail_On_Creation":
+    {
+      $send_mail_on_creation = $misc_row['Value'];
+      break;
+    }
+    case "Format_Mail_HTML":
+    {
+      $format_mail_html = $misc_row['Value'];
+      break;
+    }
+    case "Validate_Mail_Host":
+    {
+      $validate_mail_host = $misc_row['Value'];
+      break;
+    }
+    case "Limit_Acc_Per_IP":
+    {
+      $limit_acc_per_ip = $misc_row['Value'];
+      break;
+    }
+    case "Remember_Me_Checked":
+    {
+      $remember_me_checked = $misc_row['Value'];
+      break;
+    }
+    case "Allow_Anony":
+    {
+      $allow_anony = $misc_row['Value'];
+      break;
+    }
+    case "Anony_Name":
+    {
+      $anony_uname = $misc_row['Value'];
+      break;
+    }
+    case "Anony_Realm_ID":
+    {
+      $anony_realm_id = $misc_row['Value'];
+      break;
+    }
+    case "Site_Title":
+    {
+      $title = $misc_row['Value'];
+      break;
+    }
+    case "Item_Per_Page":
+    {
+      $itemperpage = $misc_row['Value'];
+      break;
+    }
+    case "Show_Country_Flags":
+    {
+      $showcountryflag = $misc_row['Value'];
+      break;
+    }
+    case "Default_Theme":
+    {
+      $theme = $misc_row['Value'];
+      break;
+    }
+    case "Default_Language":
+    {
+      $language = $misc_row['Value'];
+      break;
+    }
+    case "Timezone":
+    {
+      $timezone = $misc_row['Value'];
+      break;
+    }
+    case "GM_Online":
+    {
+      $gm_online = $misc_row['Value'];
+      break;
+    }
+    case "GM_Online_Count":
+    {
+      $gm_online_count = $misc_row['Value'];
+      break;
+    }
+    case "Hide_Max_Players":
+    {
+      $hide_max_players = $misc_row['Value'];
+      break;
+    }
+    case "Hide_Avg_Latency":
+    {
+      $hide_avg_latency = $misc_row['Value'];
+      break;
+    }
+    case "Hide_Server_Mem":
+    {
+      $hide_server_mem = $misc_row['Value'];
+      break;
+    }
+    case "Hide_Plr_Latency":
+    {
+      $hide_plr_latency = $misc_row['Value'];
+      break;
+    }
+    case "Quest_Item_Vendor_Level_Mul":
+    {
+      $quest_item['levelMul'] = $misc_row['Value'];
+      break;
+    }
+    case "Quest_Item_Vendor_Rew_Mul":
+    {
+      $quest_item['rewMul'] = $misc_row['Value'];
+      break;
+    }
+    case "Ultra_Vendor_Mult_0":
+    {
+      $ultra_mult[0] = $misc_row['Value'];
+      break;
+    }
+    case "Ultra_Vendor_Mult_1":
+    {
+      $ultra_mult[1] = $misc_row['Value'];
+      break;
+    }
+    case "Ultra_Vendor_Mult_2":
+    {
+      $ultra_mult[2] = $misc_row['Value'];
+      break;
+    }
+    case "Ultra_Vendor_Mult_3":
+    {
+      $ultra_mult[3] = $misc_row['Value'];
+      break;
+    }
+    case "Ultra_Vendor_Mult_4":
+    {
+      $ultra_mult[4] = $misc_row['Value'];
+      break;
+    }
+    case "Ultra_Vendor_Mult_5":
+    {
+      $ultra_mult[5] = $misc_row['Value'];
+      break;
+    }
+    case "Ultra_Vendor_Mult_6":
+    {
+      $ultra_mult[6] = $misc_row['Value'];
+      break;
+    }
+    case "Ultra_Vendor_Mult_7":
+    {
+      $ultra_mult[7] = $misc_row['Value'];
+      break;
+    }
+    case "Ultra_Vendor_Base":
+    {
+      $ultra_base = $misc_row['Value'];
+      break;
+    }
+    case "Map_GM_Show_Online_Only_GMOff":
+    {
+      $map_gm_show_online_only_gmoff = $misc_row['Value'];
+      break;
+    }
+    case "Map_GM_Show_Online_Only_GMVisible":
+    {
+      $map_gm_show_online_only_gmvisible = $misc_row['Value'];
+      break;
+    }
+    case "Map_GM_Add_Suffix":
+    {
+      $map_gm_add_suffix = $misc_row['Value'];
+      break;
+    }
+    case "Map_Status_GM_Include_All":
+    {
+      $map_status_gm_include_all = $misc_row['Value'];
+      break;
+    }
+    case "Map_Show_Status":
+    {
+      $map_show_status = $misc_row['Value'];
+      break;
+    }
+    case "Map_Show_Timer":
+    {
+      $map_show_time = $misc_row['Value'];
+      break;
+    }
+    case "Map_Timer":
+    {
+      $map_time = $misc_row['Value'];
+      break;
+    }
+    case "Map_Show_Online":
+    {
+      $map_show_online = $misc_row['Value'];
+      break;
+    }
+    case "Map_Time_To_Show_Uptime":
+    {
+      $map_time_to_show_uptime = $misc_row['Value'];
+      break;
+    }
+    case "Map_Time_To_Show_MaxOnline":
+    {
+      $map_time_to_show_maxonline = $misc_row['Value'];
+      break;
+    }
+    case "Map_Time_To_Show_GMOnline":
+    {
+      $map_time_to_show_gmonline = $misc_row['Value'];
+      break;
+    }
+    case "Language_Locales_Search_Option":
+    {
+      $locales_search_option = $misc_row['Value'];
+      break;
+    }
+    case "Language_Site_Encoding":
+    {
+      $site_encoding = $misc_row['Value'];
+      break;
+    }
+    case "Backup_Dir":
+    {
+      $backup_dir = $misc_row['Value'];
+      break;
+    }
+    case "Debug":
+    {
+      $debug = $misc_row['Value'];
+      break;
+    }
+    case "Test_Mode":
+    {
+      $developer_test_mode = $misc_row['Value'];
+      break;
+    }
+    case "Multi_Realm":
+    {
+      $multi_realm_mode = $misc_row['Value'];
+      break;
+    }
+  }
+}
 
 ?>

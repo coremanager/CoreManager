@@ -327,6 +327,22 @@ else
         </tr>
       </table>';
 }
+// show login and register buttons at top of every page if guest mode is activated
+if($allow_anony && empty($_SESSION['logged_in']))
+{
+  $output .= '
+      <center>
+        <table>
+          <tr>
+            <td>
+              <a class="button" id="footer_register_login" href="register.php">Register</a>
+              <a class="button" id="footer_register_login" href="login.php">Login</a>
+            </td>
+          </tr>
+        </table>
+        <br />
+      </center>';
+}
 
 //---------------------Start of Body-------------------------------------------
 $output .= '
