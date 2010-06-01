@@ -507,9 +507,16 @@ else
       }
 
       if ( $core == 1 )
-        $gm = $sqll->result($sqll->query("SELECT gm FROM accounts WHERE acct='".$char['acct']."'"), 0);
+        $ca_query = "SELECT name FROM `".$logon_db['name']."`.accounts LEFT JOIN `".$arcm_db['name']."`.config_accounts ON accounts.name = `".$arcm_db['name']."`.config_accounts.Login WHERE acct='".$char['acct']."'";
       else
-        $gm = $sqll->result($sqll->query("SELECT gmlevel AS gm FROM account_access WHERE id='".$char['acct']."'"), 0);
+        $ca_query = "SELECT *, username AS name FROM `".$logon_db['name']."`.account LEFT JOIN `".$arcm_db['name']."`.config_accounts ON account.username = `".$arcm_db['name']."`.config_accounts.Login WHERE id='".$char['acct']."'";
+        
+      $ca_result = $sqlm->query($ca_query);
+      $char_acct = $sqlm->fetch_assoc($ca_result);
+
+      $gm = $char_acct['SecurityLevel'];
+      if ( !isset($gm) )
+        $gm = 0;
 	
 	    if ( $core == 1 )
         $guild_id = $sqlc->result($sqlc->query("SELECT guildid FROM guild_data WHERE playerid='".$char['guid']."'"), 0);
@@ -531,11 +538,11 @@ else
       if (($user_lvl > 0) && (($user_lvl >= gmlevel($gm)) || ($user_lvl == gmlevel('4'))))
         $output .= '
                   <a href="char.php?id='.$char['guid'].'">
-                    <span onmousemove="toolTip(\''.id_get_gm_level($gm).'\', \'item_tooltip\')" onmouseout="toolTip()">'.htmlentities($char['name']).'</span>
+                    <span onmousemove="toolTip(\''.$char_acct['name'].' ('.id_get_gm_level($gm).')'.'\', \'item_tooltip\')" onmouseout="toolTip()">'.htmlentities($char['name']).'</span>
                   </a>';
       else
         $output .='
-                  <span onmousemove="toolTip(\''.id_get_gm_level($gm).'\', \'item_tooltip\')" onmouseout="toolTip()">'.htmlentities($char['name']).'</span>';
+                  <span>'.htmlentities($char['name']).'</span>';
       $output .= '
                   </td>
                   <td>
