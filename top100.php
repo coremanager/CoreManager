@@ -310,8 +310,16 @@ function top100($realmid)
                 <td>'.char_get_level_color($char['level']).'</td>';
     if ($type == 'level')
     {
-      $guild_id = $sqlc->result($sqlc->query("SELECT guildid FROM guild_data WHERE playerid = '".$char['guid']."'"), 0);
-      $guild_name = $sqlc->result($sqlc->query("SELECT guildname FROM guilds WHERE guildid = '".$guild_id."'"), 0);
+      if ( $core == 1 )
+      {
+        $guild_id = $sqlc->result($sqlc->query("SELECT guildid FROM guild_data WHERE playerid = '".$char['guid']."'"), 0);
+        $guild_name = $sqlc->result($sqlc->query("SELECT guildname FROM guilds WHERE guildid = '".$guild_id."'"), 0);
+      }
+      else
+      {
+        $guild_id = $sqlc->result($sqlc->query("SELECT guildid FROM guild_member WHERE guid = '".$char['guid']."'"), 0);
+        $guild_name = $sqlc->result($sqlc->query("SELECT name AS guildname FROM guild WHERE guildid = '".$guild_id."'"), 0);
+      }
       $days  = floor(round($char['totaltime'] / 3600)/24);
       $hours = round($char['totaltime'] / 3600) - ($days * 24);
       $time = '';

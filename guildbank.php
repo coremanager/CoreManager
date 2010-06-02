@@ -28,37 +28,47 @@ valid_login($action_permission['view']);
 function guild_bank()
 {
   global  $output, $realm_id, $characters_db, $arcm_db, $world_db, $item_datasite, $item_icons, $sqlm, $sqlw,
-    $sqll, $sqlc;
+    $sqll, $sqlc, $sqld;
 
   //wowhead_tt();
 
-  if (empty($_GET['id'])) error(lang('global', 'empty_fields'));
+  if ( empty($_GET['id']) ) 
+    error(lang('global', 'empty_fields'));
 
   // this is multi realm support, as of writing still under development
   //  this page is already implementing it
-  if (empty($_GET['realm'])) $realmid = $realm_id;
+  if ( empty($_GET['realm']) ) 
+    $realmid = $realm_id;
   else
   {
     $realmid = $sqll->quote_smart($_GET['realm']);
-    if (is_numeric($realmid))
+    if ( is_numeric($realmid) )
       $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
   $guild_id = $sqlc->quote_smart($_GET['id']);
-  if (is_numeric($guild_id)); else $guild_id = 0;
+  if ( is_numeric($guild_id) )
+    ;
+  else
+    $guild_id = 0;
 
-  if (empty($_GET['tab'])) $current_tab = 0;
-  else $current_tab = $sqlc->quote_smart($_GET['tab']);
-  if (is_numeric($current_tab) || ($current_tab > 6)); else $current_tab = 0;
+  if ( empty($_GET['tab']) )
+    $current_tab = 0;
+  else
+    $current_tab = $sqlc->quote_smart($_GET['tab']);
+  if ( is_numeric($current_tab) || ($current_tab > 6) )
+    ;
+  else
+    $current_tab = 0;
 
   if ( $core == 1 )
     $result = $sqlc->query('SELECT guildName, bankBalance FROM guilds WHERE guildid = '.$guild_id.' LIMIT 1');
   else
     $result = $sqlc->query('SELECT name AS guildName, BankMoney AS bankBalance FROM guild WHERE guildid = '.$guild_id.' LIMIT 1');
 
-  if($sqlc->num_rows($result))
+  if( $sqlc->num_rows($result) )
   {
     $guild_name  = $sqlc->result($result, 0, 'guildName');
     $bank_gold   = $sqlc->result($result, 0, 'bankBalance');
@@ -68,7 +78,7 @@ function guild_bank()
     else
       $result = $sqlc->query('SELECT TabId, TabName, TabIcon FROM guild_bank_tab WHERE guildid = '.$guild_id.' LIMIT 6');
     $tabs = array();
-    while ($tab = $sqlc->fetch_assoc($result))
+    while ( $tab = $sqlc->fetch_assoc($result) )
     {
       $tabs[$tab['TabId']] = $tab;
     }
@@ -79,28 +89,34 @@ function guild_bank()
           <center>
             <div id="tab">
               <ul>';
-    for($i=0;$i<6;++$i)
+    for( $i=0; $i<6; ++$i )
     {
-      if (isset($tabs[$i]))
+      if ( isset($tabs[$i]) )
       {
         $output .= '
                 <li'.(($current_tab == $i) ? ' id="selected"' : '').'>
                   <a href="guildbank.php?id='.$guild_id.'&amp;tab='.$i.'&amp;realm='.$realmid.'">';
-        if ($tabs[$i]['TabIcon'] == '')
+        if ( $tabs[$i]['TabIcon'] == '' )
         {
           $output .= '
                     <img src="img/INV/INV_blank_32.gif" class="icon_border_0"';
         }
         else
         {
-          if (file_exists(''.$item_icons.'/'.$tabs[$i]['TabIcon'].'.jpg'))
+          // make sure we're looking for the file name with the correct capitalization
+          $ii_query = "SELECT * FROM itemdisplayinfo WHERE LCASE(IconName)='".strtolower($tabs[$i]['TabIcon'])."' LIMIT 1";
+          $ii_result = $sqld->query($ii_query);
+          $ii_fields = $sqld->fetch_assoc($ii_result);
+          $tabs[$i]['TabIcon'] = $ii_fields['IconName'];
+
+          if ( file_exists(''.$item_icons.'/'.$tabs[$i]['TabIcon'].'.png') )
             $output .= '
-                    <img src="'.$item_icons.'/'.$tabs[$i]['TabIcon'].'.jpg" class="icon_border_0"';
+                    <img src="'.$item_icons.'/'.$tabs[$i]['TabIcon'].'.png" class="icon_border_0"';
           else
             $output .= '
                     <img src="img/INV/INV_blank_32.gif" class="icon_border_0"';
         }
-        if ($tabs[$i]['TabName'] == '')
+        if ( $tabs[$i]['TabName'] == '' )
           $output .= ' onmousemove="toolTip(\''.lang('guildbank', 'tab').($i+1).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />';
         else
           $output .= ' onmousemove="toolTip(\''.$tabs[$i]['TabName'].'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />';
@@ -113,23 +129,21 @@ function guild_bank()
               </ul>
             </div>
             <div id="tab_content">';
-    /*$result = $sqlc->query('SELECT gbi.SlotId, gbi.item_entry,
-      SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", 15), " ", -1) as stack_count
-      FROM guild_bankitem gbi INNER JOIN item_instance ii on ii.guid = gbi.item_guid
-      WHERE gbi.guildid = '.$guild_id.' AND TabID = '.$current_tab.'');*/
 
     if ( $core == 1 )
-      $result = $sqlc->query('SELECT gbi.SlotId, gbi.itemGuid
-        FROM guild_bankitems gbi INNER JOIN `'.$world_db[$realm_id]['name'].'`.items ii on ii.entry = gbi.itemGuid
+      $result = $sqlc->query('SELECT gbi.SlotId, gbi.itemGuid, ii.entry,
+        ii.count AS stack_count,
+        FROM guild_bankitems gbi INNER JOIN playeritems ii on ii.guid = gbi.itemGuid
         WHERE gbi.guildid = '.$guild_id.' AND TabID = '.$current_tab.'');
     else
-      $result = $sqlc->query('SELECT gbi.SlotId, gbi.item_entry, 
+      $result = $sqlc->query('SELECT gbi.SlotId, gbi.item_guid AS itemGuid, gbi.item_entry AS entry, 
         SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", 15), " ", -1) as stack_count 
         FROM guild_bank_item gbi INNER JOIN item_instance ii on ii.guid = gbi.item_guid 
         WHERE gbi.guildid = '.$guild_id.' AND TabID = '.$current_tab.'');
+        
     $gb_slots = array();
-    while ($tab = $sqlc->fetch_assoc($result))
-      if ($tab['itemGuid'])
+    while ( $tab = $sqlc->fetch_assoc($result) )
+      if ( $tab['itemGuid'] )
         $gb_slots[$tab['SlotId']] = $tab;
 
     // this_is_junk: style left hardcoded because it's calculated.
@@ -140,18 +154,16 @@ function guild_bank()
                     <div style="width:'.(14*43).'px;height:'.(7*41).'px;">';
 
     $item_position = 0;
-    for ($i=0;$i<7;++$i)
+    for ( $i=0; $i<7; ++$i )
     {
-      for ($j=0;$j<14;++$j)
+      for ( $j=0; $j<14; ++$j )
       {
         $item_position = $j*7+$i;
-        if (isset($gb_slots[$item_position]))
+        if ( isset($gb_slots[$item_position]) )
         {
-          $gb_item_id = $gb_slots[$item_position]['itemGuid'];
-          $stack = $gb_slots[$item_position]['stack_count'] == 1 ? '' : $gb_slots[$item_position]['stack_count'];
-          // this_is_junk: ArcEmu doesn't store item stacks in guild banks?
+          $gb_item_id = $gb_slots[$item_position]['entry'];
+          $stack = ( $gb_slots[$item_position]['stack_count'] == 1 ? '' : $gb_slots[$item_position]['stack_count'] );
           // this_is_junk: style left hardcoded because it's calculated.
-          $stack = 1;
           $output .= '
                       <div style="left:'.($j*43).'px;top:'.($i*41).'px;">
                         <a id="guildbank_padding" href="'.$item_datasite.$gb_item_id.'">

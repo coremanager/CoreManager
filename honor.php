@@ -88,7 +88,8 @@ while ($char = $sqlc->fetch_assoc($query))
   }
   else
   {
-    $guild_name = $sqlc->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char['guid'].";"));
+    $guild_name = $sqlc->fetch_row($sqlc->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char['guid'].";"));
+    $guild_name = $sqlc->fetch_row($sqlc->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char['guid'].";"));
   }
   
   $output .= " <tr>

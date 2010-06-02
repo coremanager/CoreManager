@@ -54,7 +54,7 @@ function browse_guilds()
       left outer join guild_data as gm on gm.guildid = g.guildid left outer join characters as c on c.guid = gm.playerid
       where c.acct = $user_id group by g.guildid order by gid");
   else
-    $query_myGuild = $sqlc->query("SELECT g.guildid as gid, g.name, g.leaderguid AS lguid,
+    $query_myGuild = $sqlc->query("SELECT g.guildid as gid, g.name AS guildname, g.leaderguid AS lguid,
       (SELECT name from characters where guid = lguid), (SELECT race in (2,5,6,8,10) from characters where guid = lguid) as faction,
       (select count(*) from characters where guid in (select guid from guild_member where guildid = lguid) and online = 1) as gonline,
       (select count(*) from guild_member where guildid = gid), SUBSTRING_INDEX(g.MOTD,' ',6), g.createdate,
@@ -80,8 +80,19 @@ function browse_guilds()
               </tr>';
     while ($data = $sqlc->fetch_row($query_myGuild))
     {
-      $result = $sqll->query("SELECT gm FROM accounts WHERE acct ='$data[9]'");
-      $owner_gmlvl = $sqll->result($result, 0, 'gm');
+      if ( $core == 1 )
+        $result = $sqll->query("SELECT login FROM accounts WHERE acct ='$data[9]'");
+      else
+        $result = $sqll->query("SELECT username AS login FROM account WHERE id ='$data[9]'");
+        
+      $uname = $sqll->result($result, 0, 'login');
+      
+      $result = $sqlm->query("SELECT SecurityLevel FROM config_accounts WHERE Login='".$uname."'");
+      
+      $owner_gmlvl = $sqll->result($result, 0, 'SecurityLevel');
+      if ( !isset($owner_gmlvl) )
+        $owner_gmlvl = 0;
+      
       $output .= "
               <tr>
                 <td>$data[0]</td>
@@ -121,21 +132,21 @@ function browse_guilds()
         if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("guild.php?error=5");
         if ( $core == 1 )
         {
-          $query = $sqlc->query("SELECT g.guildid as gid, g.guildname,g.leaderguid as lguid,
-            (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction,
-            (select count(*) from guild_data where guildid = gid) as tot_chars, createdate, c.acct as laccount
-            FROM guilds as g left outer join characters as c on c.guid = g.leaderguid
-            where g.name like '%$search_value%' ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-          $query_count = $sqlc->query("SELECT 1 from guilds where guildname like '%$search_value%'");
+          $query = $sqlc->query("SELECT g.guildid AS gid, g.guildname, g.leaderguid AS lguid,
+            (SELECT name FROM characters WHERE guid = lguid) AS lname, c.race IN (2,5,6,8,10) AS lfaction,
+            (SELECT COUNT(*) FROM guild_data WHERE guildid = gid) AS tot_chars, createdate, c.acct AS laccount
+            FROM guilds AS g LEFT OUTER JOIN characters AS c ON c.guid = g.leaderguid
+            WHERE g.name LIKE '%$search_value%' ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+          $query_count = $sqlc->query("SELECT 1 FROM guilds WHERE guildname LIKE '%$search_value%'");
         }
         else
         {
-          $query = $sqlc->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
-            (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction,
-            (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount
-            FROM guild as g left outer join characters as c on c.guid = g.leaderguid
-            where g.name like '%$search_value%' ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-          $query_count = $sqlc->query("SELECT 1 from guild where name like '%$search_value%'");
+          $query = $sqlc->query("SELECT g.guildid AS gid, g.name AS guildname ,g.leaderguid AS lguid,
+            (SELECT name FROM characters WHERE guid = lguid) AS lname, c.race IN (2,5,6,8,10) AS lfaction,
+            (SELECT COUNT(*) FROM guild_member WHERE guildid = gid) AS tot_chars, createdate, c.account AS laccount
+            FROM guild AS g LEFT OUTER JOIN characters AS c ON c.guid = g.leaderguid
+            WHERE g.name LIKE '%$search_value%' ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+          $query_count = $sqlc->query("SELECT 1 FROM guild WHERE name LIKE '%$search_value%'");
         }
         break;
       }
@@ -266,21 +277,15 @@ function browse_guilds()
   while ($data = $sqlc->fetch_row($query))
   {
     if ( $core == 1 )
-    {
       $query = "SELECT * FROM accounts WHERE acct = '".$data[7]."'";
-      $result = $sqll->query($query);
-      $result = $sqll->fetch_assoc($result);
-      $user = $result['login'];
-    }
     else
-    {
-      $query = "SELECT * FROM account WHERE id = '".$data[7]."'";
-      $result = $sqll->query($query);
-      $result = $sqll->fetch_assoc($result);
-      $user = $result['username'];
-    }
+      $query = "SELECT *, username AS login FROM account WHERE id = '".$data[7]."'";
+      
+    $result = $sqll->query($query);
+    $result = $sqll->fetch_assoc($result);
+    $user = $result['login'];
     
-    $result = $sqlm->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login ='".$user."'");
+    $result = $sqlm->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$user."'");
     $owner_gmlvl = $sqll->result($result, 0, 'gm');
     $output .= "
                 <tr>

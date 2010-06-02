@@ -830,6 +830,7 @@ function edit_user()
     $result = $sqll->query("SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) AS lastlogin, flags FROM accounts WHERE acct = '$acct'");
   else
     $result = $sqll->query("SELECT account.id AS acct, username AS login, account_access.gmlevel AS gm, email, last_ip AS lastip, mutetime AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags FROM account LEFT JOIN account_access ON account.id = account_access.id WHERE account.id = '$acct'");
+    
   $data = $sqll->fetch_assoc($result);
   
   $o_temp = 0;
@@ -842,6 +843,7 @@ function edit_user()
       $online_res = $sql->query("SELECT SUM(online) FROM characters WHERE acct='".$data['acct']."'");
     else
       $online_res = $sql->query("SELECT SUM(online) FROM characters WHERE account='".$data['acct']."'");
+      
     $online_fields = $sql->fetch_assoc($online_res);
     $o_temp += $online_fields['SUM(online)'];
   }
@@ -1193,6 +1195,7 @@ function edit_user()
           else
             $char_array = $sqlc->query("SELECT guid, name, race, class, level, gender
               FROM `characters` WHERE account = $acct");
+              
           while ($char = $sqlc->fetch_array($char_array))
           {
             $output .= "
@@ -1221,7 +1224,11 @@ function edit_user()
               </tr>";
       if ($chars_on_realm)
       {
-        $char_array = $sqlc->query("SELECT guid,name,race,class, level, gender FROM `characters` WHERE acct = $acct");
+        if ( $core == 1 )
+          $char_array = $sqlc->query("SELECT guid, name, race, class, level, gender FROM `characters` WHERE acct = $acct");
+        else
+          $char_array = $sqlc->query("SELECT guid, name, race, class, level, gender FROM `characters` WHERE account = $acct");
+        
         while ($char = $sqlc->fetch_array($char_array))
         {
           $output .= "
