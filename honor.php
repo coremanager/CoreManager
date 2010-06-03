@@ -27,11 +27,11 @@ global $output, $characters_db, $realm_id, $itemperpage, $core;
 $output .= "
       <div class=\"bubble\">";
 
-$start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
-$order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) :"honor";
+$start = (isset($_GET['start'])) ? $sql['char']->quote_smart($_GET['start']) : 0;
+$order_by = (isset($_GET['order_by'])) ? $sql['char']->quote_smart($_GET['order_by']) :"honor";
 
 if ( $core == 1 )
-  $query = $sqlc->query("SELECT
+  $query = $sql['char']->query("SELECT
         guid, name, race, class,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ';', ".(PLAYER_FIELD_HONOR_CURRENCY+1)."), ';', -1) AS UNSIGNED) AS honor ,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ';', ".(PLAYER_FIELD_LIFETIME_HONORBALE_KILLS+1)."), ';', -1) AS UNSIGNED) AS kills,
@@ -43,7 +43,7 @@ if ( $core == 1 )
         WHERE race IN (1,3,4,7,11)
         ORDER BY $order_by DESC LIMIT 25;");
 else
-  $query = $sqlc->query("SELECT characters.guid, characters.name, race, class, 
+  $query = $sql['char']->query("SELECT characters.guid, characters.name, race, class, 
         totalHonorPoints AS honor , totalKills AS kills, level, arenaPoints AS arena, 
         guildid AS GNAME, gender 
         FROM `characters`,guild_member 
@@ -51,7 +51,7 @@ else
         ORDER BY $order_by DESC LIMIT 25;");
   
 
-$this_page = $sqlc->num_rows($query);
+$this_page = $sql['char']->num_rows($query);
 
 $output .= "<script type=\"text/javascript\">
   answerbox.btn_ok='".lang('global', 'yes_low')."';
@@ -79,17 +79,17 @@ $output .= "<script type=\"text/javascript\">
     <th width=\"30%\">".lang('honor', 'guild')."</th>
   </tr>";
 
-while ($char = $sqlc->fetch_assoc($query)) 
+while ($char = $sql['char']->fetch_assoc($query)) 
 {
   if ( $core == 1 )
   {
-    $guild_id = $sqlc->result($sqlc->query("SELECT guildid FROM guild_data WHERE playerid = '".$char['guid']."'"), 0);
-    $guild_name = $sqlc->result($sqlc->query("SELECT guildname FROM guilds WHERE guildid = '".$guild_id."'"), 0);
+    $guild_id = $sql['char']->result($sql['char']->query("SELECT guildid FROM guild_data WHERE playerid = '".$char['guid']."'"), 0);
+    $guild_name = $sql['char']->result($sql['char']->query("SELECT guildname FROM guilds WHERE guildid = '".$guild_id."'"), 0);
   }
   else
   {
-    $guild_name = $sqlc->fetch_row($sqlc->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char['guid'].";"));
-    $guild_name = $sqlc->fetch_row($sqlc->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char['guid'].";"));
+    $guild_name = $sql['char']->fetch_row($sql['char']->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char['guid'].";"));
+    $guild_name = $sql['char']->fetch_row($sql['char']->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char['guid'].";"));
   }
   
   $output .= " <tr>
@@ -108,7 +108,7 @@ while ($char = $sqlc->fetch_assoc($query))
 $output .= "</table><br /></fieldset>";
 
 if ( $core == 1 )
-  $query = $sqlc->query("SELECT
+  $query = $sql['char']->query("SELECT
         guid,name,race,class,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(PLAYER_FIELD_HONOR_CURRENCY+1)."), ' ', -1) AS UNSIGNED) AS honor ,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(PLAYER_FIELD_LIFETIME_HONORBALE_KILLS+1)."), ' ', -1) AS UNSIGNED) AS kills, level,
@@ -119,14 +119,14 @@ if ( $core == 1 )
         ORDER BY $order_by DESC
         LIMIT 25;");
 else
-  $query = $sqlc->query("SELECT characters.guid, characters.name, race,class, 
+  $query = $sql['char']->query("SELECT characters.guid, characters.name, race,class, 
         totalHonorPoints AS honor , totalKills AS kills, 
         level, arenaPoints AS arena, guildid AS GNAME, gender 
         FROM `characters`,guild_member WHERE race NOT IN (1,3,4,7,11) AND guild_member.guid = characters.guid 
         ORDER BY $order_by DESC LIMIT 25;");
 
 
-$this_page = $sqlc->num_rows($query);
+$this_page = $sql['char']->num_rows($query);
 
 $output .= "<script type=\"text/javascript\">
   answerbox.btn_ok='".lang('global', 'yes_low')."';
@@ -152,16 +152,16 @@ $output .= "<script type=\"text/javascript\">
     <th width=\"30%\">".lang('honor', 'guild')."</th>
   </tr>";
 
-while ($char = $sqlc->fetch_assoc($query)) 
+while ($char = $sql['char']->fetch_assoc($query)) 
 {
   if ( $core == 1 )
   {
-    $guild_id = $sqlc->result($sqlc->query("SELECT guildid FROM guild_data WHERE playerid = '".$char['guid']."'"), 0);
-    $guild_name = $sqlc->result($sqlc->query("SELECT guildname FROM guilds WHERE guildid = '".$guild_id."'"), 0);
+    $guild_id = $sql['char']->result($sql['char']->query("SELECT guildid FROM guild_data WHERE playerid = '".$char['guid']."'"), 0);
+    $guild_name = $sql['char']->result($sql['char']->query("SELECT guildname FROM guilds WHERE guildid = '".$guild_id."'"), 0);
   }
   else
   {
-    $guild_name = $sqlc->fetch_assoc($sqlc->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char['GNAME'].";"));
+    $guild_name = $sql['char']->fetch_assoc($sql['char']->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char['GNAME'].";"));
     $guild_name = $guild_name['name'];
   }
 

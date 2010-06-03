@@ -25,9 +25,9 @@
 
 function misc_get_country_by_ip($ip)
 {
-  global $sqlm;
+  global $sql;
 
-  $country = $sqlm->fetch_assoc($sqlm->query(
+  $country = $sql['mgr']->fetch_assoc($sql['mgr']->query(
     'SELECT c.code, c.country FROM ip2nationcountries c, ip2nation i
       WHERE i.ip <= INET_ATON("'.$ip.'") AND c.code = i.country
         ORDER BY i.ip DESC LIMIT 0,1;'));
@@ -44,12 +44,12 @@ function misc_get_country_by_ip($ip)
 
 function misc_get_country_by_account($account)
 {
-  global $sqll, $core;
+  global $sql, $core;
 
   if ( $core == 1 )
-    $ip = $sqll->fetch_assoc($sqll->query('SELECT lastip FROM accounts WHERE acct='.$account.';'));
+    $ip = $sql['logon']->fetch_assoc($sql['logon']->query('SELECT lastip FROM accounts WHERE acct='.$account.';'));
   else
-    $ip = $sqll->fetch_assoc($sqll->query('SELECT last_ip AS lastip FROM account WHERE id='.$account.';'));
+    $ip = $sql['logon']->fetch_assoc($sql['logon']->query('SELECT last_ip AS lastip FROM account WHERE id='.$account.';'));
 
   return misc_get_country_by_ip($ip['lastip']);
 }

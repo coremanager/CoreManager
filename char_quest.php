@@ -32,7 +32,7 @@ valid_login($action_permission['view']);
 function char_quest()
 {
   global $output, $realm_id, $world_db, $logon_db, $characters_db, $action_permission,
-    $user_lvl, $user_name, $quest_datasite, $itemperpage, $sqll, $sqlc;
+    $user_lvl, $user_name, $quest_datasite, $itemperpage, $sql;
 
   if (empty($_GET['id'])) error(lang('global', 'empty_fields'));
 
@@ -40,41 +40,41 @@ function char_quest()
     $realmid = $realm_id;
   else
   {
-    $realmid = $sqll->quote_smart($_GET['realm']);
+    $realmid = $sql['logon']->quote_smart($_GET['realm']);
     if (is_numeric($realmid))
-      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
-  $id = $sqlc->quote_smart($_GET['id']);
+  $id = $sql['char']->quote_smart($_GET['id']);
   if (is_numeric($id)); else $id = 0;
 
   //==========================$_GET and SECURE=================================
-  $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sql['char']->quote_smart($_GET['start']) : 0;
   if (is_numeric($start)); else $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 1;
+  $order_by = (isset($_GET['order_by'])) ? $sql['char']->quote_smart($_GET['order_by']) : 1;
   if (is_numeric($order_by)); else $order_by=1;
 
-  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 0;
+  $dir = (isset($_GET['dir'])) ? $sql['char']->quote_smart($_GET['dir']) : 0;
   if (preg_match('/^[01]{1}$/', $dir)); else $dir=0;
 
   $order_dir = ($dir) ? 'ASC' : 'DESC';
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end=============================
 
-  $result = $sqlc->query('SELECT acct, name, race, class, level, gender
+  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
     FROM characters WHERE guid = '.$id.' LIMIT 1');
 
-  if ($sqlc->num_rows($result))
+  if ($sql['char']->num_rows($result))
   {
-    $char = $sqlc->fetch_assoc($result);
+    $char = $sql['char']->fetch_assoc($result);
 
-    $owner_acc_id = $sqlc->result($result, 0, 'acct');
-    $result = $sqll->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sqll->result($result, 0, 'gm');
-    $owner_name = $sqll->result($result, 0, 'login');
+    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
+    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
+    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_name = $sql['logon']->result($result, 0, 'login');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
@@ -108,18 +108,18 @@ function char_quest()
                   <th width="5%"><img src="img/aff_qst.png" width="14" height="14" border="0" alt="" /></th>
                 </tr>';
       // this_is_junk: I'm not sure what status and rewarded actually do in MaNGOS
-      $result = $sqlc->query("SELECT quest_id, completed FROM questlog WHERE player_guid = '".$id."'");
+      $result = $sql['char']->query("SELECT quest_id, completed FROM questlog WHERE player_guid = '".$id."'");
 
       $quests_1 = array();
       $quests_3 = array();
 
-      if ($sqlc->num_rows($result))
+      if ($sql['char']->num_rows($result))
       {
-        while ($quest = $sqlc->fetch_assoc($result))
+        while ($quest = $sql['char']->fetch_assoc($result))
         {
           $deplang = get_lang_id();
-          $query1 = $sqlc->query('SELECT questlevel, title FROM `'.$world_db[$realmid]['name'].'`.`quests` WHERE `entry` = \''.$quest['quest_id'].'\'');
-          $quest_info = $sqlc->fetch_assoc($query1);
+          $query1 = $sql['char']->query('SELECT questlevel, title FROM `'.$world_db[$realmid]['name'].'`.`quests` WHERE `entry` = \''.$quest['quest_id'].'\'');
+          $quest_info = $sql['char']->fetch_assoc($query1);
           if(1 == $quest['completed'])
             array_push($quests_1, array($quest['quest_id'], $quest_info['questlevel'], $quest_info['title'], $quest['rewarded']));
           else

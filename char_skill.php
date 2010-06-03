@@ -29,7 +29,7 @@ valid_login($action_permission['view']);
 function char_skill()
 {
   global $output, $realm_id, $characters_db, $arcm_db, $action_permission, $user_lvl,
-    $user_name, $skill_datasite, $sqlm, $sqll, $sqlc;
+    $user_name, $skill_datasite, $sql;
 
   //wowhead_tt();
 
@@ -42,40 +42,40 @@ function char_skill()
     $realmid = $realm_id;
   else
   {
-    $realmid = $sqll->quote_smart($_GET['realm']);
+    $realmid = $sql['logon']->quote_smart($_GET['realm']);
     if (is_numeric($realmid))
-      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
-  $id = $sqlc->quote_smart($_GET['id']);
+  $id = $sql['char']->quote_smart($_GET['id']);
   if (is_numeric($id)); else $id = 0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 1;
+  $order_by = (isset($_GET['order_by'])) ? $sql['char']->quote_smart($_GET['order_by']) : 1;
 
-  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sql['char']->quote_smart($_GET['dir']) : 1;
   if (preg_match('/^[01]{1}$/', $dir)); else $dir = 1;
 
   $order_dir = ($dir) ? 'ASC' : 'DESC';
   $dir = ($dir) ? 0 : 1;
 
-  $result = $sqlc->query('SELECT acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
+  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
 
-  if ($sqlc->num_rows($result))
+  if ($sql['char']->num_rows($result))
   {
-    $char = $sqlc->fetch_assoc($result);
+    $char = $sql['char']->fetch_assoc($result);
 
     // we get user permissions first
-    $owner_acc_id = $sqlc->result($result, 0, 'acct');
-    $result = $sqll->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sqll->result($result, 0, 'gm');
-    $owner_name = $sqll->result($result, 0, 'login');
+    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
+    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
+    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_name = $sql['logon']->result($result, 0, 'login');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
-      $result = $sqlc->query('SELECT data, name, race, class, level, gender FROM characters WHERE guid = '.$id.'');
-      $char = $sqlc->fetch_assoc($result);
+      $result = $sql['char']->query('SELECT data, name, race, class, level, gender FROM characters WHERE guid = '.$id.'');
+      $char = $sql['char']->fetch_assoc($result);
       $char_data = explode(';',$char['data']);
 
       $output .= '

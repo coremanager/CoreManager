@@ -179,16 +179,16 @@ function bbcode_parse($text, $brfix = 1, $emoticons = 1, $wow = 1)
 
 function get_side()
 {
-  global $user_id, $characters_db, $realm_id, $sqlc, $core;
+  global $user_id, $characters_db, $realm_id, $sql, $core;
 
   if ( $core == 1 )
-    $result = $sqlc->query("SELECT race FROM `characters` WHERE acct = '$user_id';");
+    $result = $sql['char']->query("SELECT race FROM `characters` WHERE acct = '$user_id';");
   else
-    $result = $sqlc->query("SELECT race FROM `characters` WHERE account = '$user_id';");
-  if(!$sqlc->num_rows($result))
+    $result = $sql['char']->query("SELECT race FROM `characters` WHERE account = '$user_id';");
+  if(!$sql['char']->num_rows($result))
     return "NO";
   $a = 0; $h = 0;
-  while($race = $sqlc->fetch_row($result))
+  while($race = $sql['char']->fetch_row($result))
   {
     if($race[0] == 1 || $race[0] == 3 || $race[0] == 4 || $race[0] == 7 || $race[0] == 11)
       $a++;

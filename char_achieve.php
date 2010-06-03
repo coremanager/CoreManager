@@ -33,7 +33,7 @@ function char_achievements()
   global $output, $logon_db,
     $realm_id, $characters_db, $arcm_db,
     $action_permission, $user_lvl, $user_name,
-    $achievement_datasite, $sqlm, $sqld, $sqll, $sqlc;
+    $achievement_datasite, $sql;
 
   // this page uses wowhead tooltops
   //wowhead_tt();
@@ -48,36 +48,36 @@ function char_achievements()
     $realmid = $realm_id;
   else
   {
-    $realmid = $sqll->quote_smart($_GET['realm']);
+    $realmid = $sql['logon']->quote_smart($_GET['realm']);
     if (is_numeric($realmid))
-      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
   //-------------------SQL Injection Prevention--------------------------------
   // no point going further if we don have a valid ID
-  $id = $sqlc->quote_smart($_GET['id']);
+  $id = $sql['char']->quote_smart($_GET['id']);
   if (is_numeric($id));
   else error(lang('global', 'empty_fields'));
 
-  $show_type = (isset($_POST['show_type'])) ? $sqlc->quote_smart($_POST['show_type']) : 0;
+  $show_type = (isset($_POST['show_type'])) ? $sql['char']->quote_smart($_POST['show_type']) : 0;
   if (is_numeric($show_type)); else $show_type = 0;
 
   // getting character data from database
-  $result = $sqlc->query('SELECT acct, name, race, class, level, gender
+  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
     FROM characters WHERE guid = '.$id.' LIMIT 1');
 
   // no point going further if character does not exist
-  if ($sqlc->num_rows($result))
+  if ($sql['char']->num_rows($result))
   {
-    $char = $sqlc->fetch_assoc($result);
+    $char = $sql['char']->fetch_assoc($result);
 
     // we get user permissions first
-    $owner_acc_id = $sqlc->result($result, 0, 'accounts');
-    $result = $sqll->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sqll->result($result, 0, 'gm');
-    $owner_name = $sqll->result($result, 0, 'login');
+    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
+    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
+    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_name = $sql['logon']->result($result, 0, 'login');
 
     // check user permission
     if ( ($user_lvl > $owner_gmlvl) || ($owner_name === $user_name) ||($user_lvl == gmlevel('4')))
@@ -275,16 +275,16 @@ function char_achievements()
                         <td>
                         </td>
                       </tr>';
-      $result = $sqlc->query('SELECT achievement, date FROM character_achievement WHERE guid = '.$id.'');
+      $result = $sql['char']->query('SELECT achievement, date FROM character_achievement WHERE guid = '.$id.'');
       $char_achieve = array();
-      while ($temp = $sqlc->fetch_assoc($result))
+      while ($temp = $sql['char']->fetch_assoc($result))
         $char_achieve[$temp['achievement']] = $temp['date'];
-      $result = $sqlc->query('SELECT achievement, date FROM character_achievement WHERE guid = \''.$id.'\' order by date DESC limit 4');
+      $result = $sql['char']->query('SELECT achievement, date FROM character_achievement WHERE guid = \''.$id.'\' order by date DESC limit 4');
 
       $points = 0;
 
-      $main_cats = achieve_get_main_category($sqld);
-      $sub_cats  = achieve_get_sub_category($sqld);
+      $main_cats = achieve_get_main_category();
+      $sub_cats  = achieve_get_sub_category();
 
       $output_achieve_main_cat = array();
       $output_u_achieve_main_cat = array();
@@ -308,7 +308,7 @@ function char_achievements()
           $i=0;
           $output_achieve_main_cat[$cat_id] = '';
           $output_u_achieve_main_cat[$cat_id] = '';
-          $achieve_main_cat = achieve_get_id_category($cat['ID'], $sqld);
+          $achieve_main_cat = achieve_get_id_category($cat['ID']);
           foreach($achieve_main_cat as $achieve_id => $cid)
           {
             if (isset($achieve_id) && isset($cid['id']))
@@ -324,7 +324,7 @@ function char_achievements()
                       <tr>
                         <td width="1%" align="left">
                           <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">
-                            <img src="'.achieve_get_icon($cid['id'], $sqld).'" width="36" height="36" class="icon_border_0" alt="" />
+                            <img src="'.achieve_get_icon($cid['id']).'" width="36" height="36" class="icon_border_0" alt="" />
                           </a>
                         </td>
                         <td colspan="2" align="left">
@@ -349,7 +349,7 @@ function char_achievements()
                         <td width="1%" align="left">
                           <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">
                             <span id="ch_ach_opacity">
-                              <img src="'.achieve_get_icon($cid['id'], $sqld).'" width="36" height="36" class="icon_border_0" alt="" />
+                              <img src="'.achieve_get_icon($cid['id']).'" width="36" height="36" class="icon_border_0" alt="" />
                             </span>
                           </a>
                         </td>
@@ -391,7 +391,7 @@ function char_achievements()
                 $j=0;
                 $output_achieve_sub_cat[$sub_cat_id] = '';
                 $output_u_achieve_sub_cat[$sub_cat_id] = '';
-                $achieve_sub_cat = achieve_get_id_category($sub_cat_id, $sqld);
+                $achieve_sub_cat = achieve_get_id_category($sub_cat_id);
                 foreach($achieve_sub_cat as $achieve_id => $cid)
                 {
                   if (isset($achieve_id) && isset($cid['id']))
@@ -407,7 +407,7 @@ function char_achievements()
                             <tr>
                               <td width="1%" align="left">
                                 <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">
-                                  <img src="'.achieve_get_icon($cid['id'], $sqld).'" width="36" height="36" class="icon_border_0" alt="" />
+                                  <img src="'.achieve_get_icon($cid['id']).'" width="36" height="36" class="icon_border_0" alt="" />
                                 </a>
                               </td>
                               <td colspan="2" align="left">
@@ -432,7 +432,7 @@ function char_achievements()
                               <td width="1%" align="left">
                                 <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">
                                   <span id="ch_ach_opacity">
-                                    <img src="'.achieve_get_icon($cid['id'], $sqld).'" width="36" height="36" class="icon_border_0" alt="" />
+                                    <img src="'.achieve_get_icon($cid['id']).'" width="36" height="36" class="icon_border_0" alt="" />
                                   </span>
                                 </a>
                               </td>
@@ -541,9 +541,9 @@ function char_achievements()
                         <th width="5%">'.lang('char', 'achievement_points').'</th>
                         <th width="15%">'.lang('char', 'achievement_date').'</th>
                       </tr>';
-      while ($temp = $sqlc->fetch_assoc($result))
+      while ($temp = $sql['char']->fetch_assoc($result))
       {
-        $cid = achieve_get_details($temp['achievement'], $sqld);
+        $cid = achieve_get_details($temp['achievement']);
         $cid['name'] = str_replace('&', '&amp;', $cid['name']);
         $cid['description'] = str_replace('&', '&amp;', $cid['description']);
         $cid['reward'] = str_replace('&', '&amp;', $cid['reward']);
@@ -551,7 +551,7 @@ function char_achievements()
                       <tr>
                         <td width="1%" align="left">
                           <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">
-                            <img src="'.achieve_get_icon($cid['id'], $sqld).'" width="36" height="36" class="icon_border_0" alt="" />
+                            <img src="'.achieve_get_icon($cid['id']).'" width="36" height="36" class="icon_border_0" alt="" />
                           </a>
                         </td>
                         <td colspan="2" align="left">

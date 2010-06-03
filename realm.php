@@ -26,27 +26,27 @@ valid_login($action_permission['view']);
 //####################################################################################################
 function show_realm()
 {
-  global $output, $server, $action_permission, $user_lvl, $sqlm, $sqlc;
+  global $output, $server, $action_permission, $user_lvl, $sql;
 
   valid_login($action_permission['view']);
 
   //==========================$_GET and SECURE=================================
-  $order_by = (isset($_GET['order_by'])) ? $sqlm->quote_smart($_GET['order_by']) : 'rid';
+  $order_by = (isset($_GET['order_by'])) ? $sql['mgr']->quote_smart($_GET['order_by']) : 'rid';
   if (preg_match('/^[_[:lower:]]{1,8}$/', $order_by)); else $order_by='rid';
 
-  $dir = (isset($_GET['dir'])) ? $sqlm->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sql['mgr']->quote_smart($_GET['dir']) : 1;
   if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
 
   $order_dir = ($dir) ? 'ASC' : 'DESC';
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end=============================
-  $result = $sqlc->query("SELECT COUNT(*) FROM characters");
-  $sum = $sqlc->fetch_row($result);
+  $result = $sql['char']->query("SELECT COUNT(*) FROM characters");
+  $sum = $sql['char']->fetch_row($result);
   $sum = $sum[0];
 
-  $result = $sqlm->query('SELECT realmlist.id AS rid, name, address, port, icon, color, timezone
+  $result = $sql['mgr']->query('SELECT realmlist.id AS rid, name, address, port, icon, color, timezone
             FROM realmlist ORDER BY '.$order_by.' '.$order_dir.'');
-  $total_realms = $sqlm->num_rows($result);
+  $total_realms = $sql['mgr']->num_rows($result);
 
   $output .= '
           <center>
@@ -83,7 +83,7 @@ function show_realm()
   $icon_type = get_icon_type();
   $timezone_type = get_timezone_type();
 
-  while ($realm = $sqlm->fetch_assoc($result))
+  while ($realm = $sql['mgr']->fetch_assoc($result))
   {
     $output .= '
               <tr>';
@@ -147,20 +147,20 @@ function show_realm()
 //####################################################################################################
 function edit_realm()
 {
-  global $output, $server, $action_permission, $user_lvl, $sqlm, $sqlc;
+  global $output, $server, $action_permission, $user_lvl, $sql;
 
   valid_login($action_permission['update']);
 
-  $result = $sqlc->query("SELECT COUNT(*) FROM characters");
-  $sum = $sqlc->fetch_row($result);
+  $result = $sql['char']->query("SELECT COUNT(*) FROM characters");
+  $sum = $sql['char']->fetch_row($result);
   $sum = $sum[0];
 
   if(empty($_GET['id'])) redirect('realm.php?error=1');
-  $id = $sqlm->quote_smart($_GET['id']);
+  $id = $sql['mgr']->quote_smart($_GET['id']);
   if(is_numeric($id)); else redirect('realm.php?error=1');
 
   if ($realm =
-       $sqlm->fetch_assoc($sqlm->query('SELECT realmlist.id AS rid, name, address, port, icon, color, timezone
+       $sql['mgr']->fetch_assoc($sql['mgr']->query('SELECT realmlist.id AS rid, name, address, port, icon, color, timezone
          FROM realmlist WHERE id ='.$id.''))
      )
   {
@@ -275,7 +275,7 @@ function edit_realm()
 //####################################################################################################
 function doedit_realm()
 {
-  global $action_permission, $sqlm;
+  global $action_permission, $sql;
 
   valid_login($action_permission['update']);
 
@@ -288,16 +288,16 @@ function doedit_realm()
      )
     redirect('realm.php?error=1');
 
-  $id = $sqlm->quote_smart($_GET['id']);
+  $id = $sql['mgr']->quote_smart($_GET['id']);
   if(is_numeric($id)); else redirect('realm.php?error=1');
-  $new_name     = $sqlm->quote_smart($_GET['new_name']);
-  $new_address  = $sqlm->quote_smart($_GET['new_address']);
-  $new_port     = $sqlm->quote_smart($_GET['new_port']);
-  $new_icon     = $sqlm->quote_smart($_GET['new_icon']);
-  $new_color    = $sqlm->quote_smart($_GET['new_color']);
-  $new_timezone = $sqlm->quote_smart($_GET['new_timezone']);
+  $new_name     = $sql['mgr']->quote_smart($_GET['new_name']);
+  $new_address  = $sql['mgr']->quote_smart($_GET['new_address']);
+  $new_port     = $sql['mgr']->quote_smart($_GET['new_port']);
+  $new_icon     = $sql['mgr']->quote_smart($_GET['new_icon']);
+  $new_color    = $sql['mgr']->quote_smart($_GET['new_color']);
+  $new_timezone = $sql['mgr']->quote_smart($_GET['new_timezone']);
 
-  $query = $sqlm->query('UPDATE realmlist SET name=\''.$new_name.'\', address =\''.$new_address.'\' , port =\''.$new_port.'\', icon =\''.$new_icon.'\', color =\''.$new_color.'\', timezone =\''.$new_timezone.'\' WHERE id = '.$id.'');
+  $query = $sql['mgr']->query('UPDATE realmlist SET name=\''.$new_name.'\', address =\''.$new_address.'\' , port =\''.$new_port.'\', icon =\''.$new_icon.'\', color =\''.$new_color.'\', timezone =\''.$new_timezone.'\' WHERE id = '.$id.'');
 
   unset($new_name);
   unset($new_address);
@@ -306,7 +306,7 @@ function doedit_realm()
   unset($new_color);
   unset($new_timezone);
 
-  if ($sqlm->affected_rows())
+  if ($sql['mgr']->affected_rows())
     redirect('realm.php?error=3');
   else
     redirect('realm.php?action=edit_realm&id='.$id.'&error=4');
@@ -318,12 +318,12 @@ function doedit_realm()
 //####################################################################################################
 function del_realm()
 {
-  global $output, $action_permission, $sqlm;
+  global $output, $action_permission, $sql;
 
   valid_login($action_permission['delete']);
 
   if(empty($_GET['id'])) redirect('realm.php?error=1');
-  $id = $sqlm->quote_smart($_GET['id']);
+  $id = $sql['mgr']->quote_smart($_GET['id']);
   if(is_numeric($id)); else redirect('realm.php?error=1');
 
   $output .= '
@@ -351,18 +351,18 @@ function del_realm()
 //####################################################################################################
 function dodel_realm()
 {
-  global $action_permission, $sqlm;
+  global $action_permission, $sql;
 
   valid_login($action_permission['delete']);
 
   if(empty($_GET['id'])) redirect('realm.php?error=1');
-  $id = $sqlm->quote_smart($_GET['id']);
+  $id = $sql['mgr']->quote_smart($_GET['id']);
   if(is_numeric($id)); else redirect('realm.php?error=1');
 
-  $sqlm->query('DELETE FROM realmlist WHERE id = '.$id.'');
+  $sql['mgr']->query('DELETE FROM realmlist WHERE id = '.$id.'');
   unset($id);
 
-  if ($sqlm->affected_rows())
+  if ($sql['mgr']->affected_rows())
     redirect('realm.php');
   else
     redirect('realm.php?error=2');
@@ -374,11 +374,11 @@ function dodel_realm()
 //####################################################################################################
 function add_realm()
 {
-  global $action_permission, $sqlm;
+  global $action_permission, $sql;
 
   valid_login($action_permission['insert']);
 
-  if ($sqlm->query('INSERT INTO realmlist (id, name, address, port, icon, color, timezone)
+  if ($sql['mgr']->query('INSERT INTO realmlist (id, name, address, port, icon, color, timezone)
     VALUES (NULL,"ArcEmu", "127.0.0.1", 8129 ,0 ,0 ,1)'))
     redirect('realm.php');
   else
@@ -391,14 +391,14 @@ function add_realm()
 //####################################################################################################
 function set_def_realm()
 {
-  global $action_permission, $sqlm;
+  global $action_permission, $sql;
 
   valid_login($action_permission['view']);
 
-  $id = (isset($_GET['id'])) ? $sqlm->quote_smart($_GET['id']) : 1;
+  $id = (isset($_GET['id'])) ? $sql['mgr']->quote_smart($_GET['id']) : 1;
   if(is_numeric($id)); else $id = 1;
 
-  if ($sqlm->num_rows($sqlm->query('SELECT id FROM realmlist WHERE id = '.$id.'')))
+  if ($sql['mgr']->num_rows($sql['mgr']->query('SELECT id FROM realmlist WHERE id = '.$id.'')))
     $_SESSION['realm_id'] = $id;
   unset($id);
 

@@ -32,7 +32,7 @@ function char_main()
   global $output,
     $realm_id, $logon_db, $characters_db, $world_db, $server, $arcm_db,
     $action_permission, $user_lvl, $user_name, $user_id,
-    $item_datasite, $spell_datasite, $showcountryflag, $timezone, $sqlm, $sqlw, $sqld, $sqll, $sqlc, $core;
+    $item_datasite, $spell_datasite, $showcountryflag, $timezone, $sql, $core;
 
   // this page uses wowhead tooltops
   //wowhead_tt();
@@ -48,26 +48,26 @@ function char_main()
     $realmid = $realm_id;
   else
   {
-    $realmid = $sqll->quote_smart($_GET['realm']);
+    $realmid = $sql['logon']->quote_smart($_GET['realm']);
     if (is_numeric($realmid))
-      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
   if (empty($_GET['id']))
   {
-    $name = $sqlc->quote_smart($_GET['name']);
+    $name = $sql['char']->quote_smart($_GET['name']);
     if ( $core == 1 )
-      $result = $sqlc->query("SELECT guid, acct, race FROM characters WHERE name = '".$name."' LIMIT 1");
+      $result = $sql['char']->query("SELECT guid, acct, race FROM characters WHERE name = '".$name."' LIMIT 1");
     else
-      $result = $sqlc->query("SELECT guid, id AS acct, race FROM characters WHERE name = '".$name."' LIMIT 1");
-    $id_result = $sqlc->fetch_assoc($result);
+      $result = $sql['char']->query("SELECT guid, id AS acct, race FROM characters WHERE name = '".$name."' LIMIT 1");
+    $id_result = $sql['char']->fetch_assoc($result);
     $id = $id_result['guid'];
   }
   else
   {
-    $id = $sqlc->quote_smart($_GET['id']);
+    $id = $sql['char']->quote_smart($_GET['id']);
   }
 
   if (is_numeric($id))
@@ -76,20 +76,20 @@ function char_main()
     error(lang('global', 'empty_fields'));
 
   if ( $core == 1 )
-    $result = $sqlc->query('SELECT acct, race FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql['char']->query('SELECT acct, race FROM characters WHERE guid = '.$id.' LIMIT 1');
   else
-    $result = $sqlc->query('SELECT account AS acct, race FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql['char']->query('SELECT account AS acct, race FROM characters WHERE guid = '.$id.' LIMIT 1');
 
-  if ($sqlc->num_rows($result))
+  if ($sql['char']->num_rows($result))
   {
     //resrict by owner's gmlvl
-    $owner_acc_id = $sqlc->result($result, 0, 'acct');
+    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
     if ( $core == 1 )
-      $query = $sqll->query('SELECT gm, login FROM accounts WHERE acct = '.$owner_acc_id.'');
+      $query = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$owner_acc_id.'');
     else
-      $query = $sqll->query('SELECT gmlevel AS gm, account.username as login FROM account_access LEFT JOIN account ON account.id = account_access.id WHERE account.id = '.$owner_acc_id.'');
-    $owner_gmlvl = $sqll->result($query, 0, 'gm');
-    $owner_name = $sqll->result($query, 0, 'login');
+      $query = $sql['logon']->query('SELECT gmlevel AS gm, account.username as login FROM account_access LEFT JOIN account ON account.id = account_access.id WHERE account.id = '.$owner_acc_id.'');
+    $owner_gmlvl = $sql['logon']->result($query, 0, 'gm');
+    $owner_name = $sql['logon']->result($query, 0, 'login');
 
     if($user_lvl || $server[$realmid]['both_factions'])
     {
@@ -98,10 +98,10 @@ function char_main()
     }
     else
     {
-      $side_p = (in_array($sqlc->result($result, 0, 'race'),array(2,5,6,8,10))) ? 1 : 2;
-      $result_1 = $sqlc->query('SELECT race FROM characters WHERE acct = '.$user_id.' LIMIT 1');
-      if ($sqlc->num_rows($result))
-        $side_v = (in_array($sqlc->result($result_1, 0, 'race'), array(2,5,6,8,10))) ? 1 : 2;
+      $side_p = (in_array($sql['char']->result($result, 0, 'race'),array(2,5,6,8,10))) ? 1 : 2;
+      $result_1 = $sql['char']->query('SELECT race FROM characters WHERE acct = '.$user_id.' LIMIT 1');
+      if ($sql['char']->num_rows($result))
+        $side_v = (in_array($sql['char']->result($result_1, 0, 'race'), array(2,5,6,8,10))) ? 1 : 2;
       else
         $side_v = 0;
       unset($result_1);
@@ -111,19 +111,19 @@ function char_main()
     {
       if ( $core == 1 )
       {
-        $result = $sqlc->query("SELECT guid, name, race, class, level, zoneid, mapid, online, gender,
+        $result = $sql['char']->query("SELECT guid, name, race, class, level, zoneid, mapid, online, gender,
           SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1) AS totaltime,
           acct, data, timestamp 
           FROM characters WHERE guid = '".$id."'");
       }
       else
       {
-        $result = $sqlc->query("SELECT guid, name, race, class, level, zone AS zoneid, map AS mapid, online, gender,
+        $result = $sql['char']->query("SELECT guid, name, race, class, level, zone AS zoneid, map AS mapid, online, gender,
           totaltime, account AS acct, logout_time AS timestamp, health, 
 					power1, power2, power3, power4, power5, power6, power7 
           FROM characters WHERE guid = '".$id."'");
       }
-      $char = $sqlc->fetch_assoc($result);
+      $char = $sql['char']->fetch_assoc($result);
       
       if ( $core == 1 )
       {
@@ -135,8 +135,8 @@ function char_main()
       else
       {
         $query = "SELECT * FROM characters LEFT JOIN character_stats ON characters.guid=character_stats.guid WHERE characters.guid='".$id."'";
-        $char_data_result = $sqlc->query($query);
-        $char_data_fields = $sqlc->fetch_assoc($char_data_result);
+        $char_data_result = $sql['char']->query($query);
+        $char_data_fields = $sql['char']->fetch_assoc($char_data_result);
         $char_data[PLAYER_BLOCK_PERCENTAGE] = $char_data_fields['blockPct'];
         $char_data[PLAYER_DODGE_PERCENTAGE] = $char_data_fields['dodgePct'];
         $char_data[PLAYER_PARRY_PERCENTAGE] = $char_data_fields['parryPct'];
@@ -187,28 +187,28 @@ function char_main()
 
       if ( $core == 1 )
       {
-        $guild_id = $sqlc->result($sqlc->query("SELECT guildid FROM guild_data WHERE playerid='".$char['guid']."'"), 0);
-        $guild_rank = $sqlc->result($sqlc->query("SELECT guildRank FROM guild_data WHERE playerid='".$char['guid']."'"), 0);
-        $guild_name = $sqlc->result($sqlc->query("SELECT guildName FROM guilds WHERE guildid='".$guild_id."'"));
+        $guild_id = $sql['char']->result($sql['char']->query("SELECT guildid FROM guild_data WHERE playerid='".$char['guid']."'"), 0);
+        $guild_rank = $sql['char']->result($sql['char']->query("SELECT guildRank FROM guild_data WHERE playerid='".$char['guid']."'"), 0);
+        $guild_name = $sql['char']->result($sql['char']->query("SELECT guildName FROM guilds WHERE guildid='".$guild_id."'"));
       }
       else
       {
-        $guild_id = $sqlc->result($sqlc->query("SELECT guildid FROM guild_member WHERE guid='".$char['guid']."'"), 0);
-        $guild_rank = $sqlc->result($sqlc->query("SELECT rank AS guildRank FROM guild_member WHERE guid='".$char['guid']."'"), 0);
-        $guild_name = $sqlc->result($sqlc->query("SELECT name AS guildName FROM guild WHERE guildid='".$guild_id."'"));
+        $guild_id = $sql['char']->result($sql['char']->query("SELECT guildid FROM guild_member WHERE guid='".$char['guid']."'"), 0);
+        $guild_rank = $sql['char']->result($sql['char']->query("SELECT rank AS guildRank FROM guild_member WHERE guid='".$char['guid']."'"), 0);
+        $guild_name = $sql['char']->result($sql['char']->query("SELECT name AS guildName FROM guild WHERE guildid='".$guild_id."'"));
       }
 
       $online = ($char['online']) ? lang('char', 'online') : lang('char', 'offline');
 
       if($guild_id)
       {
-        //$guild_name = $sqlc->result($sqlc->query('SELECT name FROM guild WHERE guildid ='.$char_data[CHAR_DATA_OFFSET_GUILD_ID].''), 0, 'name');
+        //$guild_name = $sql['char']->result($sql['char']->query('SELECT name FROM guild WHERE guildid ='.$char_data[CHAR_DATA_OFFSET_GUILD_ID].''), 0, 'name');
         $guild_name = '<a href="guild.php?action=view_guild&amp;realm='.$realmid.'&amp;error=3&amp;id='.$guild_id.'" >'.$guild_name.'</a>';
         $mrank = $guild_rank;
         if ( $core == 1 )
-          $guild_rank = $sqlc->result($sqlc->query('SELECT rankname FROM guild_ranks WHERE guildid ='.$guild_id.' AND rankId='.$mrank.''), 0, 'rankname');
+          $guild_rank = $sql['char']->result($sql['char']->query('SELECT rankname FROM guild_ranks WHERE guildid ='.$guild_id.' AND rankId='.$mrank.''), 0, 'rankname');
         else
-          $guild_rank = $sqlc->result($sqlc->query('SELECT rname AS rankname FROM guild_rank WHERE guildid ='.$guild_id.' AND rid='.$mrank.''), 0, 'rankname');
+          $guild_rank = $sql['char']->result($sql['char']->query('SELECT rname AS rankname FROM guild_rank WHERE guildid ='.$guild_id.' AND rid='.$mrank.''), 0, 'rankname');
       }
       else
       {
@@ -336,9 +336,9 @@ function char_main()
       {
         $world_db_name = $world_db[$realm_id]['name'];
         $char_equip_query = "SELECT * FROM character_inventory WHERE guid='".$id."' AND character_inventory.bag=0";
-        $char_equip_result = $sqlc->query($char_equip_query);
+        $char_equip_result = $sql['char']->query($char_equip_query);
         
-        while ( $equip_row = $sqlc->fetch_assoc($char_equip_result) )
+        while ( $equip_row = $sql['char']->fetch_assoc($char_equip_result) )
         {
           switch ( $equip_row['slot'] )
           {
@@ -543,14 +543,14 @@ function char_main()
                       <div>';
       // this_is_junk: auras are stored in a string in the characters table.
       // not sure how to query a string as though it were a record
-      /*$a_results = $sqlc->query('SELECT DISTINCT spell FROM character_aura WHERE guid = '.$id.'');
-      if ($sqlc->num_rows($a_results))
+      /*$a_results = $sql['char']->query('SELECT DISTINCT spell FROM character_aura WHERE guid = '.$id.'');
+      if ($sql['char']->num_rows($a_results))
       {
-        while ($aura = $sqlc->fetch_assoc($a_results))
+        while ($aura = $sql['char']->fetch_assoc($a_results))
         {
                  $output .= '
                         <a id="char_icon_padding" href="'.$spell_datasite.$aura['spell'].'" target="_blank">
-                          <img src="'.spell_get_icon($aura['spell'], $sqlm).'" alt="'.$aura['spell'].'" width="24" height="24" />
+                          <img src="'.spell_get_icon($aura['spell'], $sql['mgr']).'" alt="'.$aura['spell'].'" width="24" height="24" />
                         </a>';
         }
       }*/
@@ -564,7 +564,7 @@ function char_main()
                         <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
                        - '.lang('char', 'level_short').char_get_level_color($char['level']).'
                       </font>
-                      <br />'.lang('char', 'location').': '.get_map_name($char['mapid'], $sqld).' - '.get_zone_name($char['zoneid'], $sqld).'
+                      <br />'.lang('char', 'location').': '.get_map_name($char['mapid']).' - '.get_zone_name($char['zoneid']).'
                       <br />'.lang('char', 'honor_points').': '.$char_data[PLAYER_FIELD_HONOR_CURRENCY].' | '.lang('char', 'arena_points').': '.$char_data[PLAYER_FIELD_ARENA_CURRENCY].' | '.lang('char', 'honor_kills').': '.$char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS].'
                       <br />'.lang('char', 'guild').': '.$guild_name.' | '.lang('char', 'rank').': '.htmlentities($guild_rank).'
                       <br />'.lang('char', 'online').': '.(($char['online']) ? '<img src="img/up.gif" onmousemove="toolTip(\'Online\', \'item_tooltip\')" onmouseout="toolTip()" alt="online" />' : '<img src="img/down.gif" onmousemove="toolTip(\'Offline\', \'item_tooltip\')" onmouseout="toolTip()" alt="offline" />');

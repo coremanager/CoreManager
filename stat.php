@@ -24,7 +24,7 @@ valid_login($action_permission['view']);
 
 function stats($action)
 {
-  global $output, $realm_id, $logon_db, $server, $theme, $sqll, $sqlm, $sqlc, $core;
+  global $output, $realm_id, $logon_db, $server, $theme, $sql, $core;
 
   $race = Array
   (
@@ -99,7 +99,7 @@ function stats($action)
     return $uptimeString;
   }
 
-  $total_chars = $sqlc->result($sqlc->query('SELECT count(*) FROM characters'.( ($action) ? ' WHERE online= 1' : '' ).''), 0);
+  $total_chars = $sql['char']->result($sql['char']->query('SELECT count(*) FROM characters'.( ($action) ? ' WHERE online= 1' : '' ).''), 0);
 
   if ( $core == 1 )
   {
@@ -109,8 +109,8 @@ function stats($action)
   else
   {
     $up_query = "SELECT * FROM uptime WHERE realmid = '".$realm_id."' ORDER BY starttime DESC LIMIT 1";
-    $up_results = $sqll->query($up_query);
-    $uptime = $sqll->fetch_assoc($up_results);
+    $up_results = $sql['logon']->query($up_query);
+    $uptime = $sql['logon']->fetch_assoc($up_results);
     $stats['uptime'] = time() - $uptime['starttime'];
     $stats['uptime'] = "    <uptime>".format_uptime($stats['uptime'])."</uptime>";
     $stat_uptime = explode(' ', $stats['uptime']);
@@ -151,11 +151,11 @@ function stats($action)
     else
     {
       if ( $core == 1 )
-        $query = $sqll->query("SELECT COUNT(*) FROM accounts UNION SELECT COUNT(*) FROM accounts WHERE gm <> '0'");
+        $query = $sql['logon']->query("SELECT COUNT(*) FROM accounts UNION SELECT COUNT(*) FROM accounts WHERE gm <> '0'");
       else
-        $query = $sqll->query("SELECT COUNT(*) FROM account UNION SELECT COUNT(*) FROM account_access WHERE gmlevel <> '0'");
-      $total_acc = $sqll->result($query, 0);
-      $total_gms = $sqll->result($query, 1);
+        $query = $sql['logon']->query("SELECT COUNT(*) FROM account UNION SELECT COUNT(*) FROM account_access WHERE gmlevel <> '0'");
+      $total_acc = $sql['logon']->result($query, 0);
+      $total_gms = $sql['logon']->result($query, 1);
       unset($query);
 
       $data = date('Y-m-d H:i:s');
@@ -166,11 +166,11 @@ function stats($action)
         $uni_query = "SELECT DISTINCT COUNT(lastip) FROM accounts WHERE lastlogin > '".$data_1."' AND lastlogin < '".$data."'";
       else
         $uni_query = "SELECT DISTINCT COUNT(last_ip) FROM account WHERE last_login > '".$data_1."' AND last_login < '".$data."'";
-      $uniqueIPs = $sqll->result($sqll->query($uni_query), 0);
+      $uniqueIPs = $sql['logon']->result($sql['logon']->query($uni_query), 0);
       unset($data_1);
       unset($data);
 
-      //$max_ever = $sqlm->result($sqlm->query('SELECT peakcount FROM uptime WHERE realmid = '.$realm_id.' ORDER BY peakcount DESC LIMIT 1'), 0);
+      //$max_ever = $sql['mgr']->result($sql['mgr']->query('SELECT peakcount FROM uptime WHERE realmid = '.$realm_id.' ORDER BY peakcount DESC LIMIT 1'), 0);
       $max_restart = $stats['peak'];
 
       // Mangos uptime table doesn't have an uptime field. O_o
@@ -225,7 +225,7 @@ function stats($action)
     }
 
     //there is always less hordies
-    $horde_chars  = $sqlc->result($sqlc->query('SELECT count(guid) FROM characters WHERE race IN(2,5,6,8,10)'.(($action) ? ' AND online= 1' : '')), 0);
+    $horde_chars  = $sql['char']->result($sql['char']->query('SELECT count(guid) FROM characters WHERE race IN(2,5,6,8,10)'.(($action) ? ' AND online= 1' : '')), 0);
     $horde_pros   = round(($horde_chars*100)/$total_chars ,1);
     $allies_chars = $total_chars - $horde_chars;
     $allies_pros  = 100 - $horde_pros;
@@ -245,12 +245,12 @@ function stats($action)
     unset($allies_chars);
     unset($allies_pros);
 
-    $order_race = (isset($_GET['race'])) ? 'AND race ='.$sqlc->quote_smart($_GET['race']) : '';
-    $order_class = (isset($_GET['class'])) ? 'AND class ='.$sqlc->quote_smart($_GET['class']) : '';
+    $order_race = (isset($_GET['race'])) ? 'AND race ='.$sql['char']->quote_smart($_GET['race']) : '';
+    $order_class = (isset($_GET['class'])) ? 'AND class ='.$sql['char']->quote_smart($_GET['class']) : '';
 
     if(isset($_GET['level']))
     {
-      $lvl_min = $sqlc->quote_smart($_GET['level']);
+      $lvl_min = $sql['char']->quote_smart($_GET['level']);
       $lvl_max = $lvl_min + 4;
       $order_level = 'AND level >= '.$lvl_min.' AND level <= '.$lvl_max.'';
     }
@@ -259,9 +259,9 @@ function stats($action)
 
     if(isset($_GET['side']))
     {
-      if ('h' == $sqlc->quote_smart($_GET['side']))
+      if ('h' == $sql['char']->quote_smart($_GET['side']))
         $order_side = 'AND race IN(2,5,6,8,10)';
-      elseif ('a' == $sqlc->quote_smart($_GET['side']))
+      elseif ('a' == $sql['char']->quote_smart($_GET['side']))
         $order_side = 'AND race IN (1,3,4,7,11)';
     }
     else
@@ -270,7 +270,7 @@ function stats($action)
     // RACE
     foreach ($race as $id)
     {
-      $race[$id[0]][2] = $sqlc->result($sqlc->query('SELECT count(guid) FROM characters
+      $race[$id[0]][2] = $sql['char']->result($sql['char']->query('SELECT count(guid) FROM characters
         WHERE race = '.$id[0].' '.$order_class.' '.$order_level.' '.$order_side.(($action) ? ' AND online= 1' : '')), 0);
       $race[$id[0]][3] = round((($race[$id[0]][2])*100)/$total_chars,1);
     }
@@ -311,7 +311,7 @@ function stats($action)
     // CLASS
     foreach ($class as $id)
     {
-      $class[$id[0]][2] = $sqlc->result($sqlc->query('SELECT count(guid) FROM characters
+      $class[$id[0]][2] = $sql['char']->result($sql['char']->query('SELECT count(guid) FROM characters
         WHERE class = '.$id[0].' '.$order_race.' '.$order_level.' '.$order_side.(($action) ? ' AND online= 1' : '')), 0);
       $class[$id[0]][3] = round((($class[$id[0]][2])*100)/$total_chars,1);
     }
@@ -353,7 +353,7 @@ function stats($action)
     // LEVEL
     foreach ($level as $id)
     {
-      $level[$id[0]][3] = $sqlc->result($sqlc->query('SELECT count(guid) FROM characters
+      $level[$id[0]][3] = $sql['char']->result($sql['char']->query('SELECT count(guid) FROM characters
         WHERE level >= '.$id[1].'
           AND level <= '.$id[2].'
             '.$order_race.' '.$order_class.' '.$order_side.(($action) ? ' AND online= 1' : '').''), 0);

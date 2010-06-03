@@ -28,17 +28,16 @@ valid_login($action_permission['view']);
 function browse_chars()
 {
   global $output, $logon_db, $arcm_db, $arcm_db, $characters_db, $realm_id,
-    $action_permission, $user_lvl, $user_name, $showcountryflag, $itemperpage, $timezone, $sqlm, $sqlm, $sqld,
-    $sqll, $sqlc, $core;
+    $action_permission, $user_lvl, $user_name, $showcountryflag, $itemperpage, $timezone, $sql, $core;
 
   //==========================$_GET and SECURE========================
-  $start = (isset($_GET['start'])) ? $sqll->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sql['logon']->quote_smart($_GET['start']) : 0;
   if (is_numeric($start)); else $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqll->quote_smart($_GET['order_by']) : 'guid';
+  $order_by = (isset($_GET['order_by'])) ? $sql['logon']->quote_smart($_GET['order_by']) : 'guid';
   if (preg_match('/^[_[:lower:]]{1,12}$/', $order_by)); else $order_by = 'guid';
 
-  $dir = (isset($_GET['dir'])) ? $sqll->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sql['logon']->quote_smart($_GET['dir']) : 1;
   if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
 
   $order_dir = ($dir) ? 'ASC' : 'DESC';
@@ -54,8 +53,8 @@ function browse_chars()
   $search_value = '';
   if(isset($_GET['search_value']) && isset($_GET['search_by']))
   {
-    $search_value = $sqll->quote_smart($_GET['search_value']);
-    $search_by = (isset($_GET['search_by'])) ? $sqll->quote_smart($_GET['search_by']) : 'name';
+    $search_value = $sql['logon']->quote_smart($_GET['search_value']);
+    $search_by = (isset($_GET['search_by'])) ? $sql['logon']->quote_smart($_GET['search_by']) : 'name';
     $search_menu = array('name', 'guid', 'account', 'level', 'greater_level', 'guild', 'race', 'class', 'mapid', 'highest_rank', 'greater_rank', 'online', 'gold', 'item');
     if (in_array($search_by, $search_menu));
     else $search_by = 'name';
@@ -66,10 +65,10 @@ function browse_chars()
       //need to get the acc id from other table since input comes as name
       case "account":
         if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("charlist.php?error=2");
-        $result = $sqll->query("SELECT acct FROM accounts WHERE login LIKE '%$search_value%' LIMIT $start, $itemperpage");
+        $result = $sql['logon']->query("SELECT acct FROM accounts WHERE login LIKE '%$search_value%' LIMIT $start, $itemperpage");
 
         $where_out = " acct IN (0 ";
-        while ($char = $sqll->fetch_row($result))
+        while ($char = $sql['logon']->fetch_row($result))
         {
           $where_out .= " ,";
           $where_out .= $char[0];
@@ -115,19 +114,19 @@ function browse_chars()
 
       case "guild":
         if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("charlist.php?error=2");
-        $result = $sqlc->query("SELECT guildid FROM guilds WHERE guildname LIKE '%$search_value%'");
-        $guildid = $sqlc->result($result, 0, 'guildid');
+        $result = $sql['char']->query("SELECT guildid FROM guilds WHERE guildname LIKE '%$search_value%'");
+        $guildid = $sql['char']->result($result, 0, 'guildid');
 
         if (!$search_value)
           $guildid = 0;
         $Q1 = "SELECT playerid FROM guild_data WHERE guildid = ";
         $Q1 .= $guildid;
 
-        $result = $sqlc->query($Q1);
+        $result = $sql['char']->query($Q1);
         unset($guildid);
         unset($Q1);
         $where_out = "guid IN (0 ";
-        while ($char = $sqlc->fetch_row($result))
+        while ($char = $sql['char']->fetch_row($result))
         {
           $where_out .= " ,";
           $where_out .= $char[0];
@@ -149,10 +148,10 @@ function browse_chars()
 
       case "item":
         if (is_numeric($search_value)); else $search_value = 0;
-        $result = $sqlc->query("SELECT ownerguid FROM playeritems WHERE entry = '$search_value'");
+        $result = $sql['char']->query("SELECT ownerguid FROM playeritems WHERE entry = '$search_value'");
 
         $where_out = "guid IN (0 ";
-        while ($char = $sqlc->fetch_row($result))
+        while ($char = $sql['char']->fetch_row($result))
         {
           $where_out .= " ,";
           $where_out .= $char[0];
@@ -202,28 +201,28 @@ function browse_chars()
             WHERE $where_out ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
     }
 
-    $query_1 = $sqlc->query("SELECT count(*) FROM `characters` where $where_out");
-    $query = $sqlc->query($sql_query);
+    $query_1 = $sql['char']->query("SELECT count(*) FROM `characters` where $where_out");
+    $query = $sql['char']->query($sql_query);
   }
   else
   {
-    $query_1 = $sqlc->query("SELECT count(*) FROM `characters`");
+    $query_1 = $sql['char']->query("SELECT count(*) FROM `characters`");
     if ( $core == 1 )
-      $query = $sqlc->query("SELECT guid, name, acct, race, class, zoneid, mapid,
+      $query = $sql['char']->query("SELECT guid, name, acct, race, class, zoneid, mapid,
         online,level, gender, timestamp,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ';', ".(PLAYER_FIELD_LIFETIME_HONORBALE_KILLS+1)."), ';', -1) AS UNSIGNED) AS highest_rank
         FROM `characters` ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
     else
-      $query = $sqlc->query("SELECT guid, name, account AS acct, race, class, zone AS zoneid, map AS mapid,
+      $query = $sql['char']->query("SELECT guid, name, account AS acct, race, class, zone AS zoneid, map AS mapid,
         online, level, gender, logout_time AS timestamp,
         totalHonorPoints AS highest_rank
         FROM `characters` ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   }
 
-  $all_record = $sqlc->result($query_1,0);
+  $all_record = $sql['char']->result($query_1,0);
   unset($query_1);
 
-  $this_page = $sqlc->num_rows($query) or die(error(lang('global', 'err_no_result')));
+  $this_page = $sql['char']->num_rows($query) or die(error(lang('global', 'err_no_result')));
 
   //==========================top tage navigaion starts here========================
   $output .= '
@@ -315,14 +314,14 @@ function browse_chars()
   for ($i=1; $i<=$looping; $i++)
   {
     // switched to fetch_assoc because using record indexes is for morons
-    $char = $sqlc->fetch_assoc($query, 0) or die(error(lang('global', 'err_no_user')));
+    $char = $sql['char']->fetch_assoc($query, 0) or die(error(lang('global', 'err_no_user')));
     // to disalow lower lvl gm to  view accounts of other gms
     if ( $core == 1 )
-      $result = $sqll->query("SELECT gm, login FROM accounts WHERE acct ='".$char['acct']."'");
+      $result = $sql['logon']->query("SELECT gm, login FROM accounts WHERE acct ='".$char['acct']."'");
     else
-      $result = $sqll->query("SELECT gmlevel AS gm, username AS login FROM account LEFT JOIN account_access ON account.id = account_access.id WHERE account.id ='".$char['acct']."'");
-    $owner_gmlvl = gmlevel($sqll->result($result, 0, 'gm'));
-    $owner_acc_name = $sqll->result($result, 0, 'login');
+      $result = $sql['logon']->query("SELECT gmlevel AS gm, username AS login FROM account LEFT JOIN account_access ON account.id = account_access.id WHERE account.id ='".$char['acct']."'");
+    $owner_gmlvl = gmlevel($sql['logon']->result($result, 0, 'gm'));
+    $owner_acc_name = $sql['logon']->result($result, 0, 'login');
       
     $time_offset = $timezone * 3600;
       
@@ -333,12 +332,12 @@ function browse_chars()
 
     if ( $core == 1 )
     {
-      $guild_id = $sqlc->result($sqlc->query("SELECT guildid FROM guild_data WHERE playerid='".$char['guid']."'"), 0);
-      $guild_name = $sqlc->result($sqlc->query("SELECT guildName FROM guilds WHERE guildid='".$guild_id."'"));
+      $guild_id = $sql['char']->result($sql['char']->query("SELECT guildid FROM guild_data WHERE playerid='".$char['guid']."'"), 0);
+      $guild_name = $sql['char']->result($sql['char']->query("SELECT guildName FROM guilds WHERE guildid='".$guild_id."'"));
     }
     else
     {
-      $guild_name = $sqlc->result($sqlc->query("SELECT name FROM guild WHERE guildid = '".$char['guid']."'"));
+      $guild_name = $sql['char']->result($sql['char']->query("SELECT name FROM guild WHERE guildid = '".$char['guid']."'"));
     }
 
     // we need the screen name here
@@ -347,11 +346,11 @@ function browse_chars()
       $un_query = "SELECT * FROM accounts WHERE acct = '".$char['acct']."'";
     else
       $un_query = "SELECT * FROM account WHERE id = '".$char['acct']."'";
-    $un_results = $sqll->query($un_query);
-    $un = $sqll->fetch_assoc($un_results);
+    $un_results = $sql['logon']->query($un_query);
+    $un = $sql['logon']->fetch_assoc($un_results);
     $sn_query = "SELECT * FROM config_accounts WHERE Login = '".$un['login']."'";
-    $sn_result = $sqlm->query($sn_query);
-    $sn = $sqlm->fetch_assoc($sn_result);    
+    $sn_result = $sql['mgr']->query($sn_query);
+    $sn = $sql['mgr']->fetch_assoc($sn_result);    
 
     if ( ($user_lvl >= $owner_gmlvl) || ($owner_acc_name == $user_name) || ($user_lvl == gmlevel('4')) )
     {
@@ -375,8 +374,8 @@ function browse_chars()
                 <td><img src='img/c_icons/".$char['race']."-".$char['gender'].".gif' onmousemove='toolTip(\"".char_get_race_name($char['race'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                 <td><img src='img/c_icons/{$char['class']}.gif' onmousemove='toolTip(\"".char_get_class_name($char['class'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                 <td>".char_get_level_color($char['level'])."</td>
-                <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$char['mapid']."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($char['mapid'], $sqld)."</span></td>
-                <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$char['zoneid']."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($char['zoneid'], $sqld)."</span></td>
+                <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$char['mapid']."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($char['mapid'])."</span></td>
+                <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$char['zoneid']."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($char['zoneid'])."</span></td>
                 <td>".$char['highest_rank']."</td>
                 <td class=\"small\"><a href='guild.php?action=view_guild&amp;error=3&amp;id=".$guild_id."'>".htmlentities($guild_name)."</a></td>
                 <td class=\"small\">$lastseen</td>
@@ -431,7 +430,7 @@ function browse_chars()
 //########################################################################################################################
 function del_char_form()
 {
-  global $output, $characters_db, $realm_id, $action_permission, $sqlc;
+  global $output, $characters_db, $realm_id, $action_permission, $sql;
 
   valid_login($action_permission['delete']);
 
@@ -451,7 +450,7 @@ function del_char_form()
   $n_check = count($check);
   for ($i=0; $i<$n_check; ++$i)
   {
-    $name = $sqlc->result($sqlc->query('SELECT name FROM characters WHERE guid = '.$check[$i].''), 0);
+    $name = $sql['char']->result($sql['char']->query('SELECT name FROM characters WHERE guid = '.$check[$i].''), 0);
     $output .= '
                 <a href="char.php?id='.$check[$i].'" target="_blank">'.$name.', </a>';
     $pass_array .= '&amp;check%5B%5D='.$check[$i].'';
@@ -483,11 +482,11 @@ function del_char_form()
 //########################################################################################################################
 function dodel_char()
 {
-  global $output, $characters_db, $realm_id, $action_permission, $tab_del_user_characters, $sqlc;
+  global $output, $characters_db, $realm_id, $action_permission, $tab_del_user_characters, $sql;
 
   valid_login($action_permission['delete']);
 
-  if(isset($_GET['check'])) $check = $sqlc->quote_smart($_GET['check']);
+  if(isset($_GET['check'])) $check = $sql['char']->quote_smart($_GET['check']);
     else redirect('char_list.php?error=1');
 
   $deleted_chars = 0;

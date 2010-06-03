@@ -129,7 +129,7 @@ function print_mail_form()
 function send_mail()
 {
   global $output, $logon_db, $characters_db, $realm_id,
-         $user_name, $from_mail, $mailer_type, $smtp_cfg, $GMailSender, $sqll, $sqlc;
+         $user_name, $from_mail, $mailer_type, $smtp_cfg, $GMailSender, $sql;
 
   if ( empty($_GET['body']) || empty($_GET['subject']) || empty($_GET['type']) || empty($_GET['group_sign']) || empty($_GET['group_send']) )
   {
@@ -137,10 +137,10 @@ function send_mail()
   }
 
   $body = explode("\n",$_GET['body']);
-  $subject = $sqlc->quote_smart($_GET['subject']);
+  $subject = $sql['char']->quote_smart($_GET['subject']);
 
   if(isset($_GET['to'])&&($_GET['to'] != ''))
-    $to = $sqlc->quote_smart($_GET['to']);
+    $to = $sql['char']->quote_smart($_GET['to']);
   else
   {
     $to = 0;
@@ -150,16 +150,16 @@ function send_mail()
     }
     else
     {
-      $group_value = $sqlc->quote_smart($_GET['group_value']);
-      $group_sign = $sqlc->quote_smart($_GET['group_sign']);
-      $group_send = $sqlc->quote_smart($_GET['group_send']);
+      $group_value = $sql['char']->quote_smart($_GET['group_value']);
+      $group_sign = $sql['char']->quote_smart($_GET['group_sign']);
+      $group_send = $sql['char']->quote_smart($_GET['group_send']);
     }
   }
 
   $type = addslashes($_GET['type']);
-  $att_gold = $sqlc->quote_smart($_GET['money']);
-  $att_item = $sqlc->quote_smart($_GET['att_item']);
-  $att_stack = $sqlc->quote_smart($_GET['att_stack']);
+  $att_gold = $sql['char']->quote_smart($_GET['money']);
+  $att_item = $sql['char']->quote_smart($_GET['att_item']);
+  $att_stack = $sql['char']->quote_smart($_GET['att_stack']);
   
   if ( ( $att_item <> 0 ) && ( $att_stack == 0 ) )
     $att_stack = 1;
@@ -241,7 +241,7 @@ function send_mail()
         switch ($group_send)
         {
           case "gm_level":
-            $result = $sqll->query("SELECT email FROM accounts WHERE gm $group_sign '$group_value'");
+            $result = $sql['logon']->query("SELECT email FROM accounts WHERE gm $group_sign '$group_value'");
             while($user = $sql->fetch_row($result))
             {
               if($user[0] != "") array_push($email_array, $user[0]);
@@ -249,8 +249,8 @@ function send_mail()
             break;
           case "locked":
             //this_is_junk: I'm going to pretend that locked is muted.
-            $result = $sqll->query("SELECT email FROM accounts WHERE muted $group_sign '$group_value'");
-            while($user = $sqll->fetch_row($result))
+            $result = $sql['logon']->query("SELECT email FROM accounts WHERE muted $group_sign '$group_value'");
+            while($user = $sql['logon']->fetch_row($result))
             {
               if($user[0] != "")
                 array_push($email_array, $user[0]);
@@ -258,10 +258,10 @@ function send_mail()
             break;
           case "banned":
             //this_is_junk: sigh...
-            $que = $sqll->query("SELECT id FROM account_banned");
+            $que = $sql['logon']->query("SELECT id FROM account_banned");
             while ($banned = $sql->fetch_row($que))
             {
-              $result = $sqll->query("SELECT email FROM accounts WHERE acct = '$banned[0]'");
+              $result = $sql['logon']->query("SELECT email FROM accounts WHERE acct = '$banned[0]'");
               if($sqlr->result($result, 0, 'email'))
                 array_push($email_array, $sql->result($result, 0, 'email'));
             }
@@ -311,15 +311,15 @@ function send_mail()
       $value .= $body[$i]." ";
       $body=$value;
       $body = str_replace("\r", " ", $body);
-      $body = $sqlc->quote_smart($body);
+      $body = $sql['char']->quote_smart($body);
 
       if($to)
       {
         //single Recipient
-        $result = $sqlc->query("SELECT guid FROM characters WHERE name = '$to'");
-        if ($sqlc->num_rows($result) == 1)
+        $result = $sql['char']->query("SELECT guid FROM characters WHERE name = '$to'");
+        if ($sql['char']->num_rows($result) == 1)
         {
-          $receiver = $sqlc->result($result, 0, 'guid');
+          $receiver = $sql['char']->result($result, 0, 'guid');
           $mails = array();
           $mail['receiver'] = $receiver;
           $mail['subject'] = $subject;
@@ -346,34 +346,34 @@ function send_mail()
         switch ($group_send)
         {
           case "gm_level":
-            $result = $sqll->query("SELECT acct FROM accounts WHERE gm $group_sign '$group_value'");
-            while($acc = $sqlc->fetch_row($result))
+            $result = $sql['logon']->query("SELECT acct FROM accounts WHERE gm $group_sign '$group_value'");
+            while($acc = $sql['char']->fetch_row($result))
             {
-              $result_2 = $sqlc->query("SELECT name FROM `characters` WHERE acct = '$acc[0]'");
-              while($char = $sqlc->fetch_row($result_2))
+              $result_2 = $sql['char']->query("SELECT name FROM `characters` WHERE acct = '$acc[0]'");
+              while($char = $sql['char']->fetch_row($result_2))
                 array_push($char_array, $char[0]);
             }
             break;
           case "online":
-            $result = $sqlc->query("SELECT name FROM `characters` WHERE online $group_sign '$group_value'");
-            while($user = $sqlc->fetch_row($result))
+            $result = $sql['char']->query("SELECT name FROM `characters` WHERE online $group_sign '$group_value'");
+            while($user = $sql['char']->fetch_row($result))
               array_push($char_array, $user[0]);
             break;
           case "char_level":
-            $result = $sqlc->query("SELECT name FROM `characters` WHERE level $group_sign '$group_value'");
-            while($user = $sqlc->fetch_row($result))
+            $result = $sql['char']->query("SELECT name FROM `characters` WHERE level $group_sign '$group_value'");
+            while($user = $sql['char']->fetch_row($result))
               array_push($char_array, $user[0]);
             break;
           default:
             redirect("mail.php?error=5");
         }
         $mails = array();
-        if($sqlc->num_rows($result))
+        if($sql['char']->num_rows($result))
         {
           foreach ($char_array as $receiver)
           {
-            $result = $sqlc->query("SELECT guid FROM characters WHERE name = '".$receiver."'");
-            $char_guid = $sqlc->fetch_row($result);
+            $result = $sql['char']->query("SELECT guid FROM characters WHERE name = '".$receiver."'");
+            $char_guid = $sql['char']->fetch_row($result);
             $mail = array();
             $mail['receiver'] = $char_guid[0];
             $mail['subject'] = $subject;
@@ -405,16 +405,16 @@ function send_mail()
 //
 function send_ingame_mail($realm_id, $massmails)
 {
-  global $server, $characters_db, $realm_id, $from_char, $stationary, $sqlc;
+  global $server, $characters_db, $realm_id, $from_char, $stationary, $sql;
 
   //$mess_str = '';
   $mess = 0;
   $result = '';
   foreach($massmails as $mails)
   {
-    $sqlc->query("INSERT INTO mailbox_insert_queue (sender_guid, receiver_guid, subject, body, stationary, money, item_id, item_stack)
+    $sql['char']->query("INSERT INTO mailbox_insert_queue (sender_guid, receiver_guid, subject, body, stationary, money, item_id, item_stack)
                   VALUES ('".$from_char."', '".$mails['receiver']."', '".$mails['subject']."', '".$mails['body']."', '".$stationary."', '".$mails['att_gold']."', '".$mails['att_item']."', '".$mails['att_stack']."')");
-    if($sqlc->affected_rows())
+    if($sql['char']->affected_rows())
     {
       //$mess_str .= "Successfully sent message sent to ". $mails['receiver_name']."<br />";
       $mess = 0; // success
@@ -433,7 +433,7 @@ function send_ingame_mail($realm_id, $massmails)
     redirect("mail.php?action=result&error=6&mess=$mess&recipient=".$mails['receiver_name']);
   else
   {
-    $redirect = $sqlc->quote_smart($_GET['redirect']);
+    $redirect = $sql['char']->quote_smart($_GET['redirect']);
     redirect($redirect);
   }
 

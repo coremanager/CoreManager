@@ -28,16 +28,16 @@ valid_login($action_permission['view']);
 function browse_teams()
 {
   global $output, $characters_db, $realm_id, $itemperpage,
-    $action_permission, $user_lvl, $user_id, $sqlc, $core;
+    $action_permission, $user_lvl, $user_id, $sql, $core;
 
   //==========================$_GET and SECURE=================================
-  $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sql['char']->quote_smart($_GET['start']) : 0;
   if (is_numeric($start)); else $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "atid";
+  $order_by = (isset($_GET['order_by'])) ? $sql['char']->quote_smart($_GET['order_by']) : "atid";
   if (!preg_match("/^[_[:lower:]]{1,17}$/", $order_by)) $order_by="atid";
 
-  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sql['char']->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
   $order_dir = ($dir) ? "ASC" : "DESC";
@@ -48,8 +48,8 @@ function browse_teams()
   $search_value = '';
   if(isset($_GET['search_value']) && isset($_GET['search_by']))
   {
-    $search_value = $sqlc->quote_smart($_GET['search_value']);
-    $search_by = $sqlc->quote_smart($_GET['search_by']);
+    $search_value = $sql['char']->quote_smart($_GET['search_value']);
+    $search_by = $sql['char']->quote_smart($_GET['search_by']);
     $search_menu = array('atname', 'leadername', 'atid');
     if (!in_array($search_by, $search_menu)) $search_by = 'atid';
 
@@ -61,7 +61,7 @@ function browse_teams()
       {
         if ( $core == 1 )
         {
-          $query = $sqlc->query("SELECT arenateams.id AS atid, arenateams.name AS atname,
+          $query = $sql['char']->query("SELECT arenateams.id AS atid, arenateams.name AS atname,
             arenateams.leader AS lguid, arenateams.type AS attype,
             (SELECT name FROM `characters` WHERE guid = lguid) AS lname,
             rating AS atrating, SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', -2), ' ', 1) AS atgames, 
@@ -79,19 +79,19 @@ function browse_teams()
             FROM arenateams
             WHERE arenateams.name LIKE '%$search_value%'
             ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-          $query_1 = $sqlc->query("SELECT count(*) FROM arenateams
+          $query_1 = $sql['char']->query("SELECT count(*) FROM arenateams
             WHERE arenateams.name LIKE '%$search_value%'");
         }
         else
         {
-          $query = $sqlc->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname,
+          $query = $sql['char']->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname,
             arena_team.captainguid AS lguid, arena_team.type AS attype, 
             (SELECT name FROM `characters` WHERE guid = lguid) AS lname, 
             (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid = atid) AS tot_chars, 
             rating AS atrating, games as atgames, wins as atwins FROM arena_team, arena_team_stats 
             WHERE arena_team.arenateamid = arena_team_stats.arenateamid AND arena_team.name LIKE '%$search_value%' 
             ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-          $query_1 = $sqlc->query("SELECT count(*) FROM arena_team 
+          $query_1 = $sql['char']->query("SELECT count(*) FROM arena_team 
             WHERE arena_team.name LIKE '%$search_value%'");
         }
       }
@@ -99,7 +99,7 @@ function browse_teams()
       {
         if ( $core == 1 )
         {
-          $query = $sqlc->query("SELECT arenateams.id AS atid, arenateams.name AS atname, arenateams.leader AS lguid,
+          $query = $sql['char']->query("SELECT arenateams.id AS atid, arenateams.name AS atname, arenateams.leader AS lguid,
             arenateams.type AS attype,
             (SELECT name FROM `characters` WHERE guid = lguid) AS lname,
             rating AS atrating, SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', -2), ' ', 1) AS atgames, 
@@ -118,12 +118,12 @@ function browse_teams()
             WHERE arenateams.leader in
             (SELECT guid FROM characters WHERE name LIKE '%$search_value%')
             ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-          $query_1 = $sqlc->query("SELECT count(*) FROM arenateams
+          $query_1 = $sql['char']->query("SELECT count(*) FROM arenateams
             WHERE arenateams.leader IN (SELECT guid FROM characters WHERE name LIKE '%$search_value%')");
         }
         else
         {
-          $query = $sqlc->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
+          $query = $sql['char']->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
             arena_team.captainguid AS lguid, arena_team.type AS attype, 
             (SELECT name FROM `characters` WHERE guid = lguid) AS lname,
             (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid = atid) AS tot_chars, 
@@ -131,7 +131,7 @@ function browse_teams()
             FROM arena_team, arena_team_stats 
             WHERE arena_team.arenateamid = arena_team_stats.arenateamid AND arena_team.captainguid in (SELECT guid from characters where name like '%$search_value%') 
             ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-          $query_1 = $sqlc->query("SELECT count(*) FROM arena_team 
+          $query_1 = $sql['char']->query("SELECT count(*) FROM arena_team 
             WHERE arena_team.captainguid IN (SELECT guid FROM characters WHERE name LIKE '%$search_value%')");
         }
       }
@@ -139,7 +139,7 @@ function browse_teams()
       {
         if ( $core == 1 )
         {
-          $query = $sqlc->query("SELECT arenateams.id AS atid, arenateams.name AS atname, arenateams.leader AS lguid,
+          $query = $sql['char']->query("SELECT arenateams.id AS atid, arenateams.name AS atname, arenateams.leader AS lguid,
             arenateams.type AS attype,
             (SELECT name FROM `characters` WHERE guid = lguid) AS lname,
             rating AS atrating, SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', -2), ' ', 1) AS atgames, 
@@ -157,12 +157,12 @@ function browse_teams()
             FROM arenateams
             WHERE arenateams.id ='$search_value'
             ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-          $query_1 = $sqlc->query("SELECT count(*) FROM arenateams
+          $query_1 = $sql['char']->query("SELECT count(*) FROM arenateams
             WHERE arenateams.id = '$search_value'");
         }
         else
         {
-          $query = $sqlc->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
+          $query = $sql['char']->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
             arena_team.captainguid AS lguid, arena_team.type AS attype, 
             (SELECT name FROM `characters` WHERE guid = lguid) AS lname,
             (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid = atid) AS tot_chars, 
@@ -170,7 +170,7 @@ function browse_teams()
             FROM arena_team, arena_team_stats 
             WHERE arena_team.arenateamid = arena_team_stats.arenateamid AND arena_team.arenateamid ='$search_value' 
             ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-          $query_1 = $sqlc->query("SELECT count(*) FROM arena_team 
+          $query_1 = $sql['char']->query("SELECT count(*) FROM arena_team 
             WHERE arena_team.arenateamid ='$search_value'");
         }
         break;
@@ -181,7 +181,7 @@ function browse_teams()
   {
     if ( $core == 1)
     {
-      $query = $sqlc->query("SELECT arenateams.id AS atid, arenateams.name AS atname, arenateams.leader AS lguid,
+      $query = $sql['char']->query("SELECT arenateams.id AS atid, arenateams.name AS atname, arenateams.leader AS lguid,
         arenateams.type AS attype,
         (SELECT name FROM `characters` WHERE guid = lguid) AS lname,
         rating AS atrating, SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', -2), ' ', 1) AS atgames, 
@@ -198,11 +198,11 @@ function browse_teams()
             SUBSTRING_INDEX(player_data10, ' ', 1) AS p10
         FROM arenateams
         ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-      $query_1 = $sqlc->query("SELECT count(*) FROM arenateams");
+      $query_1 = $sql['char']->query("SELECT count(*) FROM arenateams");
     }
     else
     {
-      $query = $sqlc->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
+      $query = $sql['char']->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
         arena_team.captainguid AS lguid, arena_team.type AS attype, 
         (SELECT name FROM `characters` WHERE guid = lguid) AS lname,
         (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid = atid) AS tot_chars, 
@@ -211,12 +211,12 @@ function browse_teams()
         FROM `arena_team_member`, `characters`, `arena_team` 
         WHERE arena_team.arenateamid = atid AND arena_team_member.arenateamid = arena_team.arenateamid AND arena_team_member.guid = characters.guid AND characters.online = 1) as arenateam_online FROM arena_team, arena_team_stats WHERE arena_team.arenateamid = arena_team_stats.arenateamid 
         ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-      $query_1 = $sqlc->query("SELECT count(*) FROM arena_team");
+      $query_1 = $sql['char']->query("SELECT count(*) FROM arena_team");
     }
   }
-  $all_record = $sqlc->result($query_1,0);
+  $all_record = $sql['char']->result($query_1,0);
   unset($query_1);
-  $this_page = $sqlc->num_rows($query);
+  $this_page = $sql['char']->num_rows($query);
 
   $member_count = 0;
   $members_online = 0;
@@ -275,18 +275,18 @@ function browse_teams()
               <th width=\"1%\"><a href=\"arenateam.php?order_by=games&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='games' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "").lang('arenateam', 'games')."</a></th>
               <th width=\"1%\"><a href=\"arenateam.php?order_by=wins&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='wins' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "").lang('arenateam', 'wins')."</a></th>
             </tr>";
-  while ($data = $sqlc->fetch_assoc($query))
+  while ($data = $sql['char']->fetch_assoc($query))
   {
-    //$gonline = $sqlc->query("SELECT count(*) AS GCNT  FROM `arenateams`,`characters` WHERE arenateams.id = ".$data['atid']." AND characters.online = 1;");
-    //$arenateam_online = $sqlc->result($gonline,"GCNT");
+    //$gonline = $sql['char']->query("SELECT count(*) AS GCNT  FROM `arenateams`,`characters` WHERE arenateams.id = ".$data['atid']." AND characters.online = 1;");
+    //$arenateam_online = $sql['char']->result($gonline,"GCNT");
     for($i = 1; $i < 11; $i++)
     {
       if($data['p'.$i])
       {
         $member_count += 1;
 
-        $online = $sqlc->query("SELECT * FROM characters WHERE online = 1 AND guid = '".$data['p'.$i]."'");
-        if ($sqlc->num_rows($online))
+        $online = $sql['char']->query("SELECT * FROM characters WHERE online = 1 AND guid = '".$data['p'.$i]."'");
+        if ($sql['char']->num_rows($online))
           $members_online += 1;
       }
     }
@@ -326,17 +326,17 @@ function count_days( $a, $b ) {
 function view_team()
 {
   global $output, $characters_db, $realm_id, $arcm_db, $logon_db,
-    $action_permission, $user_lvl, $user_id, $showcountryflag, $sqlc, $sqll, $sqlm;
+    $action_permission, $user_lvl, $user_id, $showcountryflag, $sql;
 
   if(!isset($_GET['id'])) redirect("arenateam.php?error=1");
 
-  $arenateam_id = $sqlc->quote_smart($_GET['id']);
+  $arenateam_id = $sql['char']->quote_smart($_GET['id']);
 
-  $query = $sqlc->query("SELECT id, name, type FROM arenateams WHERE id = '$arenateam_id'");
-  $arenateam_data = $sqlc->fetch_row($query);
+  $query = $sql['char']->query("SELECT id, name, type FROM arenateams WHERE id = '$arenateam_id'");
+  $arenateam_data = $sql['char']->fetch_row($query);
 
   // arenateams.data format: [week games] [week wins] [season games] [season wins]
-  $query = $sqlc->query("SELECT id, rating,
+  $query = $sql['char']->query("SELECT id, rating,
     SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 2), ' ', 1) AS games, 
     SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 2), ' ', -1) AS wins,
     SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', -2), ' ', 1) AS played, 
@@ -344,7 +344,7 @@ function view_team()
     ranking, player_data1, player_data2, player_data3, player_data4, player_data5,
     player_data6, player_data7, player_data8, player_data9, player_data10
     FROM arenateams WHERE id = '$arenateam_id'");
-  $arenateamstats_data = $sqlc->fetch_row($query);
+  $arenateamstats_data = $sql['char']->fetch_row($query);
 
   $rating_offset = 1550;
   if ($arenateam_data[2] == 3)
@@ -435,8 +435,8 @@ function view_team()
     {
       $query = "SELECT acct, name, level, race, class, online, timestamp, gender
                 FROM characters WHERE guid = '".$member[0]."'";
-      $result = $sqlc->query($query);
-      $member_char = $sqlc->fetch_row($result);
+      $result = $sql['char']->query($query);
+      $member_char = $sql['char']->fetch_row($result);
 
       $accid = $member_char[0];
       $output .= "
@@ -561,7 +561,7 @@ function del_team()
 //##########################################################################################
 function rem_char_from_team()
 {
-  global $characters_db, $realm_id, $user_lvl, $sqlc;
+  global $characters_db, $realm_id, $user_lvl, $sql;
 
   if(isset($_GET['id'])) $guid = $_GET['id'];
     else redirect("arenateam.php?error=1");

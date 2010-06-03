@@ -22,9 +22,9 @@
 
  function get_itemset_name($id)
 {
-  global $arcm_db, $sqld;
+  global $arcm_db, $sql;
   
-  $itemset = $sqld->fetch_row($sqld->query("SELECT `ItemName` FROM `itemset` WHERE `ID`={$id} LIMIT 1"));
+  $itemset = $sql['dbc']->fetch_row($sql['dbc']->query("SELECT `ItemName` FROM `itemset` WHERE `ID`={$id} LIMIT 1"));
   return $itemset[0];
 }
 
@@ -34,15 +34,15 @@
 
 function get_item_border($item_id)
 {
-  global $sqlw, $core;
+  global $sql, $core;
 
   if($item_id)
   {
     if ( $core == 1 )
-      $result = $sqlw->query('SELECT quality FROM items WHERE entry = '.$item_id.'');
+      $result = $sql['world']->query('SELECT quality FROM items WHERE entry = '.$item_id.'');
     else
-      $result = $sqlw->query('SELECT Quality AS quality FROM item_template WHERE entry = '.$item_id.'');
-    $iborder = (1 == $sqlw->num_rows($result)) ? $sqlw->result($result, 0, 'quality'): 'Quality: '.$iborder.' Not Found' ;
+      $result = $sql['world']->query('SELECT Quality AS quality FROM item_template WHERE entry = '.$item_id.'');
+    $iborder = (1 == $sql['world']->num_rows($result)) ? $sql['world']->result($result, 0, 'quality'): 'Quality: '.$iborder.' Not Found' ;
 
     return 'icon_border_'.$iborder.'';
   }
@@ -56,13 +56,13 @@ function get_item_border($item_id)
 
 function get_item_name($item_id)
 {
-  global $world_db, $realm_id, $sqlw;
+  global $world_db, $realm_id, $sql;
 
   if($item_id)
   {
     $deplang = get_lang_id();
-    $result = $sqlw->query('SELECT name1 FROM items WHERE entry = '.$item_id.'');
-    $item_name = (1 == $sqlw->num_rows($result)) ? $sqlw->result($result, 0, 'name1') : 'ItemID: '.$item_id.' Not Found' ;
+    $result = $sql['world']->query('SELECT name1 FROM items WHERE entry = '.$item_id.'');
+    $item_name = (1 == $sql['world']->num_rows($result)) ? $sql['world']->result($result, 0, 'name1') : 'ItemID: '.$item_id.' Not Found' ;
 
     return $item_name;
   }
@@ -77,17 +77,17 @@ function get_item_name($item_id)
 function get_item_icon($itemid)
 {
   global $arcm_db, $world_db, $realm_id, $proxy_cfg, $get_icons_from_web, $item_icons,
-         $hosted_on_nix, $sqld, $sqlw, $core;
+         $sql, $core;
 
   if ( $core == 1 )
-    $result = $sqlw->query("SELECT `displayid` FROM `items` WHERE `entry` = $itemid LIMIT 1");
+    $result = $sql['world']->query("SELECT `displayid` FROM `items` WHERE `entry` = $itemid LIMIT 1");
   else
-    $result = $sqlw->query("SELECT `displayid` FROM `item_template` WHERE `entry` = $itemid LIMIT 1");
-  $displayid_record = $sqlw->fetch_assoc($result);
+    $result = $sql['world']->query("SELECT `displayid` FROM `item_template` WHERE `entry` = $itemid LIMIT 1");
+  $displayid_record = $sql['world']->fetch_assoc($result);
   $displayid = $displayid_record['displayid'];
 
-  $result = $sqld->query("SELECT `IconName` FROM itemdisplayinfo WHERE id = '".$displayid."'");
-  $icon_fields = $sqld->fetch_assoc($result);
+  $result = $sql['dbc']->query("SELECT `IconName` FROM itemdisplayinfo WHERE id = '".$displayid."'");
+  $icon_fields = $sql['dbc']->fetch_assoc($result);
   return $item_icons."/".$icon_fields['IconName'].".png";
 }
 
@@ -97,12 +97,12 @@ function get_item_icon($itemid)
 
 function get_item_tooltip($item_id)
 {
-  global $world_db, $realm_id, $language, $sqlw;
+  global $world_db, $realm_id, $language, $sql;
 
   if($item_id)
   {
     $deplang = get_lang_id();
-    $result_1 = $sqlw->query("SELECT stat_type1,stat_value1,stat_type2,
+    $result_1 = $sql['world']->query("SELECT stat_type1,stat_value1,stat_type2,
       stat_value2,stat_type3,stat_value3,stat_type4,stat_value4,stat_type5,
       stat_value5,stat_type6,stat_value6,stat_type7,stat_value7,stat_type8,
       stat_value8,stat_type9,stat_value9,stat_type10,stat_value10,armor,
@@ -118,7 +118,7 @@ function get_item_tooltip($item_id)
       RandomProperty,RandomSuffix
       FROM item_template LEFT JOIN locales_item ON item_template.entry = locales_item.entry
       WHERE item_template.entry = '$item_id' LIMIT 1");
-    if ($item = $sqlw->fetch_row($result_1))
+    if ($item = $sql['world']->fetch_row($result_1))
     {
       $tooltip = "";
 

@@ -29,7 +29,7 @@ valid_login($action_permission['view']);
 
 function sel_char()
 {
-  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sqlc;
+  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sql;
 
   valid_login($action_permission['view']);
 
@@ -49,8 +49,8 @@ function sel_char()
               <th class="xname_LRC">'.lang('xrace', 'lvl').'</th>
               <th class="xname_LRC">'.lang('xrace', 'race').'</th>
               <th class="xname_LRC">'.lang('xrace', 'class').'</th>';
-  $chars = $sqlc->query("SELECT * FROM characters WHERE acct='".$user_id."'");
-  while ($char = $sqlc->fetch_assoc($chars))
+  $chars = $sql['char']->query("SELECT * FROM characters WHERE acct='".$user_id."'");
+  while ($char = $sql['char']->fetch_assoc($chars))
   {
     $output .= '
             <tr>
@@ -101,19 +101,19 @@ $Class_Races       =  array
 function chooserace()
 {
   global $output, $action_permission, $characters_db, $realm_id, $user_id,
-    $Class_Races, $sqlc;
+    $Class_Races, $sql;
 
   valid_login($action_permission['view']);
 
-  $guid = $sqlc->quote_smart($_GET['char']);
+  $guid = $sql['char']->quote_smart($_GET['char']);
   $new1 = '';
   if (isset($_GET['new1']))
-    $new1 = $sqlc->quote_smart($_GET['new1']);
+    $new1 = $sql['char']->quote_smart($_GET['new1']);
   $new2 = '';
   if (isset($_GET['new2']))
-    $new2 = $sqlc->quote_smart($_GET['new2']);
+    $new2 = $sql['char']->quote_smart($_GET['new2']);
 
-  $char = $sqlc->fetch_assoc($sqlc->query("SELECT * FROM characters WHERE guid='".$guid."'"));
+  $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$guid."'"));
   $output .= '
     <center>
       <fieldset id="xname_fieldset">
@@ -185,22 +185,22 @@ function chooserace()
 function getapproval()
 {
   global $output, $action_permission, $arcm_db, $characters_db, $realm_id,
-    $user_id, $Class_Races, $sqlm, $sqlc;
+    $user_id, $Class_Races, $sql;
 
   valid_login($action_permission['view']);
 
-  $guid = $sqlm->quote_smart($_GET['guid']);
-  $newrace = $sqlm->quote_smart($_GET['newrace']);
+  $guid = $sql['mgr']->quote_smart($_GET['guid']);
+  $newrace = $sql['mgr']->quote_smart($_GET['newrace']);
 
-  $count = $sqlm->num_rows($sqlm->query("SELECT * FROM char_changes WHERE `guid`='".$guid."'"));
+  $count = $sql['mgr']->num_rows($sql['mgr']->query("SELECT * FROM char_changes WHERE `guid`='".$guid."'"));
   if ($count)
     redirect("change_char_race.php?error=3");
 
-  $char = $sqlc->fetch_assoc($sqlc->query("SELECT * FROM characters WHERE `guid`='".$guid."'"));
+  $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE `guid`='".$guid."'"));
   if ( !in_array($newrace, $Class_Races[$char['class']]) )
     redirect("change_char_race.php?error=2");
 
-  $result = $sqlm->query("INSERT INTO char_changes (guid,new_race) VALUES ('".$guid."', '".$newrace."')");
+  $result = $sql['mgr']->query("INSERT INTO char_changes (guid,new_race) VALUES ('".$guid."', '".$newrace."')");
 
   redirect("change_char_race.php?error=5");
 }
@@ -212,15 +212,15 @@ function getapproval()
 
 function denied()
 {
-  global $output, $action_permission, $arcm_db, $characters_db, $realm_id, $user_id, $sqlm, $sqlc;
+  global $output, $action_permission, $arcm_db, $characters_db, $realm_id, $user_id, $sql;
 
   valid_login($action_permission['update']);
 
-  $guid = $sqlm->quote_smart($_GET['guid']);
+  $guid = $sql['mgr']->quote_smart($_GET['guid']);
 
-  $result = $sqlm->query("DELETE FROM char_changes WHERE `guid`='".$guid."'");
+  $result = $sql['mgr']->query("DELETE FROM char_changes WHERE `guid`='".$guid."'");
 
-  $char = $sqlc->fetch_assoc($sqlc->query("SELECT * FROM characters WHERE guid='".$guid."'"));
+  $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$guid."'"));
 
   // send denial letter
   redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char['name']."&subject=".lang('xrace', 'subject')."&body=".lang('xrace', 'body1').$char['name'].lang('xrace', 'body2')."&group_sign==&group_send=gm_level&money=0&att_item=0&att_stack=0&redirect=index.php");
@@ -233,18 +233,17 @@ function denied()
 
 function saverace()
 {
-  global $output, $action_permission, $arcm_db, $characters_db, $realm_id, $sqlm, $sqlc,
-    $user_id;
+  global $output, $action_permission, $arcm_db, $characters_db, $realm_id, $sql, $user_id;
 
   valid_login($action_permission['update']);
 
-  $guid = $sqlm->quote_smart($_GET['guid']);
+  $guid = $sql['mgr']->quote_smart($_GET['guid']);
 
-  $name = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM char_changes WHERE `guid`='".$guid."'"));
+  $name = $sql['mgr']->fetch_assoc($sql['mgr']->query("SELECT * FROM char_changes WHERE `guid`='".$guid."'"));
 
-  $result = $sqlc->query("UPDATE characters SET `race`='".$name['new_race']."' WHERE `guid`='".$guid."'");
+  $result = $sql['char']->query("UPDATE characters SET `race`='".$name['new_race']."' WHERE `guid`='".$guid."'");
 
-  $result = $sqlm->query("DELETE FROM char_changes WHERE `guid`='".$guid."'");
+  $result = $sql['mgr']->query("DELETE FROM char_changes WHERE `guid`='".$guid."'");
 
   // this_is_junk: The retail version of this swaps the character's old home faction reputation with
   // their reputation with the new faction.  So, an Orc wanting to become a Blood Elf would have

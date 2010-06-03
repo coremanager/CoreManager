@@ -27,8 +27,7 @@ valid_login($action_permission['view']);
 //########################################################################################################################^M
 function char_mail()
 {
-  global $output, $realm_id, $characters_db, $action_permission, $user_lvl, $user_name, $user_id,
-    $sqll, $sqlc;
+  global $output, $realm_id, $characters_db, $action_permission, $user_lvl, $user_name, $user_id, $sql;
 
   if (empty($_GET['id']))
     error(lang('global', 'empty_fields'));
@@ -37,30 +36,30 @@ function char_mail()
     $realmid = $realm_id;
   else
   {
-    $realmid = $sqll->quote_smart($_GET['realm']);
+    $realmid = $sql['logon']->quote_smart($_GET['realm']);
     if (is_numeric($realmid))
-      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
-  $id = $sqlc->quote_smart($_GET['id']);
+  $id = $sql['char']->quote_smart($_GET['id']);
   if (is_numeric($id)); else $id = 0;
 
-  $result = $sqlc->query('SELECT acct, name, race, class, level, gender
+  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
     FROM characters WHERE guid = '.$id.' LIMIT 1');
 
-  if ($sqlc->num_rows($result))
+  if ($sql['char']->num_rows($result))
   {
-    $char = $sqlc->fetch_assoc($result);
+    $char = $sql['char']->fetch_assoc($result);
     
     if ( $user_id <> $char['acct'] )
       error(lang('char', 'no_permission'));
 
-    $owner_acc_id = $sqlc->result($result, 0, 'accounts');
-    $result = $sqll->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sqll->result($result, 0, 'gm');
-    $owner_name = $sqll->result($result, 0, 'login');
+    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
+    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
+    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_name = $sql['logon']->result($result, 0, 'login');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
@@ -103,9 +102,9 @@ function char_mail()
                 </font>
                 <br /><br />';
 
-      $result = $sqlc->query("SELECT * FROM mailbox WHERE player_guid = '".$id."' AND deleted_flag = 0");
+      $result = $sql['char']->query("SELECT * FROM mailbox WHERE player_guid = '".$id."' AND deleted_flag = 0");
 
-      if ($sqlc->num_rows($result))
+      if ($sql['char']->num_rows($result))
       {
         $output .= '
                 <table class="lined" id="ch_mail_table">
@@ -114,11 +113,11 @@ function char_mail()
                     <th>'.lang('char', 'sender').'</th>
                     <th width="55%">'.lang('char', 'subject').'</th>
                   </tr>';
-        while($mail = $sqlc->fetch_assoc($result))
+        while($mail = $sql['char']->fetch_assoc($result))
         {
           $c_query = "SELECT name FROM characters WHERE guid = '".$mail['sender_guid']."'";
-          $c_result = $sqlc->query($c_query);
-          $c_name = $sqlc->fetch_assoc($c_result);
+          $c_result = $sql['char']->query($c_query);
+          $c_name = $sql['char']->fetch_assoc($c_result);
           
           $output .= '
                   <tr>
@@ -198,8 +197,7 @@ function char_mail()
 //########################################################################################################################^M
 function read_mail()
 {
-  global $output, $realm_id, $characters_db, $action_permission, $user_lvl, $user_name, $user_id,
-    $sqll, $sqlc;
+  global $output, $realm_id, $characters_db, $action_permission, $user_lvl, $user_name, $user_id, $sql;
 
   if (empty($_GET['id']))
     error(lang('global', 'empty_fields'));
@@ -211,33 +209,33 @@ function read_mail()
     $realmid = $realm_id;
   else
   {
-    $realmid = $sqll->quote_smart($_GET['realm']);
+    $realmid = $sql['logon']->quote_smart($_GET['realm']);
     if (is_numeric($realmid))
-      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
-  $id = $sqlc->quote_smart($_GET['id']);
+  $id = $sql['char']->quote_smart($_GET['id']);
   if (is_numeric($id)); else $id = 0;
 
-  $message = $sqlc->quote_smart($_GET['message']);
+  $message = $sql['char']->quote_smart($_GET['message']);
   if (is_numeric($message)); else $message = 0;
 
-  $result = $sqlc->query('SELECT acct, name, race, class, level, gender
+  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
     FROM characters WHERE guid = '.$id.' LIMIT 1');
 
-  if ($sqlc->num_rows($result))
+  if ($sql['char']->num_rows($result))
   {
-    $char = $sqlc->fetch_assoc($result);
+    $char = $sql['char']->fetch_assoc($result);
     
     if ( $user_id <> $char['acct'] )
       error(lang('char', 'no_permission'));
 
-    $owner_acc_id = $sqlc->result($result, 0, 'accounts');
-    $result = $sqll->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sqll->result($result, 0, 'gm');
-    $owner_name = $sqll->result($result, 0, 'login');
+    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
+    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
+    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_name = $sql['logon']->result($result, 0, 'login');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
@@ -279,14 +277,14 @@ function read_mail()
                 </font>
                 <br />';
 
-      $result = $sqlc->query("SELECT * FROM mailbox WHERE message_id = '".$message."'");
-      $mail = $sqlc->fetch_assoc($result);
+      $result = $sql['char']->query("SELECT * FROM mailbox WHERE message_id = '".$message."'");
+      $mail = $sql['char']->fetch_assoc($result);
 
-      if ($sqlc->num_rows($result))
+      if ($sql['char']->num_rows($result))
       {
         $c_query = "SELECT name FROM characters WHERE guid = '".$mail['sender_guid']."'";
-        $c_result = $sqlc->query($c_query);
-        $c_name = $sqlc->fetch_assoc($c_result);
+        $c_result = $sql['char']->query($c_query);
+        $c_name = $sql['char']->fetch_assoc($c_result);
           
         $output .= '
                 <fieldset id="ch_read_mail_field">

@@ -30,7 +30,7 @@ valid_login($action_permission['view']);
 
 function sel_char()
 {
-  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sqlc;
+  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sql;
 
   valid_login($action_permission['view']);
 
@@ -50,8 +50,8 @@ function sel_char()
               <th class="xname_LRC">'.lang('unstuck', 'lvl').'</th>
               <th class="xname_LRC">'.lang('unstuck', 'race').'</th>
               <th class="xname_LRC">'.lang('unstuck', 'class').'</th>';
-  $chars = $sqlc->query("SELECT * FROM characters WHERE acct='".$user_id."'");
-  while ($char = $sqlc->fetch_assoc($chars))
+  $chars = $sql['char']->query("SELECT * FROM characters WHERE acct='".$user_id."'");
+  while ($char = $sql['char']->fetch_assoc($chars))
   {
     $output .= '
             <tr>
@@ -88,19 +88,19 @@ function sel_char()
 function approve()
 {
   global $output, $action_permission, $characters_db, $realm_id, 
-    $arcm_db, $user_id, $sqlc, $sqlm, $sqld;
+    $arcm_db, $user_id, $sql;
 
   valid_login($action_permission['view']);
 
-  $guid = $sqlc->quote_smart($_GET['char']);
+  $guid = $sql['char']->quote_smart($_GET['char']);
   $new1 = '';
   if (isset($_GET['new1']))
-    $new1 = $sqlc->quote_smart($_GET['new1']);
+    $new1 = $sql['char']->quote_smart($_GET['new1']);
   $new2 = '';
   if (isset($_GET['new2']))
-    $new2 = $sqlc->quote_smart($_GET['new2']);
+    $new2 = $sql['char']->quote_smart($_GET['new2']);
 
-  $char = $sqlc->fetch_assoc($sqlc->query("SELECT * FROM characters WHERE guid='".$guid."'"));
+  $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$guid."'"));
   $output .= '
     <center>
       <fieldset id="xname_fieldset">
@@ -129,8 +129,8 @@ function approve()
               <td><b>'.lang('unstuck', 'curloc').':</b></td>
             </tr>
             <tr>
-              <td>'.get_map_name($char['mapId'], $sqld).'</td>
-              <td>'.get_zone_name($char['zoneId'], $sqld).'</td>
+              <td>'.get_map_name($char['mapId']).'</td>
+              <td>'.get_zone_name($char['zoneId']).'</td>
             </tr>
             <tr>
               <td>&nbsp;</td>
@@ -139,8 +139,8 @@ function approve()
               <td colspan="2"><b>'.lang('unstuck', 'newloc').':</b></td>
             </tr>
             <tr>
-              <td>'.get_map_name($char['bindmapId'], $sqld).'</td>
-              <td>'.get_zone_name($char['bindzoneId'], $sqld).'</td>
+              <td>'.get_map_name($char['bindmapId']).'</td>
+              <td>'.get_zone_name($char['bindzoneId']).'</td>
             </tr>
             <tr>
               <td>&nbsp;</td>
@@ -165,15 +165,15 @@ function approve()
 
 function saveloc()
 {
-  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sqlc;
+  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sql;
 
   valid_login($action_permission['view']);
 
-  $guid = $sqlc->quote_smart($_GET['guid']);
+  $guid = $sql['char']->quote_smart($_GET['guid']);
 
-  $char = $sqlc->fetch_assoc($sqlc->query("SELECT * FROM characters WHERE `guid`='".$guid."'"));
+  $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE `guid`='".$guid."'"));
 
-  $result = $sqlc->query("UPDATE characters SET `positionX`='".$char['bindpositionX']."', `positionY`='".$char['bindpositionY']."', `positionZ`='".$char['bindpositionZ']."', `mapId`='".$char['bindmapId']."', `zoneId`='".$char['bindzoneId']."' WHERE `guid`='".$guid."'");
+  $result = $sql['char']->query("UPDATE characters SET `positionX`='".$char['bindpositionX']."', `positionY`='".$char['bindpositionY']."', `positionZ`='".$char['bindpositionZ']."', `mapId`='".$char['bindmapId']."', `zoneId`='".$char['bindzoneId']."' WHERE `guid`='".$guid."'");
 
   redirect("hearthstone.php?error=2");
 }

@@ -26,10 +26,10 @@ valid_login($action_permission['view']);
 //########################################################################################################################
 function show_list()
 {
-  global $realm_id, $output, $logon_db, $characters_db, $itemperpage, $action_permission, $user_lvl, $sqll, $sqlc;
+  global $realm_id, $output, $logon_db, $characters_db, $itemperpage, $action_permission, $user_lvl, $sql;
   valid_login($action_permission['view']);
 
-  $ban_type = (isset($_GET['ban_type'])) ? $sqll->quote_smart($_GET['ban_type']) : "accounts";
+  $ban_type = (isset($_GET['ban_type'])) ? $sql['logon']->quote_smart($_GET['ban_type']) : "accounts";
   
   switch($ban_type)
   {
@@ -51,13 +51,13 @@ function show_list()
   }
 
   //==========================$_GET and SECURE=================================
-  $start = (isset($_GET['start'])) ? $sqll->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sql['logon']->quote_smart($_GET['start']) : 0;
   if (is_numeric($start)); else $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqll->quote_smart($_GET['order_by']) : "$key_field";
+  $order_by = (isset($_GET['order_by'])) ? $sql['logon']->quote_smart($_GET['order_by']) : "$key_field";
   if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="$key_field";
 
-  $dir = (isset($_GET['dir'])) ? $sqll->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sql['logon']->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
   $order_dir = ($dir) ? "ASC" : "DESC";
@@ -68,43 +68,43 @@ function show_list()
   {
     case "accounts":
     {
-      $query_1 = $sqll->query("SELECT count(*) FROM accounts WHERE banned <> 0");
+      $query_1 = $sql['logon']->query("SELECT count(*) FROM accounts WHERE banned <> 0");
       break;
     }
     case "characters":
     {
-      $query_1 = $sqlc->query("SELECT count(*) FROM characters WHERE banned <> 0");
+      $query_1 = $sql['char']->query("SELECT count(*) FROM characters WHERE banned <> 0");
       break;
     }
     case "ipbans":
     {
-      $query_1 = $sqll->query("SELECT count(*) FROM ipbans");
+      $query_1 = $sql['logon']->query("SELECT count(*) FROM ipbans");
       break;
     }
   }
 
-  $all_record = $sqll->result($query_1,0);
+  $all_record = $sql['logon']->result($query_1,0);
 
   switch($ban_type)
   {
     case "accounts":
     {
-      $result = $sqll->query("SELECT acct, banned FROM $ban_type WHERE banned <> 0 ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+      $result = $sql['logon']->query("SELECT acct, banned FROM $ban_type WHERE banned <> 0 ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
       break;
     }
     case "characters":
     {
-      $result = $sqlc->query("SELECT guid, name, banned, banReason FROM $ban_type WHERE banned <> 0 ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+      $result = $sql['char']->query("SELECT guid, name, banned, banReason FROM $ban_type WHERE banned <> 0 ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
       break;
     }
     case "ipbans":
     {
-      $result = $sqll->query("SELECT ip, expire FROM $ban_type ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+      $result = $sql['logon']->query("SELECT ip, expire FROM $ban_type ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
       break;
     }
   }
   
-  $this_page = $sqll->num_rows($result);
+  $this_page = $sql['logon']->num_rows($result);
 
   $output .= "
         <center>
@@ -190,21 +190,21 @@ function show_list()
     }
   }
 
-  while ($ban = $sqll->fetch_assoc($result))
+  while ($ban = $sql['logon']->fetch_assoc($result))
   {
     if ($ban_type == "accounts")
     {
-      $result1 = $sqll->query("SELECT login FROM accounts WHERE acct='".$ban['acct']."'");
-      $row_name = $sqll->result($result1, 0, 'login');
+      $result1 = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$ban['acct']."'");
+      $row_name = $sql['logon']->result($result1, 0, 'login');
       $name_out = "<a href=\"user.php?action=edit_user&amp;error=11&amp;acct=".$ban['acct']."\">$row_name</a>";
     }
     elseif ($ban_type == "characters")
     {
-      $result = $sqlc->query("SELECT acct,name FROM characters WHERE guid='".$ban['guid']."'");
-      $row_name = $sqlc->result($result, 0, 'name');
-      $owner_acc = $sqlc->result($result, 0, 'acct');
-      $result = $sqll->query("SELECT login FROM accounts WHERE acct='".$owner_acc."'");
-      $name_out = $sqll->result($result, 0, 'login');
+      $result = $sql['char']->query("SELECT acct,name FROM characters WHERE guid='".$ban['guid']."'");
+      $row_name = $sql['char']->result($result, 0, 'name');
+      $owner_acc = $sql['char']->result($result, 0, 'acct');
+      $result = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$owner_acc."'");
+      $name_out = $sql['logon']->result($result, 0, 'login');
     }
     else
     {
@@ -278,16 +278,16 @@ function show_list()
 //########################################################################################################################
 function do_delete_entry()
 {
-  global $logon_db, $characters_db, $realm_id, $action_permission, $user_lvl, $sqll, $sqlc;
+  global $logon_db, $characters_db, $realm_id, $action_permission, $user_lvl, $sql;
   valid_login($action_permission['delete']);
 
   if(isset($_GET['ban_type']))
-    $ban_type = $sqll->quote_smart($_GET['ban_type']);
+    $ban_type = $sql['logon']->quote_smart($_GET['ban_type']);
   else
     redirect("banned.php?error=1");
 
   if(isset($_GET['entry']))
-    $entry = $sqll->quote_smart($_GET['entry']);
+    $entry = $sql['logon']->quote_smart($_GET['entry']);
   else
     redirect("banned.php?error=1");
 
@@ -295,9 +295,9 @@ function do_delete_entry()
   {
     case "accounts":
     {
-      $sqll->query("UPDATE accounts SET banned = '0' WHERE acct = '".$entry."'");
+      $sql['logon']->query("UPDATE accounts SET banned = '0' WHERE acct = '".$entry."'");
 
-      if ($sqll->affected_rows())
+      if ($sql['logon']->affected_rows())
         redirect("banned.php?error=3&ban_type=$ban_type");
       else
         redirect("banned.php?error=2&ban_type=$ban_type");
@@ -306,9 +306,9 @@ function do_delete_entry()
     }
     case "characters":
     {
-      $sqlc->query("UPDATE characters SET banned = '0', banReason = '' WHERE guid = '".$entry."'");
+      $sql['char']->query("UPDATE characters SET banned = '0', banReason = '' WHERE guid = '".$entry."'");
 
-      if ($sqlc->affected_rows())
+      if ($sql['char']->affected_rows())
         redirect("banned.php?error=3&ban_type=$ban_type");
       else
         redirect("banned.php?error=2&ban_type=$ban_type");
@@ -317,9 +317,9 @@ function do_delete_entry()
     }
     case "ipbans":
     {
-      $sqll->query("DELETE FROM ipbans WHERE ip = '".$entry."'");
+      $sql['logon']->query("DELETE FROM ipbans WHERE ip = '".$entry."'");
 
-      if ($sqll->affected_rows())
+      if ($sql['logon']->affected_rows())
         redirect("banned.php?error=3&ban_type=$ban_type");
       else
         redirect("banned.php?error=2&ban_type=$ban_type");
@@ -392,34 +392,34 @@ function add_entry()
 //########################################################################################################################
 function do_add_entry()
 {
-  global $logon_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl, $sqll, $sqlc;
+  global $logon_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl, $sql;
   valid_login($action_permission['insert']);
 
   if( (empty($_GET['ban_type'])) || (empty($_GET['entry'])) || (empty($_GET['bantime'])) )
     redirect("banned.php?error=1&action=add_entry");
 
-  $ban_type = $sqll->quote_smart($_GET['ban_type']);
+  $ban_type = $sql['logon']->quote_smart($_GET['ban_type']);
 
-  $entry = $sqll->quote_smart($_GET['entry']);
+  $entry = $sql['logon']->quote_smart($_GET['entry']);
 
   switch($ban_type)
   {
     case "accounts":
     {
-      $result1 = $sqll->query("SELECT acct FROM accounts WHERE login ='".$entry."'");
-      if (!$sqll->num_rows($result1))
+      $result1 = $sql['logon']->query("SELECT acct FROM accounts WHERE login ='".$entry."'");
+      if (!$sql['logon']->num_rows($result1))
         redirect("banned.php?error=4&action=add_entry");
       else
-        $entry = $sqll->result($result1, 0, 'acct');
+        $entry = $sql['logon']->result($result1, 0, 'acct');
       break;
     }
     case "characters":
     {
-      $result1 = $sqlc->query("SELECT guid FROM characters WHERE name ='".$entry."'");
-      if (!$sqlc->num_rows($result1))
+      $result1 = $sql['char']->query("SELECT guid FROM characters WHERE name ='".$entry."'");
+      if (!$sql['char']->num_rows($result1))
         redirect("banned.php?error=4&action=add_entry");
       else
-        $entry = $sqlc->result($result1, 0, 'guid');
+        $entry = $sql['char']->result($result1, 0, 'guid');
       break;
     }
     case "ipbans":
@@ -428,19 +428,19 @@ function do_add_entry()
     }
   }
 
-  $bantime = time() + (3600 * $sqll->quote_smart($_GET['bantime']));
-  $banreason = (isset($_GET['banreason']) && ($_GET['banreason'] != '')) ? $sqll->quote_smart($_GET['banreason']) : "none";
+  $bantime = time() + (3600 * $sql['logon']->quote_smart($_GET['bantime']));
+  $banreason = (isset($_GET['banreason']) && ($_GET['banreason'] != '')) ? $sql['logon']->quote_smart($_GET['banreason']) : "none";
 
   switch($ban_type)
   {
     case "accounts":
     {
-      $result = $sqll->query("SELECT banned FROM accounts WHERE acct = '".$entry."'");
-      $acct_banned = $sqll->result($result, 0);
+      $result = $sql['logon']->query("SELECT banned FROM accounts WHERE acct = '".$entry."'");
+      $acct_banned = $sql['logon']->result($result, 0);
       if($acct_banned == 0)
-        $sqll->query("UPDATE accounts SET banned = '".$bantime."' WHERE acct='".$entry."'");
+        $sql['logon']->query("UPDATE accounts SET banned = '".$bantime."' WHERE acct='".$entry."'");
 
-      if ($sqll->affected_rows())
+      if ($sql['logon']->affected_rows())
         redirect("banned.php?error=3&ban_type=$ban_type");
       else
         redirect("banned.php?error=2&ban_type=$ban_type");
@@ -448,12 +448,12 @@ function do_add_entry()
     }
     case "characters":
     {
-      $result = $sqlc->query("SELECT banned FROM characters WHERE guid = '".$entry."'");
-      $char_banned = $sqlc->result($result, 0);
+      $result = $sql['char']->query("SELECT banned FROM characters WHERE guid = '".$entry."'");
+      $char_banned = $sql['char']->result($result, 0);
       if($char_banned == 0)
-        $sqlc->query("UPDATE characters SET banned = '".$bantime."', banReason = '".$banreason."' WHERE guid = '".$entry."'");
+        $sql['char']->query("UPDATE characters SET banned = '".$bantime."', banReason = '".$banreason."' WHERE guid = '".$entry."'");
       
-      if ($sqlc->affected_rows())
+      if ($sql['char']->affected_rows())
         redirect("banned.php?error=3&ban_type=$ban_type");
       else
         redirect("banned.php?error=2&ban_type=$ban_type");
@@ -461,11 +461,11 @@ function do_add_entry()
     }
     case "ipbans":
     {
-      $result = $sqll->query("SELECT ip FROM ipbans WHERE ip = '".$entry."'");
-      if(!$sqll->num_rows($result))
-        $sqll->query("INSERT INTO ipbans (ip, expire) VALUES ('".$entry."','".$bantime."')");
+      $result = $sql['logon']->query("SELECT ip FROM ipbans WHERE ip = '".$entry."'");
+      if(!$sql['logon']->num_rows($result))
+        $sql['logon']->query("INSERT INTO ipbans (ip, expire) VALUES ('".$entry."','".$bantime."')");
 
-      if ($sqll->affected_rows())
+      if ($sql['logon']->affected_rows())
         redirect("banned.php?error=3&ban_type=$ban_type");
       else
         redirect("banned.php?error=2&ban_type=$ban_type");

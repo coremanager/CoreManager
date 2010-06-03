@@ -25,7 +25,7 @@ require_once 'tab_lib.php';
 function del_char($guid, $realm)
 {
   global $characters_db, $logon_db, $realm_id,
-    $user_lvl, $user_id, $tab_del_user_characters, $sqlc, $sqll;
+    $user_lvl, $user_id, $tab_del_user_characters, $sql;
 
   $sql = new SQL;
   $sql->connect($characters_db[$realm]['addr'], $characters_db[$realm]['user'], $characters_db[$realm]['pass'], $characters_db[$realm]['name']);
@@ -33,7 +33,7 @@ function del_char($guid, $realm)
   $query = $sql->query("SELECT acct, online FROM characters WHERE guid = '".$guid."' LIMIT 1");
   $owner_acc_id = $sql->result($query, 0, 'acct');
 
-  $owner_gmlvl = $sqll->result($sqll->query("SELECT gm FROM accounts WHERE acct = '".$owner_acc_id."'"), 0);
+  $owner_gmlvl = $sql['logon']->result($sql['logon']->query("SELECT gm FROM accounts WHERE acct = '".$owner_acc_id."'"), 0);
 
   if ( ($user_lvl >= gmlevel($owner_gmlvl)) || ($owner_acc_id == $user_id) )
   {
@@ -66,20 +66,20 @@ function del_char($guid, $realm)
 function del_acc($acc_id)
 {
   global $characters_db, $logon_db, $arcm_db, $realm_id,
-    $user_lvl, $user_id, $tab_del_user_realmd, $tab_del_user_char, $tab_del_user_characters, $sqlc, $sqll, $sqlm;
+    $user_lvl, $user_id, $tab_del_user_realmd, $tab_del_user_char, $tab_del_user_characters, $sql;
 
   $del_char = 0;
 
-  $query = $sqll->query('SELECT gm FROM accounts WHERE acct ='.$acc_id.'');
-  $gmlevel = $sqll->result($query, 0, 'gm');
+  $query = $sql['logon']->query('SELECT gm FROM accounts WHERE acct ='.$acc_id.'');
+  $gmlevel = $sql['logon']->result($query, 0, 'gm');
   
   //get login name to delete from config_accounts
-  $query = $sqll->query('SELECT login FROM accounts WHERE acct ='.$acc_id.'');
-  $acct_login = $sqll->result($query, 0, 'login');
+  $query = $sql['logon']->query('SELECT login FROM accounts WHERE acct ='.$acc_id.'');
+  $acct_login = $sql['logon']->result($query, 0, 'login');
 
   if ( ($user_lvl >= gmlevel($gmlevel)) || ($acc_id == $user_id) )
   {
-    $online = $sqlc->result($sqlc->query("SELECT COUNT(*) FROM characters WHERE acct = '".$acct_id."'"), 0);
+    $online = $sql['char']->result($sql['char']->query("SELECT COUNT(*) FROM characters WHERE acct = '".$acct_id."'"), 0);
     if ($online > 0);
     else
     {
@@ -95,9 +95,9 @@ function del_acc($acc_id)
         }
       }
       
-      $sqll->query("DELETE FROM accounts WHERE acct = '".$acc_id."'");
-      $sqlm->query("DELETE FROM config_accounts WHERE Login = '".$acct_login."'");
-      if ($sqll->affected_rows())
+      $sql['logon']->query("DELETE FROM accounts WHERE acct = '".$acc_id."'");
+      $sql['mgr']->query("DELETE FROM config_accounts WHERE Login = '".$acct_login."'");
+      if ($sql['logon']->affected_rows())
         return array(true, $del_char);
     }
   }
@@ -109,32 +109,32 @@ function del_acc($acc_id)
 //Delete Guild
 function del_guild($guid, $realm)
 {
-  global $characters_db, $sqlc;
+  global $characters_db, $sql;
 
   require_once 'libs/data_lib.php';
 
   //clean data inside characters.data field
-  while ($guild_member = $sqlc->result($sqlc->query('SELECT guid FROM guild_member WHERE guildid = '.$guid.''),0))
+  while ($guild_member = $sql['char']->result($sql['char']->query('SELECT guid FROM guild_member WHERE guildid = '.$guid.''),0))
   {
-    $data = $sqlc->result($sqlc->query('SELECT data FROM characters WHERE guid = '.$guild_member.''), 0);
+    $data = $sql['char']->result($sql['char']->query('SELECT data FROM characters WHERE guid = '.$guild_member.''), 0);
     $data = explode(' ', $data);
     $data[CHAR_DATA_OFFSET_GUILD_ID] = 0;
     $data[CHAR_DATA_OFFSET_GUILD_RANK] = 0;
     $data = implode(' ', $data);
-    $sqlc->query('UPDATE characters SET data = '.$data.' WHERE guid = '.$guild_member.'');
+    $sql['char']->query('UPDATE characters SET data = '.$data.' WHERE guid = '.$guild_member.'');
   }
 
-  $sqlc->query('DELETE FROM item_instance WHERE guid IN (SELECT item_guid FROM guild_bank_item WHERE guildid ='.$guid.')');
-  $sqlc->query('DELETE FROM guild_bank_item WHERE guildid = '.$guid.'');
-  $sqlc->query('DELETE FROM guild_bank_eventlog WHERE guildid = '.$guid.'');
-  $sqlc->query('DELETE FROM guild_bank_right WHERE guildid = '.$guid.'');
-  $sqlc->query('DELETE FROM guild_bank_tab WHERE guildid = '.$guid.'');
-  $sqlc->query('DELETE FROM guild_eventlog WHERE guildid = '.$guid.'');
-  $sqlc->query('DELETE FROM guild_rank WHERE guildid = '.$guid.'');
-  $sqlc->query('DELETE FROM guild_member WHERE guildid = '.$guid.'');
-  $sqlc->query('DELETE FROM guild WHERE guildid = '.$guid.'');
+  $sql['char']->query('DELETE FROM item_instance WHERE guid IN (SELECT item_guid FROM guild_bank_item WHERE guildid ='.$guid.')');
+  $sql['char']->query('DELETE FROM guild_bank_item WHERE guildid = '.$guid.'');
+  $sql['char']->query('DELETE FROM guild_bank_eventlog WHERE guildid = '.$guid.'');
+  $sql['char']->query('DELETE FROM guild_bank_right WHERE guildid = '.$guid.'');
+  $sql['char']->query('DELETE FROM guild_bank_tab WHERE guildid = '.$guid.'');
+  $sql['char']->query('DELETE FROM guild_eventlog WHERE guildid = '.$guid.'');
+  $sql['char']->query('DELETE FROM guild_rank WHERE guildid = '.$guid.'');
+  $sql['char']->query('DELETE FROM guild_member WHERE guildid = '.$guid.'');
+  $sql['char']->query('DELETE FROM guild WHERE guildid = '.$guid.'');
 
-  if ($sqlc->affected_rows())
+  if ($sql['char']->affected_rows())
     return true;
   else
     return false;
@@ -146,13 +146,13 @@ function del_guild($guid, $realm)
 //Delete Arena Team
 function del_arenateam($guid, $realm)
 {
-  global $characters_db, $sqlc;
+  global $characters_db, $sql;
 
-  $sqlc->query('DELETE FROM arena_team WHERE arenateamid = '.$guid.'');
-  $sqlc->query('DELETE FROM arena_team_stats WHERE arenateamid = '.$guid.'');
-  $sqlc->query('DELETE FROM arena_team_member WHERE arenateamid = '.$guid.'');
+  $sql['char']->query('DELETE FROM arena_team WHERE arenateamid = '.$guid.'');
+  $sql['char']->query('DELETE FROM arena_team_stats WHERE arenateamid = '.$guid.'');
+  $sql['char']->query('DELETE FROM arena_team_member WHERE arenateamid = '.$guid.'');
 
-  if ($sqlc->affected_rows())
+  if ($sql['char']->affected_rows())
     return true;
   else
     return false;

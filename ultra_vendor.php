@@ -26,13 +26,13 @@ valid_login($action_permission['view']);
 //########################################################################################################################
 function show_list()
 {
-  global $realm_id, $output, $logon_db, $characters_db, $itemperpage, $action_permission, $user_lvl, $sqlc;
+  global $realm_id, $output, $logon_db, $characters_db, $itemperpage, $action_permission, $user_lvl, $sql;
 
   valid_login($action_permission['view']);
 
   $query = "SELECT * FROM characters WHERE acct='".$_SESSION['user_id']."'";
-  $result = $sqlc->query($query);
-  $num_rows = $sqlc->num_rows($result);
+  $result = $sql['char']->query($query);
+  $num_rows = $sql['char']->num_rows($result);
 
   $output .= "
           <table class='top_hidden'>
@@ -53,7 +53,7 @@ function show_list()
                     <table>";
     if($num_rows > 1)
     {
-      while ($field = $sqlc->fetch_assoc($result))
+      while ($field = $sql['char']->fetch_assoc($result))
       {
         $output .= "<tr>
                       <td>
@@ -64,7 +64,7 @@ function show_list()
     }
     else
     {
-      $field = $sqlc->fetch_assoc($result);
+      $field = $sql['char']->fetch_assoc($result);
       $output .= "<tr>
                     <td>
                       <input type='radio' name='charname' value='".$field['name']."' checked='true' />".$field['name']."
@@ -91,7 +91,7 @@ function show_list()
 //########################################################################################################################
 function select_item()
 {
-  global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl, $sqlc, $sqlw;
+  global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl, $sql;
 
   valid_login($action_permission['insert']);
 
@@ -137,7 +137,7 @@ function select_item()
 function select_quantity()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
-    $ultra_mult, $ultra_base, $sqlc, $sqlw;
+    $ultra_mult, $ultra_base, $sql;
 
   valid_login($action_permission['insert']);
 
@@ -145,12 +145,12 @@ function select_quantity()
     redirect("questitem_vendor.php?error=1");
 
   $iquery = "SELECT * FROM items WHERE entry = '".$_GET['myItem']."'";
-  $iresult = $sqlw->query($iquery);
-  $item = $sqlw->fetch_assoc($iresult);
+  $iresult = $sql['world']->query($iquery);
+  $item = $sql['world']->fetch_assoc($iresult);
 
   $cquery = "SELECT guid,level,gold FROM characters WHERE name = '".$_GET['charname']."'";
-  $cresult = $sqlc->query($cquery);
-  $char = $sqlc->fetch_assoc($cresult);
+  $cresult = $sql['char']->query($cquery);
+  $char = $sql['char']->fetch_assoc($cresult);
 
   $chargold = $char['gold'];
   $chargold = str_pad($chargold, 4, "0", STR_PAD_LEFT);
@@ -251,7 +251,7 @@ function select_quantity()
 function approve()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
-    $quest_item, $sqlc, $sqlw;
+    $quest_item, $sql;
 
   valid_login($action_permission['insert']);
 
@@ -263,12 +263,12 @@ function approve()
     redirect("questitem_vendor.php?error=1");
 
   $query = "SELECT * FROM items WHERE entry = '".$_GET['item']."'";
-  $result = $sqlw->query($query);
-  $item = $sqlw->fetch_assoc($result);
+  $result = $sql['world']->query($query);
+  $item = $sql['world']->fetch_assoc($result);
 
   $cquery = "SELECT * FROM characters WHERE name = '".$_GET['charname']."'";
-  $cresult = $sqlc->query($cquery);
-  $char = $sqlc->fetch_assoc($cresult);
+  $cresult = $sql['char']->query($cquery);
+  $char = $sql['char']->fetch_assoc($cresult);
 
   $total = $_GET['gold'] * $_GET['want'];
   $total = str_pad($total, 4, "0", STR_PAD_LEFT);
@@ -335,7 +335,7 @@ function approve()
 function purchase()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
-    $from_char, $stationary, $sqlw, $sqlc;
+    $from_char, $stationary, $sql;
 
   valid_login($action_permission['insert']);
 
@@ -347,12 +347,12 @@ function purchase()
     redirect("questitem_vendor.php?error=1");
 
   $iquery = "SELECT * FROM items WHERE entry='".$_GET['item']."'";
-  $iresult = $sqlw->query($iquery);
-  $item = $sqlw->fetch_assoc($iresult);
+  $iresult = $sql['world']->query($iquery);
+  $item = $sql['world']->fetch_assoc($iresult);
 
   $cquery = "SELECT * FROM characters WHERE name='".$_GET['char']."'";
-  $cresult = $sqlc->query($cquery);
-  $char = $sqlc->fetch_assoc($cresult);
+  $cresult = $sql['char']->query($cquery);
+  $char = $sql['char']->fetch_assoc($cresult);
 
   $char_money = $char['gold'];
   $char_money = $char_money - $_GET['total'];
@@ -360,8 +360,8 @@ function purchase()
   $mail_query = "INSERT INTO mailbox_insert_queue VALUES ('".$from_char."', '".$char['guid']."', '".lang('ultra', 'questitems')."', ".chr(34).$_GET['want']."x ".$item['name1'].chr(34).", '".$stationary."', '0', '".$_GET['item']."', '".$_GET['want']."')";
   $money_query = "UPDATE characters SET gold = '".$char_money."' WHERE guid = '".$char['guid']."'";
 
-  $mail_result = $sqlc->query($mail_query);
-  $money_result = $sqlc->query($money_query);
+  $mail_result = $sql['char']->query($mail_query);
+  $money_result = $sql['char']->query($money_query);
 
   if ($mail_result & $money_result)
     redirect("ultra_vendor.php?error=3");

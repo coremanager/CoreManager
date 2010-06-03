@@ -29,10 +29,10 @@ function edit_user()
 {
   global $output, $arcm_db, $logon_db, $characters_db, $arcm_db, $realm_id,
     $user_name, $user_id, $expansion_select, $server, $developer_test_mode, $multi_realm_mode,
-    $sqlm, $sqll, $sqlc, $core;
+    $sql, $core;
 
-  $refguid = $sqlm->result($sqlm->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = \''.$user_id.'\''), 0, 'InvitedBy');
-  $referred_by = $sqlc->result($sqlc->query('SELECT name FROM characters WHERE guid = \''.$refguid.'\''), 0, 'name');
+  $refguid = $sql['mgr']->result($sql['mgr']->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = \''.$user_id.'\''), 0, 'InvitedBy');
+  $referred_by = $sql['char']->result($sql['char']->query('SELECT name FROM characters WHERE guid = \''.$refguid.'\''), 0, 'name');
   unset($refguid);
   
   if ( $core == 1 )
@@ -40,12 +40,12 @@ function edit_user()
   else
     $query = "SELECT email, expansion AS flags, last_ip AS lastip FROM account WHERE username = '".$user_name."'";
 
-  if ($acc = $sqll->fetch_assoc($sqll->query($query)))
+  if ($acc = $sql['logon']->fetch_assoc($sql['logon']->query($query)))
   {
     // if we have a screen name, we need to use it
     $screen_name_query = "SELECT * FROM config_accounts WHERE Login = '".$user_name."'";
-    $screen_name = $sqlm->query($screen_name_query);
-    $screen_name = $sqlm->fetch_assoc($screen_name);
+    $screen_name = $sql['mgr']->query($screen_name_query);
+    $screen_name = $sql['mgr']->fetch_assoc($screen_name);
     $output .= '
           <center>
             <script type="text/javascript" src="libs/js/sha1.js"></script>
@@ -167,15 +167,15 @@ function edit_user()
     
     foreach ( $characters_db as $db )
     {
-      $sql = new SQL;
-      $sql->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
+      $sqlt = new SQL;
+      $sqlt->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
       
       if ( $core == 1 )
         $query = "SELECT COUNT(*) FROM characters WHERE acct='".$user_id."'";
       else
         $query = "SELECT COUNT(*) FROM characters WHERE account='".$user_id."'";
-      $result = $sql->query($query);
-      $fields = $sql->fetch_assoc($result);
+      $result = $sqlt->query($query);
+      $fields = $sqlt->fetch_assoc($result);
       
       $c_count += $fields['COUNT(*)'];
     }
@@ -186,26 +186,26 @@ function edit_user()
                     <td>'.$c_count.'</td>
                   </tr>';
                   
-    $realms = $sqlm->query('SELECT id, name FROM realmlist');
-    if ( 1 < $sqlm->num_rows($realms) && (1 < count($server)) && (1 < count($characters_db)) )
+    $realms = $sql['mgr']->query('SELECT id, name FROM realmlist');
+    if ( 1 < $sql['mgr']->num_rows($realms) && (1 < count($server)) && (1 < count($characters_db)) )
     {
-      while ($realm = $sqlm->fetch_assoc($realms))
+      while ($realm = $sql['mgr']->fetch_assoc($realms))
       {
-        $sqlc->connect($characters_db[$realm['id']]['addr'], $characters_db[$realm['id']]['user'], $characters_db[$realm['id']]['pass'], $characters_db[$realm['id']]['name']);
+        $sql['char']->connect($characters_db[$realm['id']]['addr'], $characters_db[$realm['id']]['user'], $characters_db[$realm['id']]['pass'], $characters_db[$realm['id']]['name']);
         if ( $core == 1 )
-          $result = $sqlc->query('SELECT guid, name, race, class, level, gender
+          $result = $sql['char']->query('SELECT guid, name, race, class, level, gender
             FROM characters WHERE acct = '.$user_id.'');
         else
-          $result = $sqlc->query('SELECT guid, name, race, class, level, gender
+          $result = $sql['char']->query('SELECT guid, name, race, class, level, gender
             FROM characters WHERE account = '.$user_id.'');
 
         $output .= '
                     <tr>
                       <td>'.lang('edit', 'characters').' '.$realm['name'].'</td>
-                      <td>'.$sqlc->num_rows($result).'</td>
+                      <td>'.$sql['char']->num_rows($result).'</td>
                     </tr>';
 
-        while ($char = $sqlc->fetch_assoc($result))
+        while ($char = $sql['char']->fetch_assoc($result))
         {
           $output .= '
                     <tr>
@@ -223,18 +223,18 @@ function edit_user()
     else
     {
       if ( $core == 1 )
-        $result = $sqlc->query('SELECT guid, name, race, class, level, gender
+        $result = $sql['char']->query('SELECT guid, name, race, class, level, gender
           FROM characters WHERE acct = '.$user_id.'');
       else
-        $result = $sqlc->query('SELECT guid, name, race, class, level, gender
+        $result = $sql['char']->query('SELECT guid, name, race, class, level, gender
           FROM characters WHERE account = '.$user_id.'');
 
       $output .= '
                   <tr>
                     <td>'.lang('edit', 'characters').'</td>
-                    <td>'.$sqlc->num_rows($result).'</td>
+                    <td>'.$sql['char']->num_rows($result).'</td>
                   </tr>';
-      while ($char = $sqlc->fetch_assoc($result))
+      while ($char = $sql['char']->fetch_assoc($result))
       {
         $output .= '
                   <tr>
@@ -355,7 +355,7 @@ function edit_user()
 //#############################################################################################################
 function doedit_user()
 {
-  global $output, $user_name, $logon_db, $arcm_db, $sqlm, $sqll, $sqlc;
+  global $output, $user_name, $logon_db, $arcm_db, $sql;
 
   if ( (empty($_POST['pass'])||($_POST['pass'] == ''))
     && (empty($_POST['mail'])||($_POST['mail'] == ''))
@@ -363,28 +363,28 @@ function doedit_user()
     && (empty($_POST['referredby'])||($_POST['referredby'] == '')) )
     redirect('edit.php?error=1');
 
-  //$new_pass = ($sqll->quote_smart($_POST['pass']) == sha1(strtoupper($user_name).':******')) ? '' : 'sha_pass_hash=\''.$sqll->quote_smart($_POST['pass']).'\', ';
+  //$new_pass = ($sql['logon']->quote_smart($_POST['pass']) == sha1(strtoupper($user_name).':******')) ? '' : 'sha_pass_hash=\''.$sql['logon']->quote_smart($_POST['pass']).'\', ';
   if ($_POST['pass'] <> "******")
-    $new_pass = "password = '".$sqll->quote_smart($_POST['pass'])."',";
-  $screenname = $sqll->quote_smart(trim($_POST['screenname']));
-  $new_mail = $sqll->quote_smart(trim($_POST['mail']));
-  $new_expansion = $sqll->quote_smart(trim($_POST['expansion']));
-  $referredby = $sqll->quote_smart(trim($_POST['referredby']));
+    $new_pass = "password = '".$sql['logon']->quote_smart($_POST['pass'])."',";
+  $screenname = $sql['logon']->quote_smart(trim($_POST['screenname']));
+  $new_mail = $sql['logon']->quote_smart(trim($_POST['mail']));
+  $new_expansion = $sql['logon']->quote_smart(trim($_POST['expansion']));
+  $referredby = $sql['logon']->quote_smart(trim($_POST['referredby']));
 
   // if we received a Screen Name, make sure it does not conflict with other Screen Names or with
   // ArcEmu login names.
   if ($screenname)
   {
     $query = "SELECT * FROM config_accounts WHERE ScreenName = '".$screenname."'";
-    $sn_result = $sqlm->query($query);
-    $sn = $sqlm->fetch_assoc($sn_result);
+    $sn_result = $sql['mgr']->query($query);
+    $sn = $sql['mgr']->fetch_assoc($sn_result);
     if ($sn['Login'] <> $user_name)
     {
-      if ($sqlm->num_rows($sn_result) <> 0)
+      if ($sql['mgr']->num_rows($sn_result) <> 0)
         redirect('edit.php?error=6');
       $query = "SELECT * FROM accounts WHERE login = '".$screenname."'";
-      $sn_result = $sqll->query($query);
-      if ($sqll->num_rows($sn_result) <> 0)
+      $sn_result = $sql['logon']->query($query);
+      if ($sql['logon']->num_rows($sn_result) <> 0)
         redirect('edit.php?error=6');
     }
   }
@@ -397,12 +397,12 @@ function doedit_user()
 
   // set screen name
   if ($screenname)
-    $sqlm->query("INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '".$screenname."')");
+    $sql['mgr']->query("INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '".$screenname."')");
 
   // change other settings
   $query = "UPDATE accounts SET email = '".$new_mail."', ".$new_pass." flags = '".$new_expansion."' WHERE login = '".$user_name."'";
-  $sqll->query($query);
-  if (doupdate_referral($referredby) || $sqlm->affected_rows())
+  $sql['logon']->query($query);
+  if (doupdate_referral($referredby) || $sql['mgr']->affected_rows())
     redirect('edit.php?error=3');
   else
     redirect('edit.php?error=4');
@@ -411,21 +411,21 @@ function doedit_user()
 
 function doupdate_referral($referredby)
 {
-  global $arcm_db, $logon_db, $user_id, $sqlm, $sqll, $sqlc;
+  global $arcm_db, $logon_db, $user_id, $sql;
 
-  if (NULL == $sqlm->result($sqlm->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = \''.$user_id.'\''), 0))
+  if (NULL == $sql['mgr']->result($sql['mgr']->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = \''.$user_id.'\''), 0))
   {
-    $referred_by = $sqlc->result($sqlc->query('SELECT guid FROM characters WHERE name = \''.$referredby.'\''), 0);
+    $referred_by = $sql['char']->result($sql['char']->query('SELECT guid FROM characters WHERE name = \''.$referredby.'\''), 0);
 
     if ($referred_by == NULL);
     else
     {
-      $char = $sqlc->result($sqlc->query('SELECT acct FROM characters WHERE guid = \''.$referred_by.'\''), 0, 'account');
-      $result = $sqll->result($sqll->query('SELECT acct FROM accounts WHERE acct = \''.$char.'\''), 0, 'id');
+      $char = $sql['char']->result($sql['char']->query('SELECT acct FROM characters WHERE guid = \''.$referred_by.'\''), 0, 'account');
+      $result = $sql['logon']->result($sql['logon']->query('SELECT acct FROM accounts WHERE acct = \''.$char.'\''), 0, 'id');
       if ($result == $user_id);
       else
       {
-        $sqlm->query('INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES (\''.$user_id.'\', \''.$referred_by.'\', \''.$result.'\')');
+        $sql['mgr']->query('INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES (\''.$user_id.'\', \''.$referred_by.'\', \''.$result.'\')');
         return true;
       }
     }

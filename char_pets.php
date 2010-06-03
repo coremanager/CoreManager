@@ -30,7 +30,7 @@ valid_login($action_permission['view']);
 function char_pets()
 {
   global $output, $realm_id, $characters_db, $arcm_db, $action_permission, $user_lvl, $user_name, 
-    $spell_datasite, $pet_ability, $sqll, $sqlc, $sqlm;
+    $spell_datasite, $pet_ability, $sql;
 
   //wowhead_tt();
 
@@ -41,27 +41,27 @@ function char_pets()
     $realmid = $realm_id;
   else
   {
-    $realmid = $sqll->quote_smart($_GET['realm']);
+    $realmid = $sql['logon']->quote_smart($_GET['realm']);
     if (is_numeric($realmid))
-      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
-  $id = $sqlc->quote_smart($_GET['id']);
+  $id = $sql['char']->quote_smart($_GET['id']);
   if (is_numeric($id)); else $id = 0;
 
-  $result = $sqlc->query('SELECT acct, name, race, class, level, gender
+  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
     FROM characters WHERE guid = '.$id.' LIMIT 1');
 
-  if ($sqlc->num_rows($result))
+  if ($sql['char']->num_rows($result))
   {
-    $char = $sqlc->fetch_assoc($result);
+    $char = $sql['char']->fetch_assoc($result);
 
-    $owner_acc_id = $sqlc->result($result, 0, 'accounts');
-    $result = $sqll->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sqll->result($result, 0, 'gm');
-    $owner_name = $sqll->result($result, 0, 'login');
+    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
+    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
+    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_name = $sql['logon']->result($result, 0, 'login');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
@@ -97,11 +97,11 @@ function char_pets()
               </font>
               <br /><br />';
 
-      $result = $sqlc->query('SELECT petnumber, level, fields, SUBSTRING_INDEX(SUBSTRING_INDEX(`fields`, " ", 77), " ", -1) AS cur_xp, SUBSTRING_INDEX(SUBSTRING_INDEX(`fields`, " ", 78), " ", -1) AS next_level_xp, name, happinessupdate FROM playerpets WHERE ownerguid = '.$id.'');
+      $result = $sql['char']->query('SELECT petnumber, level, fields, SUBSTRING_INDEX(SUBSTRING_INDEX(`fields`, " ", 77), " ", -1) AS cur_xp, SUBSTRING_INDEX(SUBSTRING_INDEX(`fields`, " ", 78), " ", -1) AS next_level_xp, name, happinessupdate FROM playerpets WHERE ownerguid = '.$id.'');
 
-      if ($sqlc->num_rows($result))
+      if ($sql['char']->num_rows($result))
       {
-        while($pet = $sqlc->fetch_assoc($result))
+        while($pet = $sql['char']->fetch_assoc($result))
         {
           $pet_data = explode(' ',$pet['fields']);
           $happiness = floor($pet_data[UNIT_FIELD_MAXPOWER3]/333000);
@@ -139,10 +139,10 @@ function char_pets()
                   <tr>
                     <td align="right">Pet Abilities:</td>
                     <td align="left">';
-          $ability_results = $sqlc->query('SELECT spellid FROM playerpetspells WHERE petnumber = '.$pet['petnumber'].' AND flags > 1'); // active = 0 is unused and active = 1 probably some passive auras, i dont know diference between values 129 and 193, need to check mangos source
-          if ($sqlc->num_rows($ability_results))
+          $ability_results = $sql['char']->query('SELECT spellid FROM playerpetspells WHERE petnumber = '.$pet['petnumber'].' AND flags > 1'); // active = 0 is unused and active = 1 probably some passive auras, i dont know diference between values 129 and 193, need to check mangos source
+          if ($sql['char']->num_rows($ability_results))
           {
-            while ($ability = $sqlc->fetch_assoc($ability_results))
+            while ($ability = $sql['char']->fetch_assoc($ability_results))
             {
               $output .= '
                       <a id="ch_pet_padding" href="'.$spell_datasite.$ability['spellid'].'" target="_blank">

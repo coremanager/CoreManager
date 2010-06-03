@@ -31,7 +31,7 @@ valid_login($action_permission['view']);
 function char_talent()
 {
   global $output, $realm_id, $characters_db, $arcm_db, $server, $action_permission,
-    $user_lvl, $user_name, $spell_datasite, $sqlm, $sqld, $sqll, $sqlc, $core;
+    $user_lvl, $user_name, $spell_datasite, $sql, $core;
 
   // this page uses wowhead tooltops
   //wowhead_tt();
@@ -46,38 +46,38 @@ function char_talent()
     $realmid = $realm_id;
   else
   {
-    $realmid = $sqll->quote_smart($_GET['realm']);
+    $realmid = $sql['logon']->quote_smart($_GET['realm']);
     if (is_numeric($realmid))
-      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
   //-------------------SQL Injection Prevention--------------------------------
   // no point going further if we don have a valid ID
-  $id = $sqlc->quote_smart($_GET['id']);
+  $id = $sql['char']->quote_smart($_GET['id']);
   if (is_numeric($id));
   else error(lang('global', 'empty_fields'));
 
   if ( $core == 1 )
-    $result = $sqlc->query('SELECT acct, name, race, class, level, gender,
+    $result = $sql['char']->query('SELECT acct, name, race, class, level, gender,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_POINTS1+1).'), " ", -1) AS UNSIGNED) AS talent_points
       FROM characters WHERE guid = '.$id.' LIMIT 1');
   else
-    $result = $sqlc->query('SELECT account AS acct, name, race, class, level, gender
+    $result = $sql['char']->query('SELECT account AS acct, name, race, class, level, gender
       FROM characters WHERE guid = '.$id.' LIMIT 1');
 
-  if ($sqlc->num_rows($result))
+  if ($sql['char']->num_rows($result))
   {
-    $char = $sqlc->fetch_assoc($result);
+    $char = $sql['char']->fetch_assoc($result);
 
-    $owner_acc_id = $sqlc->result($result, 0, 'accounts');
+    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
     if ( $core == 1 )
-      $result = $sqll->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
+      $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
     else
-      $result = $sqll->query('SELECT gmlevel AS gm, username AS login FROM account LEFT JOIN account_access ON account_access.id = account.id WHERE account.id = '.$char['acct'].'');
-    $owner_gmlvl = $sqll->result($result, 0, 'gm');
-    $owner_name = $sqll->result($result, 0, 'login');
+      $result = $sql['logon']->query('SELECT gmlevel AS gm, username AS login FROM account LEFT JOIN account_access ON account_access.id = account.id WHERE account.id = '.$char['acct'].'');
+    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_name = $sql['logon']->result($result, 0, 'login');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
@@ -87,8 +87,8 @@ function char_talent()
           $spec_query = "SELECT currentspec FROM characters WHERE guid = '".$id."'";
         else
           $spec_query = "SELECT activespec AS currentspec FROM characters WHERE guid = '".$id."'";
-        $spec_results = $sqlc->query($spec_query);
-        $spec_field = $sqlc->fetch_assoc($spec_results);
+        $spec_results = $sql['char']->query($spec_query);
+        $spec_field = $sql['char']->fetch_assoc($spec_results);
         $cur_spec = $spec_field['currentspec'] + 1;
         if ($cur_spec == 1)
           $opp_spec = 2;
@@ -108,8 +108,8 @@ function char_talent()
         // this_is_junk: ArcEmu stores talents in a characters table field in the following format:
         //               [talent id][spell offset],[talent id2][spell offset2],...[talent idN][spell offsetN],
         //               So, we have to explode it into an array, then into a pair of arrays.
-        $result = $sqlc->query("SELECT talents".$cur_spec." FROM characters WHERE guid = '".$id."'");
-        $talent_list = $sqlc->result($result, 0);
+        $result = $sql['char']->query("SELECT talents".$cur_spec." FROM characters WHERE guid = '".$id."'");
+        $talent_list = $sql['char']->result($result, 0);
         $talent_list = substr($talent_list, 0, strlen($talent_list) - 1);
         $talent_list = explode(",", $talent_list);
         $talents = array();
@@ -132,9 +132,9 @@ function char_talent()
       else
       {
         $query = "SELECT * FROM character_talent WHERE guid='".$id."' AND spec='".($cur_spec-1)."'";
-        $result = $sqlc->query($query);
+        $result = $sql['char']->query($query);
         $talents = array();
-        while ( $row = $sqlc->fetch_assoc($result) )
+        while ( $row = $sql['char']->fetch_assoc($result) )
         {
           array_push($talents, $row['spell']);
           array_push($talent_ranks, 0);
@@ -179,10 +179,10 @@ function char_talent()
 
         for ($i = 0; $i < count($talents); $i++)
         {
-          $talent_spell = $sqld->query("SELECT spell".($talent_ranks[$i] + 1)." FROM talent WHERE id = '".$talents[$i]."'");
-          $talent_spell = $sqld->result($talent_spell,0);
+          $talent_spell = $sql['dbc']->query("SELECT spell".($talent_ranks[$i] + 1)." FROM talent WHERE id = '".$talents[$i]."'");
+          $talent_spell = $sql['dbc']->result($talent_spell,0);
 
-          if ($tab = $sqld->fetch_assoc($sqld->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell5 = '.$talent_spell.' LIMIT 1')))
+          if ($tab = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell5 = '.$talent_spell.' LIMIT 1')))
           {
               if (isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]))
                 $l -=$tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']][1];
@@ -192,7 +192,7 @@ function char_talent()
               if ($tab['Talent1'])
                 talent_dependencies($tabs, $tab, $l);
           }
-          elseif ($tab = $sqld->fetch_assoc($sqld->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell4 = '.$talent_spell.' LIMIT 1')))
+          elseif ($tab = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell4 = '.$talent_spell.' LIMIT 1')))
           {
               if (isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]))
                 $l -=$tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']][1];
@@ -202,7 +202,7 @@ function char_talent()
               if ($tab['Talent1'])
                 talent_dependencies($tabs, $tab, $l);
           }
-          elseif ($tab = $sqld->fetch_assoc($sqld->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell3 = '.$talent_spell.' LIMIT 1')))
+          elseif ($tab = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell3 = '.$talent_spell.' LIMIT 1')))
           {
               if (isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]))
                 $l -=$tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']][1];
@@ -212,7 +212,7 @@ function char_talent()
               if ($tab['Talent1'])
                 talent_dependencies($tabs, $tab, $l);
           }
-          elseif ($tab = $sqld->fetch_assoc($sqld->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell2 = '.$talent_spell.' LIMIT 1')))
+          elseif ($tab = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell2 = '.$talent_spell.' LIMIT 1')))
           {
               if (isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]))
                 $l -=$tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']][1];
@@ -222,7 +222,7 @@ function char_talent()
               if ($tab['Talent1'])
                 talent_dependencies($tabs, $tab, $l);
           }
-          elseif ($tab = $sqld->fetch_assoc($sqld->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell1 = '.$talent_spell.' LIMIT 1')))
+          elseif ($tab = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell1 = '.$talent_spell.' LIMIT 1')))
           {
               if (isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]))
                 $l -=$tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']][1];
@@ -239,7 +239,7 @@ function char_talent()
         $class_name = get_class_name($char['class']);
         foreach ($tabs as $k=>$data)
         {
-          $talent_name = $sqld->result($sqld->query('SELECT name FROM talenttab WHERE id = '.$k.''), 0, 'name');
+          $talent_name = $sql['dbc']->result($sql['dbc']->query('SELECT name FROM talenttab WHERE id = '.$k.''), 0, 'name');
           $talent_name = str_replace(" ", "", $talent_name);
           $points = 0;
           $output .= '
@@ -283,7 +283,7 @@ function char_talent()
                      </tr>
                       <tr>
                         <td colspan="6" valign="bottom" align="left">
-                         '.$sqld->result($sqld->query('SELECT name FROM talenttab WHERE id = '.$k.''), 0, 'name').': '.$points.'
+                         '.$sql['dbc']->result($sql['dbc']->query('SELECT name FROM talenttab WHERE id = '.$k.''), 0, 'name').': '.$points.'
                         </td>
                       </tr>
                     </table>
@@ -321,8 +321,8 @@ function char_talent()
         unset($talent_points_used);
         unset($talent_points_left);
         $glyph_query = "SELECT glyphs".$cur_spec." FROM characters WHERE guid = '".$id."'";
-        $glyph_results = $sqlc->query($glyph_query);
-        $glyph_field = $sqlc->fetch_assoc($glyph_results);
+        $glyph_results = $sql['char']->query($glyph_query);
+        $glyph_field = $sql['char']->fetch_assoc($glyph_results);
         $glyphs = $glyph_field['glyphs1'];
         $glyphs = substr($glyphs, 0, strlen($glyphs) - 1);
         $glyphs = explode(',', $glyphs);
@@ -330,7 +330,7 @@ function char_talent()
         {
           if ($glyphs[$i])
           {
-            $glyph = $sqld->result($sqld->query("SELECT spellid FROM glyphproperties WHERE id = '".$glyphs[$i]."'"), 0);
+            $glyph = $sql['dbc']->result($sql['dbc']->query("SELECT spellid FROM glyphproperties WHERE id = '".$glyphs[$i]."'"), 0);
 
             $output .='
                     <a href="'.$spell_datasite.$glyph.'" target="_blank">
@@ -426,11 +426,11 @@ function get_class_name($class_id)
 
 function talent_dependencies(&$tabs, &$tab, &$i)
 {
-  global $sqld;
+  global $sql;
 
   $query = 'SELECT TalentTab, Row, Col, Spell'.($tab['TalentCount1'] + 1).', Talent1, TalentCount1'.(($tab['TalentCount1'] < 4) ? ', Spell'.($tab['TalentCount1'] + 2).'' : '').' FROM talent WHERE id = '.$tab['Talent1'].' AND Spell'.($tab['TalentCount1'] + 1).' != 0 LIMIT 1';
 
-  if ($dep = $sqld->fetch_assoc($sqld->query($query)))
+  if ($dep = $sql['dbc']->fetch_assoc($sql['dbc']->query($query)))
   {
     if(empty($tabs[$dep['TalentTab']][$dep['Row']][$dep['Col']]))
     {

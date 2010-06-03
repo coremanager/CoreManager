@@ -51,16 +51,16 @@ foreach($forum_skeleton as $cid => $category){
 function forum_index()
 {
   global $enablesidecheck, $forum_skeleton, $forumlang, $user_lvl, $output, $logon_db, $arcm_db,
-    $arcm_db, $sqlm;
+    $arcm_db, $sql;
 
   if($enablesidecheck)
     $side = get_side();
 
-  $result = $sqlm->query("SELECT `authorname`,`id`,`name`,`time`,`forum` FROM `forum_posts` WHERE `id` IN (SELECT MAX(`id`) FROM `forum_posts` GROUP BY `forum`) ORDER BY `forum`;");
+  $result = $sql['mgr']->query("SELECT `authorname`,`id`,`name`,`time`,`forum` FROM `forum_posts` WHERE `id` IN (SELECT MAX(`id`) FROM `forum_posts` GROUP BY `forum`) ORDER BY `forum`;");
   $lasts = array();
-  if($sqlm->num_rows($result) > 0)
+  if($sql['mgr']->num_rows($result) > 0)
   {
-    while($row = $sqlm->fetch_row($result))
+    while($row = $sql['mgr']->fetch_row($result))
       $lasts[$row[4]] = $row;
   }
   $output .= "<div class=\"top\"><h1>".lang('forum', 'forums')."</h1>".lang('forum', 'you_are_here')." : <a href=\"forum.php\">".lang('forum', 'forum_index')."</a></div><center><table class=\"lined\">";
@@ -78,7 +78,7 @@ function forum_index()
           continue;
       }
     }
-    $output .= "<tr><td class=\"head\" align=\"left\">".$sqlm->result($sqlm->query("SELECT * FROM config_lang_forum WHERE `Key`='".$category["name"]."' AND Lang='".$forumlang."'"), 0, "Value")."</td>
+    $output .= "<tr><td class=\"head\" align=\"left\">".$sql['mgr']->result($sql['mgr']->query("SELECT * FROM config_lang_forum WHERE `Key`='".$category["name"]."' AND Lang='".$forumlang."'"), 0, "Value")."</td>
                     <td class=\"head\">".lang('forum', 'topics')."</td>
                     <td class=\"head\">".lang('forum', 'replies')."</td>
                     <td class=\"head\" align=\"right\">".lang('forum', 'last_post')."</td></tr>";
@@ -96,21 +96,21 @@ function forum_index()
             continue;
         }
       }
-      $totaltopics = $sqlm->query("SELECT id FROM forum_posts WHERE forum = '$id' AND id = `topic`;");
-      $numtopics = $sqlm->num_rows($totaltopics);
-      $totalreplies = $sqlm->query("SELECT id FROM forum_posts WHERE forum = '$id';");
-      $numreplies = $sqlm->num_rows($totalreplies);
-      $output .= "<tr><td align=\"left\"><a href=\"forum.php?action=view_forum&amp;id=$id\">".$sqlm->result($sqlm->query("SELECT * FROM config_lang_forum WHERE `Key`='".$forum["name"]."' AND Lang='".$forumlang."'"), 0, "Value")."</a><br />".$sqlm->result($sqlm->query("SELECT * FROM config_lang_forum WHERE `Key`='".$forum["desc"]."' AND Lang='".$forumlang."'"), 0, "Value")."</td>
+      $totaltopics = $sql['mgr']->query("SELECT id FROM forum_posts WHERE forum = '$id' AND id = `topic`;");
+      $numtopics = $sql['mgr']->num_rows($totaltopics);
+      $totalreplies = $sql['mgr']->query("SELECT id FROM forum_posts WHERE forum = '$id';");
+      $numreplies = $sql['mgr']->num_rows($totalreplies);
+      $output .= "<tr><td align=\"left\"><a href=\"forum.php?action=view_forum&amp;id=$id\">".$sql['mgr']->result($sql['mgr']->query("SELECT * FROM config_lang_forum WHERE `Key`='".$forum["name"]."' AND Lang='".$forumlang."'"), 0, "Value")."</a><br />".$sql['mgr']->result($sql['mgr']->query("SELECT * FROM config_lang_forum WHERE `Key`='".$forum["desc"]."' AND Lang='".$forumlang."'"), 0, "Value")."</td>
                         <td>{$numtopics}</td>
                         <td>{$numreplies}</td>";
       if(isset($lasts[$id]))
       {
         // Use screen name if available
         $sn_query = "SELECT * FROM config_accounts WHERE Login = '".$lasts[$id][0]."'";
-        $sn_result = $sqlm->query($sn_query);
-        if ($sqlm->num_rows($sn_result))
+        $sn_result = $sql['mgr']->query($sn_query);
+        if ($sql['mgr']->num_rows($sn_result))
         {
-          $sn = $sqlm->fetch_assoc($sn_result);
+          $sn = $sql['mgr']->fetch_assoc($sn_result);
           $lasts[$id][0] = $sn['ScreenName'];
         }
         $lasts[$id][2] = htmlspecialchars($lasts[$id][2]);
@@ -123,7 +123,7 @@ function forum_index()
     }
   }
   $output .= "<tr><td align=\"right\" class=\"hidden\"></td></tr></table></center><br/>";
-  //$sqlm->close();
+  //$sql['mgr']->close();
   // Queries : 1
 }
 
@@ -131,16 +131,15 @@ function forum_index()
 //
 // #######################################################################################################
 function forum_view_forum(){
-  global $enablesidecheck, $forum_skeleton, $maxqueries, $user_lvl, $output, 
-    $arcm_db, $arcm_db, $sqlm;
+  global $enablesidecheck, $forum_skeleton, $maxqueries, $user_lvl, $output, $arcm_db, $sql;
 
   if($enablesidecheck)
     $side = get_side();
 
   if(!isset($_GET["id"])) error(lang('forum', 'no_such_forum'));
-  else $id = $sqlm->quote_smart($_GET["id"]);
+  else $id = $sql['mgr']->quote_smart($_GET["id"]);
   if(!isset($_GET["page"])) $page = 0;
-  else $page = $sqlm->quote_smart($_GET["page"]);
+  else $page = $sql['mgr']->quote_smart($_GET["page"]);
   $cat = 0;
   foreach($forum_skeleton as $cid => $category)
   {
@@ -176,17 +175,17 @@ function forum_view_forum(){
   $start = ($maxqueries * $page);
   $output .= "<div class=\"top\"><h1>".lang('forum', 'forums')."</h1>".lang('forum', 'you_are_here')." : <a href=\"forum.php\">".lang('forum', 'forum_index')."</a> -> <a href=\"forum.php?action=view_forum&amp;id={$id}\">{$forum["name"]}</a></div>
         <center><table class=\"lined\">";
-  $topics = $sqlm->query("SELECT id, authorid, authorname, name, annouced, sticked, closed FROM forum_posts WHERE (forum = '$id' AND id = `topic`) OR annouced = 1 AND id = `topic` ORDER BY annouced DESC, sticked DESC, lastpost DESC LIMIT $start, $maxqueries;");
-  $result = $sqlm->query("SELECT `topic` as curtopic,(SELECT count(`id`)-1 FROM forum_posts WHERE `topic` = `curtopic`) AS replies,lastpost as curlastpost,(SELECT authorname FROM forum_posts WHERE id = curlastpost) as authorname,(SELECT time FROM forum_posts WHERE id = curlastpost) as time FROM `forum_posts` WHERE (`forum` = $id AND `topic` = `id` ) OR annouced = 1;");
+  $topics = $sql['mgr']->query("SELECT id, authorid, authorname, name, annouced, sticked, closed FROM forum_posts WHERE (forum = '$id' AND id = `topic`) OR annouced = 1 AND id = `topic` ORDER BY annouced DESC, sticked DESC, lastpost DESC LIMIT $start, $maxqueries;");
+  $result = $sql['mgr']->query("SELECT `topic` as curtopic,(SELECT count(`id`)-1 FROM forum_posts WHERE `topic` = `curtopic`) AS replies,lastpost as curlastpost,(SELECT authorname FROM forum_posts WHERE id = curlastpost) as authorname,(SELECT time FROM forum_posts WHERE id = curlastpost) as time FROM `forum_posts` WHERE (`forum` = $id AND `topic` = `id` ) OR annouced = 1;");
   $lasts = array();
-  if($sqlm->num_rows($result) > 0)
+  if($sql['mgr']->num_rows($result) > 0)
   {
-    while($row = $sqlm->fetch_row($result))
+    while($row = $sql['mgr']->fetch_row($result))
       $lasts[$row[0]] = $row;
   }
   if($forum_skeleton[$cat]["level_post_topic"] <= $user_lvl && $forum["level_post_topic"] <= $user_lvl)
     $output .= "<tr><td colspan=\"4\" id=\"forum_topic_list_header\"><a href=\"forum.php?action=add_topic&amp;id={$id}\">".lang('forum', 'new_topic')."</a></td></tr>";
-  if($sqlm->num_rows($topics)!=0)
+  if($sql['mgr']->num_rows($topics)!=0)
   {
     $output .= "<tr>
       <td id=\"forum_topic_list_header_title\">".lang('forum', 'title')."</td>
@@ -194,7 +193,7 @@ function forum_view_forum(){
       <td>".lang('forum', 'replies')."</td>
       <td>".lang('forum', 'last_post')."</td>
     </tr>";
-    while($topic = $sqlm->fetch_row($topics))
+    while($topic = $sql['mgr']->fetch_row($topics))
     {
       $output .= "<tr>
               <td id=\"forum_topic_list_title\">";
@@ -213,10 +212,10 @@ function forum_view_forum(){
       $topic[3] = htmlspecialchars($topic[3]);
       // Use screen name if available
       $sn_query = "SELECT * FROM config_accounts WHERE Login = '".$topic[2]."'";
-      $sn_result = $sqlm->query($sn_query);
-      if ($sqlm->num_rows($sn_result))
+      $sn_result = $sql['mgr']->query($sn_query);
+      if ($sql['mgr']->num_rows($sn_result))
       {
-        $sn = $sqlm->fetch_assoc($sn_result);
+        $sn = $sql['mgr']->fetch_assoc($sn_result);
         $topic[2] = $sn['ScreenName'];
       }
       $output .= "<a href=\"forum.php?action=view_topic&amp;id={$topic[0]}\">{$topic[3]}</a></td><td>{$topic[2]}</td>
@@ -224,8 +223,8 @@ function forum_view_forum(){
               <td>".lang('forum', 'last_post_by')." {$lasts[$topic[0]][3]}, {$lasts[$topic[0]][4]}</td>
             </tr>";
     }
-    $totaltopics = $sqlm->query("SELECT id FROM forum_posts WHERE forum = '$id' AND id = `topic`;"); //My page system is so roxing, i can' t break this query xD
-    $pages = ceil($sqlm->num_rows($totaltopics)/$maxqueries);
+    $totaltopics = $sql['mgr']->query("SELECT id FROM forum_posts WHERE forum = '$id' AND id = `topic`;"); //My page system is so roxing, i can' t break this query xD
+    $pages = ceil($sql['mgr']->num_rows($totaltopics)/$maxqueries);
     $output .= "<tr><td align=\"right\" colspan=\"4\">".lang('forum', 'pages')." : ";
     for($x = 1; $x <= $pages; $x++)
     {
@@ -236,7 +235,7 @@ function forum_view_forum(){
   }
   else
     $output .= "<tr><td>".lang('forum', 'no_topics')."</td></tr>";
-  //$sqlm->close();
+  //$sql['mgr']->close();
   $output .= "<tr><td align=\"right\" class=\"hidden\"></td></tr></table></center><br/>";
   // Queries : 3
 }
@@ -246,17 +245,17 @@ function forum_view_forum(){
 function forum_view_topic(){
 
   global $enablesidecheck, $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output,
-    $realm_db, $characters_db, $realm_id, $arcm_db, $logon_db, $arcm_db, $sqlm, $sqll, $core;
+    $realm_db, $characters_db, $realm_id, $arcm_db, $logon_db, $arcm_db, $sql, $core;
 
   if($enablesidecheck) $side = get_side(); // Better to use it here instead of call it many time in the loop :)
 
   if(isset($_GET["id"])){
-    $id = $sqlm->quote_smart($_GET["id"]);
+    $id = $sql['mgr']->quote_smart($_GET["id"]);
     $post = false;
   }
   else{
     if(isset($_GET["postid"])){
-      $id = $sqlm->quote_smart($_GET["postid"]);
+      $id = $sql['mgr']->quote_smart($_GET["postid"]);
       $post = true;
     }
     else
@@ -265,15 +264,15 @@ function forum_view_topic(){
 
 
   if(!isset($_GET["page"])) $page = 0;
-  else $page = $sqlm->quote_smart($_GET["page"]); // Fok you mathafoker haxorz
+  else $page = $sql['mgr']->quote_smart($_GET["page"]); // Fok you mathafoker haxorz
   $start = ($maxqueries * $page);
 
   if(!$post){
-    $posts = $sqlm->query("SELECT id,authorid,authorname,forum,name,text,time,annouced,sticked,closed FROM forum_posts WHERE topic = '$id' ORDER BY id ASC LIMIT $start, $maxqueries;");
+    $posts = $sql['mgr']->query("SELECT id,authorid,authorname,forum,name,text,time,annouced,sticked,closed FROM forum_posts WHERE topic = '$id' ORDER BY id ASC LIMIT $start, $maxqueries;");
 
 // Thx qsa for the query structure
 
-    //$link = $sqlm->connect($logon_db['addr'], $logon_db['user'], $logon_db['pass'], $logon_db['name']);
+    //$link = $sql['mgr']->connect($logon_db['addr'], $logon_db['user'], $logon_db['pass'], $logon_db['name']);
 
 //$query = "SELECT account,name,gender,race,class,
  //level,(SELECT gmlevel FROM `{$realm_db['name']}`.account WHERE `{$realm_db['name']}`.account.id = `{$characters_db[$realm_id]['name']}`.characters.account) as gmlevel
@@ -289,7 +288,7 @@ else
     level,(SELECT gmlevel FROM `{$logon_db['name']}`.account_access WHERE `{$logon_db['name']}`.account_access.id = `{$characters_db[$realm_id]['name']}`.characters.account) as gmlevel
     FROM `{$characters_db[$realm_id]['name']}`.characters WHERE level IN ( SELECT MAX(level) FROM `{$characters_db[$realm_id]['name']}`.characters WHERE account IN (";
 }
-while($post = $sqlm->fetch_row($posts)){
+while($post = $sql['mgr']->fetch_row($posts)){
   $query .= "$post[1],";
 }
 mysql_data_seek($posts,0);
@@ -297,10 +296,10 @@ if ( $core == 1 )
   $query .= "0) GROUP BY acct);";
 else
   $query .= "0) GROUP BY account);";
-    /*$link = $sqlm->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);*/
-    $results = $sqlm->query($query);
+    /*$link = $sql['mgr']->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);*/
+    $results = $sql['mgr']->query($query);
 
-    while($avatar = $sqlm->fetch_row($results))
+    while($avatar = $sql['mgr']->fetch_row($results))
     {
       $gmlevel = gmlevel($avatar[6]);
       $char_gender = str_pad(dechex($avatar[2]),8, 0, STR_PAD_LEFT);
@@ -313,11 +312,11 @@ else
       $avatars[$avatar[0]]["gm"] = $gmlevel;
     }
 
-//    $link = $sqlm->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-    $replies = $sqlm->num_rows($posts);
+//    $link = $sql['mgr']->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+    $replies = $sql['mgr']->num_rows($posts);
     if($replies==0)
       error(lang('forum', 'no_such_topic'));
-    $post = $sqlm->fetch_row($posts);
+    $post = $sql['mgr']->fetch_row($posts);
     $fid = $post[3];
     $cat = 0;
     foreach($forum_skeleton as $cid => $category){
@@ -407,13 +406,13 @@ else
               $un_query = "SELECT * FROM accounts WHERE acct = '".$post[1]["name"]."'";
             else
               $un_query = "SELECT * FROM account WHERE id = '".$post[1]["name"]."'";
-            $un_results = $sqll->query($un_query);
-            $un = $sqll->fetch_assoc($un_results);
+            $un_results = $sql['logon']->query($un_query);
+            $un = $sql['logon']->fetch_assoc($un_results);
             $sn_query = "SELECT * FROM config_accounts WHERE Login = '".$un['login']."'";
-            $sn_result = $sqlm->query($sn_query);
-            if ($sqlm->num_rows($sn_result))
+            $sn_result = $sql['mgr']->query($sn_query);
+            if ($sql['mgr']->num_rows($sn_result))
             {
-              $sn = $sqlm->fetch_assoc($sn_result);
+              $sn = $sql['mgr']->fetch_assoc($sn_result);
               $post[1]["name"] = $sn['ScreenName'];
               $post[2] = $sn['ScreenName'];
             }
@@ -431,7 +430,7 @@ else
           $output .= "</div></td></tr>";
           $closed = $post[9];
 
-    while($post = $sqlm->fetch_row($posts)){
+    while($post = $sql['mgr']->fetch_row($posts)){
           $post[5] = bb2html($post[5]);
 
             if(isset($avatars[$post[1]]))
@@ -449,13 +448,13 @@ else
             // Use screen name if available
             // we have to get the actual login name first here
             $un_query = "SELECT * FROM accounts WHERE acct = '".$post[1]["name"]."'";
-            $un_results = $sqll->query($un_query);
-            $un = $sqll->fetch_assoc($un_results);
+            $un_results = $sql['logon']->query($un_query);
+            $un = $sql['logon']->fetch_assoc($un_results);
             $sn_query = "SELECT * FROM config_accounts WHERE Login = '".$un['login']."'";
-            $sn_result = $sqlm->query($sn_query);
-            if ($sqlm->num_rows($sn_result))
+            $sn_result = $sql['mgr']->query($sn_query);
+            if ($sql['mgr']->num_rows($sn_result))
             {
-              $sn = $sqlm->fetch_assoc($sn_result);
+              $sn = $sql['mgr']->fetch_assoc($sn_result);
               $post[1]["name"] = $sn['ScreenName'];
               $post[2] = $sn['ScreenName'];
             }
@@ -473,10 +472,10 @@ else
           $output .= "</td></tr>";
     }
 
-    //$link = $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+    //$link = $sql['mgr']->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
 
-    $totalposts = $sqlm->query("SELECT id FROM forum_posts WHERE topic = '$id';");
-    $totalposts = $sqlm->num_rows($totalposts);
+    $totalposts = $sql['mgr']->query("SELECT id FROM forum_posts WHERE topic = '$id';");
+    $totalposts = $sql['mgr']->num_rows($totalposts);
 
     $pages = ceil($totalposts/$maxqueries);
     $output .= "<tr><td align=\"right\" colspan=\"3\">".lang('forum', 'pages')." : ";
@@ -504,24 +503,24 @@ else
     }
 
     $output .= "</center>";
-    //$sqlm->close();
+    //$sql['mgr']->close();
   }
   else{
     $output .= "<div class=\"top\"><h1>Stand by...</h1></div>";
 
-    $post = $sqlm->query("SELECT topic, id FROM forum_posts WHERE id = '$id'"); // Get our post id
-    if($sqlm->num_rows($post)==0)
+    $post = $sql['mgr']->query("SELECT topic, id FROM forum_posts WHERE id = '$id'"); // Get our post id
+    if($sql['mgr']->num_rows($post)==0)
       error(lang('forum', 'no_such_topic'));
-    $post = $sqlm->fetch_row($post);
+    $post = $sql['mgr']->fetch_row($post);
     if($post[0]==$post[1])
       redirect("forum.php?action=view_topic&id=$id");
     $topic = $post[0];
-    $posts = $sqlm->query("SELECT id FROM forum_posts WHERE topic = '$topic';"); // Get posts in our topic
-    $replies = $sqlm->num_rows($posts);
+    $posts = $sql['mgr']->query("SELECT id FROM forum_posts WHERE topic = '$topic';"); // Get posts in our topic
+    $replies = $sql['mgr']->num_rows($posts);
     if($replies==0)
       error(lang('forum', 'no_such_topic'));
     $row = 0;
-    while($post = $sqlm->fetch_row($posts)){ // Find the row of our post, so we could have his ratio (topic x/total topics) and knew the page to show
+    while($post = $sql['mgr']->fetch_row($posts)){ // Find the row of our post, so we could have his ratio (topic x/total topics) and knew the page to show
       $row++;
       if($topic==$id) break;
     }
@@ -530,76 +529,76 @@ else
       $page++;
     };
     $page--;
-    //$sqlm->close();
+    //$sql['mgr']->close();
     redirect("forum.php?action=view_topic&id=$topic&page=$page");
   }
   // Queries : 2 with id || 2 (+2) with postid
 }
 function forum_do_edit_close(){
-  global $user_lvl, $arcm_db, $sqlm;
+  global $user_lvl, $arcm_db, $sql;
 
   if($user_lvl == 0)
     error(lang('forum', 'no_access'));
 
   if(!isset($_GET["id"])) error(lang('forum', 'no_such_topic'));
-  else $id = $sqlm->quote_smart($_GET["id"]);
+  else $id = $sql['mgr']->quote_smart($_GET["id"]);
 
   if(!isset($_GET["state"])) error("Bad request, please mail admin and describe what you did to get this error.");
-  else $state = $sqlm->quote_smart($_GET["state"]);
+  else $state = $sql['mgr']->quote_smart($_GET["state"]);
 
-  $sqlm->query("UPDATE forum_posts SET closed = '$state' WHERE id = '$id'");
-  //$sqlm->close();
+  $sql['mgr']->query("UPDATE forum_posts SET closed = '$state' WHERE id = '$id'");
+  //$sql['mgr']->close();
   redirect("forum.php?action=view_topic&id=$id");
   // Queries : 1
 }
 function forum_do_edit_announce(){
-  global $user_lvl, $arcm_db, $sqlm;
+  global $user_lvl, $arcm_db, $sql;
 
   if($user_lvl == 0)
     error(lang('forum', 'no_access'));
 
   if(!isset($_GET["id"])) error(lang('forum', 'no_such_topic'));
-  else $id = $sqlm->quote_smart($_GET["id"]);
+  else $id = $sql['mgr']->quote_smart($_GET["id"]);
 
   if(!isset($_GET["state"])) error("Bad request, please mail admin and describe what you did to get this error.");
-  else $state = $sqlm->quote_smart($_GET["state"]);
+  else $state = $sql['mgr']->quote_smart($_GET["state"]);
 
-  $sqlm->query("UPDATE forum_posts SET annouced = '$state' WHERE id = '$id'");
-  //$sqlm->close();
+  $sql['mgr']->query("UPDATE forum_posts SET annouced = '$state' WHERE id = '$id'");
+  //$sql['mgr']->close();
   redirect("forum.php?action=view_topic&id=$id");
   // Queries : 1
 }
 function forum_do_edit_stick(){
-  global $user_lvl, $arcm_db, $sqlm;
+  global $user_lvl, $arcm_db, $sql;
 
   if($user_lvl == 0)
     error(lang('forum', 'no_access'));
 
   if(!isset($_GET["id"])) error(lang('forum', 'no_such_topic'));
-  else $id = $sqlm->quote_smart($_GET["id"]);
+  else $id = $sql['mgr']->quote_smart($_GET["id"]);
 
   if(!isset($_GET["state"])) error("Bad request, please mail admin and describe what you did to get this error.");
-  else $state = $sqlm->quote_smart($_GET["state"]);
+  else $state = $sql['mgr']->quote_smart($_GET["state"]);
 
-  $sqlm->query("UPDATE forum_posts SET sticked = '$state' WHERE id = '$id'");
-  //$sqlm->close();
+  $sql['mgr']->query("UPDATE forum_posts SET sticked = '$state' WHERE id = '$id'");
+  //$sql['mgr']->close();
   redirect("forum.php?action=view_topic&id=$id");
   // Queries : 1
 }
 function forum_delete_post(){
-  global $enablesidecheck, $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $arcm_db, $sqlm;
+  global $enablesidecheck, $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $arcm_db, $sql;
   
   if(!isset($_GET["id"])) error(lang('forum', 'no_such_post'));
-  else $id = $sqlm->quote_smart($_GET["id"]);
+  else $id = $sql['mgr']->quote_smart($_GET["id"]);
 
-  $topic = $sqlm->query("SELECT id,topic,authorid,forum FROM forum_posts WHERE id = '$id';");
-  if($sqlm->num_rows($topic)==0) error(lang('forum', 'no_such_post'));
-  $topic = $sqlm->fetch_row($topic);
+  $topic = $sql['mgr']->query("SELECT id,topic,authorid,forum FROM forum_posts WHERE id = '$id';");
+  if($sql['mgr']->num_rows($topic)==0) error(lang('forum', 'no_such_post'));
+  $topic = $sql['mgr']->fetch_row($topic);
   if($user_lvl == 0 && $topic[2] != $user_id) error(lang('forum', 'no_access'));
   $fid = $topic[3];
 
-  $topic2 = $sqlm->query("SELECT name FROM forum_posts WHERE id = '{$topic[1]}';");
-  $name = $sqlm->fetch_row($topic2);
+  $topic2 = $sql['mgr']->query("SELECT name FROM forum_posts WHERE id = '{$topic[1]}';");
+  $name = $sql['mgr']->fetch_row($topic2);
 
   $cat = 0;
   foreach($forum_skeleton as $cid => $category){
@@ -619,48 +618,48 @@ function forum_delete_post(){
   makebutton(lang('forum', 'back'), "javascript:window.history.back()", 120);
   makebutton(lang('forum', 'confirm'), "forum.php?action=do_delete_post&amp;id={$topic[0]}", 120);
   $output .= "</td></tr></table></center>";
-  //$sqlm->close();
+  //$sql['mgr']->close();
   // Queries : 1
 }
 function forum_do_delete_post(){
-  global $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $arcm_db, $sqlm;
+  global $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $arcm_db, $sql;
 
   if(!isset($_GET["id"])) error(lang('forum', 'no_such_post'));
-  else $id = $sqlm->quote_smart($_GET["id"]);
+  else $id = $sql['mgr']->quote_smart($_GET["id"]);
 
-  $topic = $sqlm->query("SELECT id,topic,name,authorid,forum FROM forum_posts WHERE id = '$id';");
-  if($sqlm->num_rows($topic)==0) error(lang('forum', 'no_such_post'));
-  $topic = $sqlm->fetch_row($topic);
+  $topic = $sql['mgr']->query("SELECT id,topic,name,authorid,forum FROM forum_posts WHERE id = '$id';");
+  if($sql['mgr']->num_rows($topic)==0) error(lang('forum', 'no_such_post'));
+  $topic = $sql['mgr']->fetch_row($topic);
   if($user_lvl == 0 && $topic[3] != $user_id) error(lang('forum', 'no_access'));
   $fid = $topic[4];
 
   if($id==$topic[1]){
-    $sqlm->query("DELETE FROM forum_posts WHERE topic = '$id'");
+    $sql['mgr']->query("DELETE FROM forum_posts WHERE topic = '$id'");
     redirect("forum.php?action=view_forum&id=$fid");
   }
   else
   {
-    $sqlm->query("DELETE FROM forum_posts WHERE id = '$id'");
-    $result = $sqlm->query("SELECT id FROM forum_posts WHERE topic = '{$topic[1]}' ORDER BY id DESC LIMIT 1;"); // get last post id
-    $lastpostid = $sqlm->fetch_row($result);
+    $sql['mgr']->query("DELETE FROM forum_posts WHERE id = '$id'");
+    $result = $sql['mgr']->query("SELECT id FROM forum_posts WHERE topic = '{$topic[1]}' ORDER BY id DESC LIMIT 1;"); // get last post id
+    $lastpostid = $sql['mgr']->fetch_row($result);
     $lastpostid = $lastpostid[0];
-    $sqlm->query("UPDATE forum_posts SET lastpost = '$lastpostid' WHERE id = '{$topic[1]}'"); // update topic' s last post id
+    $sql['mgr']->query("UPDATE forum_posts SET lastpost = '$lastpostid' WHERE id = '{$topic[1]}'"); // update topic' s last post id
     redirect("forum.php?action=view_topic&id={$topic[1]}");
   }
   // Queries : 1 (if delete topic) || 4 if delete post
 }
 
 function forum_add_topic(){
-  global $enablesidecheck, $forum_skeleton, $maxqueries, $minfloodtime, $user_lvl, $user_id, $output, $arcm_db, $sqlm;
+  global $enablesidecheck, $forum_skeleton, $maxqueries, $minfloodtime, $user_lvl, $user_id, $output, $arcm_db, $sql;
 
   if($enablesidecheck) $side = get_side(); // Better to use it here instead of call it many time in the loop :)
 
   if($minfloodtime > 0)
   {
-    $userposts = $sqlm->query("SELECT time FROM forum_posts WHERE authorid = '$user_id' ORDER BY id DESC LIMIT 1;");
-    if($sqlm->num_rows($userposts) != 0)
+    $userposts = $sql['mgr']->query("SELECT time FROM forum_posts WHERE authorid = '$user_id' ORDER BY id DESC LIMIT 1;");
+    if($sql['mgr']->num_rows($userposts) != 0)
     {
-      $mintimeb4post = $sqlm->fetch_row($userposts);
+      $mintimeb4post = $sql['mgr']->fetch_row($userposts);
       $mintimeb4post = time() - strtotime($mintimeb4post[0]);
 
       if($mintimeb4post < $minfloodtime)
@@ -669,7 +668,7 @@ function forum_add_topic(){
   }
 
   if(!isset($_GET["id"])) error(lang('forum', 'no_such_forum'));
-  else $id = $sqlm->quote_smart($_GET["id"]);
+  else $id = $sql['mgr']->quote_smart($_GET["id"]);
 
   $cat = 0;
   foreach($forum_skeleton as $cid => $category){
@@ -738,20 +737,20 @@ function forum_add_topic(){
         </td></tr></table><TEXTAREA NAME=\"msg\" ROWS=8 COLS=93></TEXTAREA>
   <input type=\"hidden\" name=\"forum\" value=\"$id\" /></form>";
   $output .= "</center><br/>";
-  //$sqlm->close();
+  //$sql['mgr']->close();
   // Queries : 1
 }
 function forum_do_add_topic(){
-  global $enablesidecheck, $forum_skeleton, $user_lvl, $user_name, $user_id, $arcm_db, $minfloodtime, $sqlm;
+  global $enablesidecheck, $forum_skeleton, $user_lvl, $user_name, $user_id, $arcm_db, $minfloodtime, $sql;
 
   if($enablesidecheck) $side = get_side(); // Better to use it here instead of call it many time in the loop :)
 
 
   {
-    $userposts = $sqlm->query("SELECT time FROM forum_posts WHERE authorid = '$user_id' ORDER BY id DESC LIMIT 1;");
-    if($sqlm->num_rows($userposts) != 0)
+    $userposts = $sql['mgr']->query("SELECT time FROM forum_posts WHERE authorid = '$user_id' ORDER BY id DESC LIMIT 1;");
+    if($sql['mgr']->num_rows($userposts) != 0)
     {
-      $mintimeb4post = $sqlm->fetch_row($userposts);
+      $mintimeb4post = $sql['mgr']->fetch_row($userposts);
       $mintimeb4post = time() - strtotime($mintimeb4post[0]);
 
       if($mintimeb4post < $minfloodtime)
@@ -760,7 +759,7 @@ function forum_do_add_topic(){
   }
 
   if(!isset($_POST['forum'])) error(lang('forum', 'no_such_forum'));
-  else $forum = $sqlm->quote_smart($_POST['forum']);
+  else $forum = $sql['mgr']->quote_smart($_POST['forum']);
 
   $cat = 0;
   foreach($forum_skeleton as $cid => $category){
@@ -788,22 +787,22 @@ function forum_do_add_topic(){
   }
 
 //  $_POST['msg'] = htmlspecialchars($_POST['msg']);
-  $msg = trim($sqlm->quote_smart($_POST['msg']), " ");
+  $msg = trim($sql['mgr']->quote_smart($_POST['msg']), " ");
 //  $_POST['name'] = htmlspecialchars($_POST['name']);
-  $name = trim($sqlm->quote_smart($_POST['name']), " ");
+  $name = trim($sql['mgr']->quote_smart($_POST['name']), " ");
 
   if (strlen($name) > 49){
-    //$sqlm->close();
+    //$sql['mgr']->close();
     error(lang('forum', 'name_too_long'));
   }
 
   if (strlen($name) < 5){
-    //$sqlm->close();
+    //$sql['mgr']->close();
     error(lang('forum', 'name_too_short'));
   }
 
   if (strlen($msg) < 5){
-    //$sqlm->close();
+    //$sql['mgr']->close();
     error(lang('forum', 'msg_too_short'));
   }
 
@@ -812,26 +811,26 @@ function forum_do_add_topic(){
 
   $time = date("m/d/y H:i:s");
 
-  $sqlm->query("INSERT INTO forum_posts (authorid, authorname, forum, name, text, time) VALUES ('$user_id', '$user_name', '$forum', '$name', '$msg', '$time');");
-  $id = $sqlm->insert_id();
-  $sqlm->query("UPDATE forum_posts SET topic = '$id', lastpost = '$id' WHERE id = '$id';");
+  $sql['mgr']->query("INSERT INTO forum_posts (authorid, authorname, forum, name, text, time) VALUES ('$user_id', '$user_name', '$forum', '$name', '$msg', '$time');");
+  $id = $sql['mgr']->insert_id();
+  $sql['mgr']->query("UPDATE forum_posts SET topic = '$id', lastpost = '$id' WHERE id = '$id';");
 
-  //$sqlm->close();
+  //$sql['mgr']->close();
 
   redirect("forum.php?action=view_topic&id=$id");
   // Queries : 3
 }
 function forum_do_add_post(){
-  global $enablesidecheck, $forum_skeleton, $minfloodtime, $user_lvl, $user_name, $user_id, $arcm_db, $sqlm;
+  global $enablesidecheck, $forum_skeleton, $minfloodtime, $user_lvl, $user_name, $user_id, $arcm_db, $sql;
 
   if($enablesidecheck) $side = get_side(); // Better to use it here instead of call it many time in the loop :)
 
   if($minfloodtime > 0)
   {
-    $userposts = $sqlm->query("SELECT time FROM forum_posts WHERE authorid = '$user_id' ORDER BY id DESC LIMIT 1;");
-    if($sqlm->num_rows($userposts) != 0)
+    $userposts = $sql['mgr']->query("SELECT time FROM forum_posts WHERE authorid = '$user_id' ORDER BY id DESC LIMIT 1;");
+    if($sql['mgr']->num_rows($userposts) != 0)
     {
-      $mintimeb4post = $sqlm->fetch_row($userposts);
+      $mintimeb4post = $sql['mgr']->fetch_row($userposts);
       $mintimeb4post = time() - strtotime($mintimeb4post[0]);
 
       if($mintimeb4post < $minfloodtime)
@@ -840,7 +839,7 @@ function forum_do_add_post(){
   }
 
   if(!isset($_POST['forum'])) error(lang('forum', 'no_such_forum'));
-  else $forum = $sqlm->quote_smart($_POST['forum']);
+  else $forum = $sql['mgr']->quote_smart($_POST['forum']);
 
   $cat = 0;
   foreach($forum_skeleton as $cid => $category){
@@ -869,48 +868,48 @@ function forum_do_add_post(){
   }
 
   if(!isset($_POST['topic'])) error(lang('forum', 'no_such_topic'));
-  else $topic = $sqlm->quote_smart($_POST['topic']);
+  else $topic = $sql['mgr']->quote_smart($_POST['topic']);
 
 //  $_POST['msg'] = htmlspecialchars($_POST['msg']);
-  $msg = trim($sqlm->quote_smart($_POST['msg']), " ");
+  $msg = trim($sql['mgr']->quote_smart($_POST['msg']), " ");
 
   $msg = str_replace('\n', '<br />', $msg);
 //  $msg = str_replace('\r', '<br />', $msg);
 
   if (strlen($msg) < 5){
-    //$sqlm->close();
+    //$sql['mgr']->close();
     error(lang('forum', 'msg_too_short'));
   }
 
-  $name = $sqlm->query("SELECT name FROM forum_posts WHERE id = '$topic';");
-  $name = $sqlm->fetch_row($name);
-  $name = $sqlm->quote_smart($name[0]);
+  $name = $sql['mgr']->query("SELECT name FROM forum_posts WHERE id = '$topic';");
+  $name = $sql['mgr']->fetch_row($name);
+  $name = $sql['mgr']->quote_smart($name[0]);
 
   $time = date("m/d/y H:i:s");
 
-  $sqlm->query("INSERT INTO forum_posts (authorid, authorname, forum, topic, name, text, time) VALUES ('$user_id', '$user_name', '$forum', $topic, '$name', '$msg', '$time');");
+  $sql['mgr']->query("INSERT INTO forum_posts (authorid, authorname, forum, topic, name, text, time) VALUES ('$user_id', '$user_name', '$forum', $topic, '$name', '$msg', '$time');");
   $query = "SELECT id FROM forum_posts WHERE authorid='".$user_id."' AND topic='".$topic."' AND time='".$time."'";
-  $result = $sqlm->query($query);
-  $fields = $sqlm->fetch_assoc($result);
+  $result = $sql['mgr']->query($query);
+  $fields = $sql['mgr']->fetch_assoc($result);
   $id = $fields['id'];
-  //$id = @mysql_insert_id($sqlm);
-  $sqlm->query("UPDATE forum_posts SET lastpost = $id WHERE id = $topic;");
+  //$id = @mysql_insert_id($sql['mgr']);
+  $sql['mgr']->query("UPDATE forum_posts SET lastpost = $id WHERE id = $topic;");
 
-  //$sqlm->close();
+  //$sql['mgr']->close();
 
   redirect("forum.php?action=view_topic&id=$topic");
   // Queries : 4
 }
 
 function forum_edit_post(){
-  global $forum_skeleton, $maxqueries, $minfloodtime, $user_lvl, $user_id, $output, $arcm_db, $sqlm;
+  global $forum_skeleton, $maxqueries, $minfloodtime, $user_lvl, $user_id, $output, $arcm_db, $sql;
 
   if(!isset($_GET["id"])) error(lang('forum', 'no_such_post'));
-  else $id = $sqlm->quote_smart($_GET["id"]);
+  else $id = $sql['mgr']->quote_smart($_GET["id"]);
 
-  $post = $sqlm->query("SELECT id,topic,authorid,forum,name,text FROM forum_posts WHERE id = '$id';");
-  if($sqlm->num_rows($post)==0) error(lang('forum', 'no_such_post'));
-  $post = $sqlm->fetch_row($post);
+  $post = $sql['mgr']->query("SELECT id,topic,authorid,forum,name,text FROM forum_posts WHERE id = '$id';");
+  if($sql['mgr']->num_rows($post)==0) error(lang('forum', 'no_such_post'));
+  $post = $sql['mgr']->fetch_row($post);
 
   if($user_lvl == 0 && $user_id != $post[2])
     error(lang('forum', 'no_access'));
@@ -945,71 +944,71 @@ function forum_edit_post(){
   <input type=\"hidden\" name=\"post\" value=\"{$post[0]}\" />";
 
   $output .= "</center></form><br/>";
-  //$sqlm->close();
+  //$sql['mgr']->close();
   // Queries : 1
 }
 function forum_do_edit_post(){
-  global $user_lvl, $user_name, $user_id, $arcm_db, $sqlm;
+  global $user_lvl, $user_name, $user_id, $arcm_db, $sql;
 
   if(!isset($_POST['forum'])) error(lang('forum', 'no_such_forum'));
-  else $forum = $sqlm->quote_smart($_POST['forum']);
+  else $forum = $sql['mgr']->quote_smart($_POST['forum']);
   if(!isset($_POST['post'])) error(lang('forum', 'no_such_post'));
-  else $post = $sqlm->quote_smart($_POST['post']);
+  else $post = $sql['mgr']->quote_smart($_POST['post']);
 
   if(!isset($_POST['name']))
     $topic = 0;
   else{
     $topic = 1;
 //    htmlspecialchars($_POST['name']);
-    $name = $sqlm->quote_smart($_POST['name']);
+    $name = $sql['mgr']->quote_smart($_POST['name']);
     if (strlen($name) > 49){
-      //$sqlm->close();
+      //$sql['mgr']->close();
       error(lang('forum', 'name_too_long'));
     }
     if (strlen($name) < 5){
-      //$sqlm->close();
+      //$sql['mgr']->close();
       error(lang('forum', 'name_too_short'));
     }
   }
 
 //  $_POST['msg'] = htmlspecialchars($_POST['msg']);
-  $msg = trim($sqlm->quote_smart($_POST['msg']), " ");
+  $msg = trim($sql['mgr']->quote_smart($_POST['msg']), " ");
 
   if (strlen($msg) < 5){
-    //$sqlm->close();
+    //$sql['mgr']->close();
     error(lang('forum', 'msg_too_short'));
   }
 
   //$msg = str_replace('\n', '<br />', $msg);
 //  $msg = str_replace('\r', '<br />', $msg);
 
-  $result = $sqlm->query("SELECT topic FROM forum_posts WHERE id = $post;");
-  $topicid = $sqlm->fetch_row($result);
+  $result = $sql['mgr']->query("SELECT topic FROM forum_posts WHERE id = $post;");
+  $topicid = $sql['mgr']->fetch_row($result);
 
-  $sqlm->query("UPDATE forum_posts SET text = '$msg' WHERE id = $post;");
+  $sql['mgr']->query("UPDATE forum_posts SET text = '$msg' WHERE id = $post;");
 
   if($topic == 1){
-    $sqlm->query("UPDATE forum_posts SET name = '$name' WHERE topic = {$topicid[0]};");
+    $sql['mgr']->query("UPDATE forum_posts SET name = '$name' WHERE topic = {$topicid[0]};");
   }
 
-  $result = $sqlm->query("SELECT topic FROM forum_posts WHERE id = $post;");
-  $topicid = $sqlm->fetch_row($result);
+  $result = $sql['mgr']->query("SELECT topic FROM forum_posts WHERE id = $post;");
+  $topicid = $sql['mgr']->fetch_row($result);
 
-  //$sqlm->close();
+  //$sql['mgr']->close();
   redirect("forum.php?action=view_topic&id={$topicid[0]}");
   // Queries : 3 (+1 if topic)
 }
 
 function forum_move_topic(){
-  global $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $arcm_db, $sqlm;
+  global $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $arcm_db, $sql;
   
   if(!isset($_GET["id"])) error(lang('forum', 'no_such_topic'));
-  else $id = $sqlm->quote_smart($_GET["id"]);
+  else $id = $sql['mgr']->quote_smart($_GET["id"]);
 
-  $topic = $sqlm->query("SELECT id,topic,authorid,forum, name FROM forum_posts WHERE id = '$id';");
+  $topic = $sql['mgr']->query("SELECT id,topic,authorid,forum, name FROM forum_posts WHERE id = '$id';");
   //                0 1   2   3   4
-  if($sqlm->num_rows($topic)==0) error(lang('forum', 'no_such_topic'));
-  $topic = $sqlm->fetch_row($topic);
+  if($sql['mgr']->num_rows($topic)==0) error(lang('forum', 'no_such_topic'));
+  $topic = $sql['mgr']->fetch_row($topic);
   if($user_lvl == 0) error(lang('forum', 'no_access'));
   $fid = $topic[3];
 
@@ -1040,18 +1039,18 @@ function forum_move_topic(){
   makebutton(lang('forum', 'back'), "javascript:window.history.back()", 120);
   makebutton(lang('forum', 'confirm'), "javascript:do_submit()", 120);
   $output .= "</td></tr></table></center>";
-  //$sqlm->close();
+  //$sql['mgr']->close();
   // Queries : 1
 }
 function forum_do_move_topic(){
-  global $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $arcm_db, $sqlm;
+  global $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $arcm_db, $sql;
 
   if(!isset($_POST['forum'])) error(lang('forum', 'no_such_forum'));
-  else $forum = $sqlm->quote_smart($_POST['forum']);
+  else $forum = $sql['mgr']->quote_smart($_POST['forum']);
   if(!isset($_POST['id'])) error(lang('forum', 'no_such_topic'));
-  else $id = $sqlm->quote_smart($_POST['id']);
+  else $id = $sql['mgr']->quote_smart($_POST['id']);
 
-  $sqlm->query("UPDATE forum_posts SET forum = '$forum' WHERE topic = '$id'"); // update topic' s last post id
+  $sql['mgr']->query("UPDATE forum_posts SET forum = '$forum' WHERE topic = '$id'"); // update topic' s last post id
   redirect("forum.php?action=view_topic&id=$id");
   // Queries : 1
 }

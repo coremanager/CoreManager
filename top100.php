@@ -25,23 +25,23 @@ valid_login($action_permission['view']);
 function top100($realmid)
 {
   global $output, $logon_db, $characters_db, $server, $itemperpage, $developer_test_mode,
-    $multi_realm_mode, $sqlm, $sqlc, $core;
+    $multi_realm_mode, $sql, $core;
 
   $realm_id = $realmid;
 
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sql['char']->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
   //==========================$_GET and SECURE========================
-  $type = (isset($_GET['type'])) ? $sqlc->quote_smart($_GET['type']) : 'level';
+  $type = (isset($_GET['type'])) ? $sql['char']->quote_smart($_GET['type']) : 'level';
   if (preg_match('/^[_[:lower:]]{1,10}$/', $type)); else $type = 'level';
 
-  $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sql['char']->quote_smart($_GET['start']) : 0;
   if (is_numeric($start)); else $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'level';
+  $order_by = (isset($_GET['order_by'])) ? $sql['char']->quote_smart($_GET['order_by']) : 'level';
   if (preg_match('/^[_[:lower:]]{1,14}$/', $order_by)); else $order_by = 'level';
 
-  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sql['char']->quote_smart($_GET['dir']) : 1;
   if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
 
   $order_dir = ($dir) ? 'DESC' : 'DESC';
@@ -52,14 +52,14 @@ function top100($realmid)
   if (in_array($type, $type_list));
     else $type = 'level';
 
-  $result = $sqlc->query('SELECT count(*) FROM characters');
-  $all_record = $sqlc->result($result, 0);
+  $result = $sql['char']->query('SELECT count(*) FROM characters');
+  $all_record = $sql['char']->result($result, 0);
   $all_record = (($all_record < 100) ? $all_record : 100);
 
   if ( $core == 1)
   {
     // this_is_junk: rage and runic are both stored *10
-    $result = $sqlc->query('SELECT guid, name, race, class, gender, level, online, gold,
+    $result = $sql['char']->query('SELECT guid, name, race, class, gender, level, online, gold,
       SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, " ", 2), " ", -1) AS totaltime,
       CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, ";", '.(PLAYER_GUILDID+1).'),          ";", -1) AS UNSIGNED) as gname,
       CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, ";", '.(UNIT_FIELD_MAXHEALTH+1).'),        ";", -1) AS UNSIGNED) AS health,
@@ -106,7 +106,7 @@ function top100($realmid)
   else
   {
     $query = "SELECT characters.guid, characters.name, race, class, gender, level, 
-              totaltime, online, money, health, power1,
+              totaltime, online, money AS gold, health, power1,
 							arenaPoints as arena, totalHonorPoints as honor, totalKills as kills, 
               guildid as gname,
               strength AS str,
@@ -140,7 +140,7 @@ function top100($realmid)
               FROM characters, character_stats, guild_member 
               WHERE guild_member.guid = characters.guid 
               ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
-    $result = $sqlc->query($query);
+    $result = $sql['char']->query($query);
   }
 
   //==========================top tage navigaion starts here========================
@@ -189,8 +189,8 @@ function top100($realmid)
             <table class="top_hidden" id="top100_realms">';
   if($developer_test_mode && $multi_realm_mode)
   {
-    $realms = $sqlm->query('SELECT count(*) FROM realmlist');
-    $tot_realms = $sqlm->result($realms, 0);
+    $realms = $sql['mgr']->query('SELECT count(*) FROM realmlist');
+    $tot_realms = $sql['mgr']->result($realms, 0);
     if (1 < $tot_realms && 1 < count($server))
     {
       $output .= '
@@ -297,7 +297,7 @@ function top100($realmid)
   $output .= '
               </tr>';
   $i=0;
-  while($char = $sqlc->fetch_assoc($result))
+  while($char = $sql['char']->fetch_assoc($result))
   {
     $output .= '
               <tr valign="top">
@@ -312,13 +312,13 @@ function top100($realmid)
     {
       if ( $core == 1 )
       {
-        $guild_id = $sqlc->result($sqlc->query("SELECT guildid FROM guild_data WHERE playerid = '".$char['guid']."'"), 0);
-        $guild_name = $sqlc->result($sqlc->query("SELECT guildname FROM guilds WHERE guildid = '".$guild_id."'"), 0);
+        $guild_id = $sql['char']->result($sql['char']->query("SELECT guildid FROM guild_data WHERE playerid = '".$char['guid']."'"), 0);
+        $guild_name = $sql['char']->result($sql['char']->query("SELECT guildname FROM guilds WHERE guildid = '".$guild_id."'"), 0);
       }
       else
       {
-        $guild_id = $sqlc->result($sqlc->query("SELECT guildid FROM guild_member WHERE guid = '".$char['guid']."'"), 0);
-        $guild_name = $sqlc->result($sqlc->query("SELECT name AS guildname FROM guild WHERE guildid = '".$guild_id."'"), 0);
+        $guild_id = $sql['char']->result($sql['char']->query("SELECT guildid FROM guild_member WHERE guid = '".$char['guid']."'"), 0);
+        $guild_name = $sql['char']->result($sql['char']->query("SELECT name AS guildname FROM guild WHERE guildid = '".$guild_id."'"), 0);
       }
       $days  = floor(round($char['totaltime'] / 3600)/24);
       $hours = round($char['totaltime'] / 3600) - ($days * 24);
@@ -565,13 +565,13 @@ if ('realms' == $action)
   {
     $n_realms = $_POST['n_realms'];
 
-    $realms = $sqlm->query('SELECT id, name FROM realmlist LIMIT 10');
+    $realms = $sql['mgr']->query('SELECT id, name FROM realmlist LIMIT 10');
 
-    if (1 < $sqlm->num_rows($realms) && 1 < (count($server)))
+    if (1 < $sql['mgr']->num_rows($realms) && 1 < (count($server)))
     {
       for($i=1;$i<=$n_realms;++$i)
       {
-        $realm = $sqlm->fetch_assoc($realms);
+        $realm = $sql['mgr']->fetch_assoc($realms);
         if(isset($server[$realm['id']]))
         {
           $output .= '

@@ -28,7 +28,7 @@ function doregister()
   global $characters_db, $logon_db, $arcm_db, $realm_id, $disable_acc_creation,
     $limit_acc_per_ip, $valid_ip_mask, $send_mail_on_creation, $create_acc_locked, $from_mail,
     $mailer_type, $smtp_cfg, $title, $expansion_select, $defaultoption, $GMailSender, $format_mail_html,
-    $enable_captcha, $use_recaptcha, $recaptcha_private_key, $sqll, $sqlm, $core;
+    $enable_captcha, $use_recaptcha, $recaptcha_private_key, $sql, $core;
 
   if ($enable_captcha)
   {
@@ -97,22 +97,22 @@ function doregister()
       redirect("register.php?err=9&usr=$last_ip");
   }
 
-  $user_name = $sqll->quote_smart(trim($_POST['username']));
-  $screenname = $sqlm->quote_smart(trim($_POST['screenname']));
-  $pass = $sqll->quote_smart($_POST['pass']);
-  $pass1 = $sqll->quote_smart($_POST['pass1']);
+  $user_name = $sql['logon']->quote_smart(trim($_POST['username']));
+  $screenname = $sql['mgr']->quote_smart(trim($_POST['screenname']));
+  $pass = $sql['logon']->quote_smart($_POST['pass']);
+  $pass1 = $sql['logon']->quote_smart($_POST['pass1']);
 
   //make sure username/pass at least 4 chars long and less than max
   if ((strlen($user_name) < 4) || (strlen($user_name) > 15))
   {
-    //$sqll->close();
+    //$sql['logon']->close();
     redirect("register.php?err=5");
   }
   if ( $core == 1 )
   {
     if ((strlen($pass) < 4) || (strlen($pass) > 15))
     {
-      //$sqll->close();
+      //$sql['logon']->close();
       redirect("register.php?err=5");
     }
   }
@@ -123,7 +123,7 @@ function doregister()
   {
     if ((strlen($screenname) < 4) || (strlen($screenname) > 15))
     {
-      //$sqll->close();
+      //$sql['logon']->close();
       redirect("register.php?err=5");
     }
   }
@@ -133,22 +133,22 @@ function doregister()
   //make sure it doesnt contain non english chars.
   if (!valid_alphabetic($user_name))
   {
-    //$sqll->close();
+    //$sql['logon']->close();
     redirect("register.php?err=6");
   }
 
   //make sure screen name doesnt contain non english chars.
   if (!valid_alphabetic($screenname))
   {
-    //$sqll->close();
+    //$sql['logon']->close();
     redirect("register.php?err=6");
   }
 
   //make sure the mail is valid mail format
-  $mail = $sqll->quote_smart(trim($_POST['email']));
+  $mail = $sql['logon']->quote_smart(trim($_POST['email']));
   if ((!valid_email($mail))||(strlen($mail) > 224))
   {
-    //$sqll->close();
+    //$sql['logon']->close();
     redirect("register.php?err=7");
   }
 
@@ -158,45 +158,45 @@ function doregister()
     $per_ip = ($limit_acc_per_ip) ? "OR last_ip='$last_ip'" : "";
 
   if ( $core == 1 )
-    $result = $sqll->query("SELECT ip FROM ipbans WHERE ip = '$last_ip'");
+    $result = $sql['logon']->query("SELECT ip FROM ipbans WHERE ip = '$last_ip'");
   else
-    $result = $sqll->query("SELECT ip FROM ip_banned WHERE ip = '$last_ip'");
+    $result = $sql['logon']->query("SELECT ip FROM ip_banned WHERE ip = '$last_ip'");
   
   //IP is in ban list
-  if ($sqll->num_rows($result))
+  if ($sql['logon']->num_rows($result))
   {
-    //$sqll->close();
+    //$sql['logon']->close();
     redirect("register.php?err=8&usr=$last_ip");
   }
 
   //Email check
   if ( $core == 1 )
-    $result = $sqll->query("SELECT login, email FROM accounts WHERE login='".$user_name."' OR login='".$screenname."' OR email='".$mail."' ".$per_ip);
+    $result = $sql['logon']->query("SELECT login, email FROM accounts WHERE login='".$user_name."' OR login='".$screenname."' OR email='".$mail."' ".$per_ip);
   else
-    $result = $sqll->query("SELECT username AS login, email FROM account WHERE username='".$user_name."' OR username='".$screenname."' OR email='".$mail."' ".$per_ip);
+    $result = $sql['logon']->query("SELECT username AS login, email FROM account WHERE username='".$user_name."' OR username='".$screenname."' OR email='".$mail."' ".$per_ip);
     
-  if ($sqll->num_rows($result))
+  if ($sql['logon']->num_rows($result))
   {
-    //$sqll->close();
+    //$sql['logon']->close();
     redirect("register.php?err=14");
   }
 
   //there is already someone with same account name
-  if ($sqll->num_rows($result))
+  if ($sql['logon']->num_rows($result))
   {
-    //$sqll->close();
+    //$sql['logon']->close();
     redirect("register.php?err=3&usr=$user_name");
   }
   else
   {
     // check for existing screen name
     $query = "SELECT * FROM config_accounts WHERE ScreenName ='".$screenname."'";
-    $result = $sqlm->query($query);
-    if ($sqlm->num_rows($result))
+    $result = $sql['mgr']->query($query);
+    if ($sql['mgr']->num_rows($result))
       redirect("register.php?err=3&usr=$screenname");
 
     if ($expansion_select)
-      $expansion = (isset($_POST['expansion'])) ? $sqll->quote_smart($_POST['expansion']) : 0;
+      $expansion = (isset($_POST['expansion'])) ? $sql['logon']->quote_smart($_POST['expansion']) : 0;
     else
       $expansion = $defaultoption;
 
@@ -204,7 +204,7 @@ function doregister()
     if ($screenname)
     {
       $query = "INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '".$screenname."')";
-      $s_result = $sqlm->query($query);
+      $s_result = $sql['mgr']->query($query);
     }
     else
       $s_result = true;
@@ -214,20 +214,20 @@ function doregister()
     else
       $query = "INSERT INTO account (username, sha_pass_hash, email, expansion) VALUES ('".$user_name."', '".$pass."', '".$mail."', '".$expansion."')";
     
-    $a_result = $sqll->query($query);
-    //$sqll->close();
+    $a_result = $sql['logon']->query($query);
+    //$sql['logon']->close();
     
     if ( $core == 1 )
       ;
     else
     {
       $id_query = "SELECT * FROM account WHERE username='".$user_name."'";
-      $id_result = $sqll->query($id_query);
-      $id_fields = $sqll->fetch_assoc($id_result);
+      $id_result = $sql['logon']->query($id_query);
+      $id_fields = $sql['logon']->fetch_assoc($id_result);
       $new_id = $id_fields['id'];
       
       $query = "INSERT INTO account_access (id, gmlevel, RealmID) VALUES ('".$new_id."', '0', '-1')";
-      $aa_result = $sqll->query($query);
+      $aa_result = $sql['logon']->query($query);
     }
 
     if ( $core == 1 )
@@ -581,7 +581,7 @@ function pass_recovery()
 function do_pass_recovery()
 {
   global $logon_db, $from_mail, $mailer_type, $smtp_cfg, $title, $GMailSender,
-    $format_mail_html, $sqll;
+    $format_mail_html, $sql;
 
   if ( empty($_POST['username']) || empty($_POST['email']) )
     redirect("register.php?action=pass_recovery&err=1");
@@ -589,14 +589,14 @@ function do_pass_recovery()
   /*$sql = new SQL;
   $sql->connect($logon_db['addr'], $logon_db['user'], $logon_db['pass'], $logon_db['name']);*/
 
-  $user_name = $sqll->quote_smart(trim($_POST['username']));
-  $email_addr = $sqll->quote_smart($_POST['email']);
+  $user_name = $sql['logon']->quote_smart(trim($_POST['username']));
+  $email_addr = $sql['logon']->quote_smart($_POST['email']);
 
-  $result = $sqll->query("SELECT password FROM accounts WHERE login = '$user_name' AND email = '$email_addr'");
+  $result = $sql['logon']->query("SELECT password FROM accounts WHERE login = '$user_name' AND email = '$email_addr'");
 
-  if ($sqll->num_rows($result) == 1)
+  if ($sql['logon']->num_rows($result) == 1)
   {
-    $pass = $sqll->fetch_assoc($result);
+    $pass = $sql['logon']->fetch_assoc($result);
 
     if ($GMailSender)
     {
@@ -704,22 +704,22 @@ function do_pass_recovery()
 //               this is unused.  And should be deleted later.
 function do_pass_activate()
 {
- global $logon_db, $sqll;
+ global $logon_db, $sql;
 
  if ( empty($_GET['h']) || empty($_GET['p']) ) redirect("register.php?action=pass_recovery&err=1");
 
  /*$sql = new SQL;
  $sql->connect($logon_db['addr'], $logon_db['user'], $logon_db['pass'], $logon_db['name']);*/
 
- $pass = $sqll->quote_smart(trim($_GET['p']));
- $hash = $sqll->quote_smart($_GET['h']);
+ $pass = $sql['logon']->quote_smart(trim($_GET['p']));
+ $hash = $sql['logon']->quote_smart($_GET['h']);
 
- $result = $sqll->query("SELECT id,login FROM accounts WHERE password = '$hash'");
+ $result = $sql['logon']->query("SELECT id,login FROM accounts WHERE password = '$hash'");
 
- if ($sqll->num_rows($result) == 1){
-  $username = $sqll->result($result, 0, 'username');
-  $id = $sqll->result($result, 0, 'id');
-  if (substr(sha1(strtoupper($sqll->result($result, 0, 'username'))),0,7) == $pass){
+ if ($sql['logon']->num_rows($result) == 1){
+  $username = $sql['logon']->result($result, 0, 'username');
+  $id = $sql['logon']->result($result, 0, 'id');
+  if (substr(sha1(strtoupper($sql['logon']->result($result, 0, 'username'))),0,7) == $pass){
     $sql->query("UPDATE account SET sha_pass_hash=SHA1(CONCAT(UPPER('$username'),':',UPPER('$pass'))), v=0, s=0 WHERE id = '$id'");
     redirect("login.php");
     }

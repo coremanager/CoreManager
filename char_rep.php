@@ -28,7 +28,7 @@ valid_login($action_permission['view']);
 function char_rep()
 {
   global $output, $realm_id, $characters_db, $logon_db, $arcm_db, $action_permission,
-    $user_lvl, $user_name, $sqlm, $sqll, $sqlc;
+    $user_lvl, $user_name, $sql;
 
   require_once 'libs/fact_lib.php';
   $reputation_rank = fact_get_reputation_rank_arr();
@@ -43,37 +43,37 @@ function char_rep()
     $realmid = $realm_id;
   else
   {
-    $realmid = $sqll->quote_smart($_GET['realm']);
+    $realmid = $sql['logon']->quote_smart($_GET['realm']);
     if (is_numeric($realmid))
-      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
-  $id = $sqlc->quote_smart($_GET['id']);
+  $id = $sql['char']->quote_smart($_GET['id']);
   if (is_numeric($id)); else $id = 0;
 
-  $result = $sqlc->query('SELECT acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
+  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
 
-  if ($sqlc->num_rows($result))
+  if ($sql['char']->num_rows($result))
   {
-    $char = $sqlc->fetch_assoc($result);
+    $char = $sql['char']->fetch_assoc($result);
 
     // we get user permissions first
-    $owner_acc_id = $sqlc->result($result, 0, 'accounts');
-    $result = $sqll->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sqll->result($result, 0, 'gm');
-    $owner_name = $sqll->result($result, 0, 'login');
+    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
+    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
+    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_name = $sql['logon']->result($result, 0, 'login');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
-      //$result = $sqlc->query('SELECT faction, standing FROM character_reputation WHERE guid = '.$id.' AND (flags & 1 = 1)');
+      //$result = $sql['char']->query('SELECT faction, standing FROM character_reputation WHERE guid = '.$id.' AND (flags & 1 = 1)');
       // this_is_junk: ArcEmu stores reputation in a single field
       //               [faction id][unk1][unk2][standing],
       //               I'm sure the two unk's are useful data, I just don't need it here.
       //               But, we're going to break the values into two arrays
-      $result = $sqlc->query("SELECT reputation FROM characters WHERE guid = '".$id."'");
-      $result = $sqlc->fetch_assoc($result);
+      $result = $sql['char']->query("SELECT reputation FROM characters WHERE guid = '".$id."'");
+      $result = $sql['char']->fetch_assoc($result);
       $result = $result['reputation'];
       $result = substr($result, 0, strlen($result) - 1);
       $result = explode(",", $result);
@@ -287,7 +287,7 @@ function char_rep()
 
       if (count($factions) > 1)
       {
-        //while ($fact = $sqlc->fetch_assoc($result))
+        //while ($fact = $sql['char']->fetch_assoc($result))
         for ($i = 0; $i < count($factions); $i++)
         {
           $faction  = $factions[$i];

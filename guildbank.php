@@ -27,8 +27,7 @@ valid_login($action_permission['view']);
 //########################################################################################################################
 function guild_bank()
 {
-  global  $output, $realm_id, $characters_db, $arcm_db, $world_db, $item_datasite, $item_icons, $sqlm, $sqlw,
-    $sqll, $sqlc, $sqld;
+  global  $output, $realm_id, $characters_db, $arcm_db, $world_db, $item_datasite, $item_icons, $sql;
 
   //wowhead_tt();
 
@@ -41,14 +40,14 @@ function guild_bank()
     $realmid = $realm_id;
   else
   {
-    $realmid = $sqll->quote_smart($_GET['realm']);
+    $realmid = $sql['logon']->quote_smart($_GET['realm']);
     if ( is_numeric($realmid) )
-      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
-  $guild_id = $sqlc->quote_smart($_GET['id']);
+  $guild_id = $sql['char']->quote_smart($_GET['id']);
   if ( is_numeric($guild_id) )
     ;
   else
@@ -57,28 +56,28 @@ function guild_bank()
   if ( empty($_GET['tab']) )
     $current_tab = 0;
   else
-    $current_tab = $sqlc->quote_smart($_GET['tab']);
+    $current_tab = $sql['char']->quote_smart($_GET['tab']);
   if ( is_numeric($current_tab) || ($current_tab > 6) )
     ;
   else
     $current_tab = 0;
 
   if ( $core == 1 )
-    $result = $sqlc->query('SELECT guildName, bankBalance FROM guilds WHERE guildid = '.$guild_id.' LIMIT 1');
+    $result = $sql['char']->query('SELECT guildName, bankBalance FROM guilds WHERE guildid = '.$guild_id.' LIMIT 1');
   else
-    $result = $sqlc->query('SELECT name AS guildName, BankMoney AS bankBalance FROM guild WHERE guildid = '.$guild_id.' LIMIT 1');
+    $result = $sql['char']->query('SELECT name AS guildName, BankMoney AS bankBalance FROM guild WHERE guildid = '.$guild_id.' LIMIT 1');
 
-  if( $sqlc->num_rows($result) )
+  if( $sql['char']->num_rows($result) )
   {
-    $guild_name  = $sqlc->result($result, 0, 'guildName');
-    $bank_gold   = $sqlc->result($result, 0, 'bankBalance');
+    $guild_name  = $sql['char']->result($result, 0, 'guildName');
+    $bank_gold   = $sql['char']->result($result, 0, 'bankBalance');
 
     if ( $core == 1 )
-      $result = $sqlc->query('SELECT TabId, TabName, TabIcon FROM guild_banktabs WHERE guildid = '.$guild_id.' LIMIT 6');
+      $result = $sql['char']->query('SELECT TabId, TabName, TabIcon FROM guild_banktabs WHERE guildid = '.$guild_id.' LIMIT 6');
     else
-      $result = $sqlc->query('SELECT TabId, TabName, TabIcon FROM guild_bank_tab WHERE guildid = '.$guild_id.' LIMIT 6');
+      $result = $sql['char']->query('SELECT TabId, TabName, TabIcon FROM guild_bank_tab WHERE guildid = '.$guild_id.' LIMIT 6');
     $tabs = array();
-    while ( $tab = $sqlc->fetch_assoc($result) )
+    while ( $tab = $sql['char']->fetch_assoc($result) )
     {
       $tabs[$tab['TabId']] = $tab;
     }
@@ -105,8 +104,8 @@ function guild_bank()
         {
           // make sure we're looking for the file name with the correct capitalization
           $ii_query = "SELECT * FROM itemdisplayinfo WHERE LCASE(IconName)='".strtolower($tabs[$i]['TabIcon'])."' LIMIT 1";
-          $ii_result = $sqld->query($ii_query);
-          $ii_fields = $sqld->fetch_assoc($ii_result);
+          $ii_result = $sql['dbc']->query($ii_query);
+          $ii_fields = $sql['dbc']->fetch_assoc($ii_result);
           $tabs[$i]['TabIcon'] = $ii_fields['IconName'];
 
           if ( file_exists(''.$item_icons.'/'.$tabs[$i]['TabIcon'].'.png') )
@@ -131,18 +130,18 @@ function guild_bank()
             <div id="tab_content">';
 
     if ( $core == 1 )
-      $result = $sqlc->query('SELECT gbi.SlotId, gbi.itemGuid, ii.entry,
+      $result = $sql['char']->query('SELECT gbi.SlotId, gbi.itemGuid, ii.entry,
         ii.count AS stack_count,
         FROM guild_bankitems gbi INNER JOIN playeritems ii on ii.guid = gbi.itemGuid
         WHERE gbi.guildid = '.$guild_id.' AND TabID = '.$current_tab.'');
     else
-      $result = $sqlc->query('SELECT gbi.SlotId, gbi.item_guid AS itemGuid, gbi.item_entry AS entry, 
+      $result = $sql['char']->query('SELECT gbi.SlotId, gbi.item_guid AS itemGuid, gbi.item_entry AS entry, 
         SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", 15), " ", -1) as stack_count 
         FROM guild_bank_item gbi INNER JOIN item_instance ii on ii.guid = gbi.item_guid 
         WHERE gbi.guildid = '.$guild_id.' AND TabID = '.$current_tab.'');
         
     $gb_slots = array();
-    while ( $tab = $sqlc->fetch_assoc($result) )
+    while ( $tab = $sql['char']->fetch_assoc($result) )
       if ( $tab['itemGuid'] )
         $gb_slots[$tab['SlotId']] = $tab;
 

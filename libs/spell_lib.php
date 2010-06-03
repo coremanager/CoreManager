@@ -24,9 +24,9 @@
 
 function spell_get_name($id)
 {
-  global $sqld;
+  global $sql;
 
-  $spell_name = $sqld->fetch_assoc($sqld->query('SELECT spellname_loc0 FROM dbc_spell WHERE spellID='.$id.' LIMIT 1'));
+  $spell_name = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT spellname_loc0 FROM dbc_spell WHERE spellID='.$id.' LIMIT 1'));
   return $spell_name['spellname_loc0'];
 }
 
@@ -36,22 +36,22 @@ function spell_get_name($id)
 
 function spell_get_icon($auraid)
 {
-  global $proxy_cfg, $get_icons_from_web, $item_icons, $sqld;
+  global $proxy_cfg, $get_icons_from_web, $item_icons, $sql;
 
-  $result = $sqld->query('SELECT spellIconId FROM spell WHERE ID = '.$auraid.' LIMIT 1');
+  $result = $sql['dbc']->query('SELECT spellIconId FROM spell WHERE ID = '.$auraid.' LIMIT 1');
 
   if ($result)
-    $displayid = $sqld->result($result, 0);
+    $displayid = $sql['dbc']->result($result, 0);
   else
     $displayid = 0;
 
   if ($displayid)
   {
-    $result = $sqld->query('SELECT Name FROM spellicon WHERE id = '.$displayid.' LIMIT 1');
+    $result = $sql['dbc']->query('SELECT Name FROM spellicon WHERE id = '.$displayid.' LIMIT 1');
 
     if($result)
     {
-      $aura = $sqld->result($result, 0);
+      $aura = $sql['dbc']->result($result, 0);
       $aura = explode("\\", $aura);
       $aura = $aura[count($aura) - 1];
 
@@ -72,7 +72,7 @@ function spell_get_icon($auraid)
         //  }
         //  else
         //  {
-        //    $sqlm->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
+        //    $sql['mgr']->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
         //    if (file_exists(''.$item_icons.'/'.$aura.'.png'))
         //      unlink(''.$item_icons.'/'.$aura.'.png');
         //    $aura = '';

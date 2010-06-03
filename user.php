@@ -31,16 +31,16 @@ function browse_users()
 {
   global $output, $realm_id, $arcm_db, $logon_db, $arcm_db, $characters_db,
     $action_permission, $user_lvl, $user_name, $itemperpage, $showcountryflag, $expansion_select,
-    $timezone, $sqlm, $sqlm, $sqll, $sqlc, $core;
+    $timezone, $sql, $core;
 
   //-------------------SQL Injection Prevention--------------------------------
-  $start = (isset($_GET['start'])) ? $sqll->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sql['logon']->quote_smart($_GET['start']) : 0;
   if (is_numeric($start)); else $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqll->quote_smart($_GET['order_by']) : 'acct';
+  $order_by = (isset($_GET['order_by'])) ? $sql['logon']->quote_smart($_GET['order_by']) : 'acct';
   if (preg_match('/^[_[:lower:]]{1,15}$/', $order_by)); else $order_by='acct';
 
-  $dir = (isset($_GET['dir'])) ? $sqll->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sql['logon']->quote_smart($_GET['dir']) : 1;
   if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
 
   $order_dir = ($dir) ? 'ASC' : 'DESC';
@@ -53,8 +53,8 @@ function browse_users()
   if(isset($_GET['search_value']) && isset($_GET['search_by']))
   {
     // injection prevention
-    $search_value = $sqll->quote_smart($_GET['search_value']);
-    $search_by = $sqll->quote_smart($_GET['search_by']);
+    $search_value = $sql['logon']->quote_smart($_GET['search_value']);
+    $search_by = $sql['logon']->quote_smart($_GET['search_by']);
     $search_menu = array('login', 'acct', 'gm', 'greater_gmlevel', 'email', 'lastip', 'lastlogin', 'banned', 'muted', 'flags');
     if (in_array($search_by, $search_menu));
     else $search_by = 'login';
@@ -67,21 +67,21 @@ function browse_users()
       //TODO
       $sql_query = 'SELECT acct,login,gm,email,lastip,muted,UNIX_TIMESTAMP(lastlogin) as lastlogin,flags
         FROM accounts WHERE gm > "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
-      $query_1 = $sqll->query('SELECT count(*) FROM accounts WHERE gm > "%'.$search_value.'%"');
+      $query_1 = $sql['logon']->query('SELECT count(*) FROM accounts WHERE gm > "%'.$search_value.'%"');
     }
     elseif ($search_by === 'banned')
     {
       $sql_query = 'SELECT acct,login,gm,email,lastip,muted,UNIX_TIMESTAMP(lastlogin) as lastlogin,flags
         FROM accounts WHERE acct = 0 ';
       $count_query = 'SELECT count(*) FROM accounts WHERE banned <> 0 ';
-      $que = $sqll->query('SELECT acct FROM accounts WHERE banned <> 0');
-      while ($banned = $sqll->fetch_assoc($que))
+      $que = $sql['logon']->query('SELECT acct FROM accounts WHERE banned <> 0');
+      while ($banned = $sql['logon']->fetch_assoc($que))
       {
         $sql_query .= 'OR acct = '.$banned['acct'].'';
         $count_query .= 'OR acct = '.$banned['acct'].'';
       }
       $sql_query .= ' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
-      $query_1 = $sqll->query($count_query);
+      $query_1 = $sql['logon']->query($count_query);
       unset($count_query);
     }
     else
@@ -89,28 +89,28 @@ function browse_users()
       // default search case
       $sql_query = 'SELECT acct,login,gm,email,lastip,muted,UNIX_TIMESTAMP(lastlogin) as lastlogin,flags
         FROM accounts WHERE '.$search_by.' LIKE "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
-      $query_1 = $sqll->query('SELECT count(*) FROM accounts WHERE '.$search_by.' LIKE "%'.$search_value.'%"');
+      $query_1 = $sql['logon']->query('SELECT count(*) FROM accounts WHERE '.$search_by.' LIKE "%'.$search_value.'%"');
     }
-    $query = $sqll->query($sql_query);
+    $query = $sql['logon']->query($sql_query);
   }
   else
   {
     // get total number of items
     if ( $core == 1 )
     {
-      $query_1 = $sqll->query('SELECT count(*) FROM accounts');
-      $query = $sqll->query('SELECT acct,login,gm,email,lastip,muted,UNIX_TIMESTAMP(lastlogin) as lastlogin,flags
+      $query_1 = $sql['logon']->query('SELECT count(*) FROM accounts');
+      $query = $sql['logon']->query('SELECT acct,login,gm,email,lastip,muted,UNIX_TIMESTAMP(lastlogin) as lastlogin,flags
         FROM accounts ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
     }
     else
     {
-      $query_1 = $sqll->query('SELECT count(*) FROM account');
-      $query = $sqll->query('SELECT account.id AS acct, username AS login, account_access.gmlevel AS gm, email, last_ip AS lastip, mutetime AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags
+      $query_1 = $sql['logon']->query('SELECT count(*) FROM account');
+      $query = $sql['logon']->query('SELECT account.id AS acct, username AS login, account_access.gmlevel AS gm, email, last_ip AS lastip, mutetime AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags
         FROM account LEFT JOIN account_access ON account_access.id = account.id ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
     }
   }
   // this is for multipage support
-  $all_record = $sqll->result($query_1,0);
+  $all_record = $sql['logon']->result($query_1,0);
   unset($query_1);
 
   //==========================top tage navigaion starts here========================
@@ -228,30 +228,30 @@ function browse_users()
                 </tr>';
 
   //---------------Page Specific Data Starts Here--------------------------
-  while ($data = $sqll->fetch_assoc($query))
+  while ($data = $sql['logon']->fetch_assoc($query))
   {
     // get screen name for each account
     $sn_query = "SELECT * FROM config_accounts WHERE Login = '".$data['login']."'";
-    $sn_result = $sqlm->query($sn_query);
-    $screenname = $sqlm->fetch_assoc($sn_result);
+    $sn_result = $sql['mgr']->query($sn_query);
+    $screenname = $sql['mgr']->fetch_assoc($sn_result);
     
     // clear character count from previous account
     $char_count = 0;
 
     foreach ($characters_db as $db)
     {
-        $sql = new SQL;
-        $sql->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
+        $sqlt = new SQL;
+        $sqlt->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
 
         if ( $core == 1 )
           $char_query = "SELECT COUNT(*) FROM characters WHERE acct = '".$data['acct']."'";
         else
           $char_query = "SELECT COUNT(*) FROM characters WHERE account = '".$data['acct']."'";
-        $char_result = $sql->query($char_query);
-        $char_count_fields = $sql->fetch_assoc($char_result);
+        $char_result = $sqlt->query($char_query);
+        $char_count_fields = $sqlt->fetch_assoc($char_result);
         $char_count += $char_count_fields['COUNT(*)'];
     }
-    
+
     if ( ($user_lvl >= gmlevel($data['gm'])) || ($user_name == $data['login']) )
     {
       $output .= '
@@ -307,18 +307,18 @@ function browse_users()
       $o_temp = 0;
       foreach ( $characters_db as $db )
       {
-        $sql = new SQL;
-        $sql->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
+        $sqlt = new SQL;
+        $sqlt->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
         
         if ( $core == 1 )
           $sql_c_query = "SELECT SUM(online) FROM characters WHERE acct = '".$data['acct']."'";
         else
           $sql_c_query = "SELECT SUM(online) FROM characters WHERE account = '".$data['acct']."'";
-        $c_query = $sql->query($sql_c_query);
-        $c_result = $sql->fetch_row($c_query);
+        $c_query = $sqlt->query($sql_c_query);
+        $c_result = $sqlt->fetch_row($c_query);
         $o_temp += $c_result[0];
       }
-      
+
       $time_offset = $timezone * 3600;
       
       if ( $data['lastlogin'] <> 0 )
@@ -407,7 +407,7 @@ function browse_users()
 //#######################################################################################################
 function del_user()
 {
-  global $output, $logon_db, $action_permission, $sqll;
+  global $output, $logon_db, $action_permission, $sql;
 
   valid_login($action_permission['delete']);
   if(isset($_GET['check'])) $check = $_GET['check'];
@@ -434,7 +434,7 @@ function del_user()
 
   for ($i=0; $i<count($check); $i++)
   {
-    $login = $sqll->result($sqll->query("SELECT login FROM `accounts` WHERE acct = '".$check[$i]."'"),0);
+    $login = $sql['logon']->result($sql['logon']->query("SELECT login FROM `accounts` WHERE acct = '".$check[$i]."'"),0);
     $output .= "
           <a href=\"user.php?action=edit_user&amp;acct=$check[$i]\" target=\"_blank\">$login, </a>";
     $pass_array .= "&amp;check%5B%5D=$check[$i]";
@@ -465,12 +465,12 @@ function del_user()
 function dodel_user()
 {
   global $output, $logon_db, $characters_db, $realm_id, $user_lvl,
-    $tab_del_user_characters, $tab_del_user_realmd, $action_permission, $sqll;
+    $tab_del_user_characters, $tab_del_user_realmd, $action_permission, $sql;
 
   valid_login($action_permission['delete']);
 
   if(isset($_GET['check']))
-    $check = $sqll->quote_smart($_GET['check']);
+    $check = $sql['logon']->quote_smart($_GET['check']);
   else
     redirect("user.php?error=1");
 
@@ -775,15 +775,15 @@ function add_new()
 //#########################################################################################################
 function doadd_new()
 {
-  global $logon_db, $action_permission, $sqll;
+  global $logon_db, $action_permission, $sql;
 
   valid_login($action_permission['insert']);
 
   if ( empty($_GET['new_user']) || empty($_GET['pass']) )
     redirect("user.php?action=add_new&error=4");
 
-  $new_user = $sqll->quote_smart(trim($_GET['new_user']));
-  $password = $sqll->quote_smart($_GET['pass']);
+  $new_user = $sql['logon']->quote_smart(trim($_GET['new_user']));
+  $password = $sql['logon']->quote_smart($_GET['pass']);
 
   //make sure username/pass at least 4 chars long and less than max
   if ((strlen($new_user) < 4) || (strlen($new_user) > 15))
@@ -793,18 +793,18 @@ function doadd_new()
   //make sure it doesnt contain non english chars.
   if (!valid_alphabetic($new_user))
     redirect("user.php?action=add_new&error=9");
-  $result = $sqll->query("SELECT login FROM accounts WHERE login = '$new_user'");
+  $result = $sql['logon']->query("SELECT login FROM accounts WHERE login = '$new_user'");
 
   //there is already someone with same username
-  if ($sqll->num_rows($result))
+  if ($sql['logon']->num_rows($result))
     redirect("user.php?action=add_new&error=7");
   else
     $last_ip = "0.0.0.0";
-  $new_mail = (isset($_GET['new_mail'])) ? $sqll->quote_smart(trim($_GET['new_mail'])) : NULL;
-  $locked = (isset($_GET['new_locked'])) ? $sqll->quote_smart($_GET['new_locked']) : 0;
-  $expansion = (isset($_GET['new_expansion'])) ? $sqll->quote_smart($_GET['new_expansion']) : 0;
+  $new_mail = (isset($_GET['new_mail'])) ? $sql['logon']->quote_smart(trim($_GET['new_mail'])) : NULL;
+  $locked = (isset($_GET['new_locked'])) ? $sql['logon']->quote_smart($_GET['new_locked']) : 0;
+  $expansion = (isset($_GET['new_expansion'])) ? $sql['logon']->quote_smart($_GET['new_expansion']) : 0;
 
-  $result = $sqll->query("INSERT INTO accounts (login,password,gm,email,lastip,muted,lastlogin,flags,banned)
+  $result = $sql['logon']->query("INSERT INTO accounts (login,password,gm,email,lastip,muted,lastlogin,flags,banned)
     VALUES ('$new_user','$password',0 ,'$new_mail','$last_ip', $locked ,NULL, $expansion,0)");
   if ($result)
     redirect("user.php?error=5");
@@ -819,32 +819,32 @@ function edit_user()
 {
   global $output, $logon_db, $characters_db, $realm_id, $arcm_db, $arcm_db, $realm_id,
     $user_lvl, $user_name, $gm_level_arr, $action_permission, $expansion_select, $developer_test_mode,
-    $multi_realm_mode, $server, $timezone, $sqll, $sqlm, $sqlm, $sqlc, $core;
+    $multi_realm_mode, $server, $timezone, $sql, $core;
 
   if (empty($_GET['acct']))
     redirect("user.php?error=10");
 
-  $acct = $sqll->quote_smart($_GET['acct']);
+  $acct = $sql['logon']->quote_smart($_GET['acct']);
 
   if ( $core == 1 )
-    $result = $sqll->query("SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) AS lastlogin, flags FROM accounts WHERE acct = '$acct'");
+    $result = $sql['logon']->query("SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) AS lastlogin, flags FROM accounts WHERE acct = '$acct'");
   else
-    $result = $sqll->query("SELECT account.id AS acct, username AS login, account_access.gmlevel AS gm, email, last_ip AS lastip, mutetime AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags FROM account LEFT JOIN account_access ON account.id = account_access.id WHERE account.id = '$acct'");
+    $result = $sql['logon']->query("SELECT account.id AS acct, username AS login, account_access.gmlevel AS gm, email, last_ip AS lastip, mutetime AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags FROM account LEFT JOIN account_access ON account.id = account_access.id WHERE account.id = '$acct'");
     
-  $data = $sqll->fetch_assoc($result);
+  $data = $sql['logon']->fetch_assoc($result);
   
   $o_temp = 0;
   foreach ($characters_db as $db)
   {
-    $sql = new SQL;
-    $sql->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
+    $sqlt = new SQL;
+    $sqlt->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
     
     if ( $core == 1 )
-      $online_res = $sql->query("SELECT SUM(online) FROM characters WHERE acct='".$data['acct']."'");
+      $online_res = $sqlt->query("SELECT SUM(online) FROM characters WHERE acct='".$data['acct']."'");
     else
-      $online_res = $sql->query("SELECT SUM(online) FROM characters WHERE account='".$data['acct']."'");
+      $online_res = $sqlt->query("SELECT SUM(online) FROM characters WHERE account='".$data['acct']."'");
       
-    $online_fields = $sql->fetch_assoc($online_res);
+    $online_fields = $sqlt->fetch_assoc($online_res);
     $o_temp += $online_fields['SUM(online)'];
   }
   if($o_temp <> 0)
@@ -853,12 +853,12 @@ function edit_user()
     $acct_online = 0;
 
   $query = "SELECT * FROM config_accounts WHERE Login = '".$data['login']."'";
-  $sn_result = $sqlm->query($query);
-  $screenname = $sqlm->fetch_assoc($sn_result);
+  $sn_result = $sql['mgr']->query($query);
+  $screenname = $sql['mgr']->fetch_assoc($sn_result);
 
-  $refguid = $sqlm->fetch_assoc($sqlm->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '.$data['acct'].''));
+  $refguid = $sql['mgr']->fetch_assoc($sql['mgr']->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '.$data['acct'].''));
   $refguid = $refguid['InveitedBy'];
-  $referred_by = $sqlc->fetch_assoc($sqlc->query("SELECT name FROM characters WHERE guid = '$refguid'"));
+  $referred_by = $sql['char']->fetch_assoc($sql['char']->query("SELECT name FROM characters WHERE guid = '$refguid'"));
   unset($refguid);
   $referred_by = $referred_by['name'];
       
@@ -869,7 +869,7 @@ function edit_user()
   else
     $lastlog = '-';
 
-  if ($sqll->num_rows($result))
+  if ($sql['logon']->num_rows($result))
   {
     $output .= '
         <center>
@@ -1025,12 +1025,12 @@ function edit_user()
               <tr>
                 <td>".lang('user', 'banned')."</td>";
     if ( $core == 1 )
-      $que = $sqll->query("SELECT banned FROM accounts WHERE banned <> 0 AND acct = $acct");
+      $que = $sql['logon']->query("SELECT banned FROM accounts WHERE banned <> 0 AND acct = $acct");
     else
-      $que = $sqll->query("SELECT bandate, unbandate, bannedby, banreason FROM account_banned WHERE id = $acct");
-    if ($sqll->num_rows($que))
+      $que = $sql['logon']->query("SELECT bandate, unbandate, bannedby, banreason FROM account_banned WHERE id = $acct");
+    if ($sql['logon']->num_rows($que))
     {
-      $banned = $sqll->fetch_row($que);
+      $banned = $sql['logon']->fetch_row($que);
       $ban_info = " From:".date('d-m-Y G:i', $banned[0])." till:".date('d-m-Y G:i', $banned[1])."<br />by $banned[2]";
       $ban_checked = " checked=\"checked\"";
     }
@@ -1143,45 +1143,45 @@ function edit_user()
                 <td>".(($acct_online) ? "<img src=\"img/up.gif\" alt=\"\" />" : "<img src=\"img/down.gif\" alt=\"\" />")."</td>
               </tr>";
               
-    //$realms = $sqlm->query('SELECT id, name FROM realmlist');
-    //while ( $realm = $sqlm->fetch_assoc($realms) )
+    //$realms = $sql['mgr']->query('SELECT id, name FROM realmlist');
+    //while ( $realm = $sql['mgr']->fetch_assoc($realms) )
     foreach ( $characters_db as $db )
     {
-      $sql = new SQL;
-      $sql->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
+      $sqlt = new SQL;
+      $sqlt->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
       
       if ( $core == 1 )
         $query = "SELECT COUNT(*) FROM characters WHERE acct='".$acct."'";
       else
         $query = "SELECT COUNT(*) FROM characters WHERE account='".$acct."'";
-      $result = $sql->query($query);
-      $fields = $sql->fetch_assoc($result);
+      $result = $sqlt->query($query);
+      $fields = $sqlt->fetch_assoc($result);
       
       $tot_chars += $fields['COUNT(*)'];
     }
     
     if ( $core == 1 )
-      $query = $sqlc->query("SELECT COUNT(*) FROM `characters` WHERE acct = $acct");
+      $query = $sql['char']->query("SELECT COUNT(*) FROM `characters` WHERE acct = $acct");
     else
-      $query = $sqlc->query("SELECT COUNT(*) FROM `characters` WHERE account = $acct");
-    $chars_on_realm = $sqlc->result($query, 0);
+      $query = $sql['char']->query("SELECT COUNT(*) FROM `characters` WHERE account = $acct");
+    $chars_on_realm = $sql['char']->result($query, 0);
     $output .= "
               <tr>
                 <td>".lang('user', 'tot_chars')."</td>
                 <td>$tot_chars</td>
               </tr>";
-    $realms = $sqlm->query("SELECT id, name FROM realmlist");
-    if ( $sqlm->num_rows($realms) > 1 && ( count($server) > 1 ) && ( count($characters_db) > 1 ) )
+    $realms = $sql['mgr']->query("SELECT id, name FROM realmlist");
+    if ( $sql['mgr']->num_rows($realms) > 1 && ( count($server) > 1 ) && ( count($characters_db) > 1 ) )
     {
       require_once("libs/get_lib.php");
-      while ($realm = $sqlm->fetch_array($realms))
+      while ($realm = $sql['mgr']->fetch_array($realms))
       {
-        $sqlc->connect($characters_db[$realm[0]]['addr'], $characters_db[$realm[0]]['user'], $characters_db[$realm[0]]['pass'], $characters_db[$realm[0]]['name']);
+        $sql['char']->connect($characters_db[$realm[0]]['addr'], $characters_db[$realm[0]]['user'], $characters_db[$realm[0]]['pass'], $characters_db[$realm[0]]['name']);
         if ( $core == 1 )
-          $query = $sqlc->query("SELECT COUNT(*) FROM `characters` WHERE acct = $acct");
+          $query = $sql['char']->query("SELECT COUNT(*) FROM `characters` WHERE acct = $acct");
         else
-          $query = $sqlc->query("SELECT COUNT(*) FROM `characters` WHERE account = $acct");
-        $chars_on_realm = $sqlc->result($query, 0);
+          $query = $sql['char']->query("SELECT COUNT(*) FROM `characters` WHERE account = $acct");
+        $chars_on_realm = $sql['char']->result($query, 0);
         $output .= "
               <tr>
                 <td>".lang('user', 'chars_on_realm')." ".get_realm_name($realm[0])."</td>
@@ -1190,13 +1190,13 @@ function edit_user()
         if ($chars_on_realm)
         {
           if ( $core == 1 )
-            $char_array = $sqlc->query("SELECT guid, name, race, class, level, gender
+            $char_array = $sql['char']->query("SELECT guid, name, race, class, level, gender
               FROM `characters` WHERE acct = $acct");
           else
-            $char_array = $sqlc->query("SELECT guid, name, race, class, level, gender
+            $char_array = $sql['char']->query("SELECT guid, name, race, class, level, gender
               FROM `characters` WHERE account = $acct");
               
-          while ($char = $sqlc->fetch_array($char_array))
+          while ($char = $sql['char']->fetch_array($char_array))
           {
             $output .= "
               <tr>
@@ -1213,10 +1213,10 @@ function edit_user()
     else
     {
       if ( $core == 1 )
-        $query = $sqlc->query("SELECT COUNT(*) FROM `characters` WHERE acct = $acct");
+        $query = $sql['char']->query("SELECT COUNT(*) FROM `characters` WHERE acct = $acct");
       else
-        $query = $sqlc->query("SELECT COUNT(*) FROM `characters` WHERE account = $acct");
-      $chars_on_realm = $sqlc->result($query, 0);
+        $query = $sql['char']->query("SELECT COUNT(*) FROM `characters` WHERE account = $acct");
+      $chars_on_realm = $sql['char']->result($query, 0);
       $output .= "
               <tr>
                 <td>".lang('user', 'chars_on_realm')."</td>
@@ -1225,11 +1225,11 @@ function edit_user()
       if ($chars_on_realm)
       {
         if ( $core == 1 )
-          $char_array = $sqlc->query("SELECT guid, name, race, class, level, gender FROM `characters` WHERE acct = $acct");
+          $char_array = $sql['char']->query("SELECT guid, name, race, class, level, gender FROM `characters` WHERE acct = $acct");
         else
-          $char_array = $sqlc->query("SELECT guid, name, race, class, level, gender FROM `characters` WHERE account = $acct");
+          $char_array = $sql['char']->query("SELECT guid, name, race, class, level, gender FROM `characters` WHERE account = $acct");
         
-        while ($char = $sqlc->fetch_array($char_array))
+        while ($char = $sql['char']->fetch_array($char_array))
         {
           $output .= "
                 <tr>
@@ -1274,7 +1274,7 @@ function edit_user()
 //############################################################################################################
 function doedit_user()
 {
-  global $logon_db, $arcm_db, $arcm_db, $user_lvl, $user_name, $action_permission, $sqll, $sqlm;
+  global $logon_db, $arcm_db, $arcm_db, $user_lvl, $user_name, $action_permission, $sql;
 
   valid_login($action_permission['update']);
 
@@ -1284,20 +1284,20 @@ function doedit_user()
     && (!isset($_POST['referredby'])||($_POST['referredby'] === '')) )
     redirect("user.php?action=edit_user&acct={$_POST['acct']}&error=1");
 
-  $acct = $sqll->quote_smart($_POST['acct']);
-  $login = $sqll->quote_smart($_POST['login']);
-  $screenname = $sqlm->quote_smart($_POST['screenname']);
-  $banreason = $sqll->quote_smart($_POST['banreason']);
-  $password = $sqll->quote_smart($_POST['pass']);
+  $acct = $sql['logon']->quote_smart($_POST['acct']);
+  $login = $sql['logon']->quote_smart($_POST['login']);
+  $screenname = $sql['mgr']->quote_smart($_POST['screenname']);
+  $banreason = $sql['logon']->quote_smart($_POST['banreason']);
+  $password = $sql['logon']->quote_smart($_POST['pass']);
   //$user_password_change = ($password != sha1(strtoupper($login).":******")) ? "login='$login',password='$login'," : "";
 
-  $mail = (isset($_POST['mail']) && $_POST['mail'] != '') ? $sqll->quote_smart($_POST['mail']) : "";
-  $failed = (isset($_POST['failed'])) ? $sqll->quote_smart($_POST['failed']) : 0;
-  $gmlevel = (isset($_POST['gm'])) ? $sqll->quote_smart($_POST['gm']) : 0;
-  $expansion = (isset($_POST['expansion'])) ? $sqll->quote_smart($_POST['expansion']) : 1;
-  $banned = (isset($_POST['banned'])) ? $sqll->quote_smart($_POST['banned']) : 0;
-  $locked = (isset($_POST['locked'])) ? $sqll->quote_smart($_POST['locked']) : 0;
-  $referredby = $sqll->quote_smart(trim($_POST['referredby']));
+  $mail = (isset($_POST['mail']) && $_POST['mail'] != '') ? $sql['logon']->quote_smart($_POST['mail']) : "";
+  $failed = (isset($_POST['failed'])) ? $sql['logon']->quote_smart($_POST['failed']) : 0;
+  $gmlevel = (isset($_POST['gm'])) ? $sql['logon']->quote_smart($_POST['gm']) : 0;
+  $expansion = (isset($_POST['expansion'])) ? $sql['logon']->quote_smart($_POST['expansion']) : 1;
+  $banned = (isset($_POST['banned'])) ? $sql['logon']->quote_smart($_POST['banned']) : 0;
+  $locked = (isset($_POST['locked'])) ? $sql['logon']->quote_smart($_POST['locked']) : 0;
+  $referredby = $sql['logon']->quote_smart(trim($_POST['referredby']));
 
   //make sure username/pass at least 4 chars long and less than max
   if ((strlen($login) < 4) || (strlen($login) > 15))
@@ -1308,12 +1308,12 @@ function doedit_user()
   if ($screenname <> $_POST['oldscreenname'])
   {
     $query = "SELECT * FROM config_accounts WHERE ScreenName = '".$screenname."'";
-    $sn_result = $sqlm->query($query);
-    if ($sqlm->num_rows($sn_result) <> 0)
+    $sn_result = $sql['mgr']->query($query);
+    if ($sql['mgr']->num_rows($sn_result) <> 0)
       redirect('user.php?action=edit_user&acct='.$acct.'&error=7&');
     $query = "SELECT * FROM accounts WHERE login = '".$screenname."'";
-    $sn_result = $sqll->query($query);
-    if ($sqll->num_rows($sn_result) <> 0)
+    $sn_result = $sql['logon']->query($query);
+    if ($sql['logon']->num_rows($sn_result) <> 0)
       redirect('user.php?action=edit_user&acct='.$acct.'&error=7');
 
     //make sure screen name is at least 4 chars long and less than max
@@ -1328,16 +1328,16 @@ function doedit_user()
   if (!valid_alphabetic($login))
     redirect("user.php?action=edit_user&error=9&acct=".$acct);
   //restricting access to lower gmlvl
-  $result = $sqll->query("SELECT gm,login FROM accounts WHERE acct = '$acct'");
-  if (($user_lvl <= $sqll->result($result, 0, 'gm')) && ($user_name != $sqll->result($result, 0, 'login')))
+  $result = $sql['logon']->query("SELECT gm,login FROM accounts WHERE acct = '$acct'");
+  if (($user_lvl <= $sql['logon']->result($result, 0, 'gm')) && ($user_name != $sql['logon']->result($result, 0, 'login')))
     redirect("user.php?error=14");
   if (!$banned)
-    $sqll->query("UPDATE accounts SET banned=0 WHERE acct='$acct'");
+    $sql['logon']->query("UPDATE accounts SET banned=0 WHERE acct='$acct'");
   else
   {
-    $result = $sqll->query("SELECT count(*) FROM accounts WHERE banned <> 0 AND acct = '$acct'");
-    if(!$sqll->result($result, 0))
-      $sqll->query("INSERT INTO account_banned (id, bandate, unbandate, bannedby, banreason, active)
+    $result = $sql['logon']->query("SELECT count(*) FROM accounts WHERE banned <> 0 AND acct = '$acct'");
+    if(!$sql['logon']->result($result, 0))
+      $sql['logon']->query("INSERT INTO account_banned (id, bandate, unbandate, bannedby, banreason, active)
                  VALUES ($acct, ".time().",".(time()+(365*24*3600)).",'$user_name','$banreason', 1)");
   }
 
@@ -1348,19 +1348,19 @@ function doedit_user()
     else
       $temp_login = $login;
     $query = "SELECT * FROM config_accounts WHERE Login = '".$_POST['oldlogin']."'";
-    $sn_result = $sqlm->query($query);
-    if ($sqlm->num_rows($sn_result))
-      $s_result = $sqlm->query("UPDATE config_accounts SET Login='".$temp_login."', ScreenName = '".$screenname."' WHERE Login = '".$_POST['oldlogin']."'");
+    $sn_result = $sql['mgr']->query($query);
+    if ($sql['mgr']->num_rows($sn_result))
+      $s_result = $sql['mgr']->query("UPDATE config_accounts SET Login='".$temp_login."', ScreenName = '".$screenname."' WHERE Login = '".$_POST['oldlogin']."'");
     else
-      $s_result = $sqlm->query("INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$login."', '".$screenname."')");
+      $s_result = $sql['mgr']->query("INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$login."', '".$screenname."')");
   }
   else
       $s_result = true;
 
   if ($password == "******")
-    $a_result = $sqll->query("UPDATE accounts SET login='$login', email='$mail', muted='$locked', gm='$gmlevel', flags='$expansion' WHERE acct=$acct");
+    $a_result = $sql['logon']->query("UPDATE accounts SET login='$login', email='$mail', muted='$locked', gm='$gmlevel', flags='$expansion' WHERE acct=$acct");
   else
-    $a_result = $sqll->query("UPDATE accounts SET login='$login', email='$mail', password='$password', muted='$locked', gm='$gmlevel', flags='$expansion' WHERE acct=$acct");
+    $a_result = $sql['logon']->query("UPDATE accounts SET login='$login', email='$mail', password='$password', muted='$locked', gm='$gmlevel', flags='$expansion' WHERE acct=$acct");
 
   $result = $s_result && $a_result;
 
@@ -1372,24 +1372,24 @@ function doedit_user()
 
 function doupdate_referral($referredby, $user_id)
 {
-  global $logon_db, $arcm_db, $characters_db, $realm_id, $sqlm, $sqlc, $sqll;
+  global $logon_db, $arcm_db, $characters_db, $realm_id, $sql;
 
-  $result = $sqlm->fetch_row($sqlm->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '".$user_id."'"));
+  $result = $sql['mgr']->fetch_row($sql['mgr']->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '".$user_id."'"));
   $result = $result[0];
 
   if ($result == NULL)
   {
-    $referred_by = $sqlc->fetch_row($sqlc->query("SELECT guid FROM characters WHERE name = '$referredby'"));
+    $referred_by = $sql['char']->fetch_row($sql['char']->query("SELECT guid FROM characters WHERE name = '$referredby'"));
     $referred_by = $referred_by[0];
 
     if ($referred_by != NULL)
     {
-      $char = $sqlc->fetch_row($sqlc->query("SELECT acct FROM characters WHERE guid = '$referred_by'"));
-      $result = $sqll->fetch_row($sqll->query("SELECT acct FROM accounts WHERE acct = '$char'"));
+      $char = $sql['char']->fetch_row($sql['char']->query("SELECT acct FROM characters WHERE guid = '$referred_by'"));
+      $result = $sql['logon']->fetch_row($sql['logon']->query("SELECT acct FROM accounts WHERE acct = '$char'"));
       $result = $result[0];
       if ($result != $user_id)
       {
-        $sqlm->query("INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES ('$user_id', '$referred_by', '$result')");
+        $sql['mgr']->query("INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES ('$user_id', '$referred_by', '$result')");
         return true;
       }
       else

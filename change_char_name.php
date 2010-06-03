@@ -29,7 +29,7 @@ valid_login($action_permission['view']);
 
 function sel_char()
 {
-  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sqlc;
+  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sql;
 
   valid_login($action_permission['view']);
 
@@ -49,8 +49,8 @@ function sel_char()
               <th class="xname_LRC">'.lang('xname', 'lvl').'</th>
               <th class="xname_LRC">'.lang('xname', 'race').'</th>
               <th class="xname_LRC">'.lang('xname', 'class').'</th>';
-  $chars = $sqlc->query("SELECT * FROM characters WHERE acct='".$user_id."'");
-  while ($char = $sqlc->fetch_assoc($chars))
+  $chars = $sql['char']->query("SELECT * FROM characters WHERE acct='".$user_id."'");
+  while ($char = $sql['char']->fetch_assoc($chars))
   {
     $output .= '
             <tr>
@@ -86,19 +86,19 @@ function sel_char()
 
 function choosename()
 {
-  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sqlc;
+  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sql;
 
   valid_login($action_permission['view']);
 
-  $guid = $sqlc->quote_smart($_GET['char']);
+  $guid = $sql['char']->quote_smart($_GET['char']);
   $new1 = '';
   if (isset($_GET['new1']))
-    $new1 = $sqlc->quote_smart($_GET['new1']);
+    $new1 = $sql['char']->quote_smart($_GET['new1']);
   $new2 = '';
   if (isset($_GET['new2']))
-    $new2 = $sqlc->quote_smart($_GET['new2']);
+    $new2 = $sql['char']->quote_smart($_GET['new2']);
 
-  $char = $sqlc->fetch_assoc($sqlc->query("SELECT * FROM characters WHERE guid='".$guid."'"));
+  $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$guid."'"));
   $output .= '
     <center>
       <fieldset id="xname_fieldset">
@@ -157,26 +157,26 @@ function choosename()
 
 function getapproval()
 {
-  global $output, $action_permission, $arcm_db, $characters_db, $realm_id, $user_id, $sqlm, $sqlc;
+  global $output, $action_permission, $arcm_db, $characters_db, $realm_id, $user_id, $sql;
 
   valid_login($action_permission['view']);
 
-  $guid = $sqlm->quote_smart($_GET['guid']);
-  $new1 = $sqlm->quote_smart($_GET['new1']);
-  $new2 = $sqlm->quote_smart($_GET['new2']);
+  $guid = $sql['mgr']->quote_smart($_GET['guid']);
+  $new1 = $sql['mgr']->quote_smart($_GET['new1']);
+  $new2 = $sql['mgr']->quote_smart($_GET['new2']);
 
   if ($new1 <> $new2)
     redirect("change_char_name.php?action=choosename&char=".$guid."&new1=".$new1."&new2=".$new2."&error=2");
 
-  $count = $sqlm->num_rows($sqlm->query("SELECT * FROM char_changes WHERE `guid`='".$guid."'"));
+  $count = $sql['mgr']->num_rows($sql['mgr']->query("SELECT * FROM char_changes WHERE `guid`='".$guid."'"));
   if ($count)
     redirect("change_char_name.php?error=3");
 
-  $count = $sqlc->num_rows($sqlc->query("SELECT * FROM characters WHERE `name`='".$new1."'"));
+  $count = $sql['char']->num_rows($sql['char']->query("SELECT * FROM characters WHERE `name`='".$new1."'"));
   if ($count)
     redirect("change_char_name.php?error=4");
 
-  $result = $sqlm->query("INSERT INTO char_changes (guid,new_name) VALUES ('".$guid."', '".$new1."')");
+  $result = $sql['mgr']->query("INSERT INTO char_changes (guid,new_name) VALUES ('".$guid."', '".$new1."')");
 
   redirect("change_char_name.php?error=5");
 }
@@ -188,15 +188,15 @@ function getapproval()
 
 function denied()
 {
-  global $output, $action_permission, $arcm_db, $characters_db, $realm_id, $user_id, $sqlm, $sqlc;
+  global $output, $action_permission, $arcm_db, $characters_db, $realm_id, $user_id, $sql;
 
   valid_login($action_permission['update']);
 
-  $guid = $sqlm->quote_smart($_GET['guid']);
+  $guid = $sql['mgr']->quote_smart($_GET['guid']);
 
-  $result = $sqlm->query("DELETE FROM char_changes WHERE `guid`='".$guid."'");
+  $result = $sql['mgr']->query("DELETE FROM char_changes WHERE `guid`='".$guid."'");
 
-  $char = $sqlc->fetch_assoc($sqlc->query("SELECT * FROM characters WHERE guid='".$guid."'"));
+  $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$guid."'"));
 
   // send denial letter
   redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char['name']."&subject=".lang('xname', 'subject')."&body=".lang('xname', 'body1').$char['name'].lang('xname', 'body2')."&group_sign==&group_send=gm_level&money=0&att_item=0&att_stack=0&redirect=index.php");
@@ -210,17 +210,17 @@ function denied()
 function savename()
 {
   global $output, $action_permission, $arcm_db, $characters_db, $realm_id,
-    $user_id, $sqlm, $sqlc;
+    $user_id, $sql;
 
   valid_login($action_permission['update']);
 
-  $guid = $sqlm->quote_smart($_GET['guid']);
+  $guid = $sql['mgr']->quote_smart($_GET['guid']);
 
-  $name = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM char_changes WHERE `guid`='".$guid."'"));
+  $name = $sql['mgr']->fetch_assoc($sql['mgr']->query("SELECT * FROM char_changes WHERE `guid`='".$guid."'"));
 
-  $result = $sqlc->query("UPDATE characters SET `name`='".$name['new_name']."' WHERE `guid`='".$guid."'");
+  $result = $sql['char']->query("UPDATE characters SET `name`='".$name['new_name']."' WHERE `guid`='".$guid."'");
 
-  $result = $sqlm->query("DELETE FROM char_changes WHERE `guid`='".$guid."'");
+  $result = $sql['mgr']->query("DELETE FROM char_changes WHERE `guid`='".$guid."'");
 
   redirect("index.php");
 }

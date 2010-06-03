@@ -133,20 +133,23 @@ if ($allow_anony && empty($_SESSION['logged_in']))
 
 $realm_id = ( isset($_GET['realm_id']) ) ? (int)$_GET['realm_id'] : $_SESSION['realm_id'];
 
-$sqll = new SQL;
-$sqll->connect($logon_db['addr'], $logon_db['user'], $logon_db['pass'], $logon_db['name']);
+// set up databse global
+$sql = array();
 
-$sqld = new SQL;
-$sqld->connect($dbc_db['addr'], $dbc_db['user'], $dbc_db['pass'], $dbc_db['name']);
+$sql['logon'] = new SQL;
+$sql['logon']->connect($logon_db['addr'], $logon_db['user'], $logon_db['pass'], $logon_db['name']);
 
-$sqlm = new SQL;
-$sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+$sql['dbc'] = new SQL;
+$sql['dbc']->connect($dbc_db['addr'], $dbc_db['user'], $dbc_db['pass'], $dbc_db['name']);
 
-$sqlc = new SQL;
-$sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+$sql['mgr'] = new SQL;
+$sql['mgr']->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
 
-$sqlw = new SQL;
-$sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+$sql['char'] = new SQL;
+$sql['char']->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+
+$sql['world'] = new SQL;
+$sql['world']->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
 //----Check if a user has login, if Guest mode is enabled, code above will login as Guest
 if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION['realm_id']) && empty($_GET['err']))
@@ -229,14 +232,14 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
                 <li><a href="edit.php">'.lang('header', 'my_acc').'</a>
                   <ul>';
 
-  $result = $sqlm->query('SELECT id, name FROM `realmlist` LIMIT 10');
+  $result = $sql['mgr']->query('SELECT id, name FROM `realmlist` LIMIT 10');
 
   // we check how many realms are configured, this does not check if config is valid
-  if ( ( 1 < $sqlm->num_rows($result)) && ( 1 < count($server)) && ( 1 < count($characters_db)) )
+  if ( ( 1 < $sql['mgr']->num_rows($result)) && ( 1 < count($server)) && ( 1 < count($characters_db)) )
   {
     $output .= '
                     <li><a href="#">'.lang('header', 'realms').'</a></li>';
-    while ($realm = $sqlm->fetch_assoc($result))
+    while ($realm = $sql['mgr']->fetch_assoc($result))
     {
       if(isset($server[$realm['id']]))
       {
@@ -262,16 +265,16 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
   else
   {
     if ( $core == 1 )
-      $result = $sqlc->query('SELECT guid, name, race, class, level, gender FROM characters WHERE acct = '.$user_id.'');
+      $result = $sql['char']->query('SELECT guid, name, race, class, level, gender FROM characters WHERE acct = '.$user_id.'');
     else
-      $result = $sqlc->query('SELECT guid, name, race, class, level, gender FROM characters WHERE account = '.$user_id.'');
+      $result = $sql['char']->query('SELECT guid, name, race, class, level, gender FROM characters WHERE account = '.$user_id.'');
 
     // this puts links to user characters of active realm in "My Account" menu
-    if($sqlc->num_rows($result))
+    if($sql['char']->num_rows($result))
     {
       $output .= '
                     <li><a href="#">'.lang('header', 'my_characters').'</a></li>';
-      while ($char = $sqlc->fetch_assoc($result))
+      while ($char = $sql['char']->fetch_assoc($result))
       {
         $output .= '
                     <li>
@@ -298,8 +301,8 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
           </td>
           <td class="table_top_middle">';
   $web_admin_query = "SELECT * FROM config_accounts WHERE Login='".$user_name."'";
-  $web_admin_result = $sqlm->query($web_admin_query);
-  $web_admin = $sqlm->fetch_assoc($web_admin_result);
+  $web_admin_result = $sql['mgr']->query($web_admin_query);
+  $web_admin = $sql['mgr']->fetch_assoc($web_admin_result);
   $web_admin = $web_admin['WebAdmin'];
   //if (!$_SESSION['screenname'])
   //{

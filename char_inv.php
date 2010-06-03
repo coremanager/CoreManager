@@ -32,7 +32,7 @@ function char_inv()
 {
   global $output, $realm_id, $characters_db, $world_db, $arcm_db,
     $action_permission, $user_lvl, $user_name,
-    $item_datasite, $sqlw, $sqlm, $sqll, $sqlc, $core;
+    $item_datasite, $sql, $core;
 
   // this page uses wowhead tooltops
   //wowhead_tt();
@@ -49,9 +49,9 @@ function char_inv()
     $realmid = $realm_id;
   else
   {
-    $realmid = $sqll->quote_smart($_GET['realm']);
+    $realmid = $sql['logon']->quote_smart($_GET['realm']);
     if (is_numeric($realmid))
-      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
@@ -59,41 +59,41 @@ function char_inv()
   //-------------------SQL Injection Prevention--------------------------------
   // no point going further if we don have a valid ID
   // this_is_junk: char.php doesn't post account.   Why is this even here?
-  //$acct = $sqlc->quote_smart($_GET['acct']);
+  //$acct = $sql['char']->quote_smart($_GET['acct']);
   //if (is_numeric($acct));
   //else error($lang_global['empty_fields']);
 
   // getting character data from database
   if ( $core == 1 )
-    $result = $sqlc->query("SELECT acct, name, race, class, level, gender, gold
+    $result = $sql['char']->query("SELECT acct, name, race, class, level, gender, gold
       FROM characters WHERE guid = '".$cid."' LIMIT 1");
   else
-    $result = $sqlc->query("SELECT account AS acct, name, race, class, level, gender, money AS gold
+    $result = $sql['char']->query("SELECT account AS acct, name, race, class, level, gender, money AS gold
       FROM characters WHERE guid = '".$cid."' LIMIT 1");
 
   // no point going further if character does not exist
-  if ($sqlc->num_rows($result))
+  if ($sql['char']->num_rows($result))
   {
-    $char = $sqlc->fetch_assoc($result);
+    $char = $sql['char']->fetch_assoc($result);
 
     // we get user permissions first
-    $owner_acc_id = $sqlc->result($result, 0, 'accounts');
+    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
     if ( $core == 1 )
-      $result = $sqll->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
+      $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
     else
-      $result = $sqll->query('SELECT account_access.gmlevel AS gm, account.username AS login FROM account LEFT JOIN account_access ON account_access.id = account.id WHERE account.id = '.$char['acct'].'');
-    $owner_gmlvl = $sqll->result($result, 0, 'gm');
-    $owner_name = $sqll->result($result, 0, 'login');
+      $result = $sql['logon']->query('SELECT account_access.gmlevel AS gm, account.username AS login FROM account LEFT JOIN account_access ON account_access.id = account.id WHERE account.id = '.$char['acct'].'');
+    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_name = $sql['logon']->result($result, 0, 'login');
 
     // check user permission
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
       // main data that we need for this page, character inventory
       if ( $core == 1 )
-        $result = $sqlc->query('SELECT containerslot, slot, entry, count
+        $result = $sql['char']->query('SELECT containerslot, slot, entry, count
           FROM playeritems WHERE ownerguid = '.$cid.' ORDER BY containerslot, slot');
       else
-        $result = $sqlc->query('SELECT bag, slot, item_template AS entry, item, SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 15), " ", -1) AS count
+        $result = $sql['char']->query('SELECT bag, slot, item_template AS entry, item, SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 15), " ", -1) AS count
           FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid = '.$cid.' ORDER BY bag, slot');
 
       //---------------Page Specific Data Starts Here--------------------------
@@ -133,7 +133,7 @@ function char_inv()
       $equip_bnk_bag_id = array(0,0,0,0,0,0,0,0);
 
       // we load the things in each bag slot
-      while ($slot = $sqlc->fetch_assoc($result))
+      while ($slot = $sql['char']->fetch_assoc($result))
       {
         if ( $core == 1 )
         {
@@ -143,7 +143,7 @@ function char_inv()
             {
               $bag_id[$slot['slot']] = ($slot['slot']-18);
               $equiped_bag_id[$slot['slot']-18] = array($slot['entry'],
-                $sqlw->result($sqlw->query('SELECT containerslots FROM items
+                $sql['world']->result($sql['world']->query('SELECT containerslots FROM items
                   WHERE entry = '.$slot['entry'].''), 0, 'containerslots'), $slot['count']);
             }
             elseif($slot['slot'] < 39) // SLOT 23 TO 38 (BackPack)
@@ -160,7 +160,7 @@ function char_inv()
             {
               $bank_bag_id[$slot['slot']] = ($slot['slot']-66);
               $equip_bnk_bag_id[$slot['slot']-66] = array($slot['entry'], 
-                $sqlw->result($sqlw->query('SELECT containerslots FROM items
+                $sql['world']->result($sql['world']->query('SELECT containerslots FROM items
                   WHERE entry = '.$slot['entry'].''), 0, 'containerslots'), $slot['count']);
             }
           }
@@ -189,7 +189,7 @@ function char_inv()
             {
               $bag_id[$slot['item']] = ($slot['slot']-18);
               $equiped_bag_id[$slot['slot']-18] = array($slot['entry'],
-                $sqlw->result($sqlw->query('SELECT ContainerSlots FROM item_template
+                $sql['world']->result($sql['world']->query('SELECT ContainerSlots FROM item_template
                   WHERE entry = '.$slot['entry'].''), 0, 'containerslots'), $slot['count']);
             }
             elseif($slot['slot'] < 39) // SLOT 23 TO 38 (BackPack)
@@ -206,7 +206,7 @@ function char_inv()
             {
               $bank_bag_id[$slot['slot']] = ($slot['slot']-66);
               $equip_bnk_bag_id[$slot['slot']-66] = array($slot['entry'], 
-                $sqlw->result($sqlw->query('SELECT ContainerSlots FROM item_template
+                $sql['world']->result($sql['world']->query('SELECT ContainerSlots FROM item_template
                   WHERE entry = '.$slot['entry'].''), 0, 'containerslots'), $slot['count']);
             }
           }

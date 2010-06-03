@@ -27,11 +27,11 @@ valid_login($action_permission['insert'],'Insert');
 //#############################################################################
 function browse_motd()
 {
-  global $output, $action_permission, $sqlm;
+  global $output, $action_permission, $sql;
 
   valid_login($action_permission['insert']);
 
-  $motds = $sqlm->query("SELECT * FROM motd ORDER BY Priority ASC");
+  $motds = $sql['mgr']->query("SELECT * FROM motd ORDER BY Priority ASC");
 
   $output .= '
         <center>
@@ -43,7 +43,7 @@ function browse_motd()
               <th width="20%">'.lang('motd', 'message').'</th>
             </tr>';
 
-  while ($motd = $sqlm->fetch_assoc($motds))
+  while ($motd = $sql['mgr']->fetch_assoc($motds))
   {
     $output .= '
             <tr>
@@ -77,12 +77,12 @@ function browse_motd()
 //#############################################################################
 function add_motd()
 {
-  global $output, $action_permission, $sqlm;
+  global $output, $action_permission, $sql;
 
   valid_login($action_permission['insert']);
 
   if (isset($_GET['redirect']))
-    $redirect = $sqlm->quote_smart($_GET['redirect']);
+    $redirect = $sql['mgr']->quote_smart($_GET['redirect']);
 
   $output .= '
           <center>
@@ -140,20 +140,20 @@ function add_motd()
 //#############################################################################
 function edit_motd()
 {
-  global $output, $action_permission, $sqlm;
+  global $output, $action_permission, $sql;
 
   valid_login($action_permission['update']);
 
   if(empty($_GET['id'])) redirect('motd.php?error=1');
-  $id = $sqlm->quote_smart($_GET['id']);
+  $id = $sql['mgr']->quote_smart($_GET['id']);
   if(is_numeric($id)); else redirect('motd.php?error=1');
 
-  $msg = $sqlm->result($sqlm->query('SELECT message FROM motd WHERE id = '.$id.''), 0);
-  $priority = $sqlm->result($sqlm->query('SELECT priority FROM motd WHERE id = '.$id.''), 0);
-  $enabled = $sqlm->result($sqlm->query('SELECT enabled FROM motd WHERE id = '.$id.''), 0);
+  $msg = $sql['mgr']->result($sql['mgr']->query('SELECT message FROM motd WHERE id = '.$id.''), 0);
+  $priority = $sql['mgr']->result($sql['mgr']->query('SELECT priority FROM motd WHERE id = '.$id.''), 0);
+  $enabled = $sql['mgr']->result($sql['mgr']->query('SELECT enabled FROM motd WHERE id = '.$id.''), 0);
 
   if (isset($_GET['redirect']))
-    $redirect = $sqlm->quote_smart($_GET['redirect']);
+    $redirect = $sql['mgr']->quote_smart($_GET['redirect']);
 
   $output .= '
           <center>
@@ -214,7 +214,7 @@ function edit_motd()
 //#####################################################################################################
 function do_add_motd()
 {
-  global $action_permission, $user_name, $sqlm;
+  global $action_permission, $user_name, $sql;
 
   valid_login($action_permission['insert']);
 
@@ -224,24 +224,24 @@ function do_add_motd()
   if (empty($_GET['priority']))
     $priority = 0;
   else
-    $priority = $sqlm->quote_smart($_GET['priority']);
+    $priority = $sql['mgr']->quote_smart($_GET['priority']);
 
   if ($_GET['enabled'] == 'on')
     $enabled = 1;
   else
     $enabled = 0;
 
-  $msg = $sqlm->quote_smart($_GET['msg']);
-  $oldmsg = $sqlm->quote_smart($_GET['oldmsg']);
+  $msg = $sql['mgr']->quote_smart($_GET['msg']);
+  $oldmsg = $sql['mgr']->quote_smart($_GET['oldmsg']);
   if (4096 < strlen($msg))
     redirect('motd.php?error=2');
 
-  $name = $sqlm->result($sqlm->query("SELECT ScreenName FROM config_accounts WHERE Login='".$user_name."'"), 0);
+  $name = $sql['mgr']->result($sql['mgr']->query("SELECT ScreenName FROM config_accounts WHERE Login='".$user_name."'"), 0);
   if ($name == "")
     $name = $user_name;
 
   $by = 'Posted by: '.$name.' ('.date('m/d/Y H:i:s').')';
-  $sqlm->query("INSERT INTO motd (Message, Priority, Enabled, `By`) VALUES ('".$msg."', '".$priority."', '".$enabled."', '".$by."')");
+  $sql['mgr']->query("INSERT INTO motd (Message, Priority, Enabled, `By`) VALUES ('".$msg."', '".$priority."', '".$enabled."', '".$by."')");
 
   unset($by);
   unset($msg);
@@ -258,7 +258,7 @@ function do_add_motd()
 //#####################################################################################################
 function do_edit_motd()
 {
-  global $action_permission, $user_name, $sqlm;
+  global $action_permission, $user_name, $sql;
 
   valid_login($action_permission['update']);
 
@@ -268,35 +268,35 @@ function do_edit_motd()
   if (empty($_GET['priority']))
     $priority = 0;
   else
-    $priority = $sqlm->quote_smart($_GET['priority']);
+    $priority = $sql['mgr']->quote_smart($_GET['priority']);
 
   if ($_GET['enabled'] == 'on')
     $enabled = 1;
   else
     $enabled = 0;
 
-  $id = $sqlm->quote_smart($_GET['id']);
+  $id = $sql['mgr']->quote_smart($_GET['id']);
   if(is_numeric($id)); else redirect('motd.php?error=1');
 
-  $msg = $sqlm->quote_smart($_GET['msg']);
-  $oldmsg = $sqlm->quote_smart($sqlm->result($sqlm->query("SELECT Message FROM motd WHERE ID = '".$id."'"), 0));
+  $msg = $sql['mgr']->quote_smart($_GET['msg']);
+  $oldmsg = $sql['mgr']->quote_smart($sql['mgr']->result($sql['mgr']->query("SELECT Message FROM motd WHERE ID = '".$id."'"), 0));
   if (4096 < strlen($msg))
     redirect('motd.php?error=2');
 
-  $name = $sqlm->result($sqlm->query("SELECT ScreenName FROM config_accounts WHERE Login='".$user_name."'"), 0);
+  $name = $sql['mgr']->result($sql['mgr']->query("SELECT ScreenName FROM config_accounts WHERE Login='".$user_name."'"), 0);
   if ($name == "")
     $name = $user_name;
 
   if ($oldmsg <> $msg)
   {
-    $by = $sqlm->result($sqlm->query("SELECT `By` FROM motd WHERE ID = '".$id."'"), 0);
+    $by = $sql['mgr']->result($sql['mgr']->query("SELECT `By` FROM motd WHERE ID = '".$id."'"), 0);
     $by = split('<br />', $by, 2);
     $by = $by[0].'<br />'.'Edited by: '.$name.' ('.date('m/d/Y H:i:s').')';
-    $sqlm->query("UPDATE motd SET Message = '".$msg."', Priority = '".$priority."', Enabled = '".$enabled."', `By` = '".$by."' WHERE ID = '".$id."'");
+    $sql['mgr']->query("UPDATE motd SET Message = '".$msg."', Priority = '".$priority."', Enabled = '".$enabled."', `By` = '".$by."' WHERE ID = '".$id."'");
   }
   else
   {
-    $sqlm->query("UPDATE motd SET Message = '".$msg."', Priority = '".$priority."', Enabled = '".$enabled."' WHERE ID = '".$id."'");
+    $sql['mgr']->query("UPDATE motd SET Message = '".$msg."', Priority = '".$priority."', Enabled = '".$enabled."' WHERE ID = '".$id."'");
   }
 
   unset($by);
@@ -315,15 +315,15 @@ function do_edit_motd()
 //#####################################################################################################
 function delete_motd()
 {
-  global $action_permission, $sqlm;
+  global $action_permission, $sql;
 
   valid_login($action_permission['delete']);
 
   if (empty($_GET['id'])) redirect('index.php');
-  $id = $sqlm->quote_smart($_GET['id']);
+  $id = $sql['mgr']->quote_smart($_GET['id']);
   if(is_numeric($id)); else redirect('motd.php?error=1');
 
-  $sqlm->query('DELETE FROM motd WHERE id ='.$id.'');
+  $sql['mgr']->query('DELETE FROM motd WHERE id ='.$id.'');
   unset($id);
   if ($_GET['redirect'] == 1)
     redirect('motd.php');

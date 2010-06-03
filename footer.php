@@ -22,16 +22,14 @@
   //  so we would have to close these, or we can't have debug output
   if($debug)
   {
-    if (isset($sql))
-      $sql->close();
-    if (isset($sqll))
-      $sqll->close();
-    if (isset($sqlc))
-      $sqlc->close();
-    if (isset($sqlm))
-      $sqlm->close();
-    if (isset($sqlw))
-      $sqlw->close();
+    if (isset($sql['logon']))
+      $sql['logon']->close();
+    if (isset($sql['char']))
+      $sql['char']->close();
+    if (isset($sql['mgr']))
+      $sql['mgr']->close();
+    if (isset($sql['world']))
+      $sql['world']->close();
 
     // level 3 debug lists all global vars, but can't read classes
     // level 4 debug prints all global arrays, but can't print content of classes
@@ -39,10 +37,10 @@
     if(2 < $debug)
     {
       unset($sql);
-      unset($sqll);
-      unset($sqlc);
-      unset($sqlm);
-      unset($sqlw);
+      unset($sql['logon']);
+      unset($sql['char']);
+      unset($sql['mgr']);
+      unset($sql['world']);
     }
   }
 

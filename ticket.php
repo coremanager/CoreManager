@@ -26,16 +26,16 @@ valid_login($action_permission['view']);
 //#############################################################################
 function browse_tickets()
 {
-  global $output, $characters_db, $realm_id, $action_permission, $user_lvl, $itemperpage, $sqlc, $core;
+  global $output, $characters_db, $realm_id, $action_permission, $user_lvl, $itemperpage, $sql, $core;
 
   //==========================$_GET and SECURE=================================
-  $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sql['char']->quote_smart($_GET['start']) : 0;
   if (is_numeric($start)); else $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'guid';
+  $order_by = (isset($_GET['order_by'])) ? $sql['char']->quote_smart($_GET['order_by']) : 'guid';
   if (preg_match('/^[_[:lower:]]{1,10}$/', $order_by)); else $order_by = 'guid';
 
-  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sql['char']->quote_smart($_GET['dir']) : 1;
   if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
 
   $order_dir = ($dir) ? 'ASC' : 'DESC';
@@ -44,20 +44,20 @@ function browse_tickets()
 
   //get total number of items
   if ( $core == 1 )
-    $query_1 = $sqlc->query('SELECT count(*) FROM gm_tickets WHERE deleted=0');
+    $query_1 = $sql['char']->query('SELECT count(*) FROM gm_tickets WHERE deleted=0');
   else
-    $query_1 = $sqlc->query('SELECT count(*) FROM gm_tickets WHERE closed=0');
-  $all_record = $sqlc->result($query_1,0);
+    $query_1 = $sql['char']->query('SELECT count(*) FROM gm_tickets WHERE closed=0');
+  $all_record = $sql['char']->result($query_1,0);
   unset($query_1);
 
   if ( $core == 1 )
-    $query = $sqlc->query("SELECT gm_tickets.ticketid, gm_tickets.playerGuid, gm_tickets.message,
+    $query = $sql['char']->query("SELECT gm_tickets.ticketid, gm_tickets.playerGuid, gm_tickets.message,
                            `characters`.name, gm_tickets.deleted, gm_tickets.timestamp
                          FROM gm_tickets
                          LEFT JOIN `characters` ON gm_tickets.playerGuid = `characters`.`guid`
                          ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   else
-    $query = $sqlc->query("SELECT gm_tickets.guid, gm_tickets.playerGuid, gm_tickets.message,
+    $query = $sql['char']->query("SELECT gm_tickets.guid, gm_tickets.playerGuid, gm_tickets.message,
                            `characters`.name, gm_tickets.closed, gm_tickets.timestamp
                          FROM gm_tickets
                          LEFT JOIN `characters` ON gm_tickets.playerGuid = `characters`.`guid`
@@ -93,7 +93,7 @@ function browse_tickets()
                 <th width=\"40%\">".lang('ticket', 'message')."</th>
                 <th width=\"10%\">".lang('ticket', 'date')."</th>
               </tr>";
-  while ($ticket = $sqlc->fetch_row($query))
+  while ($ticket = $sql['char']->fetch_row($query))
   {
     if (!$ticket[4])
     {
@@ -144,20 +144,20 @@ function browse_tickets()
 //########################################################################################################################
 function delete_tickets()
 {
-  global $characters_db, $realm_id, $action_permission, $sqlc;
+  global $characters_db, $realm_id, $action_permission, $sql;
 
   valid_login($action_permission['delete']);
 
   if(!isset($_GET['check'])) redirect("ticket.php?error=1");
 
-  $check = $sqlc->quote_smart($_GET['check']);
+  $check = $sql['char']->quote_smart($_GET['check']);
 
   $deleted_tickets = 0;
   for ($i=0; $i<count($check); $i++)
   {
     if ($check[$i] != "" )
     {
-      $query = $sqlc->query("DELETE FROM gm_tickets WHERE ticketid = '$check[$i]'");
+      $query = $sql['char']->query("DELETE FROM gm_tickets WHERE ticketid = '$check[$i]'");
       $deleted_tickets++;
     }
   }
@@ -174,29 +174,29 @@ function delete_tickets()
 //########################################################################################################################
 function edit_ticket()
 {
-  global  $output, $characters_db, $realm_id, $action_permission, $sqlc, $core;
+  global  $output, $characters_db, $realm_id, $action_permission, $sql, $core;
 
   valid_login($action_permission['update']);
 
   if(!isset($_GET['id'])) redirect("Location: ticket.php?error=1");
 
-  $id = $sqlc->quote_smart($_GET['id']);
+  $id = $sql['char']->quote_smart($_GET['id']);
   if(is_numeric($id)); else redirect("ticket.php?error=1");
 
   if ( $core == 1 )
-    $query = $sqlc->query("SELECT gm_tickets.ticketid, gm_tickets.playerGuid, gm_tickets.message,
+    $query = $sql['char']->query("SELECT gm_tickets.ticketid, gm_tickets.playerGuid, gm_tickets.message,
                            `characters`.name, gm_tickets.timestamp
                          FROM gm_tickets
                          LEFT JOIN characters ON gm_tickets.`playerGuid` = `characters`.`guid`
                          WHERE gm_tickets.playerGuid = `characters`.`guid` AND gm_tickets.ticketid = '$id'");
   else
-    $query = $sqlc->query("SELECT gm_tickets.guid, gm_tickets.playerGuid, gm_tickets.message,
+    $query = $sql['char']->query("SELECT gm_tickets.guid, gm_tickets.playerGuid, gm_tickets.message,
                            `characters`.name, gm_tickets.timestamp
                          FROM gm_tickets
                          LEFT JOIN characters ON gm_tickets.`playerGuid` = `characters`.`guid`
                          WHERE gm_tickets.playerGuid = `characters`.`guid` AND gm_tickets.guid = '$id'");
 
-  if ($ticket = $sqlc->fetch_row($query))
+  if ($ticket = $sql['char']->fetch_row($query))
   {
     $output .= "
         <center>
@@ -271,20 +271,20 @@ function edit_ticket()
 //########################################################################################################################
 function do_edit_ticket()
 {
-  global $characters_db, $realm_id, $action_permission, $sqlc;
+  global $characters_db, $realm_id, $action_permission, $sql;
 
   valid_login($action_permission['update']);
 
   if(empty($_POST['new_text']) || empty($_POST['id']) )
     redirect("ticket.php?error=1");
 
-  $new_text = $sqlc->quote_smart($_POST['new_text']);
-  $id = $sqlc->quote_smart($_POST['id']);
+  $new_text = $sql['char']->quote_smart($_POST['new_text']);
+  $id = $sql['char']->quote_smart($_POST['id']);
   if(is_numeric($id)); else redirect("ticket.php?error=1");
 
-  $query = $sqlc->query("UPDATE gm_tickets SET message='$new_text' WHERE ticketid = '$id'");
+  $query = $sql['char']->query("UPDATE gm_tickets SET message='$new_text' WHERE ticketid = '$id'");
 
-  if ($sqlc->affected_rows())
+  if ($sql['char']->affected_rows())
   {
     redirect("ticket.php?error=5");
   }
@@ -300,19 +300,19 @@ function do_edit_ticket()
 //########################################################################################################################
 function do_mark_ticket()
 {
-  global $characters_db, $realm_id, $action_permission, $sqlc;
+  global $characters_db, $realm_id, $action_permission, $sql;
 
   valid_login($action_permission['update']);
 
   if (empty($_GET['id']))
     redirect("ticket.php?error=1");
 
-  $id = $sqlc->quote_smart($_GET['id']);
+  $id = $sql['char']->quote_smart($_GET['id']);
   if(!is_numeric($id))
     redirect("ticket.php?error=1");
-  $query = $sqlc->query("UPDATE gm_tickets SET deleted=1 WHERE ticketid = '$id'");
+  $query = $sql['char']->query("UPDATE gm_tickets SET deleted=1 WHERE ticketid = '$id'");
 
-  if ($sqlc->affected_rows())
+  if ($sql['char']->affected_rows())
   {
     redirect("ticket.php?error=5");
   }

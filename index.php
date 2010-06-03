@@ -35,8 +35,7 @@ function front()
   global $output, $realm_id, $world_db, $logon_db, $arcm_db, $server,
     $action_permission, $user_lvl, $user_id,
     $showcountryflag, $gm_online_count, $gm_online, $itemperpage,
-    $hide_max_players, $hide_avg_latency, $hide_plr_latency, $hide_server_mem, $sqlm, $sqlw, $sqld,
-    $sqll, $sqlc, $core;
+    $hide_max_players, $hide_avg_latency, $hide_plr_latency, $hide_server_mem, $sql, $core;
 
   $output .= '
           <div class="top">';
@@ -102,7 +101,7 @@ else
     }
     else
     {
-      $stats = $sqll->fetch_assoc($sqll->query('SELECT starttime, maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY starttime DESC LIMIT 1'), 0);
+      $stats = $sql['logon']->fetch_assoc($sql['logon']->query('SELECT starttime, maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY starttime DESC LIMIT 1'), 0);
       $uptimetime = time() - $stats['starttime'];
 
       function format_uptime($seconds)
@@ -154,8 +153,8 @@ else
       if (!$hide_avg_latency)
       {
         $lat_query = "SELECT SUM(latency), COUNT(*) FROM characters";
-        $lat_result = $sqlc->query($lat_query);
-        $lat_fields = $sqlc->fetch_assoc($lat_result);
+        $lat_result = $sql['char']->query($lat_query);
+        $lat_fields = $sql['char']->fetch_assoc($lat_result);
         $avglat = number_format($lat_fields['SUM(latency)'] / $lat_fields['COUNT(*)'], 3);
         
         $output .= '
@@ -187,20 +186,20 @@ else
   $output .= '</div>';
 
   // count pending character changes
-  $char_change_count = $sqlm->result($sqlm->query("SELECT COUNT(*) FROM char_changes"), 0);
+  $char_change_count = $sql['mgr']->result($sql['mgr']->query("SELECT COUNT(*) FROM char_changes"), 0);
 
   //MOTD/GM Tickets part
-  $start_m = (isset($_GET['start_m'])) ? $sqlc->quote_smart($_GET['start_m']) : 0;
+  $start_m = (isset($_GET['start_m'])) ? $sql['char']->quote_smart($_GET['start_m']) : 0;
   if (is_numeric($start_m)); else $start_m = 0;
 
   if ( $core == 1 )
-    $all_record_m = $sqlc->result($sqlc->query('SELECT count(*) FROM gm_tickets WHERE deleted=0'), 0);
+    $all_record_m = $sql['char']->result($sql['char']->query('SELECT count(*) FROM gm_tickets WHERE deleted=0'), 0);
   else
-    $all_record_m = $sqlc->result($sqlc->query('SELECT count(*) FROM gm_tickets WHERE closed=0'), 0);
+    $all_record_m = $sql['char']->result($sql['char']->query('SELECT count(*) FROM gm_tickets WHERE closed=0'), 0);
 
   // get our MotDs...
   $motd = "";
-  $motd_result = $sqlm->query("SELECT * FROM motd WHERE Enabled <> 0 ORDER BY Priority ASC");
+  $motd_result = $sql['mgr']->query("SELECT * FROM motd WHERE Enabled <> 0 ORDER BY Priority ASC");
   // if we don't get any MotDs, it'll stay empty
 
   if ($user_lvl >= $action_permission['update'])
@@ -220,7 +219,7 @@ else
   $output .= '
               <tr><th>'.lang('index', 'motd').'</th></tr>';
 
-  while ($temp = $sqlm->fetch_assoc($motd_result))
+  while ($temp = $sql['mgr']->fetch_assoc($motd_result))
   {
     $motd = bb2html($temp['Message'])."<br /><br />";
     if ($motd)
@@ -254,7 +253,7 @@ else
                 <th></th>';
     }
   }
-  if ($sqlm->num_rows($motd_result))
+  if ($sql['mgr']->num_rows($motd_result))
     $output = substr($output, 0, strlen($output) - 9);
 
   if ($user_lvl >= $action_permission['insert'])
@@ -285,10 +284,10 @@ else
       $output .= '
               <th>'.lang('index', 'tickets').'</th>';
       if ( $core == 1 )
-        $result = $sqlc->query('SELECT ticketid, level, message, name, deleted, timestamp FROM gm_tickets ORDER BY ticketid DESC LIMIT '.$start_m.', 3');
+        $result = $sql['char']->query('SELECT ticketid, level, message, name, deleted, timestamp FROM gm_tickets ORDER BY ticketid DESC LIMIT '.$start_m.', 3');
       else
-        $result = $sqlc->query('SELECT gm_tickets.guid AS ticketid, characters.level, message, gm_tickets.name, closed AS deleted, timestamp FROM gm_tickets LEFT JOIN characters ON characters.guid = gm_tickets.playerGuid ORDER BY ticketid DESC LIMIT '.$start_m.', 3');
-      while($post = $sqlc->fetch_assoc($result))
+        $result = $sql['char']->query('SELECT gm_tickets.guid AS ticketid, characters.level, message, gm_tickets.name, closed AS deleted, timestamp FROM gm_tickets LEFT JOIN characters ON characters.guid = gm_tickets.playerGuid ORDER BY ticketid DESC LIMIT '.$start_m.', 3');
+      while($post = $sql['char']->fetch_assoc($result))
       {
         if (!$post['deleted'])
         {
@@ -342,11 +341,11 @@ else
     {
       $output .= '
               <th>'.lang('index', 'pendingchanges').'</th>';
-      $result = $sqlm->query("SELECT * FROM char_changes");
-      while($change = $sqlm->fetch_assoc($result))
+      $result = $sql['mgr']->query("SELECT * FROM char_changes");
+      while($change = $sql['mgr']->fetch_assoc($result))
       {
-        $change_char = $sqlc->fetch_assoc($sqlc->query("SELECT * FROM characters WHERE guid='".$change['guid']."'"));
-        $change_acct = $sqll->fetch_assoc($sqll->query("SELECT * FROM accounts WHERE acct='".$change_char['acct']."'"));
+        $change_char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$change['guid']."'"));
+        $change_acct = $sql['logon']->fetch_assoc($sql['logon']->query("SELECT * FROM accounts WHERE acct='".$change_char['acct']."'"));
         if ( isset($change['new_name']) )
           $output .= '
               <tr>
@@ -406,13 +405,13 @@ else
   if ($online)
   {
     //==========================$_GET and SECURE=================================
-    $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
+    $start = (isset($_GET['start'])) ? $sql['char']->quote_smart($_GET['start']) : 0;
     if (is_numeric($start)); else $start = 0;
 
-    $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'name';
+    $order_by = (isset($_GET['order_by'])) ? $sql['char']->quote_smart($_GET['order_by']) : 'name';
     if (preg_match('/^[_[:lower:]]{1,12}$/', $order_by)); else $order_by = 'name';
 
-    $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
+    $dir = (isset($_GET['dir'])) ? $sql['char']->quote_smart($_GET['dir']) : 1;
     if (preg_match('/^[01]{1}$/', $dir)); else $dir = 1;
 
     $order_dir = ($dir) ? 'ASC' : 'DESC';
@@ -428,27 +427,27 @@ else
     if( $user_lvl || $server[$realm_id]['both_factions']);
     else
     {
-      $result = $sqlc->query("SELECT race FROM characters WHERE acct = ".$user_id."
+      $result = $sql['char']->query("SELECT race FROM characters WHERE acct = ".$user_id."
         AND SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1) = (SELECT MAX(SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1)) FROM characters WHERE acct = ".$user_id.") LIMIT 1");
-      if ($sqlc->num_rows($result))
-        $order_side = (in_array($sqlc->result($result, 0),array(2,5,6,8,10))) ? " AND race IN (2,5,6,8,10) " : " AND race IN (1,3,4,7,11) ";
+      if ($sql['char']->num_rows($result))
+        $order_side = (in_array($sql['char']->result($result, 0),array(2,5,6,8,10))) ? " AND race IN (2,5,6,8,10) " : " AND race IN (1,3,4,7,11) ";
     }
     if($order_by == 'ip')
       //this_is_junk: oops, cross referencing character & account works for me because I mix the logon & character databases :/
       //hmmm.... this will work as long as the logon & character databases are on the same MySQL server.
-      $result = $sqll->query("SELECT acct, lastip FROM accounts WHERE acct=any(SELECT acct FROM ".$character_db[$realm_id]['name']."characters WHERE online=1) ORDER BY lastip ".$order_dir." LIMIT ".$start.", ".$itemperpage);
+      $result = $sql['logon']->query("SELECT acct, lastip FROM accounts WHERE acct=any(SELECT acct FROM ".$character_db[$realm_id]['name']."characters WHERE online=1) ORDER BY lastip ".$order_dir." LIMIT ".$start.", ".$itemperpage);
     else
     {
       if ( $core == 1 )
-        $result = $sqlc->query("SELECT guid, name, race, class, zoneid, mapid, level, acct, gender,
+        $result = $sql['char']->query("SELECT guid, name, race, class, zoneid, mapid, level, acct, gender,
                               CAST( SUBSTRING_INDEX( SUBSTRING_INDEX( data, ';', ".(PLAYER_FIELD_HONOR_CURRENCY+1)." ), ';', -1 ) AS UNSIGNED ) AS highest_rank
                               FROM characters WHERE online=1 ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
       else
-        $result = $sqlc->query("SELECT guid, name, race, class, zone AS zoneid, map AS mapid, level, account AS acct, gender,
+        $result = $sql['char']->query("SELECT guid, name, race, class, zone AS zoneid, map AS mapid, level, account AS acct, gender,
                               totalHonorPoints AS highest_rank, latency
                               FROM characters WHERE online=1 ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
     }
-    $total_online = $sqlc->result($sqlc->query("SELECT count(*) FROM characters WHERE online= 1"), 0);
+    $total_online = $sql['char']->result($sql['char']->query("SELECT count(*) FROM characters WHERE online= 1"), 0);
     $replace = '
               <tr>
                 <td align="right" class="hidden">'.generate_pagination('index.php?start='.$start.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record_m, 3, $start_m, 'start_m').'</td>
@@ -498,11 +497,11 @@ else
               </tr>';
     }
 
-    while ($char = $sqlc->fetch_assoc($result))
+    while ($char = $sql['char']->fetch_assoc($result))
     {
       if($order_by == 'ip')
       {
-        $temp = $sqlc->fetch_assoc($sqlc->query("SELECT guid, name, race, class, zoneid, mapid, level, acct, gender FROM characters WHERE online=1 ".$order_side." AND acct=".$char['id']));
+        $temp = $sql['char']->fetch_assoc($sql['char']->query("SELECT guid, name, race, class, zoneid, mapid, level, acct, gender FROM characters WHERE online=1 ".$order_side." AND acct=".$char['id']));
         $char = $temp;
       }
 
@@ -511,25 +510,25 @@ else
       else
         $ca_query = "SELECT *, username AS name FROM `".$logon_db['name']."`.account LEFT JOIN `".$arcm_db['name']."`.config_accounts ON account.username = `".$arcm_db['name']."`.config_accounts.Login WHERE id='".$char['acct']."'";
         
-      $ca_result = $sqlm->query($ca_query);
-      $char_acct = $sqlm->fetch_assoc($ca_result);
+      $ca_result = $sql['mgr']->query($ca_query);
+      $char_acct = $sql['mgr']->fetch_assoc($ca_result);
 
       $gm = $char_acct['SecurityLevel'];
       if ( !isset($gm) )
         $gm = 0;
 	
 	    if ( $core == 1 )
-        $guild_id = $sqlc->result($sqlc->query("SELECT guildid FROM guild_data WHERE playerid='".$char['guid']."'"), 0);
+        $guild_id = $sql['char']->result($sql['char']->query("SELECT guildid FROM guild_data WHERE playerid='".$char['guid']."'"), 0);
       else
-        $guild_id = $sqlc->result($sqlc->query("SELECT guildid FROM guild_member WHERE guid='".$char['guid']."'"), 0);
+        $guild_id = $sql['char']->result($sql['char']->query("SELECT guildid FROM guild_member WHERE guid='".$char['guid']."'"), 0);
       
       if ( $core == 1 )
         $guild_name_query = "SELECT guildName FROM guilds WHERE guildid='".$guild_id."'";
       else
         $guild_name_query = "SELECT name AS guildName FROM guild WHERE guildid='".$guild_id."'";
         
-      $guild_name_result = $sqlc->query($guild_name_query);
-      $guild_name = $sqlc->fetch_assoc($guild_name_result);
+      $guild_name_result = $sql['char']->query($guild_name_query);
+      $guild_name = $sql['char']->fetch_assoc($guild_name_result);
       $guild_name = $guild_name['guildName'];
 
       $output .= '
@@ -558,8 +557,8 @@ else
                   <td>
                     <a href="guild.php?action=view_guild&amp;error=3&amp;id='.$guild_id.'">'.htmlentities($guild_name).'</a>
                   </td>
-                  <td><span onmousemove="toolTip(\'MapID:'.$char['mapid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_map_name($char['mapid'], $sqld).'</span></td>
-                  <td><span onmousemove="toolTip(\'ZoneID:'.$char['zoneid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_zone_name($char['zoneid'], $sqld).'</span></td>';
+                  <td><span onmousemove="toolTip(\'MapID:'.$char['mapid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_map_name($char['mapid']).'</span></td>
+                  <td><span onmousemove="toolTip(\'ZoneID:'.$char['zoneid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_zone_name($char['zoneid']).'</span></td>';
       // display player area, if available
       if ( $core == 1 )
       {
@@ -568,7 +567,7 @@ else
           if ($stats['plrs_area'][$i][0] == $char['name'])
           {
             $output .= '
-                  <td><span onmousemove="toolTip(\'AreaID:'.$stats['plrs_area'][$i][1].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_zone_name($stats['plrs_area'][$i][1], $sqld).'</span></td>';
+                  <td><span onmousemove="toolTip(\'AreaID:'.$stats['plrs_area'][$i][1].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_zone_name($stats['plrs_area'][$i][1]).'</span></td>';
           }
           if ( !isset( $stats['plrs_lat'][$i][1] ) )
             $output .= '

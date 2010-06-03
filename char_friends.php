@@ -30,7 +30,7 @@ function char_friends()
 {
   global $output,
     $realm_id, $logon_db, $arcm_db, $characters_db,
-    $action_permission, $user_lvl, $user_name, $sqlm, $sqld, $sqll, $sqlc;
+    $action_permission, $user_lvl, $user_name, $sql;
 
   if (empty($_GET['id']))
     error(lang('global', 'empty_fields'));
@@ -43,9 +43,9 @@ function char_friends()
     $realmid = $realm_id;
   else
   {
-    $realmid = $sqll->quote_smart($_GET['realm']);
+    $realmid = $sql['logon']->quote_smart($_GET['realm']);
     if (is_numeric($realmid))
-      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
@@ -53,10 +53,10 @@ function char_friends()
   //==========================$_GET and SECURE========================
   if (is_numeric($id)); else $id = 0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'name';
+  $order_by = (isset($_GET['order_by'])) ? $sql['char']->quote_smart($_GET['order_by']) : 'name';
   if (preg_match('/^[[:lower:]]{1,6}$/', $order_by)); else $order_by = 'name';
 
-  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sql['char']->quote_smart($_GET['dir']) : 1;
   if (preg_match('/^[01]{1}$/', $dir)); else $dir = 1;
 
   $order_dir = ($dir) ? 'ASC' : 'DESC';
@@ -69,18 +69,18 @@ function char_friends()
     $order_by = 'zone '.$order_dir.', map';
 
   // getting character data from database
-  $result = $sqlc->query('SELECT acct, name, race, class, level, gender
+  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
     FROM characters WHERE guid = '.$id.' LIMIT 1');
 
-  if ($sqlc->num_rows($result))
+  if ($sql['char']->num_rows($result))
   {
-    $char = $sqlc->fetch_assoc($result);
+    $char = $sql['char']->fetch_assoc($result);
 
     // we get user permissions first
-    $owner_acc_id = $sqlc->result($result, 0, 'account');
-    $result = $sqll->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sqll->result($result, 0, 'gm');
-    $owner_name = $sqll->result($result, 0, 'login');
+    $owner_acc_id = $sql['char']->result($result, 0, 'account');
+    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
+    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_name = $sql['logon']->result($result, 0, 'login');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
@@ -124,10 +124,10 @@ function char_friends()
                   <td>
                     <table class="lined" id="ch_fri_unk_2">';
 
-      $result = $sqlc->query('SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
+      $result = $sql['char']->query('SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
         FROM characters WHERE guid in (SELECT friend_guid FROM social_friends WHERE character_guid = '.$id.') ORDER BY '.$order_by.' '.$order_dir.'');
 
-      if ($sqlc->num_rows($result))
+      if ($sql['char']->num_rows($result))
       {
         $output .= '
                       <tr>
@@ -142,9 +142,9 @@ function char_friends()
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=zoneid&amp;dir='.$dir.'"'.($order_by==='zone '.$order_dir.', map' ? ' class="'.$order_dir.'"' : '').'>'.lang('char', 'zone').'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=online&amp;dir='.$dir.'"'.($order_by==='online' ? ' class="'.$order_dir.'"' : '').'>'.lang('char', 'online').'</a></th>
                       </tr>';
-        while ($data = $sqlc->fetch_assoc($result))
+        while ($data = $sql['char']->fetch_assoc($result))
         {
-          $char_gm_level=$sqll->result($sqll->query('SELECT gm FROM accounts WHERE acct = '.$data['acct'].''), 0, 'gmlevel');
+          $char_gm_level=$sql['logon']->result($sql['logon']->query('SELECT gm FROM accounts WHERE acct = '.$data['acct'].''), 0, 'gmlevel');
           $output .= '
                       <tr>
                         <td>';
@@ -156,17 +156,17 @@ function char_friends()
                         <td><img src="img/c_icons/'.$data['race'].'-'.$data['gender'].'.gif" onmousemove="toolTip(\''.char_get_race_name($data['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /></td>
                         <td><img src="img/c_icons/'.$data['class'].'.gif" onmousemove="toolTip(\''.char_get_class_name($data['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /></td>
                         <td>'.char_get_level_color($data['level']).'</td>
-                        <td class="small"><span onmousemove="toolTip(\'MapID:'.$data['mapid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_map_name($data['mapid'], $sqld).'</span></td>
-                        <td class="small"><span onmousemove="toolTip(\'ZoneID:'.$data['zoneid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_zone_name($data['zoneid'], $sqld).'</span></td>
+                        <td class="small"><span onmousemove="toolTip(\'MapID:'.$data['mapid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_map_name($data['mapid']).'</span></td>
+                        <td class="small"><span onmousemove="toolTip(\'ZoneID:'.$data['zoneid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_zone_name($data['zoneid']).'</span></td>
                         <td>'.(($data['online']) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />').'</td>
                       </tr>';
         }
       }
 
-      $result = $sqlc->query('SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
+      $result = $sql['char']->query('SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
         FROM characters WHERE guid in (SELECT character_guid FROM social_friends WHERE friend_guid = '.$id.') ORDER BY '.$order_by.' '.$order_dir.'');
 
-      if ($sqlc->num_rows($result))
+      if ($sql['char']->num_rows($result))
       {
         $output .= '
                       <tr>
@@ -181,9 +181,9 @@ function char_friends()
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=zoneid&amp;dir='.$dir.'"'.($order_by==='zone '.$order_dir.', map' ? ' class="'.$order_dir.'"' : '').'>'.lang('char', 'zone').'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=online&amp;dir='.$dir.'"'.($order_by==='online' ? ' class="'.$order_dir.'"' : '').'>'.lang('char', 'online').'</a></th>
                       </tr>';
-        while ($data = $sqlc->fetch_assoc($result))
+        while ($data = $sql['char']->fetch_assoc($result))
         {
-          $char_gm_level=$sqll->result($sqll->query('SELECT gm FROM accounts WHERE acct = '.$data['acct'].''), 0, 'gmlevel');
+          $char_gm_level=$sql['logon']->result($sql['logon']->query('SELECT gm FROM accounts WHERE acct = '.$data['acct'].''), 0, 'gmlevel');
           $output .= '
                       <tr>
                         <td>';
@@ -195,8 +195,8 @@ function char_friends()
                         <td><img src="img/c_icons/'.$data['race'].'-'.$data['gender'].'.gif" onmousemove="toolTip(\''.char_get_race_name($data['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /></td>
                         <td><img src="img/c_icons/'.$data['class'].'.gif" onmousemove="toolTip(\''.char_get_class_name($data['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /></td>
                         <td>'.char_get_level_color($data['level']).'</td>
-                        <td class="small"><span onmousemove="toolTip(\'MapID:'.$data['mapid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_map_name($data['mapid'], $sqld).'</span></td>
-                        <td class="small"><span onmousemove="toolTip(\'ZoneID:'.$data['zoneid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_zone_name($data['zoneid'], $sqld).'</span></td>
+                        <td class="small"><span onmousemove="toolTip(\'MapID:'.$data['mapid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_map_name($data['mapid']).'</span></td>
+                        <td class="small"><span onmousemove="toolTip(\'ZoneID:'.$data['zoneid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_zone_name($data['zoneid']).'</span></td>
                         <td>'.(($data['online']) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />').'</td>
                       </tr>';
         }
@@ -209,10 +209,10 @@ function char_friends()
                         // ]]>
                       </script>';
 
-      $result = $sqlc->query('SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
+      $result = $sql['char']->query('SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
         FROM characters WHERE guid in (SELECT ignore_guid FROM social_ignores WHERE character_guid = '.$id.') ORDER BY '.$order_by.' '.$order_dir.'');
 
-      if ($sqlc->num_rows($result))
+      if ($sql['char']->num_rows($result))
       {
         $output .= '
                       <tr>
@@ -227,9 +227,9 @@ function char_friends()
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=zoneid&amp;dir='.$dir.'"'.($order_by==='zoneid '.$order_dir.', map' ? ' class="'.$order_dir.'"' : '').'>'.lang('char', 'zone').'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=online&amp;dir='.$dir.'"'.($order_by==='online' ? ' class="'.$order_dir.'"' : '').'>'.lang('char', 'online').'</a></th>
                       </tr>';
-        while ($data = $sqlc->fetch_assoc($result))
+        while ($data = $sql['char']->fetch_assoc($result))
         {
-          $char_gm_level=$sqll->result($sqll->query('SELECT gm FROM accounts WHERE acct = '.$data['acct'].''), 0, 'gmlevel');
+          $char_gm_level=$sql['logon']->result($sql['logon']->query('SELECT gm FROM accounts WHERE acct = '.$data['acct'].''), 0, 'gmlevel');
           $output .= '
                       <tr>
                         <td>';
@@ -241,17 +241,17 @@ function char_friends()
                         <td><img src="img/c_icons/'.$data['race'].'-'.$data['gender'].'.gif" onmousemove="toolTip(\''.char_get_race_name($data['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /></td>
                         <td><img src="img/c_icons/'.$data['class'].'.gif" onmousemove="toolTip(\''.char_get_class_name($data['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /></td>
                         <td>'.char_get_level_color($data['level']).'</td>
-                        <td class="small"><span onmousemove="toolTip(\'MapID:'.$data['mapid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_map_name($data['mapid'], $sqld).'</span></td>
-                        <td class="small"><span onmousemove="toolTip(\'ZoneID:'.$data['zoneid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_zone_name($data['zoneid'], $sqld).'</span></td>
+                        <td class="small"><span onmousemove="toolTip(\'MapID:'.$data['mapid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_map_name($data['mapid']).'</span></td>
+                        <td class="small"><span onmousemove="toolTip(\'ZoneID:'.$data['zoneid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_zone_name($data['zoneid']).'</span></td>
                         <td>'.(($data['online']) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />').'</td>
                       </tr>';
         }
       }
 
-      $result = $sqlc->query('SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
+      $result = $sql['char']->query('SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
         FROM characters WHERE guid in (SELECT character_guid FROM social_ignores WHERE ignore_guid = '.$id.') ORDER BY '.$order_by.' '.$order_dir.'');
 
-      if ($sqlc->num_rows($result))
+      if ($sql['char']->num_rows($result))
       {
         $output .= '
                       <tr>
@@ -266,9 +266,9 @@ function char_friends()
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=zoneid&amp;dir='.$dir.'"'.($order_by==='zone '.$order_dir.', map' ? ' class="'.$order_dir.'"' : '').'>'.lang('char', 'zone').'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=online&amp;dir='.$dir.'"'.($order_by==='online' ? ' class="'.$order_dir.'"' : '').'>'.lang('char', 'online').'</a></th>
                       </tr>';
-        while ($data = $sqlc->fetch_assoc($result))
+        while ($data = $sql['char']->fetch_assoc($result))
         {
-          $char_gm_level=$sqll->result($sqll->query('SELECT gm FROM accounts WHERE acct = '.$data['acct'].''), 0, 'gmlevel');
+          $char_gm_level=$sql['logon']->result($sql['logon']->query('SELECT gm FROM accounts WHERE acct = '.$data['acct'].''), 0, 'gmlevel');
           $output .= '
                       <tr>
                         <td>';
@@ -280,8 +280,8 @@ function char_friends()
                         <td><img src="img/c_icons/'.$data['race'].'-'.$data['gender'].'.gif" onmousemove="toolTip(\''.char_get_race_name($data['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /></td>
                         <td><img src="img/c_icons/'.$data['class'].'.gif" onmousemove="toolTip(\''.char_get_class_name($data['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /></td>
                         <td>'.char_get_level_color($data['level']).'</td>
-                        <td class="small"><span onmousemove="toolTip(\'MapID:'.$data['mapid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_map_name($data['mapid'], $sqld).'</span></td>
-                        <td class="small"><span onmousemove="toolTip(\'ZoneID:'.$data['zoneid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_zone_name($data['zoneid'], $sqld).'</span></td>
+                        <td class="small"><span onmousemove="toolTip(\'MapID:'.$data['mapid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_map_name($data['mapid']).'</span></td>
+                        <td class="small"><span onmousemove="toolTip(\'ZoneID:'.$data['zoneid'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_zone_name($data['zoneid']).'</span></td>
                         <td>'.(($data['online']) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />').'</td>
                       </tr>';
         }
