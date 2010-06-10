@@ -43,7 +43,7 @@ function front()
 //---------------------Information for Explorer Users--------------------------
 if(preg_match("/MSIE/", $_SERVER['HTTP_USER_AGENT']))
   $msie = "<br /><center><span id='index_explorer_warning'>
-             Notice: This site may not function correctly on Microsoft Internet Explorer.
+             Notice: This site will NOT function correctly on Microsoft Internet Explorer.
            </span></center><br />";
 else
   $msie = "";

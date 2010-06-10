@@ -67,22 +67,31 @@ function wowhead_did($item)
 
 function char_view()
 {
-  global $output, $action_permission, $user_lvl, $user_name, $sql;
+  global $output, $action_permission, $user_lvl, $user_name, $sql, $core;
 
   if (empty($_GET['id']))
     error(lang('global', 'empty_fields'));
   else
     $id = $_GET['id'];
 
-  $query = $sql['char']->query("SELECT * FROM characters WHERE `guid` = '" . $id . "'");
+  if ( $core == 1 )
+    $query = $sql['char']->query("SELECT * FROM characters WHERE `guid` = '" . $id . "'");
+  else
+    $query = $sql['char']->query("SELECT *, account AS acct FROM characters WHERE `guid` = '" . $id . "'");
   $char = $sql['char']->fetch_assoc($query);
 
-  // we get user permissions first
+  // we get owner permissions first
   $owner_acc_id = $char['acct'];
-  $aresult = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$owner_acc_id.'');
+  if ( $core == 1 )
+    $aresult = $sql['logon']->query('SELECT login FROM accounts WHERE acct = '.$owner_acc_id.'');
+  else
+    $aresult = $sql['logon']->query('SELECT username AS login FROM account WHERE id = '.$owner_acc_id.'');
   $owner = $sql['logon']->fetch_assoc($aresult);
-  $owner_gmlvl = $owner['gm'];
   $owner_name = $owner['login'];
+  $s_query = "SELECT SecurityLevel FROM config_accounts WHERE Login='".$owner_name."'";
+  $s_result = $sql['mgr']->query($s_query);
+  $s_fields = $sql['mgr']->fetch_assoc($s_result);
+  $owner_gmlvl = $s_fields['gm'];
   
   if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
   {

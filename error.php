@@ -18,8 +18,70 @@
 */
 
 
-// page header, and any additional required libraries
-require_once 'header.php';
+// because error needs a header but header.php requires databases,
+// we make our own page header, and get any additional required libraries
+session_start();
+
+//---------------------Loading User Theme and Language Settings----------------
+if (isset($_COOKIE['theme']))
+{
+  if (is_dir('themes/'.$_COOKIE['theme']))
+    if (is_file('themes/'.$_COOKIE['theme'].'/'.$_COOKIE['theme'].'_1024.css'))
+      $theme = $_COOKIE['theme'];
+}
+else
+  $theme = "Sulfur";
+
+if (isset($_COOKIE['lang']))
+{
+  $lang = $_COOKIE['lang'];
+  if (file_exists('lang/'.$lang.'.php'));
+  else
+    $lang = $language;
+}
+else
+  $lang = $language;
+
+require_once 'libs/global_lib.php';
+require_once 'lang/'.$lang.'.php';
+require_once 'libs/lang_lib.php';
+
+// sets encoding defined in config for language support
+header('Content-Type: text/html; charset='.$site_encoding);
+header('Expires: Tue, 01 Jan 2000 00:00:00 GMT');
+header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+$output .= '
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>'.$title.'</title>
+    <meta http-equiv="Content-Type" content="text/html; charset='.$site_encoding.'" />
+    <meta http-equiv="Content-Type" content="text/javascript; charset='.$site_encoding.'" />
+    <link rel="stylesheet" type="text/css" href="themes/'.$theme.'/'.$theme.'_1024.css" title="1024" />
+    <link rel="stylesheet" type="text/css" href="themes/'.$theme.'/'.$theme.'_1280.css" title="1280" />
+    <link rel="SHORTCUT ICON" href="img/favicon.ico" />
+    <script type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="libs/js/general.js"></script>
+    <script type="text/javascript" src="libs/js/layout.js"></script>
+  </head>';
+
+$output .= '
+  <body onload="dynamicLayout();">
+    <center>
+      <table class="table_top">
+        <tr>
+          <td class="table_top_left" valign="top">
+          </td>
+          <td class="table_top_middle"></td>
+          <td class="table_top_right"></td>
+        </tr>
+      </table>
+      <div id="body_main">';
+// end of header
+
 // we get the error message which was passed to us
 $err = (isset($_SESSION['pass_error'])) ? ($_SESSION['pass_error']) : 'Oopsy...';
 
