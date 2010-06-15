@@ -33,7 +33,7 @@ function char_achievements()
   global $output, $logon_db,
     $realm_id, $characters_db, $arcm_db,
     $action_permission, $user_lvl, $user_name,
-    $achievement_datasite, $sql;
+    $achievement_datasite, $sql, $core;
 
   // this page uses wowhead tooltops
   //wowhead_tt();
@@ -65,8 +65,12 @@ function char_achievements()
   if (is_numeric($show_type)); else $show_type = 0;
 
   // getting character data from database
-  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
-    FROM characters WHERE guid = '.$id.' LIMIT 1');
+  if ( $core == 1 )
+    $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
+      FROM characters WHERE guid = '.$id.' LIMIT 1');
+  else
+    $result = $sql['char']->query('SELECT account AS acct, name, race, class, level, gender
+      FROM characters WHERE guid = '.$id.' LIMIT 1');
 
   // no point going further if character does not exist
   if ($sql['char']->num_rows($result))
@@ -74,10 +78,17 @@ function char_achievements()
     $char = $sql['char']->fetch_assoc($result);
 
     // we get user permissions first
-    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
-    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
+
+    if ( $core == 1 )
+      $result = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$char['acct']."'");
+    else
+      $result = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$char['acct']."'");
+
     $owner_name = $sql['logon']->result($result, 0, 'login');
+      
+    $sec_res = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql['mgr']->result($sec_res, 0, 'gm');
 
     // check user permission
     if ( ($user_lvl > $owner_gmlvl) || ($owner_name === $user_name) ||($user_lvl == gmlevel('4')))

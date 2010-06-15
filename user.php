@@ -231,9 +231,14 @@ function browse_users()
   while ($data = $sql['logon']->fetch_assoc($query))
   {
     // get screen name for each account
-    $sn_query = "SELECT * FROM config_accounts WHERE Login = '".$data['login']."'";
+    $sn_query = "SELECT *, SecurityLevel AS gm FROM config_accounts WHERE Login = '".$data['login']."'";
     $sn_result = $sql['mgr']->query($sn_query);
     $screenname = $sql['mgr']->fetch_assoc($sn_result);
+    
+    // if the user doesn't have a value in their SecurityLevel field,
+    // assume it's Player (ZERO)
+    if ( !isset($screenname['gm']) )
+      $screenname['gm'] = 0;
     
     // clear character count from previous account
     $char_count = 0;
@@ -252,7 +257,7 @@ function browse_users()
         $char_count += $char_count_fields['COUNT(*)'];
     }
 
-    if ( ($user_lvl >= gmlevel($data['gm'])) || ($user_name == $data['login']) )
+    if ( ($user_lvl >= gmlevel($screenname['gm'])) || ($user_name == $data['login']) )
     {
       $output .= '
                 <tr>';
@@ -262,7 +267,7 @@ function browse_users()
       else
         $output .= '
                   <td>*</td>';
-      if ( ($user_lvl >= gmlevel($data['gm'])) || ($user_name == $data['login']) )
+      if ( ($user_lvl >= gmlevel($screenname['gm'])) || ($user_name == $data['login']) )
         $output .= '
                   <td>'.$data['acct'].'</td>
                   <td>
@@ -272,7 +277,7 @@ function browse_users()
         $output .= '
                   <td>***</td>
                   <td>*****</td>';
-      if ( ($user_lvl >= gmlevel($data['gm'])) || ($user_name == $data['login']) )
+      if ( ($user_lvl >= gmlevel($screenname['gm'])) || ($user_name == $data['login']) )
         $output .= '
                   <td>
                     <a href="user.php?action=edit_user&amp;error=11&amp;acct='.$data['acct'].'">'.$screenname['ScreenName'].'</a>
@@ -281,7 +286,7 @@ function browse_users()
         $output .= '
                   <td>*****</td>';
       $output .= '
-                  <td>'.gmlevel_short($data['gm']).'</td>';
+                  <td>'.gmlevel_short($screenname['gm']).'</td>';
       if ($expansion_select)
       {
         $exp_lvl_arr = id_get_exp_lvl();

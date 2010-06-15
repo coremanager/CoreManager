@@ -51,9 +51,13 @@ function char_racegender($race, $gender)
 
 function wowhead_did($item)
 {
-  global $sql;
+  global $sql, $core;
 
-  $query = $sql['world']->query("SELECT `displayid` FROM items WHERE `entry` = '" . $item . "' LIMIT 1");
+  if ( $core == 1)
+    $query = $sql['world']->query("SELECT `displayid` FROM items WHERE `entry` = '" . $item . "' LIMIT 1");
+  else
+    $query = $sql['world']->query("SELECT `displayid` FROM item_template WHERE `entry` = '" . $item . "' LIMIT 1");
+
   $result = $sql['world']->fetch_assoc($query);
 
   $displayid = $result['displayid'];
@@ -95,35 +99,156 @@ function char_view()
   
   if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
   {
-    $data = explode(';',$char['data']);
+    if ( $core == 1 )
+    {
+      $data = explode(';',$char['data']);
 
-    $item_head = $data[PLAYER_VISIBLE_ITEM_1_ENTRYID];
-    $item_neck = $data[PLAYER_VISIBLE_ITEM_2_ENTRYID];
-    $item_shoulder = $data[PLAYER_VISIBLE_ITEM_3_ENTRYID];
-    $item_shirt = $data[PLAYER_VISIBLE_ITEM_4_ENTRYID];
-    $item_chest = $data[PLAYER_VISIBLE_ITEM_5_ENTRYID];
-    $item_belt = $data[PLAYER_VISIBLE_ITEM_6_ENTRYID];
-    $item_legs = $data[PLAYER_VISIBLE_ITEM_7_ENTRYID];
-    $item_feet = $data[PLAYER_VISIBLE_ITEM_8_ENTRYID];
-    $item_wrist = $data[PLAYER_VISIBLE_ITEM_9_ENTRYID];
-    $item_gloves = $data[PLAYER_VISIBLE_ITEM_10_ENTRYID];
-    $item_finger1 = $data[PLAYER_VISIBLE_ITEM_11_ENTRYID];
-    $item_finger2 = $data[PLAYER_VISIBLE_ITEM_12_ENTRYID];
-    $item_trinket1 = $data[PLAYER_VISIBLE_ITEM_13_ENTRYID];
-    $item_trinket2 = $data[PLAYER_VISIBLE_ITEM_14_ENTRYID];
-    $item_back = $data[PLAYER_VISIBLE_ITEM_15_ENTRYID];
-    $item_main_hand = $data[PLAYER_VISIBLE_ITEM_16_ENTRYID];
-    $item_off_hand = $data[PLAYER_VISIBLE_ITEM_17_ENTRYID];
-    $item_ranged_slot = $data[PLAYER_VISIBLE_ITEM_18_ENTRYID];
-    $item_tabard = $data[PLAYER_VISIBLE_ITEM_19_ENTRYID];
+      $item_head = $data[PLAYER_VISIBLE_ITEM_1_ENTRYID];
+      $item_neck = $data[PLAYER_VISIBLE_ITEM_2_ENTRYID];
+      $item_shoulder = $data[PLAYER_VISIBLE_ITEM_3_ENTRYID];
+      $item_shirt = $data[PLAYER_VISIBLE_ITEM_4_ENTRYID];
+      $item_chest = $data[PLAYER_VISIBLE_ITEM_5_ENTRYID];
+      $item_belt = $data[PLAYER_VISIBLE_ITEM_6_ENTRYID];
+      $item_legs = $data[PLAYER_VISIBLE_ITEM_7_ENTRYID];
+      $item_feet = $data[PLAYER_VISIBLE_ITEM_8_ENTRYID];
+      $item_wrist = $data[PLAYER_VISIBLE_ITEM_9_ENTRYID];
+      $item_gloves = $data[PLAYER_VISIBLE_ITEM_10_ENTRYID];
+      $item_finger1 = $data[PLAYER_VISIBLE_ITEM_11_ENTRYID];
+      $item_finger2 = $data[PLAYER_VISIBLE_ITEM_12_ENTRYID];
+      $item_trinket1 = $data[PLAYER_VISIBLE_ITEM_13_ENTRYID];
+      $item_trinket2 = $data[PLAYER_VISIBLE_ITEM_14_ENTRYID];
+      $item_back = $data[PLAYER_VISIBLE_ITEM_15_ENTRYID];
+      $item_main_hand = $data[PLAYER_VISIBLE_ITEM_16_ENTRYID];
+      $item_off_hand = $data[PLAYER_VISIBLE_ITEM_17_ENTRYID];
+      $item_ranged_slot = $data[PLAYER_VISIBLE_ITEM_18_ENTRYID];
+      $item_tabard = $data[PLAYER_VISIBLE_ITEM_19_ENTRYID];
 
-    $b = $data[PLAYER_BYTES];
-    $b2 = $data[PLAYER_BYTES_2];
-    $ha = ($b>>16)%256;
-    $hc = ($b>>24)%256;
-    $fa = ($b>>8)%256;
-    $sk = $b%256;
-    $fh = $b2%256;
+      $b = $data[PLAYER_BYTES];
+      $b2 = $data[PLAYER_BYTES_2];
+      $ha = ($b>>16)%256;
+      $hc = ($b>>24)%256;
+      $fa = ($b>>8)%256;
+      $sk = $b%256;
+      $fh = $b2%256;
+    }
+    else
+    {
+      $inv_query = "SELECT * FROM character_inventory WHERE guid='".$id."'";
+      $inv_result = $sql['char']->query($inv_query);
+
+      while ( $inv_row = $sql['char']->fetch_assoc($inv_result) )
+      {
+        if ( $inv_row['bag'] == 0 )
+        {
+          switch ( $inv_row['slot'] )
+          {
+            case 0:
+            {
+              $item_head = $inv_row['item_template'];
+              break;
+            }
+            case 1:
+            {
+              $item_neck = $inv_row['item_template'];
+              break;
+            }
+            case 2:
+            {
+              $item_shoulder = $inv_row['item_template'];
+              break;
+            }
+            case 3:
+            {
+              $item_shirt = $inv_row['item_template'];
+              break;
+            }
+            case 4:
+            {
+              $item_chest = $inv_row['item_template'];
+              break;
+            }
+            case 5:
+            {
+              $item_belt = $inv_row['item_template'];
+              break;
+            }
+            case 6:
+            {
+              $item_legs = $inv_row['item_template'];
+              break;
+            }
+            case 7:
+            {
+              $item_feet = $inv_row['item_template'];
+              break;
+            }
+            case 8:
+            {
+              $item_wrist = $inv_row['item_template'];
+              break;
+            }
+            case 9:
+            {
+              $item_gloves = $inv_row['item_template'];
+              break;
+            }
+            case 10:
+            {
+              $item_finger1 = $inv_row['item_template'];
+              break;
+            }
+            case 11:
+            {
+              $item_finger2 = $inv_row['item_template'];
+              break;
+            }
+            case 12:
+            {
+              $item_trinket1 = $inv_row['item_template'];
+              break;
+            }
+            case 13:
+            {
+              $item_trinket2 = $inv_row['item_template'];
+              break;
+            }
+            case 14:
+            {
+              $item_back = $inv_row['item_template'];
+              break;
+            }
+            case 15:
+            {
+              $item_main_hand = $inv_row['item_template'];
+              break;
+            }
+            case 16:
+            {
+              $item_off_hand = $inv_row['item_template'];
+              break;
+            }
+            case 17:
+            {
+              $item_ranged_slot = $inv_row['item_template'];
+              break;
+            }
+            case 18:
+            {
+              $item_tabard = $inv_row['item_template'];
+              break;
+            }
+          }
+        }
+      }
+
+      $b = $char['playerBytes'];
+      $b2 = $char['playerBytes2'];
+      $ha = ($b>>16)%256;
+      $hc = ($b>>24)%256;
+      $fa = ($b>>8)%256;
+      $sk = $b%256;
+      $fh = $b2%256;
+    }
 
     //------------------------Character Tabs---------------------------------
     // we start with a lead of 10 spaces,

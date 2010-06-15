@@ -32,23 +32,21 @@ if (function_exists ('date_default_timezone_set'))
 
 
 //#############################################################################
-//work around for MSIE and wowhead tooltip display error
-//if ( ereg('MSIE' , $_SERVER['HTTP_USER_AGENT']) )
-//{
-//  $tt_script = '';
-//}
-//else
-//{
-    $tt_script = 'http://www.wowhead.com/widgets/power.js';
-//}
+// wowhead tooltip script location
+$tt_script = 'http://www.wowhead.com/widgets/power.js';
 
 
 //#############################################################################
 // loading of wowhead tool tip script
 function wowhead_tt()
 {
- global $output, $tt_script;
- $output .='<script type="text/javascript" src="'.$tt_script.'"></script>';
+  global $output, $tt_script;
+
+  // check that we can reach wowhead
+  // this should improve page load times when wowhead is unreachable
+  if ( test_port("www.wowhead.com", 80) )
+    $output .='
+    <script type="text/javascript" src="'.$tt_script.'"></script>';
 
 }
 

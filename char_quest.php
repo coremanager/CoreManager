@@ -32,7 +32,7 @@ valid_login($action_permission['view']);
 function char_quest()
 {
   global $output, $realm_id, $world_db, $logon_db, $characters_db, $action_permission,
-    $user_lvl, $user_name, $quest_datasite, $itemperpage, $sql;
+    $user_lvl, $user_name, $quest_datasite, $itemperpage, $sql, $core;
 
   if (empty($_GET['id'])) error(lang('global', 'empty_fields'));
 
@@ -64,17 +64,29 @@ function char_quest()
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end=============================
 
-  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
-    FROM characters WHERE guid = '.$id.' LIMIT 1');
+  if ( $core == 1 )
+    $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
+      FROM characters WHERE guid = '.$id.' LIMIT 1');
+  else
+    $result = $sql['char']->query('SELECT account AS acct, name, race, class, level, gender
+      FROM characters WHERE guid = '.$id.' LIMIT 1');
 
   if ($sql['char']->num_rows($result))
   {
     $char = $sql['char']->fetch_assoc($result);
 
+    // we get user permissions first
     $owner_acc_id = $sql['char']->result($result, 0, 'acct');
-    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+
+    if ( $core == 1 )
+      $result = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$char['acct']."'");
+    else
+      $result = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$char['acct']."'");
+
     $owner_name = $sql['logon']->result($result, 0, 'login');
+      
+    $sec_res = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql['mgr']->result($sec_res, 0, 'gm');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
@@ -107,20 +119,29 @@ function char_quest()
                   <th width="78%"><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'&amp;start='.$start.'&amp;order_by=2&amp;dir='.$dir.'"'.($order_by == 2 ? ' class="'.$order_dir.'"' : '').'>'.lang('char', 'quest_title').'</a></th>
                   <th width="5%"><img src="img/aff_qst.png" width="14" height="14" border="0" alt="" /></th>
                 </tr>';
-      // this_is_junk: I'm not sure what status and rewarded actually do in MaNGOS
-      $result = $sql['char']->query("SELECT quest_id, completed FROM questlog WHERE player_guid = '".$id."'");
+
+      if ( $core == 1 )
+        $result = $sql['char']->query("SELECT quest_id, completed FROM questlog WHERE player_guid = '".$id."'");
+      else
+        $result = $sql['char']->query("SELECT quest AS quest_id, status AS completed FROM character_queststatus WHERE guid = '".$id."'");
 
       $quests_1 = array();
       $quests_3 = array();
 
-      if ($sql['char']->num_rows($result))
+      if ( $sql['char']->num_rows($result) )
       {
-        while ($quest = $sql['char']->fetch_assoc($result))
+        while ( $quest = $sql['char']->fetch_assoc($result) )
         {
           $deplang = get_lang_id();
-          $query1 = $sql['char']->query('SELECT questlevel, title FROM `'.$world_db[$realmid]['name'].'`.`quests` WHERE `entry` = \''.$quest['quest_id'].'\'');
+
+          if ( $core == 1 )
+            $query1 = $sql['char']->query("SELECT questlevel, title FROM `".$world_db[$realmid]['name']."`.quests WHERE entry='".$quest['quest_id']."'");
+          else
+            $query1 = $sql['char']->query("SELECT QuestLevel AS questlevel, Title AS title FROM `".$world_db[$realmid]['name']."`.quest_template WHERE entry='".$quest['quest_id']."'");
+
           $quest_info = $sql['char']->fetch_assoc($query1);
-          if(1 == $quest['completed'])
+
+          if ( $quest['completed'] == 1 )
             array_push($quests_1, array($quest['quest_id'], $quest_info['questlevel'], $quest_info['title'], $quest['rewarded']));
           else
             array_push($quests_3, array($quest['quest_id'], $quest_info['questlevel'], $quest_info['title']));

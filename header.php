@@ -96,11 +96,13 @@ $output .= '
     <link rel="SHORTCUT ICON" href="img/favicon.ico" />
     <script type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" src="libs/js/general.js"></script>
-    <script type="text/javascript" src="libs/js/layout.js"></script>
-  </head>';
+    <script type="text/javascript" src="libs/js/layout.js"></script>';
 
-  // make wowhead tooltops generally available
-  wowhead_tt();
+    // make wowhead tooltops generally available
+    wowhead_tt();
+
+$output .= '
+  </head>';
 
 $output .= '
   <body onload="dynamicLayout();">

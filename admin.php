@@ -1468,12 +1468,11 @@ function savegms()
   $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
 
   $index = $sqlm->quote_smart($_GET['index']);
-  $gm_lvl = $sqlm->quote_smart($_GET['gmlvl']);
   $sec_lvl = $sqlm->quote_smart($_GET['seclvl']);
   $full_name = $sqlm->quote_smart($_GET['fullname']);
   $short_name = $sqlm->quote_smart($_GET['shortname']);
 
-  $result = $sqlm->query("UPDATE config_gm_level_names SET GM_Level = '".$gm_lvl."', Security_Level = '".$sec_lvl."', Full_Name = '".$full_name."', Short_Name = '".$short_name."' WHERE `Index` = '".$index."'");
+  $result = $sqlm->query("UPDATE config_gm_level_names SET Security_Level = '".$sec_lvl."', Full_Name = '".$full_name."', Short_Name = '".$short_name."' WHERE `Index` = '".$index."'");
   redirect("admin.php?section=gmlevels");
 }
 

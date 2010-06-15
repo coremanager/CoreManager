@@ -30,7 +30,7 @@ function char_friends()
 {
   global $output,
     $realm_id, $logon_db, $arcm_db, $characters_db,
-    $action_permission, $user_lvl, $user_name, $sql;
+    $action_permission, $user_lvl, $user_name, $sql, $core;
 
   if (empty($_GET['id']))
     error(lang('global', 'empty_fields'));
@@ -69,18 +69,29 @@ function char_friends()
     $order_by = 'zone '.$order_dir.', map';
 
   // getting character data from database
-  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
-    FROM characters WHERE guid = '.$id.' LIMIT 1');
+  if ( $core == 1 )
+    $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
+      FROM characters WHERE guid='.$id.' LIMIT 1');
+  else
+    $result = $sql['char']->query('SELECT account AS acct, name, race, class, level, gender
+      FROM characters WHERE guid='.$id.' LIMIT 1');
 
   if ($sql['char']->num_rows($result))
   {
     $char = $sql['char']->fetch_assoc($result);
 
     // we get user permissions first
-    $owner_acc_id = $sql['char']->result($result, 0, 'account');
-    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
+
+    if ( $core == 1 )
+      $result = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$char['acct']."'");
+    else
+      $result = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$char['acct']."'");
+
     $owner_name = $sql['logon']->result($result, 0, 'login');
+      
+    $sec_res = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql['mgr']->result($sec_res, 0, 'gm');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
@@ -124,8 +135,13 @@ function char_friends()
                   <td>
                     <table class="lined" id="ch_fri_unk_2">';
 
-      $result = $sql['char']->query('SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
-        FROM characters WHERE guid in (SELECT friend_guid FROM social_friends WHERE character_guid = '.$id.') ORDER BY '.$order_by.' '.$order_dir.'');
+      // get friends
+      if ( $core == 1 )
+        $result = $sql['char']->query("SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
+          FROM characters WHERE guid IN (SELECT friend_guid FROM social_friends WHERE character_guid='".$id."') ORDER BY '".$order_by."' '".$order_dir."'");
+      else
+        $result = $sql['char']->query("SELECT name, race, class, map AS mapid, zone AS zoneid, level, gender, online, account AS acct, guid
+          FROM characters WHERE guid IN (SELECT friend FROM character_social WHERE guid='".$id."' AND flags=1) ORDER BY '".$order_by."' '".$order_dir."'");
 
       if ($sql['char']->num_rows($result))
       {
@@ -144,7 +160,13 @@ function char_friends()
                       </tr>';
         while ($data = $sql['char']->fetch_assoc($result))
         {
-          $char_gm_level=$sql['logon']->result($sql['logon']->query('SELECT gm FROM accounts WHERE acct = '.$data['acct'].''), 0, 'gmlevel');
+          if ( $core == 1 )
+            $char_owner = $sql['logon']->result($sql['logon']->query("SELECT login FROM accounts WHERE acct='".$data['acct']."'"), 0, 'gmlevel');
+          else
+            $char_owner = $sql['logon']->result($sql['logon']->query("SELECT username AS login FROM account WHERE id='".$data['acct']."'"), 0, 'login');
+
+          $char_gm_level = $sql['mgr']->result($sql['mgr']->query("SELECT SecurityLevel AS gmlevel FROM config_accounts WHERE Login='".$char_owner."'"), 0, 'gmlevel');
+
           $output .= '
                       <tr>
                         <td>';
@@ -163,8 +185,13 @@ function char_friends()
         }
       }
 
-      $result = $sql['char']->query('SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
-        FROM characters WHERE guid in (SELECT character_guid FROM social_friends WHERE friend_guid = '.$id.') ORDER BY '.$order_by.' '.$order_dir.'');
+      // get is friend of
+      if ( $core == 1 )
+        $result = $sql['char']->query("SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
+          FROM characters WHERE guid IN (SELECT character_guid FROM social_friends WHERE friend_guid = '".$id."') ORDER BY '".$order_by."' '".$order_dir."'");
+      else
+        $result = $sql['char']->query("SELECT name, race, class, map AS mapid, zone AS zoneid, level, gender, online, account AS acct, guid
+          FROM characters WHERE guid IN (SELECT friend FROM character_social WHERE guid = '".$id."' AND flags=1) ORDER BY '".$order_by."' '".$order_dir."'");
 
       if ($sql['char']->num_rows($result))
       {
@@ -183,7 +210,13 @@ function char_friends()
                       </tr>';
         while ($data = $sql['char']->fetch_assoc($result))
         {
-          $char_gm_level=$sql['logon']->result($sql['logon']->query('SELECT gm FROM accounts WHERE acct = '.$data['acct'].''), 0, 'gmlevel');
+          if ( $core == 1 )
+            $char_owner = $sql['logon']->result($sql['logon']->query("SELECT login FROM accounts WHERE acct='".$data['acct']."'"), 0, 'gmlevel');
+          else
+            $char_owner = $sql['logon']->result($sql['logon']->query("SELECT username AS login FROM account WHERE id='".$data['acct']."'"), 0, 'login');
+
+          $char_gm_level = $sql['mgr']->result($sql['mgr']->query("SELECT SecurityLevel AS gmlevel FROM config_accounts WHERE Login='".$char_owner."'"), 0, 'gmlevel');
+
           $output .= '
                       <tr>
                         <td>';
@@ -209,8 +242,13 @@ function char_friends()
                         // ]]>
                       </script>';
 
-      $result = $sql['char']->query('SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
-        FROM characters WHERE guid in (SELECT ignore_guid FROM social_ignores WHERE character_guid = '.$id.') ORDER BY '.$order_by.' '.$order_dir.'');
+      // get ignores
+      if ( $core == 1 )
+        $result = $sql['char']->query("SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
+          FROM characters WHERE guid IN (SELECT ignore_guid FROM social_ignores WHERE character_guid = '".$id."') ORDER BY '".$order_by."' '".$order_dir."'");
+      else
+        $result = $sql['char']->query("SELECT name, race, class, map AS mapid, zone AS zoneid, level, gender, online, account AS acct, guid
+          FROM characters WHERE guid IN (SELECT friend FROM character_social WHERE guid = '".$id."' AND flags=2) ORDER BY '".$order_by."' '".$order_dir."'");
 
       if ($sql['char']->num_rows($result))
       {
@@ -229,7 +267,13 @@ function char_friends()
                       </tr>';
         while ($data = $sql['char']->fetch_assoc($result))
         {
-          $char_gm_level=$sql['logon']->result($sql['logon']->query('SELECT gm FROM accounts WHERE acct = '.$data['acct'].''), 0, 'gmlevel');
+          if ( $core == 1 )
+            $char_owner = $sql['logon']->result($sql['logon']->query("SELECT login FROM accounts WHERE acct='".$data['acct']."'"), 0, 'gmlevel');
+          else
+            $char_owner = $sql['logon']->result($sql['logon']->query("SELECT username AS login FROM account WHERE id='".$data['acct']."'"), 0, 'login');
+
+          $char_gm_level = $sql['mgr']->result($sql['mgr']->query("SELECT SecurityLevel AS gmlevel FROM config_accounts WHERE Login='".$char_owner."'"), 0, 'gmlevel');
+
           $output .= '
                       <tr>
                         <td>';
@@ -248,8 +292,13 @@ function char_friends()
         }
       }
 
-      $result = $sql['char']->query('SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
-        FROM characters WHERE guid in (SELECT character_guid FROM social_ignores WHERE ignore_guid = '.$id.') ORDER BY '.$order_by.' '.$order_dir.'');
+      // get ignored by
+      if ( $core == 1 )
+        $result = $sql['char']->query("SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
+          FROM characters WHERE guid IN (SELECT ignore_guid FROM social_ignores WHERE character_guid = '".$id."') ORDER BY '".$order_by."' '".$order_dir."'");
+      else
+        $result = $sql['char']->query("SELECT name, race, class, map AS mapid, zone AS zoneid, level, gender, online, account AS acct, guid
+          FROM characters WHERE guid IN (SELECT friend FROM character_social WHERE guid = '".$id."' AND flags=2) ORDER BY '".$order_by."' '".$order_dir."'");
 
       if ($sql['char']->num_rows($result))
       {
@@ -268,7 +317,13 @@ function char_friends()
                       </tr>';
         while ($data = $sql['char']->fetch_assoc($result))
         {
-          $char_gm_level=$sql['logon']->result($sql['logon']->query('SELECT gm FROM accounts WHERE acct = '.$data['acct'].''), 0, 'gmlevel');
+          if ( $core == 1 )
+            $char_owner = $sql['logon']->result($sql['logon']->query("SELECT login FROM accounts WHERE acct='".$data['acct']."'"), 0, 'gmlevel');
+          else
+            $char_owner = $sql['logon']->result($sql['logon']->query("SELECT username AS login FROM account WHERE id='".$data['acct']."'"), 0, 'login');
+
+          $char_gm_level = $sql['mgr']->result($sql['mgr']->query("SELECT SecurityLevel AS gmlevel FROM config_accounts WHERE Login='".$char_owner."'"), 0, 'gmlevel');
+
           $output .= '
                       <tr>
                         <td>';
