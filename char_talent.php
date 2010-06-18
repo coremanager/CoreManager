@@ -179,8 +179,15 @@ function char_talent()
 
         for ($i = 0; $i < count($talents); $i++)
         {
-          $talent_spell = $sql['dbc']->query("SELECT spell".($talent_ranks[$i] + 1)." FROM talent WHERE id = '".$talents[$i]."'");
-          $talent_spell = $sql['dbc']->result($talent_spell,0);
+          if ( $core == 1 )
+          {
+            $talent_spell = $sql['dbc']->query("SELECT spell".($talent_ranks[$i] + 1)." FROM talent WHERE id = '".$talents[$i]."'");
+            $talent_spell = $sql['dbc']->result($talent_spell,0);
+          }
+          else
+          {
+            $talent_spell = $talents[$i];
+          }
 
           if ($tab = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell5 = '.$talent_spell.' LIMIT 1')))
           {
@@ -320,12 +327,34 @@ function char_talent()
         unset($talent_points);
         unset($talent_points_used);
         unset($talent_points_left);
-        $glyph_query = "SELECT glyphs".$cur_spec." FROM characters WHERE guid = '".$id."'";
-        $glyph_results = $sql['char']->query($glyph_query);
-        $glyph_field = $sql['char']->fetch_assoc($glyph_results);
-        $glyphs = $glyph_field['glyphs1'];
-        $glyphs = substr($glyphs, 0, strlen($glyphs) - 1);
-        $glyphs = explode(',', $glyphs);
+        if ( $core == 1)
+        {
+          $glyph_query = "SELECT glyphs".$cur_spec." FROM characters WHERE guid = '".$id."'";
+          $glyph_results = $sql['char']->query($glyph_query);
+          $glyph_field = $sql['char']->fetch_assoc($glyph_results);
+          $glyphs = $glyph_field['glyphs1'];
+          $glyphs = substr($glyphs, 0, strlen($glyphs) - 1);
+          $glyphs = explode(',', $glyphs);
+        }
+        else
+        {
+          $glyph_query = "SELECT * FROM character_glyphs WHERE guid='".$id."'";
+          $glyph_result = $sql['char']->query($glyph_query);
+          $glyph_field = $sql['char']->fetch_assoc($glyph_results);
+          $glyphs = array();
+          if ( !isset($glyph_field['glyph1']) )
+            array_push($glyphs, $glyph_field['glyph1']);
+          if ( !isset($glyph_field['glyph2']) )
+            array_push($glyphs, $glyph_field['glyph2']);
+          if ( !isset($glyph_field['glyph3']) )
+            array_push($glyphs, $glyph_field['glyph3']);
+          if ( !isset($glyph_field['glyph4']) )
+            array_push($glyphs, $glyph_field['glyph4']);
+          if ( !isset($glyph_field['glyph5']) )
+            array_push($glyphs, $glyph_field['glyph5']);
+          if ( !isset($glyph_field['glyph6']) )
+            array_push($glyphs, $glyph_field['glyph6']);
+        }
         for($i=0;$i<6;++$i)
         {
           if ($glyphs[$i])
