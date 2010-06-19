@@ -27,7 +27,7 @@ valid_login($action_permission['view']);
 //########################################################################################################################^M
 function char_mail()
 {
-  global $output, $realm_id, $characters_db, $action_permission, $user_lvl, $user_name, $user_id, $sql;
+  global $output, $realm_id, $characters_db, $action_permission, $user_lvl, $user_name, $user_id, $sql, $core;
 
   if (empty($_GET['id']))
     error(lang('global', 'empty_fields'));
@@ -46,8 +46,12 @@ function char_mail()
   $id = $sql['char']->quote_smart($_GET['id']);
   if (is_numeric($id)); else $id = 0;
 
-  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
-    FROM characters WHERE guid = '.$id.' LIMIT 1');
+  if ( $core == 1 )
+    $result = $sql['char']->query("'SELECT acct, name, race, class, level, gender
+      FROM characters WHERE guid='".$id."' LIMIT 1");
+  else
+    $result = $sql['char']->query("SELECT account AS acct, name, race, class, level, gender
+      FROM characters WHERE guid='".$id."' LIMIT 1");
 
   if ($sql['char']->num_rows($result))
   {
@@ -56,10 +60,14 @@ function char_mail()
     if ( $user_id <> $char['acct'] )
       error(lang('char', 'no_permission'));
 
-    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
-    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
+    if ( $core == 1 )
+      $result = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$char['acct']."'");
+    else
+      $result = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$char['acct']."'");
     $owner_name = $sql['logon']->result($result, 0, 'login');
+    $result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql['mgr']->result($result, 0, 'gm');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
@@ -102,7 +110,10 @@ function char_mail()
                 </font>
                 <br /><br />';
 
-      $result = $sql['char']->query("SELECT * FROM mailbox WHERE player_guid = '".$id."' AND deleted_flag = 0");
+      if ( $core == 1 )
+        $result = $sql['char']->query("SELECT * FROM mailbox WHERE player_guid='".$id."' AND deleted_flag=0");
+      else
+        $result = $sql['char']->query("SELECT *, sender AS sender_guid, checked AS read_flag, id AS message_id FROM mail WHERE receiver='".$id."'");
 
       if ($sql['char']->num_rows($result))
       {
@@ -122,12 +133,24 @@ function char_mail()
           $output .= '
                   <tr>
                     <td>';
-          if ( ($mail['read_flag']) )
-              $output .= '
-                      <img src="img/flag_white.gif" />';
+          if ( $core == 1 )
+          {
+            if ( isset($mail['read_flag']) )
+                $output .= '
+                        <img src="img/flag_white.gif" />';
+            else
+                $output .= '
+                        <img src="img/flag_green.gif" />';
+          }
           else
-              $output .= '
-                      <img src="img/flag_green.gif" />';
+          {
+            if ( isset($mail['read_flag']) && ( $mail['read_flag'] <> 16 ) )
+                $output .= '
+                        <img src="img/flag_white.gif" />';
+            else
+                $output .= '
+                        <img src="img/flag_green.gif" />';
+          }
           $output .= '
                     </td>
                     <td><a href="char.php?id='.$mail['sender_guid'].'">'.$c_name['name'].'</a></td>
@@ -197,7 +220,7 @@ function char_mail()
 //########################################################################################################################^M
 function read_mail()
 {
-  global $output, $realm_id, $characters_db, $action_permission, $user_lvl, $user_name, $user_id, $sql;
+  global $output, $realm_id, $characters_db, $action_permission, $user_lvl, $user_name, $user_id, $sql, $core;
 
   if (empty($_GET['id']))
     error(lang('global', 'empty_fields'));
@@ -222,8 +245,12 @@ function read_mail()
   $message = $sql['char']->quote_smart($_GET['message']);
   if (is_numeric($message)); else $message = 0;
 
-  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
-    FROM characters WHERE guid = '.$id.' LIMIT 1');
+  if ( $core == 1 )
+    $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
+      FROM characters WHERE guid = '.$id.' LIMIT 1');
+  else
+    $result = $sql['char']->query('SELECT account AS acct, name, race, class, level, gender
+      FROM characters WHERE guid = '.$id.' LIMIT 1');
 
   if ($sql['char']->num_rows($result))
   {
@@ -232,10 +259,14 @@ function read_mail()
     if ( $user_id <> $char['acct'] )
       error(lang('char', 'no_permission'));
 
-    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
-    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
+    if ( $core == 1 )
+      $result = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$char['acct']."'");
+    else
+      $result = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$char['acct']."'");
     $owner_name = $sql['logon']->result($result, 0, 'login');
+    $result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql['mgr']->result($result, 0, 'gm');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
@@ -277,7 +308,10 @@ function read_mail()
                 </font>
                 <br />';
 
-      $result = $sql['char']->query("SELECT * FROM mailbox WHERE message_id = '".$message."'");
+      if ( $core == 1 )
+        $result = $sql['char']->query("SELECT * FROM mailbox WHERE message_id = '".$message."'");
+      else
+        $result = $sql['char']->query("SELECT *, sender AS sender_guid FROM mail WHERE id = '".$message."'");
       $mail = $sql['char']->fetch_assoc($result);
 
       if ($sql['char']->num_rows($result))
