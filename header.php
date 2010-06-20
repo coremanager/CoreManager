@@ -76,7 +76,7 @@ require_once 'libs/global_lib.php';
 require_once 'libs/lang_lib.php';
 require_once 'libs/get_lib.php';
 
-//---------------------Headers' header-----------------------------------------
+//---------------------Header's header-----------------------------------------
 // sets encoding defined in config for language support
 header('Content-Type: text/html; charset='.$site_encoding);
 header('Expires: Tue, 01 Jan 2000 00:00:00 GMT');
@@ -282,7 +282,8 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
                     <li>
                       <a href="char.php?id='.$char['guid'].'">
                         <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" alt="" /><img src="img/c_icons/'.$char['class'].'.gif" alt="" />'.
-                        $char['name'].'
+                        ' '.$char['name'].
+                        ' ('.$char['level'].') '.'
                       </a>
                     </li>';
       }

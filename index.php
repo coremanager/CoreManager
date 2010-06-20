@@ -55,7 +55,7 @@ else
     {
       $stats = get_uptime($server[$realm_id]['stats.xml']);
       
-      $staticUptime = lang('index', 'realm').' <em>'.htmlentities(get_realm_name($realm_id)).'</em> <br />'.$stats['platform'][4].' '.$stats['platform'][5].' '.$stats['platform'][6].'<br />'.lang('index', 'online').' for '.$stats['uptime'];
+      $staticUptime = ' <em>'.htmlentities(get_realm_name($realm_id)).'</em> <br />'.$stats['platform'][4].' '.$stats['platform'][5].' '.$stats['platform'][6].'<br />'.lang('index', 'online').' for '.$stats['uptime'];
       $output .= '
             <div id="uptime">'.$msie.'
               <h1>
@@ -136,7 +136,7 @@ else
         return $uptimeString;
       }
 
-      $staticUptime = lang('index', 'realm').' <em>'.htmlentities(get_realm_name($realm_id)).'</em> <br />'.lang('index', 'online').' for '.format_uptime($uptimetime);
+      $staticUptime = ' <em>'.htmlentities(get_realm_name($realm_id)).'</em> <br />'.lang('index', 'online').' for '.format_uptime($uptimetime);
       unset($uptimetime);
       $output .= '
             <div id="uptime">'.$msie.'

@@ -29,7 +29,7 @@ valid_login($action_permission['view']);
 function char_skill()
 {
   global $output, $realm_id, $characters_db, $arcm_db, $action_permission, $user_lvl,
-    $user_name, $skill_datasite, $sql;
+    $user_name, $skill_datasite, $sql, $core;
 
   //wowhead_tt();
 
@@ -60,7 +60,10 @@ function char_skill()
   $order_dir = ($dir) ? 'ASC' : 'DESC';
   $dir = ($dir) ? 0 : 1;
 
-  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
+  if ( $core == 1 )
+    $result = $sql['char']->query('SELECT acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
+  else
+    $result = $sql['char']->query('SELECT account AS acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
 
   if ($sql['char']->num_rows($result))
   {
@@ -68,15 +71,39 @@ function char_skill()
 
     // we get user permissions first
     $owner_acc_id = $sql['char']->result($result, 0, 'acct');
-    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    if ( $core == 1 )
+      $result = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$char['acct']."'");
+    else
+      $result = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$char['acct']."'");
     $owner_name = $sql['logon']->result($result, 0, 'login');
+    $result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql['mgr']->result($result, 0, 'gm');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
-      $result = $sql['char']->query('SELECT data, name, race, class, level, gender FROM characters WHERE guid = '.$id.'');
-      $char = $sql['char']->fetch_assoc($result);
-      $char_data = explode(';',$char['data']);
+      if ( $core == 1 )
+      {
+        $result = $sql['char']->query("SELECT data, name, race, class, level, gender FROM characters WHERE guid = '".$id."'");
+        $char = $sql['char']->fetch_assoc($result);
+        $char_data = explode(';',$char['data']);
+      }
+      else
+      {
+        $result = $sql['char']->query("SELECT name, race, class, level, gender FROM characters WHERE guid='".$id."'");
+        $char = $sql['char']->fetch_assoc($result);
+        $result = $sql['char']->query("SELECT * FROM character_skills WHERE guid='".$id."'");
+
+        // make TC's skill data work like our treatment of Arc's
+        $char_data = array();
+        $i = 0;
+        while ( $skill_row = $sql['char']->fetch_assoc($result) )
+        {
+          $char_data[PLAYER_SKILL_INFO_1_1 + $i] = $skill_row['skill'];
+          $char_data[PLAYER_SKILL_INFO_1_1 + $i+1] = $skill_row['value'];
+          $char_data[PLAYER_SKILL_INFO_1_1 + $i+2] = $skill_row['max'];
+          $i+=3;
+        }
+      }
 
       $output .= '
           <center>
@@ -144,7 +171,7 @@ function char_skill()
         385 => lang('char', 'wise')
       );
 
-      for ($i = PLAYER_SKILL_INFO_1_1; $i <= PLAYER_SKILL_INFO_1_1+384 ; $i+=3)
+      for ($i = PLAYER_SKILL_INFO_1_1; $i <= PLAYER_SKILL_INFO_1_1+384; $i+=3)
       {
         if (($char_data[$i])&&(skill_get_name($char_data[$i] & 0x0000FFFF)))
         {

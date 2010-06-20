@@ -28,7 +28,7 @@ valid_login($action_permission['view']);
 function char_rep()
 {
   global $output, $realm_id, $characters_db, $logon_db, $arcm_db, $action_permission,
-    $user_lvl, $user_name, $sql;
+    $user_lvl, $user_name, $sql, $core;
 
   require_once 'libs/fact_lib.php';
   $reputation_rank = fact_get_reputation_rank_arr();
@@ -53,61 +53,82 @@ function char_rep()
   $id = $sql['char']->quote_smart($_GET['id']);
   if (is_numeric($id)); else $id = 0;
 
-  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
+  if ( $core == 1 )
+    $result = $sql['char']->query('SELECT acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
+  else
+    $result = $sql['char']->query('SELECT account AS acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
 
   if ($sql['char']->num_rows($result))
   {
     $char = $sql['char']->fetch_assoc($result);
 
     // we get user permissions first
-    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
-    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
+    if ( $core == 1 )
+      $result = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$char['acct']."'");
+    else
+      $result = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$char['acct']."'");
     $owner_name = $sql['logon']->result($result, 0, 'login');
+    $result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql['mgr']->result($result, 0, 'gm');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
-      //$result = $sql['char']->query('SELECT faction, standing FROM character_reputation WHERE guid = '.$id.' AND (flags & 1 = 1)');
       // this_is_junk: ArcEmu stores reputation in a single field
       //               [faction id][unk1][unk2][standing],
       //               I'm sure the two unk's are useful data, I just don't need it here.
       //               But, we're going to break the values into two arrays
-      $result = $sql['char']->query("SELECT reputation FROM characters WHERE guid = '".$id."'");
-      $result = $sql['char']->fetch_assoc($result);
-      $result = $result['reputation'];
-      $result = substr($result, 0, strlen($result) - 1);
-      $result = explode(",", $result);
-      $factions = array();
-      $faction_ranks = array();
-      $pick = 0;
-      foreach ($result as $t)
+      if ( $core == 1 )
       {
-        switch($pick)
+        $result = $sql['char']->query("SELECT reputation FROM characters WHERE guid='".$id."'");
+        $result = $sql['char']->fetch_assoc($result);
+        $result = $result['reputation'];
+        $result = substr($result, 0, strlen($result) - 1);
+        $result = explode(",", $result);
+        $factions = array();
+        $faction_ranks = array();
+        $pick = 0;
+        foreach ($result as $t)
         {
-          case 0:
+          switch($pick)
           {
-            array_push($factions, $t);
-            $pick = 1;
-            break;
+            case 0:
+            {
+              array_push($factions, $t);
+              $pick = 1;
+              break;
+            }
+            case 1:
+            {
+              // we skip this one
+              $pick = 2;
+              break;
+            }
+            case 2:
+            {
+              // we skip this one
+              $pick = 3;
+              break;
+            }
+            case 3:
+            {
+              array_push($faction_ranks, $t);
+              $pick = 0;
+              break;
+            }
           }
-          case 1:
-          {
-            // we skip this one
-            $pick = 2;
-            break;
-          }
-          case 2:
-          {
-            // we skip this one
-            $pick = 3;
-            break;
-          }
-          case 3:
-          {
-            array_push($faction_ranks, $t);
-            $pick = 0;
-            break;
-          }
+        }
+      }
+      else
+      {
+        $result = $sql['char']->query("SELECT faction, standing FROM character_reputation WHERE guid='".$id."' AND (flags & 1 = 1)");
+        $factions = array();
+        $faction_ranks = array();
+        
+        while ( $fact = $sql['char']->fetch_assoc($result) )
+        {
+          array_push($factions, $fact['faction']);
+          array_push($faction_ranks, $fact['standing']);
         }
       }
 
@@ -287,7 +308,6 @@ function char_rep()
 
       if (count($factions) > 1)
       {
-        //while ($fact = $sql['char']->fetch_assoc($result))
         for ($i = 0; $i < count($factions); $i++)
         {
           $faction  = $factions[$i];

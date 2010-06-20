@@ -30,7 +30,7 @@ valid_login($action_permission['view']);
 function char_pets()
 {
   global $output, $realm_id, $characters_db, $arcm_db, $action_permission, $user_lvl, $user_name, 
-    $spell_datasite, $pet_ability, $sql;
+    $spell_datasite, $pet_ability, $sql, $core;
 
   //wowhead_tt();
 
@@ -51,17 +51,24 @@ function char_pets()
   $id = $sql['char']->quote_smart($_GET['id']);
   if (is_numeric($id)); else $id = 0;
 
-  $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
-    FROM characters WHERE guid = '.$id.' LIMIT 1');
+  if ( $core == 1 )
+    $result = $sql['char']->query('SELECT acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
+  else
+    $result = $sql['char']->query('SELECT account AS acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
 
   if ($sql['char']->num_rows($result))
   {
     $char = $sql['char']->fetch_assoc($result);
 
-    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
-    $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
-    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
+    // we get user permissions first
+    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
+    if ( $core == 1 )
+      $result = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$char['acct']."'");
+    else
+      $result = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$char['acct']."'");
     $owner_name = $sql['logon']->result($result, 0, 'login');
+    $result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql['mgr']->result($result, 0, 'gm');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
@@ -97,7 +104,10 @@ function char_pets()
               </font>
               <br /><br />';
 
-      $result = $sql['char']->query('SELECT petnumber, level, fields, SUBSTRING_INDEX(SUBSTRING_INDEX(`fields`, " ", 77), " ", -1) AS cur_xp, SUBSTRING_INDEX(SUBSTRING_INDEX(`fields`, " ", 78), " ", -1) AS next_level_xp, name, happinessupdate FROM playerpets WHERE ownerguid = '.$id.'');
+      if ( $core == 1 )
+        $result = $sql['char']->query('SELECT petnumber, level, fields, SUBSTRING_INDEX(SUBSTRING_INDEX(`fields`, " ", 77), " ", -1) AS cur_xp, SUBSTRING_INDEX(SUBSTRING_INDEX(`fields`, " ", 78), " ", -1) AS next_level_xp, name, happinessupdate FROM playerpets WHERE ownerguid='.$id.'');
+      else
+        $result = $sql['char']->query('SELECT id AS petnumber, level, abdata AS fields, exp AS cur_xp, SUBSTRING_INDEX(SUBSTRING_INDEX(`abdata`, " ", 78), " ", -1) AS next_level_xp, name, curhappiness AS happinessupdate FROM character_pet WHERE owner='.$id.'');
 
       if ($sql['char']->num_rows($result))
       {
@@ -121,8 +131,11 @@ function char_pets()
             $hap_val = 0;
           }
 
-          //$pet_next_lvl_xp = floor(char_get_xp_to_level($pet['level'])/4);
-          $pet_next_lvl_xp = $pet['next_level_xp'];
+          if ( $core == 1 )
+            $pet_next_lvl_xp = $pet['next_level_xp'];
+          else
+            $pet_next_lvl_xp = floor(char_get_xp_to_level($pet['level'])/4);
+
           // this_is_junk: style left hardcoded because it's calculated.
           $output .= '
                 <font class="bold">'.$pet['name'].' - lvl '.char_get_level_color($pet['level']).'
@@ -139,7 +152,11 @@ function char_pets()
                   <tr>
                     <td align="right">Pet Abilities:</td>
                     <td align="left">';
-          $ability_results = $sql['char']->query('SELECT spellid FROM playerpetspells WHERE petnumber = '.$pet['petnumber'].' AND flags > 1'); // active = 0 is unused and active = 1 probably some passive auras, i dont know diference between values 129 and 193, need to check mangos source
+          if ( $core == 1 )
+            $ability_results = $sql['char']->query("SELECT spellid FROM playerpetspells WHERE petnumber='".$pet['petnumber']."' AND flags > 1");
+          else
+            $ability_results = $sql['char']->query("SELECT spell AS spellid FROM pet_spell WHERE guid='".$pet['petnumber']."' AND active > 1");
+          // active = 0 is unused and active = 1 probably some passive auras, i dont know diference between values 129 and 193, need to check mangos source
           if ($sql['char']->num_rows($ability_results))
           {
             while ($ability = $sql['char']->fetch_assoc($ability_results))

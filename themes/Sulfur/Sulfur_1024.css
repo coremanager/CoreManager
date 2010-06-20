@@ -98,7 +98,7 @@ a:hover, a:focus{ color: #ffee40; text-decoration: none }
 #menubar li {position: static; width: auto;}
 /* end hiding from IE5 mac */
 #menubar li ul, #menubar ul li  {
-	width: 11em; /*submenu len*/
+	width: 13em; /*submenu len*/
 }
 #menubar ul li a  {
 	color: #f6b620;

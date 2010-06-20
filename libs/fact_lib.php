@@ -142,8 +142,7 @@ function fact_get_fact_id()
 
 function fact_get_reputation_rank_length()
 {
-  return array
-    (36000, 3000, 3000, 3000, 6000, 12000, 21000, 999);
+  return array(36000, 3000, 3000, 3000, 6000, 12000, 21000, 999);
 }
 
 
@@ -245,7 +244,7 @@ function fact_get_reputation($id, $standing, $race)
 function fact_get_reputation_rank($id, $standing, $race)
 {
   $reputation = fact_get_reputation($id, $standing, $race);
-    return fact_reputation_to_rank($reputation);
+  return fact_reputation_to_rank($reputation);
 }
 
 
@@ -255,7 +254,7 @@ function fact_get_reputation_rank($id, $standing, $race)
 function fact_get_reputation_at_rank($id, $standing, $race)
 {
   $reputation = fact_get_reputation($id, $standing, $race);
-    return fact_reputation_at_rank($standing);
+  return fact_reputation_at_rank($reputation);
 }
 
 
@@ -265,7 +264,7 @@ function fact_get_reputation_at_rank($id, $standing, $race)
 function fact_get_base_reputation_rank($id, $race)
 {
   $reputation = fact_get_base_reputation($id, $race);
-    return fact_reputation_to_rank($reputation);
+  return fact_reputation_to_rank($reputation);
 }
 
 
