@@ -1,0 +1,1 @@
+UPDATE `config_menus` SET Action = 'map.php', Enabled=1 WHERE `Index` = 8 AND Name = 'player_map';

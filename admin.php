@@ -928,22 +928,22 @@ function general()
           <input type="hidden" name="subsection" value="internalmap">
           <table class="simple">
             <tr>
-              <td id="help"><a href="#" onmouseover="toolTip(\''.lang('admin_tip', 'gmshowonlineonlygmoff').'\',\'info_tooltip\')" onmouseout="toolTip()">'.lang('admin', 'gmshowonlineonlygmoff').'</a>: </td>
-              <td><input type="checkbox" name="gmshowonlineonlygmoff" '.($map_gm_show_online_only_gmoff['Value'] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
+              <td id="help"><a href="#" onmouseover="toolTip(\''.lang('admin_tip', 'statusgmincludeall').'\',\'info_tooltip\')" onmouseout="toolTip()">'.lang('admin', 'statusgmincludeall').'</a>: </td>
+              <td><input type="checkbox" name="statusgmincludeall" '.($map_status_gm_include_all['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+            </tr>
+            <tr>
+              <!-- td id="help"><a href="#" onmouseover="toolTip(\''.lang('admin_tip', 'gmshowonlineonlygmoff').'\',\'info_tooltip\')" onmouseout="toolTip()">'.lang('admin', 'gmshowonlineonlygmoff').'</a>: </td>
+              <td><input type="checkbox" name="gmshowonlineonlygmoff" '.($map_gm_show_online_only_gmoff['Value'] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
               <td id="help"><a href="#" onmouseover="toolTip(\''.lang('admin_tip', 'gmshowonlineonlygmvisible').'\',\'info_tooltip\')" onmouseout="toolTip()">'.lang('admin', 'gmshowonlineonlygmvisible').'</a>: </td>
               <td><input type="checkbox" name="gmshowonlineonlygmvisible" '.($map_gm_show_online_only_gmvisible['Value'] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
-            </tr>
+            </tr -->
             <tr>
               <td id="help"><a href="#" onmouseover="toolTip(\''.lang('admin_tip', 'gmaddsuffix').'\',\'info_tooltip\')" onmouseout="toolTip()">'.lang('admin', 'gmaddsuffix').'</a>: </td>
-              <td><input type="checkbox" name="gmaddsuffix" '.($map_gm_add_suffix['Value'] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
+              <td><input type="checkbox" name="gmaddsuffix" '.($map_gm_add_suffix['Value'] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
-            <tr>
-              <td id="help"><a href="#" onmouseover="toolTip(\''.lang('admin_tip', 'statusgmincludeall').'\',\'info_tooltip\')" onmouseout="toolTip()">'.lang('admin', 'statusgmincludeall').'</a>: </td>
-              <td><input type="checkbox" name="statusgmincludeall" '.($map_status_gm_include_all['Value'] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
-            </tr>
-            <tr>
+            <!-- tr>
               <td id="help"><a href="#" onmouseover="toolTip(\''.lang('admin_tip', 'showstatus').'\',\'info_tooltip\')" onmouseout="toolTip()">'.lang('admin', 'showstatus').'</a>: </td>
               <td><input type="checkbox" name="showstatus" '.($map_show_status['Value'] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
             </tr>
@@ -970,7 +970,7 @@ function general()
             <tr>
               <td id="help"><a href="#" onmouseover="toolTip(\''.lang('admin_tip', 'timetoshowgmonline').'\',\'info_tooltip\')" onmouseout="toolTip()">'.lang('admin', 'timetoshowgmonline').'</a>: </td>
               <td><input type="text" name="timetoshowgmonline" value="'.$map_time_to_show_gmonline['Value'].'" readonly="readonly" /></td>
-            </tr>
+            </tr -->
           </table>
           <input type="submit" name="save" value="'.lang('admin', 'save').'" />
         </form>';

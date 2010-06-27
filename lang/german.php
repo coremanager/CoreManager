@@ -2816,5 +2816,20 @@ $GLOBALS['lang_unstuck'] = array
   'done' => 'Der Charakter wurde erfolgreich teleportiert.',
 );
 
+// ----- MAP.PHP -----
+$GLOBALS['lang_map'] = array
+(
+  'pmap' => 'Player Map',
+  'azeroth' => 'Azeroth',
+  'outland' => 'Outland',
+  'ek' => 'Eastern Kingdoms',
+  'k' => 'Kalimdor',
+  'nr' => 'Northrend',
+  'display' => 'Display Online or Offline Characters?',
+  'online' => 'Online Only',
+  'offline' => 'Offline Only',
+  'both' => 'Both',
+);
+
 
 ?>

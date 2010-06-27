@@ -183,7 +183,8 @@ else
   }
 
   //close the div
-  $output .= '</div>';
+  $output .= '
+          </div>';
 
   // count pending character changes
   $char_change_count = $sql['mgr']->result($sql['mgr']->query("SELECT COUNT(*) FROM char_changes"), 0);
@@ -284,16 +285,32 @@ else
       $output .= '
               <th>'.lang('index', 'tickets').'</th>';
       if ( $core == 1 )
-        $result = $sql['char']->query('SELECT ticketid, level, message, name, deleted, timestamp FROM gm_tickets ORDER BY ticketid DESC LIMIT '.$start_m.', 3');
+        $result = $sql['char']->query('SELECT ticketid, level, message, name, deleted, timestamp, gm_tickets.playerGuid, acct FROM gm_tickets LEFT JOIN characters ON characters.guid = gm_tickets.playerGuid ORDER BY ticketid DESC LIMIT '.$start_m.', 3');
       else
-        $result = $sql['char']->query('SELECT gm_tickets.guid AS ticketid, characters.level, message, gm_tickets.name, closed AS deleted, timestamp FROM gm_tickets LEFT JOIN characters ON characters.guid = gm_tickets.playerGuid ORDER BY ticketid DESC LIMIT '.$start_m.', 3');
+        $result = $sql['char']->query('SELECT gm_tickets.guid AS ticketid, characters.level, message, gm_tickets.name, closed AS deleted, timestamp, gm_tickets.playerGuid, account AS acct FROM gm_tickets LEFT JOIN characters ON characters.guid = gm_tickets.playerGuid ORDER BY ticketid DESC LIMIT '.$start_m.', 3');
+
       while($post = $sql['char']->fetch_assoc($result))
       {
         if (!$post['deleted'])
         {
-          $output .= '
+          if ( $core == 1 )
+            $login_result = $sql['logon']->query("SELECT * FROM accounts WHERE acct='".$post['acct']."'");
+          else
+            $login_result = $sql['logon']->query("SELECT *, username AS login FROM account WHERE id='".$post['acct']."'");
+          $login = $sql['logon']->fetch_assoc($login_result);
+          $gm_result = $sql['mgr']->query("SELECT SecurityLevel FROM config_accounts WHERE Login='".$login['login']."'");
+          $gm = $sql['mgr']->fetch_assoc($gm_result);
+          $gm = $gm['SecurityLevel'];
+          if (($user_lvl > 0) && (($user_lvl >= gmlevel($gm)) || ($user_lvl == gmlevel('4'))))
+            $output .= '<tr>
+                  <td align="left">
+                    <a href="char.php?id='.$post['playerGuid'].'">
+                        <span onmousemove="toolTip(\''.$post['name'].' ('.id_get_gm_level($gm).')'.'\', \'item_tooltip\')" onmouseout="toolTip()">'.htmlentities($post['name']).'</span>
+                    </a>
+                 </td>
+              </tr>
               <tr>
-                <td align="left" class="large">
+                <td align="left">
                   <span>'.$post['message'].'</span>
                  </td>
               </tr>
@@ -308,7 +325,7 @@ else
                 <td align="right">';
           if ($user_lvl >= $action_permission['update'])
             $output .= '
-                  <a href="ticket.php?action=edit_ticket&amp;error=4&amp;id='.$post['guid'].'">
+                  <a href="ticket.php?action=edit_ticket&amp;error=4&amp;id='.$post['ticketid'].'">
                     <img src="img/edit.png" width="14" height="14" alt="" />
                   </a>';
           $output .= '
@@ -631,7 +648,7 @@ else
 //$lang_index = lang_index();
 
 $output .= "
-      <div class=\"bubble\">";
+        <div class=\"bubble\">";
 
 front();
 

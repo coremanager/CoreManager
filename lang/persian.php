@@ -2385,6 +2385,7 @@ $GLOBALS['lang_xrace'] = array
   // end message
   'nomatch' => 'The selected race is not compatible with the character\'s class!',
   'already' => 'A name or race change request is already on file for that character.',
+  'inuse' => 'That name is in use.',
   'done' => 'The race change request has been filed.',
   'online' => 'The Character is currently online.  We cannot change the race at this time.',
   // The following is for the ingame mail message about race change denial.
@@ -2544,7 +2545,7 @@ $GLOBALS['lang_admin'] = array
   'gmshowonlineonlygmoff' => 'GM Show Online Only GM Off',
   'gmshowonlineonlygmvisible' => 'GM Show Online Only GM Visible',
   'gmaddsuffix' => 'GM Add Suffix',
-  'statusgmincludeall' => 'Status GM Include All',
+  'statusgmincludeall' => 'Show Gm\'s',
   'showstatus' => 'Show Status',
   'showtimer' => 'Show Timer',
   'timer' => 'Timer',
@@ -2733,8 +2734,8 @@ $GLOBALS['lang_admin_tip'] = array
   'internal_map' => 'Built-in Player Map',
   'gmshowonlineonlygmoff' => 'DISABLED: Non-functional.',
   'gmshowonlineonlygmvisible' => 'DISABLED: Non-functional.',
+  'gmshow' => "Show GM\'s on Map.",
   'gmaddsuffix' => 'Add {GM} to name.',
-  'statusgmincludeall' => 'Show GMs on map.',
   'showstatus' => 'Show server status box.',
   'showtimer' => 'Show Autoupdate Timer.',
   'timer' => 'Map Autoupdate Time (in seconds)<br />0 - not update.',
@@ -2813,6 +2814,21 @@ $GLOBALS['lang_unstuck'] = array
   'newloc' => 'New Location',
   'save' => 'Save Changes',
   'done' => 'The character has been moved successfully.',
+);
+
+// ----- MAP.PHP -----
+$GLOBALS['lang_map'] = array
+(
+  'pmap' => 'Player Map',
+  'azeroth' => 'Azeroth',
+  'outland' => 'Outland',
+  'ek' => 'Eastern Kingdoms',
+  'k' => 'Kalimdor',
+  'nr' => 'Northrend',
+  'display' => 'Display Online or Offline Characters?',
+  'online' => 'Online Only',
+  'offline' => 'Offline Only',
+  'both' => 'Both',
 );
 
 

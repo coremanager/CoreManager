@@ -300,7 +300,7 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
                 </li>
               </ul>
               <br class="clearit" />
-            </div>
+            </div><!-- menu_wrapper -->
           </td>
           <td class="table_top_middle">';
   $web_admin_query = "SELECT * FROM config_accounts WHERE Login='".$user_name."'";
@@ -353,6 +353,6 @@ if($allow_anony && empty($_SESSION['logged_in']))
 //---------------------Start of Body-------------------------------------------
 $output .= '
       <div id="body_main">
-          <!-- end of header.php -->';
+        <!-- end of header.php -->';
 
 ?>

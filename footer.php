@@ -49,8 +49,8 @@
   //  so if the file before this follows the indent, we will be at the same place it starts
   //  keep html indent in sync, so debuging from browser source would be easy to read
   $output .= '
-          <!-- start of footer.php -->
-          </div>
+        </div><!-- bubble -->
+        <!-- start of footer.php -->
         <div id="body_bottom">';
   $output .= '
           <table class="table_bottom">
@@ -80,7 +80,7 @@
   //---------------------Version Information-------------------------------------
 
   $output .= '
-      <div id="version">'.lang('footer', 'powered').' ';
+                <div id="version">'.lang('footer', 'powered').' ';
   if ( $show_version['show'] && $user_lvl >= $show_version['version_lvl'] )
   {
     if ( ( 1 < $show_version['show']) && $user_lvl >= $show_version['svnrev_lvl'] )
@@ -178,13 +178,13 @@
     echo '
               </td>
             </tr>
-          <table>';
+          </table>';
   }
 
 ?>
 
-        </div>
-      </div>
+        </div><! -- body_bottom -->
+      </div><!-- body_main -->
     </center>
   </body>
 </html>
