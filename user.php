@@ -99,14 +99,14 @@ function browse_users()
     if ( $core == 1 )
     {
       $query_1 = $sql['logon']->query('SELECT count(*) FROM accounts');
-      $query = $sql['logon']->query('SELECT acct,login,gm,email,lastip,muted,UNIX_TIMESTAMP(lastlogin) as lastlogin,flags
+      $query = $sql['logon']->query('SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) as lastlogin, flags, banned
         FROM accounts ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
     }
     else
     {
       $query_1 = $sql['logon']->query('SELECT count(*) FROM account');
-      $query = $sql['logon']->query('SELECT account.id AS acct, username AS login, account_access.gmlevel AS gm, email, last_ip AS lastip, mutetime AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags
-        FROM account LEFT JOIN account_access ON account_access.id = account.id ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
+      $query = $sql['logon']->query('SELECT *, account.id AS acct, username AS login, account_access.gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags
+        FROM account LEFT JOIN account_access ON account_access.id = account.id LEFT JOIN account_banned ON account_banned.id = account.id ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
     }
   }
   // this is for multipage support
@@ -169,8 +169,14 @@ function browse_users()
                             <!-- option value="joindate"'.($search_by === 'joindate' ? ' selected="selected"' : '').'>'.lang('user', 'by_join_date').'</option -->
                             <option value="last_ip"'.($search_by === 'last_ip' ? ' selected="selected"' : '').'>'.lang('user', 'by_ip').'</option>
                             <option value="last_login"'.($search_by === 'last_login' ? ' selected="selected"' : '').'>'.lang('user', 'by_last_login').'</option>
-                            <option value="online"'.($search_by === 'online' ? ' selected="selected"' : '').'>'.lang('user', 'by_online').'</option>
-                            <option value="locked"'.($search_by === 'locked' ? ' selected="selected"' : '').'>'.lang('user', 'by_locked').'</option>
+                            <option value="online"'.($search_by === 'online' ? ' selected="selected"' : '').'>'.lang('user', 'by_online').'</option>';
+  if ( $core == 1 )
+    $output .= '
+                            <option value="locked"'.($search_by === 'locked' ? ' selected="selected"' : '').'>'.lang('user', 'by_muted').'</option>';
+  else
+    $output .= '
+                            <option value="locked"'.($search_by === 'locked' ? ' selected="selected"' : '').'>'.lang('user', 'by_locked').'</option>';
+  $output .= '
                             <option value="banned"'.($search_by === 'banned' ? ' selected="selected"' : '').'>'.lang('user', 'by_banned').'</option>
                           </select>
                         </form>
@@ -214,8 +220,14 @@ function browse_users()
                   <th width="1%"><a href="user.php?order_by=email&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='email' ? ' class="'.$order_dir.'"' : '').'>'.lang('user', 'email').'</a></th>
                   <!-- <th width="1%"><a href="user.php?order_by=joindate&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='joindate' ? ' class="'.$order_dir.'"' : '').'>'.lang('user', 'join_date').'</a></th> -->
                   <th width="1%"><a href="user.php?order_by=lastip&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='lastip' ? ' class="'.$order_dir.'"' : '').'>'.lang('user', 'ip').'</a></th>
-                  <th width="1%">'.lang('user', 'char_count').'</th>
-                  <th width="1%"><a href="user.php?order_by=muted&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='muted' ? ' class="'.$order_dir.'"' : '').'>'.lang('user', 'locked').'</a></th>
+                  <th width="1%">'.lang('user', 'char_count').'</th>';
+    if ( $core == 1 )
+      $output .= '
+                  <th width="1%"><a href="user.php?order_by=muted&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='muted' ? ' class="'.$order_dir.'"' : '').'>'.lang('user', 'muted').'</a></th>';
+    else
+      $output .= '
+                  <th width="1%"><a href="user.php?order_by=muted&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='muted' ? ' class="'.$order_dir.'"' : '').'>'.lang('user', 'locked').'</a></th>';
+    $output .= '
                   <th width="1%"><a href="user.php?order_by=lastlogin&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='lastlogin' ? ' class="'.$order_dir.'"' : '').'>'.lang('user', 'last_login').'</a></th>
                   <th width="1%">'.lang('user', 'online').'</a></th>';
   if ($showcountryflag)
@@ -225,6 +237,7 @@ function browse_users()
                   <th width="1%">'.lang('global', 'country').'</th>';
   }
   $output .= '
+                  <th width="1%"><a href="user.php?order_by=banned&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='banned' ? ' class="'.$order_dir.'"' : '').'>'.lang('user', 'banned').'</a></th>
                 </tr>';
 
   //---------------Page Specific Data Starts Here--------------------------
@@ -296,7 +309,7 @@ function browse_users()
       }
       if ( ($user_lvl >= $action_permission['update']) || ($user_name === $data['login']) )
         $output .= '
-                  <td><a href="mailto:'.$data['email'].'">'.substr($data['email'],0,15).'</a></td>';
+                  <td>'.( ( $data['email'] ) ? '<a href="mailto:'.$data['email'].'">'.substr($data['email'],0,15).'</a>' : '-' ).'</td>';
       else
         $output .= '
                   <td>***@***.***</td>';
@@ -325,14 +338,20 @@ function browse_users()
       }
 
       $time_offset = $timezone * 3600;
-      
+
       if ( $data['lastlogin'] <> 0 )
         $lastlog = date("F j, Y @ Hi", $data['lastlogin'] + $time_offset);
       else
         $lastlog = '-';
 
+      if ( $core == 1 )
+        $output .= '
+                  <td>'.( ($data['muted']) ? '<img src="img/lock.png" />' : '-' ).'</td>';
+      else
+        $output .= '
+                  <td>'.( ($data['locked']) ? '<img src="img/lock.png" />' : '-' ).'</td>';
+
       $output .= '
-                  <td>'.(($data['muted']) ? lang('global', 'yes_low') : lang('global', 'no_low')).'</td>
                   <td class="small">'.$lastlog.'</td>
                   <td>'.(($o_temp<>0) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />').'</td>';
       if ($showcountryflag)
@@ -341,6 +360,16 @@ function browse_users()
         $output .= '
                   <td>'.(($country['code']) ? '<img src="img/flags/'.$country['code'].'.png" onmousemove="toolTip(\''.($country['country']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />' : '-').'</td>';
       }
+      if ( $core == 1 )
+        ;
+      else
+        if ( $data['active'] )
+          if ( time() < $data['unbandate'] )
+            $output .= '<td><img src="img/flag_red.png" /></td>';
+          else
+            $output .= '<td>-</td>';
+        else
+          $output .= '<td>-</td>';
       $output .= '
                 </tr>';
     }

@@ -90,10 +90,10 @@ function char_inv()
     {
       // main data that we need for this page, character inventory
       if ( $core == 1 )
-        $result = $sql['char']->query('SELECT containerslot, slot, entry, count
+        $result = $sql['char']->query('SELECT containerslot, slot, entry, 0 AS enchantment, 0 AS property, count
           FROM playeritems WHERE ownerguid = '.$cid.' ORDER BY containerslot, slot');
       else
-        $result = $sql['char']->query('SELECT bag, slot, item_template AS entry, item, SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 15), " ", -1) AS count
+        $result = $sql['char']->query('SELECT bag, slot, item_template AS entry, item, SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 23), " ", -1) AS enchantment, SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 57), " ", -1) AS property, SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 15), " ", -1) AS count
           FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid = '.$cid.' ORDER BY bag, slot');
 
       //---------------Page Specific Data Starts Here--------------------------
@@ -148,13 +148,23 @@ function char_inv()
             }
             elseif($slot['slot'] < 39) // SLOT 23 TO 38 (BackPack)
             {
+              $i_query = "SELECT * FROM items WHERE entry='".$slot['entry']."'";
+
+              $i_result = $sql['world']->query($i_query);
+              $i = $sql['world']->fetch_assoc($i_result);
+
               if(isset($bag[0][$slot['slot']-23]))
                 $bag[0][$slot['slot']-23][0]++;
-              else $bag[0][$slot['slot']-23] = array($slot['entry'],0,$slot['count']);
+              else $bag[0][$slot['slot']-23] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property']);
             }
             elseif($slot['slot'] < 67) // SLOT 39 TO 66 (Bank)
             {
-              $bank[0][$slot['slot']-39] = array($slot['entry'],0,$slot['count']);
+              $i_query = "SELECT * FROM items WHERE entry='".$slot['entry']."'";
+
+              $i_result = $sql['world']->query($i_query);
+              $i = $sql['world']->fetch_assoc($i_result);
+
+              $bank[0][$slot['slot']-39] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property']);
             }
             elseif($slot['slot'] < 74) // SLOT 67 TO 73 (Bank Bags)
             {
@@ -169,15 +179,25 @@ function char_inv()
             // Bags
             if (isset($bag_id[$slot['containerslot']]))
             {
+              $i_query = "SELECT * FROM items WHERE entry='".$slot['entry']."'";
+
+              $i_result = $sql['world']->query($i_query);
+              $i = $sql['world']->fetch_assoc($i_result);
+
               if(isset($bag[$bag_id[$slot['containerslot']]][$slot['slot']]))
                 $bag[$bag_id[$slot['containerslot']]][$slot['slot']][1]++;
               else
-                $bag[$bag_id[$slot['containerslot']]][$slot['slot']] = array($slot['entry'],0,$slot['count']);
+                $bag[$bag_id[$slot['containerslot']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property']);
             }
             // Bank Bags
             elseif (isset($bank_bag_id[$slot['containerslot']]))
             {
-              $bank[$bank_bag_id[$slot['containerslot']]][$slot['slot']] = array($slot['entry'],0,$slot['count']);
+              $i_query = "SELECT * FROM items WHERE entry='".$slot['entry']."'";
+
+              $i_result = $sql['world']->query($i_query);
+              $i = $sql['world']->fetch_assoc($i_result);
+
+              $bank[$bank_bag_id[$slot['containerslot']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property']);
             }
           }
         }
@@ -194,20 +214,30 @@ function char_inv()
             }
             elseif($slot['slot'] < 39) // SLOT 23 TO 38 (BackPack)
             {
+              $i_query = "SELECT * FROM item_template WHERE entry='".$slot['entry']."'";
+
+              $i_result = $sql['world']->query($i_query);
+              $i = $sql['world']->fetch_assoc($i_result);
+
               if(isset($bag[0][$slot['slot']-23]))
                 $bag[0][$slot['slot']-23][0]++;
-              else $bag[0][$slot['slot']-23] = array($slot['entry'],0,$slot['count']);
+              else $bag[0][$slot['slot']-23] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property']);
             }
             elseif($slot['slot'] < 67) // SLOT 39 TO 66 (Bank)
             {
-              $bank[0][$slot['slot']-39] = array($slot['entry'],0,$slot['count']);
+              $i_query = "SELECT * FROM item_template WHERE entry='".$slot['entry']."'";
+
+              $i_result = $sql['world']->query($i_query);
+              $i = $sql['world']->fetch_assoc($i_result);
+
+              $bank[0][$slot['slot']-39] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property']);
             }
             elseif($slot['slot'] < 74) // SLOT 67 TO 73 (Bank Bags)
             {
-              $bank_bag_id[$slot['slot']] = ($slot['slot']-66);
+              $bank_bag_id[$slot['item']] = ($slot['slot']-66);
               $equip_bnk_bag_id[$slot['slot']-66] = array($slot['entry'], 
                 $sql['world']->result($sql['world']->query('SELECT ContainerSlots FROM item_template
-                  WHERE entry = '.$slot['entry'].''), 0, 'containerslots'), $slot['count']);
+                  WHERE entry = '.$slot['entry'].''), 0, 'ContainerSlots'), $slot['count']);
             }
           }
           else
@@ -215,15 +245,25 @@ function char_inv()
             // Bags
             if (isset($bag_id[$slot['bag']]))
             {
+              $i_query = "SELECT * FROM item_template WHERE entry='".$slot['entry']."'";
+
+              $i_result = $sql['world']->query($i_query);
+              $i = $sql['world']->fetch_assoc($i_result);
+
               if(isset($bag[$bag_id[$slot['bag']]][$slot['slot']]))
                 $bag[$bag_id[$slot['bag']]][$slot['slot']][1]++;
               else
-                $bag[$bag_id[$slot['bag']]][$slot['slot']] = array($slot['entry'],0,$slot['count']);
+                $bag[$bag_id[$slot['bag']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property']);
             }
             // Bank Bags
             elseif (isset($bank_bag_id[$slot['bag']]))
             {
-              $bank[$bank_bag_id[$slot['bag']]][$slot['slot']] = array($slot['entry'],0,$slot['count']);
+              $i_query = "SELECT * FROM item_template WHERE entry='".$slot['entry']."'";
+
+              $i_result = $sql['world']->query($i_query);
+              $i = $sql['world']->fetch_assoc($i_result);
+
+              $bank[$bank_bag_id[$slot['bag']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property']);
             }
           }
         }
@@ -305,11 +345,20 @@ function char_inv()
           $item[2] = $item[2] == 1 ? '' : $item[2];
           $output .= '
                       <div style="left:'.(($pos+$dsp)%4*42).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">
-                        <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank">
+                        <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');">
                           <img src="'.get_item_icon($item[0]).'" alt="" />
                         </a>
                         <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
                         <div id="ch_inv_quantity">'.$item[2].'</div>
+                      </div>';
+                      // build a tooltip object for this item
+                      $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'" style="left: '.((($pos+$dsp)%4*42)-129).'px; top:'.((floor(($pos+$dsp)/4)*41)+42).'px;">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($item[3], $item[4], $item[5]).'
+                          </td>
+                        </table>
                       </div>';
         }
         $output .= '
@@ -340,11 +389,20 @@ function char_inv()
         $item[2] = $item[2] == 1 ? '' : $item[2];
         $output .= '
                       <div style="left:'.($pos%4*42).'px;top:'.(floor($pos/4)*41).'px;">
-                        <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank">
+                        <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');">
                           <img src="'.get_item_icon($item[0]).'" alt="" />
                         </a>
                         <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
                         <div id="ch_inv_quantity">'.$item[2].'</div>
+                      </div>';
+                      // build a tooltip object for this item
+                      $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'" style="left: '.(($pos%4*42)-129).'px; top:'.((floor($pos/4)*41)+42).'px;">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($item[3], $item[4], $item[5]).'
+                          </td>
+                        </table>
                       </div>';
       }
       unset($bag);
@@ -368,11 +426,20 @@ function char_inv()
         $item[2] = $item[2] == 1 ? '' : $item[2];
         $output .= '
                       <div style="left:'.($pos%7*43).'px;top:'.(floor($pos/7)*41).'px;">
-                        <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank">
+                        <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');" onmouseout="HideTooltip(\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');">
                           <img src="'.get_item_icon($item[0]).'" class="inv_icon" alt="" />
                         </a>
                         <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
                         <div id="ch_inv_quantity">'.$item[2].'</div>
+                      </div>';
+                      // build a tooltip object for this item
+                      $output .= '
+                      <div class="item_tooltip" id="tooltip_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'" style="left: '.(($pos%7*43)-129).'px; top:'.((floor($pos/7)*41)+42).'px;">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($item[3], $item[4], $item[5]).'
+                          </td>
+                        </table>
                       </div>';
       }
       $output .= '
@@ -447,11 +514,20 @@ function char_inv()
           $item[2] = $item[2] == 1 ? '' : $item[2];
           $output .= '
                       <div style="left:'.(($pos+$dsp)%4*43).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">
-                        <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank">
+                        <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');">
                           <img src="'.get_item_icon($item[0]).'" alt="" />
                         </a>
                         <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
                         <div id="ch_inv_quantity">'.$item[2].'</div>
+                      </div>';
+                      // build a tooltip object for this item
+                      $output .= '
+                      <div class="item_tooltip" id="tooltip_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'" style="left: '.((($pos+$dsp)%4*43)-129).'px; top:'.((floor(($pos+$dsp)/4)*41)+42).'px;">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($item[3], $item[4], $item[5]).'
+                          </td>
+                        </table>
                       </div>';
         }
 

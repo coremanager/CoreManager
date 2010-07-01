@@ -85,11 +85,13 @@ function char_main()
     //resrict by owner's gmlvl
     $owner_acc_id = $sql['char']->result($result, 0, 'acct');
     if ( $core == 1 )
-      $query = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$owner_acc_id.'');
+      $query = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$owner_acc_id."'");
     else
-      $query = $sql['logon']->query('SELECT gmlevel AS gm, account.username as login FROM account_access LEFT JOIN account ON account.id = account_access.id WHERE account.id = '.$owner_acc_id.'');
-    $owner_gmlvl = $sql['logon']->result($query, 0, 'gm');
+      $query = $sql['logon']->query("SELECT username as login FROM account WHERE id='".$owner_acc_id."'");
     $owner_name = $sql['logon']->result($query, 0, 'login');
+
+    $query = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql['mgr']->result($query, 0, 'gm');
 
     if($user_lvl || $server[$realmid]['both_factions'])
     {

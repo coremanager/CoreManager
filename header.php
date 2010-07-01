@@ -98,8 +98,8 @@ $output .= '
     <script type="text/javascript" src="libs/js/general.js"></script>
     <script type="text/javascript" src="libs/js/layout.js"></script>';
 
-    // make wowhead tooltops generally available
-    wowhead_tt();
+	// make wowhead tooltops generally available
+	//wowhead_tt();
 
 $output .= '
   </head>';

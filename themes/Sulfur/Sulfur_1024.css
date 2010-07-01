@@ -970,7 +970,7 @@ tr td.rep0
 }
 
 /*** item tooltips***/
-.item_tooltip  td
+.item_tooltipx  td
 {
 	float: none;
 	font-size: 11px;
@@ -1009,9 +1009,11 @@ tr td.rep0
   background-color: #454545;
 	border: 1px solid #F0D070;
   color: #ffffff;
+  width: 150px;
 }
 .map_tooltip table .name_level
 {
+	border-bottom: 1px solid  #F0D070;
   text-align: center;
 }
 .map_tooltip table .race
@@ -1024,7 +1026,27 @@ tr td.rep0
 }
 .map_tooltip table .zone
 {
+	border-top: 1px solid  #F0D070;
   text-align: center;
+}
+
+.item_tooltip
+{
+  visibility: hidden;
+  position: absolute;
+  z-index: 99;
+}
+.item_tooltip table
+{
+  background-color: #000000;
+	border: 1px solid #F0D070;
+  color: #ffffff;
+  width: 300px;
+}
+.item_tooltip table td
+{
+  background-color: #000000;
+	border: 0px;
 }
 
 .answerbox
@@ -1644,8 +1666,8 @@ tr td.rep0
 /* USER.PHP */
 #user_bubble
 {
-  width: 850px;
-  margin-left: -25px; /* half of the difference in width */
+  width: 900px;
+  margin-left: -50px; /* half of the difference in width */
 }
 
 

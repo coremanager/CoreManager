@@ -36,23 +36,6 @@ function show_map()
   $online = (isset($_GET['online'])) ? $_GET['online'] : 1;
 
   $output .= '
-          <script type="text/javascript">
-            function ShowPopup(hoveritem, id)
-            {
-              hp = document.getElementById("maptooltip" + id);
-              
-              // Set popup to visible
-              hp.style.visibility = "Visible";
-            }
-
-            function HidePopup(id)
-            {
-              hp = document.getElementById("maptooltip" + id);
-              hp.style.visibility = "Hidden";	
-            }
-          </script>';
-
-  $output .= '
           <table class="hidden">
             <tr>';
 
@@ -324,7 +307,7 @@ function show_map()
       
       // build the tooltip for this character
       $output .= '
-          <div class="map_tooltip" id="maptooltip'.$row['guid'].'" style="left: '.($x_relative+10).'px; top:'.($y_relative+180).'px;">
+          <div class="map_tooltip" id="tooltip'.$row['guid'].'" style="left: '.($x_relative+10).'px; top:'.($y_relative+180).'px;">
             <table>
               <tr>
                 <td class="name_level" colspan="2">
@@ -357,7 +340,7 @@ function show_map()
 
       // draw a dot for the character
       $output .= '
-          <a href="char.php?id='.$row['guid'].'" onmouseover="ShowPopup(this,'.$row['guid'].');" onmouseout="HidePopup('.$row['guid'].');"><!-- X'.$x.' Y'.$y.' Map'.$map.' -->
+          <a href="char.php?id='.$row['guid'].'" onmouseover="ShowTooltip(this,'.$row['guid'].');" onmouseout="HideTooltip('.$row['guid'].');"><!-- X'.$x.' Y'.$y.' Map'.$map.' -->
             <img src="img/map/'.( char_get_side_id($row['race']) ? 'horde' : 'allia' ).'.gif" style="position: absolute; left: '.$x_relative.'px; top: '.($y_relative+180).'px;" />
           </a>';
     }
@@ -431,11 +414,11 @@ function show_map()
       
       // build the tooltip for this character
       $output .= '
-          <div class="map_tooltip" id="maptooltip'.$row['guid'].'" style="left: '.($x_relative+10).'px; top:'.($y_relative+180).'px;">
+          <div class="map_tooltip" id="tooltip'.$row['guid'].'" style="left: '.($x_relative+10).'px; top:'.($y_relative+180).'px;">
             <table>
               <tr>
                 <td class="name_level" colspan="2">
-                  '.( ( $map_gm_add_suffix && $row['gm'] ) ? '{GM} ' : '' ).$row['name'].' ('.char_get_level_color($row['level']).')
+                  '.( ( $map_gm_add_suffix && $row['gm'] ) ? '<img src="img/star.png" /> ' : '' ).$row['name'].' ('.char_get_level_color($row['level']).')
                 </td>
               </tr>
               <tr>
@@ -464,7 +447,7 @@ function show_map()
 
       // draw a dot for the character
       $output .= '
-          <a href="char.php?id='.$row['guid'].'" onmouseover="ShowPopup(this,'.$row['guid'].');" onmouseout="HidePopup('.$row['guid'].');"><!-- X'.$x.' Y'.$y.' Map'.$map.' -->
+          <a href="char.php?id='.$row['guid'].'" onmouseover="ShowTooltip(this,'.$row['guid'].');" onmouseout="HideTooltip('.$row['guid'].');"><!-- X'.$x.' Y'.$y.' Map'.$map.' -->
             <img src="img/map/'.( char_get_side_id($row['race']) ? 'horde' : 'allia' ).'.gif" style="position: absolute; left: '.$x_relative.'px; top: '.($y_relative+180).'px;" />
           </a>';
     }

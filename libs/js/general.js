@@ -79,6 +79,25 @@ function showHide(id,force)
 }
 
 
+//####################################################################################################
+// 'New' Tooltip
+//####################################################################################################
+
+function ShowTooltip(hoveritem, id)
+{
+  tt = document.getElementById("tooltip" + id);
+
+  // Set tooltip to visible
+  tt.style.visibility = "Visible";
+}
+
+function HideTooltip(id)
+{
+  tt = document.getElementById("tooltip" + id);
+  tt.style.visibility = "hidden";	
+}
+
+
 /*
  +-------------------------------------------------------------------+
  |                   J S - T O O L T I P   (v2.1)                    |
@@ -94,7 +113,7 @@ var SA = (navigator.userAgent.indexOf('Safari') != -1);
 var DOM = document.getElementById;
 var tooltip = null;
 
-function TOOLTIP()
+function oldTOOLTIP()
 {
   this.text = '';
   this.height = 0;
@@ -249,11 +268,11 @@ function getMouseXY(e)
 }
 
 
-function toolTip(text,tip_class)
+function oldtoolTip(text,tip_class)
 {
   if(text)
   {
-    tooltip = new TOOLTIP();
+    tooltip = new oldTOOLTIP();
     tooltip.text = text;
     tooltip.create(tip_class);
   }
