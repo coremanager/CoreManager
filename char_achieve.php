@@ -31,7 +31,7 @@ valid_login($action_permission['view']);
 function char_achievements()
 {
   global $output, $logon_db,
-    $realm_id, $characters_db, $arcm_db,
+    $realm_id, $characters_db, $corem_db,
     $action_permission, $user_lvl, $user_name,
     $achievement_datasite, $sql, $core;
 

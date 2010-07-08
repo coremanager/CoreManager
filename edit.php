@@ -27,7 +27,7 @@ valid_login($action_permission['view']);
 //##############################################################################################################
 function edit_user()
 {
-  global $output, $arcm_db, $logon_db, $characters_db, $arcm_db, $realm_id,
+  global $output, $corem_db, $logon_db, $characters_db, $corem_db, $realm_id,
     $user_name, $user_id, $expansion_select, $server, $developer_test_mode, $multi_realm_mode,
     $sql, $core;
 
@@ -355,7 +355,7 @@ function edit_user()
 //#############################################################################################################
 function doedit_user()
 {
-  global $output, $user_name, $logon_db, $arcm_db, $sql;
+  global $output, $user_name, $logon_db, $corem_db, $sql;
 
   if ( (empty($_POST['pass'])||($_POST['pass'] == ''))
     && (empty($_POST['mail'])||($_POST['mail'] == ''))
@@ -411,7 +411,7 @@ function doedit_user()
 
 function doupdate_referral($referredby)
 {
-  global $arcm_db, $logon_db, $user_id, $sql;
+  global $corem_db, $logon_db, $user_id, $sql;
 
   if (NULL == $sql['mgr']->result($sql['mgr']->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = \''.$user_id.'\''), 0))
   {

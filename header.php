@@ -145,7 +145,7 @@ $sql['dbc'] = new SQL;
 $sql['dbc']->connect($dbc_db['addr'], $dbc_db['user'], $dbc_db['pass'], $dbc_db['name']);
 
 $sql['mgr'] = new SQL;
-$sql['mgr']->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+$sql['mgr']->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
 $sql['char'] = new SQL;
 $sql['char']->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);

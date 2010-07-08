@@ -65,7 +65,7 @@ function del_char($guid, $realm)
 //Delete Account - return array(deletion_flag , number_of_chars_deleted)
 function del_acc($acc_id)
 {
-  global $characters_db, $logon_db, $arcm_db, $realm_id,
+  global $characters_db, $logon_db, $corem_db, $realm_id,
     $user_lvl, $user_id, $tab_del_user_realmd, $tab_del_user_char, $tab_del_user_characters, $sql;
 
   $del_char = 0;

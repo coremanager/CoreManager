@@ -17,11 +17,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-$arcm_db['addr']     = '127.0.0.1:3306';         // SQL server IP:port your CoreManager DB is located on
-$arcm_db['user']     = 'root';                   // SQL server login your CoreManager DB is located on
-$arcm_db['pass']     = 'password';               // SQL server pass your CoreManager DB is located on
-$arcm_db['name']     = 'db name';                // CoreManager DB name
-$arcm_db['encoding'] = 'utf8';                   // SQL connection encoding
+$corem_db['addr']     = '127.0.0.1:3306';         // SQL server IP:port your CoreManager DB is located on
+$corem_db['user']     = 'root';                   // SQL server login your CoreManager DB is located on
+$corem_db['pass']     = 'password';               // SQL server pass your CoreManager DB is located on
+$corem_db['name']     = 'db name';                // CoreManager DB name
+$corem_db['encoding'] = 'utf8';                   // SQL connection encoding
 
 //#############################################################################
 //---- SQL Configuration ----
@@ -109,10 +109,10 @@ function error($err)
 
 function show()
 {
-  global $output, $arcm_db;
+  global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $check_installed = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key` = 'Installed'"));
 
@@ -205,10 +205,10 @@ function show()
 
 function save()
 {
-  global $arcm_db;
+  global $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   if ($_GET['host'] <> "")
     $host = $sqlm->quote_smart($_GET['host']);

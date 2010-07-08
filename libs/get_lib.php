@@ -23,7 +23,7 @@
 
 function get_realm_name($realm_id)
 {
-  global $arcm_db, $sql;
+  global $corem_db, $sql;
 
   $result = $sql['mgr']->query("SELECT name FROM `realmlist` WHERE id = '$realm_id'");
   $realm_name = $sql['mgr']->result($result, 0);

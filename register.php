@@ -25,7 +25,7 @@
 //#####################################################################################################
 function doregister()
 {
-  global $characters_db, $logon_db, $arcm_db, $realm_id, $disable_acc_creation,
+  global $characters_db, $logon_db, $corem_db, $realm_id, $disable_acc_creation,
     $limit_acc_per_ip, $valid_ip_mask, $send_mail_on_creation, $create_acc_locked, $from_mail,
     $mailer_type, $smtp_cfg, $title, $expansion_select, $defaultoption, $GMailSender, $format_mail_html,
     $enable_captcha, $use_recaptcha, $recaptcha_private_key, $sql, $core;

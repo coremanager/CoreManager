@@ -374,12 +374,34 @@ function dodel_realm()
 //####################################################################################################
 function add_realm()
 {
-  global $action_permission, $sql;
+  global $action_permission, $sql, $core;
 
   valid_login($action_permission['insert']);
+  
+  switch ( $core )
+  {
+    case 1:
+    {
+      $name = "ArcEmu";
+      $port = "8129";
+      break;
+    }
+    case 2:
+    {
+      $name = "MaNGOS";
+      $port = "8085";
+      break;
+    }
+    case 3:
+    {
+      $name = "Trinity";
+      $port = "8085";
+      break;
+    }
+  }
 
   if ($sql['mgr']->query('INSERT INTO realmlist (id, name, address, port, icon, color, timezone)
-    VALUES (NULL,"ArcEmu", "127.0.0.1", 8129 ,0 ,0 ,1)'))
+    VALUES (NULL,"'.$name.'", "127.0.0.1", '.$port.' ,0 ,0 ,1)'))
     redirect('realm.php');
   else
     redirect('realm.php?error=4');

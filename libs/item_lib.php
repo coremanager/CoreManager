@@ -22,7 +22,7 @@
 
  function get_itemset_name($id)
 {
-  global $arcm_db, $sql;
+  global $corem_db, $sql;
   
   $itemset = $sql['dbc']->fetch_row($sql['dbc']->query("SELECT `ItemName` FROM `itemset` WHERE `ID`={$id} LIMIT 1"));
   return $itemset[0];
@@ -76,7 +76,7 @@ function get_item_name($item_id)
 
 function get_item_icon($itemid)
 {
-  global $arcm_db, $world_db, $realm_id, $proxy_cfg, $get_icons_from_web, $item_icons,
+  global $corem_db, $world_db, $realm_id, $proxy_cfg, $get_icons_from_web, $item_icons,
          $sql, $core;
 
   if ( $core == 1 )

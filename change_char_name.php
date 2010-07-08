@@ -157,7 +157,7 @@ function choosename()
 
 function getapproval()
 {
-  global $output, $action_permission, $arcm_db, $characters_db, $realm_id, $user_id, $sql;
+  global $output, $action_permission, $corem_db, $characters_db, $realm_id, $user_id, $sql;
 
   valid_login($action_permission['view']);
 
@@ -188,7 +188,7 @@ function getapproval()
 
 function denied()
 {
-  global $output, $action_permission, $arcm_db, $characters_db, $realm_id, $user_id, $sql;
+  global $output, $action_permission, $corem_db, $characters_db, $realm_id, $user_id, $sql;
 
   valid_login($action_permission['update']);
 
@@ -209,7 +209,7 @@ function denied()
 
 function savename()
 {
-  global $output, $action_permission, $arcm_db, $characters_db, $realm_id,
+  global $output, $action_permission, $corem_db, $characters_db, $realm_id,
     $user_id, $sql;
 
   valid_login($action_permission['update']);

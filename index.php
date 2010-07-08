@@ -32,7 +32,7 @@ valid_login($action_permission['view']);
 //#############################################################################
 function front()
 {
-  global $output, $realm_id, $world_db, $logon_db, $arcm_db, $server,
+  global $output, $realm_id, $world_db, $logon_db, $corem_db, $server,
     $action_permission, $user_lvl, $user_id,
     $showcountryflag, $gm_online_count, $gm_online, $itemperpage,
     $hide_max_players, $hide_avg_latency, $hide_plr_latency, $hide_server_mem, $sql, $core;
@@ -523,9 +523,9 @@ else
       }
 
       if ( $core == 1 )
-        $ca_query = "SELECT name FROM `".$logon_db['name']."`.accounts LEFT JOIN `".$arcm_db['name']."`.config_accounts ON accounts.name = `".$arcm_db['name']."`.config_accounts.Login WHERE acct='".$char['acct']."'";
+        $ca_query = "SELECT name FROM `".$logon_db['name']."`.accounts LEFT JOIN `".$corem_db['name']."`.config_accounts ON accounts.name = `".$corem_db['name']."`.config_accounts.Login WHERE acct='".$char['acct']."'";
       else
-        $ca_query = "SELECT *, username AS name FROM `".$logon_db['name']."`.account LEFT JOIN `".$arcm_db['name']."`.config_accounts ON account.username = `".$arcm_db['name']."`.config_accounts.Login WHERE id='".$char['acct']."'";
+        $ca_query = "SELECT *, username AS name FROM `".$logon_db['name']."`.account LEFT JOIN `".$corem_db['name']."`.config_accounts ON account.username = `".$corem_db['name']."`.config_accounts.Login WHERE id='".$char['acct']."'";
         
       $ca_result = $sql['mgr']->query($ca_query);
       $char_acct = $sql['mgr']->fetch_assoc($ca_result);

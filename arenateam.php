@@ -325,7 +325,7 @@ function count_days( $a, $b ) {
 //########################################################################################################################
 function view_team()
 {
-  global $output, $characters_db, $realm_id, $arcm_db, $logon_db,
+  global $output, $characters_db, $realm_id, $corem_db, $logon_db,
     $action_permission, $user_lvl, $user_id, $showcountryflag, $sql;
 
   if(!isset($_GET['id'])) redirect("arenateam.php?error=1");

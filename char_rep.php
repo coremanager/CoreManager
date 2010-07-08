@@ -27,7 +27,7 @@ valid_login($action_permission['view']);
 //########################################################################################################################
 function char_rep()
 {
-  global $output, $realm_id, $characters_db, $logon_db, $arcm_db, $action_permission,
+  global $output, $realm_id, $characters_db, $logon_db, $corem_db, $action_permission,
     $user_lvl, $user_name, $sql, $core;
 
   require_once 'libs/fact_lib.php';

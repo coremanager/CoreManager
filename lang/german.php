@@ -948,7 +948,7 @@ $GLOBALS['lang_realm'] = array
   'test_server' => 'Testserver',
   'qa_server' => 'QA Server', 
   'others' => 'Andere',
-  'conf_from_file' => '** Dieser Realm scheint keine korrekten Einstellungen in der config.php zu haben.<br />&Uuml;berpr&uuml;fen die Einstellungen.',
+  'conf_from_file' => '** This realm appear not to have proper configuration.<br />Make sure to properly configure it in the Servers tab of the ACP before using it. **',
   'offline' => 'Offline',
   'status' => 'Status',
   'notconfigured' => 'Noch nicht Konfiguriert',
@@ -977,6 +977,7 @@ $GLOBALS['lang_ticket'] = array
   'tot_tickets' => 'Tickets Gesamt',
   'update' => 'Ticket aktualisieren',
   'abandon' => 'Ticket makieren als abgeschlossen',  
+  'closedby' => 'Closed by',
 );
 
 
@@ -2413,7 +2414,8 @@ $GLOBALS['lang_admin'] = array
   'forum' => 'Forum',
   'main' => 'Hauptseite',
   'accounts' => 'Accounts',
-  'arcmdb' => 'CoreManager',
+
+  'coremdb' => 'CoreManager',
   'chardb' => 'Charakter',
   'logondb' => 'Logon',
   'host' => 'Host',
@@ -2429,6 +2431,8 @@ $GLOBALS['lang_admin'] = array
   'remove' => 'L&ouml;schen',
   'addchar' => 'Neue Charakter Datenbank',
   'addworld' => 'Neue World Datenbank',
+  'db_warn' => '<span style="color:red">NOTICE: If you need to change the name of any of these databases, it is advised that you change the name here <b>first</b>, otherwise you will have to alter the database information in the CoreManager Config Database.  Because CoreManager will not function if it cannot find it\'s databases.</span>',
+
   'addrow' => 'Neue Zeile',
   'delrow' => 'Ausgew&auml;hlte Zeile l&ouml;schen',
   'gmlvl' => 'GM Level',

@@ -29,7 +29,7 @@ valid_login($action_permission['view']);
 //########################################################################################################################
 function browse_users()
 {
-  global $output, $realm_id, $arcm_db, $logon_db, $arcm_db, $characters_db,
+  global $output, $realm_id, $corem_db, $logon_db, $corem_db, $characters_db,
     $action_permission, $user_lvl, $user_name, $itemperpage, $showcountryflag, $expansion_select,
     $timezone, $sql, $core;
 
@@ -851,7 +851,7 @@ function doadd_new()
 //###########################################################################################################
 function edit_user()
 {
-  global $output, $logon_db, $characters_db, $realm_id, $arcm_db, $arcm_db, $realm_id,
+  global $output, $logon_db, $characters_db, $realm_id, $corem_db, $corem_db, $realm_id,
     $user_lvl, $user_name, $gm_level_arr, $action_permission, $expansion_select, $developer_test_mode,
     $multi_realm_mode, $server, $timezone, $sql, $core;
 
@@ -1308,7 +1308,7 @@ function edit_user()
 //############################################################################################################
 function doedit_user()
 {
-  global $logon_db, $arcm_db, $arcm_db, $user_lvl, $user_name, $action_permission, $sql;
+  global $logon_db, $corem_db, $corem_db, $user_lvl, $user_name, $action_permission, $sql;
 
   valid_login($action_permission['update']);
 
@@ -1406,7 +1406,7 @@ function doedit_user()
 
 function doupdate_referral($referredby, $user_id)
 {
-  global $logon_db, $arcm_db, $characters_db, $realm_id, $sql;
+  global $logon_db, $corem_db, $characters_db, $realm_id, $sql;
 
   $result = $sql['mgr']->fetch_row($sql['mgr']->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '".$user_id."'"));
   $result = $result[0];

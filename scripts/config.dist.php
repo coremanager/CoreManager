@@ -29,11 +29,11 @@ $core = 0;
 //#############################################################################
 // CoreManager Database Configuration
 
-$arcm_db['addr']     = '127.0.0.1:3306';         // SQL server IP:port your CoreManager DB is located on
-$arcm_db['user']     = 'root';                   // SQL server login your CoreManager DB is located on
-$arcm_db['pass']     = 'password';               // SQL server pass your CoreManager DB is located on
-$arcm_db['name']     = 'db name';                // CoreManager DB name
-$arcm_db['encoding'] = 'utf8';                   // SQL connection encoding
+$corem_db['addr']     = '127.0.0.1:3306';         // SQL server IP:port your CoreManager DB is located on
+$corem_db['user']     = 'root';                   // SQL server login your CoreManager DB is located on
+$corem_db['pass']     = 'password';               // SQL server pass your CoreManager DB is located on
+$corem_db['name']     = 'db name';                // CoreManager DB name
+$corem_db['encoding'] = 'utf8';                   // SQL connection encoding
 
 //#############################################################################
 // SQL Configuration

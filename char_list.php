@@ -27,7 +27,7 @@ valid_login($action_permission['view']);
 //########################################################################################################################
 function browse_chars()
 {
-  global $output, $logon_db, $arcm_db, $arcm_db, $characters_db, $realm_id,
+  global $output, $logon_db, $corem_db, $corem_db, $characters_db, $realm_id,
     $action_permission, $user_lvl, $user_name, $showcountryflag, $itemperpage, $timezone, $sql, $core;
 
   //==========================$_GET and SECURE========================

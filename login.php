@@ -25,7 +25,7 @@ require_once 'header.php';
 //#############################################################################
 function dologin()
 {
-  global $arcm_db, $sql, $core;
+  global $corem_db, $sql, $core;
 
   if (empty($_POST['login']) || empty($_POST['password']))
     redirect('login.php?error=2');
@@ -251,7 +251,7 @@ function login()
 //#################################################################################################
 function do_cookie_login()
 {
-  global $arcm_db, $sql, $core;
+  global $corem_db, $sql, $core;
   
   if (empty($_COOKIE['login']) || empty($_COOKIE['password']) || empty($_COOKIE['realm_id']))
     redirect('login.php?error=2');

@@ -28,7 +28,7 @@ valid_login($action_permission['view']);
 //########################################################################################################################
 function char_skill()
 {
-  global $output, $realm_id, $characters_db, $arcm_db, $action_permission, $user_lvl,
+  global $output, $realm_id, $characters_db, $corem_db, $action_permission, $user_lvl,
     $user_name, $skill_datasite, $sql, $core;
 
   //wowhead_tt();

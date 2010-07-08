@@ -30,7 +30,7 @@ valid_login($action_permission['view']);
 //########################################################################################################################
 function char_talent()
 {
-  global $output, $realm_id, $characters_db, $arcm_db, $server, $action_permission,
+  global $output, $realm_id, $characters_db, $corem_db, $server, $action_permission,
     $user_lvl, $user_name, $spell_datasite, $sql, $core;
 
   // this page uses wowhead tooltops

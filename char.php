@@ -30,7 +30,7 @@ valid_login($action_permission['view']);
 function char_main()
 {
   global $output,
-    $realm_id, $logon_db, $characters_db, $world_db, $server, $arcm_db,
+    $realm_id, $logon_db, $characters_db, $world_db, $server, $corem_db,
     $action_permission, $user_lvl, $user_name, $user_id,
     $item_datasite, $spell_datasite, $showcountryflag, $timezone, $sql, $core;
 

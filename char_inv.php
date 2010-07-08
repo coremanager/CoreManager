@@ -30,7 +30,7 @@ valid_login($action_permission['view']);
 //#############################################################################
 function char_inv()
 {
-  global $output, $realm_id, $characters_db, $world_db, $arcm_db,
+  global $output, $realm_id, $characters_db, $world_db, $corem_db,
     $action_permission, $user_lvl, $user_name,
     $item_datasite, $sql, $core;
 

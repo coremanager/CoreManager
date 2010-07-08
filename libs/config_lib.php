@@ -21,7 +21,7 @@
 require_once 'db_lib.php';
 
 $sqlm = new SQL;
-$sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+$sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
 $temp = $sqlm->fetch_assoc($sqlm->query('SELECT * FROM config_dbc_database'));
 $dbc_db['addr']     = $temp["Address"].":".$temp["Port"];

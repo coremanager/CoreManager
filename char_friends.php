@@ -29,7 +29,7 @@ valid_login($action_permission['view']);
 function char_friends()
 {
   global $output,
-    $realm_id, $logon_db, $arcm_db, $characters_db,
+    $realm_id, $logon_db, $corem_db, $characters_db,
     $action_permission, $user_lvl, $user_name, $sql, $core;
 
   if (empty($_GET['id']))

@@ -50,8 +50,8 @@ foreach($forum_skeleton as $cid => $category){
 // #######################################################################################################
 function forum_index()
 {
-  global $enablesidecheck, $forum_skeleton, $forumlang, $user_lvl, $output, $logon_db, $arcm_db,
-    $arcm_db, $sql;
+  global $enablesidecheck, $forum_skeleton, $forumlang, $user_lvl, $output, $logon_db, $corem_db,
+    $corem_db, $sql;
 
   if($enablesidecheck)
     $side = get_side();
@@ -131,7 +131,7 @@ function forum_index()
 //
 // #######################################################################################################
 function forum_view_forum(){
-  global $enablesidecheck, $forum_skeleton, $maxqueries, $user_lvl, $output, $arcm_db, $sql;
+  global $enablesidecheck, $forum_skeleton, $maxqueries, $user_lvl, $output, $corem_db, $sql;
 
   if($enablesidecheck)
     $side = get_side();
@@ -245,7 +245,7 @@ function forum_view_forum(){
 function forum_view_topic(){
 
   global $enablesidecheck, $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output,
-    $realm_db, $characters_db, $realm_id, $arcm_db, $logon_db, $arcm_db, $sql, $core;
+    $realm_db, $characters_db, $realm_id, $corem_db, $logon_db, $corem_db, $sql, $core;
 
   if($enablesidecheck) $side = get_side(); // Better to use it here instead of call it many time in the loop :)
 
@@ -472,7 +472,7 @@ else
           $output .= "</td></tr>";
     }
 
-    //$link = $sql['mgr']->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+    //$link = $sql['mgr']->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
     $totalposts = $sql['mgr']->query("SELECT id FROM forum_posts WHERE topic = '$id';");
     $totalposts = $sql['mgr']->num_rows($totalposts);
@@ -535,7 +535,7 @@ else
   // Queries : 2 with id || 2 (+2) with postid
 }
 function forum_do_edit_close(){
-  global $user_lvl, $arcm_db, $sql;
+  global $user_lvl, $corem_db, $sql;
 
   if($user_lvl == 0)
     error(lang('forum', 'no_access'));
@@ -552,7 +552,7 @@ function forum_do_edit_close(){
   // Queries : 1
 }
 function forum_do_edit_announce(){
-  global $user_lvl, $arcm_db, $sql;
+  global $user_lvl, $corem_db, $sql;
 
   if($user_lvl == 0)
     error(lang('forum', 'no_access'));
@@ -569,7 +569,7 @@ function forum_do_edit_announce(){
   // Queries : 1
 }
 function forum_do_edit_stick(){
-  global $user_lvl, $arcm_db, $sql;
+  global $user_lvl, $corem_db, $sql;
 
   if($user_lvl == 0)
     error(lang('forum', 'no_access'));
@@ -586,7 +586,7 @@ function forum_do_edit_stick(){
   // Queries : 1
 }
 function forum_delete_post(){
-  global $enablesidecheck, $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $arcm_db, $sql;
+  global $enablesidecheck, $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $corem_db, $sql;
   
   if(!isset($_GET["id"])) error(lang('forum', 'no_such_post'));
   else $id = $sql['mgr']->quote_smart($_GET["id"]);
@@ -622,7 +622,7 @@ function forum_delete_post(){
   // Queries : 1
 }
 function forum_do_delete_post(){
-  global $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $arcm_db, $sql;
+  global $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $corem_db, $sql;
 
   if(!isset($_GET["id"])) error(lang('forum', 'no_such_post'));
   else $id = $sql['mgr']->quote_smart($_GET["id"]);
@@ -650,7 +650,7 @@ function forum_do_delete_post(){
 }
 
 function forum_add_topic(){
-  global $enablesidecheck, $forum_skeleton, $maxqueries, $minfloodtime, $user_lvl, $user_id, $output, $arcm_db, $sql;
+  global $enablesidecheck, $forum_skeleton, $maxqueries, $minfloodtime, $user_lvl, $user_id, $output, $corem_db, $sql;
 
   if($enablesidecheck) $side = get_side(); // Better to use it here instead of call it many time in the loop :)
 
@@ -741,7 +741,7 @@ function forum_add_topic(){
   // Queries : 1
 }
 function forum_do_add_topic(){
-  global $enablesidecheck, $forum_skeleton, $user_lvl, $user_name, $user_id, $arcm_db, $minfloodtime, $sql;
+  global $enablesidecheck, $forum_skeleton, $user_lvl, $user_name, $user_id, $corem_db, $minfloodtime, $sql;
 
   if($enablesidecheck) $side = get_side(); // Better to use it here instead of call it many time in the loop :)
 
@@ -821,7 +821,7 @@ function forum_do_add_topic(){
   // Queries : 3
 }
 function forum_do_add_post(){
-  global $enablesidecheck, $forum_skeleton, $minfloodtime, $user_lvl, $user_name, $user_id, $arcm_db, $sql;
+  global $enablesidecheck, $forum_skeleton, $minfloodtime, $user_lvl, $user_name, $user_id, $corem_db, $sql;
 
   if($enablesidecheck) $side = get_side(); // Better to use it here instead of call it many time in the loop :)
 
@@ -902,7 +902,7 @@ function forum_do_add_post(){
 }
 
 function forum_edit_post(){
-  global $forum_skeleton, $maxqueries, $minfloodtime, $user_lvl, $user_id, $output, $arcm_db, $sql;
+  global $forum_skeleton, $maxqueries, $minfloodtime, $user_lvl, $user_id, $output, $corem_db, $sql;
 
   if(!isset($_GET["id"])) error(lang('forum', 'no_such_post'));
   else $id = $sql['mgr']->quote_smart($_GET["id"]);
@@ -948,7 +948,7 @@ function forum_edit_post(){
   // Queries : 1
 }
 function forum_do_edit_post(){
-  global $user_lvl, $user_name, $user_id, $arcm_db, $sql;
+  global $user_lvl, $user_name, $user_id, $corem_db, $sql;
 
   if(!isset($_POST['forum'])) error(lang('forum', 'no_such_forum'));
   else $forum = $sql['mgr']->quote_smart($_POST['forum']);
@@ -1000,7 +1000,7 @@ function forum_do_edit_post(){
 }
 
 function forum_move_topic(){
-  global $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $arcm_db, $sql;
+  global $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $corem_db, $sql;
   
   if(!isset($_GET["id"])) error(lang('forum', 'no_such_topic'));
   else $id = $sql['mgr']->quote_smart($_GET["id"]);
@@ -1043,7 +1043,7 @@ function forum_move_topic(){
   // Queries : 1
 }
 function forum_do_move_topic(){
-  global $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $arcm_db, $sql;
+  global $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $corem_db, $sql;
 
   if(!isset($_POST['forum'])) error(lang('forum', 'no_such_forum'));
   else $forum = $sql['mgr']->quote_smart($_POST['forum']);

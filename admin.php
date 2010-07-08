@@ -35,17 +35,17 @@ require_once("admin/header.php");
 
 function database()
 {
-  global $output, $arcm_db;
+  global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $dbc_db = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_dbc_database"));
   $logon_db = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_logon_database"));
   $char_dbs = $sqlm->query("SELECT * FROM config_character_databases");
   $world_dbs = $sqlm->query("SELECT * FROM config_world_databases");
 
-  $output .= '
+  $output .= lang('admin','db_warn').'
         <form name="form" action="admin.php" method="GET">
           <input type="hidden" name="section" value="databases">
           <input type="hidden" name="action" value="savedbs">
@@ -57,19 +57,19 @@ function database()
                   <table>
                     <tr>
                       <td width=75px>'.lang('admin', 'host').': </td>
-                      <td><input type="text" name="arcm_host" value="'.$dbc_db['Address'].'" size="10%"></td>
+                      <td><input type="text" name="corem_host" value="'.$dbc_db['Address'].'" size="10%"></td>
                       <td width=75px>'.lang('admin', 'port').': </td>
-                      <td><input type="text" name="arcm_port" value="'.$dbc_db['Port'].'" size="10%"></td>
+                      <td><input type="text" name="corem_port" value="'.$dbc_db['Port'].'" size="10%"></td>
                     </tr>
                     <tr>
                       <td width=75px>'.lang('admin', 'user').': </td>
-                      <td><input type="text" name="arcm_user" value="'.$dbc_db['User'].'" size="10%"></td>
+                      <td><input type="text" name="corem_user" value="'.$dbc_db['User'].'" size="10%"></td>
                       <td width=75px>'.lang('admin', 'pass').': </td>
-                      <td><input type="text" name="arcm_pass" value="'.$dbc_db['Password'].'" size="10%"></td>
+                      <td><input type="text" name="corem_pass" value="'.$dbc_db['Password'].'" size="10%"></td>
                     </tr>
                     <tr>
                       <td width=75px>'.lang('admin', 'name').': </td>
-                      <td><input type="text" name="arcm_name" value="'.$dbc_db['Name'].'" size="10%"></td>
+                      <td><input type="text" name="corem_name" value="'.$dbc_db['Name'].'" size="10%"></td>
                     </tr>
                   </table>
                 </fieldset>
@@ -179,17 +179,17 @@ function database()
 
 function savedbs()
 {
-  global $output, $arcm_db;
+  global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
-  $arcm_host = $sqlm->quote_smart($_GET['arcm_host']);
-  $arcm_port = $sqlm->quote_smart($_GET['arcm_port']);
-  $arcm_user = $sqlm->quote_smart($_GET['arcm_user']);
-  $arcm_pass = $sqlm->quote_smart($_GET['arcm_pass']);
-  $arcm_name = $sqlm->quote_smart($_GET['arcm_name']);
-  $result_arcm = $sqlm->query("UPDATE config_arcmanager_database SET Address='".$arcm_host."', Port='".$arcm_port."', User='".$arcm_user."', Password='".$arcm_pass."', Name='".$arcm_name."' WHERE `Index`=1");
+  $corem_host = $sqlm->quote_smart($_GET['corem_host']);
+  $corem_port = $sqlm->quote_smart($_GET['corem_port']);
+  $corem_user = $sqlm->quote_smart($_GET['corem_user']);
+  $corem_pass = $sqlm->quote_smart($_GET['corem_pass']);
+  $corem_name = $sqlm->quote_smart($_GET['corem_name']);
+  $result_arcm = $sqlm->query("UPDATE config_dbc_database SET Address='".$corem_host."', Port='".$corem_port."', User='".$corem_user."', Password='".$corem_pass."', Name='".$corem_name."' WHERE `Index`=1");
 
   $logon_host = $sqlm->quote_smart($_GET['logon_host']);
   $logon_port = $sqlm->quote_smart($_GET['logon_port']);
@@ -237,10 +237,10 @@ function savedbs()
 
 function general()
 {
-  global $output, $arcm_db;
+  global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   if (isset($_GET['subsection']))
     $subsection = $sqlm->quote_smart($_GET['subsection']);
@@ -1353,10 +1353,10 @@ function general()
 
 function gmlevels()
 {
-  global $output, $arcm_db;
+  global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $gm_lvls = $sqlm->query("SELECT * FROM config_gm_level_names");
 
@@ -1462,10 +1462,10 @@ function gmlevels()
 
 function savegms()
 {
-  global $output, $arcm_db;
+  global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $index = $sqlm->quote_smart($_GET['index']);
   $sec_lvl = $sqlm->quote_smart($_GET['seclvl']);
@@ -1478,10 +1478,10 @@ function savegms()
 
 function servers()
 {
-  global $output, $arcm_db, $lang_global;
+  global $output, $corem_db, $lang_global;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $result = $sqlm->query("SELECT * FROM config_servers");
 
@@ -1594,10 +1594,10 @@ function servers()
 
 function saveserver()
 {
-  global $arcm_db;
+  global $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $server_id = $sqlm->quote_smart($_GET['index']);
   $server_host = $sqlm->quote_smart($_GET['server_host']);
@@ -1611,10 +1611,10 @@ function saveserver()
 
 function menus()
 {
-  global $output, $arcm_db, $lang_global;
+  global $output, $corem_db, $lang_global;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $menu_action = 'start';
   if (isset($_GET['editmenu']))
@@ -1886,10 +1886,10 @@ function menus()
 
 function savemenu()
 {
-  global $arcm_db;
+  global $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $menu_item = $sqlm->quote_smart($_GET['menu_item']);
   $menu = $sqlm->quote_smart($_GET['menu']);
@@ -1915,10 +1915,10 @@ function savemenu()
 
 function forum()
 {
-  global $output, $arcm_db, $logon_db, $lang_global;
+  global $output, $corem_db, $logon_db, $lang_global;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $forum_action = 0;
   if (isset($_GET['editforum']))
@@ -2044,10 +2044,10 @@ function forum()
 
 function accounts()
 {
-  global $output, $arcm_db, $logon_db, $lang_global, $core;
+  global $output, $corem_db, $logon_db, $lang_global, $core;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $sqll = new SQL;
   $sqll->connect($logon_db['addr'], $logon_db['user'], $logon_db['pass'], $logon_db['name']);
@@ -2145,10 +2145,10 @@ function accounts()
 
 function saveacct()
 {
-  global $arcm_db;
+  global $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($arcm_db['addr'], $arcm_db['user'], $arcm_db['pass'], $arcm_db['name']);
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $acct = $sqlm->quote_smart($_GET['login']);
   $sn = $sqlm->quote_smart($_GET['sn']);
