@@ -110,13 +110,34 @@ else
         $mins  = intval($seconds / 60 % 60);
         $hours = intval($seconds / 3600 % 24);
         $days  = intval($seconds / 86400);
-
-        $uptimeString='';
-
-        if ($days)
+        if ( $days > 365 )
         {
-          $uptimeString .= $days;
-          $uptimeString .= ((1 === $days) ? ' day' : ' days');
+          $days  = intval($seconds / 86400 % 365.24);
+          $years = intval($seconds / 31556926);
+        }
+
+        $uptimeString = '';
+
+        if ($years)
+        {
+          // we have a server that has been up for over a year? O_o
+          // actually, it's probably because the server didn't write a useful
+          // value to the uptime table's starttime field.
+          $uptimeString .= $years;
+          $uptimeString .= ((1 === $years) ? ' year' : ' years');
+          if ($days)
+          {
+            $uptimeString .= ((0 < $years) ? ', ' : '').$days;
+            $uptimeString .= ((1 === $days) ? ' day' : ' days');
+          }
+        }
+        else
+        {
+          if ($days)
+          {
+            $uptimeString .= $days;
+            $uptimeString .= ((1 === $days) ? ' day' : ' days');
+          }
         }
         if ($hours)
         {
@@ -136,7 +157,13 @@ else
         return $uptimeString;
       }
 
-      $staticUptime = ' <em>'.htmlentities(get_realm_name($realm_id)).'</em> <br />'.lang('index', 'online').' for '.format_uptime($uptimetime);
+      $staticUptime = ' <em>'.htmlentities(get_realm_name($realm_id)).'</em> ';
+
+      if ( $stats['starttime'] <> 0 )
+        $staticUptime .= '<br />'.lang('index', 'online').' for '.format_uptime($uptimetime);
+      else
+        $staticUptime .= '<br /><span style="color:orange">The current time difference since the Unix Epoch is: <br>'.format_uptime($uptimetime).'</span><br><span style="color:red">(meaning: a minor server error has occured)</span>';
+
       unset($uptimetime);
       $output .= '
             <div id="uptime">'.$msie.'
