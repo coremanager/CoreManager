@@ -147,7 +147,13 @@
             </tr>
           </table>
           <br />';
+
+  // adding the Content-Length header directive can improve client-side load times.
+  $content_length = strlen($output);
+  header('Content-Length: '.$content_length);
+
   echo $output;
+
   unset($output);
   // we need to close $output before we start debug mode 3 or higher
   //  we will get double output if we don't

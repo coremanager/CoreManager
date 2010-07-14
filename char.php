@@ -337,9 +337,13 @@ function char_main()
       else
       {
         $world_db_name = $world_db[$realm_id]['name'];
-        $char_equip_query = "SELECT * FROM character_inventory WHERE guid='".$id."' AND character_inventory.bag=0";
+        $char_equip_query = "SELECT *,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 11), ' ', -1) AS creator,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 23), ' ', -1) AS enchantment,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 57), ' ', -1) AS property
+        FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid='".$id."' AND character_inventory.bag=0";
         $char_equip_result = $sql['char']->query($char_equip_query);
-        
+
         while ( $equip_row = $sql['char']->fetch_assoc($char_equip_result) )
         {
           switch ( $equip_row['slot'] )
@@ -347,96 +351,115 @@ function char_main()
             case 0:
             {
               $EQU_HEAD = $equip_row['item_template'];
+              $EQU_HEAD_ROW = $equip_row;
               break;
             }
             case 1:
             {
               $EQU_NECK = $equip_row['item_template'];
+              $EQU_NECK_ROW = $equip_row;
               break;
             }
             case 2:
             {
               $EQU_SHOULDER = $equip_row['item_template'];
+              $EQU_SHOULDER_ROW = $equip_row;
               break;
             }
             case 3:
             {
               $EQU_SHIRT = $equip_row['item_template'];
+              $EQU_SHIRT_ROW = $equip_row;
               break;
             }
             case 4:
             {
               $EQU_CHEST = $equip_row['item_template'];
+              $EQU_CHEST_ROW = $equip_row;
               break;
             }
             case 5:
             {
               $EQU_BELT = $equip_row['item_template'];
+              $EQU_BELT_ROW = $equip_row;
               break;
             }
             case 6:
             {
               $EQU_LEGS = $equip_row['item_template'];
+              $EQU_LEGS_ROW = $equip_row;
               break;
             }
             case 7:
             {
               $EQU_FEET = $equip_row['item_template'];
+              $EQU_FEET_ROW = $equip_row;
               break;
             }
             case 8:
             {
               $EQU_WRIST = $equip_row['item_template'];
+              $EQU_WRIST_ROW = $equip_row;
               break;
             }
             case 9:
             {
               $EQU_GLOVES = $equip_row['item_template'];
+              $EQU_GLOVES_ROW = $equip_row;
               break;
             }
             case 10:
             {
               $EQU_FINGER1 = $equip_row['item_template'];
+              $EQU_FINGER1_ROW = $equip_row;
               break;
             }
             case 11:
             {
               $EQU_FINGER2 = $equip_row['item_template'];
+              $EQU_FINGER2_ROW = $equip_row;
               break;
             }
             case 12:
             {
               $EQU_TRINKET1 = $equip_row['item_template'];
+              $EQU_TRINKET1_ROW = $equip_row;
               break;
             }
             case 13:
             {
               $EQU_TRINKET2 = $equip_row['item_template'];
+              $EQU_TRINKET2_ROW = $equip_row;
               break;
             }
             case 14:
             {
               $EQU_BACK = $equip_row['item_template'];
+              $EQU_BACK_ROW = $equip_row;
               break;
             }
             case 15:
             {
               $EQU_MAIN_HAND = $equip_row['item_template'];
+              $EQU_MAIN_HAND_ROW = $equip_row;
               break;
             }
             case 16:
             {
               $EQU_OFF_HAND = $equip_row['item_template'];
+              $EQU_OFF_HAND_ROW = $equip_row;
               break;
             }
             case 17:
             {
               $EQU_RANGED = $equip_row['item_template'];
+              $EQU_RANGED_ROW = $equip_row;
               break;
             }
             case 18:
             {
               $EQU_TABARD = $equip_row['item_template'];
+              $EQU_TABARD_ROW = $equip_row;
               break;
             }
           }
@@ -472,25 +495,25 @@ function char_main()
 
       $equiped_items = array
       (
-         1 => array('',($EQU_HEAD      ? get_item_icon($EQU_HEAD)      : 0),($EQU_HEAD      ? get_item_border($EQU_HEAD)      : 0)),
-         2 => array('',($EQU_NECK      ? get_item_icon($EQU_NECK)      : 0),($EQU_NECK      ? get_item_border($EQU_NECK)      : 0)),
-         3 => array('',($EQU_SHOULDER  ? get_item_icon($EQU_SHOULDER)  : 0),($EQU_SHOULDER  ? get_item_border($EQU_SHOULDER)  : 0)),
-         4 => array('',($EQU_SHIRT     ? get_item_icon($EQU_SHIRT)     : 0),($EQU_SHIRT     ? get_item_border($EQU_SHIRT)     : 0)),
-         5 => array('',($EQU_CHEST     ? get_item_icon($EQU_CHEST)     : 0),($EQU_CHEST     ? get_item_border($EQU_CHEST)     : 0)),
-         6 => array('',($EQU_BELT      ? get_item_icon($EQU_BELT)      : 0),($EQU_BELT      ? get_item_border($EQU_BELT)      : 0)),
-         7 => array('',($EQU_LEGS      ? get_item_icon($EQU_LEGS)      : 0),($EQU_LEGS      ? get_item_border($EQU_LEGS)      : 0)),
-         8 => array('',($EQU_FEET      ? get_item_icon($EQU_FEET)      : 0),($EQU_FEET      ? get_item_border($EQU_FEET)      : 0)),
-         9 => array('',($EQU_WRIST     ? get_item_icon($EQU_WRIST)     : 0),($EQU_WRIST     ? get_item_border($EQU_WRIST)     : 0)),
-        10 => array('',($EQU_GLOVES    ? get_item_icon($EQU_GLOVES)    : 0),($EQU_GLOVES    ? get_item_border($EQU_GLOVES)    : 0)),
-        11 => array('',($EQU_FINGER1   ? get_item_icon($EQU_FINGER1)   : 0),($EQU_FINGER1   ? get_item_border($EQU_FINGER1)   : 0)),
-        12 => array('',($EQU_FINGER2   ? get_item_icon($EQU_FINGER2)   : 0),($EQU_FINGER2   ? get_item_border($EQU_FINGER2)   : 0)),
-        13 => array('',($EQU_TRINKET1  ? get_item_icon($EQU_TRINKET1)  : 0),($EQU_TRINKET1  ? get_item_border($EQU_TRINKET1)  : 0)),
-        14 => array('',($EQU_TRINKET2  ? get_item_icon($EQU_TRINKET2)  : 0),($EQU_TRINKET2  ? get_item_border($EQU_TRINKET2)  : 0)),
-        15 => array('',($EQU_BACK      ? get_item_icon($EQU_BACK)      : 0),($EQU_BACK      ? get_item_border($EQU_BACK)      : 0)),
-        16 => array('',($EQU_MAIN_HAND ? get_item_icon($EQU_MAIN_HAND) : 0),($EQU_MAIN_HAND ? get_item_border($EQU_MAIN_HAND) : 0)),
-        17 => array('',($EQU_OFF_HAND  ? get_item_icon($EQU_OFF_HAND)  : 0),($EQU_OFF_HAND  ? get_item_border($EQU_OFF_HAND)  : 0)),
-        18 => array('',($EQU_RANGED    ? get_item_icon($EQU_RANGED)    : 0),($EQU_RANGED    ? get_item_border($EQU_RANGED)    : 0)),
-        19 => array('',($EQU_TABARD    ? get_item_icon($EQU_TABARD)    : 0),($EQU_TABARD    ? get_item_border($EQU_TABARD)    : 0))
+         1 => array('',($EQU_HEAD      ? get_item_icon($EQU_HEAD)      : 0),($EQU_HEAD      ? get_item_border($EQU_HEAD)      : 0), $EQU_HEAD_ROW),
+         2 => array('',($EQU_NECK      ? get_item_icon($EQU_NECK)      : 0),($EQU_NECK      ? get_item_border($EQU_NECK)      : 0), $EQU_NECK_ROW),
+         3 => array('',($EQU_SHOULDER  ? get_item_icon($EQU_SHOULDER)  : 0),($EQU_SHOULDER  ? get_item_border($EQU_SHOULDER)  : 0), $EQU_SHOULDER_ROW),
+         4 => array('',($EQU_SHIRT     ? get_item_icon($EQU_SHIRT)     : 0),($EQU_SHIRT     ? get_item_border($EQU_SHIRT)     : 0), $EQU_SHIRT_ROW),
+         5 => array('',($EQU_CHEST     ? get_item_icon($EQU_CHEST)     : 0),($EQU_CHEST     ? get_item_border($EQU_CHEST)     : 0), $EQU_CHEST_ROW),
+         6 => array('',($EQU_BELT      ? get_item_icon($EQU_BELT)      : 0),($EQU_BELT      ? get_item_border($EQU_BELT)      : 0), $EQU_BELT_ROW),
+         7 => array('',($EQU_LEGS      ? get_item_icon($EQU_LEGS)      : 0),($EQU_LEGS      ? get_item_border($EQU_LEGS)      : 0), $EQU_LEGS_ROW),
+         8 => array('',($EQU_FEET      ? get_item_icon($EQU_FEET)      : 0),($EQU_FEET      ? get_item_border($EQU_FEET)      : 0), $EQU_FEET_ROW),
+         9 => array('',($EQU_WRIST     ? get_item_icon($EQU_WRIST)     : 0),($EQU_WRIST     ? get_item_border($EQU_WRIST)     : 0), $EQU_WRIST_ROW),
+        10 => array('',($EQU_GLOVES    ? get_item_icon($EQU_GLOVES)    : 0),($EQU_GLOVES    ? get_item_border($EQU_GLOVES)    : 0), $EQU_GLOVES_ROW),
+        11 => array('',($EQU_FINGER1   ? get_item_icon($EQU_FINGER1)   : 0),($EQU_FINGER1   ? get_item_border($EQU_FINGER1)   : 0), $EQU_FINGER1_ROW),
+        12 => array('',($EQU_FINGER2   ? get_item_icon($EQU_FINGER2)   : 0),($EQU_FINGER2   ? get_item_border($EQU_FINGER2)   : 0), $EQU_FINGER2_ROW),
+        13 => array('',($EQU_TRINKET1  ? get_item_icon($EQU_TRINKET1)  : 0),($EQU_TRINKET1  ? get_item_border($EQU_TRINKET1)  : 0), $EQU_TRINKET1_ROW),
+        14 => array('',($EQU_TRINKET2  ? get_item_icon($EQU_TRINKET2)  : 0),($EQU_TRINKET2  ? get_item_border($EQU_TRINKET2)  : 0), $EQU_TRINKET2_ROW),
+        15 => array('',($EQU_BACK      ? get_item_icon($EQU_BACK)      : 0),($EQU_BACK      ? get_item_border($EQU_BACK)      : 0), $EQU_BACK_ROW),
+        16 => array('',($EQU_MAIN_HAND ? get_item_icon($EQU_MAIN_HAND) : 0),($EQU_MAIN_HAND ? get_item_border($EQU_MAIN_HAND) : 0), $EQU_MAIN_HAND_ROW),
+        17 => array('',($EQU_OFF_HAND  ? get_item_icon($EQU_OFF_HAND)  : 0),($EQU_OFF_HAND  ? get_item_border($EQU_OFF_HAND)  : 0), $EQU_OFF_HAND_ROW),
+        18 => array('',($EQU_RANGED    ? get_item_icon($EQU_RANGED)    : 0),($EQU_RANGED    ? get_item_border($EQU_RANGED)    : 0), $EQU_RANGED_ROW),
+        19 => array('',($EQU_TABARD    ? get_item_icon($EQU_TABARD)    : 0),($EQU_TABARD    ? get_item_border($EQU_TABARD)    : 0), $EQU_TABARD_ROW)
       );
 
       $output .= '
@@ -583,10 +606,31 @@ function char_main()
                   <tr>
                     <td width="6%">';
       if (($equiped_items[1][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_HEAD.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_HEAD.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'HEAD'.'\');" onmouseout="HideTooltip(\'_b'.'HEAD'.'\');">
                         <img src="'.$equiped_items[1][1].'" class="'.$equiped_items[1][2].'" alt="Head" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[1][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'HEAD'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[1][3]['enchantment'], $equiped_items[1][3]['property'], $equiped_items[1][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_head.png" class="icon_border_0" alt="empty" />';
@@ -645,10 +689,31 @@ function char_main()
                     </td>
                     <td width="6%">';
       if (($equiped_items[10][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_GLOVES.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_GLOVES.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'GLOVES'.'\');" onmouseout="HideTooltip(\'_b'.'GLOVES'.'\');">
                         <img src="'.$equiped_items[10][1].'" class="'.$equiped_items[10][2].'" alt="Gloves" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[10][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'GLOVES'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[10][3]['enchantment'], $equiped_items[10][3]['property'], $equiped_items[10][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_gloves.png" class="icon_border_0" alt="empty" />';
@@ -658,10 +723,31 @@ function char_main()
                   <tr>
                     <td width="1%">';
       if (($equiped_items[2][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_NECK.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_NECK.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'NECK'.'\');" onmouseout="HideTooltip(\'_b'.'NECK'.'\');">
                         <img src="'.$equiped_items[2][1].'" class="'.$equiped_items[2][2].'" alt="Neck" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[2][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'NECK'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[2][3]['enchantment'], $equiped_items[2][3]['property'], $equiped_items[2][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_neck.png" class="icon_border_0" alt="empty" />';
@@ -705,10 +791,31 @@ function char_main()
                     </td>
                     <td width="1%">';
       if (($equiped_items[6][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_BELT.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_BELT.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'BELT'.'\');" onmouseout="HideTooltip(\'_b'.'BELT'.'\');">
                         <img src="'.$equiped_items[6][1].'" class="'.$equiped_items[6][2].'" alt="Belt" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[6][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'BELT'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[6][3]['enchantment'], $equiped_items[6][3]['property'], $equiped_items[6][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_waist.png" class="icon_border_0" alt="empty" />';
@@ -718,10 +825,31 @@ function char_main()
                   <tr>
                     <td width="1%">';
       if (($equiped_items[3][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_SHOULDER.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_SHOULDER.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'SHOULDER'.'\');" onmouseout="HideTooltip(\'_b'.'SHOULDER'.'\');">
                         <img src="'.$equiped_items[3][1].'" class="'.$equiped_items[3][2].'" alt="Shoulder" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[3][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'SHOULDER'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[3][3]['enchantment'], $equiped_items[13][3]['property'], $equiped_items[3][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_shoulder.png" class="icon_border_0" alt="empty" />';
@@ -729,10 +857,31 @@ function char_main()
                     </td>
                     <td width="1%">';
       if (($equiped_items[7][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_LEGS.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_LEGS.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'LEGS'.'\');" onmouseout="HideTooltip(\'_b'.'LEGS'.'\');">
                         <img src="'.$equiped_items[7][1].'" class="'.$equiped_items[7][2].'" alt="Legs" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[7][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'LEGS'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[7][3]['enchantment'], $equiped_items[7][3]['property'], $equiped_items[7][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_legs.png" class="icon_border_0" alt="empty" />';
@@ -742,10 +891,31 @@ function char_main()
                   <tr>
                     <td width="1%">';
       if (($equiped_items[15][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_BACK.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_BACK.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'BACK'.'\');" onmouseout="HideTooltip(\'_b'.'BACK'.'\');">
                         <img src="'.$equiped_items[15][1].'" class="'.$equiped_items[15][2].'" alt="Back" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[15][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'BACK'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[15][3]['enchantment'], $equiped_items[15][3]['property'], $equiped_items[15][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_chest_back.png" class="icon_border_0" alt="empty" />';
@@ -753,10 +923,31 @@ function char_main()
                     </td>
                     <td width="1%">';
       if (($equiped_items[8][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_FEET.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_FEET.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FEET'.'\');" onmouseout="HideTooltip(\'_b'.'FEET'.'\');">
                         <img src="'.$equiped_items[8][1].'" class="'.$equiped_items[8][2].'" alt="Feet" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[8][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'FEET'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[8][3]['enchantment'], $equiped_items[8][3]['property'], $equiped_items[8][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_feet.png" class="icon_border_0" alt="empty" />';
@@ -766,10 +957,31 @@ function char_main()
                   <tr>
                     <td width="1%">';
       if (($equiped_items[5][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_CHEST.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_CHEST.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'CHEST'.'\');" onmouseout="HideTooltip(\'_b'.'CHEST'.'\');">
                         <img src="'.$equiped_items[5][1].'" class="'.$equiped_items[5][2].'" alt="Chest" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[5][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'CHEST'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[5][3]['enchantment'], $equiped_items[5][3]['property'], $equiped_items[5][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_chest_back.png" class="icon_border_0" alt="empty" />';
@@ -809,10 +1021,31 @@ function char_main()
                     </td>
                     <td width="1%">';
       if (($equiped_items[11][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_FINGER1.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_FINGER1.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FINGER1'.'\');" onmouseout="HideTooltip(\'_b'.'FINGER1'.'\');">
                         <img src="'.$equiped_items[11][1].'" class="'.$equiped_items[11][2].'" alt="Finger1" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[11][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'FINGER1'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[11][3]['enchantment'], $equiped_items[11][3]['property'], $equiped_items[11][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_finger.png" class="icon_border_0" alt="empty" />';
@@ -822,10 +1055,31 @@ function char_main()
                   <tr>
                     <td width="1%">';
       if (($equiped_items[4][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_SHIRT.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_SHIRT.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'SHIRT'.'\');" onmouseout="HideTooltip(\'_b'.'SHIRT'.'\');">
                         <img src="'.$equiped_items[4][1].'" class="'.$equiped_items[4][2].'" alt="Shirt" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[4][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'SHIRT'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[4][3]['enchantment'], $equiped_items[4][3]['property'], $equiped_items[4][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_shirt.png" class="icon_border_0" alt="empty" />';
@@ -833,10 +1087,31 @@ function char_main()
                     </td>
                     <td width="1%">';
       if (($equiped_items[12][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_FINGER2.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_FINGER2.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FINGER2'.'\');" onmouseout="HideTooltip(\'_b'.'FINGER2'.'\');">
                         <img src="'.$equiped_items[12][1].'" class="'.$equiped_items[12][2].'" alt="Finger2" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[12][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'FINGER2'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[12][3]['enchantment'], $equiped_items[12][3]['property'], $equiped_items[12][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else $output .= '
                       <img src="img/INV/INV_empty_finger.png" class="icon_border_0" alt="empty" />';
       $output .= '
@@ -845,10 +1120,31 @@ function char_main()
                   <tr>
                     <td width="1%">';
       if (($equiped_items[19][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_TABARD.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_TABARD.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TABARD'.'\');" onmouseout="HideTooltip(\'_b'.'TABARD'.'\');">
                         <img src="'.$equiped_items[19][1].'" class="'.$equiped_items[19][2].'" alt="Tabard" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[19][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'TABARD'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[19][3]['enchantment'], $equiped_items[19][3]['property'], $equiped_items[19][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else $output .= '
                       <img src="img/INV/INV_empty_tabard.png" class="icon_border_0" alt="empty" />';
       $output .= '
@@ -881,10 +1177,31 @@ function char_main()
                     </td>
                     <td width="1%">';
       if (($equiped_items[13][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_TRINKET1.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_TRINKET1.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TRINKET1'.'\');" onmouseout="HideTooltip(\'_b'.'TRINKET1'.'\');">
                         <img src="'.$equiped_items[13][1].'" class="'.$equiped_items[13][2].'" alt="Trinket1" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[13][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'TRINKET1'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[13][3]['enchantment'], $equiped_items[13][3]['property'], $equiped_items[13][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_trinket.png" class="icon_border_0" alt="empty" />';
@@ -894,10 +1211,31 @@ function char_main()
                   <tr>
                     <td width="1%">';
       if (($equiped_items[9][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_WRIST.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_WRIST.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'WRIST'.'\');" onmouseout="HideTooltip(\'_b'.'WRIST'.'\');">
                         <img src="'.$equiped_items[9][1].'" class="'.$equiped_items[9][2].'" alt="Wrist" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[9][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'WRIST'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[9][3]['enchantment'], $equiped_items[9][3]['property'], $equiped_items[9][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_wrist.png" class="icon_border_0" alt="empty" />';
@@ -905,10 +1243,31 @@ function char_main()
                     </td>
                     <td width="1%">';
       if (($equiped_items[14][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_TRINKET2.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_TRINKET2.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TRINKET2'.'\');" onmouseout="HideTooltip(\'_b'.'TRINKET2'.'\');">
                         <img src="'.$equiped_items[14][1].'" class="'.$equiped_items[14][2].'" alt="Trinket2" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[14][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'TRINKET2'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[14][3]['enchantment'], $equiped_items[14][3]['property'], $equiped_items[14][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_trinket.png" class="icon_border_0" alt="empty" />';
@@ -919,10 +1278,31 @@ function char_main()
                     <td></td>
                     <td width="15%">';
       if (($equiped_items[16][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_MAIN_HAND.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_MAIN_HAND.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'MAIN_HAND'.'\');" onmouseout="HideTooltip(\'_b'.'MAIN_HAND'.'\');">
                         <img src="'.$equiped_items[16][1].'" class="'.$equiped_items[16][2].'" alt="MainHand" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[16][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'MAIN_HAND'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[16][3]['enchantment'], $equiped_items[16][3]['property'], $equiped_items[16][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_main_hand.png" class="icon_border_0" alt="empty" />';
@@ -930,10 +1310,31 @@ function char_main()
                     </td>
                     <td width="15%">';
       if (($equiped_items[17][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_OFF_HAND.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_OFF_HAND.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'OFF_HAND'.'\');" onmouseout="HideTooltip(\'_b'.'OFF_HAND'.'\');">
                         <img src="'.$equiped_items[17][1].'" class="'.$equiped_items[17][2].'" alt="OffHand" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[17][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'OFF_HAND'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[17][3]['enchantment'], $equiped_items[17][3]['property'], $equiped_items[17][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_off_hand.png" class="icon_border_0" alt="empty" />';
@@ -941,10 +1342,31 @@ function char_main()
                     </td>
                     <td width="15%">';
       if (($equiped_items[18][1]))
+      {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_RANGED.'" target="_blank">
+                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_RANGED.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'RANGED'.'\');" onmouseout="HideTooltip(\'_b'.'RANGED'.'\');">
                         <img src="'.$equiped_items[18][1].'" class="'.$equiped_items[18][2].'" alt="Ranged" />
                       </a>';
+
+        // build a tooltip object for this item
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[18][3]['item_template']."'";
+          $i_result = $sql['world']->query($i_query);
+          $i_fields = $sql['world']->fetch_assoc($i_result);
+        }
+
+        $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.'RANGED'.'">
+                        <table>
+                          <td>
+                            '.get_item_tooltip($i_fields, $equiped_items[18][3]['enchantment'], $equiped_items[18][3]['property'], $equiped_items[18][3]['creator']).'
+                          </td>
+                        </table>
+                      </div>';
+      }
       else
         $output .= '
                       <img src="img/INV/INV_empty_ranged.png" class="icon_border_0" alt="empty" />';

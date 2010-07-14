@@ -65,9 +65,11 @@ if (isset($_COOKIE['lang']))
 }
 else
   $lang = $language;
+  
+//---------------------Current Filename----------------------------------------
+$cur_filename = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1);
 
 //---------------------Loading Libraries---------------------------------------
-// database library
 require_once 'libs/db_lib.php';
 require_once 'lang/'.$lang.'.php';
 
@@ -76,14 +78,20 @@ require_once 'libs/global_lib.php';
 require_once 'libs/lang_lib.php';
 require_once 'libs/get_lib.php';
 
+//---------------------Cache Expiration Date Offset----------------------------
+//$expire_offset = 60 * 60 * 24 * 3;
+
 //---------------------Header's header-----------------------------------------
 // sets encoding defined in config for language support
 header('Content-Type: text/html; charset='.$site_encoding);
-header('Expires: Tue, 01 Jan 2000 00:00:00 GMT');
-header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Cache-Control: post-check=0, pre-check=0', false);
-header('Pragma: no-cache');
+// the webserver should be adding this directive, but just in case...
+header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+// dynamic pages can't be cached
+//header('Date: '.gmdate('D, d M Y H:i:s').' GMT');
+//header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($cur_filename)).' GMT');
+//header("Expires: " . gmdate("D, d M Y H:i:s", time() + $expire_offset) . " GMT");
+//header('Cache-Control: must-revalidate');
+//header('Cache-Control: post-check=0, pre-check=0', false);
 $output .= '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">

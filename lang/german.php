@@ -701,7 +701,10 @@ $GLOBALS['lang_item'] = array
   'HA_RATING' => 'Ausweichchance',
   'CA_RATING' => 'Kritische Treffer Chance',
   'RESILIENCE_RATING' => 'Widerst&auml;nde', 
-  'HASTE_RATING' => 'Beweglichkeit' 
+  'HASTE_RATING' => 'Beweglichkeit',
+  'madeby' => 'Made by',
+  'sellprice' => 'Sell Price',
+  'nosellprice' => 'No Sell Price',
 );
 
 

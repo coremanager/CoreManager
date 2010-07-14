@@ -701,7 +701,10 @@ $GLOBALS['lang_item'] = array
   'HA_RATING' => 'Hit Avoid',
   'CA_RATING' => 'Crit Avoid',
   'RESILIENCE_RATING' => 'Resistance',
-  'HASTE_RATING' => 'Haste'
+  'HASTE_RATING' => 'Haste',
+  'madeby' => 'Made by',
+  'sellprice' => 'Sell Price',
+  'nosellprice' => 'No Sell Price',
 );
 
 

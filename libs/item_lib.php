@@ -146,11 +146,11 @@ function get_item_quality_color($quality)
 //#############################################################################
 //generate item tooltip from item_template.entry
 
-function get_item_tooltip($item, $ench, $prop)
+function get_item_tooltip($item, $ench, $prop, $creator)
 {
-  global $world_db, $realm_id, $language, $sql;
+  global $world_db, $realm_id, $language, $sql, $core;
 
-  if($item)
+  if( $item )
   {
       $tooltip = "";
 
@@ -203,9 +203,10 @@ function get_item_tooltip($item, $ench, $prop)
         default:
       }
 
-      if ($item['maxcount']) $tooltip .= lang('item', 'unique')."<br />";
+      if ($item['maxcount'])
+        $tooltip .= lang('item', 'unique')."<br />";
 
-      $tooltip .= "<br />";
+      //$tooltip .= "<br />";
 
       switch ($item['InventoryType'])
       {
@@ -652,16 +653,16 @@ function get_item_tooltip($item, $ench, $prop)
           switch ($item[$sock])
           {
             case 1:
-              $tooltip .= "<img src='img/socket_meta.gif' alt='' /><font color='gray'> ".lang('item', 'socket_meta')."</font><br />";
+              $tooltip .= "<img class='item_tooltip_socket' src='img/socket_meta.gif' alt='' /><font color='gray'> ".lang('item', 'socket_meta')."</font><br />";
               break;
             case 2:
-              $tooltip .= "<img src='img/socket_red.gif' alt='' /><font color='red'> ".lang('item', 'socket_red')."</font><br />";
+              $tooltip .= "<img class='item_tooltip_socket' src='img/socket_red.gif' alt='' /><font color='red'> ".lang('item', 'socket_red')."</font><br />";
               break;
             case 4:
-              $tooltip .= "<img src='img/socket_yellow.gif' alt='' /><font color='yellow'> ".lang('item', 'socket_yellow')."</font><br />";
+              $tooltip .= "<img class='item_tooltip_socket' src='img/socket_yellow.gif' alt='' /><font color='yellow'> ".lang('item', 'socket_yellow')."</font><br />";
               break;
             case 8:
-              $tooltip .= "<img src='img/socket_blue.gif' alt='' /><font color='blue'> ".lang('item', 'socket_blue')."</font><br />";
+              $tooltip .= "<img class='item_tooltip_socket' src='img/socket_blue.gif' alt='' /><font color='blue'> ".lang('item', 'socket_blue')."</font><br />";
               break;
             default:
           }
@@ -692,10 +693,13 @@ function get_item_tooltip($item, $ench, $prop)
       if ($item['ContainerSlots'])
         $tooltip .= " ".$item['ContainerSlots']." ".lang('item', 'slots')."<br />";
 
-      $tooltip .= "</font><br /><font color='#1eff00'>";
+      $tooltip .= "</font><font color='#1eff00'>";
       //random enchantments
       if ($item['RandomProperty'] || $item['RandomSuffix'])
         $tooltip .= "&lt; Random enchantment &gt;<br />";
+      //created enchantments
+      if ($ench || $prop)
+        $tooltip .= "&lt; Enchanted &gt;<br />";
 
       //Ratings additions.
       if (isset($flag_rating))
@@ -918,7 +922,7 @@ function get_item_tooltip($item, $ench, $prop)
           if ($item[$spellid])
           {
             if ($item[$charges]>1)
-              $tooltip.= abs($item[$charges])." ".lang('item', 'charges').".<br />";
+              $tooltip.= "".abs($item[$charges])." ".lang('item', 'charges').".<br />";
           }
         }
       }
@@ -928,10 +932,59 @@ function get_item_tooltip($item, $ench, $prop)
       if ($item['itemset'])
       {
         include_once("id_tab.php");
-        $tooltip .= "<br /><font color='orange'>".lang('item', 'item_set')." : ".get_itemset_name($item['itemset'])." (".$item['itemset'].")</font>";
+        $tooltip .= "<font color='orange'>".lang('item', 'item_set')." : ".get_itemset_name($item['itemset'])." (".$item['itemset'].")</font><br />";
       }
       if ($item['description'])
-        $tooltip .= "<br /><font color='orange'>''".str_replace("\"", " '", $item['description'])."'</font>";
+        $tooltip .= "<font color='orange'>''".str_replace("\"", " '", $item['description'])."'</font><br />";
+        
+      if ( $creator )
+      {
+        if ( $core == 1 )
+          ;
+        else
+        {
+          $c_query = "SELECT name FROM characters WHERE guid='".$creator."'";
+          $c_result = $sql['char']->query($c_query);
+          $c_field = $sql['char']->fetch_assoc($c_result);
+          $creator = $c_field['name'];
+        }
+
+        $tooltip .= "<font color='#1eff00'>&lt; ".lang('item', 'madeby')." ".$creator." &gt;</font><br />";
+      }
+
+      if ( $item['SellPrice'] )
+      {
+        // pad the sell price
+        $SellPrice = str_pad($item['SellPrice'], 4, "0", STR_PAD_LEFT);
+
+        // break it into gold, silver, and copper
+        $pg = substr($SellPrice,  0, -4);
+        if ($pg == '')
+          $pg = 0;
+        $ps = substr($SellPrice, -4,  2);
+        if ( ($ps == '') || ($ps == '00') )
+          $ps = 0;
+        $pc = substr($SellPrice, -2);
+        if ( ($pc == '') || ($pc == '00') )
+          $pc = 0;
+
+        // convert the strings into numbers
+        $pg = floor($pg);
+        $ps = floor($ps);
+        $pc = floor($pc);
+
+        $tooltip .= lang('item','sellprice').": ";
+        if  ( $pg )
+          $tooltip .= $pg."<img class='item_tooltip_price' src='img/gold.gif' alt='' align='middle' />";
+        if  ( $ps )
+          $tooltip .= $ps."<img class='item_tooltip_price' src='img/silver.gif' alt='' align='middle' />";
+        if  ( $pc )
+          $tooltip .= $pc."<img class='item_tooltip_price' src='img/copper.gif' alt='' align='middle' />";
+      }
+      else
+      {
+        $tooltip .= lang('item','nosellprice');
+      }
 
     return $tooltip;
   }

@@ -1035,6 +1035,7 @@ tr td.rep0
   visibility: hidden;
   position: absolute;
   z-index: 99;
+  text-align: left;
 }
 .item_tooltip table
 {
@@ -1047,6 +1048,16 @@ tr td.rep0
 {
   background-color: #000000;
 	border: 0px;
+}
+.item_tooltip .item_tooltip_socket
+{
+  width: 14px;
+  height: 14px;
+}
+.item_tooltip .item_tooltip_price
+{
+  width: 13px;
+  height: 13px;
 }
 
 .answerbox
@@ -1379,6 +1390,7 @@ tr td.rep0
 	margin: -21px 0px 0px 17px;
 	font-weight: bold;
 	font-size: 14px;
+  pointer-events: none;
 }
 #ch_inv_quantity_shadow
 {
@@ -1387,6 +1399,7 @@ tr td.rep0
 	color: black;
 	font-weight: bold;
 	font-size: 14px;
+  pointer-events: none;
 }
 #ch_backpack_icon_margin
 {
