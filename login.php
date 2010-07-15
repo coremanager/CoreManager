@@ -130,6 +130,11 @@ function dologin()
 function login()
 {
   global $output, $lang_login, $characters_db, $server, $remember_me_checked, $sql, $core;
+  
+  $override_remember_me = $_COOKIE['override_remember_me'];
+  // if the cookie doesn't exist, we default to showing
+  if ( !isset($override_remember_me) )
+    $override_remember_me = 1;
 
   $output .= '
           <center>
@@ -144,7 +149,7 @@ function login()
   else
     $output .= '
                   document.form.password.value = hex_sha1(document.form.login.value.toUpperCase()+":"+document.form.login_pass.value.toUpperCase());
-                  document.form.login_pass.value = "0";';
+                  //document.form.login_pass.value = "0";';
   $output .= '
                   do_submit();
                 }
@@ -207,7 +212,7 @@ function login()
                     <td align="right">'.lang('login', 'remember_me').' : </td>
 										<td>&nbsp;</td>
                     <td align="left"><input type="checkbox" name="remember" value="1"';
-  if ($remember_me_checked)
+  if ( $remember_me_checked && $override_remember_me )
     $output .= ' checked="checked"';
   // this_is_junk: the hardcoded CSS here is for an input doing nothing.
   $output .= ' /></td>

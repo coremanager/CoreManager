@@ -818,6 +818,7 @@ $GLOBALS['lang_edit'] = array
   'sn_error' => 'Anzeigename wird schon benutzt!', 
   'edit_your_acc' => 'Account bearbeiten',
   'save' => 'Speichern',
+  'override' => 'Show "Remember Me:" login option on this computer',
 );
 
 

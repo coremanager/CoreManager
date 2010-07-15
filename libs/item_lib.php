@@ -178,8 +178,11 @@ function get_item_tooltip($item, $ench, $prop, $creator)
         case 5: //Orange Legendary
           $tooltip .= "<font color='orange' class='large'>$itemname</font><br />";
           break;
-        case 6: //Red Artifact
-          $tooltip .= "<font color='red' class='large'>$itemname</font><br />";
+        case 6: //Gold Artifact
+          $tooltip .= "<font color='#e5cc80' class='large'>$itemname</font><br />";
+          break;
+        case 7: //Gold Heirloom
+          $tooltip .= "<font color='#e5cc80' class='large'>$itemname</font><br />";
           break;
         default:
       }

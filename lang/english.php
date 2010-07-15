@@ -813,11 +813,12 @@ $GLOBALS['lang_edit'] = array
   'theme' => 'Theme',
   'use_valid_email' => 'Try providing a VALID Email Address!',
   'data_updated' => 'Update action success!',
-  'error_updating' => 'Update action Error! - Non of the fields changed?',
+  'error_updating' => 'Update action Error! - None of the fields changed?',
   'del_error' => 'Unexpected Delete Error.',
   'sn_error' => 'Unable to set Screen name, that name is already in use!',
   'edit_your_acc' => 'Edit Your Account',
   'save' => 'Save',
+  'override' => 'Show "Remember Me:" login option on this computer',
 );
 
 

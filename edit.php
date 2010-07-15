@@ -29,7 +29,7 @@ function edit_user()
 {
   global $output, $corem_db, $logon_db, $characters_db, $corem_db, $realm_id,
     $user_name, $user_id, $expansion_select, $server, $developer_test_mode, $multi_realm_mode,
-    $sql, $core;
+    $remember_me_checked, $sql, $core;
 
   $refguid = $sql['mgr']->result($sql['mgr']->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = \''.$user_id.'\''), 0, 'InvitedBy');
   $referred_by = $sql['char']->result($sql['char']->query('SELECT name FROM characters WHERE guid = \''.$refguid.'\''), 0, 'name');
@@ -55,7 +55,7 @@ function edit_user()
                 {
                   //document.form.pass.value = hex_sha1(\''.strtoupper($user_name).':\'+document.form.user_pass.value.toUpperCase());
                   document.form.pass.value = document.form.user_pass.value;//.toUpperCase();
-                  document.form.user_pass.value = \'0\';
+                  //document.form.user_pass.value = \'0\';
                   do_submit();
                 }
               // ]]>
@@ -249,6 +249,18 @@ function edit_user()
     }
     unset($result);
     unset($realms);
+
+    $override_remember_me = $_COOKIE['override_remember_me'];
+    if ( !isset($override_remember_me) )
+      $override_remember_me = 1;
+
+    if ( $remember_me_checked )
+      $output .= '
+                  <tr>
+                    <td>'.lang('edit','override').'</td>
+                    <td><input type="checkbox" name="override" value="1" '.( ($override_remember_me) ? 'checked="checked"' : '' ).' />
+                  </tr>';
+
     $output .= '
                   <tr>
                     <td>';
@@ -331,7 +343,8 @@ function edit_user()
     }
     $output .= '
                         </optgroup>
-                      </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                      </select>&nbsp;&nbsp;&nbsp;&nbsp;';
+    $output .= '
                     </form>
                   </td>
                   <td>';
@@ -355,7 +368,7 @@ function edit_user()
 //#############################################################################################################
 function doedit_user()
 {
-  global $output, $user_name, $logon_db, $corem_db, $sql;
+  global $output, $user_name, $logon_db, $corem_db, $sql, $core;
 
   if ( (empty($_POST['pass'])||($_POST['pass'] == ''))
     && (empty($_POST['mail'])||($_POST['mail'] == ''))
@@ -363,16 +376,22 @@ function doedit_user()
     && (empty($_POST['referredby'])||($_POST['referredby'] == '')) )
     redirect('edit.php?error=1');
 
-  //$new_pass = ($sql['logon']->quote_smart($_POST['pass']) == sha1(strtoupper($user_name).':******')) ? '' : 'sha_pass_hash=\''.$sql['logon']->quote_smart($_POST['pass']).'\', ';
-  if ($_POST['pass'] <> "******")
-    $new_pass = "password = '".$sql['logon']->quote_smart($_POST['pass'])."',";
+  // password
+  if ( $core == 1 )
+    if ( $_POST['pass'] != "******" )
+      $new_pass = "password='".$sql['logon']->quote_smart($_POST['pass'])."',";
+  else
+    if ( $_POST['pass'] != "******" )
+      $new_pass = "password='".sha1(strtoupper($user_name).":".$sql['logon']->quote_smart($_POST['pass']))."', ";
+
+  // other
   $screenname = $sql['logon']->quote_smart(trim($_POST['screenname']));
   $new_mail = $sql['logon']->quote_smart(trim($_POST['mail']));
   $new_expansion = $sql['logon']->quote_smart(trim($_POST['expansion']));
   $referredby = $sql['logon']->quote_smart(trim($_POST['referredby']));
 
   // if we received a Screen Name, make sure it does not conflict with other Screen Names or with
-  // ArcEmu login names.
+  // the game server's login names.
   if ($screenname)
   {
     $query = "SELECT * FROM config_accounts WHERE ScreenName = '".$screenname."'";
@@ -382,7 +401,12 @@ function doedit_user()
     {
       if ($sql['mgr']->num_rows($sn_result) <> 0)
         redirect('edit.php?error=6');
-      $query = "SELECT * FROM accounts WHERE login = '".$screenname."'";
+
+      if ( $core == 1 )
+        $query = "SELECT * FROM accounts WHERE login='".$screenname."'";
+      else
+        $query = "SELECT * FROM account WHERE username='".$screenname."'";
+
       $sn_result = $sql['logon']->query($query);
       if ($sql['logon']->num_rows($sn_result) <> 0)
         redirect('edit.php?error=6');
@@ -398,11 +422,34 @@ function doedit_user()
   // set screen name
   if ($screenname)
     $sql['mgr']->query("INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '".$screenname."')");
+    
+  // Overriding Remember Me is done via a cookie
+  // usage is backward from the name
+  // 1 = show check box
+  // 0 = hide
+  if ( !isset($_POST['override']) )
+    $override = 0;
+  else
+    $override = 1;
+
+  if ( $override != $_COOKIE['override_remember_me'] )
+  {
+    if ( $override )
+      setcookie('override_remember_me', '1', time()+60*60*24*30);
+    else
+      setcookie('override_remember_me', '0', time()+60*60*24*30);
+
+    $other_changes = 1;
+  }
 
   // change other settings
-  $query = "UPDATE accounts SET email = '".$new_mail."', ".$new_pass." flags = '".$new_expansion."' WHERE login = '".$user_name."'";
+  if ( $core == 1 )
+    $query = "UPDATE accounts SET email='".$new_mail."', ".$new_pass." flags='".$new_expansion."' WHERE login='".$user_name."'";
+  else
+    $query = "UPDATE account SET email='".$new_mail."', ".$new_pass." expansion='".$new_expansion."' WHERE username='".$user_name."'";
+
   $sql['logon']->query($query);
-  if (doupdate_referral($referredby) || $sql['mgr']->affected_rows())
+  if ( doupdate_referral($referredby) || $sql['mgr']->affected_rows() || $other_changes )
     redirect('edit.php?error=3');
   else
     redirect('edit.php?error=4');

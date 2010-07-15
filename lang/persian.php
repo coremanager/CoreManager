@@ -818,6 +818,7 @@ $GLOBALS['lang_edit'] = array
   'sn_error' => 'Unable to set Screen name, that name is already in use!',
   'edit_your_acc' => 'اصلاح اکانت',
   'save' => 'Save',
+  'override' => 'Show "Remember Me:" login option on this computer',
 );
 
 
