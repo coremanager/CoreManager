@@ -7,7 +7,7 @@ Begin Window Window1
    Frame           =   0
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   4.4e+2
+   Height          =   4.72e+2
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
@@ -65,7 +65,7 @@ Begin Window Window1
       DataSource      =   ""
       Enabled         =   True
       Format          =   ""
-      Height          =   374
+      Height          =   406
       HelpTag         =   ""
       HideSelection   =   True
       Index           =   -2147483648
@@ -119,7 +119,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   3
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Progress:"
       TextAlign       =   0
       TextColor       =   0
@@ -152,7 +151,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -185,7 +183,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Error Message(s):"
       TextAlign       =   0
       TextColor       =   0
@@ -218,7 +215,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Achievement:"
       TextAlign       =   0
       TextColor       =   0
@@ -251,7 +247,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   7
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Achievement_Category:"
       TextAlign       =   0
       TextColor       =   0
@@ -284,7 +279,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   8
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Achievement_Criteria:"
       TextAlign       =   0
       TextColor       =   0
@@ -317,7 +311,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   9
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "AreaTable:"
       TextAlign       =   0
       TextColor       =   0
@@ -350,7 +343,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   10
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Faction:"
       TextAlign       =   0
       TextColor       =   0
@@ -383,7 +375,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   11
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "FactionTemplate:"
       TextAlign       =   0
       TextColor       =   0
@@ -416,7 +407,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   12
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "GemProperties:"
       TextAlign       =   0
       TextColor       =   0
@@ -449,7 +439,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   13
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "GlyphProperties:"
       TextAlign       =   0
       TextColor       =   0
@@ -482,7 +471,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   14
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Item:"
       TextAlign       =   0
       TextColor       =   0
@@ -515,7 +503,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   15
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "ItemDisplayInfo:"
       TextAlign       =   0
       TextColor       =   0
@@ -548,7 +535,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   16
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "SpellItemEnchantment:"
       TextAlign       =   0
       TextColor       =   0
@@ -581,7 +567,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   17
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "ItemExtendedCost:"
       TextAlign       =   0
       TextColor       =   0
@@ -614,7 +599,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   18
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "ItemSet:"
       TextAlign       =   0
       TextColor       =   0
@@ -647,7 +631,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   19
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Map:"
       TextAlign       =   0
       TextColor       =   0
@@ -680,7 +663,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   20
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "SkillLine:"
       TextAlign       =   0
       TextColor       =   0
@@ -713,7 +695,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   21
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "SkillLineAbility:"
       TextAlign       =   0
       TextColor       =   0
@@ -746,7 +727,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   22
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "SkillRaceClassInfo:"
       TextAlign       =   0
       TextColor       =   0
@@ -779,7 +759,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   23
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Spell:"
       TextAlign       =   0
       TextColor       =   0
@@ -812,7 +791,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   24
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "SpellIcon:"
       TextAlign       =   0
       TextColor       =   0
@@ -845,7 +823,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   25
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Talent:"
       TextAlign       =   0
       TextColor       =   0
@@ -878,7 +855,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   26
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "TalentTab:"
       TextAlign       =   0
       TextColor       =   0
@@ -911,7 +887,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   27
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "WorldMapArea:"
       TextAlign       =   0
       TextColor       =   0
@@ -944,7 +919,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   28
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -977,7 +951,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   29
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1010,7 +983,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   30
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1043,7 +1015,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   31
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1076,7 +1047,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   32
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1109,7 +1079,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   33
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1142,7 +1111,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   34
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1175,7 +1143,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   35
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1208,7 +1175,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   36
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1241,7 +1207,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   37
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1274,7 +1239,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   38
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1307,7 +1271,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   39
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1340,7 +1303,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   40
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1373,7 +1335,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   41
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1406,7 +1367,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   42
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1439,7 +1399,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   43
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1472,7 +1431,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   44
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1505,7 +1463,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   45
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1538,7 +1495,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   46
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1571,7 +1527,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   47
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1604,8 +1559,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   48
       TabPanelIndex   =   0
-      TabStop         =   True
-
       Text            =   "0/0"
       TextAlign       =   0
       TextColor       =   0
@@ -1617,6 +1570,134 @@ Begin Window Window1
       Visible         =   True
       Width           =   169
    End
+   Begin StaticText ProgItemRandomProperties
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   152
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Multiline       =   ""
+      Scope           =   0
+      TabIndex        =   49
+      TabPanelIndex   =   0
+      Text            =   "0/0"
+      TextAlign       =   0
+      TextColor       =   0
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   416
+      Underline       =   ""
+      Visible         =   True
+      Width           =   169
+   End
+   Begin StaticText TextItemRandomProperties
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   20
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Multiline       =   ""
+      Scope           =   0
+      TabIndex        =   50
+      TabPanelIndex   =   0
+      Text            =   "ItemRandomProperties:"
+      TextAlign       =   0
+      TextColor       =   0
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   416
+      Underline       =   ""
+      Visible         =   True
+      Width           =   120
+   End
+   Begin StaticText ProgItemRandomSuffix
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   152
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Multiline       =   ""
+      Scope           =   0
+      TabIndex        =   51
+      TabPanelIndex   =   0
+      Text            =   "0/0"
+      TextAlign       =   0
+      TextColor       =   0
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   432
+      Underline       =   ""
+      Visible         =   True
+      Width           =   169
+   End
+   Begin StaticText TextItemRandomSuffix
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   20
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Multiline       =   ""
+      Scope           =   0
+      TabIndex        =   52
+      TabPanelIndex   =   0
+      Text            =   "ItemRandomSuffix:"
+      TextAlign       =   0
+      TextColor       =   0
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   432
+      Underline       =   ""
+      Visible         =   True
+      Width           =   120
+   End
 End
 #tag EndWindow
 
@@ -1624,7 +1705,7 @@ End
 	#tag Note, Name = LICENSE
 		
 		CoreManager, PHP Front End for ArcEmu, MaNGOS, and TrinityCore
-    Copyright (C) 2010  CoreManager Project
+		    Copyright (C) 2010  CoreManager Project
 		
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -1679,6 +1760,14 @@ End
 
 	#tag Property, Flags = &h0
 		ItemExtendedCostRunner As ItemExtendedCost
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		ItemRandomPropertiesRunner As ItemRandomProperties
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		ItemRandomSuffixRunner As ItemRandomSuffix
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -1816,6 +1905,8 @@ End
 		  FileList.append "Talent.dbc"
 		  FileList.append "TalentTab.dbc"
 		  FileList.append "WorldMapArea.dbc"
+		  FileList.append "ItemRandomProperties.dbc"
+		  FileList.append "ItemRandomSuffix.dbc"
 		  
 		  for each file as string in FileList
 		    f = d.Child(file)
@@ -2196,6 +2287,40 @@ End
 		        // 20 is bytes in header
 		        AreaTableRunner.stringStart = (AreaTableRunner.recordCount * AreaTableRunner.recordSize) + 20
 		        AreaTableRunner.Run
+		      case "ItemRandomProperties.dbc"
+		        ItemRandomPropertiesRunner = new ItemRandomProperties
+		        ItemRandomPropertiesRunner.b = f.OpenAsBinaryFile
+		        ItemRandomPropertiesRunner.b.LittleEndian = true
+		        
+		        ItemRandomPropertiesRunner.offset = 4
+		        
+		        ItemRandomPropertiesRunner.b.Position = ItemRandomPropertiesRunner.offset
+		        
+		        ItemRandomPropertiesRunner.recordCount = ItemRandomPropertiesRunner.b.ReadUInt32()
+		        ItemRandomPropertiesRunner.fieldCount = ItemRandomPropertiesRunner.b.ReadUInt32()
+		        ItemRandomPropertiesRunner.recordSize = ItemRandomPropertiesRunner.b.ReadUInt32()
+		        ItemRandomPropertiesRunner.stringSize = ItemRandomPropertiesRunner.b.ReadUInt32()
+		        
+		        // 20 is bytes in header
+		        ItemRandomPropertiesRunner.stringStart = (ItemRandomPropertiesRunner.recordCount * ItemRandomPropertiesRunner.recordSize) + 20
+		        ItemRandomPropertiesRunner.Run
+		      case "ItemRandomSuffix.dbc"
+		        ItemRandomSuffixRunner = new ItemRandomSuffix
+		        ItemRandomSuffixRunner.b = f.OpenAsBinaryFile
+		        ItemRandomSuffixRunner.b.LittleEndian = true
+		        
+		        ItemRandomSuffixRunner.offset = 4
+		        
+		        ItemRandomSuffixRunner.b.Position = ItemRandomSuffixRunner.offset
+		        
+		        ItemRandomSuffixRunner.recordCount = ItemRandomSuffixRunner.b.ReadUInt32()
+		        ItemRandomSuffixRunner.fieldCount = ItemRandomSuffixRunner.b.ReadUInt32()
+		        ItemRandomSuffixRunner.recordSize = ItemRandomSuffixRunner.b.ReadUInt32()
+		        ItemRandomSuffixRunner.stringSize = ItemRandomSuffixRunner.b.ReadUInt32()
+		        
+		        // 20 is bytes in header
+		        ItemRandomSuffixRunner.stringStart = (ItemRandomSuffixRunner.recordCount * ItemRandomSuffixRunner.recordSize) + 20
+		        ItemRandomSuffixRunner.Run
 		      else
 		        TextArea1.text = f.name + " not handled"
 		      end select

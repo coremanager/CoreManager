@@ -1,54 +1,59 @@
 #tag Class
-Protected Class SkillLine
+Protected Class ItemRandomProperties
 Inherits RunnerClass
 	#tag Event
 		Sub Run()
 		  do
 		    dim ID As integer
-		    dim SkillLineCategory As integer
-		    dim SkillCostID As integer
-		    dim Name As String
-		    dim Description As String
-		    dim SpellIcon As integer
-		    dim Verb As string
-		    dim CanLink As integer
+		    dim Name As string
+		    dim SpellItemEnchantment_1 As integer
+		    dim SpellItemEnchantment_2 As integer
+		    dim SpellItemEnchantment_3 As integer
+		    dim SpellItemEnchantment_4 As integer
+		    dim SpellItemEnchantment_5 As integer
+		    dim Suffix As String
+		    dim SuffixFlags As integer
 		    
 		    if record < recordCount then
-		      Window1.ProgSkillLine.text = str(Record) + "/" + str(recordCount - 1)
-		      Window1.ProgSkillLine.Refresh
+		      Window1.ProgItemRandomProperties.text = str(Record) + "/" + str(recordCount - 1)
+		      Window1.ProgItemRandomProperties.Refresh
 		      
 		      ID = b.ReadInt32
-		      SkillLineCategory = b.ReadInt32
-		      SkillCostID = b.ReadInt32
 		      
 		      offset = b.Position
 		      stringPos = b.ReadUInt32
 		      Name = MySQLPrepare(GetString(stringStart + stringPos, b))
-		      //skip useless data
-		      offset = offset + (17 * 4)
+		      //skip to next field
+		      offset = offset + 4
 		      b.Position = offset
+		      
+		      SpellItemEnchantment_1 = b.ReadInt32
+		      SpellItemEnchantment_2 = b.ReadInt32
+		      SpellItemEnchantment_3 = b.ReadInt32
+		      SpellItemEnchantment_4 = b.ReadInt32
+		      SpellItemEnchantment_5 = b.ReadInt32
 		      
 		      offset = b.Position
 		      stringPos = b.ReadUInt32
-		      Description = MySQLPrepare(GetString(stringStart + stringPos, b))
+		      Suffix = MySQLPrepare(GetString(stringStart + stringPos, b))
 		      //skip useless data
-		      offset = offset + (17 * 4)
+		      offset = offset + (16 * 4)
 		      b.Position = offset
 		      
-		      SpellIcon = b.ReadInt32
-		      
-		      offset = b.Position
-		      stringPos = b.ReadUInt32
-		      Verb = MySQLPrepare(GetString(stringStart + stringPos, b))
-		      //skip useless data
-		      offset = offset + (17 * 4)
-		      b.Position = offset
-		      
-		      CanLink = b.ReadInt32
+		      SuffixFlags = b.ReadInt32
 		      
 		      dim query as string
-		      query = "INSERT INTO skillline VALUES(" + str(ID) + ", " + str(SkillLineCategory) + ", " + str(SkillCostID) + ", '" + name + "', '" + Description + "', " _
-		      + str(SpellIcon) + ", '" + Verb + "', " + str(CanLink) + ")"
+		      query = "INSERT INTO itemrandomproperties VALUES(" + _
+		      str(ID) + ", '" + _
+		      Name + "', " + _
+		      str(SpellItemEnchantment_1) + ", " + _
+		      str(SpellItemEnchantment_2) + ", " + _
+		      str(SpellItemEnchantment_3) + ", " + _
+		      str(SpellItemEnchantment_4) + ", " + _
+		      str(SpellItemEnchantment_5) + ", '" + _
+		      Suffix + "', " + _
+		      str(SuffixFlags) + _
+		      ")"
 		      
 		      db.SQLExecute(query)
 		      
@@ -58,8 +63,8 @@ Inherits RunnerClass
 		      end if
 		      Record = Record + 1
 		    else
-		      Window1.ProgSkillLine.text = "COMPLETE"
-		      Window1.ProgSkillLine.Refresh
+		      Window1.ProgItemRandomProperties.text = "COMPLETE"
+		      Window1.ProgItemRandomProperties.Refresh
 		      exit do
 		    end if
 		  loop
