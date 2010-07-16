@@ -96,7 +96,7 @@ function char_inv()
         $result = $sql['char']->query('SELECT bag, slot, item_template AS entry, item, 
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 11), " ", -1) AS creator,
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 23), " ", -1) AS enchantment, 
-          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 57), " ", -1) AS property, 
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 60), " ", -1) AS property, 
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 15), " ", -1) AS count
           FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid = '.$cid.' ORDER BY bag, slot');
 

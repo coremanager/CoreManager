@@ -340,7 +340,7 @@ function char_main()
         $char_equip_query = "SELECT *,
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 11), ' ', -1) AS creator,
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 23), ' ', -1) AS enchantment,
-          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 57), ' ', -1) AS property
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 60), ' ', -1) AS property
         FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid='".$id."' AND character_inventory.bag=0";
         $char_equip_result = $sql['char']->query($char_equip_query);
 

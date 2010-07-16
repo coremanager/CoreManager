@@ -154,35 +154,40 @@ function get_item_tooltip($item, $ench, $prop, $creator)
   {
       $tooltip = "";
 
-      $query = "SELECT * FROM ";
-      $enchantment = "";
+      $query = "SELECT * FROM itemrandomproperties WHERE ID='".$prop."'";
+      $result = $sql['dbc']->query($query);
+      $i_prop = $sql['dbc']->fetch_assoc($result);
+
+      $query = "SELECT * FROM spellitemenchantment WHERE ID='".$ench."'";
+      $result = $sql['dbc']->query($query);
+      $i_ench = $sql['dbc']->fetch_assoc($result);
 
       $itemname = htmlspecialchars($item['name']);
       switch ($item['Quality'])
       {
         case 0: //Grey Poor
-          $tooltip .= "<font color='#b2c2b9' class='large'>$itemname</font><br />";
+          $tooltip .= "<font color='#b2c2b9' class='large'>".$itemname." ".$i_prop['Name']."</font><br />";
           break;
         case 1: //White Common
-          $tooltip .= "<font color='white' class='large'>$itemname</font><br />";
+          $tooltip .= "<font color='white' class='large'>".$itemname." ".$i_prop['Name']."</font><br />";
           break;
         case 2: //Green Uncommon
-          $tooltip .= "<font color='#1eff00' class='large'>$itemname</font><br />";
+          $tooltip .= "<font color='#1eff00' class='large'>".$itemname." ".$i_prop['Name']."</font><br />";
           break;
         case 3: //Blue Rare
-          $tooltip .= "<font color='#0070dd' class='large'>$itemname</font><br />";
+          $tooltip .= "<font color='#0070dd' class='large'>".$itemname." ".$i_prop['Name']."</font><br />";
           break;
         case 4: //Purple Epic
-          $tooltip .= "<font color='#a335ee' class='large'>$itemname</font><br />";
+          $tooltip .= "<font color='#a335ee' class='large'>".$itemname." ".$i_prop['Name']."</font><br />";
           break;
         case 5: //Orange Legendary
-          $tooltip .= "<font color='orange' class='large'>$itemname</font><br />";
+          $tooltip .= "<font color='orange' class='large'>".$itemname." ".$i_prop['Name']."</font><br />";
           break;
         case 6: //Gold Artifact
-          $tooltip .= "<font color='#e5cc80' class='large'>$itemname</font><br />";
+          $tooltip .= "<font color='#e5cc80' class='large'>".$itemname." ".$i_prop['Name']."</font><br />";
           break;
         case 7: //Gold Heirloom
-          $tooltip .= "<font color='#e5cc80' class='large'>$itemname</font><br />";
+          $tooltip .= "<font color='#e5cc80' class='large'>".$itemname." ".$i_prop['Name']."</font><br />";
           break;
         default:
       }
@@ -697,12 +702,34 @@ function get_item_tooltip($item, $ench, $prop, $creator)
         $tooltip .= " ".$item['ContainerSlots']." ".lang('item', 'slots')."<br />";
 
       $tooltip .= "</font><font color='#1eff00'>";
+
       //random enchantments
-      if ($item['RandomProperty'] || $item['RandomSuffix'])
-        $tooltip .= "&lt; Random enchantment &gt;<br />";
+      //if ( $item['RandomProperty'] || $item['RandomSuffix'] )
+      if ( $i_prop )
+      {
+        $prop1 = $i_prop['SpellItemEnchantment_1'];
+        $prop2 = $i_prop['SpellItemEnchantment_2'];
+        $prop3 = $i_prop['SpellItemEnchantment_3'];
+        $prop4 = $i_prop['SpellItemEnchantment_4'];
+        $prop5 = $i_prop['SpellItemEnchantment_5'];
+
+        $query = "SELECT * FROM spellitemenchantment 
+          WHERE ".
+          ( $prop1 ? "ID=".$prop1 : "" ).
+          ( $prop2 ? " OR ID=".$prop2 : "" ).
+          ( $prop3 ? " OR ID=".$prop3 : "" ).
+          ( $prop4 ? " OR ID=".$prop4 : "" ).
+          ( $prop5 ? " OR ID=".$prop5 : "" );
+        $result = $sql['dbc']->query($query);
+        while ( $prop_row = $sql['dbc']->fetch_assoc($result) )
+        {
+          $tooltip .= $prop_row['EnchantmentName']."<br />";
+        }
+      }
+
       //created enchantments
-      if ($ench || $prop)
-        $tooltip .= "&lt; Enchanted &gt;<br />";
+      if ( $ench )
+        $tooltip .= $i_ench['EnchantmentName']."<br />";
 
       //Ratings additions.
       if (isset($flag_rating))
