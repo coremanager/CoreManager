@@ -24,17 +24,17 @@ if (ini_get('session.auto_start'));
 else session_start();
 
 //---------------------Load Default and User Configuration---------------------
-if (file_exists('config/config.php'))
+if (file_exists('configs/config.php'))
 {
-  if (!file_exists('config/config.dist.php'))
-    exit('<center><br><code>\'config/config.dist.php\'</code> not found,<br>
-          please restore <code>\'config/config.dist.php\'</code></center>');
-  require_once 'config/config.php';
+  if (!file_exists('configs/config.dist.php'))
+    exit('<center><br><code>\'configs/config.dist.php\'</code> not found,<br>
+          please restore <code>\'configs/config.dist.php\'</code></center>');
+  require_once 'configs/config.php';
 }
 else
-  exit('<center><br><code>\'config/config.php\'</code> not found,<br>
-        please copy <code>\'config/config.dist.php\'</code> to
-        <code>\'config/config.php\'</code> and make appropriate changes.');
+  exit('<center><br><code>\'configs/config.php\'</code> not found,<br>
+        please copy <code>\'configs/config.dist.php\'</code> to
+        <code>\'configs/config.php\'</code> and make appropriate changes.');
 
 //----------------- Make sure a valid core has been selected ------------------
 

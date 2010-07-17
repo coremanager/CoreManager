@@ -49,12 +49,12 @@ INSTALLATION:
 
 CONFIGURATION:
 
-   1. Copy \config\config.dist.php into \config\ as config.php.
+   1. Copy \configs\config.dist.php into \configs\ as config.php.
 
-   2. Open \config\config.php for editing.
+   2. Open \configs\config.php for editing.
    3. Configure all 5 entries for $arcm_db with the info for your CoreManager Database
    4. Configure the setting for $db_type.
-   5. Save and close \config\config.php.
+   5. Save and close \configs\config.php.
 
    6. Open setup.php for editing.
    7. Configure all 5 entries for $arcm_db.
