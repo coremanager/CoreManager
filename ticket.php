@@ -45,6 +45,8 @@ function browse_tickets()
   //get total number of items
   if ( $core == 1 )
     $query_1 = $sql['char']->query('SELECT count(*) FROM gm_tickets WHERE deleted=0');
+  elseif ( $core == 2 )
+    $query_1 = $sql['char']->query('SELECT count(*) FROM character_ticket');
   else
     $query_1 = $sql['char']->query('SELECT count(*) FROM gm_tickets WHERE closed=0');
   $all_record = $sql['char']->result($query_1,0);
@@ -57,6 +59,14 @@ function browse_tickets()
                         gm_tickets.deleted AS status, gm_tickets.timestamp AS timestamp
                         FROM gm_tickets
                         LEFT JOIN `characters` ON gm_tickets.playerGuid = `characters`.`guid`
+                        ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+  elseif ( $core == 2 )
+    $query = $sql['char']->query("SELECT character_ticket.ticket_id AS guid, character_ticket.guid AS player,
+                        character_ticket.ticket_text AS message,
+                        op.name AS opener, 0 AS closer,
+                        0 AS status, character_ticket.ticket_lastchange AS timestamp
+                        FROM character_ticket
+                        LEFT JOIN `characters` AS op ON character_ticket.guid = op.`guid`
                         ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   else
     $query = $sql['char']->query("SELECT gm_tickets.guid AS guid, gm_tickets.playerGuid AS player,

@@ -148,10 +148,6 @@
           </table>
           <br />';
 
-  // adding the Content-Length header directive can improve client-side load times.
-  $content_length = strlen($output);
-  header('Content-Length: '.$content_length);
-
   echo $output;
 
   unset($output);

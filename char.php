@@ -312,9 +312,9 @@ function char_main()
 
       $expertise  = ''.$char_data[PLAYER_EXPERTISE].' / '.$char_data[PLAYER_OFFHAND_EXPERTISE].'';
 
-      if ( $core == 1 )
-      {
-        $EQU_HEAD      = $char_data[PLAYER_FIELD_INV_SLOT_HEAD + 0];
+      //if ( $core == 1 )
+      //{
+        /*$EQU_HEAD      = $char_data[PLAYER_FIELD_INV_SLOT_HEAD + 0];
         $EQU_NECK      = $char_data[PLAYER_FIELD_INV_SLOT_HEAD + 2];
         $EQU_SHOULDER  = $char_data[PLAYER_FIELD_INV_SLOT_HEAD + 4];
         $EQU_SHIRT     = $char_data[PLAYER_FIELD_INV_SLOT_HEAD + 6];
@@ -332,139 +332,160 @@ function char_main()
         $EQU_MAIN_HAND = $char_data[PLAYER_FIELD_INV_SLOT_HEAD + 30];
         $EQU_OFF_HAND  = $char_data[PLAYER_FIELD_INV_SLOT_HEAD + 32];
         $EQU_RANGED    = $char_data[PLAYER_FIELD_INV_SLOT_HEAD + 34];
-        $EQU_TABARD    = $char_data[PLAYER_FIELD_INV_SLOT_HEAD + 36];
-      }
-      else
+        $EQU_TABARD    = $char_data[PLAYER_FIELD_INV_SLOT_HEAD + 36];*/
+      //}
+      //else
+      //{
+      $world_db_name = $world_db[$realm_id]['name'];
+
+      if ( $core == 1 )
       {
-        $world_db_name = $world_db[$realm_id]['name'];
+        $char_equip_query = "SELECT *, 
+          entry AS item_template, randomprop as property, enchantments AS enchantment 
+          FROM playeritems WHERE ownerguid='".$id."' AND containerslot=-1";
+      }
+      elseif ( $core == 2 )
+      {
         $char_equip_query = "SELECT *,
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 11), ' ', -1) AS creator,
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 23), ' ', -1) AS enchantment,
-          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 60), ' ', -1) AS property
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 60), ' ', -1) AS property,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 62), ' ', -1) AS durability
         FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid='".$id."' AND character_inventory.bag=0";
-        $char_equip_result = $sql['char']->query($char_equip_query);
+      }
+      else
+      {
+        $char_equip_query = "SELECT *,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 11), ' ', -1) AS creator,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 23), ' ', -1) AS enchantment,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 60), ' ', -1) AS property,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 62), ' ', -1) AS durability
+        FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid='".$id."' AND character_inventory.bag=0";
+      }
 
-        while ( $equip_row = $sql['char']->fetch_assoc($char_equip_result) )
+      $char_equip_result = $sql['char']->query($char_equip_query);
+
+      while ( $equip_row = $sql['char']->fetch_assoc($char_equip_result) )
+      {
+        switch ( $equip_row['slot'] )
         {
-          switch ( $equip_row['slot'] )
+          case 0:
           {
-            case 0:
-            {
-              $EQU_HEAD = $equip_row['item_template'];
-              $EQU_HEAD_ROW = $equip_row;
-              break;
-            }
-            case 1:
-            {
-              $EQU_NECK = $equip_row['item_template'];
-              $EQU_NECK_ROW = $equip_row;
-              break;
-            }
-            case 2:
-            {
-              $EQU_SHOULDER = $equip_row['item_template'];
-              $EQU_SHOULDER_ROW = $equip_row;
-              break;
-            }
-            case 3:
-            {
-              $EQU_SHIRT = $equip_row['item_template'];
-              $EQU_SHIRT_ROW = $equip_row;
-              break;
-            }
-            case 4:
-            {
-              $EQU_CHEST = $equip_row['item_template'];
-              $EQU_CHEST_ROW = $equip_row;
-              break;
-            }
-            case 5:
-            {
-              $EQU_BELT = $equip_row['item_template'];
-              $EQU_BELT_ROW = $equip_row;
-              break;
-            }
-            case 6:
-            {
-              $EQU_LEGS = $equip_row['item_template'];
-              $EQU_LEGS_ROW = $equip_row;
-              break;
-            }
-            case 7:
-            {
-              $EQU_FEET = $equip_row['item_template'];
-              $EQU_FEET_ROW = $equip_row;
-              break;
-            }
-            case 8:
-            {
-              $EQU_WRIST = $equip_row['item_template'];
-              $EQU_WRIST_ROW = $equip_row;
-              break;
-            }
-            case 9:
-            {
-              $EQU_GLOVES = $equip_row['item_template'];
-              $EQU_GLOVES_ROW = $equip_row;
-              break;
-            }
-            case 10:
-            {
-              $EQU_FINGER1 = $equip_row['item_template'];
-              $EQU_FINGER1_ROW = $equip_row;
-              break;
-            }
-            case 11:
-            {
-              $EQU_FINGER2 = $equip_row['item_template'];
-              $EQU_FINGER2_ROW = $equip_row;
-              break;
-            }
-            case 12:
-            {
-              $EQU_TRINKET1 = $equip_row['item_template'];
-              $EQU_TRINKET1_ROW = $equip_row;
-              break;
-            }
-            case 13:
-            {
-              $EQU_TRINKET2 = $equip_row['item_template'];
-              $EQU_TRINKET2_ROW = $equip_row;
-              break;
-            }
-            case 14:
-            {
-              $EQU_BACK = $equip_row['item_template'];
-              $EQU_BACK_ROW = $equip_row;
-              break;
-            }
-            case 15:
-            {
-              $EQU_MAIN_HAND = $equip_row['item_template'];
-              $EQU_MAIN_HAND_ROW = $equip_row;
-              break;
-            }
-            case 16:
-            {
-              $EQU_OFF_HAND = $equip_row['item_template'];
-              $EQU_OFF_HAND_ROW = $equip_row;
-              break;
-            }
-            case 17:
-            {
-              $EQU_RANGED = $equip_row['item_template'];
-              $EQU_RANGED_ROW = $equip_row;
-              break;
-            }
-            case 18:
-            {
-              $EQU_TABARD = $equip_row['item_template'];
-              $EQU_TABARD_ROW = $equip_row;
-              break;
-            }
+            $EQU_HEAD = $equip_row['item_template'];
+            $EQU_HEAD_ROW = $equip_row;
+            break;
+          }
+          case 1:
+          {
+            $EQU_NECK = $equip_row['item_template'];
+            $EQU_NECK_ROW = $equip_row;
+            break;
+          }
+          case 2:
+          {
+            $EQU_SHOULDER = $equip_row['item_template'];
+            $EQU_SHOULDER_ROW = $equip_row;
+            break;
+          }
+          case 3:
+          {
+            $EQU_SHIRT = $equip_row['item_template'];
+            $EQU_SHIRT_ROW = $equip_row;
+            break;
+          }
+          case 4:
+          {
+            $EQU_CHEST = $equip_row['item_template'];
+            $EQU_CHEST_ROW = $equip_row;
+            break;
+          }
+          case 5:
+          {
+            $EQU_BELT = $equip_row['item_template'];
+            $EQU_BELT_ROW = $equip_row;
+            break;
+          }
+          case 6:
+          {
+            $EQU_LEGS = $equip_row['item_template'];
+            $EQU_LEGS_ROW = $equip_row;
+            break;
+          }
+          case 7:
+          {
+            $EQU_FEET = $equip_row['item_template'];
+            $EQU_FEET_ROW = $equip_row;
+            break;
+          }
+          case 8:
+          {
+            $EQU_WRIST = $equip_row['item_template'];
+            $EQU_WRIST_ROW = $equip_row;
+            break;
+          }
+          case 9:
+          {
+            $EQU_GLOVES = $equip_row['item_template'];
+            $EQU_GLOVES_ROW = $equip_row;
+            break;
+          }
+          case 10:
+          {
+            $EQU_FINGER1 = $equip_row['item_template'];
+            $EQU_FINGER1_ROW = $equip_row;
+            break;
+          }
+          case 11:
+          {
+            $EQU_FINGER2 = $equip_row['item_template'];
+            $EQU_FINGER2_ROW = $equip_row;
+            break;
+          }
+          case 12:
+          {
+            $EQU_TRINKET1 = $equip_row['item_template'];
+            $EQU_TRINKET1_ROW = $equip_row;
+            break;
+          }
+          case 13:
+          {
+            $EQU_TRINKET2 = $equip_row['item_template'];
+            $EQU_TRINKET2_ROW = $equip_row;
+            break;
+          }
+          case 14:
+          {
+            $EQU_BACK = $equip_row['item_template'];
+            $EQU_BACK_ROW = $equip_row;
+            break;
+          }
+          case 15:
+          {
+            $EQU_MAIN_HAND = $equip_row['item_template'];
+            $EQU_MAIN_HAND_ROW = $equip_row;
+            break;
+          }
+          case 16:
+          {
+            $EQU_OFF_HAND = $equip_row['item_template'];
+            $EQU_OFF_HAND_ROW = $equip_row;
+            break;
+          }
+          case 17:
+          {
+            $EQU_RANGED = $equip_row['item_template'];
+            $EQU_RANGED_ROW = $equip_row;
+            break;
+          }
+          case 18:
+          {
+            $EQU_TABARD = $equip_row['item_template'];
+            $EQU_TABARD_ROW = $equip_row;
+            break;
           }
         }
       }
+      //}
 /*
 // reserved incase we want to use back CoreManager's built in tooltip, instead of wowheads'
 // CoreManager's item tooltip needs updating, but it can show enchantments and sockets.
@@ -614,19 +635,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[1][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[1][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'HEAD'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[1][3]['enchantment'], $equiped_items[1][3]['property'], $equiped_items[1][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[1][3]['enchantment'], $equiped_items[1][3]['property'], $equiped_items[1][3]['creator'], $equiped_items[1][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -697,19 +722,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[10][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[10][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'GLOVES'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[10][3]['enchantment'], $equiped_items[10][3]['property'], $equiped_items[10][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[10][3]['enchantment'], $equiped_items[10][3]['property'], $equiped_items[10][3]['creator'], $equiped_items[10][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -731,19 +760,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[2][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[2][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'NECK'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[2][3]['enchantment'], $equiped_items[2][3]['property'], $equiped_items[2][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[2][3]['enchantment'], $equiped_items[2][3]['property'], $equiped_items[2][3]['creator'], $equiped_items[2][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -799,19 +832,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[6][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[6][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'BELT'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[6][3]['enchantment'], $equiped_items[6][3]['property'], $equiped_items[6][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[6][3]['enchantment'], $equiped_items[6][3]['property'], $equiped_items[6][3]['creator'], $equiped_items[6][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -833,19 +870,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[3][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[3][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'SHOULDER'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[3][3]['enchantment'], $equiped_items[13][3]['property'], $equiped_items[3][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[3][3]['enchantment'], $equiped_items[3][3]['property'], $equiped_items[3][3]['creator'], $equiped_items[3][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -865,19 +906,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[7][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[7][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'LEGS'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[7][3]['enchantment'], $equiped_items[7][3]['property'], $equiped_items[7][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[7][3]['enchantment'], $equiped_items[7][3]['property'], $equiped_items[7][3]['creator'], $equiped_items[7][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -899,19 +944,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[15][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[15][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'BACK'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[15][3]['enchantment'], $equiped_items[15][3]['property'], $equiped_items[15][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[15][3]['enchantment'], $equiped_items[15][3]['property'], $equiped_items[15][3]['creator'], $equiped_items[15][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -931,19 +980,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[8][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[8][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'FEET'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[8][3]['enchantment'], $equiped_items[8][3]['property'], $equiped_items[8][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[8][3]['enchantment'], $equiped_items[8][3]['property'], $equiped_items[8][3]['creator'], $equiped_items[8][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -965,19 +1018,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[5][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[5][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'CHEST'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[5][3]['enchantment'], $equiped_items[5][3]['property'], $equiped_items[5][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[5][3]['enchantment'], $equiped_items[5][3]['property'], $equiped_items[5][3]['creator'], $equiped_items[5][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -1029,19 +1086,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[11][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[11][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'FINGER1'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[11][3]['enchantment'], $equiped_items[11][3]['property'], $equiped_items[11][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[11][3]['enchantment'], $equiped_items[11][3]['property'], $equiped_items[11][3]['creator'], $equiped_items[11][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -1063,19 +1124,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[4][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[4][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'SHIRT'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[4][3]['enchantment'], $equiped_items[4][3]['property'], $equiped_items[4][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[4][3]['enchantment'], $equiped_items[4][3]['property'], $equiped_items[4][3]['creator'], $equiped_items[4][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -1095,19 +1160,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[12][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[12][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'FINGER2'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[12][3]['enchantment'], $equiped_items[12][3]['property'], $equiped_items[12][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[12][3]['enchantment'], $equiped_items[12][3]['property'], $equiped_items[12][3]['creator'], $equiped_items[12][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -1128,19 +1197,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[19][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[19][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'TABARD'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[19][3]['enchantment'], $equiped_items[19][3]['property'], $equiped_items[19][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[19][3]['enchantment'], $equiped_items[19][3]['property'], $equiped_items[19][3]['creator'], $equiped_items[19][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -1185,19 +1258,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[13][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[13][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'TRINKET1'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[13][3]['enchantment'], $equiped_items[13][3]['property'], $equiped_items[13][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[13][3]['enchantment'], $equiped_items[13][3]['property'], $equiped_items[13][3]['creator'], $equiped_items[13][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -1219,19 +1296,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[9][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[9][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'WRIST'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[9][3]['enchantment'], $equiped_items[9][3]['property'], $equiped_items[9][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[9][3]['enchantment'], $equiped_items[9][3]['property'], $equiped_items[9][3]['creator'], $equiped_items[9][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -1251,19 +1332,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[14][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[14][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'TRINKET2'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[14][3]['enchantment'], $equiped_items[14][3]['property'], $equiped_items[14][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[14][3]['enchantment'], $equiped_items[14][3]['property'], $equiped_items[14][3]['creator'], $equiped_items[14][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -1286,19 +1371,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[16][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[16][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'MAIN_HAND'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[16][3]['enchantment'], $equiped_items[16][3]['property'], $equiped_items[16][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[16][3]['enchantment'], $equiped_items[16][3]['property'], $equiped_items[16][3]['creator'], $equiped_items[16][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -1318,19 +1407,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[17][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[17][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'OFF_HAND'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[17][3]['enchantment'], $equiped_items[17][3]['property'], $equiped_items[17][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[17][3]['enchantment'], $equiped_items[17][3]['property'], $equiped_items[17][3]['creator'], $equiped_items[17][3]['durability']).'
                           </td>
                         </table>
                       </div>';
@@ -1350,19 +1443,23 @@ function char_main()
 
         // build a tooltip object for this item
         if ( $core == 1 )
-          ;
+          $i_query = "SELECT 
+            *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+            socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+            requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+            sellprice AS SellPrice, itemlevel AS ItemLevel
+            FROM items WHERE entry='".$equiped_items[18][3]['item_template']."'";
         else
-        {
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[18][3]['item_template']."'";
-          $i_result = $sql['world']->query($i_query);
-          $i_fields = $sql['world']->fetch_assoc($i_result);
-        }
+
+        $i_result = $sql['world']->query($i_query);
+        $i_fields = $sql['world']->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'RANGED'.'">
                         <table>
                           <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[18][3]['enchantment'], $equiped_items[18][3]['property'], $equiped_items[18][3]['creator']).'
+                            '.get_item_tooltip($i_fields, $equiped_items[18][3]['enchantment'], $equiped_items[18][3]['property'], $equiped_items[18][3]['creator'], $equiped_items[18][3]['durability']).'
                           </td>
                         </table>
                       </div>';

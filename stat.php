@@ -152,6 +152,8 @@ function stats($action)
     {
       if ( $core == 1 )
         $query = $sql['logon']->query("SELECT COUNT(*) FROM accounts UNION SELECT COUNT(*) FROM accounts WHERE gm <> '0'");
+      elseif ( $core == 2 )
+        $query = $sql['logon']->query("SELECT COUNT(*) FROM account UNION SELECT COUNT(*) FROM account WHERE gmlevel <> '0'");
       else
         $query = $sql['logon']->query("SELECT COUNT(*) FROM account UNION SELECT COUNT(*) FROM account_access WHERE gmlevel <> '0'");
       $total_acc = $sql['logon']->result($query, 0);

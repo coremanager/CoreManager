@@ -315,13 +315,15 @@ function browse_chars()
   {
     // switched to fetch_assoc because using record indexes is for morons
     $char = $sql['char']->fetch_assoc($query, 0) or die(error(lang('global', 'err_no_user')));
-    // to disalow lower lvl gm to  view accounts of other gms
+    // to disalow lower lvl gm to  view accounts of other GMs
     if ( $core == 1 )
-      $result = $sql['logon']->query("SELECT gm, login FROM accounts WHERE acct ='".$char['acct']."'");
+      $a_query = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$char['acct']."'");
     else
-      $result = $sql['logon']->query("SELECT gmlevel AS gm, username AS login FROM account LEFT JOIN account_access ON account.id = account_access.id WHERE account.id ='".$char['acct']."'");
-    $owner_gmlvl = gmlevel($sql['logon']->result($result, 0, 'gm'));
-    $owner_acc_name = $sql['logon']->result($result, 0, 'login');
+      $a_query = $sql['logon']->query("SELECT username as login FROM account WHERE id='".$char['acct']."'");
+    $owner_acc_name = $sql['logon']->result($a_query, 0, 'login');
+
+    $gm_query = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_acc_name."'");
+    $owner_gmlvl = $sql['mgr']->result($gm_query, 0, 'gm');
       
     $time_offset = $timezone * 3600;
       

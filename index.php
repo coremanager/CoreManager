@@ -222,6 +222,8 @@ else
 
   if ( $core == 1 )
     $all_record_m = $sql['char']->result($sql['char']->query('SELECT count(*) FROM gm_tickets WHERE deleted=0'), 0);
+  elseif ( $core == 2 )
+    $all_record_m = $sql['char']->result($sql['char']->query('SELECT count(*) FROM character_ticket'), 0);
   else
     $all_record_m = $sql['char']->result($sql['char']->query('SELECT count(*) FROM gm_tickets WHERE closed=0'), 0);
 

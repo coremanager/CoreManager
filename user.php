@@ -102,6 +102,12 @@ function browse_users()
       $query = $sql['logon']->query('SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) as lastlogin, flags, banned
         FROM accounts ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
     }
+    elseif ( $core == 2 )
+    {
+      $query_1 = $sql['logon']->query('SELECT count(*) FROM account');
+      $query = $sql['logon']->query('SELECT *, account.id AS acct, username AS login, gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags
+        FROM account LEFT JOIN account_banned ON account_banned.id = account.id ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
+    }
     else
     {
       $query_1 = $sql['logon']->query('SELECT count(*) FROM account');

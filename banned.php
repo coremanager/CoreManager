@@ -26,11 +26,13 @@ valid_login($action_permission['view']);
 //########################################################################################################################
 function show_list()
 {
-  global $realm_id, $output, $logon_db, $characters_db, $itemperpage, $action_permission, $user_lvl, $sql;
+  global $realm_id, $output, $logon_db, $characters_db, $itemperpage, $action_permission, $user_lvl, $sql,
+    $core;
+
   valid_login($action_permission['view']);
 
   $ban_type = (isset($_GET['ban_type'])) ? $sql['logon']->quote_smart($_GET['ban_type']) : "accounts";
-  
+
   switch($ban_type)
   {
     case "accounts":
@@ -68,17 +70,26 @@ function show_list()
   {
     case "accounts":
     {
-      $query_1 = $sql['logon']->query("SELECT count(*) FROM accounts WHERE banned <> 0");
+      if ( $core == 1 )
+        $query_1 = $sql['logon']->query("SELECT count(*) FROM accounts WHERE banned <> 0");
+      else
+        $query_1 = $sql['logon']->query("SELECT count(*) FROM account_banned WHERE active <> 0");
       break;
     }
     case "characters":
     {
-      $query_1 = $sql['char']->query("SELECT count(*) FROM characters WHERE banned <> 0");
+      if ( $core == 1 )
+        $query_1 = $sql['char']->query("SELECT count(*) FROM characters WHERE banned <> 0");
+      else
+        ;//MaNGOS & Trinity don't ban by character
       break;
     }
     case "ipbans":
     {
-      $query_1 = $sql['logon']->query("SELECT count(*) FROM ipbans");
+      if ( $core == 1 )
+        $query_1 = $sql['logon']->query("SELECT count(*) FROM ipbans");
+      else
+        $query_1 = $sql['logon']->query("SELECT count(*) FROM ip_banned");
       break;
     }
   }
@@ -89,17 +100,26 @@ function show_list()
   {
     case "accounts":
     {
-      $result = $sql['logon']->query("SELECT acct, banned FROM $ban_type WHERE banned <> 0 ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+      if ( $core == 1 )
+        $result = $sql['logon']->query("SELECT acct, banned FROM accounts WHERE banned <> 0 ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+      else
+        $result = $sql['logon']->query("SELECT id AS acct, active AS banned FROM account_banned WHERE active <> 0 ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
       break;
     }
     case "characters":
     {
-      $result = $sql['char']->query("SELECT guid, name, banned, banReason FROM $ban_type WHERE banned <> 0 ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+      if ( $core == 1 )
+        $result = $sql['char']->query("SELECT guid, name, banned, banReason FROM $ban_type WHERE banned <> 0 ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+      else
+        ;// MaNGOS & Trinity don't ban by character
       break;
     }
     case "ipbans":
     {
-      $result = $sql['logon']->query("SELECT ip, expire FROM $ban_type ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+      if ( $core == 1 )
+        $result = $sql['logon']->query("SELECT ip, expire FROM ipbans ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+      else
+        $result = $sql['logon']->query("SELECT ip, unbandate AS expire FROM ip_banned ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
       break;
     }
   }

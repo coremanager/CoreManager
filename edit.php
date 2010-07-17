@@ -432,7 +432,7 @@ function doedit_user()
   else
     $override = 1;
 
-  if ( $override != $_COOKIE['override_remember_me'] )
+  if ( ( $override != $_COOKIE['override_remember_me'] ) || ( !isset($_COOKIE['override_remember_me']) ) )
   {
     if ( $override )
       setcookie('override_remember_me', '1', time()+60*60*24*30);

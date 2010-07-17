@@ -71,13 +71,13 @@ function char_talent()
   {
     $char = $sql['char']->fetch_assoc($result);
 
-    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
+    //resrict by owner's gmlvl
+    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
     if ( $core == 1 )
-      $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
+      $query = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$owner_acc_id."'");
     else
-      $result = $sql['logon']->query('SELECT gmlevel AS gm, username AS login FROM account LEFT JOIN account_access ON account_access.id = account.id WHERE account.id = '.$char['acct'].'');
-    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
-    $owner_name = $sql['logon']->result($result, 0, 'login');
+      $query = $sql['logon']->query("SELECT username as login FROM account WHERE id='".$owner_acc_id."'");
+    $owner_name = $sql['logon']->result($query, 0, 'login');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {

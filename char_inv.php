@@ -77,23 +77,27 @@ function char_inv()
     $char = $sql['char']->fetch_assoc($result);
 
     // we get user permissions first
-    $owner_acc_id = $sql['char']->result($result, 0, 'accounts');
+    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
     if ( $core == 1 )
-      $result = $sql['logon']->query('SELECT gm, login FROM accounts WHERE acct = '.$char['acct'].'');
+      $query = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$owner_acc_id."'");
     else
-      $result = $sql['logon']->query('SELECT account_access.gmlevel AS gm, account.username AS login FROM account LEFT JOIN account_access ON account_access.id = account.id WHERE account.id = '.$char['acct'].'');
-    $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
-    $owner_name = $sql['logon']->result($result, 0, 'login');
+      $query = $sql['logon']->query("SELECT username as login FROM account WHERE id='".$owner_acc_id."'");
+    $owner_name = $sql['logon']->result($query, 0, 'login');
+
+    $query = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql['mgr']->result($query, 0, 'gm');
 
     // check user permission
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
     {
       // main data that we need for this page, character inventory
       if ( $core == 1 )
-        $result = $sql['char']->query('SELECT containerslot, slot, entry, 0 AS enchantment, 0 AS property, count
+        $result = $sql['char']->query('SELECT 
+          containerslot, slot, entry, enchantments AS enchantment, randomprop AS property, count
           FROM playeritems WHERE ownerguid = '.$cid.' ORDER BY containerslot, slot');
       else
-        $result = $sql['char']->query('SELECT bag, slot, item_template AS entry, item, 
+        $result = $sql['char']->query('SELECT 
+          bag, slot, item_template AS entry, item, 
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 11), " ", -1) AS creator,
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 23), " ", -1) AS enchantment, 
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 60), " ", -1) AS property, 
@@ -135,7 +139,6 @@ function char_inv()
       $equiped_bag_id = array(0,0,0,0,0);
       // this is where we will put items that are in bank bangs, 7 arrays, 1 for each
       $equip_bnk_bag_id = array(0,0,0,0,0,0,0,0);
-
       // we load the things in each bag slot
       while ($slot = $sql['char']->fetch_assoc($result))
       {
@@ -152,7 +155,12 @@ function char_inv()
             }
             elseif($slot['slot'] < 39) // SLOT 23 TO 38 (BackPack)
             {
-              $i_query = "SELECT * FROM items WHERE entry='".$slot['entry']."'";
+              $i_query = "SELECT 
+                *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+                socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+                requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+                sellprice AS SellPrice, itemlevel AS ItemLevel
+                FROM items WHERE entry='".$slot['entry']."'";
 
               $i_result = $sql['world']->query($i_query);
               $i = $sql['world']->fetch_assoc($i_result);
@@ -163,7 +171,12 @@ function char_inv()
             }
             elseif($slot['slot'] < 67) // SLOT 39 TO 66 (Bank)
             {
-              $i_query = "SELECT * FROM items WHERE entry='".$slot['entry']."'";
+              $i_query = "SELECT
+                *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+                socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+                requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+                sellprice AS SellPrice, itemlevel AS ItemLevel
+                FROM items WHERE entry='".$slot['entry']."'";
 
               $i_result = $sql['world']->query($i_query);
               $i = $sql['world']->fetch_assoc($i_result);
@@ -183,7 +196,12 @@ function char_inv()
             // Bags
             if (isset($bag_id[$slot['containerslot']]))
             {
-              $i_query = "SELECT * FROM items WHERE entry='".$slot['entry']."'";
+              $i_query = "SELECT
+                *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+                socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+                requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+                sellprice AS SellPrice, itemlevel AS ItemLevel
+                FROM items WHERE entry='".$slot['entry']."'";
 
               $i_result = $sql['world']->query($i_query);
               $i = $sql['world']->fetch_assoc($i_result);
@@ -196,7 +214,12 @@ function char_inv()
             // Bank Bags
             elseif (isset($bank_bag_id[$slot['containerslot']]))
             {
-              $i_query = "SELECT * FROM items WHERE entry='".$slot['entry']."'";
+              $i_query = "SELECT
+                *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+                socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+                requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+                sellprice AS SellPrice, itemlevel AS ItemLevel
+                FROM items WHERE entry='".$slot['entry']."'";
 
               $i_result = $sql['world']->query($i_query);
               $i = $sql['world']->fetch_assoc($i_result);

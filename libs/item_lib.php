@@ -146,7 +146,7 @@ function get_item_quality_color($quality)
 //#############################################################################
 //generate item tooltip from item_template.entry
 
-function get_item_tooltip($item, $ench, $prop, $creator)
+function get_item_tooltip($item, $ench, $prop, $creator, $durability)
 {
   global $world_db, $realm_id, $language, $sql, $core;
 
@@ -154,9 +154,58 @@ function get_item_tooltip($item, $ench, $prop, $creator)
   {
       $tooltip = "";
 
-      $query = "SELECT * FROM itemrandomproperties WHERE ID='".$prop."'";
-      $result = $sql['dbc']->query($query);
-      $i_prop = $sql['dbc']->fetch_assoc($result);
+      // properties
+      if ( $core == 1 )
+      {
+        $query = "SELECT * FROM itemrandomproperties WHERE ID='".$prop."'";
+        $result = $sql['dbc']->query($query);
+        $i_prop = $sql['dbc']->fetch_assoc($result);
+      }
+      else
+      {
+        if ( $prop > 2147483647 )
+        {
+          // Random Suffix values are stored as "negative" integers
+          // this_is_junk: the SpellItemEnchantment value pointed to by the fields in a
+          // RandomSuffix have +i instead of a stated value.
+          // I'm not sure yet how to translate that.
+          $prop = 4294967296 - $prop;
+          $query = "SELECT * FROM itemrandomsuffix WHERE ID='".$prop."'";
+          $result = $sql['dbc']->query($query);
+          $i_prop = $sql['dbc']->fetch_assoc($result);
+        }
+        else
+        {
+          // Random Suffix values are stored as "positive" integers
+          $query = "SELECT * FROM itemrandomproperties WHERE ID='".$prop."'";
+          $result = $sql['dbc']->query($query);
+          $i_prop = $sql['dbc']->fetch_assoc($result);
+        }
+      }
+
+      // enchantment
+      if ( $core == 1 )
+      {
+        // ArcEmu stores extra (and unneeded) enchantments
+        // first, we get all the enchantments
+        $temp_ench = explode(";", $ench);
+        // then, we just need the enchantment in slot 0
+        $ench = 0;
+        foreach ( $temp_ench as $temp_row)
+        {
+          // it seems that we will sometimes get an extra array member. :/
+          // we don't want it corrupting our data.
+          if ( $temp_row != "" )
+          {
+            $temp = explode(",", $temp_row);
+
+            if ( $temp[2] == 0 )
+            {
+                $ench = $temp[0];
+            }
+          }
+        }
+      }
 
       $query = "SELECT * FROM spellitemenchantment WHERE ID='".$ench."'";
       $result = $sql['dbc']->query($query);
@@ -211,8 +260,16 @@ function get_item_tooltip($item, $ench, $prop, $creator)
         default:
       }
 
-      if ($item['maxcount'])
-        $tooltip .= lang('item', 'unique')."<br />";
+      if ( $core == 1 )
+      {
+        if ( $item['Unique'] )
+          $tooltip .= lang('item', 'unique')."<br />";
+      }
+      else
+      {
+        if ( $item['maxcount'] )
+          $tooltip .= lang('item', 'unique')."<br />";
+      }
 
       //$tooltip .= "<br />";
 
@@ -677,34 +734,10 @@ function get_item_tooltip($item, $ench, $prop, $creator)
         }
       }
 
-      //level requierment
-      if($item['RequiredLevel'])
-        $tooltip .= lang('item', 'lvl_req')." ".$item['RequiredLevel']."<br />";
-
-      //allowable classes
-      if (($item['AllowableClass'])&&($item['AllowableClass'] != -1)&&($item['AllowableClass'] != 1503))
-      {
-        $tooltip .= lang('item', 'class').":";
-        if ($item['AllowableClass'] & 1) $tooltip .= " ".lang('id_tab', 'warrior')." ";
-        if ($item['AllowableClass'] & 2) $tooltip .= " ".lang('id_tab', 'paladin')." ";
-        if ($item['AllowableClass'] & 4) $tooltip .= " ".lang('id_tab', 'hunter')." ";
-        if ($item['AllowableClass'] & 8) $tooltip .= " ".lang('id_tab', 'rogue')." ";
-        if ($item['AllowableClass'] & 16) $tooltip .= " ".lang('id_tab', 'priest')." ";
-        if ($item['AllowableClass'] & 64) $tooltip .= " ".lang('id_tab', 'shaman')." ";
-        if ($item['AllowableClass'] & 128) $tooltip .= " ".lang('id_tab', 'mage')." ";
-        if ($item['AllowableClass'] & 256) $tooltip .= " ".lang('id_tab', 'warlock')." ";
-        if ($item['AllowableClass'] & 1024) $tooltip .= " ".lang('id_tab', 'druid')." ";
-        $tooltip .= "<br />";
-      }
-
-      //number of bag slots
-      if ($item['ContainerSlots'])
-        $tooltip .= " ".$item['ContainerSlots']." ".lang('item', 'slots')."<br />";
-
       $tooltip .= "</font><font color='#1eff00'>";
 
       //random enchantments
-      //if ( $item['RandomProperty'] || $item['RandomSuffix'] )
+      // we color them green because we don't add them to the normal stat values, yet.
       if ( $i_prop )
       {
         $prop1 = $i_prop['SpellItemEnchantment_1'];
@@ -726,6 +759,50 @@ function get_item_tooltip($item, $ench, $prop, $creator)
           $tooltip .= $prop_row['EnchantmentName']."<br />";
         }
       }
+
+      $tooltip .= "</font>";
+      
+      if ( isset($durability) )
+      {
+        $tooltip .= lang('item', 'durability')." ".$durability." / ".$item['MaxDurability']."<br />";
+      }
+
+      //level requierment
+      if ( $item['RequiredLevel'] > 1)
+        $tooltip .= lang('item', 'lvl_req')." ".$item['RequiredLevel']."<br />";
+      elseif ( $item['RequiredLevel'] == 0)
+      {
+        if ( $item['Quality'] == 7 )
+          $tooltip .= lang('item', 'lvl_req2')."<br />";// "Requires Level 1 to 80"
+      }
+      else
+        ;// don't bother showing "Requires Level" for items that require level 1
+
+      //item level
+      if($item['ItemLevel'])
+        $tooltip .= lang('item', 'itemlvl')." ".$item['ItemLevel']."<br />";
+
+      //allowable classes
+      if ( ( $item['AllowableClass'] ) && ( $item['AllowableClass'] != -1 ) && ( $item['AllowableClass'] != 1503 ) )
+      {
+        $tooltip .= lang('item', 'class').":";
+        if ($item['AllowableClass'] & 1) $tooltip .= " ".lang('id_tab', 'warrior')." ";
+        if ($item['AllowableClass'] & 2) $tooltip .= " ".lang('id_tab', 'paladin')." ";
+        if ($item['AllowableClass'] & 4) $tooltip .= " ".lang('id_tab', 'hunter')." ";
+        if ($item['AllowableClass'] & 8) $tooltip .= " ".lang('id_tab', 'rogue')." ";
+        if ($item['AllowableClass'] & 16) $tooltip .= " ".lang('id_tab', 'priest')." ";
+        if ($item['AllowableClass'] & 64) $tooltip .= " ".lang('id_tab', 'shaman')." ";
+        if ($item['AllowableClass'] & 128) $tooltip .= " ".lang('id_tab', 'mage')." ";
+        if ($item['AllowableClass'] & 256) $tooltip .= " ".lang('id_tab', 'warlock')." ";
+        if ($item['AllowableClass'] & 1024) $tooltip .= " ".lang('id_tab', 'druid')." ";
+        $tooltip .= "<br />";
+      }
+
+      //number of bag slots
+      if ($item['ContainerSlots'])
+        $tooltip .= " ".$item['ContainerSlots']." ".lang('item', 'slots')."<br />";
+
+      $tooltip .= "</font><font color='#1eff00'>";
 
       //created enchantments
       if ( $ench )

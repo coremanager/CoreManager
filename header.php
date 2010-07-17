@@ -24,18 +24,18 @@ if (ini_get('session.auto_start'));
 else session_start();
 
 //---------------------Load Default and User Configuration---------------------
-if (file_exists('scripts/config.php'))
+if (file_exists('config/config.php'))
 {
-  if (!file_exists('scripts/config.dist.php'))
-    exit('<center><br><code>\'scripts/config.dist.php\'</code> not found,<br>
-          please restore <code>\'scripts/config.dist.php\'</code></center>');
-  require_once 'scripts/config.php';
+  if (!file_exists('config/config.dist.php'))
+    exit('<center><br><code>\'config/config.dist.php\'</code> not found,<br>
+          please restore <code>\'config/config.dist.php\'</code></center>');
+  require_once 'config/config.php';
 }
 else
-  exit('<center><br><code>\'scripts/config.php\'</code> not found,<br>
-        please copy <code>\'scripts/config.dist.php\'</code> to
-        <code>\'scripts/config.php\'</code> and make appropriate changes.');
-        
+  exit('<center><br><code>\'config/config.php\'</code> not found,<br>
+        please copy <code>\'config/config.dist.php\'</code> to
+        <code>\'config/config.php\'</code> and make appropriate changes.');
+
 //----------------- Make sure a valid core has been selected ------------------
 
 if ( ( $core < 1 ) || ( $core > 3 ) )
@@ -65,7 +65,7 @@ if (isset($_COOKIE['lang']))
 }
 else
   $lang = $language;
-  
+
 //---------------------Current Filename----------------------------------------
 $cur_filename = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1);
 

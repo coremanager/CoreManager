@@ -35,12 +35,13 @@ else
 if (isset($_COOKIE['lang']))
 {
   $lang = $_COOKIE['lang'];
-  if (file_exists('lang/'.$lang.'.php'));
+  if (file_exists('lang/'.$lang.'.php'))
+    ;
   else
-    $lang = $language;
+    $lang = 'english';
 }
 else
-  $lang = $language;
+  $lang = 'english';
 
 require_once 'libs/global_lib.php';
 require_once 'lang/'.$lang.'.php';

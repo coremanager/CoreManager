@@ -635,6 +635,7 @@ $GLOBALS['lang_item'] = array
   'arcane_dmg' => 'Arkanschaden',
   'physical_dmg' => 'Physisch',
   'lvl_req' => 'Ben&ouml;tigt Stufe',
+  'lvl_req2' => 'Requires Level 1 to 80',
   'item_set' => 'Gegenstands-Set',
   'bag' => 'Tasche',
   'health' => 'Gesundheit',
@@ -705,6 +706,8 @@ $GLOBALS['lang_item'] = array
   'madeby' => 'Made by',
   'sellprice' => 'Sell Price',
   'nosellprice' => 'No Sell Price',
+  'itemlvl' => 'Item Level',
+  'durability' => 'Durability',
 );
 
 

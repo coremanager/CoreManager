@@ -19,7 +19,7 @@
 
 
 require_once("header.php");
-require_once("scripts/forum.conf.php");
+require_once("config/forum.conf.php");
 require_once("libs/forum_lib.php");
 require_once("libs/bb2html_lib.php");
 valid_login($action_permission['view']);

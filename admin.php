@@ -23,7 +23,7 @@ $time_start = microtime(true);
 if (ini_get('session.auto_start'));
 else session_start();
 
-require_once("scripts/config.php");
+require_once("config/config.php");
 require_once("admin/admin_lib.php");
 require_once("libs/lang_lib.php");
 
