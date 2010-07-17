@@ -169,14 +169,15 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability)
           // this_is_junk: the SpellItemEnchantment value pointed to by the fields in a
           // RandomSuffix have +i instead of a stated value.
           // I'm not sure yet how to translate that.
-          $prop = 4294967296 - $prop;
+          // tempararily disabling showing Random Suffixes...
+          //$prop = 4294967296 - $prop;
           $query = "SELECT * FROM itemrandomsuffix WHERE ID='".$prop."'";
           $result = $sql['dbc']->query($query);
           $i_prop = $sql['dbc']->fetch_assoc($result);
         }
         else
         {
-          // Random Suffix values are stored as "positive" integers
+          // Random Property values are stored as "positive" integers
           $query = "SELECT * FROM itemrandomproperties WHERE ID='".$prop."'";
           $result = $sql['dbc']->query($query);
           $i_prop = $sql['dbc']->fetch_assoc($result);
@@ -736,33 +737,39 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability)
 
       $tooltip .= "</font><font color='#1eff00'>";
 
-      //random enchantments
+      // random enchantments
       // we color them green because we don't add them to the normal stat values, yet.
-      if ( $i_prop )
+      if ( $prop > 2147483647 )
+        // tempararily disabling showing Random Suffixes...
+        $tooltip .= "< Random Enchantment ><br />";
+      else
       {
-        $prop1 = $i_prop['SpellItemEnchantment_1'];
-        $prop2 = $i_prop['SpellItemEnchantment_2'];
-        $prop3 = $i_prop['SpellItemEnchantment_3'];
-        $prop4 = $i_prop['SpellItemEnchantment_4'];
-        $prop5 = $i_prop['SpellItemEnchantment_5'];
-
-        $query = "SELECT * FROM spellitemenchantment 
-          WHERE ".
-          ( $prop1 ? "ID=".$prop1 : "" ).
-          ( $prop2 ? " OR ID=".$prop2 : "" ).
-          ( $prop3 ? " OR ID=".$prop3 : "" ).
-          ( $prop4 ? " OR ID=".$prop4 : "" ).
-          ( $prop5 ? " OR ID=".$prop5 : "" );
-        $result = $sql['dbc']->query($query);
-        while ( $prop_row = $sql['dbc']->fetch_assoc($result) )
+        if ( $i_prop )
         {
-          $tooltip .= $prop_row['EnchantmentName']."<br />";
+          $prop1 = $i_prop['SpellItemEnchantment_1'];
+          $prop2 = $i_prop['SpellItemEnchantment_2'];
+          $prop3 = $i_prop['SpellItemEnchantment_3'];
+          $prop4 = $i_prop['SpellItemEnchantment_4'];
+          $prop5 = $i_prop['SpellItemEnchantment_5'];
+
+          $query = "SELECT * FROM spellitemenchantment 
+            WHERE ".
+            ( $prop1 ? "ID=".$prop1 : "" ).
+            ( $prop2 ? " OR ID=".$prop2 : "" ).
+            ( $prop3 ? " OR ID=".$prop3 : "" ).
+            ( $prop4 ? " OR ID=".$prop4 : "" ).
+            ( $prop5 ? " OR ID=".$prop5 : "" );
+          $result = $sql['dbc']->query($query);
+          while ( $prop_row = $sql['dbc']->fetch_assoc($result) )
+          {
+            $tooltip .= $prop_row['EnchantmentName']."<br />";
+          }
         }
       }
 
       $tooltip .= "</font>";
       
-      if ( isset($durability) )
+      if ( ( isset($durability) ) && ( $item['MaxDurability'] > 0 ) )
       {
         $tooltip .= lang('item', 'durability')." ".$durability." / ".$item['MaxDurability']."<br />";
       }
