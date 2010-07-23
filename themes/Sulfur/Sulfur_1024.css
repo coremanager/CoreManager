@@ -778,9 +778,14 @@ tr td.bar span
 	margin-top: 3px;
 	color: #fff !important;
 }
-tr td.skill_ba
+tr td.skill_bar
 {
 	background-image: url(../../img/bar_skill.png);
+}
+tr td.xp_bar
+{
+  width: 580px;
+	background-image: url(../../img/bar_xp.png);
 }
 
 .faction-bar

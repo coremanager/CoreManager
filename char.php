@@ -115,14 +115,22 @@ function char_main()
       {
         $result = $sql['char']->query("SELECT guid, name, race, class, level, zoneid, mapid, online, gender,
           SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1) AS totaltime,
-          acct, data, timestamp 
+          acct, data, timestamp, xp 
+          FROM characters WHERE guid = '".$id."'");
+      }
+      elseif ( $core == 2 )
+      {
+        $result = $sql['char']->query("SELECT guid, name, race, class, level, zone AS zoneid, map AS mapid, 
+          online, gender, totaltime, account AS acct, logout_time AS timestamp, health, 
+					power1, power2, power3, power4, power5, power6, power7,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 1011), ' ', -1) AS xp
           FROM characters WHERE guid = '".$id."'");
       }
       else
       {
-        $result = $sql['char']->query("SELECT guid, name, race, class, level, zone AS zoneid, map AS mapid, online, gender,
-          totaltime, account AS acct, logout_time AS timestamp, health, 
-					power1, power2, power3, power4, power5, power6, power7 
+        $result = $sql['char']->query("SELECT guid, name, race, class, level, zone AS zoneid, map AS mapid, 
+          online, gender, totaltime, account AS acct, logout_time AS timestamp, health, 
+					power1, power2, power3, power4, power5, power6, power7, xp 
           FROM characters WHERE guid = '".$id."'");
       }
       $char = $sql['char']->fetch_assoc($result);
@@ -1472,8 +1480,24 @@ function char_main()
                     <td width="15%"></td>
                     <td></td>
                   </tr>';
-      if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
       {
+        // if the character is still leveling, show an experience bar
+        if ( $char['level'] < 80 )
+        {
+          $xp_query = "SELECT * FROM xp_to_level WHERE level='".$char['level']."'";
+          $xp_result = $sql['mgr']->query($xp_query);
+          $xp_fields = $sql['mgr']->fetch_assoc($xp_result);
+          $xp_to_level = $xp_fields['xp_for_next_level'];
+          
+          $output .= '
+                    <tr>
+                      <td colspan="6" valign="center" class="bar xp_bar" style="background-position: '.(round(580*$char['xp']/$xp_to_level)-580).'px;">
+                        '.lang('char', 'exp').": ".$char['xp']." / ".$xp_to_level.'
+                      </td>
+                    </tr>';
+        }
+
         //total time played
         $tot_time = $char['totaltime'];
         $tot_days = (int)($tot_time/86400);
