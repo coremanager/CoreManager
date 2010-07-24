@@ -146,7 +146,7 @@ function get_item_quality_color($quality)
 //#############################################################################
 //generate item tooltip from item_template.entry
 
-function get_item_tooltip($item, $ench, $prop, $creator, $durability)
+function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
 {
   global $world_db, $realm_id, $language, $sql, $core;
 
@@ -244,21 +244,31 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability)
 
       $tooltip .= "<font color='white'>";
 
-      switch ($item['bonding'])
+      // bonding
+      // first, we check if our item is already bound
+      // if not, show how it will bind
+      if ( ($flags && 1) == 1 )
       {
-        case 1: //Binds when Picked Up
-          $tooltip .= lang('item', 'bop')."<br />";
-          break;
-        case 2: //Binds when Equipped
-          $tooltip .= lang('item', 'boe')."<br />";
-          break;
-        case 3: //Binds when Used
-          $tooltip .= lang('item', 'bou')."<br />";
-          break;
-        case 4: //Quest Item
-          $tooltip .= lang('item', 'quest_item')."<br />";
-          break;
-        default:
+        $tooltip .= lang('item', 'bound')."<br />";
+      }
+      else
+      {
+        switch ($item['bonding'])
+        {
+          case 1: //Binds when Picked Up
+            $tooltip .= lang('item', 'bop')."<br />";
+            break;
+          case 2: //Binds when Equipped
+            $tooltip .= lang('item', 'boe')."<br />";
+            break;
+          case 3: //Binds when Used
+            $tooltip .= lang('item', 'bou')."<br />";
+            break;
+          case 4: //Quest Item
+            $tooltip .= lang('item', 'quest_item')."<br />";
+            break;
+          default:
+        }
       }
 
       if ( $core == 1 )
@@ -322,7 +332,7 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability)
           $tooltip .= lang('item', 'back')." - ";
           break;
         case 18:
-          $tooltip .= lang('item', 'bag')."";
+          $tooltip .= lang('item', 'bag')."<br />";
           break;
         case 19:
           $tooltip .= lang('item', 'tabard')." - ";

@@ -121,7 +121,9 @@ function char_view()
       $item_main_hand = $data[PLAYER_VISIBLE_ITEM_16_ENTRYID];
       $item_off_hand = $data[PLAYER_VISIBLE_ITEM_17_ENTRYID];
       $item_ranged_slot = $data[PLAYER_VISIBLE_ITEM_18_ENTRYID];
-      $item_tabard = $data[PLAYER_VISIBLE_ITEM_19_ENTRYID];
+      // don't bother showing guild tabards
+      if ( $data[PLAYER_VISIBLE_ITEM_19_ENTRYID] <> 5976 )
+        $item_tabard = $data[PLAYER_VISIBLE_ITEM_19_ENTRYID];
 
       $b = $data[PLAYER_BYTES];
       $b2 = $data[PLAYER_BYTES_2];
@@ -234,7 +236,9 @@ function char_view()
             }
             case 18:
             {
-              $item_tabard = $inv_row['item_template'];
+              // don't bother showing guild tabards
+              if ( $inv_row['item_template'] <> 5976 )
+                $item_tabard = $inv_row['item_template'];
               break;
             }
           }

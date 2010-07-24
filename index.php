@@ -179,7 +179,7 @@ else
                   .$stats['maxplayers'].'</font>';
       if (!$hide_avg_latency)
       {
-        $lat_query = "SELECT SUM(latency), COUNT(*) FROM characters";
+        $lat_query = "SELECT SUM(latency), COUNT(*) FROM characters WHERE online=1 OR logout_time>'".$stats['starttime']."'";
         $lat_result = $sql['char']->query($lat_query);
         $lat_fields = $sql['char']->fetch_assoc($lat_result);
         $avglat = number_format($lat_fields['SUM(latency)'] / $lat_fields['COUNT(*)'], 3);
