@@ -1,6 +1,6 @@
 Subject: Welcome to <title>.
 
-Thank you for registering in our ArcEmu Server at <base_url>.
+Thank you for registering in our <core> Server at <base_url>.
 
 Your account details are:
 Username: <username>

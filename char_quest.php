@@ -123,7 +123,7 @@ function char_quest()
       if ( $core == 1 )
         $result = $sql['char']->query("SELECT quest_id, completed FROM questlog WHERE player_guid = '".$id."'");
       else
-        $result = $sql['char']->query("SELECT quest AS quest_id, status AS completed FROM character_queststatus WHERE guid = '".$id."'");
+        $result = $sql['char']->query("SELECT quest AS quest_id, status AS completed FROM character_queststatus WHERE guid = '".$id."' AND rewarded=0 AND status<>0");
 
       $quests_1 = array();
       $quests_3 = array();

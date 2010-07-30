@@ -18,7 +18,7 @@
 */
 
 
- require_once("header.php");
+require_once("header.php");
 
 //#####################################################################################################
 // DO REGISTER
@@ -30,22 +30,22 @@ function doregister()
     $mailer_type, $smtp_cfg, $title, $expansion_select, $defaultoption, $GMailSender, $format_mail_html,
     $enable_captcha, $use_recaptcha, $recaptcha_private_key, $sql, $core;
 
-  if ($enable_captcha)
+  if ( $enable_captcha )
   {
-    if ($use_recaptcha)
+    if ( $use_recaptcha )
     {
       require_once('libs/recaptcha/recaptchalib.php');
 
       $resp = recaptcha_check_answer($recaptcha_private_key, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
       
-      if (!$resp->is_valid)
+      if ( !$resp->is_valid )
       {
         redirect("register.php?err=13");
       }
     }
     else
     {
-      if (($_POST['security_code']) != ($_SESSION['security_code']))
+      if ( ( $_POST['security_code'] ) != ( $_SESSION['security_code'] ) )
       {
         redirect("register.php?err=13");
       }
@@ -57,43 +57,43 @@ function doregister()
     redirect("register.php?err=1");
   }
 
-  if ($disable_acc_creation) 
+  if ( $disable_acc_creation ) 
     redirect("register.php?err=4");
 
-  $last_ip =  (getenv('HTTP_X_FORWARDED_FOR')) ? getenv('HTTP_X_FORWARDED_FOR') : getenv('REMOTE_ADDR');
+  $last_ip =  ( ( getenv('HTTP_X_FORWARDED_FOR') ) ? getenv('HTTP_X_FORWARDED_FOR') : getenv('REMOTE_ADDR') );
 
-  if (sizeof($valid_ip_mask))
+  if ( sizeof($valid_ip_mask) )
   {
     $qFlag = 0;
     $user_ip_mask = explode('.', $last_ip);
 
-    foreach($valid_ip_mask as $mask)
+    foreach( $valid_ip_mask as $mask )
     {
       $vmask = explode('.', $mask);
       $v_count = 4;
       $i = 0;
-      foreach($vmask as $range)
+      foreach( $vmask as $range )
       {
         $vmask_h = explode('-', $range);
-        if (isset($vmask_h[1]))
+        if ( isset($vmask_h[1]) )
         {
-          if (($vmask_h[0]>=$user_ip_mask[$i]) && ($vmask_h[1]<=$user_ip_mask[$i]))
+          if ( ( $vmask_h[0] >= $user_ip_mask[$i] ) && ( $vmask_h[1] <= $user_ip_mask[$i] ) )
             $v_count--;
         }
         else
         {
-          if ($vmask_h[0] == $user_ip_mask[$i])
+          if ( $vmask_h[0] == $user_ip_mask[$i] )
             $v_count--;
         }
         $i++;
       }
-      if (!$v_count)
+      if ( !$v_count )
       {
         $qFlag++;
         break;
       }
     }
-    if (!$qFlag)
+    if ( !$qFlag )
       redirect("register.php?err=9&usr=$last_ip");
   }
 
@@ -103,27 +103,24 @@ function doregister()
   $pass1 = $sql['logon']->quote_smart($_POST['pass1']);
 
   //make sure username/pass at least 4 chars long and less than max
-  if ((strlen($user_name) < 4) || (strlen($user_name) > 15))
+  if ( ( strlen($user_name) < 4 ) || ( strlen($user_name) > 15 ) )
   {
-    //$sql['logon']->close();
     redirect("register.php?err=5");
   }
   if ( $core == 1 )
   {
-    if ((strlen($pass) < 4) || (strlen($pass) > 15))
+    if ( ( strlen($pass) < 4 ) || ( strlen($pass) > 15 ) )
     {
-      //$sql['logon']->close();
       redirect("register.php?err=5");
     }
   }
 
   // make sure screen name is at least 4 chars long and less than max
   // Screen Name may be left blank
-  if ($screenname)
+  if ( $screenname )
   {
-    if ((strlen($screenname) < 4) || (strlen($screenname) > 15))
+    if ( ( strlen($screenname) < 4 ) || ( strlen($screenname) > 15 ) )
     {
-      //$sql['logon']->close();
       redirect("register.php?err=5");
     }
   }
@@ -131,42 +128,38 @@ function doregister()
   require_once("libs/valid_lib.php");
 
   //make sure it doesnt contain non english chars.
-  if (!valid_alphabetic($user_name))
+  if ( !valid_alphabetic($user_name) )
   {
-    //$sql['logon']->close();
     redirect("register.php?err=6");
   }
 
   //make sure screen name doesnt contain non english chars.
-  if (!valid_alphabetic($screenname))
+  if ( !valid_alphabetic($screenname) )
   {
-    //$sql['logon']->close();
     redirect("register.php?err=6");
   }
 
   //make sure the mail is valid mail format
   $mail = $sql['logon']->quote_smart(trim($_POST['email']));
-  if ((!valid_email($mail))||(strlen($mail) > 224))
+  if ( ( !valid_email($mail) ) || ( strlen($mail) > 224 ) )
   {
-    //$sql['logon']->close();
     redirect("register.php?err=7");
   }
 
   if ( $core == 1 )
-    $per_ip = ($limit_acc_per_ip) ? "OR lastip='$last_ip'" : "";
+    $per_ip = ( ( $limit_acc_per_ip ) ? "OR lastip='".$last_ip."'" : "" );
   else
-    $per_ip = ($limit_acc_per_ip) ? "OR last_ip='$last_ip'" : "";
+    $per_ip = ( ( $limit_acc_per_ip ) ? "OR last_ip='".$last_ip."'" : "" );
 
   if ( $core == 1 )
-    $result = $sql['logon']->query("SELECT ip FROM ipbans WHERE ip = '$last_ip'");
+    $result = $sql['logon']->query("SELECT ip FROM ipbans WHERE ip = '".$last_ip."'");
   else
-    $result = $sql['logon']->query("SELECT ip FROM ip_banned WHERE ip = '$last_ip'");
+    $result = $sql['logon']->query("SELECT ip FROM ip_banned WHERE ip = '".$last_ip."'");
   
   //IP is in ban list
-  if ($sql['logon']->num_rows($result))
+  if ( $sql['logon']->num_rows($result) )
   {
-    //$sql['logon']->close();
-    redirect("register.php?err=8&usr=$last_ip");
+    redirect("register.php?err=8&usr=".$last_ip);
   }
 
   //Email check
@@ -175,33 +168,31 @@ function doregister()
   else
     $result = $sql['logon']->query("SELECT username AS login, email FROM account WHERE username='".$user_name."' OR username='".$screenname."' OR email='".$mail."' ".$per_ip);
     
-  if ($sql['logon']->num_rows($result))
+  if ( $sql['logon']->num_rows($result) )
   {
-    //$sql['logon']->close();
     redirect("register.php?err=14");
   }
 
   //there is already someone with same account name
-  if ($sql['logon']->num_rows($result))
+  if ( $sql['logon']->num_rows($result) )
   {
-    //$sql['logon']->close();
-    redirect("register.php?err=3&usr=$user_name");
+    redirect("register.php?err=3&usr=".$user_name);
   }
   else
   {
     // check for existing screen name
     $query = "SELECT * FROM config_accounts WHERE ScreenName ='".$screenname."'";
     $result = $sql['mgr']->query($query);
-    if ($sql['mgr']->num_rows($result))
-      redirect("register.php?err=3&usr=$screenname");
+    if ( $sql['mgr']->num_rows($result) )
+      redirect("register.php?err=3&usr=".$screenname);
 
-    if ($expansion_select)
-      $expansion = (isset($_POST['expansion'])) ? $sql['logon']->quote_smart($_POST['expansion']) : 0;
+    if ( $expansion_select )
+      $expansion = ( ( isset($_POST['expansion']) ) ? $sql['logon']->quote_smart($_POST['expansion']) : 0 );
     else
       $expansion = $defaultoption;
 
     // insert screen name (if we didn't get a screen name, we still need to exit registration correctly.
-    if ($screenname)
+    if (  $screenname)
     {
       $query = "INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '".$screenname."')";
       $s_result = $sql['mgr']->query($query);
@@ -215,7 +206,6 @@ function doregister()
       $query = "INSERT INTO account (username, sha_pass_hash, email, expansion) VALUES ('".$user_name."', '".$pass."', '".$mail."', '".$expansion."')";
     
     $a_result = $sql['logon']->query($query);
-    //$sql['logon']->close();
     
     if ( $core == 1 )
       ;
@@ -237,36 +227,42 @@ function doregister()
 
     setcookie ("terms", "", time() - 3600);
 
-    if ($send_mail_on_creation)
+    if ( $send_mail_on_creation )
     {
-      if ($GMailSender)
+      // prepare message
+      if ( $format_mail_html )
+      {
+        $file_name = "mail_templates/mail_welcome.tpl";
+      }
+      else
+      {
+        $file_name = "mail_templates/mail_welcome_nohtml.tpl";
+      }
+      $fh = fopen($file_name, 'r');
+      $subject = fgets($fh, 4096);
+      $body = fread($fh, filesize($file_name));
+      fclose($fh);
+
+      $subject = str_replace("<title>", $title, $subject);
+      if ( $format_mail_html )
+      {
+        $body = str_replace("\n", "<br />", $body);
+        $body = str_replace("\r", " ", $body);
+      }
+      $body = str_replace("<core>", core_name($core), $body);
+      $body = str_replace("<username>", $user_name, $body);
+      if ( $screenname )
+        $body = str_replace("<screenname>", $screenname, $body);
+      else
+        $body = str_replace("<screenname>", "NONE GIVEN", $body);
+      $body = str_replace("<password>", $pass1, $body);
+      $body = str_replace("<base_url>", $_SERVER['SERVER_NAME'], $body);
+
+      if ( $GMailSender )
       {
         require_once("libs/mailer/authgMail_lib.php");
 
-        if ($format_mail_html)
-        {
-          $file_name = "mail_templates/mail_welcome.tpl";
-        }
-        else
-        {
-          $file_name = "mail_templates/mail_welcome_nohtml.tpl";
-        }
-        $fh = fopen($file_name, 'r');
-        $subject = fgets($fh, 4096);
-        $body = fread($fh, filesize($file_name));
-        fclose($fh);
-
-        $subject = str_replace("<title>", $title, $subject);
-        if ($format_mail_html)
-        {
-          $body = str_replace("\n", "<br />", $body);
-          $body = str_replace("\r", " ", $body);
-        }
-        $body = str_replace("<username>", $user_name, $body);
-        $body = str_replace("<password>", $pass1, $body);
-        $body = str_replace("<base_url>", $_SERVER['SERVER_NAME'], $body);
-
-        $fromName = "$title Admin";
+        $fromName = $title." Admin";
         authgMail($from_mail, $fromName, $mail, $mail, $subject, $body, $smtp_cfg);
       }
       else
@@ -274,11 +270,11 @@ function doregister()
         require_once("libs/mailer/class.phpmailer.php");
         $mailer = new PHPMailer();
         $mailer->Mailer = $mailer_type;
-        if ($mailer_type == "smtp")
+        if ( $mailer_type == "smtp" )
         {
           $mailer->Host = $smtp_cfg['host'];
           $mailer->Port = $smtp_cfg['port'];
-          if($smtp_cfg['user'] != '')
+          if( $smtp_cfg['user'] != "" )
           {
             $mailer->SMTPAuth  = true;
             $mailer->Username  = $smtp_cfg['user'];
@@ -286,36 +282,9 @@ function doregister()
           }
         }
 
-        if ($format_mail_html)
-        {
-          $file_name = "mail_templates/mail_welcome.tpl";
-        }
-        else
-        {
-          $file_name = "mail_templates/mail_welcome_nohtml.tpl";
-        }
-        $fh = fopen($file_name, 'r');
-        $subject = fgets($fh, 4096);
-        $body = fread($fh, filesize($file_name));
-        fclose($fh);
-
-        $subject = str_replace("<title>", $title, $subject);
-        if ($format_mail_html)
-        {
-          $body = str_replace("\n", "<br />", $body);
-          $body = str_replace("\r", " ", $body);
-        }
-        $body = str_replace("<username>", $user_name, $body);
-        if ($screenname)
-          $body = str_replace("<screenname>", $screenname, $body);
-        else
-          $body = str_replace("<screenname>", "NONE GIVEN", $body);
-        $body = str_replace("<password>", $pass1, $body);
-        $body = str_replace("<base_url>", $_SERVER['SERVER_NAME'], $body);
-
         $mailer->WordWrap = 50;
         $mailer->From = $from_mail;
-        $mailer->FromName = "$title Admin";
+        $mailer->FromName = $title." Admin";
         $mailer->Subject = $subject;
         $mailer->IsHTML($format_mail_html);
         $mailer->Body = $body;
@@ -325,7 +294,7 @@ function doregister()
       }
     }
 
-    if ($result)
+    if ( $result )
       redirect("login.php?error=6");
   }
 }
@@ -455,7 +424,7 @@ function register()
   }
   if ( $enable_captcha )
   {
-    if ($use_recaptcha)
+    if ( $use_recaptcha )
     {
       require_once('libs/recaptcha/recaptchalib.php');
     
@@ -508,11 +477,12 @@ function register()
 
   $terms = "<textarea rows=\'18\' cols=\'80\' readonly=\'readonly\'>";
   $fp = fopen("mail_templates/terms.tpl", 'r') or die (error("Couldn't Open terms.tpl File!"));
-  while (!feof($fp)) $terms .= fgets($fp, 1024);
+  while ( !feof($fp) )
+    $terms .= fgets($fp, 1024);
   fclose($fp);
   $terms .= "</textarea>";
 
-  makebutton(lang('register', 'create_acc_button'), "javascript:answerBox('".lang('register', 'terms')."<br />$terms', 'javascript:do_submit_data()')",150);
+  makebutton(lang('register', 'create_acc_button'), "javascript:answerBox('".lang('register', 'terms')."<br />".$terms."', 'javascript:do_submit_data()')",150);
   $output .= '</td><td>';
   makebutton(lang('global', 'back'), "login.php", 328);
   $output .= '
@@ -592,40 +562,40 @@ function do_pass_recovery()
   $user_name = $sql['logon']->quote_smart(trim($_POST['username']));
   $email_addr = $sql['logon']->quote_smart($_POST['email']);
 
-  $result = $sql['logon']->query("SELECT password FROM accounts WHERE login = '$user_name' AND email = '$email_addr'");
+  $result = $sql['logon']->query("SELECT password FROM accounts WHERE login = '".$user_name."' AND email = '".$email_addr."'");
 
-  if ($sql['logon']->num_rows($result) == 1)
+  if ( $sql['logon']->num_rows($result) == 1 )
   {
     $pass = $sql['logon']->fetch_assoc($result);
 
-    if ($GMailSender)
+    if ( $format_mail_html )
+      $file_name = "mail_templates/recover_password.tpl";
+    else
+       $file_name = "mail_templates/recover_password_nohtml.tpl";
+
+    $fh = fopen($file_name, 'r');
+    $subject = fgets($fh, 4096);
+    $body = fread($fh, filesize($file_name));
+    fclose($fh);
+
+    if ( $format_mail_html )
+    {
+      $body = str_replace("\n", "<br />", $body);
+      $body = str_replace("\r", " ", $body);
+    }
+    $body = str_replace("<username>", $user_name, $body);
+    $body = str_replace("<password>", $pass['password'], $body);
+    $body = str_replace("<base_url>", $_SERVER['HTTP_HOST'], $body);
+    $body = str_replace("<title>", $title, $body);
+
+    if ( $GMailSender )
     {
       require_once("libs/mailer/authgMail_lib.php");
 
-      if ($format_mail_html)
-        $file_name = "mail_templates/recover_password.tpl";
-      else
-         $file_name = "mail_templates/recover_password_nohtml.tpl";
-
-      $fh = fopen($file_name, 'r');
-      $subject = fgets($fh, 4096);
-      $body = fread($fh, filesize($file_name));
-      fclose($fh);
-
-      if ($format_mail_html)
-      {
-        $body = str_replace("\n", "<br />", $body);
-        $body = str_replace("\r", " ", $body);
-      }
-      $body = str_replace("<username>", $user_name, $body);
-      $body = str_replace("<password>", $pass['password'], $body);
-      $body = str_replace("<base_url>", $_SERVER['HTTP_HOST'], $body);
-      $body = str_replace("<title>", $title, $body);
-
-      $namefrom = "$title Admin";
+      $namefrom = $title." Admin";
       $result = authgMail($from_mail, $namefrom, $email_addr, $email_addr, $subject, $body, $smtp_cfg);
 
-      if (! ($result['quitcode'] = 221) ) 
+      if ( !($result['quitcode'] = 221) ) 
       {
         redirect("register.php?action=pass_recovery&err=11&usr=".$result['quitcode']);
       } 
@@ -639,11 +609,11 @@ function do_pass_recovery()
       require_once("libs/mailer/class.phpmailer.php");
       $mail = new PHPMailer();
       $mail->Mailer = $mailer_type;
-      if ($mailer_type == "smtp")
+      if ( $mailer_type == "smtp" )
       {
         $mail->Host = $smtp_cfg['host'];
         $mail->Port = $smtp_cfg['port'];
-        if($smtp_cfg['user'] != '') 
+        if( $smtp_cfg['user'] != "" ) 
         {
           $mail->SMTPAuth  = true;
           $mail->Username  = $smtp_cfg['user'];
@@ -651,35 +621,15 @@ function do_pass_recovery()
         }
       }
 
-      if ($format_mail_html)
-        $file_name = "mail_templates/recover_password.tpl";
-      else
-         $file_name = "mail_templates/recover_password_nohtml.tpl";
-
-      $fh = fopen($file_name, 'r');
-      $subject = fgets($fh, 4096);
-      $body = fread($fh, filesize($file_name));
-      fclose($fh);
-
-      if ($format_mail_html)
-      {
-        $body = str_replace("\n", "<br />", $body);
-        $body = str_replace("\r", " ", $body);
-      }
-      $body = str_replace("<username>", $user_name, $body);
-      $body = str_replace("<password>", $pass['password'], $body);
-      $body = str_replace("<base_url>", $_SERVER['HTTP_HOST'], $body);
-      $body = str_replace("<title>", $title, $body);
-
       $mail->WordWrap = 50;
       $mail->From = $from_mail;
-      $mail->FromName = "$title Admin";
+      $mail->FromName = $title." Admin";
       $mail->Subject = $subject;
       $mail->IsHTML($format_mail_html);
       $mail->Body = $body;
       $mail->AddAddress($email_addr);
 
-      if(!$mail->Send()) 
+      if( !$mail->Send() ) 
       {
         $mail->ClearAddresses();
         redirect("register.php?action=pass_recovery&err=11&usr=".$mail->ErrorInfo);
@@ -704,27 +654,28 @@ function do_pass_recovery()
 //               this is unused.  And should be deleted later.
 function do_pass_activate()
 {
- global $logon_db, $sql;
+  global $logon_db, $sql;
 
- if ( empty($_GET['h']) || empty($_GET['p']) ) redirect("register.php?action=pass_recovery&err=1");
+  if ( empty($_GET['h']) || empty($_GET['p']) )
+    redirect("register.php?action=pass_recovery&err=1");
 
- /*$sql = new SQL;
- $sql->connect($logon_db['addr'], $logon_db['user'], $logon_db['pass'], $logon_db['name']);*/
+  $pass = $sql['logon']->quote_smart(trim($_GET['p']));
+  $hash = $sql['logon']->quote_smart($_GET['h']);
 
- $pass = $sql['logon']->quote_smart(trim($_GET['p']));
- $hash = $sql['logon']->quote_smart($_GET['h']);
+  $result = $sql['logon']->query("SELECT id,login FROM accounts WHERE password = '".$hash."'");
 
- $result = $sql['logon']->query("SELECT id,login FROM accounts WHERE password = '$hash'");
-
- if ($sql['logon']->num_rows($result) == 1){
-  $username = $sql['logon']->result($result, 0, 'username');
-  $id = $sql['logon']->result($result, 0, 'id');
-  if (substr(sha1(strtoupper($sql['logon']->result($result, 0, 'username'))),0,7) == $pass){
-    $sql->query("UPDATE account SET sha_pass_hash=SHA1(CONCAT(UPPER('$username'),':',UPPER('$pass'))), v=0, s=0 WHERE id = '$id'");
-    redirect("login.php");
+  if ( $sql['logon']->num_rows($result) == 1 )
+  {
+    $username = $sql['logon']->result($result, 0, 'username');
+    $id = $sql['logon']->result($result, 0, 'id');
+    if ( substr(sha1(strtoupper($sql['logon']->result($result, 0, 'username'))),0,7) == $pass )
+    {
+      $sql->query("UPDATE account SET sha_pass_hash=SHA1(CONCAT(UPPER('".$username."'),':',UPPER('".$pass."'))), v=0, s=0 WHERE id = '".$id."'");
+      redirect("login.php");
     }
-
-  } else redirect("register.php?action=pass_recovery&err=1");
+  }
+  else
+    redirect("register.php?action=pass_recovery&err=1");
 
   redirect("register.php?action=pass_recovery&err=1");
 }
@@ -733,63 +684,63 @@ function do_pass_activate()
 //#####################################################################################################
 // MAIN
 //#####################################################################################################
-$err = (isset($_GET['err'])) ? $_GET['err'] : NULL;
+$err = ( ( isset($_GET['err']) ) ? $_GET['err'] : NULL );
 
-if (isset($_GET['usr'])) $usr = $_GET['usr'];
-    else $usr = NULL;
-
-//$lang_captcha = lang_captcha();
+if ( isset($_GET['usr']) )
+  $usr = $_GET['usr'];
+else
+  $usr = NULL;
 
 $output .=  '
   <div class="bubble">
     <div class="top">';
 
-switch ($err)
+switch ( $err )
 {
-case 1:
-   $output .= '<h1><font class="error">'.lang('global', 'empty_fields').'</font></h1>';
-   break;
-case 2:
-   $output .= '<h1><font class="error">'.lang('register', 'diff_pass_entered').'</font></h1>';
-   break;
-case 3:
-   $output .= '<h1><font class="error">'.lang('register', 'username').' '.$usr.' '.lang('register', 'already_exist').'</font></h1>';
-   break;
-case 4:
-   $output .= '<h1><font class="error">'.lang('register', 'acc_reg_closed').'</font></h1>';
-   break;
-case 5:
-   $output .= '<h1><font class="error">'.lang('register', 'wrong_pass_username_size').'</font></h1>';
-   break;
-case 6:
-   $output .= '<h1><font class="error">'.lang('register', 'bad_chars_used').'</font></h1>';
-   break;
-case 7:
-   $output .= '<h1><font class="error">'.lang('register', 'invalid_email').'</font></h1>';
-   break;
-case 8:
-   $output .= '<h1><font class="error">'.lang('register', 'banned_ip').' ('.$usr.')<br />'.lang('register', 'contact_serv_admin').'</font></h1>';
-   break;
-case 9:
-   $output .= '<h1><font class="error">'.lang('register', 'users_ip_range').': '.$usr.' '.lang('register', 'cannot_create_acc').'</font></h1>';
-   break;
-case 10:
-   $output .= '<h1><font class="error">'.lang('register', 'user_mail_not_found').'</font></h1>';
-   break;
-case 11:
-   $output .= '<h1><font class="error">Mailer Error: '.$usr.'</font></h1>';
-   break;
-case 12:
-   $output .= '<h1><font class="error">'.lang('register', 'recovery_mail_sent').'</font></h1>';
-   break;
-case 13:
+  case 1:
+    $output .= '<h1><font class="error">'.lang('global', 'empty_fields').'</font></h1>';
+    break;
+  case 2:
+    $output .= '<h1><font class="error">'.lang('register', 'diff_pass_entered').'</font></h1>';
+    break;
+  case 3:
+    $output .= '<h1><font class="error">'.lang('register', 'username').' '.$usr.' '.lang('register', 'already_exist').'</font></h1>';
+    break;
+  case 4:
+    $output .= '<h1><font class="error">'.lang('register', 'acc_reg_closed').'</font></h1>';
+    break;
+  case 5:
+    $output .= '<h1><font class="error">'.lang('register', 'wrong_pass_username_size').'</font></h1>';
+    break;
+  case 6:
+    $output .= '<h1><font class="error">'.lang('register', 'bad_chars_used').'</font></h1>';
+    break;
+  case 7:
+    $output .= '<h1><font class="error">'.lang('register', 'invalid_email').'</font></h1>';
+    break;
+  case 8:
+    $output .= '<h1><font class="error">'.lang('register', 'banned_ip').' ('.$usr.')<br />'.lang('register', 'contact_serv_admin').'</font></h1>';
+    break;
+  case 9:
+    $output .= '<h1><font class="error">'.lang('register', 'users_ip_range').': '.$usr.' '.lang('register', 'cannot_create_acc').'</font></h1>';
+    break;
+  case 10:
+    $output .= '<h1><font class="error">'.lang('register', 'user_mail_not_found').'</font></h1>';
+    break;
+  case 11:
+    $output .= '<h1><font class="error">Mailer Error: '.$usr.'</font></h1>';
+    break;
+  case 12:
+    $output .= '<h1><font class="error">'.lang('register', 'recovery_mail_sent').'</font></h1>';
+    break;
+  case 13:
     $output .= '<h1><font class="error">'.lang('captcha', 'invalid_code').'</font></h1>';
-   break;
-case 14:
+    break;
+  case 14:
     $output .= '<h1><font class="error">'.lang('register', 'email_address_used').'</font></h1>';
-   break;
-default:
-   $output .= '<h1><font class="error">'.lang('register', 'fill_all_fields').'</font></h1>';
+    break;
+  default:
+    $output .= '<h1><font class="error">'.lang('register', 'fill_all_fields').'</font></h1>';
 }
 
 unset($err);
@@ -797,28 +748,28 @@ unset($err);
 $output .= "
     </div>";
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
 
-switch ($action){
-case "doregister":
-   doregister();
-   break;
-case "pass_recovery":
-   pass_recovery();
-   break;
-case "do_pass_recovery":
-   do_pass_recovery();
-   break;
-case "do_pass_activate":
-   do_pass_activate();
-   break;
-default:
+switch ( $action )
+{
+  case "doregister":
+    doregister();
+    break;
+  case "pass_recovery":
+    pass_recovery();
+    break;
+  case "do_pass_recovery":
+    do_pass_recovery();
+    break;
+  case "do_pass_activate":
+    do_pass_activate();
+    break;
+  default:
     register();
 }
 
 unset($action);
 unset($action_permission);
-//unset($lang_captcha);
 
 require_once("footer.php");
 ?>

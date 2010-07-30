@@ -985,7 +985,8 @@ $GLOBALS['lang_ticket'] = array
   'ticket_updated' => 'برچسب بروز شد',
   'tot_tickets' => 'کل برچسب ها',
   'update' => 'بروز رسانی برچسب',
-  'abandon' => 'Mark Ticket as Abandoned',
+  'abandonA' => 'Mark Ticket as Abandoned',
+  'abandonMT' => 'Mark Ticket as Closed',
   'closedby' => 'Closed by',
 );
 

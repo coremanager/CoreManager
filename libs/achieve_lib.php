@@ -153,23 +153,23 @@ function achieve_get_icon($achieveid)
 
       if ($achieve)
       {
-        if (file_exists(''.$item_icons.'/'.$achieve.'.png'))
-        {
-          if (filesize(''.$item_icons.'/'.$achieve.'.png') > 349)
-          {
+        //if (file_exists(''.$item_icons.'/'.$achieve.'.png'))
+        //{
+          //if (filesize(''.$item_icons.'/'.$achieve.'.png') > 349)
+          //{
             return ''.$item_icons.'/'.$achieve.'.png';
-          }
-          else
-          {
+          //}
+          //else
+          //{
             // this_is_junk: disabled deletion from DBC data
             //$sql['mgr']->query('DELETE FROM spellicon WHERE id = '.$displayid.'');
             //if (file_exists(''.$item_icons.'/'.$achieve.'.png'))
             //  unlink(''.$item_icons.'/'.$achieve.'.png');
             //$achieve = '';
-          }
-        }
-        else
-          $achieve = '';
+          //}
+        //}
+        //else
+          //$achieve = '';
       }
       else
         $achieve = '';

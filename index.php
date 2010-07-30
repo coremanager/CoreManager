@@ -334,7 +334,7 @@ else
             $output .= '<tr>
                   <td align="left">
                     <a href="char.php?id='.$post['playerGuid'].'">
-                        <span onmousemove="oldtoolTip(\''.$post['name'].' ('.id_get_gm_level($gm).')'.'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($post['name']).'</span>
+                        <span onmousemove="oldtoolTip(\''.$login['username'].' ('.id_get_gm_level($gm).')'.'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($post['name']).'</span>
                     </a>
                  </td>
               </tr>

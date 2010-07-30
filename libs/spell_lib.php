@@ -57,12 +57,12 @@ function spell_get_icon($auraid)
 
       if ($aura)
       {
-        if (file_exists(''.$item_icons.'/'.$aura.'.png'))
-        {
+        //if (file_exists(''.$item_icons.'/'.$aura.'.png'))
+        //{
           return ''.$item_icons.'/'.$aura.'.png';
-        }
-        else
-          $aura = '';
+        //}
+        //else
+          //$aura = '';
         
         //if (file_exists(''.$item_icons.'/'.$aura.'.png'))
         //{

@@ -309,4 +309,26 @@ function generate_pagination($base_url, $num_items, $per_page, $start_item, $sta
 }
 
 
+//#############################################################################
+// core number to name
+function core_name($core_id)
+{
+  switch ( $core_id )
+  {
+    case 1:
+    {
+      return 'ArcEmu';
+    }
+    case 2:
+    {
+      return 'MaNGOS';
+    }
+    case 3:
+    {
+      return 'Trinity';
+    }
+  }
+}
+
+
 ?>

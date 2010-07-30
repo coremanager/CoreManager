@@ -34,7 +34,7 @@ function char_talent()
     $user_lvl, $user_name, $spell_datasite, $sql, $core;
 
   // this page uses wowhead tooltops
-  //wowhead_tt();
+  wowhead_tt();
 
   // we need at least an id or we would have nothing to show
   if (empty($_GET['id']))
@@ -338,21 +338,21 @@ function char_talent()
         }
         else
         {
-          $glyph_query = "SELECT * FROM character_glyphs WHERE guid='".$id."'";
+          $glyph_query = "SELECT * FROM character_glyphs WHERE guid='".$id."' and spec='".($cur_spec-1)."'";
           $glyph_result = $sql['char']->query($glyph_query);
-          $glyph_field = $sql['char']->fetch_assoc($glyph_results);
+          $glyph_field = $sql['char']->fetch_assoc($glyph_result);
           $glyphs = array();
-          if ( !isset($glyph_field['glyph1']) )
+          if ( isset($glyph_field['glyph1']) )
             array_push($glyphs, $glyph_field['glyph1']);
-          if ( !isset($glyph_field['glyph2']) )
+          if ( isset($glyph_field['glyph2']) )
             array_push($glyphs, $glyph_field['glyph2']);
-          if ( !isset($glyph_field['glyph3']) )
+          if ( isset($glyph_field['glyph3']) )
             array_push($glyphs, $glyph_field['glyph3']);
-          if ( !isset($glyph_field['glyph4']) )
+          if ( isset($glyph_field['glyph4']) )
             array_push($glyphs, $glyph_field['glyph4']);
-          if ( !isset($glyph_field['glyph5']) )
+          if ( isset($glyph_field['glyph5']) )
             array_push($glyphs, $glyph_field['glyph5']);
-          if ( !isset($glyph_field['glyph6']) )
+          if ( isset($glyph_field['glyph6']) )
             array_push($glyphs, $glyph_field['glyph6']);
         }
         for($i=0;$i<6;++$i)

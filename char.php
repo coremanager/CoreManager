@@ -123,14 +123,17 @@ function char_main()
         $result = $sql['char']->query("SELECT guid, name, race, class, level, zone AS zoneid, map AS mapid, 
           online, gender, totaltime, account AS acct, logout_time AS timestamp, health, 
 					power1, power2, power3, power4, power5, power6, power7,
-          SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 1011), ' ', -1) AS xp
+          SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 1011), ' ', -1) AS xp,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 1650), ' ', -1) AS arenaPoints,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 1649), ' ', -1) AS totalHonorPoints,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 1603), ' ', -1) AS totalKills
           FROM characters WHERE guid = '".$id."'");
       }
       else
       {
         $result = $sql['char']->query("SELECT guid, name, race, class, level, zone AS zoneid, map AS mapid, 
           online, gender, totaltime, account AS acct, logout_time AS timestamp, health, 
-					power1, power2, power3, power4, power5, power6, power7, xp 
+					power1, power2, power3, power4, power5, power6, power7, xp, arenaPoints, totalHonorPoints, totalKills
           FROM characters WHERE guid = '".$id."'");
       }
       $char = $sql['char']->fetch_assoc($result);
@@ -193,6 +196,9 @@ function char_main()
         $char_data[PLAYER_FIELD_COMBAT_RATING_1+7] = "ERR";
         $char_data[PLAYER_EXPERTISE] = "ERR";
         $char_data[PLAYER_OFFHAND_EXPERTISE] = "ERR";
+        $char_data[PLAYER_FIELD_HONOR_CURRENCY] = $char['totalHonorPoints'];
+        $char_data[PLAYER_FIELD_ARENA_CURRENCY] = $char['arenaPoints'];
+        $char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS] = $char['totalKills'];
       }
 
       if ( $core == 1 )
@@ -599,17 +605,21 @@ function char_main()
                       <div>';
       // this_is_junk: auras are stored in a string in the characters table.
       // not sure how to query a string as though it were a record
-      /*$a_results = $sql['char']->query('SELECT DISTINCT spell FROM character_aura WHERE guid = '.$id.'');
+      if ( $core == 1 )
+        ;
+      else
+        $a_results = $sql['char']->query("SELECT DISTINCT spell FROM character_aura WHERE guid='".$id."'");
+
       if ($sql['char']->num_rows($a_results))
       {
         while ($aura = $sql['char']->fetch_assoc($a_results))
         {
                  $output .= '
                         <a id="char_icon_padding" href="'.$spell_datasite.$aura['spell'].'" target="_blank">
-                          <img src="'.spell_get_icon($aura['spell'], $sql['mgr']).'" alt="'.$aura['spell'].'" width="24" height="24" />
+                          <img src="'.spell_get_icon($aura['spell']).'" alt="'.$aura['spell'].'" width="24" height="24" />
                         </a>';
         }
-      }*/
+      }
       $output .= '
                       </div>
                     </td>

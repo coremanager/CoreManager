@@ -279,9 +279,9 @@ function edit_ticket()
                           <td>';
                           
     if ( !$ticket['status'] )
-                            makebutton(lang('ticket', 'abandon'), 'ticket.php?action=do_mark_ticket&amp;id='.$id.'" type="wrn"', 230);
+                            makebutton(lang('ticket', 'abandon'.( ( $core == 1) ? 'A' : 'MT' )), 'ticket.php?action=do_mark_ticket&amp;id='.$id.'" type="wrn"', 230);
     else
-                            makebutton(lang('ticket', 'abandon'), 'ticket.php', 230);
+                            makebutton(lang('ticket', 'abandon'.( ( $core == 1) ? 'A' : 'MT' )), 'ticket.php', 230);
 
     $output .= '
                           </td>
@@ -313,7 +313,7 @@ function edit_ticket()
 //########################################################################################################################
 function do_edit_ticket()
 {
-  global $characters_db, $realm_id, $action_permission, $sql;
+  global $characters_db, $realm_id, $action_permission, $sql, $core;
 
   valid_login($action_permission['update']);
 
@@ -324,7 +324,12 @@ function do_edit_ticket()
   $id = $sql['char']->quote_smart($_POST['id']);
   if(is_numeric($id)); else redirect("ticket.php?error=1");
 
-  $query = $sql['char']->query("UPDATE gm_tickets SET message='$new_text' WHERE ticketid = '$id'");
+  if ( $core == 1 )
+    $query = $sql['char']->query("UPDATE gm_tickets SET message='$new_text' WHERE ticketid='$id'");
+  elseif ( $core == 2 )
+    $query = $sql['char']->query("UPDATE character_ticket SET ticket_text='$new_text' WHERE ticket_id='$id'");
+  else
+    $query = $sql['char']->query("UPDATE gm_tickets SET message='$new_text' WHERE guid='$id'");
 
   if ($sql['char']->affected_rows())
   {

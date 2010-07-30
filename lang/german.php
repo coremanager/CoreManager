@@ -985,7 +985,8 @@ $GLOBALS['lang_ticket'] = array
   'ticket_updated' => 'Ticket aktualisiert',
   'tot_tickets' => 'Tickets Gesamt',
   'update' => 'Ticket aktualisieren',
-  'abandon' => 'Ticket makieren als abgeschlossen',  
+  'abandonA' => 'Mark Ticket as Abandoned',
+  'abandonMT' => 'Mark Ticket as Closed',  
   'closedby' => 'Closed by',
 );
 
