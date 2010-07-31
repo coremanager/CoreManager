@@ -20,8 +20,10 @@
 
 $time_start = microtime(true);
 // resuming login session if available, or start new one
-if (ini_get('session.auto_start'));
-else session_start();
+if ( ini_get('session.auto_start') )
+  ;
+else
+  session_start();
 
 require_once("configs/config.php");
 require_once("admin/admin_lib.php");
@@ -102,7 +104,7 @@ function database()
               <td colspan=2><hr></td>
             </tr>
             <tr>';
-  while ($char = $sqlm->fetch_assoc($char_dbs))
+  while ( $char = $sqlm->fetch_assoc($char_dbs) )
   {
     $output .= '
               <td>
@@ -138,9 +140,9 @@ function database()
             </tr>';
   $output .= '
             <tr>';
-  while ($world = $sqlm->fetch_assoc($world_dbs))
+  while ( $world = $sqlm->fetch_assoc($world_dbs) )
   {
-  $output .= '
+    $output .= '
               <td>
                 <input type="hidden" name="world_realm[]" value="'.$world['Index'].'">
                 <fieldset id="admin_editdb_field">
@@ -205,10 +207,10 @@ function savedbs()
   $char_passes = $sqlm->quote_smart($_GET['char_pass']);
   $char_names = $sqlm->quote_smart($_GET['char_name']);
 
-  for ($i=0; $i<count($char_hosts); $i++)
+  for ( $i=0; $i<count($char_hosts); $i++ )
   {
     $result_char = $sqlm->query("UPDATE config_character_databases SET Address='".$char_hosts[$i]."', Port='".$char_ports[$i]."', User='".$char_users[$i]."', Password='".$char_passes[$i]."', Name='".$char_names[$i]."' WHERE `Index`='".$char_realms[$i]."'");
-    if (isset($_GET['remove_char_'.$char_realms[$i]]))
+    if ( isset($_GET['remove_char_'.$char_realms[$i]]) )
       $result_char = $sqlm->query("DELETE FROM config_character_databases WHERE `Index`='".$char_realms[$i]."'");
   }
 
@@ -219,17 +221,17 @@ function savedbs()
   $world_passes = $sqlm->quote_smart($_GET['world_pass']);
   $world_names = $sqlm->quote_smart($_GET['world_name']);
     
-  for ($i=0; $i<count($world_hosts); $i++)
+  for ( $i=0; $i<count($world_hosts); $i++ )
   {
     $result_world = $sqlm->query("UPDATE config_world_databases SET Address='".$world_hosts[$i]."', Port='".$world_ports[$i]."', User='".$world_users[$i]."', Password='".$world_passes[$i]."', Name='".$world_names[$i]."' WHERE `Index`='".$world_realms[$i]."'");
-    if (isset($_GET['remove_world_'.$world_realms[$i]]))
+    if ( isset($_GET['remove_world_'.$world_realms[$i]]) )
       $result_world = $sqlm->query("DELETE FROM config_world_databases WHERE `Index`='".$world_realms[$i]."'");
   }
 
-  if (isset($_GET['addchar']))
+  if ( isset($_GET['addchar']) )
     $result_addchar = $sqlm->query("INSERT INTO config_character_databases (Encoding) VALUES ('utf8')");
 
-  if (isset($_GET['addworld']))
+  if ( isset($_GET['addworld']) )
     $result_addworld = $sqlm->query("INSERT INTO config_world_databases (Encoding) VALUES ('utf8')");
 
   redirect("admin.php?section=databases");
@@ -242,7 +244,7 @@ function general()
   $sqlm = new SQL;
   $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
-  if (isset($_GET['subsection']))
+  if ( isset($_GET['subsection']) )
     $subsection = $sqlm->quote_smart($_GET['subsection']);
   else
     $subsection = 1;
@@ -284,23 +286,23 @@ function general()
           </tr>
         </table>';
 
-  if (isset($_GET['error']))
+  if ( isset($_GET['error']) )
     $output .= '
       <div id="misc_error">';
   else
     $output .= '
       <div id="misc">';
 
-  if (isset($_GET['subaction']))
+  if ( isset($_GET['subaction']) )
      $sub_action = $_GET['subaction'];
   else
      $sub_action = '';
 
-  switch ($subsection)
+  switch ( $subsection )
   {
     case 'version':
     {
-      if (!$sub_action)
+      if ( !$sub_action )
       {
         $show_version_show = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Show_Version_Show'"));
         $show_version_version = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Show_Version_Version'"));
@@ -363,7 +365,7 @@ function general()
     }
     case 'mail':
     {
-      if (!$sub_action)
+      if ( !$sub_action )
       {
         $mail_admin_email = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Mail_Admin_Email'"));
         $mail_mailer_type = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Mail_Mailer_Type'"));
@@ -445,7 +447,7 @@ function general()
         $mail_admin_email = $sqlm->quote_smart($_GET['adminemail']);
         $mail_mailer_type = $sqlm->quote_smart($_GET['mailertype']);
         $mail_from_email = $sqlm->quote_smart($_GET['fromemail']);
-        if (isset($_GET['gmail']))
+        if ( isset($_GET['gmail']) )
           $mail_gmailsender = 1;
         else
           $mail_gmailsender = 0;
@@ -473,7 +475,7 @@ function general()
     }
     case 'irc':
     {
-      if (!$sub_action)
+      if ( !$sub_action )
       {
         $irc_host = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='IRC_Server'"));
         $irc_port = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='IRC_Port'"));
@@ -523,7 +525,7 @@ function general()
     }
     case 'proxy':
     {
-      if (!$sub_action)
+      if ( !$sub_action )
       {
         $proxy_host = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Proxy_Addr'"));
         $proxy_port = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Proxy_Port'"));
@@ -573,7 +575,7 @@ function general()
     }
     case 'datasite':
     {
-      if (!$sub_action)
+      if ( !$sub_action )
       {
         $datasite_item = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Datasite_Item'"));
         $datasite_quest = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Datasite_Quest'"));
@@ -644,7 +646,7 @@ function general()
     }
     case 'acctcreation':
     {
-      if (!$sub_action)
+      if ( !$sub_action )
       {
         $disable_acc_creation = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Disable_Acc_Creation'"));
         $expansion_select = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Expansion_Select'"));
@@ -654,6 +656,7 @@ function general()
         $publickey = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Recaptcha_Public_Key'"));
         $privatekey = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Recaptcha_Private_Key'"));
         $send_mail_on_creation = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Send_Mail_On_Creation'"));
+        $send_confirmation_mail_on_creation = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Send_Confirmation_Mail_On_Creation'"));
         $validate_mail_host = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Validate_Mail_Host'"));
         $limit_acc_per_ip = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Limit_Acc_Per_IP'"));
         $output .= '
@@ -695,6 +698,10 @@ function general()
               <td><input type="checkbox" name="sendmailoncreation" '.($send_mail_on_creation['Value'] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'sendconfirmmailoncreation').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'sendconfirmmailoncreation').'</a>: </td>
+              <td><input type="checkbox" name="sendconfirmmailoncreation" '.($send_confirmation_mail_on_creation['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+            </tr>
+            <tr>
               <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'validatemailhost').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'validatemailhost').'</a>: </td>
               <td><input type="checkbox" name="validatemailhost" '.($validate_mail_host['Value'] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
@@ -708,34 +715,38 @@ function general()
       }
       else
       {
-        if (isset($_GET['disableacccreation']))
+        if ( isset($_GET['disableacccreation']) )
           $disable_acc_creation = 1;
         else
           $disable_acc_creation = 0;
-        if (isset($_GET['expansionselect']))
+        if ( isset($_GET['expansionselect']) )
           $expansion_select = 1;
         else
           $expansion_select = 0;
         $default_expansion = $sqlm->quote_smart($_GET['defaultexpansion']);
-        if (isset($_GET['enabledcaptcha']))
+        if ( isset($_GET['enabledcaptcha']) )
           $enabled_captcha = 1;
         else
           $enabled_captcha = 0;
-        if (isset($_GET['userecaptcha']))
+        if ( isset($_GET['userecaptcha']) )
           $using_recaptcha = 1;
         else
           $using_recaptcha = 0;
         $publickey = $sqlm->quote_smart($_GET['publickey']);
         $privatekey = $sqlm->quote_smart($_GET['privatekey']);
-        if (isset($_GET['sendmailoncreation']))
+        if ( isset($_GET['sendmailoncreation']) )
           $send_mail_on_creation = 1;
         else
           $send_mail_on_creation = 0;
-        if (isset($_GET['validatemailhost']))
+        if ( isset($_GET['sendconfirmmailoncreation']) )
+          $send_confirmation_mail_on_creation = 1;
+        else
+          $send_confirmation_mail_on_creation = 0;
+        if ( isset($_GET['validatemailhost']) )
           $validate_mail_host = 1;
         else
           $validate_mail_host = 0;
-        if (isset($_GET['limitaccperip']))
+        if ( isset($_GET['limitaccperip']) )
           $limit_acc_per_ip = 1;
         else
           $limit_acc_per_ip = 0;
@@ -748,6 +759,7 @@ function general()
         $result = $sqlm->query("UPDATE config_misc SET Value='".$publickey."' WHERE `Key`='Recaptcha_Public_Key'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$privatekey."' WHERE `Key`='Recaptcha_Private_Key'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$send_mail_on_creation."' WHERE `Key`='Send_Mail_On_Creation'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$send_confirmation_mail_on_creation."' WHERE `Key`='Send_Confirmation_Mail_On_Creation'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$validate_mail_host."' WHERE `Key`='Validate_Mail_Host'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$limit_acc_per_ip."' WHERE `Key`='Limit_Acc_Per_IP'");
 
@@ -757,7 +769,7 @@ function general()
     }
     case 'guests':
     {
-      if (!$sub_action)
+      if ( !$sub_action )
       {
         $acp_allow_anony = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Allow_Anony'"));
         $acp_anony_name = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Anony_Name'"));
@@ -786,7 +798,7 @@ function general()
       }
       else
       {
-        if (isset($_GET['allowanony']))
+        if ( isset($_GET['allowanony']) )
           $acp_allow_anony = 1;
         else
           $acp_allow_anony = 0;
@@ -803,7 +815,7 @@ function general()
     }
     case 'extratools':
     {
-      if (!$sub_action)
+      if ( !$sub_action )
       {
         $quest_item_vendor_level_mul = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Quest_Item_Vendor_Level_Mul'"));
         $quest_item_vendor_rew_mul = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Quest_Item_Vendor_Rew_Mul'"));
@@ -908,7 +920,7 @@ function general()
     }
     case 'internalmap':
     {
-      if (!$sub_action)
+      if ( !$sub_action )
       {
         $map_gm_show_online_only_gmoff = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Map_GM_Show_Online_Only_GMOff'"));
         $map_gm_show_online_only_gmvisible = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Map_GM_Show_Online_Only_GMVisible'"));
@@ -977,32 +989,32 @@ function general()
       }
       else
       {
-        if (isset($_GET['gmshowonlineonlygmoff']))
+        if ( isset($_GET['gmshowonlineonlygmoff']) )
           $map_gm_show_online_only_gmoff = 1;
         else
           $map_gm_show_online_only_gmoff = 0;
-        if (isset($_GET['gmshowonlineonlygmvisible']))
+        if ( isset($_GET['gmshowonlineonlygmvisible']) )
           $map_gm_show_online_only_gmvisible = 1;
         else
           $map_gm_show_online_only_gmvisible = 0;
-        if (isset($_GET['gmaddsuffix']))
+        if ( isset($_GET['gmaddsuffix']) )
           $map_gm_add_suffix = 1;
         else
           $map_gm_add_suffix = 0;
-        if (isset($_GET['statusgmincludeall']))
+        if ( isset($_GET['statusgmincludeall']) )
           $map_status_gm_include_all = 1;
         else
           $map_status_gm_include_all = 0;
-        if (isset($_GET['showstatus']))
+        if ( isset($_GET['showstatus']) )
           $map_show_status = 1;
         else
           $map_show_status = 0;
-        if (isset($_GET['showtimer']))
+        if ( isset($_GET['showtimer']) )
           $map_show_timer = 1;
         else
           $map_show_timer = 0;
         $map_timer = $sqlm->quote_smart($_GET['timer']);
-        if (isset($_GET['showonline']))
+        if ( isset($_GET['showonline']) )
           $map_show_online = 1;
         else
           $map_show_online = 0;
@@ -1028,7 +1040,7 @@ function general()
     }
     case 'validip':
     {
-      if (!$sub_action)
+      if ( !$sub_action )
       {
         $masks_query = $sqlm->query("SELECT * FROM config_valid_ip_mask");
         $output .= '
@@ -1042,7 +1054,7 @@ function general()
               <th width="20%"><center>'.lang('admin', 'index').'</center></th>
               <th>'.lang('admin', 'validipmask').'</th>
             </tr>';
-        while ($mask = $sqlm->fetch_assoc($masks_query))
+        while ( $mask = $sqlm->fetch_assoc($masks_query) )
         {
           $output .= '
             <tr>
@@ -1058,19 +1070,19 @@ function general()
           <input type="submit" name="delete" value="'.lang('admin', 'deleteipmask').'" />
         </form>';
       }
-      elseif ($sub_action == "editvalidip")
+      elseif ( $sub_action == "editvalidip" )
       {
-        if (isset($_GET['add']))
+        if ( isset($_GET['add']) )
         {
           $lim = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_valid_ip_mask"));
           $lim = $lim['MAX(`Index`)'] + 1;
           $sqlm->query("INSERT INTO config_valid_ip_mask SET `Index`='".$lim."', ValidIPMask=''");
           redirect("admin.php?section=general&subsection=validip");
         }
-        elseif (isset($_GET['delete']))
+        elseif ( isset($_GET['delete']) )
         {
           $index = $sqlm->quote_smart($_GET['index']);
-          if (!is_numeric($index))
+          if ( !is_numeric($index) )
             redirect("admin.php?section=general&subsection=validip&error=1");
 
           $result = $sqlm->query("DELETE FROM config_valid_ip_mask WHERE `Index`='".$index."'");
@@ -1079,7 +1091,7 @@ function general()
         else
         {
           $index = $sqlm->quote_smart($_GET['index']);
-          if (!is_numeric($index))
+          if ( !is_numeric($index) )
             redirect("admin.php?section=general&subsection=validip&error=1");
 
           $mask = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_valid_ip_mask WHERE `Index`='".$index."'"));
@@ -1115,7 +1127,7 @@ function general()
     }
     case 'more':
     {
-      if (!$sub_action)
+      if ( !$sub_action )
       {
         $sql_search_limit = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='SQL_Search_Limit'"));
         $item_icons = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Item_Icons'"));
@@ -1278,36 +1290,36 @@ function general()
       {
         $sql_search_limit = $sqlm->quote_smart($_GET['sqlsearchlimit']);
         $item_icons = $sqlm->quote_smart($_GET['itemicons']);
-        if (isset($_GET['remembermechecked']))
+        if ( isset($_GET['remembermechecked']) )
           $remember_me_checked = 1;
         else
           $remember_me_checked = 0;
         $site_title = $sqlm->quote_smart($_GET['sitetitle']);
         $item_per_page = $sqlm->quote_smart($_GET['itemperpage']);
-        if (isset($_GET['showcountryflags']))
+        if ( isset($_GET['showcountryflags']) )
           $show_country_flags = 1;
         else
           $show_country_flags = 0;
         $default_theme = $sqlm->quote_smart($_GET['defaulttheme']);
         $default_language = $sqlm->quote_smart($_GET['defaultlanguage']);
         $timezone = $sqlm->quote_smart($_GET['timezone']);
-        if (isset($_GET['gmonline']))
+        if ( isset($_GET['gmonline']) )
           $gm_online = 1;
         else
           $gm_online = 0;
-        if (isset($_GET['gmonlinecount']))
+        if ( isset($_GET['gmonlinecount']) )
           $gm_online_count = 1;
         else
           $gm_online_count = 0;
-        if (isset($_GET['hidemaxplayers']))
+        if ( isset($_GET['hidemaxplayers']) )
           $hide_max_players = 1;
         else
           $hide_max_players = 0;
-        if (isset($_GET['hideavglatency']))
+        if ( isset($_GET['hideavglatency']) )
           $hide_avg_latency = 1;
         else
           $hide_avg_latency = 0;
-        if (isset($_GET['hideplrlatency']))
+        if ( isset($_GET['hideplrlatency']) )
           $hide_plr_latency = 1;
         else
           $hide_plr_latency = 0;
@@ -1360,7 +1372,7 @@ function gmlevels()
 
   $gm_lvls = $sqlm->query("SELECT * FROM config_gm_level_names");
 
-  if (!isset($_GET['edit_btn']))
+  if ( !isset($_GET['edit_btn']) )
   {
     $output .= '
         <center>
@@ -1374,7 +1386,7 @@ function gmlevels()
                 <th>Short Name</th>
               </tr>';
     $color = "#EEEEEE";
-    while($gm_lvl = $sqlm->fetch_assoc($gm_lvls))
+    while( $gm_lvl = $sqlm->fetch_assoc($gm_lvls) )
     {
       $output .= '
               <tr>
@@ -1384,7 +1396,7 @@ function gmlevels()
                 <td style="background-color:'.$color.'">'.$gm_lvl['Short_Name'].'</td>
               </td>
           ';
-      if ($color == "#EEEEEE")
+      if ( $color == "#EEEEEE" )
         $color = "#FFFFFF";
       else
         $color = "#EEEEEE";
@@ -1401,27 +1413,27 @@ function gmlevels()
     }
     else
     {
-      if (!isset($_GET['edit']))
-        if (!isset($_GET['addrow']))
+      if ( !isset($_GET['edit']) )
+        if ( !isset($_GET['addrow']) )
           redirect("admin.php?section=gmlevels");
 
-      if (isset($_GET['delrow']))
+      if ( isset($_GET['delrow']) )
         $del_row = $_GET['delrow'];
       else
         $del_row = "";
 
-      if (isset($_GET['addrow']))
+      if ( isset($_GET['addrow']) )
         $add_row = $_GET['addrow'];
       else
         $add_row = "";
 
-      if ($add_row)
+      if ( $add_row )
       {
         $add_result = $sqlm->query("INSERT INTO config_gm_level_names (Security_Level) VALUES ('-1')");
         redirect("admin.php?section=gmlevels");
       }
 
-      if ($del_row)
+      if ( $del_row )
       {
         $del_result = $sqlm->query("DELETE FROM config_gm_level_names WHERE `Index` = '".$_GET['edit']."'");
         redirect("admin.php?section=gmlevels");
@@ -1486,14 +1498,14 @@ function servers()
   $result = $sqlm->query("SELECT * FROM config_servers");
 
   $server_action = 0;
-  if (isset($_GET['editserver']))
+  if ( isset($_GET['editserver']) )
     $server_action = 'edit';
-  if (isset($_GET['delserver']))
+  if ( isset($_GET['delserver']) )
     $server_action = 'del';
-  if (isset($_GET['addserver']))
+  if ( isset($_GET['addserver']) )
     $server_action = 'add';
 
-  if (!$server_action)
+  if ( !$server_action )
   {
     $output .= '
         <center>
@@ -1508,7 +1520,7 @@ function servers()
                 <th width="40%">'.lang('admin', 'statsxml').'</th>
               </tr>';
     $color = "#EEEEEE";
-    while ($server = $sqlm->fetch_assoc($result))
+    while ( $server = $sqlm->fetch_assoc($result) )
     {
       $output .= '
               <tr>
@@ -1518,7 +1530,7 @@ function servers()
                 <td style="background-color:'.$color.'"><center>'.$server['Both_Factions'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Stats_XML'].'</center></td>
               </tr>';
-      if ($color == "#EEEEEE")
+      if ( $color == "#EEEEEE" )
         $color = "#FFFFFF";
       else
         $color = "#EEEEEE";
@@ -1534,10 +1546,10 @@ function servers()
   }
   else
   {
-    if ($server_action == 'edit')
+    if ( $server_action == 'edit' )
     {
       $server_id = $sqlm->quote_smart($_GET['sel_server']);
-      if (is_numeric($server_id))
+      if ( is_numeric($server_id) )
       {
         $server = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_servers WHERE `Index`='".$server_id."'"));
         $output .= '
@@ -1573,10 +1585,10 @@ function servers()
       else
         redirect("admin.php?section=servers&error=1");
     }
-    elseif ($server_action == 'del')
+    elseif ( $server_action == 'del' )
     {
       $server_id = $sqlm->quote_smart($_GET['sel_server']);
-      if (is_numeric($server_id))
+      if ( is_numeric($server_id) )
       {
         $result = $sqlm->query("DELETE FROM config_servers WHERE `Index` = '".$server_id."'");
         redirect("admin.php?section=servers");
@@ -1617,22 +1629,22 @@ function menus()
   $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $menu_action = 'start';
-  if (isset($_GET['editmenu']))
+  if ( isset($_GET['editmenu']) )
     $menu_action = 'edit';
-  if (isset($_GET['delmenu']))
+  if ( isset($_GET['delmenu']) )
     $menu_action = 'delmenu';
-  if (isset($_GET['addmenu']))
+  if ( isset($_GET['addmenu']) )
     $menu_action = 'addmenu';
-  if (isset($_GET['editmenu_item']))
+  if ( isset($_GET['editmenu_item']) )
     $menu_action = 'edititem';
-  if (isset($_GET['delmenu_item']))
+  if ( isset($_GET['delmenu_item']) )
     $menu_action = 'delitem';
-  if (isset($_GET['addmenu_item']))
+  if ( isset($_GET['addmenu_item']) )
     $menu_action = 'additem';
-  if (isset($_GET['savemenu']))
+  if ( isset($_GET['savemenu']) )
     $menu_action = 'savemenu';
 
-  switch ($menu_action)
+  switch ( $menu_action )
   {
     case "start";
     {
@@ -1648,7 +1660,7 @@ function menus()
                 <th>'.lang('admin', 'action').': </th>
               </tr>';
       $color = "#EEEEEE";
-      while ($top_menu = $sqlm->fetch_assoc($top_menus))
+      while ( $top_menu = $sqlm->fetch_assoc($top_menus) )
       {
         $output .= '
               <tr>
@@ -1656,7 +1668,7 @@ function menus()
                 <td style="background-color:'.$color.'"><center>'.$top_menu['Name'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$top_menu['Action'].'</center></td>
               </tr>';
-        if ($color == "#EEEEEE")
+        if ( $color == "#EEEEEE" )
           $color = "#FFFFFF";
         else
           $color = "#EEEEEE";
@@ -1705,7 +1717,7 @@ function menus()
               </tr>';
       $menus = $sqlm->query("SELECT * FROM config_menus WHERE Menu='".$top_menu."'");
       $color = "#EEEEEE";
-      while ($menu = $sqlm->fetch_assoc($menus))
+      while ( $menu = $sqlm->fetch_assoc($menus) )
       {
         $output .= '
               <tr>
@@ -1718,7 +1730,7 @@ function menus()
                 <td style="background-color:'.$color.'"><center>'.sec_level_name($menu['Delete']).' ('.$menu['Delete'].')'.'</center></td>
                 <td style="background-color:'.$color.'"><center>'.($menu['Enabled'] ? '<img src="img/up.gif">' : '<img src="img/down.gif">').'</center></td>
               </tr>';
-        if ($color == "#EEEEEE")
+        if ( $color == "#EEEEEE" )
           $color = "#FFFFFF";
         else
           $color = "#EEEEEE";
@@ -1810,7 +1822,7 @@ function menus()
                     </select>
                   </td>
                 </tr>';
-      if ($menu_item <> 8)
+      if ( $menu_item <> 8 )
         $output .= '
                 <tr>
                   <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'enabled').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'enabled').'</a>: </td>
@@ -1841,7 +1853,7 @@ function menus()
     case "delmenu":
     {
       $top_menu = $sqlm->quote_smart($_GET['top_menu']);
-      if (is_numeric($top_menu))
+      if ( is_numeric($top_menu) )
       {
         $result = $sqlm->query("DELETE FROM config_top_menus WHERE `Index`='".$top_menu."'");
         redirect("admin.php?section=menus");
@@ -1869,7 +1881,7 @@ function menus()
     case "delitem":
     {
       $menu_item = $sqlm->quote_smart($_GET['menu_item']);
-      if (is_numeric($menu_item))
+      if ( is_numeric($menu_item) )
       {
         $result = $sqlm->query("DELETE FROM config_menus WHERE `Index`='".$menu_item."'");
         redirect("admin.php?section=menus");
@@ -1899,13 +1911,13 @@ function savemenu()
   $insert = $sqlm->quote_smart($_GET['insert']);
   $update = $sqlm->quote_smart($_GET['update']);
   $delete = $sqlm->quote_smart($_GET['delete']);
-  if (isset($_GET['enabled']))
+  if ( isset($_GET['enabled']) )
     $enabled = 1;
   else
     $enabled = 0;
 
   $result = $sqlm->query("SELECT * FROM config_menus WHERE `Index`='".$menu_item."'");
-  if ($sqlm->num_rows($result))
+  if ( $sqlm->num_rows($result) )
     $result = $sqlm->query("UPDATE config_menus SET Menu='".$menu."', Name='".$name."', Action='".$action."', View='".$view."', `Insert`='".$insert."', `Update`='".$update."', `Delete`='".$delete."', Enabled='".$enabled."' WHERE `Index`='".$menu_item."'");
   else
     $result = $sqlm->query("INSERT INTO config_menus (Menu, Name, Action, View, Insert, Update, Delete, Enabled) VALUES ('".$menu."', '".$name."', '".$action."', '".$view."', '".$insert."', '".$update."', '".$delete."', '".$enabled."')");
@@ -1921,16 +1933,16 @@ function forum()
   $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $forum_action = 0;
-  if (isset($_GET['editforum']))
+  if ( isset($_GET['editforum']) )
     $forum_action = 'edit';
-  if (isset($_GET['saveforum']))
+  if ( isset($_GET['saveforum']) )
     $forum_action = 'save';
-  if (isset($_GET['delforum']))
+  if ( isset($_GET['delforum']) )
     $forum_action = 'del';
 
   $forums = $sqlm->query("SELECT * FROM config_lang_forum");
 
-  if (!$forum_action)
+  if ( !$forum_action )
   {
     $output .= '
         <center>
@@ -1944,7 +1956,7 @@ function forum()
                 <th width="50%">'.lang('admin', 'value').'</th>
               </tr>';
     $color = "#EEEEEE";
-    while ($forum = $sqlm->fetch_assoc($forums))
+    while ( $forum = $sqlm->fetch_assoc($forums) )
     {
       $output .= '
               <tr>
@@ -1953,7 +1965,7 @@ function forum()
                 <td style="background-color:'.$color.'"><center>'.$forum['Lang'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$forum['Value'].'</center></td>
               </tr>';
-      if ($color == "#EEEEEE")
+      if ( $color == "#EEEEEE" )
         $color = "#FFFFFF";
       else
         $color = "#EEEEEE";
@@ -1965,9 +1977,9 @@ function forum()
           </form>
         </center>';
   }
-  elseif ($forum_action == 'edit')
+  elseif ( $forum_action == 'edit' )
   {
-    if (isset($_GET['forum']))
+    if ( isset($_GET['forum']) )
       $forum_KL = $sqlm->quote_smart($_GET['forum']);
     else
       redirect("admin.php?section=forum&error=1");
@@ -2001,37 +2013,37 @@ function forum()
           </form>
         </center>';
   }
-  elseif ($forum_action == 'save')
+  elseif ( $forum_action == 'save' )
   {
     $key = $sqlm->quote_smart($_GET['key']);
     $lang = $sqlm->quote_smart($_GET['lang']);
     $value = $sqlm->quote_smart($_GET['value']);
 
-    if (strstr($key, "^"))
+    if ( strstr($key, "^") )
       redirect("admin.php?section=forum&error=2");
-    if (strstr($lang, "^"))
+    if ( strstr($lang, "^") )
       redirect("admin.php?section=forum&error=2");
-    if (strstr($value, "^"))
+    if ( strstr($value, "^") )
       redirect("admin.php?section=forum&error=2");
 
     $count = $sqlm->num_rows($sqlm->query("SELECT * FROM config_lang_forum WHERE `Key`='".$key."' AND `Lang`='".$lang."'"));
-    if ($count == 1)
+    if ( $count == 1 )
       $result = $sqlm->query("UPDATE config_lang_forum SET `Value`='".$value."' WHERE `Key`='".$key."' AND `Lang`='".$lang."'");
     else
       $result = $sqlm->query("INSERT INTO config_lang_forum (`Key`,`Lang`,`Value`) VALUES ('".$key."', '".$lang."', '".$value."')");
 
     redirect("admin.php?section=forum");
   }
-  elseif ($forum_action == 'del')
+  elseif ( $forum_action == 'del' )
   {
-    if (isset($_GET['forum']))
+    if ( isset($_GET['forum']) )
       $forum_KL = $sqlm->quote_smart($_GET['forum']);
     else
       redirect("admin.php?section=forum&error=1");
     $keylang = explode("^^", $forum_KL);
     
     $count = $sqlm->num_rows($sqlm->query("SELECT * FROM config_lang_forum WHERE `Key`='".$keylang[0]."' AND `Lang`='".$keylang[1]."'"));
-    if ($count == 1)
+    if ( $count == 1 )
       $result = $sqlm->query("DELETE FROM config_lang_forum WHERE `Key`='".$keylang[0]."' AND `Lang`='".$keylang[1]."'");
     else
       redirect("admin.php?section=forum&error=1");
@@ -2058,10 +2070,10 @@ function accounts()
     $result = $sqll->query("SELECT *, username AS login FROM account");
 
   $accounts_action = 0;
-  if (isset($_GET['editacct']))
+  if ( isset($_GET['editacct']) )
     $accounts_action = 'edit';
 
-  if (!$accounts_action)
+  if ( !$accounts_action )
   {
     $output .= '
         <center>
@@ -2076,7 +2088,7 @@ function accounts()
                 <th width="15%">'.lang('admin', 'acpaccess').'</th>
               </tr>';
     $color = "#EEEEEE";
-    while ($acct = $sqll->fetch_assoc($result))
+    while ( $acct = $sqll->fetch_assoc($result) )
     {
       $acct_result = $sqlm->query("SELECT * FROM config_accounts WHERE Login='".$acct['login']."'");
       $sn_web = $sqlm->fetch_assoc($acct_result);
@@ -2088,7 +2100,7 @@ function accounts()
                 <td style="background-color:'.$color.'"><center>'.$sn_web['SecurityLevel'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.($sn_web['WebAdmin'] ? '<img src="img/up.gif">' : '<img src="img/down.gif">').'</center></td>
               </tr>';
-      if ($color == "#EEEEEE")
+      if ( $color == "#EEEEEE" )
         $color = "#FFFFFF";
       else
         $color = "#EEEEEE";
@@ -2101,7 +2113,7 @@ function accounts()
   }
   else
   {
-    if (isset($_GET['acct']))
+    if ( isset($_GET['acct']) )
       $acct = $sqlm->quote_smart($_GET['acct']);
     else
       redirect("admin.php?section=accounts&error=1");
@@ -2153,16 +2165,16 @@ function saveacct()
   $acct = $sqlm->quote_smart($_GET['login']);
   $sn = $sqlm->quote_smart($_GET['sn']);
   $sec = $sqlm->quote_smart($_GET['sec']);
-  if (isset($_GET['acp']))
+  if ( isset($_GET['acp']) )
     $acp = 1;
   else
     $acp = 0;
     
-  if (!isset($_GET['sec']))
+  if ( !isset($_GET['sec']) )
     $sec = 0;
 
   $result = $sqlm->query("SELECT * FROM config_accounts WHERE Login='".$acct."'");
-  if ($sqlm->num_rows($result))
+  if ( $sqlm->num_rows($result) )
     $result = $sqlm->query("UPDATE config_accounts SET ScreenName='".$sn."', WebAdmin='".$acp."', SecurityLevel='".$sec."' WHERE Login='".$acct."'");
   else
     $result = $sqlm->query("INSERT INTO config_accounts (Login, ScreenName, WebAdmin) VALUES ('".$acct."', '".$sn."', '".$acp."')");
@@ -2175,19 +2187,20 @@ function saveacct()
 // Fix reditection error under MS-IIS fuckedup-servers.
 function redirect($url)
 {
-  if (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false)
+  if ( strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false )
   {
     header('Location: '.$url);
     exit();
   }
-  else die('<meta http-equiv="refresh" content="0;URL='.$url.'" />');
+  else
+    die('<meta http-equiv="refresh" content="0;URL='.$url.'" />');
 }
 
 
 //#############################################################################
 // MAIN
 //#############################################################################
-$err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
+$err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
 
 $output .= "
         <div class='top'>";
@@ -2195,7 +2208,7 @@ $output .= "
           <center>
             <h1>".lang('admin', 'title')."</h1>";
 
-switch ($err)
+switch ( $err )
 {
   case 1:
     $output .= "
@@ -2220,7 +2233,7 @@ unset($err);
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-switch ($action)
+switch ( $action )
 {
   case "savedbs":
     savedbs();
@@ -2241,7 +2254,7 @@ switch ($action)
 
 $section = (isset($_GET['section'])) ? $_GET['section'] : NULL;
 
-switch ($section)
+switch ( $section )
 {
   case "gmlevels":
     gmlevels();

@@ -354,11 +354,11 @@ function do_cookie_login()
 //#################################################################################################
 // MAIN
 //#################################################################################################
-if (isset($_COOKIE["login"]) && isset($_COOKIE["password"]) && isset($_COOKIE["realm_id"]) && empty($_GET['error']))
+if ( isset($_COOKIE["login"]) && isset($_COOKIE["password"]) && isset($_COOKIE["realm_id"]) && empty($_GET['error']) )
   do_cookie_login();
 
-$err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
-$info = (isset($_GET['info'])) ? $_GET['info'] : NULL;
+$err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
+$info = ( ( isset($_GET['info']) ) ? $_GET['info'] : NULL );
 
 //$lang_login = lang_login();
 
@@ -366,25 +366,31 @@ $output .= '
       <div class="bubble">
           <div class="top">';
 
-if (1 == $err)
+if ( $err == 1 )
   $output .=  '
             <h1><font class="error">'.lang('login', 'bad_pass_user').'</font></h1>';
-elseif (2 == $err)
+elseif ( $err == 2 )
   $output .=  '
             <h1><font class="error">'.lang('login', 'missing_pass_user').'</font></h1>';
-elseif (3 == $err)
+elseif ( $err == 3 )
   $output .=  '
             <h1><font class="error">'.lang('login', 'banned_acc').'</font></h1>';
-elseif (5 == $err)
+elseif ( $err == 5 )
 {
   $output .=  '
             <h1><font class="error">'.lang('login', 'no_permision').'</font></h1>';
-  if (isset($info))
+  if ( isset($info) )
     $output .= '<h1><font class="error">'.lang('login', 'req_permision').': '.$info.'</font></h1>';
 }
-elseif (6 == $err)
+elseif ( $err == 6 )
   $output .=  '
             <h1><font class="error">'.lang('login', 'after_registration').'</font></h1>';
+elseif ( $err == 7 )
+  $output .=  '
+            <h1><font class="error">'.lang('login', 'after_activation').'</font></h1>';
+elseif ( $err == 8 )
+  $output .=  '
+            <h1><font class="error">'.lang('login', 'confirm_sent').'</font></h1>';
 else
   $output .=  '
             <h1>'.lang('login', 'enter_valid_logon').'</h1>';

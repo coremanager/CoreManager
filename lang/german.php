@@ -83,6 +83,8 @@ $GLOBALS['lang_login'] = array
   'remember_me' => 'Eingeloggt bleiben',
   'pass_recovery' => 'Passwort vergessen?',
   'after_registration' => 'Ihr Benutzername wurde erfolgreich angelegt!',
+  'after_activation' => 'Your account activation was successful!',
+  'confirm_sent' => 'Activation Email Sent'
 );
 
 
@@ -2534,6 +2536,7 @@ $GLOBALS['lang_admin'] = array
   'publickey' => 'reCAPTCHA Public Key',
   'privatekey' => 'reCAPTCHA Private Key',
   'sendmailoncreation' => 'Email Senden bei Accounterstellung',
+  'sendconfirmmailoncreation' => 'Send Confirmation Email on Account Creation',
   'validatemailhost' => 'Email Host &uuml;berpr&uuml;fen',
   'limitaccperip' => 'Accounts per IP beschr&auml;nken',
 
@@ -2724,6 +2727,7 @@ $GLOBALS['lang_admin_tip'] = array
   'publickey' => 'Your reCAPTCHA Public Key.',
   'privatekey' => 'Your reCAPTCHA Private Key.',
   'sendmailoncreation' => 'Sende eine Willkommensnachricht beim Erstellen eines Accounts.',
+  'sendconfirmmailoncreation' => 'Send Account Confirmation Email on Account Creation.<br />(Functions as Welcome Email as well)',
   'validatemailhost' => 'Versichere dich das der angegebene Host ein Valider/erreichbarer Server ist.',
   'limitaccperip' => 'Verhindere das mehr als ein Account pro IP erstellt wird.',
 

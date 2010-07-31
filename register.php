@@ -28,7 +28,7 @@ function doregister()
   global $characters_db, $logon_db, $corem_db, $realm_id, $disable_acc_creation,
     $limit_acc_per_ip, $valid_ip_mask, $send_mail_on_creation, $create_acc_locked, $from_mail,
     $mailer_type, $smtp_cfg, $title, $expansion_select, $defaultoption, $GMailSender, $format_mail_html,
-    $enable_captcha, $use_recaptcha, $recaptcha_private_key, $sql, $core;
+    $enable_captcha, $use_recaptcha, $recaptcha_private_key, $send_confirmation_mail_on_creation, $sql, $core;
 
   if ( $enable_captcha )
   {
@@ -102,7 +102,7 @@ function doregister()
   $pass = $sql['logon']->quote_smart($_POST['pass']);
   $pass1 = $sql['logon']->quote_smart($_POST['pass1']);
 
-  //make sure username/pass at least 4 chars long and less than max
+  // make sure username/pass at least 4 chars long and less than max
   if ( ( strlen($user_name) < 4 ) || ( strlen($user_name) > 15 ) )
   {
     redirect("register.php?err=5");
@@ -127,19 +127,19 @@ function doregister()
 
   require_once("libs/valid_lib.php");
 
-  //make sure it doesnt contain non english chars.
+  // make sure it doesnt contain non english chars.
   if ( !valid_alphabetic($user_name) )
   {
     redirect("register.php?err=6");
   }
 
-  //make sure screen name doesnt contain non english chars.
+  // make sure screen name doesnt contain non english chars.
   if ( !valid_alphabetic($screenname) )
   {
     redirect("register.php?err=6");
   }
 
-  //make sure the mail is valid mail format
+  // make sure the mail is valid mail format
   $mail = $sql['logon']->quote_smart(trim($_POST['email']));
   if ( ( !valid_email($mail) ) || ( strlen($mail) > 224 ) )
   {
@@ -156,13 +156,13 @@ function doregister()
   else
     $result = $sql['logon']->query("SELECT ip FROM ip_banned WHERE ip = '".$last_ip."'");
   
-  //IP is in ban list
+  // IP is in ban list
   if ( $sql['logon']->num_rows($result) )
   {
     redirect("register.php?err=8&usr=".$last_ip);
   }
 
-  //Email check
+  // Email check
   if ( $core == 1 )
     $result = $sql['logon']->query("SELECT login, email FROM accounts WHERE login='".$user_name."' OR login='".$screenname."' OR email='".$mail."' ".$per_ip);
   else
@@ -173,7 +173,7 @@ function doregister()
     redirect("register.php?err=14");
   }
 
-  //there is already someone with same account name
+  // there is already someone with same account name
   if ( $sql['logon']->num_rows($result) )
   {
     redirect("register.php?err=3&usr=".$user_name);
@@ -192,7 +192,7 @@ function doregister()
       $expansion = $defaultoption;
 
     // insert screen name (if we didn't get a screen name, we still need to exit registration correctly.
-    if (  $screenname)
+    if ( $screenname )
     {
       $query = "INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '".$screenname."')";
       $s_result = $sql['mgr']->query($query);
@@ -200,12 +200,41 @@ function doregister()
     else
       $s_result = true;
 
-    if ( $core == 1 )
-      $query = "INSERT INTO accounts (login, password, gm, banned, email, flags) VALUES ('".$user_name."', '".$pass."', '0', '0', '".$mail."', '".$expansion."')";
+    if ( $send_confirmation_mail_on_creation )
+    {
+      // for email confirmation we save their real password to their config_accounts entry
+      // and a temporary (and incorrect) password into the logon database
+      $temppass = $pass;
+      $pass_gen_list = 'abcdefghijklmnopqrstuvwxyz';
+      // generate a random, temporary pass
+      $pass = $pass_gen_list[rand(0, 25)];
+      $pass .= $pass_gen_list[rand(0, 25)];
+      $pass .= $pass_gen_list[rand(0, 25)];
+      $pass .= rand(1, 9);
+      $pass .= rand(1, 9);
+      $pass .= rand(1, 9);
+      $pass .= $pass_gen_list[rand(0, 25)];
+      // save their real password
+      $query = "UPDATE config_accounts SET TempPassword='".$temppass."' WHERE Login='".$user_name."'";
+      $q_result = $sql['mgr']->query($query);
+      // now; we create their, temporarily crippled, account
+      if ( $core == 1 )
+        $query = "INSERT INTO accounts (login, password, gm, banned, email, flags) VALUES ('".$user_name."', '".$pass."', '0', '0', '".$mail."', '".$expansion."')";
+      else
+        $query = "INSERT INTO account (username, sha_pass_hash, email, expansion) VALUES ('".$user_name."', '".(sha1(strtoupper($user_name.":".$pass)))."', '".$mail."', '".$expansion."')";
+      
+      $a_result = $sql['logon']->query($query);
+    }
     else
-      $query = "INSERT INTO account (username, sha_pass_hash, email, expansion) VALUES ('".$user_name."', '".$pass."', '".$mail."', '".$expansion."')";
-    
-    $a_result = $sql['logon']->query($query);
+    {
+      // otherwise, we just save
+      if ( $core == 1 )
+        $query = "INSERT INTO accounts (login, password, gm, banned, email, flags) VALUES ('".$user_name."', '".$pass."', '0', '0', '".$mail."', '".$expansion."')";
+      else
+        $query = "INSERT INTO account (username, sha_pass_hash, email, expansion) VALUES ('".$user_name."', '".$pass."', '".$mail."', '".$expansion."')";
+      
+      $a_result = $sql['logon']->query($query);
+    }
     
     if ( $core == 1 )
       ;
@@ -227,16 +256,17 @@ function doregister()
 
     setcookie ("terms", "", time() - 3600);
 
-    if ( $send_mail_on_creation )
+    if ( $send_confirmation_mail_on_creation )
     {
+      // we send our confirmation message
       // prepare message
       if ( $format_mail_html )
       {
-        $file_name = "mail_templates/mail_welcome.tpl";
+        $file_name = "mail_templates/mail_activate.tpl";
       }
       else
       {
-        $file_name = "mail_templates/mail_welcome_nohtml.tpl";
+        $file_name = "mail_templates/mail_activate_nohtml.tpl";
       }
       $fh = fopen($file_name, 'r');
       $subject = fgets($fh, 4096);
@@ -257,6 +287,10 @@ function doregister()
         $body = str_replace("<screenname>", "NONE GIVEN", $body);
       $body = str_replace("<password>", $pass1, $body);
       $body = str_replace("<base_url>", $_SERVER['SERVER_NAME'], $body);
+      if ( $core == 1 )
+        $body = str_replace("<key>", sha1(strtoupper($user_name.":".$temppass)), $body);
+      else
+        $body = str_replace("<key>", $temppass, $body);
 
       if ( $GMailSender )
       {
@@ -293,9 +327,84 @@ function doregister()
         $mailer->ClearAddresses();
       }
     }
+    else
+    {
+      // we only send the welcome message if we don't send the confirmation
+      if ( $send_mail_on_creation )
+      {
+        // prepare message
+        if ( $format_mail_html )
+        {
+          $file_name = "mail_templates/mail_welcome.tpl";
+        }
+        else
+        {
+          $file_name = "mail_templates/mail_welcome_nohtml.tpl";
+        }
+        $fh = fopen($file_name, 'r');
+        $subject = fgets($fh, 4096);
+        $body = fread($fh, filesize($file_name));
+        fclose($fh);
+
+        $subject = str_replace("<title>", $title, $subject);
+        if ( $format_mail_html )
+        {
+          $body = str_replace("\n", "<br />", $body);
+          $body = str_replace("\r", " ", $body);
+        }
+        $body = str_replace("<core>", core_name($core), $body);
+        $body = str_replace("<username>", $user_name, $body);
+        if ( $screenname )
+          $body = str_replace("<screenname>", $screenname, $body);
+        else
+          $body = str_replace("<screenname>", "NONE GIVEN", $body);
+        $body = str_replace("<password>", $pass1, $body);
+        $body = str_replace("<base_url>", $_SERVER['SERVER_NAME'], $body);
+
+        if ( $GMailSender )
+        {
+          require_once("libs/mailer/authgMail_lib.php");
+
+          $fromName = $title." Admin";
+          authgMail($from_mail, $fromName, $mail, $mail, $subject, $body, $smtp_cfg);
+        }
+        else
+        {
+          require_once("libs/mailer/class.phpmailer.php");
+          $mailer = new PHPMailer();
+          $mailer->Mailer = $mailer_type;
+          if ( $mailer_type == "smtp" )
+          {
+            $mailer->Host = $smtp_cfg['host'];
+            $mailer->Port = $smtp_cfg['port'];
+            if( $smtp_cfg['user'] != "" )
+            {
+              $mailer->SMTPAuth  = true;
+              $mailer->Username  = $smtp_cfg['user'];
+              $mailer->Password  =  $smtp_cfg['pass'];
+            }
+          }
+
+          $mailer->WordWrap = 50;
+          $mailer->From = $from_mail;
+          $mailer->FromName = $title." Admin";
+          $mailer->Subject = $subject;
+          $mailer->IsHTML($format_mail_html);
+          $mailer->Body = $body;
+          $mailer->AddAddress($mail);
+          $mailer->Send();
+          $mailer->ClearAddresses();
+        }
+      }
+    }
 
     if ( $result )
-      redirect("login.php?error=6");
+    {
+      if ( $send_confirmation_mail_on_creation )
+        redirect("login.php?error=8");
+      else
+        redirect("login.php?error=6");
+    }
   }
 }
 
@@ -647,6 +756,51 @@ function do_pass_recovery()
 
 
 //#####################################################################################################
+// DO ACTIVATE ACCOUNT
+//#####################################################################################################
+function do_activate()
+{
+  global $sql, $core;
+
+  $key = $sql['mgr']->quote_smart($_GET['key']);
+
+  if ( $core == 1 )
+  {
+    // because we don't support ArcEmu's encrypted password feature, we have more work to do :/
+    $query = "SELECT Login, TempPassword FROM config_accounts";
+    $result = $sql['mgr']->query($query);
+    while ( $row = $sql['mgr']->fetch_assoc($result) )
+    {
+      if ( sha1(strtoupper($row['Login'].":".$row['TempPassword'])) == $key )
+      {
+        // update our user's account to correct their password
+        $u_query = "UPDATE accounts SET password='".$row['TempPassword']."' WHERE login='".$row['Login']."'";
+        $u_result = $sql['logon']->query($u_query);
+        // destroy the temporary password
+        $p_query = "UPDATE config_accounts SET TempPassword='' WHERE Login='".$row['Login']."'";
+        $p_result = $sql['mgr']->query($p_query);
+      }
+    }
+  }
+  else
+  {
+    $query = "SELECT Login, TempPassword FROM config_accounts WHERE TempPassword='".$key."'";
+    $result = $sql['mgr']->query($query);
+    $row = $sql['mgr']->fetch_assoc($result);
+    // update our user's account to correct their password
+    $u_query = "UPDATE account SET sha_pass_hash='".$row['TempPassword']."' WHERE username='".$row['Login']."'";
+    $u_result = $sql['logon']->query($u_query);
+    // destroy the temporary password
+    $p_query = "UPDATE config_accounts SET TempPassword='' WHERE Login='".$row['Login']."'";
+    $p_result = $sql['mgr']->query($p_query);
+  }
+  
+  if ( $u_result )
+    redirect('login.php?error=7');
+}
+
+
+//#####################################################################################################
 // DO ACTIVATE RECOVERED PASSWORD
 //#####################################################################################################
 //
@@ -763,6 +917,9 @@ switch ( $action )
     break;
   case "do_pass_activate":
     do_pass_activate();
+    break;
+  case "do_activate":
+    do_activate();
     break;
   default:
     register();

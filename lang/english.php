@@ -82,7 +82,9 @@ $GLOBALS['lang_login'] = array
   'select_realm' => 'Select Realm',
   'remember_me' => 'Remember Me',
   'pass_recovery' => 'Forgot Your Password?',
-  'after_registration' => 'Your account creation was successful!'
+  'after_registration' => 'Your account creation was successful!',
+  'after_activation' => 'Your account activation was successful!',
+  'confirm_sent' => 'Activation Email Sent'
 );
 
 
@@ -2534,6 +2536,7 @@ $GLOBALS['lang_admin'] = array
   'publickey' => 'reCAPTCHA Public Key',
   'privatekey' => 'reCAPTCHA Private Key',
   'sendmailoncreation' => 'Send Email on Account Creation',
+  'sendconfirmmailoncreation' => 'Send Confirmation Email on Account Creation',
   'validatemailhost' => 'Validate Email Host',
   'limitaccperip' => 'Limit Accounts Per IP',
 
@@ -2724,6 +2727,7 @@ $GLOBALS['lang_admin_tip'] = array
   'publickey' => 'Your reCAPTCHA Public Key.',
   'privatekey' => 'Your reCAPTCHA Private Key.',
   'sendmailoncreation' => 'Send Welcome Email on Account Creation.',
+  'sendconfirmmailoncreation' => 'Send Account Confirmation Email on Account Creation.<br />(Functions as Welcome Email as well)',
   'validatemailhost' => 'Make sure the mail host provided in email is valid/accessible host.',
   'limitaccperip' => 'Prevent more than one Account being created per IP Address.',
 

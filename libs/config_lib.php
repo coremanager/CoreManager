@@ -317,6 +317,11 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $send_mail_on_creation = $misc_row['Value'];
       break;
     }
+    case "Send_Confirmation_Mail_On_Creation":
+    {
+      $send_confirmation_mail_on_creation = $misc_row['Value'];
+      break;
+    }
     case "Format_Mail_HTML":
     {
       $format_mail_html = $misc_row['Value'];
