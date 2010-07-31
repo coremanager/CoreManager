@@ -21,67 +21,83 @@
 require_once("header.php");
 valid_login($action_permission['view']);
 
+// this_is_junk: Temporarily disabled for MaNGOS & Trinity
+if ( !( $core == 1 ) )
+  die("This tool is temporarily disabled for this core type.<br /><a href='index.php'>Main Page</a>");
+
 //########################################################################################################################
 // SHOW CHARACTER LIST
 //########################################################################################################################
 function show_list()
 {
-  global $realm_id, $output, $logon_db, $characters_db, $itemperpage, $action_permission, $user_lvl, $sql;
+  global $realm_id, $output, $logon_db, $characters_db, $itemperpage, $action_permission, $user_lvl, $sql, $core;
 
   valid_login($action_permission['view']);
 
-  $query = "SELECT * FROM characters WHERE acct='".$_SESSION['user_id']."'";
+  if ( $core == 1 )
+    $query = "SELECT * FROM characters WHERE acct='".$_SESSION['user_id']."'";
+  else
+    $query = "SELECT * FROM characters WHERE account='".$_SESSION['user_id']."'";
   $result = $sql['char']->query($query);
   $num_rows = $sql['char']->num_rows($result);
 
-  $output .= "
-          <table class='top_hidden'>
-            <tr>
-              <td>
-                <center>";
-  $output .= "<fieldset class='half_frame'>
-                <legend>".lang('ultra', 'selectchar')."</legend>";
-  if($num_rows == 0)
+  $output .= '
+        <table class="top_hidden">
+          <tr>
+            <td>
+              <center>
+                <fieldset class="half_frame">
+                  <legend>'.lang('ultra', 'selectchar').'</legend>';
+  if ( $num_rows == 0 )
   {
-    $output .= "<b>".$_SESSION['login'].", ".lang('ultra', 'nochars')."</b><br /><br />";
+    $output .= '
+                  <b>'.$_SESSION['login'].', '.lang('ultra', 'nochars').'</b>
+                  <br />
+                  <br />';
     makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
   }
   else
   {
-    $output .= "<form method='get' action='ultra_vendor.php' name='form'>
-                  <input type='hidden' name='action' value='selected_char' />
-                    <table>";
-    if($num_rows > 1)
+    $output .= '
+                  <form method="get" action="ultra_vendor.php" name="form">
+                    <input type="hidden" name="action" value="selected_char" />
+                      <table>';
+    if ( $num_rows > 1 )
     {
       while ($field = $sql['char']->fetch_assoc($result))
       {
-        $output .= "<tr>
-                      <td>
-                        <input type='radio' name='charname' value='".$field['name']."' />".$field['name']."
-                      </td>
-                    </tr>";
+        $output .= '
+                        <tr>
+                          <td>
+                            <input type="radio" name="charname" value="'.$field['name'].'" />'.$field['name'].'
+                          </td>
+                        </tr>';
       }
     }
     else
     {
       $field = $sql['char']->fetch_assoc($result);
-      $output .= "<tr>
-                    <td>
-                      <input type='radio' name='charname' value='".$field['name']."' checked='true' />".$field['name']."
-                    </td>
-                  </tr>";
+      $output .= '
+                        <tr>
+                          <td>
+                            <input type="radio" name="charname" value="'.$field['name'].'" checked="true" />'.$field['name'].'
+                          </td>
+                        </tr>';
     }
-    $output .= "</table>
-                <br />";
+    $output .= '
+                      </table>
+                      <br />';
     makebutton(lang('ultra', 'select'), "javascript:do_submit()\" type=\"def",180);
     makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
-    $output .= "</form>";
+    $output .= '
+                    </form>';
   }
-  $output .= "</fieldset>
+  $output .= '
+                  </fieldset>
                 </center>
               </td>
-              </tr>
-          </table>";
+            </tr>
+          </table>';
 
 }
 
@@ -93,41 +109,42 @@ function select_item()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl, $sql;
 
-  valid_login($action_permission['insert']);
+  valid_login($action_permission['view']);
 
-  if( (empty($_GET['charname'])) )
+  if ( empty($_GET['charname']) )
     redirect("questitem_vendor.php?error=1");
 
-  $output .= "
-          <table class='top_hidden'>
+  $output .= '
+          <table class="top_hidden">
             <tr>
               <td>
                 <center>
-                <fieldset class='half_frame'>
-                  <legend>".lang('ultra', 'selectitem')."</legend>";
-
-  $output .= "<form method='get' action='ultra_vendor.php' name='form'>
-                  <input type='hidden' name='action' value='selected_item' />
-                  <input type='hidden' name='charname' value='".$_GET['charname']."' />
-                    <table>";
-  $output .= lang('ultra', 'itemline1').".<br /><br />
-                <small>(".lang('ultra', 'itemline2')." <a href='http://www.wowhead.com/'>wowhead.com</a>.
-                <br />".
-                lang('ultra', 'itemline3').".)</small>
-                <br /><br />";
-
-  $output .= "<input name='myItem' type='text'>";
-
-  $output .= "</table>
-              <br /><br />";
+                  <fieldset class="half_frame">
+                    <legend>'.lang('ultra', 'selectitem').'</legend>
+                    <form method="get" action="ultra_vendor.php" name="form">
+                      <input type="hidden" name="action" value="selected_item" />
+                      <input type="hidden" name="charname" value="'.$_GET['charname'].'" />'
+                      .lang('ultra', 'itemline1').'.
+                      <br />
+                      <br />
+                      <small>
+                        ('.lang('ultra', 'itemline2').' <a href="http://www.wowhead.com/">wowhead.com</a>.
+                        <br />'
+                        .lang('ultra', 'itemline3').'.)
+                      </small>
+                      <br />
+                      <br />
+                      <input name="myItem" type="text">
+                      <br />
+                      <br />';
   makebutton(lang('ultra', 'select'), "javascript:do_submit()\" type=\"def",180);
   makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
-  $output .= "</form>";
-  $output .= "</fieldset>
-            </center>
+  $output .= '      </form>
+                  </fieldset>
+                </center>
               </td>
-              </tr>
-          </table>";
+            </tr>
+          </table>';
 }
 
 
@@ -137,111 +154,125 @@ function select_item()
 function select_quantity()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
-    $ultra_mult, $ultra_base, $sql;
+    $ultra_mult, $ultra_base, $sql, $core;
 
-  valid_login($action_permission['insert']);
+  valid_login($action_permission['view']);
 
-  if( (empty($_GET['myItem'])) )
+  if ( empty($_GET['myItem']) )
     redirect("questitem_vendor.php?error=1");
 
-  $iquery = "SELECT * FROM items WHERE entry = '".$_GET['myItem']."'";
+  if ( $core == 1 )
+    $iquery = "SELECT * FROM items WHERE entry='".$_GET['myItem']."'";
+  else
+    $iquery = "SELECT *,
+      name AS name1, Quality AS quality, SellPrice AS sellprice, BuyPrice AS buyprice
+      FROM item_template WHERE entry='".$_GET['myItem']."'";
   $iresult = $sql['world']->query($iquery);
   $item = $sql['world']->fetch_assoc($iresult);
 
-  $cquery = "SELECT guid,level,gold FROM characters WHERE name = '".$_GET['charname']."'";
+  if ( $core == 1 )
+    $cquery = "SELECT guid, level, gold FROM characters WHERE name='".$_GET['charname']."'";
+  else
+    $cquery = "SELECT guid, level, money AS gold FROM characters WHERE name='".$_GET['charname']."'";
   $cresult = $sql['char']->query($cquery);
   $char = $sql['char']->fetch_assoc($cresult);
 
   $chargold = $char['gold'];
   $chargold = str_pad($chargold, 4, "0", STR_PAD_LEFT);
   $pg = substr($chargold,  0, -4);
-  if ($pg == '')
+  if ( $pg == '' )
     $pg = 0;
   $ps = substr($chargold, -4,  2);
-  if ( ($ps == '') || ($ps == '00') )
+  if ( ( $ps == '' ) || ( $ps == '00' ) )
     $ps = 0;
   $pc = substr($chargold, -2);
-  if ( ($pc == '') || ($pc == '00') )
+  if ( ( $pc == '' ) || ( $pc == '00' ) )
     $pc = 0;
 
   $mul = $ultra_mult[$item['quality']];
   $qual = quality($item['quality']);
 
-  if($item['sellprice'] <> 0)
+  if ( $item['sellprice'] <> 0 )
     $base_price = $item['sellprice'];
   else
   {
-    if($item['buyprice'] == 0)
+    if ( $item['buyprice'] == 0 )
       $base_price = $ultra_base;
     else
       $base_price = $item['buyprice'];
   }
 
-  $output .= "
-          <table class='top_hidden'>
+  $output .= '
+          <table class="top_hidden">
             <tr>
               <td>
                 <center>
-                <fieldset class='half_frame'>
-                  <legend>".lang('ultra', 'selectquantity')."</legend>";
+                  <fieldset class="half_frame">
+                    <legend>'.lang('ultra', 'selectquantity').'</legend>';
 
   $gold = $mul * $base_price;
   $gold = str_pad($gold, 4, "0", STR_PAD_LEFT);
   $cg = substr($gold,  0, -4);
-  if ($cg == '')
+  if ( $cg == '' )
     $cg = 0;
   $cs = substr($gold, -4,  2);
-  if ( ($cs == '') || ($cs == '00') )
+  if ( ( $cs == '' ) || ( $cs == '00' ) )
     $cs = 0;
   $cc = substr($gold, -2);
-  if ( ($cc == '') || ($cc == '00') )
+  if ( ( $cc == '' ) || ( $cc == '00' ) )
     $cc = 0;
   $gold = $mul * $base_price;
 
   $base_gold = $base_price;
   $base_gold = str_pad($base_gold, 4, "0", STR_PAD_LEFT);
   $bg = substr($base_gold,  0, -4);
-  if ($bg == '')
+  if ( $bg == '' )
     $bg = 0;
   $bs = substr($base_gold, -4,  2);
-  if ( ($bs == '') || ($bs == '00') )
+  if ( ( $bs == '' ) || ( $bs == '00' ) )
     $bs = 0;
   $bc = substr($base_gold, -2);
-  if ( ($bc == '') || ($bc == '00') )
+  if ( ( $bc == '' ) || ( $bc == '00' ) )
     $bc = 0;
 
-  $output .= "<b>".$item['name1']."</b> ".lang('ultra', 'isranked')." <b>'".$qual."'</b>,<br />".lang('ultra', 'willcost').
-             " <span id='uv_mul'>".$mul."</span>x ".lang('ultra', 'normalprice')." ".
-             $bg."<img src='img/gold.gif' alt='' align='middle' />
-             ".$bs."<img src='img/silver.gif' alt='' align='middle' />
-             ".$bc."<img src='img/copper.gif' alt='' align='middle' /><br />".
-             lang('ultra', 'or')." ".
-             $cg."<img src='img/gold.gif' alt='' align='middle' />
-             ".$cs."<img src='img/silver.gif' alt='' align='middle' />
-             ".$cc."<img src='img/copper.gif' alt='' align='middle' /> ".lang('ultra', 'each').".<br /><br />";
-
-  $output .= "<b>".$_GET['charname']."</b> ".lang('ultra', 'has')." ".$pg."<img src='img/gold.gif' alt='' align='middle' />
-             ".$ps."<img src='img/silver.gif' alt='' align='middle' />
-             ".$pc."<img src='img/copper.gif' alt='' align='middle' /><br /><br />";
-
-  $output .= "<form method='get' action='ultra_vendor.php' name='form'>
-                <input type='hidden' name='action' value='selected_quantity' />
-                  <table>";
-  $output .= "Quanity desired:&nbsp;";
-  $output .= "<input type='text' name='want' value='0' />
-              <input type='hidden' name='charname' value='".$_GET['charname']."' />
-              <input type='hidden' name='gold' value='".$gold."' />
-              <input type='hidden' name='item' value='".$item['entry']."' />";
-  $output .= "</table>
-                <br />";
+  $output .= '
+                    <b>'.$item['name1'].'</b> '.lang('ultra', 'isranked').' <b>"'.$qual.'"</b>,
+                    <br />'
+                    .lang('ultra', 'willcost').' <span id="uv_mul">'.$mul.'</span>x '.lang('ultra', 'normalprice').' '
+                    .$bg.'<img src="img/gold.gif" alt="" align="middle" />'
+                    .$bs.'<img src="img/silver.gif" alt="" align="middle" />'
+                    .$bc.'<img src="img/copper.gif" alt="" align="middle" /><br />'
+                    .lang('ultra', 'or').' '
+                    .$cg.'<img src="img/gold.gif" alt="" align="middle" />'
+                    .$cs.'<img src="img/silver.gif" alt="" align="middle" />'
+                    .$cc.'<img src="img/copper.gif" alt="" align="middle" /> '
+                    .lang('ultra', 'each').'.
+                    <br />
+                    <br />
+                    <b>'.$_GET['charname'].'</b> '.lang('ultra', 'has').' '
+                    .$pg.'<img src="img/gold.gif" alt="" align="middle" />'
+                    .$ps.'<img src="img/silver.gif" alt="" align="middle" />'
+                    .$pc.'<img src="img/copper.gif" alt="" align="middle" />
+                    <br />
+                    <br />
+                    <form method="get" action="ultra_vendor.php" name="form">
+                      <input type="hidden" name="action" value="selected_quantity" />
+                      <input type="hidden" name="charname" value="'.$_GET['charname'].'" />
+                      <input type="hidden" name="gold" value="'.$gold.'" />
+                      <input type="hidden" name="item" value="'.$item['entry'].'" />'
+                      .lang('ultra', 'wanted').':
+                      <input type="text" name="want" value="0" />
+                      <br />
+                      <br />';
   makebutton(lang('ultra', 'submit'), "javascript:do_submit()\" type=\"def",180);
   makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
-  $output .= "</form>";
-  $output .= "</fieldset>
-            </center>
+  $output .= '
+                    </form>
+                  </fieldset>
+                </center>
               </td>
-              </tr>
-          </table>";
+            </tr>
+          </table>';
 }
 
 
@@ -251,81 +282,88 @@ function select_quantity()
 function approve()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
-    $quest_item, $sql;
+    $quest_item, $sql, $core;
 
-  valid_login($action_permission['insert']);
+  valid_login($action_permission['view']);
 
-  if( !(is_numeric($_GET['item'])) )
+  if ( !( is_numeric($_GET['item']) ) )
     redirect("questitem_vendor.php?error=1");
-  if( !(is_numeric($_GET['gold'])) )
+  if ( !( is_numeric($_GET['gold']) ) )
     redirect("questitem_vendor.php?error=1");
-  if( !(is_numeric($_GET['want'])) )
+  if ( !( is_numeric($_GET['want']) ) )
     redirect("questitem_vendor.php?error=1");
 
-  $query = "SELECT * FROM items WHERE entry = '".$_GET['item']."'";
+  if ( $core == 1 )
+    $query = "SELECT * FROM items WHERE entry='".$_GET['item']."'";
+  else
+    $query = "SELECT * FROM item_template WHERE entry='".$_GET['item']."'";
   $result = $sql['world']->query($query);
   $item = $sql['world']->fetch_assoc($result);
 
-  $cquery = "SELECT * FROM characters WHERE name = '".$_GET['charname']."'";
+  $cquery = "SELECT *, money AS gold FROM characters WHERE name='".$_GET['charname']."'";
   $cresult = $sql['char']->query($cquery);
   $char = $sql['char']->fetch_assoc($cresult);
 
   $total = $_GET['gold'] * $_GET['want'];
   $total = str_pad($total, 4, "0", STR_PAD_LEFT);
   $cg = substr($total,  0, -4);
-  if($cg == '')
+  if ( $cg == '' )
     $cg = 0;
   $cs = substr($total, -4,  2);
-  if(($cs == '') || ($cs == '00'))
+  if ( ( $cs == '' ) || ( $cs == '00' ) )
     $cs = 0;
   $cc = substr($total, -2);
-  if(($cc == '') || ($cc == '00'))
+  if ( ( $cc == '' ) || ( $cc == '00' ) )
     $cc = 0;
 
-  $output .= "
-          <table class='top_hidden'>
+  $output .= '
+          <table class="top_hidden">
             <tr>
               <td>
                 <center>
-                <fieldset class='half_frame'>
-                  <legend>".lang('ultra', 'approvecost')."</legend>";
-  if ($_GET['want'] <> 0)
+                  <fieldset class="half_frame">
+                    <legend>'.lang('ultra', 'approvecost').'</legend>';
+  if ( $_GET['want'] <> 0 )
   {
-    if ($total > $char['gold'])
+    if ( $total > $char['gold'] )
     {
-      $output .= "<b>".$char['name']."</b> ".lang('ultra', 'insufficientfunds')." <span id='uv_insufficient_funds'>".$_GET['want']."</span>x <b>".$item['name1']."</b>.<br /><br />";
+      $output .= '
+                    <b>'.$char['name'].'</b> '.lang('ultra', 'insufficientfunds').' <span id="uv_insufficient_funds">'.$_GET['want'].'</span>x <b>'.$item['name1'].'</b>.
+                    <br />
+                    <br />';
       makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
     }
     else
     {
-      $output .= "<form method='get' action='questitem_vendor.php' name='form'>
-                    <input type='hidden' name='action' value='purchase' />
-                    <input type='hidden' name='char' value='".$char['name']."' />
-                    <input type='hidden' name='item' value='".$item['entry']."' />
-                    <input type='hidden' name='want' value='".$_GET['want']."' />
-                    <input type='hidden' name='total' value='".$total."' />
-                    <table>";
-      $output .= lang('ultra', 'purchase')." <span id='uv_approve_quantity'>".$_GET['want']."</span>x <b>"
-                 .$item['name1']."</b> ".lang('ultra', 'for')." ".$cg."<img src='img/gold.gif' alt='' align='middle' /> "
-                 .$cs."<img src='img/silver.gif' alt='' align='middle' /> "
-                 .$cc."<img src='img/copper.gif' alt='' align='middle' />?<br />";
-      $output .= "</table>
-                <br />";
+      $output .= '
+                    <form method="get" action="questitem_vendor.php" name="form">
+                      <input type="hidden" name="action" value="purchase" />
+                      <input type="hidden" name="char" value="'.$char['name'].'" />
+                      <input type="hidden" name="item" value="'.$item['entry'].'" />
+                      <input type="hidden" name="want" value="'.$_GET['want'].'" />
+                      <input type="hidden" name="total" value="'.$total.'" />'
+                      .lang('ultra', 'purchase').' <span id="uv_approve_quantity">'.$_GET['want'].'</span>x <b>'
+                      .$item['name1'].'</b> '.lang('ultra', 'for').' '.$cg.'<img src="img/gold.gif" alt="" align="middle" /> '
+                      .$cs.'<img src="img/silver.gif" alt="" align="middle" /> '
+                      .$cc.'<img src="img/copper.gif" alt="" align="middle" />?<br />
+                      <br />';
       makebutton(lang('ultra', 'submit'), "javascript:do_submit()\" type=\"def",180);
       makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
-      $output .= "</form>";
+      $output .= '
+                    </form>';
     }
   }
   else
   {
-    $output .= lang('ultra', 'insufficientquantity').".<br /><br />";
+    $output .= lang('ultra', 'insufficientquantity').'.<br /><br />';
     makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
   }
-  $output .= "</fieldset>
-            </center>
+  $output .= '
+                  </fieldset>
+                </center>
               </td>
-              </tr>
-          </table>";
+            </tr>
+          </table>';
 }
 
 
@@ -335,35 +373,45 @@ function approve()
 function purchase()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
-    $from_char, $stationary, $sql;
+    $from_char, $stationary, $sql, $core;
 
   valid_login($action_permission['insert']);
 
-  if( (empty($_GET['item'])) )
+  if ( empty($_GET['item']) )
     redirect("questitem_vendor.php?error=1");
-  if( (empty($_GET['total'])) )
+  if ( empty($_GET['total']) )
     redirect("questitem_vendor.php?error=1");
-  if( (empty($_GET['want'])) )
+  if ( empty($_GET['want']) )
     redirect("questitem_vendor.php?error=1");
 
-  $iquery = "SELECT * FROM items WHERE entry='".$_GET['item']."'";
+  if ( $core == 1 )
+    $iquery = "SELECT * FROM items WHERE entry='".$_GET['item']."'";
+  else
+    $iquery = "SELECT * FROM item_template WHERE entry='".$_GET['item']."'";
   $iresult = $sql['world']->query($iquery);
   $item = $sql['world']->fetch_assoc($iresult);
 
-  $cquery = "SELECT * FROM characters WHERE name='".$_GET['char']."'";
+  $cquery = "SELECT *, money AS gold FROM characters WHERE name='".$_GET['char']."'";
   $cresult = $sql['char']->query($cquery);
   $char = $sql['char']->fetch_assoc($cresult);
 
   $char_money = $char['gold'];
   $char_money = $char_money - $_GET['total'];
 
-  $mail_query = "INSERT INTO mailbox_insert_queue VALUES ('".$from_char."', '".$char['guid']."', '".lang('ultra', 'questitems')."', ".chr(34).$_GET['want']."x ".$item['name1'].chr(34).", '".$stationary."', '0', '".$_GET['item']."', '".$_GET['want']."')";
-  $money_query = "UPDATE characters SET gold = '".$char_money."' WHERE guid = '".$char['guid']."'";
+  if ( $core == 1 )
+  {
+    $mail_query = "INSERT INTO mailbox_insert_queue VALUES ('".$from_char."', '".$char['guid']."', '".lang('ultra', 'questitems')."', ".chr(34).$_GET['want']."x ".$item['name1'].chr(34).", '".$stationary."', '0', '".$_GET['item']."', '".$_GET['want']."')";
+    $money_query = "UPDATE characters SET gold='".$char_money."' WHERE guid = '".$char['guid']."'";
+  }
+  else
+  {
+    ;
+  }
 
   $mail_result = $sql['char']->query($mail_query);
   $money_result = $sql['char']->query($money_query);
 
-  if ($mail_result & $money_result)
+  if ( $mail_result & $money_result )
     redirect("ultra_vendor.php?error=3");
   else
     redirect("ultra_vendor.php?error=2");
@@ -371,7 +419,7 @@ function purchase()
 
 function quality($val)
 {
-  switch($val)
+  switch( $val )
   {
     case 0:
       return "<span id='uv_poor_quality'>".lang('ultra_quality', $val)."</span>";
@@ -404,13 +452,13 @@ function quality($val)
 //########################################################################################################################
 // MAIN
 //########################################################################################################################
-$err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
+$err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
 
 $output .= "
-      <div class=\"bubble\">
+        <div class=\"bubble\">
           <div class=\"top\">";
 
-switch ($err)
+switch ( $err )
 {
   case 1:
     $output .= "
@@ -433,9 +481,9 @@ unset($err);
 $output .= "
         </div>";
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
 
-switch ($action)
+switch ( $action )
 {
   case "purchase":
     purchase();

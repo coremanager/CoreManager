@@ -616,7 +616,7 @@ function pass_recovery()
   $output .= '
     <center>
       <fieldset class="half_frame">
-      <legend>'.lang('register', 'recover_acc_password').'</legend>
+      <legend>'.lang('register', 'recover_acc_password'.( ( $core == 1 ) ? 'A' : 'MT' )).'</legend>
       <form method="post" action="register.php?action=do_pass_recovery" name="form">
         <table class="flat">
           <tr>
@@ -638,7 +638,7 @@ function pass_recovery()
           </tr>
           <tr>
             <td>';
-  makebutton(lang('register', 'recover_pass'), "javascript:do_submit()",150);
+  makebutton(lang('register', 'recover_pass'.( ( $core == 1 ) ? 'A' : 'MT' )), "javascript:do_submit()",150);
   $output .= '
             </td>
             <td>';
@@ -660,27 +660,60 @@ function pass_recovery()
 function do_pass_recovery()
 {
   global $logon_db, $from_mail, $mailer_type, $smtp_cfg, $title, $GMailSender,
-    $format_mail_html, $sql;
+    $format_mail_html, $sql, $core;
 
   if ( empty($_POST['username']) || empty($_POST['email']) )
     redirect("register.php?action=pass_recovery&err=1");
 
-  /*$sql = new SQL;
-  $sql->connect($logon_db['addr'], $logon_db['user'], $logon_db['pass'], $logon_db['name']);*/
-
   $user_name = $sql['logon']->quote_smart(trim($_POST['username']));
   $email_addr = $sql['logon']->quote_smart($_POST['email']);
 
-  $result = $sql['logon']->query("SELECT password FROM accounts WHERE login = '".$user_name."' AND email = '".$email_addr."'");
+  if ( $core == 1 )
+    $result = $sql['logon']->query("SELECT password FROM accounts WHERE login='".$user_name."' AND email='".$email_addr."'");
+  else
+    $result = $sql['logon']->query("SELECT *, username AS login FROM account WHERE username='".$user_name."' AND email='".$email_addr."'");
 
   if ( $sql['logon']->num_rows($result) == 1 )
   {
     $pass = $sql['logon']->fetch_assoc($result);
 
-    if ( $format_mail_html )
-      $file_name = "mail_templates/recover_password.tpl";
+    // Password recovery is, basically, impossible on MaNGOS and Trinity
+    // so we just generate a new one
+    if ( $core != 1 )
+    {
+      $pass_gen_list = 'abcdefghijklmnopqrstuvwxyz';
+      // generate a random, temporary password
+      $temppass = $pass_gen_list[rand(0, 25)];
+      $temppass .= $pass_gen_list[rand(0, 25)];
+      $temppass .= $pass_gen_list[rand(0, 25)];
+      $temppass .= rand(1, 9);
+      $temppass .= rand(1, 9);
+      $temppass .= rand(1, 9);
+      $temppass .= $pass_gen_list[rand(0, 25)];
+      $pass['password'] = $temppass;
+    }
+
+    if ( $core != 1 )
+    {
+      $sha = sha1(strtoupper($pass['login'].":".$pass['password']));
+      $query = "UPDATE account SET sha_pass_hash='".$sha."' WHERE username='".$pass['login']."'";
+      $result = $sql['logon']->query($query);
+    }
+
+    if ( $core == 1 )
+    {
+      if ( $format_mail_html )
+        $file_name = "mail_templates/recover_password.tpl";
+      else
+        $file_name = "mail_templates/recover_password_nohtml.tpl";
+    }
     else
-       $file_name = "mail_templates/recover_password_nohtml.tpl";
+    {
+      if ( $format_mail_html )
+        $file_name = "mail_templates/reset_password.tpl";
+      else
+        $file_name = "mail_templates/reset_password_nohtml.tpl";
+    }
 
     $fh = fopen($file_name, 'r');
     $subject = fgets($fh, 4096);
@@ -885,7 +918,7 @@ switch ( $err )
     $output .= '<h1><font class="error">Mailer Error: '.$usr.'</font></h1>';
     break;
   case 12:
-    $output .= '<h1><font class="error">'.lang('register', 'recovery_mail_sent').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang('register', 'recovery_mail_sent'.( ( $core == 1 ) ? 'A' : 'MT' )).'</font></h1>';
     break;
   case 13:
     $output .= '<h1><font class="error">'.lang('captcha', 'invalid_code').'</font></h1>';

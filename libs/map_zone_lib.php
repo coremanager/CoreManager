@@ -19,26 +19,29 @@
 
 
 //#############################################################################
-//get map name by its id
-
+// get map name by its id
 function get_map_name($id)
 {
   global $sql;
 
-  $map_name = $sql['dbc']->fetch_assoc($sql['dbc']->query("SELECT name FROM map WHERE id=".$id." LIMIT 1"));
+  $query = "SELECT name FROM map WHERE id='".$id."' LIMIT 1";
+
+  $map_name = $sql['dbc']->fetch_assoc($sql['dbc']->query($query));
+
   return $map_name['name'];
 }
 
 
 //#############################################################################
-//get zone name by its id
-
+// get zone name by its id
 function get_zone_name($id)
 {
   global $sql;
 
-  //This table does not exist on dbc files, it was taken from CSWOWD
-  $zone_name = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT name FROM areatable WHERE id='.$id.' LIMIT 1'));
+  $query = "SELECT name FROM areatable WHERE id='".$id."' LIMIT 1";
+
+  $zone_name = $sql['dbc']->fetch_assoc($sql['dbc']->query($query));
+
   return $zone_name['name'];
 }
 

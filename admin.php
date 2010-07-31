@@ -371,6 +371,7 @@ function general()
         $mail_mailer_type = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Mail_Mailer_Type'"));
         $mail_from_email = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Mail_From_Email'"));
         $mail_gmailsender = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Mail_GMailSender'"));
+        $format_mail_html = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Format_Mail_HTML'"));
         $smtp_host = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='SMTP_Host'"));
         $smtp_port = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='SMTP_Port'"));
         $smtp_user = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='SMTP_User'"));
@@ -407,6 +408,10 @@ function general()
             <tr>
               <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'usegmail').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'usegmail').'</a>: </td>
               <td><input type="checkbox" name="gmail" '.($mail_gmailsender['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+            </tr>
+            <tr>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'formathtml').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'formathtml').'</a>: </td>
+              <td><input type="checkbox" name="usehtml" '.($format_mail_html['Value'] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
               <td colspan=2><b>'.lang('admin', 'smtp').'</b></td>
@@ -451,6 +456,10 @@ function general()
           $mail_gmailsender = 1;
         else
           $mail_gmailsender = 0;
+        if ( isset($_GET['usehtml']) )
+          $format_mail_html = 1;
+        else
+          $format_mail_html = 0;
         $smtp_host = $sqlm->quote_smart($_GET['smtphost']);
         $smtp_port = $sqlm->quote_smart($_GET['smtpport']);
         $smtp_user = $sqlm->quote_smart($_GET['smtpuser']);
@@ -462,6 +471,7 @@ function general()
         $result = $sqlm->query("UPDATE config_misc SET Value='".$mail_mailer_type."' WHERE `Key`='Mail_Mailer_Type'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$mail_from_email."' WHERE `Key`='Mail_From_Email'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$mail_gmailsender."' WHERE `Key`='Mail_GMailSender'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$format_mail_html."' WHERE `Key`='Format_Mail_HTML'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$smtp_host."' WHERE `Key`='SMTP_Host'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$smtp_port."' WHERE `Key`='SMTP_Port'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$smtp_user."' WHERE `Key`='SMTP_User'");

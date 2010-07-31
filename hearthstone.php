@@ -30,54 +30,60 @@ valid_login($action_permission['view']);
 
 function sel_char()
 {
-  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sql;
+  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sql, $core;
 
   valid_login($action_permission['view']);
 
   $output .= '
-    <center>
-      <fieldset id="xname_fieldset">
-        <legend>'.lang('unstuck', 'selectchar').'</legend>
-        <span class="xname_info">'.lang('unstuck', 'info').'</span>
-        <br />
-        <br />
-        <form method="GET" action="hearthstone.php" name="form">
-          <input type="hidden" name="action" value="approve" />
-          <table class="lined" id="xname_char_table">
-            <tr>
-              <th class="xname_radio">&nbsp;</th>
-              <th class="xname_name">'.lang('unstuck', 'char').'</th>
-              <th class="xname_LRC">'.lang('unstuck', 'lvl').'</th>
-              <th class="xname_LRC">'.lang('unstuck', 'race').'</th>
-              <th class="xname_LRC">'.lang('unstuck', 'class').'</th>';
-  $chars = $sql['char']->query("SELECT * FROM characters WHERE acct='".$user_id."'");
-  while ($char = $sql['char']->fetch_assoc($chars))
+          <center>
+            <fieldset id="xname_fieldset">
+              <legend>'.lang('unstuck', 'selectchar').'</legend>
+              <span class="xname_info">'.lang('unstuck', 'info').'</span>
+              <br />
+              <br />
+              <form method="GET" action="hearthstone.php" name="form">
+                <input type="hidden" name="action" value="approve" />
+                <table class="lined" id="xname_char_table">
+                  <tr>
+                    <th class="xname_radio">&nbsp;</th>
+                    <th class="xname_name">'.lang('unstuck', 'char').'</th>
+                    <th class="xname_LRC">'.lang('unstuck', 'lvl').'</th>
+                    <th class="xname_LRC">'.lang('unstuck', 'race').'</th>
+                    <th class="xname_LRC">'.lang('unstuck', 'class').'</th>
+                  </tr>';
+
+  if ( $core == 1 )
+    $chars = $sql['char']->query("SELECT * FROM characters WHERE acct='".$user_id."'");
+  else
+    $chars = $sql['char']->query("SELECT * FROM characters WHERE account='".$user_id."'");
+
+  while ( $char = $sql['char']->fetch_assoc($chars) )
   {
     $output .= '
-            <tr>
-              <td>
-                <input type="radio" name="char" value="'.$char['guid'].'" '.($char['online'] <> 0 ? 'disabled="disabled"' : '').' />
-              </td>
-              <td>'.$char['name'].'</td>
-              <td>'.char_get_level_color($char['level']).'</td>
-              <td>
-                <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="toolTip(\''.char_get_race_name($char['race']).'\',\'item_tooltip\')" onmouseout="toolTip()" alt="" />
-              </td>
-              <td>
-                <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="toolTip(\''.char_get_class_name($char['class']).'\',\'item_tooltip\')" onmouseout="toolTip()" alt="" />
-              </td>
-            </tr>';
+                  <tr>
+                    <td>
+                      <input type="radio" name="char" value="'.$char['guid'].'" '.($char['online'] <> 0 ? 'disabled="disabled"' : '').' />
+                    </td>
+                    <td>'.$char['name'].'</td>
+                    <td>'.char_get_level_color($char['level']).'</td>
+                    <td>
+                      <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="toolTip(\''.char_get_race_name($char['race']).'\',\'item_tooltip\')" onmouseout="toolTip()" alt="" />
+                    </td>
+                    <td>
+                      <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="toolTip(\''.char_get_class_name($char['class']).'\',\'item_tooltip\')" onmouseout="toolTip()" alt="" />
+                    </td>
+                  </tr>';
   }
 
   $output .= '
-          </table>
-          <br />';
+                </table>
+                <br />';
   makebutton(lang('unstuck', 'selectchar'), "javascript:do_submit()",180);
   $output .= '
-        </form>
-      </fieldset>
-    </center>
-    <br />';
+              </form>
+            </fieldset>
+          </center>
+          <br />';
 }
 
 
@@ -88,7 +94,7 @@ function sel_char()
 function approve()
 {
   global $output, $action_permission, $characters_db, $realm_id, 
-    $arcm_db, $user_id, $sql;
+    $arcm_db, $user_id, $sql, $core;
 
   valid_login($action_permission['view']);
 
@@ -100,7 +106,29 @@ function approve()
   if (isset($_GET['new2']))
     $new2 = $sql['char']->quote_smart($_GET['new2']);
 
-  $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$guid."'"));
+  if ( $core == 1 )
+    $query = "SELECT * FROM characters WHERE guid='".$guid."'";
+  else
+    $query = "SELECT *, characters.guid AS guid,
+      characters.map AS mapId, characters.zone AS zoneId,
+      character_homebind.map AS bindmapId, character_homebind.zone AS bindzoneId
+      FROM characters LEFT JOIN character_homebind ON characters.guid = character_homebind.guid WHERE characters.guid='".$guid."'";
+
+  $char = $sql['char']->fetch_assoc($sql['char']->query($query));
+
+  // MaNGOS & Trinity don't automatically add a home bind location for a character.
+  if ( $core != 1 )
+  {
+    if ( !isset($char['bindmapId']) )
+    {
+      $query = "SELECT * FROM playercreateinfo WHERE race='".$char['race']."' AND class='".$char['class']."'";
+      $result = $sql['world']->query($query);
+      $fields = $sql['world']->fetch_assoc($result);
+      $char['bindmapId'] = $fields['map'];
+      $char['bindzoneId'] = $fields['zone'];
+    }
+  }
+
   $output .= '
     <center>
       <fieldset id="xname_fieldset">
@@ -165,15 +193,45 @@ function approve()
 
 function saveloc()
 {
-  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sql;
+  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sql, $core;
 
   valid_login($action_permission['view']);
 
   $guid = $sql['char']->quote_smart($_GET['guid']);
 
-  $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE `guid`='".$guid."'"));
+  if ( $core == 1 )
+    $query = "SELECT * FROM characters WHERE guid='".$guid."'";
+  else
+    $query = "SELECT *,
+      characters.map AS mapId, characters.zone AS zoneId,
+      character_homebind.map AS bindmapId, character_homebind.zone AS bindzoneId,
+      character_homebind.position_x AS bindpositionX, character_homebind.position_y AS bindpositionY,
+      character_homebind.position_z AS bindpositionZ
+      FROM characters LEFT JOIN character_homebind ON characters.guid = character_homebind.guid WHERE characters.guid='".$guid."'";
 
-  $result = $sql['char']->query("UPDATE characters SET `positionX`='".$char['bindpositionX']."', `positionY`='".$char['bindpositionY']."', `positionZ`='".$char['bindpositionZ']."', `mapId`='".$char['bindmapId']."', `zoneId`='".$char['bindzoneId']."' WHERE `guid`='".$guid."'");
+  $char = $sql['char']->fetch_assoc($sql['char']->query($query));
+
+  if ( $core != 1 )
+  {
+    if ( !isset($char['bindmapId']) )
+    {
+      $query = "SELECT * FROM playercreateinfo WHERE race='".$char['race']."' AND class='".$char['class']."'";
+      $result = $sql['world']->query($query);
+      $fields = $sql['world']->fetch_assoc($result);
+      $char['bindmapId'] = $fields['map'];
+      $char['bindzoneId'] = $fields['zone'];
+      $char['bindpositionX'] = $fields['position_x'];
+      $char['bindpositionY'] = $fields['position_y'];
+      $char['bindpositionZ'] = $fields['position_z'];
+    }
+  }
+
+  if ( $core == 1 )
+    $query = "UPDATE characters SET positionX='".$char['bindpositionX']."', positionY='".$char['bindpositionY']."', positionZ='".$char['bindpositionZ']."', mapId='".$char['bindmapId']."', zoneId='".$char['bindzoneId']."' WHERE guid='".$guid."'";
+  else
+    $query = "UPDATE characters SET position_x='".$char['bindpositionX']."', position_y='".$char['bindpositionY']."', position_z='".$char['bindpositionZ']."', map='".$char['bindmapId']."', zone='".$char['bindzoneId']."' WHERE guid='".$guid."'";
+
+  $result = $sql['char']->query($query);
 
   redirect("hearthstone.php?error=2");
 }
@@ -182,16 +240,16 @@ function saveloc()
 //########################################################################################################################
 // MAIN
 //########################################################################################################################
-$err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
+$err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
 
 $output .= '
-      <div class="bubble">
+        <div class="bubble">
           <div class="top">';
 
-if ($err == 1)
+if ( $err == 1 )
   $output .= '
             <h1><font class="error">'.lang('global', 'empty_fields').'</font></h1>';
-elseif ($err == 2)
+elseif ( $err == 2 )
   $output .= '
             <h1>'.lang('unstuck', 'done').'</h1>';
 else
@@ -203,11 +261,11 @@ unset($err);
 $output .= '
           </div>';
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
 
-if ($action == 'approve')
+if ( $action == 'approve' )
   approve();
-elseif ($action == 'save')
+elseif ( $action == 'save' )
   saveloc();
 else
   sel_char();
