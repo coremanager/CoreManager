@@ -279,9 +279,9 @@ $GLOBALS['lang_header'] = array
   'unstuck' => 'Hearthstone',
 
     // please check the length at 'My Account' Menu
-  'realms' => '------ریلم------',
-  'my_characters' => '----کاراکترها----',
-  'account' => '------اکانت-----',
+  'realms' => 'ریلم',
+  'my_characters' => 'کاراکترها',
+  'account' => 'اکانت',
   'edit_my_acc' => 'اصلاح اکانت من',
   'logout' => 'خروج از سیستم',
 );
@@ -2585,6 +2585,10 @@ $GLOBALS['lang_admin'] = array
   'editipmask' => 'Edit IP Mask',
   'addipmask' => 'Add IP Mask',
   'deleteipmask' => 'Delete IP Mask',
+  
+  'ads' => 'Advertisements',
+  'enablebottomad' => 'Enable Page Bottom Ad',
+  'bottomadcontent' => 'Page Bottom Ad Content',
 
   'more' => 'More',
   'sqlsearchlimit' => 'SQL Search Limit',
@@ -2777,6 +2781,10 @@ $GLOBALS['lang_admin_tip'] = array
   'editipmask' => 'Edit IP Mask',
   'addipmask' => 'Add IP Mask',
   'deleteipmask' => 'Delete IP Mask',
+  
+  'ads' => 'Advertisements',
+  'enablebottomad' => 'Enable Page Bottom Advertising.',
+  'bottomadcontent' => 'Page Bottom Ad Content.',
 
   'more' => 'More',
   'sqlsearchlimit' => 'Limit number of maximum search results.',

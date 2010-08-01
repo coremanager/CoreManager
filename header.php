@@ -248,7 +248,7 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
   if ( ( 1 < $sql['mgr']->num_rows($result)) && ( 1 < count($server)) && ( 1 < count($characters_db)) )
   {
     $output .= '
-                    <li><a href="#">'.lang('header', 'realms').'</a></li>';
+                    <li><span style="text-align:center"><a href="#">'.lang('header', 'realms').'</a></span></li>';
     while ($realm = $sql['mgr']->fetch_assoc($result))
     {
       if(isset($server[$realm['id']]))
@@ -267,7 +267,7 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
   {
     //$lang_login = lang_login();
     $output .= '
-                    <li><a href="#">'.lang('header', 'account').'</a></li>
+                    <li><span style="text-align:center"><a href="#">'.lang('header', 'account').'</a></span></li>
                     <li><a href="register.php">'.lang('login', 'not_registrated').'</a></li>
                     <li><a href="login.php">'.lang('login', 'login').'</a></li>';
     //unset($lang_login);
@@ -283,7 +283,7 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
     if($sql['char']->num_rows($result))
     {
       $output .= '
-                    <li><a href="#">'.lang('header', 'my_characters').'</a></li>';
+                    <li><span style="text-align:center"><a href="#">'.lang('header', 'my_characters').'</a></span></li>';
       while ($char = $sql['char']->fetch_assoc($result))
       {
         $output .= '
@@ -298,7 +298,7 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
       unset($char);
     }
     $output .= '
-                    <li><a href="#">'.lang('header', 'account').'</a></li>
+                    <li><span style="text-align:center"><a href="#">'.lang('header', 'account').'</a></span></li>
                     <li><a href="edit.php">'.lang('header', 'edit_my_acc').'</a></li>
                     <li><a href="logout.php">'.lang('header', 'logout').'</a></li>';
   }

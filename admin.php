@@ -282,6 +282,9 @@ function general()
             <td '.($subsection == 'validip' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=validip">'.lang('admin', 'validip').'</a></td>
           </tr>
           <tr>
+            <td '.($subsection == 'ads' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=ads">'.lang('admin', 'ads').'</a></td>
+          </tr>
+          <tr>
             <td '.($subsection == 'more' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=more">'.lang('admin', 'more').'</a></td>
           </tr>
         </table>';
@@ -1132,6 +1135,45 @@ function general()
         $result = $sqlm->query("UPDATE config_valid_ip_mask SET ValidIPMask='".$mask."' WHERE `Index`='".$index."'");
 
         redirect("admin.php?section=general&subsection=validip");
+      }
+    break;
+    }
+    case 'ads':
+    {
+      if ( !$sub_action )
+      {
+        $enable_bottom_ad = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Enable_Page_Bottom_Ad'"));
+        $bottom_ad_content = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Page_Bottom_Ad_Content'"));
+        $output .= '
+        <form name="form" action="admin.php" method="GET">
+          <input type="hidden" name="section" value="general">
+          <input type="hidden" name="subaction" value="saveads">
+          <input type="hidden" name="subsection" value="ads">
+          <table class="simple" id="admin_more">
+            <tr>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'enablebottomad').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'enablebottomad').'</a>: </td>
+              <td><input type="checkbox" name="enablebottomad" '.($enable_bottom_ad['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+            </tr>
+            <tr>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'bottomadcontent').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'bottomadcontent').'</a>: </td>
+              <td><textarea name="bottomadcontent" rows="5" cols="40">'.$bottom_ad_content['Value'].'</textarea></td>
+            </tr>
+          </table>
+          <input type="submit" name="save" value="'.lang('admin', 'save').'" />
+        </form>';
+      }
+      else
+      {
+        if ( isset($_GET['enablebottomad']) )
+          $page_bottom_ad = 1;
+        else
+          $remember_me_checked = 0;
+        $page_bottom_ad_content = $sqlm->quote_smart($_GET['bottomadcontent']);
+
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$page_bottom_ad."' WHERE `Key`='Enable_Page_Bottom_Ad'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$page_bottom_ad_content."' WHERE `Key`='Page_Bottom_Ad_Content'");
+		
+        redirect("admin.php?section=general&subsection=ads");
       }
     break;
     }

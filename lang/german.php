@@ -279,9 +279,9 @@ $GLOBALS['lang_header'] = array
   'unstuck' => 'Ruhestein',
 
     // please check the length at 'My Account' Menu
-  'realms' => '------Realms------',
-  'my_characters' => '----Charaktere----',
-  'account' => '--Benutzerkonto--',
+  'realms' => 'Realms',
+  'my_characters' => 'Charaktere',
+  'account' => 'Benutzerkonto',
   'edit_my_acc' => 'Meine Daten &auml;ndern',
   'logout' => 'Abmelden',
 );
@@ -2585,6 +2585,10 @@ $GLOBALS['lang_admin'] = array
   'editipmask' => '&Auml;ndere IP Mask',
   'addipmask' => 'IP Mask Hinzuf&uuml;gen',
   'deleteipmask' => 'IP Mask l&ouml;schen',
+  
+  'ads' => 'Advertisements',
+  'enablebottomad' => 'Enable Page Bottom Ad',
+  'bottomadcontent' => 'Page Bottom Ad Content',
 
   'more' => 'Mehr',
   'sqlsearchlimit' => 'SQL Such-Limit',
@@ -2777,6 +2781,10 @@ $GLOBALS['lang_admin_tip'] = array
   'editipmask' => 'IP Mask &auml;ndern',
   'addipmask' => 'IP Mask Hinzuf&uuml;gen',
   'deleteipmask' => 'IP Mask l&ouml;schen',
+  
+  'ads' => 'Advertisements',
+  'enablebottomad' => 'Enable Page Bottom Advertising.',
+  'bottomadcontent' => 'Page Bottom Ad Content.',
 
   'more' => 'Mehr',
   'sqlsearchlimit' => 'Limitiert Nummer von Maximalen Such Ergebnissen.',

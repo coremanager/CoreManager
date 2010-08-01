@@ -557,6 +557,16 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $multi_realm_mode = $misc_row['Value'];
       break;
     }
+    case "Enable_Page_Bottom_Ad":
+    {
+      $page_bottom_ad = $misc_row['Value'];
+      break;
+    }
+    case "Page_Bottom_Ad_Content":
+    {
+      $page_bottom_ad_content = $misc_row['Value'];
+      break;
+    }
   }
 }
 

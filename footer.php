@@ -20,21 +20,21 @@
 
   // level 1 debug prints total queries,
   //  so we would have to close these, or we can't have debug output
-  if($debug)
+  if( $debug )
   {
-    if (isset($sql['logon']))
+    if ( isset($sql['logon']) )
       $sql['logon']->close();
-    if (isset($sql['char']))
+    if ( isset($sql['char']) )
       $sql['char']->close();
-    if (isset($sql['mgr']))
+    if ( isset($sql['mgr']) )
       $sql['mgr']->close();
-    if (isset($sql['world']))
+    if ( isset($sql['world']) )
       $sql['world']->close();
 
     // level 3 debug lists all global vars, but can't read classes
     // level 4 debug prints all global arrays, but can't print content of classes
     //  so we would have to close these, or we can't have debug output
-    if(2 < $debug)
+    if( $debug > 2)
     {
       unset($sql);
       unset($sql['logon']);
@@ -57,22 +57,22 @@
             <tr>
               <td class="table_bottom_left"></td>
               <td class="table_bottom_middle">';
-  //$lang_footer = lang_footer();
+
   $output .=
                 lang('footer', 'bugs_to_admin').' <a href="mailto:'.$admin_mail.'">'.lang('footer', 'site_admin').'</a><br />';
-  //unset($lang_footer);
+
   unset($admin_mail);
   $output .= sprintf('
-                Execute time: %.5f', (microtime(true) - $time_start));
+                Execute time: %.5f', (microtime(true) - $time_start)).' Seconds.';
   unset($time_start);
 
   // if any debug mode is activated, show memory usage
-  if($debug)
+  if( $debug )
   {
     $output .= '
                 Queries: '.$tot_queries.' on '.$_SERVER['SERVER_SOFTWARE'];
     unset($tot_queries);
-    if (function_exists('memory_get_usage'))
+    if ( function_exists('memory_get_usage') )
       $output .= sprintf('
                 <br />Mem. Usage: %.0f/%.0fK Peek: %.0f/%.0fK Global: %.0fK Limit: %s',memory_get_usage()/1024, memory_get_usage(true)/1024,memory_get_peak_usage()/1024,memory_get_peak_usage(true)/1024,sizeof($GLOBALS),ini_get('memory_limit'));
   }
@@ -87,7 +87,7 @@
     {
       $show_version['svnrev'] = '';
       // if file exists and readable
-      if (is_readable('.svn/entries') )
+      if ( is_readable('.svn/entries') )
       {
         $file_obj = new SplFileObject('.svn/entries');
         // line 4 is where svn revision is stored
@@ -147,20 +147,32 @@
             </tr>
           </table>
           <br />';
+  if ( $page_bottom_ad )
+  {
+    $output .= '
+          <table class="table_bottom">
+            <tr>
+              <td>'
+                .$page_bottom_ad_content.'
+              </td>
+            </tr>
+          </table>
+          <br />';
+  }
 
   echo $output;
 
   unset($output);
   // we need to close $output before we start debug mode 3 or higher
   //  we will get double output if we don't
-  if(2 < $debug)
+  if( $debug > 2 )
   {
     echo '
           <table>
             <tr>
               <td align="left">';
     $arrayObj = new ArrayObject(get_defined_vars());
-    for($iterator = $arrayObj->getIterator(); $iterator->valid(); $iterator->next())
+    for ( $iterator = $arrayObj->getIterator(); $iterator->valid(); $iterator->next() )
     {
       echo '
                 <br />'.$iterator->key() . ' => ' . $iterator->current();
@@ -169,11 +181,11 @@
     unset($arrayObj);
     // debug mode 3 lists all global vars and their values, but not for arrays
     // debug mode 4 branches all arrays and their content,
-    if(3 < $debug)
+    if( $debug > 3 )
     {
       echo '
                 <pre>';
-                  print_r ($GLOBALS);
+                  print_r($GLOBALS);
       echo '
                 </pre>';
     }
@@ -185,7 +197,7 @@
 
 ?>
 
-        </div><! -- body_bottom -->
+        </div><!-- body_bottom -->
       </div><!-- body_main -->
     </center>
   </body>
