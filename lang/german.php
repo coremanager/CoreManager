@@ -2232,14 +2232,13 @@ $GLOBALS['lang_spelld'] = array
 
 
 // ----- GLOBAL TELNET -----  
-// !!! UNUSED !!!    
-/*$GLOBALS['lang_telnet'] = array
+$GLOBALS['lang_telnet'] = array
 (
   'unable' => 'Verbindung Fehlgeschlagen: Kann Netzwerkverbindung nich &ouml;ffnen, Checke deine Konfiguration',
   'unknown_host' => 'Verbindung Fehlgeschlagen: Unbekannter Host, Checke deine Konfiguration',
   'login_failed' => 'Verbindung Fehlgeschlagen: Login fehlgeschlagen, Checke deine Konfiguration',
   'not_supported' => 'Verbindung Fehlgeschlagen: Deine PHP Version unterst&uuml;tzt kein Telnet, Checke deine Konfiguration',
-);*/
+);
 
 
 // ---- message.php ----
@@ -2457,11 +2456,16 @@ $GLOBALS['lang_admin'] = array
   'seclvl' => 'Sicherheitslevel',
   'fullname' => 'Voller Name',
   'shortname' => 'Kurzer Name',
+
   'bothfactions' => 'Beide Fraktionen',
   'statsxml' => 'stats.xml',
   'delserver' => 'L&ouml;sche Server',
   'editserver' => 'Server &Auml;ndern',
   'addserver' => 'Neuer Server',
+  'telnetport' => 'Telnet<br />Port',
+  'telnetuser' => 'Telnet<br />User',
+  'telnetpass' => 'Telnet<br />Pass',
+
   'editacct' => 'Account &auml;ndern',
   'login' => 'Login',
   'screenname' => 'Anzeigename',
@@ -2655,11 +2659,16 @@ $GLOBALS['lang_admin_tip'] = array
   'seclvl' => 'CoreManager Security Level',
   'fullname' => 'Voller Name',
   'shortname' => 'Kurzer Name',
+
   'bothfactions' => 'Erlaube Spielern Charaktere der anderen Fraktion zu sehen. (Wirkt nur bei Usern mit GM Level 1)',
   'statsxml' => "URL zur stats.xml Datei des Servers.<br>ONLY for ArcEmu servers!",
   'delserver' => 'L&ouml;sche Server',
   'editserver' => 'Server &auml;ndern',
   'addserver' => 'Neuer Server',
+  'telnetport' => 'Telnet Port',
+  'telnetuser' => 'Telnet User',
+  'telnetpass' => 'Telnet Pass',
+
   'editacct' => 'Account &auml;ndern',
   'login' => 'Login',
   'screenname' => 'Anzeigename',

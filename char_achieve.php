@@ -36,7 +36,7 @@ function char_achievements()
     $achievement_datasite, $sql, $core;
 
   // this page uses wowhead tooltops
-  //wowhead_tt();
+  wowhead_tt();
 
   // we need at least an id or we would have nothing to show
   if (empty($_GET['id']))

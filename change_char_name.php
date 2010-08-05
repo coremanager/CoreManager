@@ -22,10 +22,6 @@ require_once 'header.php';
 require_once 'libs/char_lib.php';
 valid_login($action_permission['view']);
 
-// this_is_junk: Temporarily disabled for MaNGOS & Trinity
-if ( !( $core == 1 ) )
-  die("This tool is temporarily disabled for this core type.<br /><a href='index.php'>Main Page</a>");
-
 
 //#############################################################################
 // SELECT CHARACTER
@@ -209,11 +205,7 @@ function denied()
 
   $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$guid."'"));
 
-  // send denial letter
-  if ( $core == 1 )
-    redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char['name']."&subject=".lang('xname', 'subject')."&body=".lang('xname', 'body1').$char['name'].lang('xname', 'body2')."&group_sign==&group_send=gm_level&money=0&att_item=0&att_stack=0&redirect=index.php");
-  else
-    ;
+  redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char['name']."&subject=".lang('xname', 'subject')."&body=".lang('xname', 'body1').$char['name'].lang('xname', 'body2')."&group_sign==&group_send=gm_level&money=0&att_item=0&att_stack=0&redirect=index.php");
 }
 
 

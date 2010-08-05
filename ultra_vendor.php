@@ -21,10 +21,6 @@
 require_once("header.php");
 valid_login($action_permission['view']);
 
-// this_is_junk: Temporarily disabled for MaNGOS & Trinity
-if ( !( $core == 1 ) )
-  die("This tool is temporarily disabled for this core type.<br /><a href='index.php'>Main Page</a>");
-
 //########################################################################################################################
 // SHOW CHARACTER LIST
 //########################################################################################################################
@@ -399,17 +395,19 @@ function purchase()
   $char_money = $char_money - $_GET['total'];
 
   if ( $core == 1 )
-  {
-    $mail_query = "INSERT INTO mailbox_insert_queue VALUES ('".$from_char."', '".$char['guid']."', '".lang('ultra', 'questitems')."', ".chr(34).$_GET['want']."x ".$item['name1'].chr(34).", '".$stationary."', '0', '".$_GET['item']."', '".$_GET['want']."')";
-    $money_query = "UPDATE characters SET gold='".$char_money."' WHERE guid = '".$char['guid']."'";
-  }
+    $money_query = "UPDATE characters SET gold='".$char_money."' WHERE guid='".$char['guid']."'";
   else
-  {
-    ;
-  }
+    $money_query = "UPDATE characters SET money='".$char_money."' WHERE guid='".$char['guid']."'";
 
-  $mail_result = $sql['char']->query($mail_query);
   $money_result = $sql['char']->query($money_query);
+  
+  if ( $core == 1 )
+    $mail_query = "INSERT INTO mailbox_insert_queue VALUES ('".$from_char."', '".$char['guid']."', '".lang('ultra', 'questitems')."', ".chr(34).$_GET['want']."x ".$item['name1'].chr(34).", '".$stationary."', '0', '".$_GET['item']."', '".$_GET['want']."')";
+  else
+    redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char['name']."&subject=".lang('ultra', 'questitems')."&body=".chr(34).$_GET['want']."x ".$item['name1'].chr(34)."&group_sign==&group_send=gm_level&money=0&att_item=".$_GET['item']."&att_stack=".$_GET['want']."&redirect=ultra_vendor.php?error=3");
+
+  // this part is only for ArcEmu.  MaNGOS & Trinity use a different redirect
+  $mail_result = $sql['char']->query($mail_query);
 
   if ( $mail_result & $money_result )
     redirect("ultra_vendor.php?error=3");
@@ -422,28 +420,28 @@ function quality($val)
   switch( $val )
   {
     case 0:
-      return "<span id='uv_poor_quality'>".lang('ultra_quality', $val)."</span>";
+      return '<span id="uv_poor_quality">'.lang('ultra_quality', $val).'</span>';
       break;
     case 1:
       return lang('ultra_quality', $val);
       break;
     case 2:
-      return "<span id='uv_uncommon_quality'>".lang('ultra_quality', $val)."</span>";
+      return '<span id="uv_uncommon_quality">'.lang('ultra_quality', $val).'</span>';
       break;
     case 3:
-      return "<span id='uv_rare_quality'>".lang('ultra_quality', $val)."</span>";
+      return '<span id="uv_rare_quality">'.lang('ultra_quality', $val).'</span>';
       break;
     case 4:
-      return "<span id='uv_epic_quality'>".lang('ultra_quality', $val)."</span>";
+      return '<span id="uv_epic_quality">'.lang('ultra_quality', $val).'</span>';
       break;
     case 5:
-      return "<span id='uv_legendary_quality'>".lang('ultra_quality', $val)."</span>";
+      return '<span id="uv_legendary_quality">'.lang('ultra_quality', $val).'</span>';
       break;
     case 6:
-      return "<span id='uv_artifact_quality'>".lang('ultra_quality', $val)."</span>";
+      return '<span id="uv_artifact_quality">'.lang('ultra_quality', $val).'</span>';
       break;
     case 7:
-      return "<span id='uv_heirloom_quality'>".lang('ultra_quality', $val)."</span>";
+      return '<span id="uv_heirloom_quality">'.lang('ultra_quality', $val).'</span>';
       break;
   }
 }
@@ -454,32 +452,32 @@ function quality($val)
 //########################################################################################################################
 $err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
 
-$output .= "
-        <div class=\"bubble\">
-          <div class=\"top\">";
+$output .= '
+        <div class="bubble">
+          <div class="top">';
 
 switch ( $err )
 {
   case 1:
-    $output .= "
-          <h1><font class=\"error\">".lang('global', 'empty_fields')."</font></h1>";
+    $output .= '
+          <h1><font class="error">'.lang('global', 'empty_fields').'</font></h1>';
     break;
   case 2:
-    $output .= "
-          <h1><font class=\"error\">".lang('ultra', 'failed')."</font></h1>";
+    $output .= '
+          <h1><font class="error">'.lang('ultra', 'failed').'</font></h1>';
     break;
   case 3:
-    $output .= "
-          <h1>".lang('ultra', 'done')."</h1>";
+    $output .= '
+          <h1>'.lang('ultra', 'done').'</h1>';
     break;
   default: //no error
-    $output .= "
-          <h1>".lang('ultra', 'title')."</h1>";
+    $output .= '
+          <h1>'.lang('ultra', 'title').'</h1>';
 }
 unset($err);
 
-$output .= "
-        </div>";
+$output .= '
+        </div>';
 
 $action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
 

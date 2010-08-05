@@ -65,6 +65,9 @@ while ($servers = $sqlm->fetch_assoc($temp))
   $server[$servers['Index']]['id']            = $servers["Index"];
   $server[$servers['Index']]['addr']          = $servers["Address"];
   $server[$servers['Index']]['game_port']     = $servers["Port"];
+  $server[$servers['Index']]['telnet_port']   = $servers["Telnet_Port"];
+  $server[$servers['Index']]['telnet_user']   = $servers["Telnet_User"];
+  $server[$servers['Index']]['telnet_pass']   = $servers["Telnet_Pass"];
   $server[$servers['Index']]['both_factions'] = $servers["Both_Factions"];
   $server[$servers['Index']]['stats.xml']     = $servers["Stats_XML"];
 }

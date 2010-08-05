@@ -2232,14 +2232,13 @@ $GLOBALS['lang_spelld'] = array
 
 
 // ----- GLOBAL TELNET -----
-// !!! UNUSED !!!
-/*$GLOBALS['lang_telnet'] = array
+$GLOBALS['lang_telnet'] = array
 (
   'unable' => 'Connect failed: Unable to open network connection, please check your config',
   'unknown_host' => 'Connect failed: Unknown host, please check your config',
   'login_failed' => 'Connect failed: Login failed, please check your config',
   'not_supported' => 'Connect failed: Your PHP version does not support PHP Telnet, please check your config',
-);*/
+);
 
 
 // ---- message.php ----
@@ -2457,11 +2456,16 @@ $GLOBALS['lang_admin'] = array
   'seclvl' => 'Security Level',
   'fullname' => 'Full Name',
   'shortname' => 'Short Name',
+
   'bothfactions' => 'Both Factions',
   'statsxml' => 'stats.xml',
   'delserver' => 'Delete Server',
   'editserver' => 'Edit Server',
   'addserver' => 'Add New Server',
+  'telnetport' => 'Telnet<br />Port',
+  'telnetuser' => 'Telnet<br />User',
+  'telnetpass' => 'Telnet<br />Pass',
+
   'editacct' => 'Edit Account',
   'login' => 'Login',
   'screenname' => 'Screen Name',
@@ -2655,11 +2659,16 @@ $GLOBALS['lang_admin_tip'] = array
   'seclvl' => 'CoreManager Security Level',
   'fullname' => 'Full Name',
   'shortname' => 'Short Name',
+
   'bothfactions' => 'Allow player to see opponent faction characters. (Affects only users with GM Level 1)',
   'statsxml' => "URL to the server\'s stats.xml file.<br>ONLY for ArcEmu servers!",
   'delserver' => 'Delete Server',
   'editserver' => 'Edit Server',
   'addserver' => 'Add New Server',
+  'telnetport' => 'Telnet Port',
+  'telnetuser' => 'Telnet User',
+  'telnetpass' => 'Telnet Pass',
+
   'editacct' => 'Edit Account',
   'login' => 'Login',
   'screenname' => 'Screen Name',

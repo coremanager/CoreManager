@@ -1,12 +1,19 @@
 CoreManager Project Team:
+
 - this_is_junk
+
+
+LANGUAGE PACK TRANSLATORS:
+
+- German -- Marcus <Knight>
+- Persian -- Lurker
 
 
 THANKS:
 
 - CoreManager is based off ArcManager which was based off MiniManager. https://www.ohloh.net/p/arcmanager
 
-- To the ArcManager, MaNGOS, and Trinity Core project teams.
+- To the ArcEmu, MaNGOS, and Trinity Core project teams.
 
 - The MiniManager Team for providing the original work http://mangos.osh.nu/forums/
 
@@ -41,9 +48,3 @@ THANKS:
 - PHPTelnet by Antone Roundy (no longer used).
 
 - ip2nation database by Per Gustafsson (no longer used) from http://www.ip2nation.com/
-
-
-LANGUAGE PACK TRANSLATORS:
-
-- German -- Marcus <Knight>
-- Persian -- Lurker

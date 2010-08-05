@@ -1542,7 +1542,7 @@ function savegms()
 
 function servers()
 {
-  global $output, $corem_db, $lang_global;
+  global $output, $corem_db, $lang_global, $core;
 
   $sqlm = new SQL;
   $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
@@ -1567,9 +1567,18 @@ function servers()
               <tr>
                 <th width="1%">&nbsp;</th>
                 <th width="40%">'.lang('admin', 'host').'</th>
-                <th width="1%">'.lang('admin', 'port').'</th>
-                <th width="10%">'.lang('admin', 'bothfactions').'</th>
-                <th width="40%">'.lang('admin', 'statsxml').'</th>
+                <th width="1%">'.lang('admin', 'port').'</th>';
+    if ( $core <> 1 )
+      $output .= '
+                <th width="10%">'.lang('admin', 'telnetport').'</th>
+                <th width="10%">'.lang('admin', 'telnetuser').'</th>
+                <th width="10%">'.lang('admin', 'telnetpass').'</th>';
+    $output .= '
+                <th width="10%">'.lang('admin', 'bothfactions').'</th>';
+    if ( $core == 1 )
+      $output .= '
+                <th width="40%">'.lang('admin', 'statsxml').'</th>';
+    $output .= '
               </tr>';
     $color = "#EEEEEE";
     while ( $server = $sqlm->fetch_assoc($result) )
@@ -1578,9 +1587,19 @@ function servers()
               <tr>
                 <td style="background-color:'.$color.'"><input type="radio" name="sel_server" value="'.$server['Index'].'"></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Address'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$server['Port'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$server['Both_Factions'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$server['Stats_XML'].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$server['Port'].'</center></td>';
+      if ( $core != 1 )
+        $output .= '
+                <td style="background-color:'.$color.'"><center>'.$server['Telnet_Port'].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$server['Telnet_User'].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$server['Telnet_Pass'].'</center></td>';
+      
+      $output .= '
+                <td style="background-color:'.$color.'"><center>'.$server['Both_Factions'].'</center></td>';
+      if ( $core == 1 )
+        $output .= '
+                <td style="background-color:'.$color.'"><center>'.$server['Stats_XML'].'</center></td>';
+      $output .= '
               </tr>';
       if ( $color == "#EEEEEE" )
         $color = "#FFFFFF";
@@ -1619,15 +1638,33 @@ function servers()
                 <tr>
                   <td>'.lang('admin', 'port').': </td>
                   <td><input type="text" name="server_port" value="'.$server['Port'].'"></td>
+                </tr>';
+        if ( $core != 1 )
+          $output .= '
+                <tr>
+                  <td>'.lang('admin_tip', 'telnetport').':</td>
+                  <td><input type="text" name="server_telnet_port" value="'.$server['Telnet_Port'].'"></td>
                 </tr>
+                <tr>
+                  <td>'.lang('admin_tip', 'telnetuser').':</td>
+                  <td><input type="text" name="server_telnet_user" value="'.$server['Telnet_User'].'"></td>
+                </tr>
+                <tr>
+                  <td>'.lang('admin_tip', 'telnetpass').':</td>
+                  <td><input type="text" name="server_telnet_pass" value="'.$server['Telnet_Pass'].'"></td>
+                </tr>';
+        $output .= '
                 <tr>
                   <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'bothfactions').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'bothfactions').'</a>: </td>
                   <td><input type="text" name="server_both" value="'.$server['Both_Factions'].'"></td>
-                </tr>
+                </tr>';
+        if ( $core == 1 )
+          $output .= '
                 <tr>
                   <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'statsxml').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'statsxml').'</a>: </td>
                   <td><input type="text" name="server_stats" value="'.$server['Stats_XML'].'"></td>
-                </tr>
+                </tr>';
+        $output .= '
               </table>
             </fieldset>
             <input type="submit" name="saveserver" value="'.lang('admin', 'save').'">
@@ -1666,10 +1703,13 @@ function saveserver()
   $server_id = $sqlm->quote_smart($_GET['index']);
   $server_host = $sqlm->quote_smart($_GET['server_host']);
   $server_port = $sqlm->quote_smart($_GET['server_port']);
+  $server_telnet_port = $sqlm->quote_smart($_GET['server_telnet_port']);
+  $server_telnet_user = strtoupper($sqlm->quote_smart($_GET['server_telnet_user']));
+  $server_telnet_pass = $sqlm->quote_smart($_GET['server_telnet_pass']);
   $server_factions = $sqlm->quote_smart($_GET['server_both']);
   $server_stats = $sqlm->quote_smart($_GET['server_stats']);
 
-  $result = $sqlm->query("UPDATE config_servers SET Address='".$server_host."', Port='".$server_port."', Both_Factions='".$server_factions."', Stats_XML='".$server_stats."' WHERE `Index`='".$server_id."'");
+  $result = $sqlm->query("UPDATE config_servers SET Address='".$server_host."', Port='".$server_port."', Telnet_Port='".$server_telnet_port."', Telnet_User='".$server_telnet_user."', Telnet_Pass='".$server_telnet_pass."', Both_Factions='".$server_factions."', Stats_XML='".$server_stats."' WHERE `Index`='".$server_id."'");
   redirect("admin.php?section=servers");
 }
 

@@ -21,10 +21,6 @@
 require_once("header.php");
 valid_login($action_permission['view']);
 
-// this_is_junk: Temporarily disabled for MaNGOS & Trinity
-if ( !( $core == 1 ) )
-  die("This tool is temporarily disabled for this core type.<br /><a href='index.php'>Main Page</a>");
-
 //########################################################################################################################
 // SHOW CHARACTER LIST
 //########################################################################################################################
@@ -619,7 +615,7 @@ function purchase()
   if ( $core == 1 )
     $mail_query = "INSERT INTO mailbox_insert_queue VALUES ('".$from_char."', '".$char['guid']."', '".lang('questitem', 'questitems')."', ".chr(34).$_GET['want']."x ".$item['name1'].chr(34).", '".$stationary."', '0', '".$_GET['item']."', '".$_GET['want']."')";
   else
-    ;
+    redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char['name']."&subject=".lang('questitem', 'questitems')."&body=".chr(34).$_GET['want']."x ".$item['name1'].chr(34)."&group_sign==&group_send=gm_level&money=0&att_item=".$_GET['item']."&att_stack=".$_GET['want']."&redirect=questitem_vendor.php");
 
   if ( $core == 1 )
     $money_query = "UPDATE characters SET gold='".$char_money."' WHERE guid='".$char['guid']."'";
