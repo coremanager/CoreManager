@@ -43,7 +43,7 @@ function browse_motd()
               <th width="20%">'.lang('motd', 'message').'</th>
             </tr>';
 
-  while ($motd = $sql['mgr']->fetch_assoc($motds))
+  while ( $motd = $sql['mgr']->fetch_assoc($motds) )
   {
     $output .= '
             <tr>
@@ -54,7 +54,7 @@ function browse_motd()
                 <a href="motd.php?action=edit_motd&id='.$motd['ID'].'&redirect=1"><img src="img/edit.png" /></a>
               </td>
               <td>
-                '.($motd['Enabled'] ? '<img src="img/up.gif">' : '<img src="img/down.gif">').'
+                '.( $motd['Enabled'] ? '<img src="img/up.gif">' : '<img src="img/down.gif">' ).'
               </td>
               <td>
                 '.bb2html($motd['Message']).'
@@ -81,10 +81,18 @@ function add_motd()
 
   valid_login($action_permission['insert']);
 
-  if (isset($_GET['redirect']))
-    $redirect = $sql['mgr']->quote_smart($_GET['redirect']);
+  $redirect = ( ( isset($_GET['redirect']) ) ? $sql['mgr']->quote_smart($_GET['redirect']) : NULL );
+
+  $msg = ( ( isset($_GET['msg']) ) ? $sql['mgr']->quote_smart($_GET['msg']) : NULL );
 
   $output .= '
+          <script>
+            function do_submit_preview()
+            {
+              document.form.action.value = "add_preview";
+              document.form.submit();
+            }
+          </script>
           <center>
             <form action="motd.php" method="get" name="form">
               <input type="hidden" name="action" value="do_add_motd" />
@@ -113,7 +121,7 @@ function add_motd()
                 </tr>
                 <tr>
                   <td colspan="3">
-                    <textarea id="msg" name="msg" rows="26" cols="97"></textarea>
+                    <textarea id="msg" name="msg" rows="26" cols="97">'.$msg.'</textarea>
                   </td>
                 </tr>
                 <tr>
@@ -123,7 +131,15 @@ function add_motd()
   $output .= '
                   </td>
                   <td>';
-  makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+  makebutton(lang('motd', 'preview_motd'), 'javascript:do_submit_preview()" type="wrn', 230);
+  $output .= '
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>';
+  makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 230);
   $output .= '
                   </td>
                 </tr>
@@ -144,18 +160,32 @@ function edit_motd()
 
   valid_login($action_permission['update']);
 
-  if(empty($_GET['id'])) redirect('motd.php?error=1');
+  if ( empty($_GET['id']) )
+    redirect('motd.php?error=1');
   $id = $sql['mgr']->quote_smart($_GET['id']);
-  if(is_numeric($id)); else redirect('motd.php?error=1');
+  if ( is_numeric($id) )
+    ;
+  else
+    redirect('motd.php?error=1');
 
-  $msg = $sql['mgr']->result($sql['mgr']->query('SELECT message FROM motd WHERE id = '.$id.''), 0);
-  $priority = $sql['mgr']->result($sql['mgr']->query('SELECT priority FROM motd WHERE id = '.$id.''), 0);
-  $enabled = $sql['mgr']->result($sql['mgr']->query('SELECT enabled FROM motd WHERE id = '.$id.''), 0);
+  if ( !isset($_GET['msg']) )
+    $msg = $sql['mgr']->result($sql['mgr']->query('SELECT message FROM motd WHERE id='.$id.''), 0);
+  else
+    $msg = $_GET['msg'];
 
-  if (isset($_GET['redirect']))
-    $redirect = $sql['mgr']->quote_smart($_GET['redirect']);
+  $priority = $sql['mgr']->result($sql['mgr']->query('SELECT priority FROM motd WHERE id='.$id.''), 0);
+  $enabled = $sql['mgr']->result($sql['mgr']->query('SELECT enabled FROM motd WHERE id='.$id.''), 0);
+
+  $redirect = ( ( isset($_GET['redirect']) ) ? $sql['mgr']->quote_smart($_GET['redirect']) : NULL );
 
   $output .= '
+          <script>
+            function do_submit_preview()
+            {
+              document.form.action.value = "edit_preview";
+              document.form.submit();
+            }
+          </script>
           <center>
             <form action="motd.php" method="get" name="form">
               <input type="hidden" name="id" value="'.$id.'" />
@@ -172,11 +202,11 @@ function edit_motd()
                 <tr>
                   <td>'.lang('motd', 'priority').': 
                     <select name="priority">
-                      <option value="0" '.($priority == 0 ? 'selected="selected"' : '').'>'.lang('motd', 'veryhigh').'</option>
-                      <option value="1" '.($priority == 1 ? 'selected="selected"' : '').'>'.lang('motd', 'high').'</option>
-                      <option value="2" '.($priority == 2 ? 'selected="selected"' : '').'>'.lang('motd', 'med').'</option>
-                      <option value="3" '.($priority == 3 ? 'selected="selected"' : '').'>'.lang('motd', 'low').'</option>
-                      <option value="4" '.($priority == 4 ? 'selected="selected"' : '').'>'.lang('motd', 'verylow').'</option>
+                      <option value="0" '.( $priority == 0 ? 'selected="selected"' : '' ).'>'.lang('motd', 'veryhigh').'</option>
+                      <option value="1" '.( $priority == 1 ? 'selected="selected"' : '' ).'>'.lang('motd', 'high').'</option>
+                      <option value="2" '.( $priority == 2 ? 'selected="selected"' : '' ).'>'.lang('motd', 'med').'</option>
+                      <option value="3" '.( $priority == 3 ? 'selected="selected"' : '' ).'>'.lang('motd', 'low').'</option>
+                      <option value="4" '.( $priority == 4 ? 'selected="selected"' : '' ).'>'.lang('motd', 'verylow').'</option>
                     </select>
                   </td>
                   <td>
@@ -197,7 +227,15 @@ function edit_motd()
   $output .= '
                   </td>
                   <td>';
-  makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+  makebutton(lang('motd', 'preview_motd'), 'javascript:do_submit_preview()" type="wrn', 230);
+  $output .= '
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>';
+  makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 230);
   $output .= '
                   </td>
                 </tr>
@@ -218,26 +256,26 @@ function do_add_motd()
 
   valid_login($action_permission['insert']);
 
-  if (empty($_GET['msg']))
+  if ( empty($_GET['msg']) )
     redirect('motd.php?error=1');
 
-  if (empty($_GET['priority']))
+  if ( empty($_GET['priority']) )
     $priority = 0;
   else
     $priority = $sql['mgr']->quote_smart($_GET['priority']);
 
-  if ($_GET['enabled'] == 'on')
+  if ( $_GET['enabled'] == 'on' )
     $enabled = 1;
   else
     $enabled = 0;
 
   $msg = $sql['mgr']->quote_smart($_GET['msg']);
   $oldmsg = $sql['mgr']->quote_smart($_GET['oldmsg']);
-  if (4096 < strlen($msg))
+  if ( strlen($msg) > 4096 )
     redirect('motd.php?error=2');
 
   $name = $sql['mgr']->result($sql['mgr']->query("SELECT ScreenName FROM config_accounts WHERE Login='".$user_name."'"), 0);
-  if ($name == "")
+  if ( $name == "" )
     $name = $user_name;
 
   $by = 'Posted by: '.$name.' ('.date('m/d/Y H:i:s').')';
@@ -245,7 +283,7 @@ function do_add_motd()
 
   unset($by);
   unset($msg);
-  if ($_GET['redirect'] == 1)
+  if ( $_GET['redirect'] == 1 )
     redirect('motd.php');
   else
     redirect('index.php');
@@ -262,32 +300,35 @@ function do_edit_motd()
 
   valid_login($action_permission['update']);
 
-  if (empty($_GET['msg']) || empty($_GET['id']))
+  if ( empty($_GET['msg']) || empty($_GET['id']) )
     redirect('motd.php?error=1');
 
-  if (empty($_GET['priority']))
+  if ( empty($_GET['priority']) )
     $priority = 0;
   else
     $priority = $sql['mgr']->quote_smart($_GET['priority']);
 
-  if ($_GET['enabled'] == 'on')
+  if ( $_GET['enabled'] == 'on' )
     $enabled = 1;
   else
     $enabled = 0;
 
   $id = $sql['mgr']->quote_smart($_GET['id']);
-  if(is_numeric($id)); else redirect('motd.php?error=1');
+  if( is_numeric($id) )
+    ;
+  else
+    redirect('motd.php?error=1');
 
   $msg = $sql['mgr']->quote_smart($_GET['msg']);
   $oldmsg = $sql['mgr']->quote_smart($sql['mgr']->result($sql['mgr']->query("SELECT Message FROM motd WHERE ID = '".$id."'"), 0));
-  if (4096 < strlen($msg))
+  if ( strlen($msg) > 4096 )
     redirect('motd.php?error=2');
 
   $name = $sql['mgr']->result($sql['mgr']->query("SELECT ScreenName FROM config_accounts WHERE Login='".$user_name."'"), 0);
-  if ($name == "")
+  if ( $name == "" )
     $name = $user_name;
 
-  if ($oldmsg <> $msg)
+  if ( $oldmsg <> $msg )
   {
     $by = $sql['mgr']->result($sql['mgr']->query("SELECT `By` FROM motd WHERE ID = '".$id."'"), 0);
     $by = split('<br />', $by, 2);
@@ -302,7 +343,7 @@ function do_edit_motd()
   unset($by);
   unset($msg);
   unset($id);
-  if ($_GET['redirect'] == 1)
+  if ( $_GET['redirect'] == 1 )
     redirect('motd.php');
   else
     redirect('index.php');
@@ -319,13 +360,17 @@ function delete_motd()
 
   valid_login($action_permission['delete']);
 
-  if (empty($_GET['id'])) redirect('index.php');
+  if ( empty($_GET['id']) )
+    redirect('index.php');
   $id = $sql['mgr']->quote_smart($_GET['id']);
-  if(is_numeric($id)); else redirect('motd.php?error=1');
+  if ( is_numeric($id) )
+    ;
+  else
+    redirect('motd.php?error=1');
 
   $sql['mgr']->query('DELETE FROM motd WHERE id ='.$id.'');
   unset($id);
-  if ($_GET['redirect'] == 1)
+  if ( $_GET['redirect'] == 1 )
     redirect('motd.php');
   else
     redirect('index.php');
@@ -336,24 +381,51 @@ function delete_motd()
 //########################################################################################################################
 // MAIN
 //########################################################################################################################
-$err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
+$err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
 
-//$lang_motd = lang_motd();
+$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
+
+if ( $action == 'add_preview' || $action == 'edit_preview' )
+{
+  $preview = ( ( isset($_GET['msg']) ) ? $_GET['msg'] : NULL );
+
+  $preview = bb2html($preview);
+
+  $output .= '
+      <div class="bubble">
+        <div class="top">
+          <h1>'.$lang_motd['preview_motd'].'</h1>
+        </div>
+        <center>
+          <table class="lined">';
+  $output .= '
+            <tr>
+              <td align="left">';
+  $output .= $preview;
+  $output .= '
+              </td>
+            </tr>
+          </table>
+        </center>
+      </div>';
+ 
+  unset($preview);
+}
 
 $output .= '
       <div class="bubble">
           <div class="top">';
 
-if (1 == $err)
+if ( $err == 1 )
   $output .= '
             <h1><font class="error">'.$lang_global['empty_fields'].'</font></h1>';
-elseif (2 == $err)
+elseif ( $err == 2 )
   $output .= '
             <h1><font class="error">'.$lang_motd['err_max_len'].'</font></h1>';
-elseif (3 == $err)
+elseif ( $err == 3 )
   $output .= '
             <h1>'.$lang_motd['edit_motd'].'</h1>';
-elseif (4 == $err)
+elseif ( $err == 4 )
   $output .= '
             <h1>'.$lang_motd['add_motd'].'</h1>';
 else
@@ -365,24 +437,25 @@ unset($err);
 $output .= '
           </div>';
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
-
-if ('delete_motd' == $action)
+if ( $action == 'delete_motd'  )
   delete_motd();
-elseif ('add_motd' == $action)
+elseif ( $action == 'add_motd' )
   add_motd();
-elseif ('do_add_motd' == $action)
+elseif ( $action == 'add_preview' )
+  add_motd();
+elseif ( $action == 'do_add_motd' )
   do_add_motd();
-elseif ('edit_motd' == $action)
+elseif ( $action == 'edit_motd' )
   edit_motd();
-elseif ('do_edit_motd' == $action)
+elseif ( $action == 'edit_preview' )
+  edit_motd();
+elseif ( $action == 'do_edit_motd' )
   do_edit_motd();
 else
   browse_motd();
 
 unset($action);
 unset($action_permission);
-//unset($lang_motd);
 
 require_once 'footer.php';
 

@@ -872,7 +872,8 @@ $GLOBALS['lang_mail'] = array
 // ----- MOTD.PHP -----
 $GLOBALS['lang_motd'] = array
 (
-  'post_motd' => 'Save Server Message',
+  'post_motd' => 'Save Message',
+  'preview_motd' => 'Preview Message',
   'post_rules' => 'طول پیغام حداکثر 255 حرف می باشد<br/>HTML tags are usable.',
   'err_max_len' => 'طول پیغام زیاد است',
   'add_motd' => 'Add Server Message',

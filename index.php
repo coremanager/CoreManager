@@ -41,7 +41,7 @@ function front()
           <div class="top">';
 
 //---------------------Information for Explorer Users--------------------------
-if(preg_match("/MSIE/", $_SERVER['HTTP_USER_AGENT']))
+if ( preg_match("/MSIE/", $_SERVER['HTTP_USER_AGENT']) )
   $msie = "<br /><center><span id='index_explorer_warning'>
              Notice: This site will NOT function correctly on Microsoft Internet Explorer.
            </span></center><br />";
@@ -49,7 +49,7 @@ else
   $msie = "";
 //-----------------------------------------------------------------------------
 
-  if (test_port($server[$realm_id]['addr'],$server[$realm_id]['game_port']))
+  if ( test_port($server[$realm_id]['addr'], $server[$realm_id]['game_port']) )
   {
     if ( $core == 1 )
     {
@@ -62,13 +62,13 @@ else
                 <font id="index_realm_info">'
                   .$staticUptime;
 
-      if (!$hide_max_players)
+      if ( !$hide_max_players )
         $output .= '
                   <br />'
                   .lang('index', 'maxplayers').
                   ': <font id="index_realm_info_value">'
                   .$stats['peak'].'</font>';
-      if (!$hide_avg_latency)
+      if ( !$hide_avg_latency )
         $output .= '
                   <br />'
                   .lang('index', 'avglat').
@@ -76,9 +76,9 @@ else
                   .$stats['avglat'].'</font>';
         $output .= '
                   <br />';
-      if ($hide_server_mem <> 0)
+      if ( $hide_server_mem <> 0 )
       {
-        if (($hide_server_mem == 2) || ($user_lvl == gmlevel('4')))
+        if ( ( $hide_server_mem == 2 ) || ( $user_lvl == gmlevel('4') ) )
         {
           $output .= 
                   lang('index', 'cpu').
@@ -118,41 +118,41 @@ else
 
         $uptimeString = '';
 
-        if ($years)
+        if ( $years )
         {
           // we have a server that has been up for over a year? O_o
           // actually, it's probably because the server didn't write a useful
           // value to the uptime table's starttime field.
           $uptimeString .= $years;
-          $uptimeString .= ((1 === $years) ? ' year' : ' years');
-          if ($days)
+          $uptimeString .= ( ( $years == 1 ) ? ' year' : ' years' );
+          if ( $days )
           {
-            $uptimeString .= ((0 < $years) ? ', ' : '').$days;
-            $uptimeString .= ((1 === $days) ? ' day' : ' days');
+            $uptimeString .= ( ( $years > 0 ) ? ', ' : '' ).$days;
+            $uptimeString .= ( ( $days == 1 ) ? ' day' : ' days');
           }
         }
         else
         {
-          if ($days)
+          if ( $days )
           {
             $uptimeString .= $days;
-            $uptimeString .= ((1 === $days) ? ' day' : ' days');
+            $uptimeString .= ( ( $days == 1 ) ? ' day' : ' days' );
           }
         }
-        if ($hours)
+        if ( $hours )
         {
-          $uptimeString .= ((0 < $days) ? ', ' : '').$hours;
-          $uptimeString .= ((1 === $hours) ? ' hour' : ' hours');
+          $uptimeString .= ( ( $days > 0 ) ? ', ' : '' ).$hours;
+          $uptimeString .= ( ( $hours == 1 ) ? ' hour' : ' hours' );
         }
-        if ($mins)
+        if ( $mins )
         {
-          $uptimeString .= ((0 < $days || 0 < $hours) ? ', ' : '').$mins;
-          $uptimeString .= ((1 === $mins) ? ' minute' : ' minutes');
+          $uptimeString .= ( ( $days > 0 || $hours > 0 ) ? ', ' : '' ).$mins;
+          $uptimeString .= ( ( $mins == 1) ? ' minute' : ' minutes' );
         }
-        if ($secs)
+        if ( $secs )
         {
-          $uptimeString .= ((0 < $days || 0 < $hours || 0 < $mins) ? ', ' : '').$secs;
-          $uptimeString .= ((1 === $secs) ? ' second' : ' seconds');
+          $uptimeString .= ( ( $days > 0 || $hours > 0 || $mins > 0 ) ? ', ' : '' ).$secs;
+          $uptimeString .= ( ( $secs == 1 ) ? ' second' : ' seconds' );
         }
         return $uptimeString;
       }
@@ -171,13 +171,13 @@ else
                 <font id="index_realm_info">'
                   .$staticUptime;
 
-      if (!$hide_max_players)
+      if ( !$hide_max_players )
         $output .= '
                   <br />'
                   .lang('index', 'maxplayers').
                   ': <font id="index_realm_info_value">'
                   .$stats['maxplayers'].'</font>';
-      if (!$hide_avg_latency)
+      if ( !$hide_avg_latency )
       {
         $lat_query = "SELECT SUM(latency), COUNT(*) FROM characters WHERE online=1 OR logout_time>'".$stats['starttime']."'";
         $lat_result = $sql['char']->query($lat_query);
@@ -217,8 +217,11 @@ else
   $char_change_count = $sql['mgr']->result($sql['mgr']->query("SELECT COUNT(*) FROM char_changes"), 0);
 
   //MOTD/GM Tickets part
-  $start_m = (isset($_GET['start_m'])) ? $sql['char']->quote_smart($_GET['start_m']) : 0;
-  if (is_numeric($start_m)); else $start_m = 0;
+  $start_m = ( ( isset($_GET['start_m']) ) ? $sql['char']->quote_smart($_GET['start_m']) : 0 );
+  if ( is_numeric($start_m) )
+    ;
+  else
+    $start_m = 0;
 
   if ( $core == 1 )
     $all_record_m = $sql['char']->result($sql['char']->query('SELECT count(*) FROM gm_tickets WHERE deleted=0'), 0);
@@ -232,7 +235,7 @@ else
   $motd_result = $sql['mgr']->query("SELECT * FROM motd WHERE Enabled <> 0 ORDER BY Priority ASC");
   // if we don't get any MotDs, it'll stay empty
 
-  if ($user_lvl >= $action_permission['update'])
+  if ( $user_lvl >= $action_permission['update'] )
     $output .= '
           <script type="text/javascript">
             // <![CDATA[
@@ -243,20 +246,17 @@ else
           </script>';
 
   $output .= '
-          <center>';
-  $output .= '
-            <table class="lined">';
-  $output .= '
+          <center>
+            <table class="lined">
               <tr><th>'.lang('index', 'motd').'</th></tr>';
 
-  while ($temp = $sql['mgr']->fetch_assoc($motd_result))
+  while ( $temp = $sql['mgr']->fetch_assoc($motd_result) )
   {
     $motd = bb2html($temp['Message'])."<br /><br />";
-    if ($motd)
+    if ( $motd )
     {
       $output .= '
-              <tr></tr>';
-      $output .= '
+              <tr></tr>
               <tr>
                 <td align="left">';
       $output .= $motd;
@@ -267,12 +267,12 @@ else
                 </td>
               </tr>';
 
-      if ($user_lvl >= $action_permission['update'])
+      if ( $user_lvl >= $action_permission['update'] )
         $output .= '
               <tr>
                 <td align="right">
                   <img src="img/cross.png" width="12" height="12" onclick="answerBox(\''.lang('global', 'delete').': &lt;font color=white&gt;'.$temp['ID'].'&lt;/font&gt;&lt;br /&gt;'.lang('global', 'are_you_sure').'\', del_motd + '.$temp['ID'].');" id="index_delete_cursor" alt="" />';
-      if ($user_lvl >= $action_permission['update'])
+      if ( $user_lvl >= $action_permission['update'] )
         $output .= '
                   <a href="motd.php?action=edit_motd&amp;error=3&amp;id='.$temp['ID'].'">
                     <img src="img/edit.png" width="14" height="14" alt="" />
@@ -283,19 +283,16 @@ else
                 <th></th>';
     }
   }
-  if ($sql['mgr']->num_rows($motd_result))
+  if ( $sql['mgr']->num_rows($motd_result) )
     $output = substr($output, 0, strlen($output) - 9);
 
-  if ($user_lvl >= $action_permission['insert'])
+  if ( $user_lvl >= $action_permission['insert'] )
   {
     $output .= '
                 <table class="lined">
                   <tr>
-                    <td align="right">';
-    $output .= '
-                      <a href="motd.php?action=add_motd&error=4">'.lang('index', 'add_motd').'</a>';
-
-    $output .= '
+                    <td align="right">
+                      <a href="motd.php?action=add_motd&error=4">'.lang('index', 'add_motd').'</a>
                     </td>
                   </tr>
                 </table>';
@@ -307,9 +304,9 @@ else
   // show gm tickets
   $output .= '<br />
             <table class="lined">';
-  if ($user_lvl >= $action_permission['insert'])
+  if ( $user_lvl >= $action_permission['insert'] )
   {
-    if($all_record_m)
+    if ( $all_record_m )
     {
       $output .= '
               <th>'.lang('index', 'tickets').'</th>';
@@ -318,9 +315,9 @@ else
       else
         $result = $sql['char']->query('SELECT gm_tickets.guid AS ticketid, characters.level, message, gm_tickets.name, closed AS deleted, timestamp, gm_tickets.playerGuid, account AS acct FROM gm_tickets LEFT JOIN characters ON characters.guid = gm_tickets.playerGuid ORDER BY ticketid DESC LIMIT '.$start_m.', 3');
 
-      while($post = $sql['char']->fetch_assoc($result))
+      while ( $post = $sql['char']->fetch_assoc($result) )
       {
-        if (!$post['deleted'])
+        if ( !$post['deleted'] )
         {
           if ( $core == 1 )
             $login_result = $sql['logon']->query("SELECT * FROM accounts WHERE acct='".$post['acct']."'");
@@ -330,7 +327,7 @@ else
           $gm_result = $sql['mgr']->query("SELECT SecurityLevel FROM config_accounts WHERE Login='".$login['login']."'");
           $gm = $sql['mgr']->fetch_assoc($gm_result);
           $gm = $gm['SecurityLevel'];
-          if (($user_lvl > 0) && (($user_lvl >= gmlevel($gm)) || ($user_lvl == gmlevel('4'))))
+          if ( ( $user_lvl > 0 ) && ( ( $user_lvl >= gmlevel($gm) ) || ( $user_lvl == gmlevel('4') ) ) )
             $output .= '<tr>
                   <td align="left">
                     <a href="char.php?id='.$post['playerGuid'].'">
@@ -352,7 +349,7 @@ else
               </tr>
               <tr>
                 <td align="right">';
-          if ($user_lvl >= $action_permission['update'])
+          if ( $user_lvl >= $action_permission['update'] )
             $output .= '
                   <a href="ticket.php?action=edit_ticket&amp;error=4&amp;id='.$post['ticketid'].'">
                     <img src="img/edit.png" width="14" height="14" alt="" />
@@ -365,7 +362,7 @@ else
               </tr>';
         }
       }
-      if ($online)
+      if ( $online )
         $output .= '%%REPLACE_TAG%%';
       else
         $output .= '
@@ -381,14 +378,14 @@ else
   // show pending character changes
   $output .= '<br />
             <table class="lined">';
-  if ($user_lvl >= $action_permission['update'])
+  if ( $user_lvl >= $action_permission['update'] )
   {
-    if($char_change_count)
+    if ( $char_change_count )
     {
       $output .= '
               <th>'.lang('index', 'pendingchanges').'</th>';
       $result = $sql['mgr']->query("SELECT * FROM char_changes");
-      while($change = $sql['mgr']->fetch_assoc($result))
+      while ( $change = $sql['mgr']->fetch_assoc($result) )
       {
         $change_char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$change['guid']."'"));
         $change_acct = $sql['logon']->fetch_assoc($sql['logon']->query("SELECT * FROM accounts WHERE acct='".$change_char['acct']."'"));
@@ -404,7 +401,7 @@ else
                 <td align="left" class="large">
                   <span>'.lang('xrace', 'player').' '.$change_acct['login'].' '.lang('xrace', 'hasreq').' '.$change_char['name'].' '.lang('xrace', 'to').' '.char_get_race_name($change['new_race']).'</span>';
 
-        if ($change_char['online'])
+        if ( $change_char['online'] )
            $output .= '
                   <br />
                   <font class="error">'.lang('xname', 'online').'</font>';
@@ -423,7 +420,7 @@ else
                   <a href="'.$file.'?action=denied&amp;guid='.$change['guid'].'">
                     <img src="img/cross.png" width="12" height="12" alt="" />
                   </a>';
-        if (!$change_char['online'])
+        if ( !$change_char['online'] )
           $output .= '
                   <a href="'.$file.'?action=approve&amp;guid='.$change['guid'].'">
                     <img src="img/aff_tick.png" width="14" height="14" alt="" />
@@ -435,7 +432,7 @@ else
                 <td class="hidden"></td>
               </tr>';
       }
-      if ($online)
+      if ( $online )
         $output .= '%%REPLACE_TAG%%';
       else
         $output .= '
@@ -448,37 +445,46 @@ else
             </table>';
 
   //print online chars
-  if ($online)
+  if ( $online )
   {
     //==========================$_GET and SECURE=================================
-    $start = (isset($_GET['start'])) ? $sql['char']->quote_smart($_GET['start']) : 0;
-    if (is_numeric($start)); else $start = 0;
+    $start = ( ( isset($_GET['start']) ) ? $sql['char']->quote_smart($_GET['start']) : 0 );
+    if ( is_numeric($start) )
+      ;
+    else
+      $start = 0;
 
-    $order_by = (isset($_GET['order_by'])) ? $sql['char']->quote_smart($_GET['order_by']) : 'name';
-    if (preg_match('/^[_[:lower:]]{1,12}$/', $order_by)); else $order_by = 'name';
+    $order_by = ( ( isset($_GET['order_by']) ) ? $sql['char']->quote_smart($_GET['order_by']) : 'name' );
+    if ( preg_match('/^[_[:lower:]]{1,12}$/', $order_by) )
+      ;
+    else
+      $order_by = 'name';
 
-    $dir = (isset($_GET['dir'])) ? $sql['char']->quote_smart($_GET['dir']) : 1;
-    if (preg_match('/^[01]{1}$/', $dir)); else $dir = 1;
+    $dir = ( ( isset($_GET['dir']) ) ? $sql['char']->quote_smart($_GET['dir']) : 1 );
+    if ( preg_match('/^[01]{1}$/', $dir) )
+      ;
+    else
+      $dir = 1;
 
-    $order_dir = ($dir) ? 'ASC' : 'DESC';
-    $dir = ($dir) ? 0 : 1;
+    $order_dir = ( ( $dir ) ? 'ASC' : 'DESC' );
+    $dir = ( ( $dir ) ? 0 : 1 );
     //==========================$_GET and SECURE end=============================
 
-    if ($order_by === 'mapid')
+    if ( $order_by === 'mapid' )
       $order_by = 'mapid '.$order_dir.', zoneid';
-    elseif ($order_by === 'zoneid')
+    elseif ( $order_by === 'zoneid' )
       $order_by = 'zoneid '.$order_dir.', mapid';
 
     $order_side = '';
-    if( $user_lvl || $server[$realm_id]['both_factions']);
+    if ( $user_lvl || $server[$realm_id]['both_factions'] );
     else
     {
       $result = $sql['char']->query("SELECT race FROM characters WHERE acct = ".$user_id."
         AND SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1) = (SELECT MAX(SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1)) FROM characters WHERE acct = ".$user_id.") LIMIT 1");
-      if ($sql['char']->num_rows($result))
-        $order_side = (in_array($sql['char']->result($result, 0),array(2,5,6,8,10))) ? " AND race IN (2,5,6,8,10) " : " AND race IN (1,3,4,7,11) ";
+      if ( $sql['char']->num_rows($result) )
+        $order_side = ( ( in_array($sql['char']->result($result, 0),array(2,5,6,8,10)) ) ? " AND race IN (2,5,6,8,10) " : " AND race IN (1,3,4,7,11) " );
     }
-    if($order_by == 'ip')
+    if ( $order_by == 'ip' )
       //this_is_junk: oops, cross referencing character & account works for me because I mix the logon & character databases :/
       //hmmm.... this will work as long as the logon & character databases are on the same MySQL server.
       $result = $sql['logon']->query("SELECT acct, lastip FROM accounts WHERE acct=any(SELECT acct FROM ".$character_db[$realm_id]['name']."characters WHERE online=1) ORDER BY lastip ".$order_dir." LIMIT ".$start.", ".$itemperpage);
@@ -496,43 +502,43 @@ else
     $total_online = $sql['char']->result($sql['char']->query("SELECT count(*) FROM characters WHERE online= 1"), 0);
     $replace = '
               <tr>
-                <td align="right" class="hidden">'.generate_pagination('index.php?start='.$start.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record_m, 3, $start_m, 'start_m').'</td>
+                <td align="right" class="hidden">'.generate_pagination('index.php?start='.$start.'&amp;order_by='.$order_by.'&amp;dir='.( ( $dir ) ? 0 : 1 ).'', $all_record_m, 3, $start_m, 'start_m').'</td>
               </tr>';
     unset($all_record_m);
     $output = str_replace('%%REPLACE_TAG%%', $replace, $output);
     unset($replace);
     $output .= '
             <font class="bold">'.lang('index', 'tot_users_online').': '.$total_online.'</font>';
-    if ($total_online)
+    if ( $total_online )
     {
     $output .= '
             <table class="lined">
               <tr>
                 <td colspan="'.(9-$showcountryflag).'" align="right" class="hidden" width="25%">';
-    $output .= generate_pagination('index.php?start_m='.$start_m.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1), $total_online, $itemperpage, $start);
+    $output .= generate_pagination('index.php?start_m='.$start_m.'&amp;order_by='.$order_by.'&amp;dir='.( ( $dir ) ? 0 : 1 ), $total_online, $itemperpage, $start);
     $output .= '
                 </td>
               </tr>
               <tr>
-                <th width="15%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=name&amp;dir='.$dir.'"'.($order_by==='name' ? ' class="'.$order_dir.'"' : '').'>'.lang('index', 'name').'</a></th>
-                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=race&amp;dir='.$dir.'"'.($order_by==='race' ? ' class="'.$order_dir.'"' : '').'>'.lang('index', 'race').'</a></th>
-                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=class&amp;dir='.$dir.'"'.($order_by==='class' ? ' class="'.$order_dir.'"' : '').'>'.lang('index', 'class').'</a></th>
-                <th width="5%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=level&amp;dir='.$dir.'"'.($order_by==='level' ? ' class="'.$order_dir.'"' : '').'>'.lang('index', 'level').'</a></th>
-                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=highest_rank&amp;dir='.$dir.'"'.($order_by==='highest_rank' ? ' class="'.$order_dir.'"' : '').'>'.lang('index', 'rank').'</a></th>
-                <th width="15%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=gname&amp;dir='.$dir.'"'.($order_by==='gname' ? ' class="'.$order_dir.'"' : '').'>'.lang('index', 'guild').'</a></th>
-                <th width="20%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=mapid&amp;dir='.$dir.'"'.($order_by==='mapid '.$order_dir.', zoneid' ? ' class="'.$order_dir.'"' : '').'>'.lang('index', 'map').'</a></th>
-                <th width="25%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=zoneid&amp;dir='.$dir.'"'.($order_by==='zoneid '.$order_dir.', mapid' ? ' class="'.$order_dir.'"' : '').'>'.lang('index', 'zone').'</a></th>';
+                <th width="15%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=name&amp;dir='.$dir.'"'.( $order_by==='name' ? ' class="'.$order_dir.'"' : '' ).'>'.lang('index', 'name').'</a></th>
+                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=race&amp;dir='.$dir.'"'.( $order_by==='race' ? ' class="'.$order_dir.'"' : '' ).'>'.lang('index', 'race').'</a></th>
+                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=class&amp;dir='.$dir.'"'.( $order_by==='class' ? ' class="'.$order_dir.'"' : '' ).'>'.lang('index', 'class').'</a></th>
+                <th width="5%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=level&amp;dir='.$dir.'"'.( $order_by==='level' ? ' class="'.$order_dir.'"' : '' ).'>'.lang('index', 'level').'</a></th>
+                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=highest_rank&amp;dir='.$dir.'"'.( $order_by==='highest_rank' ? ' class="'.$order_dir.'"' : '' ).'>'.lang('index', 'rank').'</a></th>
+                <th width="15%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=gname&amp;dir='.$dir.'"'.( $order_by==='gname' ? ' class="'.$order_dir.'"' : '' ).'>'.lang('index', 'guild').'</a></th>
+                <th width="20%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=mapid&amp;dir='.$dir.'"'.( $order_by==='mapid '.$order_dir.', zoneid' ? ' class="'.$order_dir.'"' : '' ).'>'.lang('index', 'map').'</a></th>
+                <th width="25%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=zoneid&amp;dir='.$dir.'"'.( $order_by==='zoneid '.$order_dir.', mapid' ? ' class="'.$order_dir.'"' : '' ).'>'.lang('index', 'zone').'</a></th>';
     if ( $core == 1 )
       $output .= '
                 <th width="25%">'.lang('index', 'area').'</a></th>';
     
-    if (!$hide_plr_latency)
+    if ( !$hide_plr_latency )
     {
       $output .= '
                 <th width="1%">'.lang('index', 'latency').'</th>';
     }
 
-    if ($showcountryflag)
+    if ( $showcountryflag )
     {
       require_once 'libs/misc_lib.php';
       $output .= '
@@ -543,9 +549,9 @@ else
               </tr>';
     }
 
-    while ($char = $sql['char']->fetch_assoc($result))
+    while ( $char = $sql['char']->fetch_assoc($result) )
     {
-      if($order_by == 'ip')
+      if ( $order_by == 'ip' )
       {
         $temp = $sql['char']->fetch_assoc($sql['char']->query("SELECT guid, name, race, class, zoneid, mapid, level, acct, gender FROM characters WHERE online=1 ".$order_side." AND acct=".$char['id']));
         $char = $temp;
@@ -580,7 +586,7 @@ else
       $output .= '
               <tr>
                 <td>';
-      if (($user_lvl > 0) && (($user_lvl >= gmlevel($gm)) || ($user_lvl == gmlevel('4'))))
+      if ( ( $user_lvl > 0 ) && ( ( $user_lvl >= gmlevel($gm) ) || ( $user_lvl == gmlevel('4') ) ) )
         $output .= '
                   <a href="char.php?id='.$char['guid'].'">
                     <span onmousemove="oldtoolTip(\''.$char_acct['name'].' ('.id_get_gm_level($gm).')'.'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($char['name']).'</span>
@@ -608,7 +614,7 @@ else
       // display player area, if available
       if ( $core == 1 )
       {
-        for ($i = 0; $i < count($stats['plrs_area']); $i++)
+        for ( $i = 0; $i < count($stats['plrs_area']); $i++ )
         {
           if ($stats['plrs_area'][$i][0] == $char['name'])
           {
@@ -622,32 +628,32 @@ else
       }
       
       // display player latency, if enabled, and if available
-      if (!$hide_plr_latency)
+      if ( !$hide_plr_latency )
       {
         if ( $core == 1 )
         {
-          for ($i = 0; $i < count($stats['plrs_lat']); $i++)
+          for ( $i = 0; $i < count($stats['plrs_lat']); $i++ )
           {
-            if ($stats['plrs_lat'][$i][0] == $char['name'])
+            if ( $stats['plrs_lat'][$i][0] == $char['name'] )
             {
               $output .= '
                 <td>'.$stats['plrs_lat'][$i][1].'</td>';
             }
-            if ( !isset( $stats['plrs_lat'][$i][1] ) )
+            if ( !isset($stats['plrs_lat'][$i][1]) )
               $output .= '
                 <td>-</td>';
           }
         }
         else
-              $output .= '
+          $output .= '
                 <td>'.$char['latency'].'</td>';
       }
 
-      if ($showcountryflag)
+      if ( $showcountryflag )
       {
         $country = misc_get_country_by_account($char['acct']);
         $output .='
-                <td>'.(($country['code']) ? '<img src="img/flags/'.$country['code'].'.png" onmousemove="oldtoolTip(\''.($country['country']).((($user_lvl >= $action_permission['update']) ||($user_lvl == gmlevel('4'))) ? '<br />'.$country['actualip'] : '').'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
+                <td>'.( ( $country['code'] ) ? '<img src="img/flags/'.$country['code'].'.png" onmousemove="oldtoolTip(\''.($country['country']).( ( ( $user_lvl >= $action_permission['update'] ) || ( $user_lvl == gmlevel('4') ) ) ? '<br />'.$country['actualip'] : '' ).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-' ).'</td>';
       }
       $output .='
               </tr>';
@@ -656,7 +662,7 @@ else
               <tr>';
     $output .= '
                 <td colspan="'.(9-$showcountryflag).'" align="right" class="hidden" width="25%">';
-    $output .= generate_pagination('index.php?start_m='.$start_m.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1), $total_online, $itemperpage, $start);
+    $output .= generate_pagination('index.php?start_m='.$start_m.'&amp;order_by='.$order_by.'&amp;dir='.( ( $dir ) ? 0 : 1 ), $total_online, $itemperpage, $start);
     unset($total_online);
     $output .= '
                 </td>
@@ -672,18 +678,12 @@ else
 // MAIN
 //#############################################################################
 
-//$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
-
-//$lang_index = lang_index();
-
 $output .= "
         <div class=\"bubble\">";
 
 front();
 
-//unset($action);
 unset($action_permission);
-//unset($lang_index);
 
 require_once 'footer.php';
 

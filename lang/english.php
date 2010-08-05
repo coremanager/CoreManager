@@ -872,7 +872,8 @@ $GLOBALS['lang_mail'] = array
 // ----- MOTD.PHP -----
 $GLOBALS['lang_motd'] = array
 (
-  'post_motd' => 'Save Server Message',
+  'post_motd' => 'Save Message',
+  'preview_motd' => 'Preview Message',
   'post_rules' => 'Notice: the length is limited to 4096 chars.<br />HTML tags are not usable.',
   'err_max_len' => 'Maximum length exceeded',
   'add_motd' => 'Add Server Message',
