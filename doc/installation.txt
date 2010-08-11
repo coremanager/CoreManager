@@ -21,27 +21,27 @@ REQUIREMENTS:
 INSTALLATION:
 
    1. Copy the contents of the \CoreManager\ directory into your webserver's www or htdocs directory.
-    (If you're NOT planning on using CoreManager as your primary website, copy the entire directory)
+      (If you're NOT planning on using CoreManager as your primary website, copy the entire directory)
 
    2. Create a new database for CoreManager's Configuration data.
 
    3. Create a new database for CoreManager DBC data.
-    (optional, you can use the one you just created for the configs if you like)
+      (optional, you can use the one you just created for the configs if you like)
 
    4. Import from the highest numbered *_CoreManager.sql (where * is some number) in \SQL\ to the CoreManager
-    Database you just created.  (Ignore all files in \SQL\outdated\)
+      Database you just created.  (Ignore all files in \SQL\outdated\)
 
    5. Import from the highest numbered *_CoreManager_dbc.sql (where * is some number) in \SQL\ to the CoreManager
-    DBC Database you just created.  (Ignore all files in \SQL\outdated\)
+      DBC Database you just created.  (Ignore all files in \SQL\outdated\)
 
    6. Starting with the next higher number from the one of the *_CoreManager.sql file you used above,
-    apply all the .sql files in \SQL\updates\CoreManager_database_updates\ to your CoreManager Database.
+      apply all the .sql files in \SQL\updates\CoreManager_database_updates\ to your CoreManager Database.
 
    7. Starting with the next higher number from the one of the *_CoreManager_dbc.sql file you used above, apply
-    all the .sql files in \SQL\updates\CoreManager_dbc_database_updates\ to your CoreManager Configs database.
+      all the .sql files in \SQL\updates\CoreManager_dbc_database_updates\ to your CoreManager Configs database.
 
    8. Run the included DBC to MySQL Convertor tool. Instructions are in \Tools\README (DBC to MySQL).txt
-    (This must be run from Windows XP or greater, but the destination database may be hosted on *Nix)
+      (This must be run from Windows XP or greater, but the destination database may be hosted on *Nix)
 
    9. Extract \img\icons\icons.zip into \img\icons\.
   10. Extract any .zip files in \img\icons\updates\ into \img\icons\.
@@ -52,12 +52,12 @@ CONFIGURATION:
    1. Copy \configs\config.dist.php into \configs\ as config.php.
 
    2. Open \configs\config.php for editing.
-   3. Configure all 5 entries for $arcm_db with the info for your CoreManager Database
+   3. Configure all 5 entries for $corem_db with the info for your CoreManager Database
    4. Configure the setting for $db_type.
    5. Save and close \configs\config.php.
 
    6. Open setup.php for editing.
-   7. Configure all 5 entries for $arcm_db.
+   7. Configure all 5 entries for $corem_db.
    8. Configure the setting for $db_type.
    9. Save and close setup.php.
 
@@ -65,12 +65,8 @@ CONFIGURATION:
   11. Enter the values indicated.
   12. Click "Save Changes".
 
-  13a. If you were already logged in to your CoreManager, you'll be taken to your new ACP.
-  13b. If you were NOT already logged in, you'll be told you don't have permission;
-           IN THIS CASE, IT IS ACTUALLY OK.  Log into your CoreManager and direct your browser to
-           {URL to your server}/admin.php  (e.g. http://127.0.0.1/admin.php)
+  13. It will take you to the ACP Login Screen.
+      You'll be told you don't have permission; IN THIS CASE, IT IS ACTUALLY OK.
 
-  14. Make changes using ACP.
-
-
-  Make appropriate changes in the 'Servers' tab in the ACP.
+  14. Configure the settings for the DBC, Character, and World Databases in the Databases tab.
+  15. Make appropriate changes in the 'Servers' tab in the ACP.

@@ -19,8 +19,8 @@
 
 $corem_db['addr']     = '127.0.0.1:3306';         // SQL server IP:port your CoreManager DB is located on
 $corem_db['user']     = 'root';                   // SQL server login your CoreManager DB is located on
-$corem_db['pass']     = 'password';               // SQL server pass your CoreManager DB is located on
-$corem_db['name']     = 'db name';                // CoreManager DB name
+$corem_db['pass']     = 'pcb825e';               // SQL server pass your CoreManager DB is located on
+$corem_db['name']     = 'coremanager_config';                // CoreManager DB name
 $corem_db['encoding'] = 'utf8';                   // SQL connection encoding
 
 //#############################################################################
@@ -183,6 +183,9 @@ function show()
         <fieldset id="setup_acp_field">
           <legend>'.lang('setup', 'webadmin').'</legend>
           <table>
+            <tr>
+              <td colspan="2"><span style="color:red">'.lang('setup', 'acctinfo').'</span></td>
+            </tr>
             <tr>
               <td>'.lang('setup', 'acctname').': </td>
               <td>

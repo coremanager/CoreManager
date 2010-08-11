@@ -309,3 +309,9 @@
 {
 	width:300px
 }
+
+/* ADMIN_LOGIN.PHP */
+fieldset.half_frame
+{
+	width: 550px;
+}

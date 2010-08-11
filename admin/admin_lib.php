@@ -36,13 +36,13 @@ function valid_login_webadmin($restrict_lvl)
     if ($ip === $_SESSION['client_ip'])
       ;
     else
-      header('Location: '.'login.php');
+      header('Location: '.'admin_login.php');
   }
   else
-    header('Location: '.'login.php');
+    header('Location: '.'admin_login.php');
 
   if ($user_lvl < 1)
-    header('Location: '.'login.php?error=5');
+    header('Location: '.'admin_login.php?error=5');
 }
 
 

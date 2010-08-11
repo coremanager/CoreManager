@@ -2841,6 +2841,7 @@ $GLOBALS['lang_setup'] = array
   'acctname' => 'Account Logon Name',
   'screenname' => 'Account Screen Name',
   'save' => 'Save Changes',
+  'acctinfo' => "The 'Account Logon Name' must match an existing Game Server Account!",
 );
 
 // ----- HEARTHSTONE.PHP -----
