@@ -78,7 +78,7 @@ function forum_index()
           continue;
       }
     }
-    $output .= "<tr><td class=\"head\" align=\"left\">".$sql['mgr']->result($sql['mgr']->query("SELECT * FROM config_lang_forum WHERE `Key`='".$category["name"]."' AND Lang='".$forumlang."'"), 0, "Value")."</td>
+    $output .= "<tr><td class=\"head\" align=\"left\">".$category["name"]."</td>
                     <td class=\"head\">".lang('forum', 'topics')."</td>
                     <td class=\"head\">".lang('forum', 'replies')."</td>
                     <td class=\"head\" align=\"right\">".lang('forum', 'last_post')."</td></tr>";
@@ -100,7 +100,7 @@ function forum_index()
       $numtopics = $sql['mgr']->num_rows($totaltopics);
       $totalreplies = $sql['mgr']->query("SELECT id FROM forum_posts WHERE forum = '$id';");
       $numreplies = $sql['mgr']->num_rows($totalreplies);
-      $output .= "<tr><td align=\"left\"><a href=\"forum.php?action=view_forum&amp;id=$id\">".$sql['mgr']->result($sql['mgr']->query("SELECT * FROM config_lang_forum WHERE `Key`='".$forum["name"]."' AND Lang='".$forumlang."'"), 0, "Value")."</a><br />".$sql['mgr']->result($sql['mgr']->query("SELECT * FROM config_lang_forum WHERE `Key`='".$forum["desc"]."' AND Lang='".$forumlang."'"), 0, "Value")."</td>
+      $output .= "<tr><td align=\"left\"><a href=\"forum.php?action=view_forum&amp;id=$id\">".$forum["name"]."</a><br />".$forum["desc"]."</td>
                         <td>{$numtopics}</td>
                         <td>{$numreplies}</td>";
       if(isset($lasts[$id]))

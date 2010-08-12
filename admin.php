@@ -2023,131 +2023,286 @@ function savemenu()
 
 function forum()
 {
-  global $output, $corem_db, $logon_db, $lang_global;
+  global $output, $corem_db, $lang_global;
 
   $sqlm = new SQL;
   $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
-  $forum_action = 0;
+  $forum_action = 'start';
   if ( isset($_GET['editforum']) )
     $forum_action = 'edit';
-  if ( isset($_GET['saveforum']) )
-    $forum_action = 'save';
   if ( isset($_GET['delforum']) )
-    $forum_action = 'del';
+    $forum_action = 'delforum';
+  if ( isset($_GET['addforum']) )
+    $forum_action = 'addforum';
+  if ( isset($_GET['editforum_item']) )
+    $forum_action = 'edititem';
+  if ( isset($_GET['delforum_item']) )
+    $forum_action = 'delitem';
+  if ( isset($_GET['addforum_item']) )
+    $forum_action = 'additem';
+  if ( isset($_GET['saveforum']) )
+    $forum_action = 'saveforum';
 
-  $forums = $sqlm->query("SELECT * FROM config_lang_forum");
-
-  if ( !$forum_action )
+  switch ( $forum_action )
   {
-    $output .= '
+    case "start";
+    {
+      $cats = $sqlm->query("SELECT * FROM config_forum_categories");
+      $output .= '
         <center>
           <form name="form" action="admin.php" method="GET">
             <input type="hidden" name="section" value="forum">
-            <table class="simple" id="admin_forum_lang">
+            <table class="simple" id="admin_top_menus">
               <tr>
-                <th width="5%">&nbsp;</th>
-                <th width="10%">'.lang('admin', 'key').'</th>
-                <th width="10%">'.lang('admin', 'lang').'</th>
-                <th width="50%">'.lang('admin', 'value').'</th>
+                <th colspan=2>'.lang('admin', 'cats').'</th>
+              </tr>
+            </table>
+            <table class="simple" id="admin_top_menus">
+              <tr>
+                <th>&nbsp;</th>
+                <th>'.lang('admin', 'name').': </th>
               </tr>';
-    $color = "#EEEEEE";
-    while ( $forum = $sqlm->fetch_assoc($forums) )
-    {
+      $color = "#EEEEEE";
+      while ( $cat = $sqlm->fetch_assoc($cats) )
+      {
+        $output .= '
+              <tr>
+                <td style="background-color:'.$color.'"><input type="radio" name="category" value="'.$cat['Index'].'"></td>
+                <td style="background-color:'.$color.'"><center>'.$cat['Name'].'</center></td>
+              </tr>';
+        if ( $color == "#EEEEEE" )
+          $color = "#FFFFFF";
+        else
+          $color = "#EEEEEE";
+      }
       $output .= '
-              <tr>
-                <td style="background-color:'.$color.'"><input type="radio" name="forum" value="'.$forum['Key']."^^".$forum['Lang'].'"></td>
-                <td style="background-color:'.$color.'"><center>'.$forum['Key'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$forum['Lang'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$forum['Value'].'</center></td>
-              </tr>';
-      if ( $color == "#EEEEEE" )
-        $color = "#FFFFFF";
-      else
-        $color = "#EEEEEE";
-    }
-    $output .= '
             </table>
             <input type="submit" name="editforum" value="'.lang('admin', 'editforum').'">
+            <input type="submit" name="addforum" value="'.lang('admin', 'addforum').'">
             <input type="submit" name="delforum" value="'.lang('admin', 'delforum').'">
           </form>
         </center>';
-  }
-  elseif ( $forum_action == 'edit' )
-  {
-    if ( isset($_GET['forum']) )
-      $forum_KL = $sqlm->quote_smart($_GET['forum']);
-    else
-      redirect("admin.php?section=forum&error=1");
-    $keylang = explode("^^", $forum_KL);
-    $forum = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_lang_forum WHERE `Key`='".$keylang[0]."' AND `Lang`='".$keylang[1]."'"));
-
-    $output .= '
+      break;
+    }
+    case 'edit':
+    {
+      $cat_id = $sqlm->quote_smart($_GET['category']);
+      $cat = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_forum_categories WHERE `Index`='".$cat_id."'"));
+      $sec_levels = sec_level_list();
+      $output .= '
         <center>
-          <span>'.lang('admin', 'foruminfo').'</span>
-          <br />
-          <br />
           <form name="form" action="admin.php" method="GET">
             <input type="hidden" name="section" value="forum">
-            <fieldset id="admin_edit_forum_lang">
-              <table>
+            <input type="hidden" name="category" value="'.$cat_id.'">
+            <table class="simple" id="admin_edit_top_menu_nameaction">
+              <tr>
+                <th colspan=2>'.lang('admin', 'cat').'</th>
+              </tr>
+              <tr>
+                <td>'.lang('admin', 'name').': </td>
+                <td><input type="text" name="cat_name" value="'.$cat['Name'].'" id="admin_edit_top_menu_action"></td>
+              </tr>
+            </table>
+            <table class="simple" id="admin_edit_top_menu_submenus">
+              <tr>
+                <th>&nbsp;</th>
+                <th>'.lang('admin', 'name').'</th>
+                <th>'.lang('admin', 'desc').'</th>
+                <th>'.lang('admin', 'sideaccess').'</th>
+                <th>'.lang('admin', 'secread').'</th>
+                <th>'.lang('admin', 'secpost').'</th>
+                <th>'.lang('admin', 'sectopic').'</th>
+              </tr>';
+      $forums = $sqlm->query("SELECT * FROM config_forums WHERE Category='".$cat_id."'");
+      $color = "#EEEEEE";
+      while ( $forum = $sqlm->fetch_assoc($forums) )
+      {
+        $output .= '
+              <tr>
+                <td style="background-color:'.$color.'"><input type="radio" name="forum_item" value="'.$forum['Index'].'"></td>
+                <td width="25%" style="background-color:'.$color.'"><center>'.$forum['Name'].'</center></td>
+                <td width="25%" style="background-color:'.$color.'"><center>'.$forum['Desc'].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$forum['Side_Access'].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.sec_level_name($forum['Min_Security_Level_Read']).'</center></td>
+                <td style="background-color:'.$color.'"><center>'.sec_level_name($forum['Min_Security_Level_Post']).'</center></td>
+                <td style="background-color:'.$color.'"><center>'.sec_level_name($forum['Min_Security_Level_Create_Topic']).'</center></td>
+              </tr>';
+        if ( $color == "#EEEEEE" )
+          $color = "#FFFFFF";
+        else
+          $color = "#EEEEEE";
+      }
+      $output .= '
+            </table>
+            <input type="submit" name="editforum_item" value="'.lang('admin', 'editforum_item').'">
+            <input type="submit" name="addforum_item" value="'.lang('admin', 'addforum_item').'">
+            <input type="submit" name="saveforum" value="'.lang('admin', 'save').'">
+            <input type="submit" name="delforum_item" value="'.lang('admin', 'delforum_item').'">
+          </form>
+        </center>';
+      break;
+    }
+    case 'edititem':
+    {
+      $forum_item = $sqlm->quote_smart($_GET['forum_item']);
+      $forum = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_forums WHERE `Index`='".$forum_item."'"));
+      $sec_list = sec_level_list();
+      $output .= '
+        <center>
+          <form name="form" action="admin.php" method="GET">
+            <input type="hidden" name="section" value="forum">
+            <input type="hidden" name="action" value="saveforum">
+            <input type="hidden" name="forum_item" value="'.$forum_item.'">
+            <fieldset id="admin_edit_forum_field">
+              <table id="help" id="admin_edit_menu">
                 <tr>
-                  <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'key').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'key').'</a>: </td>
-                  <td><input type="text" name="key" value="'.$forum['Key'].'">
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'cat').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'cat').'</a>: </td>
+                  <td><input type="text" name="category" value="'.$forum['Category'].'" id="admin_edit_menu_fields"></td>
                 </tr>
                 <tr>
-                  <td>'.lang('admin', 'lang').': </td>
-                  <td><input type="text" name="lang" value="'.$forum['Lang'].'">
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'forumname').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'name').'</a>: </td>
+                  <td><input type="text" name="name" value="'.$forum['Name'].'" id="admin_edit_menu_fields"></td>
+                </tr
+                <tr>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'desc').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'desc').'</a>: </td>
+                  <td><input type="text" name="desc" value="'.$forum['Desc'].'" id="admin_edit_menu_fields"></td>
                 </tr>
                 <tr>
-                  <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'value').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'value').'</a>: </td>
-                  <td><textarea name="value" cols="40" rows="3" />'.htmlentities($forum['Value']).'</textarea>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'sideaccess').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'sideaccess2').'</a>: </td>
+                  <td><input type="text" name="sideaccess" value="'.$forum['Side_Access'].'" id="admin_edit_menu_fields"></td>
+                </tr>
+                <tr>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'secread').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'secread2').'</a>: </td>
+                  <td>
+                    <select name="min_security_level_read">';
+      foreach ($sec_list as $row)
+      {
+        $output .= '
+                      <option value="'.$row['Sec'].'" '.($row['Sec'] == $forum['Min_Security_Level_Read'] ? 'selected="selected"' : '').'>'.$row['Name'].' ('.$row['Sec'].')</option>';
+      }
+      $output .= '
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'secpost').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'secpost2').'</a>: </td>
+                  <td>
+                    <select name="min_security_level_post">';
+      foreach ($sec_list as $row)
+      {
+        $output .= '
+                      <option value="'.$row['Sec'].'" '.($row['Sec'] == $forum['Min_Security_Level_Post'] ? 'selected="selected"' : '').'>'.$row['Name'].' ('.$row['Sec'].')</option>';
+      }
+      $output .= '
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'sectopic').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'sectopic2').'</a>: </td>
+                  <td>
+                    <select name="min_security_level_create_topic">';
+      foreach ($sec_list as $row)
+      {
+        $output .= '
+                      <option value="'.$row['Sec'].'" '.($row['Sec'] == $forum['Min_Security_Level_Create_Topic'] ? 'selected="selected"' : '').'>'.$row['Name'].' ('.$row['Sec'].')</option>';
+      }
+      $output .= '
+                    </select>
+                  </td>
                 </tr>
               </table>
             </fieldset>
-            <input type="submit" name="saveforum" value="'.lang('admin', 'save').'">
+            <input type="submit" name="save_forum_item" value="'.lang('admin', 'save').'">
           </form>
         </center>';
+      break;
+    }
+    case "addforum":
+    {
+      $max = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_forum_categories"));
+      $max = $max['MAX(`Index`)'] + 1;
+      $result = $sqlm->query("INSERT INTO config_forum_categories (`Index`, Name) VALUES ('".$max."', '')");
+      redirect("admin.php?section=forums");
+      break;
+    }
+    case "delforum":
+    {
+      $category = $sqlm->quote_smart($_GET['top_menu']);
+      if ( is_numeric($category) )
+      {
+        $result = $sqlm->query("DELETE FROM config_forum_categories WHERE `Index`='".$category."'");
+        redirect("admin.php?section=forums");
+      }
+      else
+        redirect("admin.php?section=forums&error=1");
+      break;
+    }
+    case "saveforum":
+    {
+      $category = $sqlm->quote_smart($_GET['category']);
+      $category_name = $sqlm->quote_smart($_GET['top_name']);
+      $result = $sqlm->query("UPDATE config_forum_categories SET Name='".$category_name."' WHERE `Index`='".$category."'");
+      redirect("admin.php?section=forums");
+      break;
+    }
+    case "additem":
+    {
+      $category = $sqlm->quote_smart($_GET['category']);
+      $result = $sqlm->query("INSERT INTO config_forums (Category, Name, Desc, Side_Access) VALUES ('".$category."', '', '', '', '')");
+      redirect("admin.php?section=forums");
+      break;
+    }
+    case "delitem":
+    {
+      $forum_item = $sqlm->quote_smart($_GET['forum_item']);
+      if ( is_numeric($forum_item) )
+      {
+        $result = $sqlm->query("DELETE FROM config_forums WHERE `Index`='".$forum_item."'");
+        redirect("admin.php?section=forums");
+      }
+      else
+        redirect("admin.php?section=forums&error=1");
+      break;
+    }
+    default:
+      redirect("admin.php?section=forums&error=1");
+      break;
   }
-  elseif ( $forum_action == 'save' )
-  {
-    $key = $sqlm->quote_smart($_GET['key']);
-    $lang = $sqlm->quote_smart($_GET['lang']);
-    $value = $sqlm->quote_smart($_GET['value']);
+}
 
-    if ( strstr($key, "^") )
-      redirect("admin.php?section=forum&error=2");
-    if ( strstr($lang, "^") )
-      redirect("admin.php?section=forum&error=2");
-    if ( strstr($value, "^") )
-      redirect("admin.php?section=forum&error=2");
+function saveforum()
+{
+  global $corem_db;
 
-    $count = $sqlm->num_rows($sqlm->query("SELECT * FROM config_lang_forum WHERE `Key`='".$key."' AND `Lang`='".$lang."'"));
-    if ( $count == 1 )
-      $result = $sqlm->query("UPDATE config_lang_forum SET `Value`='".$value."' WHERE `Key`='".$key."' AND `Lang`='".$lang."'");
-    else
-      $result = $sqlm->query("INSERT INTO config_lang_forum (`Key`,`Lang`,`Value`) VALUES ('".$key."', '".$lang."', '".$value."')");
+  $sqlm = new SQL;
+  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
-    redirect("admin.php?section=forum");
-  }
-  elseif ( $forum_action == 'del' )
-  {
-    if ( isset($_GET['forum']) )
-      $forum_KL = $sqlm->quote_smart($_GET['forum']);
-    else
-      redirect("admin.php?section=forum&error=1");
-    $keylang = explode("^^", $forum_KL);
-    
-    $count = $sqlm->num_rows($sqlm->query("SELECT * FROM config_lang_forum WHERE `Key`='".$keylang[0]."' AND `Lang`='".$keylang[1]."'"));
-    if ( $count == 1 )
-      $result = $sqlm->query("DELETE FROM config_lang_forum WHERE `Key`='".$keylang[0]."' AND `Lang`='".$keylang[1]."'");
-    else
-      redirect("admin.php?section=forum&error=1");
+  $forum_item = $sqlm->quote_smart($_GET['forum_item']);
+  $forum = $sqlm->quote_smart($_GET['category']);
+  $name = $sqlm->quote_smart($_GET['name']);
+  $desc = $sqlm->quote_smart($_GET['desc']);
+  $sideaccess = $sqlm->quote_smart($_GET['sideaccess']);
+  $min_security_level_read = $sqlm->quote_smart($_GET['min_security_level_read']);
+  $min_security_level_post = $sqlm->quote_smart($_GET['min_security_level_post']);
+  $min_security_level_create_topic = $sqlm->quote_smart($_GET['min_security_level_create_topic']);
 
-    redirect("admin.php?section=forum");
-  }
+  $result = $sqlm->query("SELECT * FROM config_forums WHERE `Index`='".$forum_item."'");
+  if ( $sqlm->num_rows($result) )
+    $result = $sqlm->query("UPDATE config_forums SET Category='".$forum."', Name='".$name."', `Desc`='".$desc."', Side_Access='".$sideaccess."', Min_Security_Level_Read='".$min_security_level_read."', Min_Security_Level_Post='".$min_security_level_post."', Min_Security_Level_Create_Topic='".$min_security_level_create_topic."' WHERE `Index`='".$forum_item."'");
   else
-    redirect("admin.php?section=forum&error=1");
+    $result = $sqlm->query("INSERT INTO config_forums (Category, Name, Desc, Side_Access, Min_Security_Level_Read, Min_Security_Level_Post, Min_Security_Level_Create_Topic) VALUES ('".$forum."', '".$name."', '".$desc."', '".$sideaccess."', '".$min_security_level_read."', '".$min_security_level_post."', '".$min_security_level_create_topic."')");
+
+  redirect("admin.php?section=forum");
 }
 
 function accounts()
@@ -2345,6 +2500,9 @@ switch ( $action )
     break;
   case "savemenu":
     savemenu();
+    break;
+  case "saveforum":
+    saveforum();
     break;
 }
 

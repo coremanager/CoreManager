@@ -22,49 +22,51 @@ $maxqueries = 20; // Max topic / post by pages
 $minfloodtime = 15; // Minimum time beetween two post
 $enablesidecheck = true; // if you dont use side specific forum, desactive it, because it will do one less query.
 
-$forum_skeleton = Array(
-	1 => Array(
-		"name" => "servcat",
-		"forums" => Array(
-			1 => Array(
-				"name" => "news",
-				"desc" => "newsdesc",
-				"level_post_topic" => 3
-			),
-			2 => Array(
-				"name" => "general",
-				"desc" => "generaldesc"
-			)
-		)
-	),
-	2 => Array(
-		"name" => "gamecat",
-		"forums" => Array(
-			3 => Array(
-				"name" => "bugs",
-				"desc" => "bugsdesc",
-			),
-			4 => Array(
-				"name" => "both",
-				"desc" => "bothdesc"
-			),
-			5 => Array(
-				"name" => "horde",
-				"desc" => "Only horde players can see this",
-				"side_access" => "H"
-			),
-			6 => Array(
-				"name" => "alliance",
-				"desc" => "alliancedesc",
-				"side_access" => "A"
-			),
-			7 => Array(
-				"name" => "admin",
-				"desc" => "admindesc",
-				"level_read" => "3",
-				"level_post" => "3"
-			)
-		)
-	)
-);
+$forum_array = array();
+$temp = $sql['mgr']->query('SELECT * FROM config_forum_categories');
+while ($fcats = $sql['mgr']->fetch_assoc($temp))
+{
+  $cat = array();
+  $cat[0] = $fcats['Index'];
+  $cat[1] = $fcats['Name'];
+
+  $m = array();
+  $temp_forums = $sql['mgr']->query("SELECT * FROM config_forums WHERE Category='".$fcats['Index']."'");
+  while ($forums = $sql['mgr']->fetch_assoc($temp_forums))
+  {
+    $forum = array();
+    array_push($forum, $forums['Index']);
+    array_push($forum, $forums['Name']);
+    array_push($forum, $forums['Desc']);
+    array_push($forum, $forums['Side_Access']);
+    array_push($forum, $forums['Min_Security_Level_Read']);
+    array_push($forum, $forums['Min_Security_Level_Post']);
+    array_push($forum, $forums['Min_Security_Level_Create_Topic']);
+    array_push($m, $forum);
+  }
+
+  $cat[2] = $m;
+
+  array_push($forum_array, $cat);
+}
+
+$forum_skeleton = array();
+foreach ( $forum_array as $category )
+{
+  $cat = array();
+  $cat['name'] = $category[1];
+  $cat['forums'] = array();
+  foreach ( $category[2] as $forums )
+  {
+    $cat['forums'][$forums[0]]['name'] = $forums[1];
+    $cat['forums'][$forums[0]]['desc'] = $forums[2];
+    $cat['forums'][$forums[0]]['side_access'] = $forums[3];
+    $cat['forums'][$forums[0]]['level_read'] = $forums[4];
+    $cat['forums'][$forums[0]]['level_post'] = $forums[5];
+    $cat['forums'][$forums[0]]['level_post_topic'] = $forums[6];
+  }
+  
+  array_push($forum_skeleton, $cat);
+}
+
 ?>

@@ -2471,6 +2471,7 @@ $GLOBALS['lang_admin'] = array
   'login' => 'Login',
   'screenname' => 'Anzeigename',
   'acpaccess' => 'Web Admin',
+
   'delmenu' => 'Men&uuml; L&ouml;schen',
   'editmenu' => 'Men&uuml; &Auml;ndern',
   'addmenu' => 'Neues Men&uuml;',
@@ -2488,6 +2489,7 @@ $GLOBALS['lang_admin'] = array
   'key' => 'Schl&uuml;ssel',
   'lang' => 'Sprache',
   'value' => 'Wert',
+
   'editforum' => 'Forum &auml;ndern',
   'delforum' => 'Forum l&ouml;schen',
   'nocarets' => 'Das ^ Symbol ist nicht erlaubt.',
