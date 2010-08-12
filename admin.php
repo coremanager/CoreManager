@@ -47,7 +47,8 @@ function database()
   $char_dbs = $sqlm->query("SELECT * FROM config_character_databases");
   $world_dbs = $sqlm->query("SELECT * FROM config_world_databases");
 
-  $output .= lang('admin','db_warn').'
+  $output .= '
+        <span style="color:red">'.lang('admin','db_warn').'</span>
         <form name="form" action="admin.php" method="GET">
           <input type="hidden" name="section" value="databases">
           <input type="hidden" name="action" value="savedbs">
@@ -1561,11 +1562,13 @@ function servers()
   {
     $output .= '
         <center>
+          <span style="color:red">'.lang('admin','server_warn').'</span>
           <form name="form" action="admin.php" method="GET">
             <input type="hidden" name="section" value="servers">
             <table class="simple" id="admin_servers">
               <tr>
                 <th width="1%">&nbsp;</th>
+                <th width="10%">'.lang('admin', 'realm').'</th>
                 <th width="40%">'.lang('admin', 'host').'</th>
                 <th width="1%">'.lang('admin', 'port').'</th>';
     if ( $core <> 1 )
@@ -1586,6 +1589,7 @@ function servers()
       $output .= '
               <tr>
                 <td style="background-color:'.$color.'"><input type="radio" name="sel_server" value="'.$server['Index'].'"></td>
+                <td style="background-color:'.$color.'"><center>'.$server['Index'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Address'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Port'].'</center></td>';
       if ( $core != 1 )

@@ -257,11 +257,11 @@ function save()
   elseif ($logon_count['COUNT(*)'] > 1)
   {
     $result = $sqlm->query("TRUNCATE TABLE config_logon_database");
-    $result = $sqlm->query("INSERT INTO config_logon_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$host."', '".$port."', '".$name."', '".$user."', '".$pass."', 'utf8')");
+    $result = $sqlm->query("INSERT INTO config_logon_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$host."', '".$port."', '".$user."', '".$name."', '".$pass."', 'utf8')");
   }
   else
   {
-    $result = $sqlm->query("INSERT INTO config_logon_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$host."', '".$port."', '".$name."', '".$user."', '".$pass."', 'utf8')");
+    $result = $sqlm->query("INSERT INTO config_logon_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$host."', '".$port."', '".$user."', '".$name."', '".$pass."', 'utf8')");
   }
 
   $account = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_accounts WHERE Login='".$acctname."'"));

@@ -83,7 +83,7 @@ function add_motd()
 
   $redirect = ( ( isset($_GET['redirect']) ) ? $sql['mgr']->quote_smart($_GET['redirect']) : NULL );
 
-  $msg = ( ( isset($_GET['msg']) ) ? $sql['mgr']->quote_smart($_GET['msg']) : NULL );
+  $msg = $_GET['msg'];
 
   $output .= '
           <script>

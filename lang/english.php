@@ -2448,7 +2448,7 @@ $GLOBALS['lang_admin'] = array
   'remove' => 'Remove',
   'addchar' => 'Add Character Database',
   'addworld' => 'Add World Database',
-  'db_warn' => '<span style="color:red">NOTICE: If you need to change the name of any of these databases, it is advised that you change the name here <b>first</b>, otherwise you will have to alter the database information in the CoreManager Config Database.  Because CoreManager will not function if it cannot find it\'s databases.</span>',
+  'db_warn' => 'NOTICE: If you need to change the name of any of these databases, it is advised that you change the name here <b>first</b>, otherwise you will have to alter the database information in the CoreManager Config Database.  Because CoreManager will not function if it cannot find it\'s databases.',
 
   'addrow' => 'Add New Row',
   'delrow' => 'Delete Selected Row',
@@ -2465,6 +2465,7 @@ $GLOBALS['lang_admin'] = array
   'telnetport' => 'Telnet<br />Port',
   'telnetuser' => 'Telnet<br />User',
   'telnetpass' => 'Telnet<br />Pass',
+  'server_warn' => 'Each entry here must have corresponding entries (based on the Realm value) for Character & World Databases!',
 
   'editacct' => 'Edit Account',
   'login' => 'Login',

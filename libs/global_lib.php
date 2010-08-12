@@ -27,7 +27,109 @@ $output = '';
 //to avoid Strict Standards notices in php 5.1
 if (function_exists ('date_default_timezone_set'))
 {
-  date_default_timezone_set($timezone);
+  date_default_timezone_set(time_offset_to_zone($timezone));
+}
+
+function time_offset_to_zone($offset)
+{
+  switch ( $offset )
+  {
+    case "-12.0":
+      $zone = "Pacific/Kwajalein";
+      break;
+    case "-11.0":
+      $zone = "Pacific/Midway";
+      break;
+    case "-10.0":
+      $zone = "Pacific/Honolulu";
+      break;
+    case "-9.0":
+      $zone = "America/Anchorage";
+      break;
+    case "-8.0":
+      $zone = "America/Los_Angeles";
+      break;
+    case "-7.0":
+      $zone = "America/Boise";
+      break;
+    case "-6.0":
+      $zone = "America/Chicago";
+      break;
+    case "-5.0":
+      $zone = "America/New_York";
+      break;
+    case "-4.0":
+      $zone = "America/Aruba";
+      break;
+    case "-3.5":
+      $zone = "America/St_Johns";
+      break;
+    case "-3.0":
+      $zone = "America/Buenos_Aires";
+      break;
+    case "-2.0":
+      $zone = "Atlantic/South_Georgia";
+      break;
+    case "-1.0":
+      $zone = "Atlantic/Azores";
+      break;
+    case "0.0":
+      $zone = "Europe/London";
+      break;
+    case "1.0":
+      $zone = "Europe/Copenhagen";
+      break;
+    case "2.0":
+      $zone = "Africa/Johannesburg";
+      break;
+    case "3.0":
+      $zone = "Europe/Moscow";
+      break;
+    case "3.5":
+      $zone = "Asia/Tehran";
+      break;
+    case "4.0":
+      $zone = "Asia/Muscat";
+      break;
+    case "4.5":
+      $zone = "Asia/Kabul";
+      break;
+    case "5.0":
+      $zone = "Asia/Karachi";
+      break;
+    case "5.5":
+      $zone = "Asia/Calcutta";
+      break;
+    case "5.75":
+      $zone = "Asia/Kathmandu";
+      break;
+    case "6.0":
+      $zone = "Asia/Colombo";
+      break;
+    case "7.0":
+      $zone = "Asia/Bangkok";
+      break;
+    case "8.0":
+      $zone = "Asia/Singapore";
+      break;
+    case "9.0":
+      $zone = "Asia/Tokyo";
+      break;
+    case "9.5":
+      $zone = "Australia/Darwin";
+      break;
+    case "10.0":
+      $zone = "Pacific/Guam";
+      break;
+    case "11.0":
+      $zone = "Pacific/Kosrae";
+      break;
+    case "12.0":
+      $zone = "Pacific/Fiji";
+      break;
+  }
+    
+  return $zone;
 }
 
 

@@ -21,6 +21,7 @@ function bb2html($text)
                 "[b]", "[/b]", 
                 "[u]", "[/u]", 
                 "[i]", "[/i]",
+                "[strike]", "[/strike]",
                 '[color="', "[/color]",
                 '[size="', "[/size]",
                 '[font="', "[/font]",
@@ -52,6 +53,7 @@ function bb2html($text)
                 "<b>", "</b>", 
                 "<u>", "</u>", 
                 "<i>", "</i>",
+                "<del>", "</del>",
                 "<span style=\"color:", "</span>",
                 "<span style=\"font-size:", "</span>",
                 "<span style=\"font-family:", "</span>",
@@ -90,56 +92,57 @@ function bbcode_add_editor()
   $bbcode_sizes = bbcode_sizes();
   $bbcode_colors = bbcode_colors();
   $bbcode_emoticons = bbcode_emoticons();
-  $output .= "
-        <script type=\"text/javascript\" src=\"libs/js/bbcode.js\"></script>
-        <div style=\"display:block\">
+  $output .= '
+        <script type="text/javascript" src="libs/js/bbcode.js"></script>
+        <div style="display:block">
           <select>
-            <option>".$bbcode_fonts[0]."</option>";
-  for($i=0;$i<count($bbcode_fonts);$i++)
+            <option>'.$bbcode_fonts[0].'</option>';
+  for ( $i=0; $i<count($bbcode_fonts); $i++ )
   {
-    $output .= "
-            <option onclick=\"addbbcode('msg','font','{$bbcode_fonts[$i]}');\" style=\"font-family:'{$bbcode_fonts[$i]}';\">{$bbcode_fonts[$i]}</option>";
+    $output .= '
+            <option onclick="addbbcode(\'msg\',\'font\',\''.$bbcode_fonts[$i].'\');" style="font-family:\''.$bbcode_fonts[$i].'\';">'.$bbcode_fonts[$i].'</option>';
   }
-  $output .= "
+  $output .= '
           </select>
           <select>
-            <option>Size</option>";
-  for($i=0;$i<count($bbcode_sizes);$i++)
+            <option>Size</option>';
+  for ( $i=0; $i<count($bbcode_sizes); $i++ )
   {
-    $output .= "
-            <option onclick=\"addbbcode('msg','size','{$bbcode_sizes[$i][1]}');\">{$bbcode_sizes[$i][0]}</option>";
+    $output .= '
+            <option onclick="addbbcode(\'msg\',\'size\',\''.$bbcode_sizes[$i][1].'\');">'.$bbcode_sizes[$i][0].'</option>';
   }
-  $output .= "
+  $output .= '
           </select>
           <select>
-            <option>".$bbcode_colors[0][1]."</option>";
-  for($i=1;$i<count($bbcode_colors);$i++)
+            <option>'.$bbcode_colors[0][1].'</option>';
+  for ( $i=1; $i<count($bbcode_colors); $i++ )
   {
-    $output .= "
-            <option onclick=\"addbbcode('msg','color','{$bbcode_colors[$i][0]}');\" style=\"color:{$bbcode_colors[$i][0]};background-color:#383838;\">{$bbcode_colors[$i][1]}</option>";
+    $output .= '
+            <option onclick="addbbcode(\'msg\',\'color\',\''.$bbcode_colors[$i][0].'\');" style="color:'.$bbcode_colors[$i][0].';background-color:#383838;">'.$bbcode_colors[$i][1].'</option>';
   }
-  $output .= "
+  $output .= '
           </select>
-          <img src=\"img/editor/bold.gif\" onclick=\"addbbcode('msg','b')\" width=\"21\" height=\"20\" style=\"cursor:pointer;\" alt=\"\" />
-          <img src=\"img/editor/italic.gif\" onclick=\"addbbcode('msg','i')\" width=\"21\" height=\"20\" style=\"cursor:pointer;\" alt=\"\" />
-          <img src=\"img/editor/underline.gif\" onclick=\"addbbcode('msg','u')\" width=\"21\" height=\"20\" style=\"cursor:pointer;\" alt=\"\" />
-          <!-- img src=\"img/editor/justifyleft.gif\" onclick=\"addbbcode('msg','left')\" width=\"21\" height=\"20\" style=\"cursor:pointer;\" alt=\"\" / -->
-          <img src=\"img/editor/justifycenter.gif\" onclick=\"addbbcode('msg','center')\" width=\"21\" height=\"20\" style=\"cursor:pointer;\" alt=\"\" />
-          <!-- img src=\"img/editor/justifyright.gif\" onclick=\"addbbcode('msg','right')\" width=\"21\" height=\"20\" style=\"cursor:pointer;\" alt=\"\" / -->
-          <img src=\"img/editor/image.gif\" onclick=\"add_img('msg')\" width=\"21\" height=\"20\" style=\"cursor:pointer;\" alt=\"\" />
-          <img src=\"img/editor/link.gif\" onclick=\"add_url('msg')\" width=\"21\" height=\"20\" style=\"cursor:pointer;\" alt=\"\" />
-          <!-- img src=\"img/editor/mail.gif\" onclick=\"add_mail('msg')\" width=\"21\" height=\"20\" style=\"cursor:pointer;\" alt=\"\" / -->
-          <img src=\"img/editor/code.gif\" onclick=\"addbbcode('msg','code')\" width=\"21\" height=\"20\" style=\"cursor:pointer;\" alt=\"\" />
-          <img src=\"img/editor/quote.gif\" onclick=\"add_quote('msg')\" width=\"21\" height=\"20\" style=\"cursor:pointer;\" alt=\"\" />
+          <img src="img/editor/bold.gif" onclick="addbbcode(\'msg\',\'b\')" width="21" height="20" style="cursor:pointer;" alt="" />
+          <img src="img/editor/italic.gif" onclick="addbbcode(\'msg\',\'i\')" width="21" height="20" style="cursor:pointer;" alt="" />
+          <img src="img/editor/underline.gif" onclick="addbbcode(\'msg\',\'u\')" width="21" height="20" style="cursor:pointer;" alt="" />
+          <img src="img/editor/strikethrough.gif" onclick="addbbcode(\'msg\',\'strike\')" width="21" height="20" style="cursor:pointer;" alt="" />
+          <!-- img src="img/editor/justifyleft.gif" onclick="addbbcode(\'msg\',\'left\')" width="21" height="20" style="cursor:pointer;" alt="" / -->
+          <img src="img/editor/justifycenter.gif" onclick="addbbcode(\'msg\',\'center\')" width="21" height="20" style="cursor:pointer;" alt="" />
+          <!-- img src="img/editor/justifyright.gif" onclick="addbbcode(\'msg\',\'right\')" width="21" height="20" style="cursor:pointer;" alt="" / -->
+          <img src="img/editor/image.gif" onclick="add_img(\'msg\')" width="21" height="20" style="cursor:pointer;" alt="" />
+          <img src="img/editor/link.gif" onclick="add_url(\'msg\')" width="21" height="20" style="cursor:pointer;" alt="" />
+          <!-- img src="img/editor/mail.gif" onclick="add_mail(\'msg\')" width="21" height="20" style="cursor:pointer;" alt="" / -->
+          <img src="img/editor/code.gif" onclick="addbbcode(\'msg\',\'code\')" width="21" height="20" style="cursor:pointer;" alt="" />
+          <img src="img/editor/quote.gif" onclick="add_quote(\'msg\')" width="21" height="20" style="cursor:pointer;" alt="" />
         </div>
-        <div style=\"display:block;padding-top:5px;\">";
-  for($i=0;$i<count($bbcode_emoticons);$i++)
+        <div style="display:block;padding-top:5px;">';
+  for ( $i=0; $i<count($bbcode_emoticons); $i++ )
   {
-    $output .= "
-          <img src=\"img/emoticons/{$bbcode_emoticons[$i][1]}.gif\" onclick=\"addText('msg','{$bbcode_emoticons[$i][0]}')\" width=\"{$bbcode_emoticons[$i][2]}\" height=\"{$bbcode_emoticons[$i][3]}\" style=\"cursor:pointer;padding:1px;\" alt=\"\" />";
+    $output .= '
+          <img src="img/emoticons/'.$bbcode_emoticons[$i][1].'.gif" onclick="addText(\'msg\',\''.$bbcode_emoticons[$i][0].'\')" width="'.$bbcode_emoticons[$i][2].'" height="'.$bbcode_emoticons[$i][3].'" style="cursor:pointer;padding:1px;" alt="" />';
   }
-  $output .= "
-        </div>";
+  $output .= '
+        </div>';
 }
 
 function bbcode_fonts()
