@@ -1,0 +1,5 @@
+Website: http://coremanager.0fees.net
+Trac: http://trac6.assembla.com/coremanager/timeline
+Ohloh: https://www.ohloh.net/p/coremanager
+
+Please use our Website for support questions.

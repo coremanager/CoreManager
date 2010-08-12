@@ -1,0 +1,15 @@
+Here's a list of the things we're aware are wrong with CoreManager
+================================================================================
+(This doesn't mean that we've given up on them, rather that we haven't gotten to
+them yet)
+================================================================================
+
+When viewed with Firefox, the legend (only the styled ones) of fieldsets are a
+few pixels lower than where they belong.
+
+Items in the right-most column of the Guild Bank contents are a few pixels lower
+than they should be.
+
+Top 100 shows multiple duplicates on Trinity.  (possibly MaNGOS as well)
+
+The Search feature on most pages doesn't work.
