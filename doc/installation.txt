@@ -26,19 +26,20 @@ INSTALLATION:
    2. Create a new database for CoreManager's Configuration data.
 
    3. Create a new database for CoreManager DBC data.
-      (optional, you can use the one you just created for the configs if you like)
+      (optional: you can use the one you just created for the configs if you like)
 
-   4. Import from the highest numbered *_CoreManager.sql (where * is some number) in \SQL\ to the CoreManager
+   4. Import from *_coremanager.sql (where * is some number) in \SQL\ to the CoreManager
       Database you just created.  (Ignore all files in \SQL\outdated\)
 
-   5. Import from the highest numbered *_CoreManager_dbc.sql (where * is some number) in \SQL\ to the CoreManager
+   5. Import from *_coremanager_dbc.sql (where * is some number) in \SQL\ to the CoreManager
       DBC Database you just created.  (Ignore all files in \SQL\outdated\)
 
-   6. Starting with the next higher number from the one of the *_CoreManager.sql file you used above,
-      apply all the .sql files in \SQL\updates\CoreManager_database_updates\ to your CoreManager Database.
+   6. Starting with the next higher number from the one of the *_coremanager.sql file you used above,
+      apply all the .sql files in \SQL\updates\coremanager_database_updates\ to your CoreManager Database.
 
-   7. Starting with the next higher number from the one of the *_CoreManager_dbc.sql file you used above, apply
-      all the .sql files in \SQL\updates\CoreManager_dbc_database_updates\ to your CoreManager Configs database.
+   7. Starting with the next higher number from the one of the *_coremanager_dbc.sql file you used above,
+      apply all the .sql files in \SQL\updates\coremanager_dbc_database_updates\ to your CoreManager
+      DBC Database.
 
    8. Run the included DBC to MySQL Convertor tool. Instructions are in \Tools\README (DBC to MySQL).txt
       (This must be run from Windows XP or greater, but the destination database may be hosted on *Nix)

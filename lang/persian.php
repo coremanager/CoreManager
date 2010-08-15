@@ -292,7 +292,7 @@ $GLOBALS['lang_footer'] = array
 (
   'bugs_to_admin' => 'در صورت مشاهده اشکال یا باگ اطلاع دهید',
   'site_admin' => 'مدیر سایت',
-  'powered' => 'Powered by <a href="http://trac6.assembla.com/coremanager">CoreManager</a>',
+  'powered' => 'Powered by <a href="http://coremanager.0fees.net/">CoreManager</a>',
   'version' => 'نسخه:',
   'revision' => 'تجدید نظر:',
 );

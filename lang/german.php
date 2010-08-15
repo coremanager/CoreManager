@@ -292,7 +292,7 @@ $GLOBALS['lang_footer'] = array
 (
   'bugs_to_admin' => 'Probleme und Fehlerberichte an den ',
   'site_admin' => 'Seitenadministrator',
-  'powered' => 'Powered by <a href="http://trac6.assembla.com/coremanager">CoreManager</a>',
+  'powered' => 'Powered by <a href="http://coremanager.0fees.net/">CoreManager</a>',
   'version' => 'Version:',
   'revision' => 'Revision:',
 );
