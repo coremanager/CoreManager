@@ -95,7 +95,7 @@ function char_inv()
         $result = $sql['char']->query('SELECT 
           containerslot, slot, entry, enchantments AS enchantment, randomprop AS property, count, flags
           FROM playeritems WHERE ownerguid = '.$cid.' ORDER BY containerslot, slot');
-      else
+      elseif ( $core == 2 )
         $result = $sql['char']->query('SELECT 
           bag, slot, item_template AS entry, item, 
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 11), " ", -1) AS creator,
@@ -104,6 +104,14 @@ function char_inv()
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 15), " ", -1) AS count,
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 62), " ", -1) AS durability,
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 22), " ", -1) AS flags
+          FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid = '.$cid.' ORDER BY bag, slot');
+      else
+        $result = $sql['char']->query('SELECT 
+          bag, slot, item_template AS entry, item, 
+          creatorGuid AS creator,
+          enchantments AS enchantment, 
+          randomPropertyId AS property, 
+          count, durability, flags
           FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid = '.$cid.' ORDER BY bag, slot');
 
       //---------------Page Specific Data Starts Here--------------------------
