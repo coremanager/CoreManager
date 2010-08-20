@@ -60,19 +60,19 @@ function database()
                   <table>
                     <tr>
                       <td width=75px>'.lang('admin', 'host').': </td>
-                      <td><input type="text" name="corem_host" value="'.$dbc_db['Address'].'" size="10%"></td>
+                      <td><input type="text" name="dbc_host" value="'.$dbc_db['Address'].'" size="10%"></td>
                       <td width=75px>'.lang('admin', 'port').': </td>
-                      <td><input type="text" name="corem_port" value="'.$dbc_db['Port'].'" size="10%"></td>
+                      <td><input type="text" name="dbc_port" value="'.$dbc_db['Port'].'" size="10%"></td>
                     </tr>
                     <tr>
                       <td width=75px>'.lang('admin', 'user').': </td>
-                      <td><input type="text" name="corem_user" value="'.$dbc_db['User'].'" size="10%"></td>
+                      <td><input type="text" name="dbc_user" value="'.$dbc_db['User'].'" size="10%"></td>
                       <td width=75px>'.lang('admin', 'pass').': </td>
-                      <td><input type="text" name="corem_pass" value="'.$dbc_db['Password'].'" size="10%"></td>
+                      <td><input type="text" name="dbc_pass" value="'.$dbc_db['Password'].'" size="10%"></td>
                     </tr>
                     <tr>
                       <td width=75px>'.lang('admin', 'name').': </td>
-                      <td><input type="text" name="corem_name" value="'.$dbc_db['Name'].'" size="10%"></td>
+                      <td><input type="text" name="dbc_name" value="'.$dbc_db['Name'].'" size="10%"></td>
                     </tr>
                   </table>
                 </fieldset>
@@ -187,12 +187,27 @@ function savedbs()
   $sqlm = new SQL;
   $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
-  $corem_host = $sqlm->quote_smart($_GET['corem_host']);
-  $corem_port = $sqlm->quote_smart($_GET['corem_port']);
-  $corem_user = $sqlm->quote_smart($_GET['corem_user']);
-  $corem_pass = $sqlm->quote_smart($_GET['corem_pass']);
-  $corem_name = $sqlm->quote_smart($_GET['corem_name']);
-  $result_arcm = $sqlm->query("UPDATE config_dbc_database SET Address='".$corem_host."', Port='".$corem_port."', User='".$corem_user."', Password='".$corem_pass."', Name='".$corem_name."' WHERE `Index`=1");
+  $dbc_host = $sqlm->quote_smart($_GET['dbc_host']);
+  $dbc_port = $sqlm->quote_smart($_GET['dbc_port']);
+  $dbc_user = $sqlm->quote_smart($_GET['dbc_user']);
+  $dbc_pass = $sqlm->quote_smart($_GET['dbc_pass']);
+  $dbc_name = $sqlm->quote_smart($_GET['dbc_name']);
+
+  $dbc_count = $sqlm->fetch_assoc($sqlm->query("SELECT COUNT(*) FROM config_dbc_database"));
+  if ($dbc_count['COUNT(*)'] == 1)
+  {
+    $dbc_upper = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_dbc_database"));
+    $result = $sqlm->query("UPDATE config_dbc_database SET Address='".$dbc_host."', Port='".$dbc_port."', Name='".$dbc_name."', User='".$dbc_user."', Password='".$dbc_pass."', Encoding='utf8' WHERE `Index`='".$dbc_upper['MAX(`Index`)']."'");
+  }
+  elseif ($dbc_count['COUNT(*)'] > 1)
+  {
+    $result = $sqlm->query("TRUNCATE TABLE config_dbc_database");
+    $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbc_host."', '".$dbc_port."', '".$dbc_user."', '".$dbc_name."', '".$dbc_pass."', 'utf8')");
+  }
+  else
+  {
+    $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbc_host."', '".$dbc_port."', '".$dbc_user."', '".$dbc_name."', '".$dbc_pass."', 'utf8')");
+  }
 
   $logon_host = $sqlm->quote_smart($_GET['logon_host']);
   $logon_port = $sqlm->quote_smart($_GET['logon_port']);
@@ -201,12 +216,12 @@ function savedbs()
   $logon_name = $sqlm->quote_smart($_GET['logon_name']);
   $result_logon = $sqlm->query("UPDATE config_logon_database SET Address='".$logon_host."', Port='".$logon_port."', User='".$logon_user."', Password='".$logon_pass."', Name='".$logon_name."' WHERE `Index`=1");
 
-  $char_realms = $sqlm->quote_smart($_GET['char_realm']);
-  $char_hosts = $sqlm->quote_smart($_GET['char_host']);
-  $char_ports = $sqlm->quote_smart($_GET['char_port']);
-  $char_users = $sqlm->quote_smart($_GET['char_user']);
-  $char_passes = $sqlm->quote_smart($_GET['char_pass']);
-  $char_names = $sqlm->quote_smart($_GET['char_name']);
+  $char_realms = ( ( isset($_GET['char_realm']) ) ? $sqlm->quote_smart($_GET['char_realm']) : NULL );
+  $char_hosts = ( ( isset($_GET['char_host']) ) ? $sqlm->quote_smart($_GET['char_host']) : NULL );
+  $char_ports = ( ( isset($_GET['char_port']) ) ? $sqlm->quote_smart($_GET['char_port']) : NULL );
+  $char_users = ( ( isset($_GET['char_user']) ) ? $sqlm->quote_smart($_GET['char_user']) : NULL );
+  $char_passes = ( ( isset($_GET['char_pass']) ) ? $sqlm->quote_smart($_GET['char_pass']) : NULL );
+  $char_names = ( ( isset($_GET['char_name']) ) ? $sqlm->quote_smart($_GET['char_name']) : NULL );
 
   for ( $i=0; $i<count($char_hosts); $i++ )
   {
@@ -215,13 +230,13 @@ function savedbs()
       $result_char = $sqlm->query("DELETE FROM config_character_databases WHERE `Index`='".$char_realms[$i]."'");
   }
 
-  $world_realms = $sqlm->quote_smart($_GET['world_realm']);
-  $world_hosts = $sqlm->quote_smart($_GET['world_host']);
-  $world_ports = $sqlm->quote_smart($_GET['world_port']);
-  $world_users = $sqlm->quote_smart($_GET['world_user']);
-  $world_passes = $sqlm->quote_smart($_GET['world_pass']);
-  $world_names = $sqlm->quote_smart($_GET['world_name']);
-    
+  $world_realms = ( ( isset($_GET['world_realm']) ) ? $sqlm->quote_smart($_GET['world_realm']) : NULL );
+  $world_hosts = ( ( isset($_GET['world_host']) ) ? $sqlm->quote_smart($_GET['world_host']) : NULL );
+  $world_ports = ( ( isset($_GET['world_port']) ) ? $sqlm->quote_smart($_GET['world_port']) : NULL );
+  $world_users = ( ( isset($_GET['world_user']) ) ? $sqlm->quote_smart($_GET['world_user']) : NULL );
+  $world_passes = ( ( isset($_GET['world_pass']) ) ? $sqlm->quote_smart($_GET['world_pass']) : NULL );
+  $world_names = ( ( isset($_GET['world_name']) ) ? $sqlm->quote_smart($_GET['world_name']) : NULL );
+
   for ( $i=0; $i<count($world_hosts); $i++ )
   {
     $result_world = $sqlm->query("UPDATE config_world_databases SET Address='".$world_hosts[$i]."', Port='".$world_ports[$i]."', User='".$world_users[$i]."', Password='".$world_passes[$i]."', Name='".$world_names[$i]."' WHERE `Index`='".$world_realms[$i]."'");
