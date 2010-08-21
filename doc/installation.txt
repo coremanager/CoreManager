@@ -57,17 +57,12 @@ CONFIGURATION:
    4. Configure the setting for $db_type.
    5. Save and close \configs\config.php.
 
-   6. Open setup.php for editing.
-   7. Configure all 5 entries for $corem_db.
-   8. Configure the setting for $db_type.
-   9. Save and close setup.php.
+   6. Open {URL to your server}/setup.php in your browser.  (e.g. http://127.0.0.1/setup.php)
+   7. Enter the values indicated.
+   8. Click "Save Changes".
 
-  10. Open {URL to your server}/setup.php in your browser.  (e.g. http://127.0.0.1/setup.php)
-  11. Enter the values indicated.
-  12. Click "Save Changes".
-
-  13. It will take you to the ACP Login Screen.
+   9. It will take you to the ACP Login Screen.
       You'll be told you don't have permission; IN THIS CASE, IT IS ACTUALLY OK.
 
-  14. Configure the settings for the DBC, Character, and World Databases in the Databases tab.
-  15. Make appropriate changes in the 'Servers' tab in the ACP.
+  10. Configure the settings for the DBC, Character, and World Databases in the Databases tab.
+  11. Make appropriate changes in the 'Servers' tab in the ACP.

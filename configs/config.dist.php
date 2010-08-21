@@ -46,12 +46,4 @@ $corem_db['encoding'] = 'utf8';                   // SQL connection encoding
 
 $db_type          = 'MySQL';
 
-//#############################################################################
-//
-// DO NOT CHANGE ANYTHING AFTER THIS POINT
-//
-//#############################################################################
-
-require_once 'libs/config_lib.php';
-
 ?>

@@ -36,6 +36,8 @@ else
         please copy <code>\'configs/config.dist.php\'</code> to
         <code>\'configs/config.php\'</code> and make appropriate changes.');
 
+require_once("libs/config_lib.php");
+
 //----------------- Make sure a valid core has been selected ------------------
 
 if ( ( $core < 1 ) || ( $core > 3 ) )

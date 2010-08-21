@@ -17,29 +17,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-$corem_db['addr']     = '127.0.0.1:3306';         // SQL server IP:port your CoreManager DB is located on
-$corem_db['user']     = 'root';                   // SQL server login your CoreManager DB is located on
-$corem_db['pass']     = 'password';               // SQL server pass your CoreManager DB is located on
-$corem_db['name']     = 'db name';                // CoreManager DB name
-$corem_db['encoding'] = 'utf8';                   // SQL connection encoding
 
-//#############################################################################
-//---- SQL Configuration ----
-//
-//  SQL server type  :
-//  'MySQL'   - Mysql
-//  'PgSQL'   - PostgreSQL
-//  'MySQLi'  - MySQLi
-//  'SQLLite' - SQLite
-
-$db_type          = 'MySQL';
-
-//#############################################################################
-//
-// DO NOT CHANGE ANYTHING AFTER THIS POINT
-//
-//#############################################################################
-
+require_once("configs/config.php");
 
 //#############################################################################
 // HEADER SECTION

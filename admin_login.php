@@ -23,6 +23,7 @@ if (ini_get('session.auto_start'));
 else session_start();
 
 require_once("configs/config.php");
+require_once("libs/config_lib.php");
 
 if (isset($_COOKIE['lang']))
 {

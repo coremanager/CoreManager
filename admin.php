@@ -26,6 +26,7 @@ else
   session_start();
 
 require_once("configs/config.php");
+require_once("libs/config_lib.php");
 require_once("admin/admin_lib.php");
 require_once("libs/lang_lib.php");
 
