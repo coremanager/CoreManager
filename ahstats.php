@@ -208,12 +208,25 @@ function browse_auctions()
       LEFT JOIN characters ON auctions.owner=characters.guid
       LEFT JOIN playeritems ON auctions.item-4611686018427387904=playeritems.guid
       ".$seach_filter." ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
-  else
+  elseif ( $core == 2 )
     $query = "SELECT characters.name AS owner_name, auctionhouse.item_template AS item_entry,
       auctionhouse.itemowner AS owner, item_template.name AS itemname,
       auctionhouse.buyoutprice AS buyout, auctionhouse.time-unix_timestamp() AS time,
       c2.name AS bidder_name, auctionhouse.buyguid AS bidder, auctionhouse.lastbid AS bid, auctionhouse.startbid,
       SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ',15), ' ',-1) AS qty,
+      characters.race AS seller_race, c2.race AS buyer_race
+      FROM characters, item_instance, ".$world_db[$realm_id]['name'].".item_template, auctionhouse
+      LEFT JOIN characters c2 ON c2.guid=auctionhouse.buyguid
+      WHERE auctionhouse.itemowner=characters.guid
+        AND auctionhouse.item_template=item_template.entry
+        AND auctionhouse.itemguid=item_instance.guid
+      ".$search_filter." ".$order_side." ORDER BY auctionhouse.".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
+  else
+    $query = "SELECT characters.name AS owner_name, auctionhouse.item_template AS item_entry,
+      auctionhouse.itemowner AS owner, item_template.name AS itemname,
+      auctionhouse.buyoutprice AS buyout, auctionhouse.time-unix_timestamp() AS time,
+      c2.name AS bidder_name, auctionhouse.buyguid AS bidder, auctionhouse.lastbid AS bid, auctionhouse.startbid,
+      item_instance.count AS qty,
       characters.race AS seller_race, c2.race AS buyer_race
       FROM characters, item_instance, ".$world_db[$realm_id]['name'].".item_template, auctionhouse
       LEFT JOIN characters c2 ON c2.guid=auctionhouse.buyguid
