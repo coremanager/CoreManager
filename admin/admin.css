@@ -16,6 +16,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/* General */
+a:link img, a:visited img
+{
+  text-decoration: none;
+  border: 0px;
+  margin-left: 5px;
+}
+a:link, a:visited
+{
+  text-decoration: none;
+  color: #0000FF;
+}
+
 /* Menu Tabs */
 #header ul
 {
@@ -247,7 +260,7 @@
 }
 #admin_edit_top_menu_nameaction
 {
-	width:800px;
+	width:900px;
 }
 #admin_edit_top_menu_name
 {
@@ -259,7 +272,7 @@
 }
 #admin_edit_top_menu_submenus
 {
-	width:800px;
+	width:900px;
 }
 #admin_edit_menu_field
 {

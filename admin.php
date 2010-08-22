@@ -1447,19 +1447,22 @@ function gmlevels()
         <center>
           <form name="form" action="admin.php" method="GET">
             <input type="hidden" name="section" value="gmlevels">
+            <input type="hidden" name="edit_btn" value="edit">
             <table class="simple">
               <tr>
-                <th>Edit</th>
-                <th>Security Level</th>
-                <th>Full Name</th>
-                <th>Short Name</th>
+                <th>'.lang('admin','edit').'</th>
+                <th>'.lang('admin','remove').'</th>
+                <th>'.lang('admin','seclvl').'</th>
+                <th>'.lang('admin','fullname').'</th>
+                <th>'.lang('admin','shortname').'</th>
               </tr>';
     $color = "#EEEEEE";
     while( $gm_lvl = $sqlm->fetch_assoc($gm_lvls) )
     {
       $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><input type="radio" name="edit" value="'.$gm_lvl['Index'].'"></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&edit='.$gm_lvl['Index'].'&edit_btn=Edit"><img src="/img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&delrow=deleterow&edit='.$gm_lvl['Index'].'&edit_btn=Edit"><img src="/img/aff_cross.png" /></a></center></td>
                 <td style="background-color:'.$color.'">'.$gm_lvl['Security_Level'].'</td>
                 <td style="background-color:'.$color.'">'.$gm_lvl['Full_Name'].'</td>
                 <td style="background-color:'.$color.'">'.$gm_lvl['Short_Name'].'</td>
@@ -1470,13 +1473,19 @@ function gmlevels()
       else
         $color = "#EEEEEE";
     }
+    $output .= '
+              <tr>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&edit_btn=Edit&addrow=addrow"><img src="/img/add.png" /></a></center></td>
+                <td style="background-color:'.$color.'" colspan="4"><a href="admin.php?section=gmlevels&edit_btn=Edit&addrow=addrow">'.lang('admin', 'addrow').'</a></td>
+              </td>
+          ';
 
     $output .= '
             </table>
-            <input type="checkbox" name="addrow">'.lang('admin', 'addrow').'
+            <!-- input type="checkbox" name="addrow">'.lang('admin', 'addrow').'
             <input type="checkbox" name="delrow">'.lang('admin', 'delrow').'
             <br />
-            <input type="submit" name="edit_btn" value="'.lang('admin', 'edit').'">
+            <input type="submit" name="addrow" value="'.lang('admin', 'addrow').'" -->
           </form>
         </center>';
     }
@@ -1517,10 +1526,6 @@ function gmlevels()
             <input type="hidden" name="index" value="'.$gm_level['Index'].'">
             <fieldset id="admin_gm_level">
             <table>
-              <tr>
-                <td width="45%" id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'gmlvl').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'gmlvl').'</a>: </td>
-                <td><input type="text" name="gmlvl" value="'.$gm_level['GM_Level'].'"></td>
-              </tr>
               <tr>
                 <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'seclvl').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'seclvl').'</a>: </td>
                 <td><input type="text" name="seclvl" value="'.$gm_level['Security_Level'].'"></td>
@@ -1583,7 +1588,8 @@ function servers()
             <input type="hidden" name="section" value="servers">
             <table class="simple" id="admin_servers">
               <tr>
-                <th width="1%">&nbsp;</th>
+                <th width="5%">'.lang('admin', 'edit').'</th>
+                <th width="5%">'.lang('admin', 'remove').'</th>
                 <th width="10%">'.lang('admin', 'realm').'</th>
                 <th width="40%">'.lang('admin', 'host').'</th>
                 <th width="1%">'.lang('admin', 'port').'</th>';
@@ -1604,7 +1610,8 @@ function servers()
     {
       $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><input type="radio" name="sel_server" value="'.$server['Index'].'"></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server['Index'].'&editserver=editserver"><img src="/img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server['Index'].'&delserver=deleteserver"><img src="/img/aff_cross.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Index'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Address'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Port'].'</center></td>';
@@ -1626,12 +1633,17 @@ function servers()
       else
         $color = "#EEEEEE";
     }
+    $output .= '
+              <tr>
+                <td style="background-color:'.$color.'"><a href="admin.php?section=servers&addserver=addserver"><img src="/img/add.png" /></a></td>
+                <td style="background-color:'.$color.'" colspan="'.( ( $core == 1 ) ? '9' : '8' ).'"><a href="admin.php?section=servers&addserver=addserver">'.lang('admin', 'addserver').'</a></td>
+              </tr>';
 
     $output .= '
             </table>
-            <input type="submit" name="editserver" value="'.lang('admin', 'editserver').'">
+            <!-- input type="submit" name="editserver" value="'.lang('admin', 'editserver').'">
             <input type="submit" name="addserver" value="'.lang('admin', 'addserver').'">
-            <input type="submit" name="delserver" value="'.lang('admin', 'delserver').'">
+            <input type="submit" name="delserver" value="'.lang('admin', 'delserver').'" -->
           </form>
         </center>';
   }
@@ -1767,7 +1779,8 @@ function menus()
             <input type="hidden" name="section" value="menus">
             <table class="simple" id="admin_top_menus">
               <tr>
-                <th>&nbsp;</th>
+                <th>'.lang('admin', 'edit').'</th>
+                <th>'.lang('admin', 'remove').'</th>
                 <th>'.lang('admin', 'name').': </th>
                 <th>'.lang('admin', 'action').': </th>
               </tr>';
@@ -1776,7 +1789,8 @@ function menus()
       {
         $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><input type="radio" name="top_menu" value="'.$top_menu['Index'].'"></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_menu='.$top_menu['Index'].'&editmenu=editmenu"><img src="/img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_menu='.$top_menu['Index'].'&delmenu=delmenu"><img src="/img/aff_cross.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center>'.$top_menu['Name'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$top_menu['Action'].'</center></td>
               </tr>';
@@ -1786,10 +1800,15 @@ function menus()
           $color = "#EEEEEE";
       }
       $output .= '
+              <tr>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&addmenu=addmenu"><img src="/img/add.png" /></a></center></td>
+                <td style="background-color:'.$color.'" colspan="3"><a href="admin.php?section=menus&addmenu=addmenu">'.lang('admin', 'addmenu').'</a></td>
+              </tr>';
+      $output .= '
             </table>
-            <input type="submit" name="editmenu" value="'.lang('admin', 'editmenu').'">
+            <!-- input type="submit" name="editmenu" value="'.lang('admin', 'editmenu').'">
             <input type="submit" name="addmenu" value="'.lang('admin', 'addmenu').'">
-            <input type="submit" name="delmenu" value="'.lang('admin', 'delmenu').'">
+            <input type="submit" name="delmenu" value="'.lang('admin', 'delmenu').'" -->
           </form>
         </center>';
       break;
@@ -1818,7 +1837,8 @@ function menus()
             </table>
             <table class="simple" id="admin_edit_top_menu_submenus">
               <tr>
-                <th>&nbsp;</th>
+                <th>'.lang('admin', 'edit').'</th>
+                <th>'.lang('admin', 'remove').'</th>
                 <th>'.lang('admin', 'name').'</th>
                 <th>'.lang('admin', 'action').'</th>
                 <th>'.lang('admin', 'view').'</th>
@@ -1833,7 +1853,8 @@ function menus()
       {
         $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><input type="radio" name="menu_item" value="'.$menu['Index'].'"></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&menu_item='.$menu['Index'].'&editmenu_item=editmenuitem"><img src="/img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&menu_item='.$menu['Index'].'&delmenu_item=delmenuitem"><img src="/img/aff_cross.png" /></a></center></td>
                 <td width="15%" style="background-color:'.$color.'"><center>'.$menu['Name'].'</center></td>
                 <td width="35%" style="background-color:'.$color.'"><center>'.$menu['Action'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.sec_level_name($menu['View']).' ('.$menu['View'].')'.'</center></td>
@@ -1848,11 +1869,16 @@ function menus()
           $color = "#EEEEEE";
       }
       $output .= '
+              <tr>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&addmenu_item=addmenuitem"><img src="/img/add.png" /></a></center></td>
+                <td style="background-color:'.$color.'" colspan="8"><a href="admin.php?section=menus&top_index='.$top_menu.'&addmenu_item=addmenuitem">'.lang('admin', 'addmenu_item').'</a></td>
+              </tr>';
+      $output .= '
             </table>
-            <input type="submit" name="editmenu_item" value="'.lang('admin', 'editmenu_item').'">
-            <input type="submit" name="addmenu_item" value="'.lang('admin', 'addmenu_item').'">
+            <!-- input type="submit" name="editmenu_item" value="'.lang('admin', 'editmenu_item').'">
+            <input type="submit" name="addmenu_item" value="'.lang('admin', 'addmenu_item').'" -->
             <input type="submit" name="savemenu" value="'.lang('admin', 'save').'">
-            <input type="submit" name="delmenu_item" value="'.lang('admin', 'delmenu_item').'">
+            <!-- input type="submit" name="delmenu_item" value="'.lang('admin', 'delmenu_item').'" -->
           </form>
         </center>';
       break;
@@ -1862,6 +1888,9 @@ function menus()
       $menu_item = $sqlm->quote_smart($_GET['menu_item']);
       $menu = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_menus WHERE `Index`='".$menu_item."'"));
       $sec_list = sec_level_list();
+      $top_menu_query = "SELECT * FROM config_top_menus";
+      $top_menu_result = $sqlm->query($top_menu_query);
+
       $output .= '
         <center>
           <form name="form" action="admin.php" method="GET">
@@ -1872,7 +1901,17 @@ function menus()
               <table id="help" id="admin_edit_menu">
                 <tr>
                   <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'menu').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'menu').'</a>: </td>
-                  <td><input type="text" name="menu" value="'.$menu['Menu'].'" id="admin_edit_menu_fields"></td>
+                  <td>
+                    <select name="menu">';
+                    //<input type="text" name="menu" value="'.$menu['Menu'].'" id="admin_edit_menu_fields">
+      while ( $row = $sqlm->fetch_assoc($top_menu_result) )
+      {
+        $output .= '
+                      <option value='.$row['Index'].'" '.( ( $row['Index'] == $menu['Menu'] ) ? 'selected="selected"' : '').' id="admin_edit_menu_fields">'.$row['Name'].'</option>';
+      }
+      $output .= '
+                    </select>
+                  </td>
                 </tr>
                 <tr>
                   <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'menuname').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'name').'</a>: </td>
@@ -1987,16 +2026,17 @@ function menus()
     {
       $top_index = $sqlm->quote_smart($_GET['top_index']);
       $result = $sqlm->query("INSERT INTO config_menus (Menu, Action, Name) VALUES ('".$top_index."', '','')");
-      redirect("admin.php?section=menus");
+      redirect("admin.php?section=menus&top_menu=".$top_index."&editmenu=editmenu");
       break;
     }
     case "delitem":
     {
       $menu_item = $sqlm->quote_smart($_GET['menu_item']);
+      $top_index = $sqlm->quote_smart($_GET['top_index']);
       if ( is_numeric($menu_item) )
       {
         $result = $sqlm->query("DELETE FROM config_menus WHERE `Index`='".$menu_item."'");
-        redirect("admin.php?section=menus");
+        redirect("admin.php?section=menus&top_menu=".$top_index."&editmenu=editmenu");
       }
       else
         redirect("admin.php?section=menus&error=1");
@@ -2076,15 +2116,17 @@ function forum()
             </table>
             <table class="simple" id="admin_top_menus">
               <tr>
-                <th>&nbsp;</th>
-                <th>'.lang('admin', 'name').': </th>
+                <th width="15%">'.lang('admin', 'edit').'</th>
+                <th width="5%">'.lang('admin', 'remove').'</th>
+                <th>'.lang('admin', 'name').'</th>
               </tr>';
       $color = "#EEEEEE";
       while ( $cat = $sqlm->fetch_assoc($cats) )
       {
         $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><input type="radio" name="category" value="'.$cat['Index'].'"></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat['Index'].'&editforum=editforum"><img src="/img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat['Index'].'&delforum=delforum"><img src="/img/aff_cross.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center>'.$cat['Name'].'</center></td>
               </tr>';
         if ( $color == "#EEEEEE" )
@@ -2093,10 +2135,15 @@ function forum()
           $color = "#EEEEEE";
       }
       $output .= '
+              <tr>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&addforum=addforum"><img src="/img/add.png" /></a></center></td>
+                <td style="background-color:'.$color.'" colspan="2"><a href="admin.php?section=forum&addforum=addforum">'.lang('admin', 'addforum').'</a></td>
+              </tr>';
+      $output .= '
             </table>
-            <input type="submit" name="editforum" value="'.lang('admin', 'editforum').'">
+            <!-- input type="submit" name="editforum" value="'.lang('admin', 'editforum').'">
             <input type="submit" name="addforum" value="'.lang('admin', 'addforum').'">
-            <input type="submit" name="delforum" value="'.lang('admin', 'delforum').'">
+            <input type="submit" name="delforum" value="'.lang('admin', 'delforum').'" -->
           </form>
         </center>';
       break;
@@ -2122,7 +2169,8 @@ function forum()
             </table>
             <table class="simple" id="admin_edit_top_menu_submenus">
               <tr>
-                <th>&nbsp;</th>
+                <th>'.lang('admin', 'edit').'</th>
+                <th>'.lang('admin', 'remove').'</th>
                 <th>'.lang('admin', 'name').'</th>
                 <th>'.lang('admin', 'desc').'</th>
                 <th>'.lang('admin', 'sideaccess').'</th>
@@ -2136,7 +2184,8 @@ function forum()
       {
         $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><input type="radio" name="forum_item" value="'.$forum['Index'].'"></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&forum_item='.$forum['Index'].'&editforum_item=editforumsection"><img src="/img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&forum_item='.$forum['Index'].'&delforum_item=delforumsection"><img src="/img/aff_cross.png" /></a></center></td>
                 <td width="25%" style="background-color:'.$color.'"><center>'.$forum['Name'].'</center></td>
                 <td width="25%" style="background-color:'.$color.'"><center>'.$forum['Desc'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$forum['Side_Access'].'</center></td>
@@ -2150,11 +2199,16 @@ function forum()
           $color = "#EEEEEE";
       }
       $output .= '
+              <tr>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&addforum_item=addforumsection"><img src="/img/add.png" /></a></center></td>
+                <td style="background-color:'.$color.'" colspan="7"><a href="admin.php?section=forum&category='.$cat_id.'&addforum_item=addforumsection">'.lang('admin', 'addforum_item').'</a></td>
+              </tr>';
+      $output .= '
             </table>
-            <input type="submit" name="editforum_item" value="'.lang('admin', 'editforum_item').'">
-            <input type="submit" name="addforum_item" value="'.lang('admin', 'addforum_item').'">
+            <!-- input type="submit" name="editforum_item" value="'.lang('admin', 'editforum_item').'">
+            <input type="submit" name="addforum_item" value="'.lang('admin', 'addforum_item').'" -->
             <input type="submit" name="saveforum" value="'.lang('admin', 'save').'">
-            <input type="submit" name="delforum_item" value="'.lang('admin', 'delforum_item').'">
+            <!-- input type="submit" name="delforum_item" value="'.lang('admin', 'delforum_item').'" -->
           </form>
         </center>';
       break;
@@ -2164,6 +2218,9 @@ function forum()
       $forum_item = $sqlm->quote_smart($_GET['forum_item']);
       $forum = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_forums WHERE `Index`='".$forum_item."'"));
       $sec_list = sec_level_list();
+      $cat_list_query = "SELECT * FROM config_forum_categories";
+      $cat_list_result = $sqlm->query($cat_list_query);
+
       $output .= '
         <center>
           <form name="form" action="admin.php" method="GET">
@@ -2174,7 +2231,17 @@ function forum()
               <table id="help" id="admin_edit_menu">
                 <tr>
                   <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'cat').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'cat').'</a>: </td>
-                  <td><input type="text" name="category" value="'.$forum['Category'].'" id="admin_edit_menu_fields"></td>
+                  <td>
+                    <select name="menu">';
+                    //<input type="text" name="category" value="'.$forum['Category'].'" id="admin_edit_menu_fields">
+      while ( $row = $sqlm->fetch_assoc($cat_list_result) )
+      {
+        $output .= '
+                      <option value='.$row['Index'].'" '.( ( $row['Index'] == $forum['Category'] ) ? 'selected="selected"' : '').' id="admin_edit_menu_fields">'.$row['Name'].'</option>';
+      }
+      $output .= '
+                    </select>
+                  </td>
                 </tr>
                 <tr>
                   <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'forumname').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'name').'</a>: </td>
@@ -2248,19 +2315,19 @@ function forum()
       $max = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_forum_categories"));
       $max = $max['MAX(`Index`)'] + 1;
       $result = $sqlm->query("INSERT INTO config_forum_categories (`Index`, Name) VALUES ('".$max."', '')");
-      redirect("admin.php?section=forums");
+      redirect("admin.php?section=forum");
       break;
     }
     case "delforum":
     {
-      $category = $sqlm->quote_smart($_GET['top_menu']);
+      $category = $sqlm->quote_smart($_GET['category']);
       if ( is_numeric($category) )
       {
         $result = $sqlm->query("DELETE FROM config_forum_categories WHERE `Index`='".$category."'");
-        redirect("admin.php?section=forums");
+        redirect("admin.php?section=forum");
       }
       else
-        redirect("admin.php?section=forums&error=1");
+        redirect("admin.php?section=forum&error=1");
       break;
     }
     case "saveforum":
@@ -2268,30 +2335,31 @@ function forum()
       $category = $sqlm->quote_smart($_GET['category']);
       $category_name = $sqlm->quote_smart($_GET['top_name']);
       $result = $sqlm->query("UPDATE config_forum_categories SET Name='".$category_name."' WHERE `Index`='".$category."'");
-      redirect("admin.php?section=forums");
+      redirect("admin.php?section=forum");
       break;
     }
     case "additem":
     {
       $category = $sqlm->quote_smart($_GET['category']);
-      $result = $sqlm->query("INSERT INTO config_forums (Category, Name, Desc, Side_Access) VALUES ('".$category."', '', '', '', '')");
-      redirect("admin.php?section=forums");
+      $result = $sqlm->query("INSERT INTO config_forums (Category, Name, `Desc`, Side_Access) VALUES ('".$category."', '', '', '')");
+      redirect("admin.php?section=forum&category=".$category."&editforum=editforum");
       break;
     }
     case "delitem":
     {
+      $category = $sqlm->quote_smart($_GET['category']);
       $forum_item = $sqlm->quote_smart($_GET['forum_item']);
       if ( is_numeric($forum_item) )
       {
         $result = $sqlm->query("DELETE FROM config_forums WHERE `Index`='".$forum_item."'");
-        redirect("admin.php?section=forums");
+        redirect("admin.php?section=forum&category=".$category."&editforum=editforum");
       }
       else
-        redirect("admin.php?section=forums&error=1");
+        redirect("admin.php?section=forum&error=1");
       break;
     }
     default:
-      redirect("admin.php?section=forums&error=1");
+      redirect("admin.php?section=forum&error=1");
       break;
   }
 }
@@ -2348,7 +2416,7 @@ function accounts()
             <input type="hidden" name="section" value="accounts">
             <table class="simple" id="admin_accounts">
               <tr>
-                <th width="5%">&nbsp;</th>
+                <th width="10%">'.lang('admin', 'edit').'</th>
                 <th>'.lang('admin', 'login').'</th>
                 <th>'.lang('admin', 'screenname').'</th>
                 <th width="20%">'.lang('admin', 'seclvl').'</th>
@@ -2361,7 +2429,7 @@ function accounts()
       $sn_web = $sqlm->fetch_assoc($acct_result);
       $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><input type="radio" name="acct" value="'.$acct['login'].'"></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=accounts&acct='.$acct['login'].'&editacct=editaccount"><img src="/img/edit.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center>'.ucfirst(strtolower($acct['login'])).'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$sn_web['ScreenName'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$sn_web['SecurityLevel'].'</center></td>
@@ -2374,7 +2442,7 @@ function accounts()
     }
     $output .= '
             </table>
-            <input type="submit" name="editacct" value="'.lang('admin', 'editacct').'">
+            <!-- input type="submit" name="editacct" value="'.lang('admin', 'editacct').'" -->
           </form>
         </center>';
   }
