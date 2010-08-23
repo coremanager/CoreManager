@@ -1461,8 +1461,8 @@ function gmlevels()
     {
       $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&edit='.$gm_lvl['Index'].'&edit_btn=Edit"><img src="/img/edit.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&delrow=deleterow&edit='.$gm_lvl['Index'].'&edit_btn=Edit"><img src="/img/aff_cross.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&edit='.$gm_lvl['Index'].'&edit_btn=Edit"><img src="img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&delrow=deleterow&edit='.$gm_lvl['Index'].'&edit_btn=Edit"><img src="img/aff_cross.png" /></a></center></td>
                 <td style="background-color:'.$color.'">'.$gm_lvl['Security_Level'].'</td>
                 <td style="background-color:'.$color.'">'.$gm_lvl['Full_Name'].'</td>
                 <td style="background-color:'.$color.'">'.$gm_lvl['Short_Name'].'</td>
@@ -1475,7 +1475,7 @@ function gmlevels()
     }
     $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&edit_btn=Edit&addrow=addrow"><img src="/img/add.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&edit_btn=Edit&addrow=addrow"><img src="img/add.png" /></a></center></td>
                 <td style="background-color:'.$color.'" colspan="4"><a href="admin.php?section=gmlevels&edit_btn=Edit&addrow=addrow">'.lang('admin', 'addrow').'</a></td>
               </td>
           ';
@@ -1610,8 +1610,8 @@ function servers()
     {
       $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server['Index'].'&editserver=editserver"><img src="/img/edit.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server['Index'].'&delserver=deleteserver"><img src="/img/aff_cross.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server['Index'].'&editserver=editserver"><img src="img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server['Index'].'&delserver=deleteserver"><img src="img/aff_cross.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Index'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Address'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Port'].'</center></td>';
@@ -1635,7 +1635,7 @@ function servers()
     }
     $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><a href="admin.php?section=servers&addserver=addserver"><img src="/img/add.png" /></a></td>
+                <td style="background-color:'.$color.'"><a href="admin.php?section=servers&addserver=addserver"><img src="img/add.png" /></a></td>
                 <td style="background-color:'.$color.'" colspan="'.( ( $core == 1 ) ? '9' : '8' ).'"><a href="admin.php?section=servers&addserver=addserver">'.lang('admin', 'addserver').'</a></td>
               </tr>';
 
@@ -1789,8 +1789,8 @@ function menus()
       {
         $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_menu='.$top_menu['Index'].'&editmenu=editmenu"><img src="/img/edit.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_menu='.$top_menu['Index'].'&delmenu=delmenu"><img src="/img/aff_cross.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_menu='.$top_menu['Index'].'&editmenu=editmenu"><img src="img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_menu='.$top_menu['Index'].'&delmenu=delmenu"><img src="img/aff_cross.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center>'.$top_menu['Name'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$top_menu['Action'].'</center></td>
               </tr>';
@@ -1801,7 +1801,7 @@ function menus()
       }
       $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&addmenu=addmenu"><img src="/img/add.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&addmenu=addmenu"><img src="img/add.png" /></a></center></td>
                 <td style="background-color:'.$color.'" colspan="3"><a href="admin.php?section=menus&addmenu=addmenu">'.lang('admin', 'addmenu').'</a></td>
               </tr>';
       $output .= '
@@ -1853,8 +1853,8 @@ function menus()
       {
         $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&menu_item='.$menu['Index'].'&editmenu_item=editmenuitem"><img src="/img/edit.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&menu_item='.$menu['Index'].'&delmenu_item=delmenuitem"><img src="/img/aff_cross.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&menu_item='.$menu['Index'].'&editmenu_item=editmenuitem"><img src="img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&menu_item='.$menu['Index'].'&delmenu_item=delmenuitem"><img src="img/aff_cross.png" /></a></center></td>
                 <td width="15%" style="background-color:'.$color.'"><center>'.$menu['Name'].'</center></td>
                 <td width="35%" style="background-color:'.$color.'"><center>'.$menu['Action'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.sec_level_name($menu['View']).' ('.$menu['View'].')'.'</center></td>
@@ -1870,7 +1870,7 @@ function menus()
       }
       $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&addmenu_item=addmenuitem"><img src="/img/add.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&addmenu_item=addmenuitem"><img src="img/add.png" /></a></center></td>
                 <td style="background-color:'.$color.'" colspan="8"><a href="admin.php?section=menus&top_index='.$top_menu.'&addmenu_item=addmenuitem">'.lang('admin', 'addmenu_item').'</a></td>
               </tr>';
       $output .= '
@@ -2125,8 +2125,8 @@ function forum()
       {
         $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat['Index'].'&editforum=editforum"><img src="/img/edit.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat['Index'].'&delforum=delforum"><img src="/img/aff_cross.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat['Index'].'&editforum=editforum"><img src="img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat['Index'].'&delforum=delforum"><img src="img/aff_cross.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center>'.$cat['Name'].'</center></td>
               </tr>';
         if ( $color == "#EEEEEE" )
@@ -2136,7 +2136,7 @@ function forum()
       }
       $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&addforum=addforum"><img src="/img/add.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&addforum=addforum"><img src="img/add.png" /></a></center></td>
                 <td style="background-color:'.$color.'" colspan="2"><a href="admin.php?section=forum&addforum=addforum">'.lang('admin', 'addforum').'</a></td>
               </tr>';
       $output .= '
@@ -2184,8 +2184,8 @@ function forum()
       {
         $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&forum_item='.$forum['Index'].'&editforum_item=editforumsection"><img src="/img/edit.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&forum_item='.$forum['Index'].'&delforum_item=delforumsection"><img src="/img/aff_cross.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&forum_item='.$forum['Index'].'&editforum_item=editforumsection"><img src="img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&forum_item='.$forum['Index'].'&delforum_item=delforumsection"><img src="img/aff_cross.png" /></a></center></td>
                 <td width="25%" style="background-color:'.$color.'"><center>'.$forum['Name'].'</center></td>
                 <td width="25%" style="background-color:'.$color.'"><center>'.$forum['Desc'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$forum['Side_Access'].'</center></td>
@@ -2200,7 +2200,7 @@ function forum()
       }
       $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&addforum_item=addforumsection"><img src="/img/add.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&addforum_item=addforumsection"><img src="img/add.png" /></a></center></td>
                 <td style="background-color:'.$color.'" colspan="7"><a href="admin.php?section=forum&category='.$cat_id.'&addforum_item=addforumsection">'.lang('admin', 'addforum_item').'</a></td>
               </tr>';
       $output .= '
@@ -2429,7 +2429,7 @@ function accounts()
       $sn_web = $sqlm->fetch_assoc($acct_result);
       $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=accounts&acct='.$acct['login'].'&editacct=editaccount"><img src="/img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=accounts&acct='.$acct['login'].'&editacct=editaccount"><img src="img/edit.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center>'.ucfirst(strtolower($acct['login'])).'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$sn_web['ScreenName'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$sn_web['SecurityLevel'].'</center></td>
