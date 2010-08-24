@@ -38,8 +38,10 @@ $corem_db['encoding'] = 'utf8';                   // SQL connection encoding
 //#############################################################################
 // SQL Configuration
 //
+//  NOTICE: ONLY MySQL IS KNOWN TO BE FUNCTIONAL
+//
 //  SQL server type  :
-//  'MySQL'   - Mysql
+//  'MySQL'   - MySQL
 //  'PgSQL'   - PostgreSQL
 //  'MySQLi'  - MySQLi
 //  'SQLLite' - SQLite

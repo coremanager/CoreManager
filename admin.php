@@ -61,19 +61,29 @@ function database()
                   <table>
                     <tr>
                       <td width=75px>'.lang('admin', 'host').': </td>
-                      <td><input type="text" name="dbc_host" value="'.$dbc_db['Address'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="dbc_host" value="'.$dbc_db['Address'].'" size="10%">
+                      </td>
                       <td width=75px>'.lang('admin', 'port').': </td>
-                      <td><input type="text" name="dbc_port" value="'.$dbc_db['Port'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="dbc_port" value="'.$dbc_db['Port'].'" size="10%">
+                      </td>
                     </tr>
                     <tr>
                       <td width=75px>'.lang('admin', 'user').': </td>
-                      <td><input type="text" name="dbc_user" value="'.$dbc_db['User'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="dbc_user" value="'.$dbc_db['User'].'" size="10%">
+                      </td>
                       <td width=75px>'.lang('admin', 'pass').': </td>
-                      <td><input type="text" name="dbc_pass" value="'.$dbc_db['Password'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="dbc_pass" value="'.$dbc_db['Password'].'" size="10%">
+                      </td>
                     </tr>
                     <tr>
                       <td width=75px>'.lang('admin', 'name').': </td>
-                      <td><input type="text" name="dbc_name" value="'.$dbc_db['Name'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="dbc_name" value="'.$dbc_db['Name'].'" size="10%">
+                      </td>
                     </tr>
                   </table>
                 </fieldset>
@@ -84,26 +94,38 @@ function database()
                   <table>
                     <tr>
                       <td width=75px>'.lang('admin', 'host').': </td>
-                      <td><input type="text" name="logon_host" value="'.$logon_db['Address'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="logon_host" value="'.$logon_db['Address'].'" size="10%">
+                      </td>
                       <td width=75px>'.lang('admin', 'port').': </td>
-                      <td><input type="text" name="logon_port" value="'.$logon_db['Port'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="logon_port" value="'.$logon_db['Port'].'" size="10%">
+                      </td>
                     </tr>
                     <tr>
                       <td width=75px>'.lang('admin', 'user').': </td>
-                      <td><input type="text" name="logon_user" value="'.$logon_db['User'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="logon_user" value="'.$logon_db['User'].'" size="10%">
+                      </td>
                       <td width=75px>'.lang('admin', 'pass').': </td>
-                      <td><input type="text" name="logon_pass" value="'.$logon_db['Password'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="logon_pass" value="'.$logon_db['Password'].'" size="10%">
+                      </td>
                     </tr>
                     <tr>
                       <td width=75px>'.lang('admin', 'name').': </td>
-                      <td><input type="text" name="logon_name" value="'.$logon_db['Name'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="logon_name" value="'.$logon_db['Name'].'" size="10%">
+                      </td>
                     </tr>
                   </table>
                 </fieldset>
               </td>
             </tr>
             <tr>
-              <td colspan=2><hr></td>
+              <td colspan=2>
+                <hr>
+              </td>
             </tr>
             <tr>';
   while ( $char = $sqlm->fetch_assoc($char_dbs) )
@@ -116,20 +138,36 @@ function database()
                   <table>
                     <tr>
                       <td width=75px>'.lang('admin', 'host').': </td>
-                      <td><input type="text" name="char_host[]" value="'.$char['Address'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="char_host[]" value="'.$char['Address'].'" size="10%">
+                      </td>
                       <td width=75px>'.lang('admin', 'port').': </td>
-                      <td><input type="text" name="char_port[]" value="'.$char['Port'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="char_port[]" value="'.$char['Port'].'" size="10%">
+                      </td>
                     </tr>
                     <tr>
                       <td width=75px>'.lang('admin', 'user').': </td>
-                      <td><input type="text" name="char_user[]" value="'.$char['User'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="char_user[]" value="'.$char['User'].'" size="10%">
+                      </td>
                       <td width=75px>'.lang('admin', 'pass').': </td>
-                      <td><input type="text" name="char_pass[]" value="'.$char['Password'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="char_pass[]" value="'.$char['Password'].'" size="10%">
+                      </td>
                     </tr>
                     <tr>
                       <td width=75px>'.lang('admin', 'name').': </td>
-                      <td><input type="text" name="char_name[]" value="'.$char['Name'].'" size="10%"></td>
-                      <td colspan=2><center><input type="checkbox" name="remove_char_'.$char['Index'].'"> '.lang('admin', 'remove').'</center><td>
+                      <td>
+                        <input type="text" name="char_name[]" value="'.$char['Name'].'" size="10%">
+                      </td>
+                      <td colspan=2>
+                        <center>
+                          <a href="admin.php?section=databases&action=savedbs&remove_char[]='.$char['Index'].'">
+                            <img src="img/aff_cross.png" /> '.lang('admin', 'remove').'
+                          </a>
+                        </center>
+                      <td>
                     </tr>
                   </table>
                 </fieldset>
@@ -138,7 +176,11 @@ function database()
   $output .= '
             </tr>
             <tr>
-              <td><input type="checkbox" name="addchar"><b>'.lang('admin', 'addchar').'</b></td>
+              <td>
+                <a href="admin.php?section=databases&action=savedbs&addchar=addchar">
+                  <img src="img/add.png" /> <b>'.lang('admin', 'addchar').'</b>
+                </a>
+              </td>
             </tr>';
   $output .= '
             <tr>';
@@ -152,20 +194,36 @@ function database()
                   <table>
                     <tr>
                       <td width=75px>'.lang('admin', 'host').': </td>
-                      <td><input type="text" name="world_host[]" value="'.$world['Address'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="world_host[]" value="'.$world['Address'].'" size="10%">
+                      </td>
                       <td width=75px>'.lang('admin', 'port').': </td>
-                      <td><input type="text" name="world_port[]" value="'.$world['Port'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="world_port[]" value="'.$world['Port'].'" size="10%">
+                      </td>
                     </tr>
                     <tr>
                       <td width=75px>'.lang('admin', 'user').': </td>
-                      <td><input type="text" name="world_user[]" value="'.$world['User'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="world_user[]" value="'.$world['User'].'" size="10%">
+                      </td>
                       <td>'.lang('admin', 'pass').': </td>
-                      <td><input type="text" name="world_pass[]" value="'.$world['Password'].'" size="10%"></td>
+                      <td>
+                        <input type="text" name="world_pass[]" value="'.$world['Password'].'" size="10%">
+                      </td>
                     </tr>
                     <tr>
                       <td width=75px>'.lang('admin', 'name').': </td>
-                      <td><input type="text" name="world_name[]" value="'.$world['Name'].'" size="10%"></td>
-                      <td colspan=2><center><input type="checkbox" name="remove_world_'.$world['Index'].'"> '.lang('admin', 'remove').'</center><td>
+                      <td>
+                        <input type="text" name="world_name[]" value="'.$world['Name'].'" size="10%">
+                      </td>
+                      <td colspan=2>
+                        <center>
+                          <a href="admin.php?section=databases&action=savedbs&remove_world[]='.$world['Index'].'">
+                            <img src="img/aff_cross.png" /> '.lang('admin', 'remove').'
+                          </a>
+                        </center>
+                      <td>
                     </tr>
                   </table>
                 </fieldset>
@@ -174,7 +232,11 @@ function database()
   $output .= '
             </tr>
             <tr>
-              <td><input type="checkbox" name="addworld"><b>'.lang('admin', 'addworld').'</b></td>
+              <td>
+                <a href="admin.php?section=databases&action=savedbs&addworld=addworld">
+                  <img src="img/add.png" /> <b>'.lang('admin', 'addworld').'</b>
+                </a>
+              </td>
             </tr>
           </table>
           <input type="submit" name="save" value="'.lang('admin', 'save').'">
@@ -188,68 +250,99 @@ function savedbs()
   $sqlm = new SQL;
   $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
-  $dbc_host = $sqlm->quote_smart($_GET['dbc_host']);
-  $dbc_port = $sqlm->quote_smart($_GET['dbc_port']);
-  $dbc_user = $sqlm->quote_smart($_GET['dbc_user']);
-  $dbc_pass = $sqlm->quote_smart($_GET['dbc_pass']);
-  $dbc_name = $sqlm->quote_smart($_GET['dbc_name']);
-
-  $dbc_count = $sqlm->fetch_assoc($sqlm->query("SELECT COUNT(*) FROM config_dbc_database"));
-  if ($dbc_count['COUNT(*)'] == 1)
-  {
-    $dbc_upper = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_dbc_database"));
-    $result = $sqlm->query("UPDATE config_dbc_database SET Address='".$dbc_host."', Port='".$dbc_port."', Name='".$dbc_name."', User='".$dbc_user."', Password='".$dbc_pass."', Encoding='utf8' WHERE `Index`='".$dbc_upper['MAX(`Index`)']."'");
-  }
-  elseif ($dbc_count['COUNT(*)'] > 1)
-  {
-    $result = $sqlm->query("TRUNCATE TABLE config_dbc_database");
-    $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbc_host."', '".$dbc_port."', '".$dbc_user."', '".$dbc_name."', '".$dbc_pass."', 'utf8')");
-  }
-  else
-  {
-    $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbc_host."', '".$dbc_port."', '".$dbc_user."', '".$dbc_name."', '".$dbc_pass."', 'utf8')");
-  }
-
-  $logon_host = $sqlm->quote_smart($_GET['logon_host']);
-  $logon_port = $sqlm->quote_smart($_GET['logon_port']);
-  $logon_user = $sqlm->quote_smart($_GET['logon_user']);
-  $logon_pass = $sqlm->quote_smart($_GET['logon_pass']);
-  $logon_name = $sqlm->quote_smart($_GET['logon_name']);
-  $result_logon = $sqlm->query("UPDATE config_logon_database SET Address='".$logon_host."', Port='".$logon_port."', User='".$logon_user."', Password='".$logon_pass."', Name='".$logon_name."' WHERE `Index`=1");
-
-  $char_realms = ( ( isset($_GET['char_realm']) ) ? $sqlm->quote_smart($_GET['char_realm']) : NULL );
-  $char_hosts = ( ( isset($_GET['char_host']) ) ? $sqlm->quote_smart($_GET['char_host']) : NULL );
-  $char_ports = ( ( isset($_GET['char_port']) ) ? $sqlm->quote_smart($_GET['char_port']) : NULL );
-  $char_users = ( ( isset($_GET['char_user']) ) ? $sqlm->quote_smart($_GET['char_user']) : NULL );
-  $char_passes = ( ( isset($_GET['char_pass']) ) ? $sqlm->quote_smart($_GET['char_pass']) : NULL );
-  $char_names = ( ( isset($_GET['char_name']) ) ? $sqlm->quote_smart($_GET['char_name']) : NULL );
-
-  for ( $i=0; $i<count($char_hosts); $i++ )
-  {
-    $result_char = $sqlm->query("UPDATE config_character_databases SET Address='".$char_hosts[$i]."', Port='".$char_ports[$i]."', User='".$char_users[$i]."', Password='".$char_passes[$i]."', Name='".$char_names[$i]."' WHERE `Index`='".$char_realms[$i]."'");
-    if ( isset($_GET['remove_char_'.$char_realms[$i]]) )
-      $result_char = $sqlm->query("DELETE FROM config_character_databases WHERE `Index`='".$char_realms[$i]."'");
-  }
-
-  $world_realms = ( ( isset($_GET['world_realm']) ) ? $sqlm->quote_smart($_GET['world_realm']) : NULL );
-  $world_hosts = ( ( isset($_GET['world_host']) ) ? $sqlm->quote_smart($_GET['world_host']) : NULL );
-  $world_ports = ( ( isset($_GET['world_port']) ) ? $sqlm->quote_smart($_GET['world_port']) : NULL );
-  $world_users = ( ( isset($_GET['world_user']) ) ? $sqlm->quote_smart($_GET['world_user']) : NULL );
-  $world_passes = ( ( isset($_GET['world_pass']) ) ? $sqlm->quote_smart($_GET['world_pass']) : NULL );
-  $world_names = ( ( isset($_GET['world_name']) ) ? $sqlm->quote_smart($_GET['world_name']) : NULL );
-
-  for ( $i=0; $i<count($world_hosts); $i++ )
-  {
-    $result_world = $sqlm->query("UPDATE config_world_databases SET Address='".$world_hosts[$i]."', Port='".$world_ports[$i]."', User='".$world_users[$i]."', Password='".$world_passes[$i]."', Name='".$world_names[$i]."' WHERE `Index`='".$world_realms[$i]."'");
-    if ( isset($_GET['remove_world_'.$world_realms[$i]]) )
-      $result_world = $sqlm->query("DELETE FROM config_world_databases WHERE `Index`='".$world_realms[$i]."'");
-  }
-
   if ( isset($_GET['addchar']) )
     $result_addchar = $sqlm->query("INSERT INTO config_character_databases (Encoding) VALUES ('utf8')");
 
   if ( isset($_GET['addworld']) )
     $result_addworld = $sqlm->query("INSERT INTO config_world_databases (Encoding) VALUES ('utf8')");
+
+  if ( isset($_GET['dbc_host']) )
+  {
+    $dbc_host = $sqlm->quote_smart($_GET['dbc_host']);
+    $dbc_port = $sqlm->quote_smart($_GET['dbc_port']);
+    $dbc_user = $sqlm->quote_smart($_GET['dbc_user']);
+    $dbc_pass = $sqlm->quote_smart($_GET['dbc_pass']);
+    $dbc_name = $sqlm->quote_smart($_GET['dbc_name']);
+
+    $dbc_count = $sqlm->fetch_assoc($sqlm->query("SELECT COUNT(*) FROM config_dbc_database"));
+
+    if ($dbc_count['COUNT(*)'] == 1)
+    {
+      $dbc_upper = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_dbc_database"));
+      $result = $sqlm->query("UPDATE config_dbc_database SET Address='".$dbc_host."', Port='".$dbc_port."', Name='".$dbc_name."', User='".$dbc_user."', Password='".$dbc_pass."', Encoding='utf8' WHERE `Index`='".$dbc_upper['MAX(`Index`)']."'");
+    }
+    elseif ($dbc_count['COUNT(*)'] > 1)
+    {
+      $result = $sqlm->query("TRUNCATE TABLE config_dbc_database");
+      $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbc_host."', '".$dbc_port."', '".$dbc_user."', '".$dbc_name."', '".$dbc_pass."', 'utf8')");
+    }
+    else
+    {
+      $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbc_host."', '".$dbc_port."', '".$dbc_user."', '".$dbc_name."', '".$dbc_pass."', 'utf8')");
+    }
+  }
+
+  if ( isset($_GET['logon_host']) )
+  {
+    $logon_host = $sqlm->quote_smart($_GET['logon_host']);
+    $logon_port = $sqlm->quote_smart($_GET['logon_port']);
+    $logon_user = $sqlm->quote_smart($_GET['logon_user']);
+    $logon_pass = $sqlm->quote_smart($_GET['logon_pass']);
+    $logon_name = $sqlm->quote_smart($_GET['logon_name']);
+
+    $result_logon = $sqlm->query("UPDATE config_logon_database SET Address='".$logon_host."', Port='".$logon_port."', User='".$logon_user."', Password='".$logon_pass."', Name='".$logon_name."' WHERE `Index`=1");
+  }
+
+  if ( isset($_GET['char_realm']) )
+  {
+    $char_realms = ( ( isset($_GET['char_realm']) ) ? $sqlm->quote_smart($_GET['char_realm']) : NULL );
+    $char_hosts = ( ( isset($_GET['char_host']) ) ? $sqlm->quote_smart($_GET['char_host']) : NULL );
+    $char_ports = ( ( isset($_GET['char_port']) ) ? $sqlm->quote_smart($_GET['char_port']) : NULL );
+    $char_users = ( ( isset($_GET['char_user']) ) ? $sqlm->quote_smart($_GET['char_user']) : NULL );
+    $char_passes = ( ( isset($_GET['char_pass']) ) ? $sqlm->quote_smart($_GET['char_pass']) : NULL );
+    $char_names = ( ( isset($_GET['char_name']) ) ? $sqlm->quote_smart($_GET['char_name']) : NULL );
+
+    for ( $i=0; $i<count($char_hosts); $i++ )
+    {
+      $result_char = $sqlm->query("UPDATE config_character_databases SET Address='".$char_hosts[$i]."', Port='".$char_ports[$i]."', User='".$char_users[$i]."', Password='".$char_passes[$i]."', Name='".$char_names[$i]."' WHERE `Index`='".$char_realms[$i]."'");
+    }
+  }
+
+  if ( isset($_GET['remove_char']) )
+  {
+    $remove_chars = ( ( isset($_GET['remove_char']) ) ? $sqlm->quote_smart($_GET['remove_char']) : NULL );
+
+    for ( $i=0; $i<count($remove_chars); $i++ )
+    {
+      $result_char = $sqlm->query("DELETE FROM config_character_databases WHERE `Index`='".$remove_chars[$i]."'");
+    }
+  }
+
+  if ( isset($_GET['world_realm']) )
+  {
+    $world_realms = ( ( isset($_GET['world_realm']) ) ? $sqlm->quote_smart($_GET['world_realm']) : NULL );
+    $world_hosts = ( ( isset($_GET['world_host']) ) ? $sqlm->quote_smart($_GET['world_host']) : NULL );
+    $world_ports = ( ( isset($_GET['world_port']) ) ? $sqlm->quote_smart($_GET['world_port']) : NULL );
+    $world_users = ( ( isset($_GET['world_user']) ) ? $sqlm->quote_smart($_GET['world_user']) : NULL );
+    $world_passes = ( ( isset($_GET['world_pass']) ) ? $sqlm->quote_smart($_GET['world_pass']) : NULL );
+    $world_names = ( ( isset($_GET['world_name']) ) ? $sqlm->quote_smart($_GET['world_name']) : NULL );
+
+    for ( $i=0; $i<count($world_hosts); $i++ )
+    {
+      $result_world = $sqlm->query("UPDATE config_world_databases SET Address='".$world_hosts[$i]."', Port='".$world_ports[$i]."', User='".$world_users[$i]."', Password='".$world_passes[$i]."', Name='".$world_names[$i]."' WHERE `Index`='".$world_realms[$i]."'");
+    }
+  }
+
+  if ( isset($_GET['remove_world']) )
+  {
+    $remove_worlds = ( ( isset($_GET['remove_world']) ) ? $sqlm->quote_smart($_GET['remove_world']) : NULL );
+
+    for ( $i=0; $i<count($remove_worlds); $i++ )
+    {
+      $remove_query .= "DELETE FROM config_world_databases WHERE `Index`='".$remove_worlds[$i]."'";
+      $result_world = $sqlm->query($remove_query);
+    }
+  }
 
   redirect("admin.php?section=databases");
 }
@@ -1564,7 +1657,7 @@ function savegms()
 
 function servers()
 {
-  global $output, $corem_db, $lang_global, $core;
+  global $output, $corem_db, $lang_global, $get_icon_type, $get_timezone_type, $core;
 
   $sqlm = new SQL;
   $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
@@ -1591,14 +1684,18 @@ function servers()
                 <th width="5%">'.lang('admin', 'edit').'</th>
                 <th width="5%">'.lang('admin', 'remove').'</th>
                 <th width="10%">'.lang('admin', 'realm').'</th>
-                <th width="40%">'.lang('admin', 'host').'</th>
+                <th width="10%">'.lang('admin', 'name').'</th>
+                <th width="20%">'.lang('admin', 'hosti').'</th>
+                <th width="20%">'.lang('admin', 'hostp').'</th>
                 <th width="1%">'.lang('admin', 'port').'</th>';
-    if ( $core <> 1 )
+    /*if ( $core <> 1 )
       $output .= '
                 <th width="10%">'.lang('admin', 'telnetport').'</th>
                 <th width="10%">'.lang('admin', 'telnetuser').'</th>
-                <th width="10%">'.lang('admin', 'telnetpass').'</th>';
+                <th width="10%">'.lang('admin', 'telnetpass').'</th>';*/
     $output .= '
+                <th width="10%">'.lang('admin', 'icon').'</th>
+                <th width="10%">'.lang('admin', 'timezone').'</th>
                 <th width="10%">'.lang('admin', 'bothfactions').'</th>';
     if ( $core == 1 )
       $output .= '
@@ -1608,20 +1705,30 @@ function servers()
     $color = "#EEEEEE";
     while ( $server = $sqlm->fetch_assoc($result) )
     {
+      $realm_query = "SELECT * FROM realmlist WHERE id='".$server['Index']."'";
+      $realm_result = $sqlm->query($realm_query);
+      $realm = $sqlm->fetch_assoc($realm_result);
+
       $output .= '
               <tr>
                 <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server['Index'].'&editserver=editserver"><img src="img/edit.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server['Index'].'&delserver=deleteserver"><img src="img/aff_cross.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Index'].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$realm['name'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Address'].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$realm['address'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Port'].'</center></td>';
-      if ( $core != 1 )
+      /*if ( $core != 1 )
         $output .= '
                 <td style="background-color:'.$color.'"><center>'.$server['Telnet_Port'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Telnet_User'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$server['Telnet_Pass'].'</center></td>';
-      
+                <td style="background-color:'.$color.'"><center>'.$server['Telnet_Pass'].'</center></td>';*/
+
+      $icon = $get_icon_type[$realm['icon']];
+      $timezone = $get_timezone_type[$realm['timezone']];
       $output .= '
+                <td style="background-color:'.$color.'"><center>'.lang('realm', $icon[1]).'</center></td>
+                <td style="background-color:'.$color.'"><center>'.lang('realm', $timezone[1]).'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server['Both_Factions'].'</center></td>';
       if ( $core == 1 )
         $output .= '
@@ -1636,7 +1743,7 @@ function servers()
     $output .= '
               <tr>
                 <td style="background-color:'.$color.'"><a href="admin.php?section=servers&addserver=addserver"><img src="img/add.png" /></a></td>
-                <td style="background-color:'.$color.'" colspan="'.( ( $core == 1 ) ? '9' : '8' ).'"><a href="admin.php?section=servers&addserver=addserver">'.lang('admin', 'addserver').'</a></td>
+                <td style="background-color:'.$color.'" colspan="'.( ( $core == 1 ) ? '10' : '9' ).'"><a href="admin.php?section=servers&addserver=addserver">'.lang('admin', 'addserver').'</a></td>
               </tr>';
 
     $output .= '
@@ -1655,6 +1762,7 @@ function servers()
       if ( is_numeric($server_id) )
       {
         $server = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_servers WHERE `Index`='".$server_id."'"));
+        $realm = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM realmlist WHERE id='".$server_id."'"));
         $output .= '
         <center>
           <form name="form" action="admin.php" method="GET">
@@ -1664,8 +1772,16 @@ function servers()
               <input type="hidden" name="index" value="'.$server['Index'].'">
               <table>
                 <tr>
-                  <td width="45%">'.lang('admin', 'host').': </td>
-                  <td><input type="text" name="server_host" value="'.$server['Address'].'"></td>
+                  <td width="45%">'.lang('admin', 'name').': </td>
+                  <td><input type="text" name="server_name" value="'.$realm['name'].'"></td>
+                </tr>
+                <tr>
+                  <td width="45%" id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'hosti').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'hosti').'</a>: </td>
+                  <td><input type="text" name="server_hosti" value="'.$server['Address'].'"></td>
+                </tr>
+                <tr>
+                  <td width="45%" id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'hostp').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'hostp').'</a>: </td>
+                  <td><input type="text" name="server_hostp" value="'.$realm['address'].'"></td>
                 </tr>
                 <tr>
                   <td>'.lang('admin', 'port').': </td>
@@ -1686,6 +1802,36 @@ function servers()
                   <td><input type="text" name="server_telnet_pass" value="'.$server['Telnet_Pass'].'"></td>
                 </tr>';
         $output .= '
+                <tr>
+                  <td>'.lang('admin', 'icon').': </td>
+                  <td>
+                    <select name="server_type">';
+        foreach ( $get_icon_type as $type )
+        {
+          $output .= '
+                      <option value="'.$type[0].'" '.( ( $realm['icon'] == $type[0] ) ? 'selected="selected"' : '' ).'>'.lang('realm', $type[1]).'</option>';
+        }
+        $output .= '
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>'.lang('admin', 'color').': </td>
+                  <td><input type="text" name="server_color" value="'.$realm['color'].'"></td>
+                </tr>
+                <tr>
+                  <td>'.lang('admin', 'timezone').': </td>
+                  <td>
+                    <select name="server_timezone">';
+        foreach ( $get_timezone_type as $zone )
+        {
+          $output .= '
+                      <option value="'.$zone[0].'" '.( ( $realm['timezone'] == $zone[0] ) ? 'selected="selected"' : '' ).'>'.lang('realm', $zone[1]).'</option>';
+        }
+        $output .= '
+                    </select>
+                  </td>
+                </tr>
                 <tr>
                   <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'bothfactions').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'bothfactions').'</a>: </td>
                   <td><input type="text" name="server_both" value="'.$server['Both_Factions'].'"></td>
@@ -1711,7 +1857,8 @@ function servers()
       $server_id = $sqlm->quote_smart($_GET['sel_server']);
       if ( is_numeric($server_id) )
       {
-        $result = $sqlm->query("DELETE FROM config_servers WHERE `Index` = '".$server_id."'");
+        $result = $sqlm->query("DELETE FROM config_servers WHERE `Index`='".$server_id."'");
+        $result = $sqlm->query("DELETE FROM realmlist WHERE id='".$server_id."'");
         redirect("admin.php?section=servers");
       }
       else
@@ -1719,7 +1866,31 @@ function servers()
     }
     else
     {
-      $result = $sqlm->query("INSERT INTO config_servers (Port, Both_Factions) VALUES (8129,1)");
+      switch ( $core )
+      {
+        case 1:
+        {
+          $name = "ArcEmu";
+          $port = "8129";
+          break;
+        }
+        case 2:
+        {
+          $name = "MaNGOS";
+          $port = "8085";
+          break;
+        }
+        case 3:
+        {
+          $name = "Trinity";
+          $port = "8085";
+          break;
+        }
+      }
+
+      $result = $sqlm->query("INSERT INTO config_servers (Port, Both_Factions) VALUES ('".$port."', 1)");
+      $result = $sqlm->query("INSERT INTO realmlist (port, name) VALUES ('".$port."', '".$name."')");
+
       redirect("admin.php?section=servers");
     }
   }
@@ -1733,15 +1904,21 @@ function saveserver()
   $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
   $server_id = $sqlm->quote_smart($_GET['index']);
-  $server_host = $sqlm->quote_smart($_GET['server_host']);
+  $server_name = $sqlm->quote_smart($_GET['server_name']);
+  $server_hosti = $sqlm->quote_smart($_GET['server_hosti']);
+  $server_hostp = $sqlm->quote_smart($_GET['server_hostp']);
   $server_port = $sqlm->quote_smart($_GET['server_port']);
-  $server_telnet_port = $sqlm->quote_smart($_GET['server_telnet_port']);
-  $server_telnet_user = strtoupper($sqlm->quote_smart($_GET['server_telnet_user']));
-  $server_telnet_pass = $sqlm->quote_smart($_GET['server_telnet_pass']);
+  $server_telnet_port = ( ( isset($_GET['server_telnet_port']) ) ? $sqlm->quote_smart($_GET['server_telnet_port']) : NULL );
+  $server_telnet_user = ( ( isset($_GET['server_telnet_user']) ) ? strtoupper($sqlm->quote_smart($_GET['server_telnet_user'])) : NULL );
+  $server_telnet_pass = ( ( isset($_GET['server_telnet_pass']) ) ? $sqlm->quote_smart($_GET['server_telnet_pass']) : NULL );
+  $server_type = $sqlm->quote_smart($_GET['server_type']);
+  $server_color = $sqlm->quote_smart($_GET['server_color']);
+  $server_timezone = $sqlm->quote_smart($_GET['server_timezone']);
   $server_factions = $sqlm->quote_smart($_GET['server_both']);
-  $server_stats = $sqlm->quote_smart($_GET['server_stats']);
+  $server_stats = ( ( isset($_GET['server_stats']) ) ? $sqlm->quote_smart($_GET['server_stats']) : NULL );
 
-  $result = $sqlm->query("UPDATE config_servers SET Address='".$server_host."', Port='".$server_port."', Telnet_Port='".$server_telnet_port."', Telnet_User='".$server_telnet_user."', Telnet_Pass='".$server_telnet_pass."', Both_Factions='".$server_factions."', Stats_XML='".$server_stats."' WHERE `Index`='".$server_id."'");
+  $result = $sqlm->query("UPDATE config_servers SET Address='".$server_hosti."', Port='".$server_port."', Telnet_Port='".$server_telnet_port."', Telnet_User='".$server_telnet_user."', Telnet_Pass='".$server_telnet_pass."', Both_Factions='".$server_factions."', Stats_XML='".$server_stats."' WHERE `Index`='".$server_id."'");
+  $result = $sqlm->query("UPDATE realmlist SET name='".$server_name."', address='".$server_hostp."', port='".$server_port."', icon='".$server_type."', color='".$server_color."', timezone='".$server_timezone."' WHERE id='".$server_id."'");
   redirect("admin.php?section=servers");
 }
 
@@ -2561,8 +2738,8 @@ switch ( $err )
 $output .= "
           </center>
         </div>
-		<br />
-		<br />";
+        <br />
+        <br />";
 
 unset($err);
 

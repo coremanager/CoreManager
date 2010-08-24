@@ -94,4 +94,40 @@ function error($err)
 {
   die($err);
 }
+
+
+//#############################################################################
+// Realm Icons for Servers Tab
+$get_icon_type = array
+(
+  0 => array( 0, 'normal'),
+  1 => array( 1, 'pvp'),
+  6 => array( 6, 'rp'),
+  8 => array( 8, 'rppvp'),
+);
+
+
+//#############################################################################
+// Realm Timezones for Servers Tab
+$get_timezone_type = array
+(
+  0 => array( 0, 'undefined'),
+  1 => array( 1, 'development'),
+  2 => array( 2, 'united_states'),
+  3 => array( 3, 'oceanic'),
+  4 => array( 4, 'latin_america'),
+  5 => array( 5, 'tournament'),
+  6 => array( 6, 'korea'),
+  8 => array( 8, 'english'),
+  9 => array( 9, 'german'),
+ 10 => array(10, 'french'),
+ 11 => array(11, 'spanish'),
+ 12 => array(12, 'russian'),
+ 14 => array(14, 'taiwan'),
+ 16 => array(16, 'china'),
+ 26 => array(26, 'test_server'),
+ 28 => array(28, 'qa_server'),
+);
+
+
 ?>
