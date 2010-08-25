@@ -79,29 +79,109 @@ $tables_backup_characters = Array
 
 
 //list of tables in characters db you need to delete data from on user deletion
-$tab_del_user_characters = Array
-(
-  Array('auctions','owner'),
-  Array('character_achievement','guid'),
-  Array('character_achievement_progress','guid'),
-  Array('playerpetspells','ownerguid'),
-  Array('playerpets','ownerguid'),
-  Array('instances','creator_guid'),
-  Array('charters','leaderguid'),
-  Array('gm_tickets','playerguid'),
-  Array('guild_data','playerid'),
-  Array('guilds','leaderguid'),
-  Array('instanceids','playerguid'),
-  Array('playercooldowns','player_guid'),
-  Array('mailbox','player_guid'),
-  Array('playeritems','ownerguid'),
-  Array('playersummons','ownerguid'),
-  Array('playersummonspells','ownerguid'),
-  Array('questlog','player_guid'),
-  Array('social_friends','character_guid'),
-  Array('social_ignores','character_guid'),
-  Array('tutorials','playerid')
-);
+global $core;
+
+if ( $core == 1 )
+{
+  $tab_del_user_characters = Array
+  (
+    Array('auctions','owner'),
+    Array('character_achievement','guid'),
+    Array('character_achievement_progress','guid'),
+    Array('playerpetspells','ownerguid'),
+    Array('playerpets','ownerguid'),
+    Array('instances','creator_guid'),
+    Array('charters','leaderguid'),
+    Array('gm_tickets','playerGuid'),
+    Array('guild_data','playerid'),
+    Array('guilds','leaderguid'),
+    Array('instanceids','playerguid'),
+    Array('playercooldowns','player_guid'),
+    Array('mailbox','player_guid'),
+    Array('playeritems','ownerguid'),
+    Array('playersummons','ownerguid'),
+    Array('playersummonspells','ownerguid'),
+    Array('questlog','player_guid'),
+    Array('social_friends','character_guid'),
+    Array('social_ignores','character_guid'),
+    Array('tutorials','playerid')
+  );
+}
+elseif ( $core == 2 )
+{
+  $tab_del_user_characters = Array
+  (
+    Array('auctionhouse','itemowner'),
+    Array('character_account_data','guid'),
+    Array('character_achievement','guid'),
+    Array('character_achievement_progress','guid'),
+    Array('character_action','guid'),
+    Array('character_aura','guid'),
+    Array('character_battleground_data','guid'),
+    Array('character_declinedname','guid'),
+    Array('character_equipmentsets','guid'),
+    Array('character_gifts','guid'),
+    Array('character_glyphs','guid'),
+    Array('character_homebind','guid'),
+    Array('character_instance','guid'),
+    Array('character_inventory','guid'),
+    Array('character_pet_declinedname','owner'),
+    Array('character_queststatus','guid'),
+    Array('character_queststatus_daily','guid'),
+    Array('character_queststatus_weekly','guid'),
+    Array('character_reputation','guid'),
+    Array('character_skills','guid'),
+    Array('character_social','guid'),
+    Array('character_spell','guid'),
+    Array('character_spell_cooldown','guid'),
+    Array('character_stats','guid'),
+    Array('character_talent','guid'),
+    Array('character_ticket','guid'),
+    Array('guild_member','guid'),
+    Array('guild','leaderguid'),
+    Array('item_instance','owner_guid'),
+    Array('mail','receiver'),
+    Array('petition','ownerguid')
+  );
+}
+else
+{
+  $tab_del_user_characters = Array
+  (
+    Array('auctionhouse','itemowner'),
+    Array('character_account_data','guid'),
+    Array('character_achievement','guid'),
+    Array('character_achievement_progress','guid'),
+    Array('character_action','guid'),
+    Array('character_aura','guid'),
+    Array('character_battleground_data','guid'),
+    Array('character_battleground_random','guid'),
+    Array('character_declinedname','guid'),
+    Array('character_equipmentsets','guid'),
+    Array('character_gifts','guid'),
+    Array('character_glyphs','guid'),
+    Array('character_homebind','guid'),
+    Array('character_inventory','guid'),
+    Array('character_pet_declinedname','owner'),
+    Array('character_queststatus','guid'),
+    Array('character_queststatus_daily','guid'),
+    Array('character_queststatus_weekly','guid'),
+    Array('character_reputation','guid'),
+    Array('character_skills','guid'),
+    Array('character_social','guid'),
+    Array('character_spell','guid'),
+    Array('character_spell_cooldown','guid'),
+    Array('character_stats','guid'),
+    Array('character_talent','guid'),
+    Array('gm_tickets','playerGuid'),
+    Array('guild_member','guid'),
+    Array('guild','leaderguid'),
+    Array('instance','id'),
+    Array('item_instance','owner_guid'),
+    Array('mail','receiver'),
+    Array('petition','ownerguid'),
+  );
+}
 
 
 //list of tables in characters db you need to backup data from on single user backup

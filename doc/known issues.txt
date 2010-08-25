@@ -13,3 +13,6 @@ than they should be.
 Top 100 shows multiple duplicates on Trinity.  (possibly MaNGOS as well)
 
 The Search feature on most pages doesn't work.
+
+Trinity Core support is only for the "Stable" release.  Revisions marked "NOT for
+production environments" may not function.

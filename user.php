@@ -447,7 +447,7 @@ function browse_users()
 //#######################################################################################################
 function del_user()
 {
-  global $output, $logon_db, $action_permission, $sql;
+  global $output, $logon_db, $action_permission, $sql, $core;
 
   valid_login($action_permission['delete']);
   if(isset($_GET['check'])) $check = $_GET['check'];
@@ -474,7 +474,11 @@ function del_user()
 
   for ($i=0; $i<count($check); $i++)
   {
-    $login = $sql['logon']->result($sql['logon']->query("SELECT login FROM `accounts` WHERE acct = '".$check[$i]."'"),0);
+    if ( $core == 1 )
+      $login = $sql['logon']->result($sql['logon']->query("SELECT login FROM `accounts` WHERE acct='".$check[$i]."'"),0);
+    else
+      $login = $sql['logon']->result($sql['logon']->query("SELECT username AS login FROM `account` WHERE id='".$check[$i]."'"),0);
+
     $output .= "
           <a href=\"user.php?action=edit_user&amp;acct=$check[$i]\" target=\"_blank\">$login, </a>";
     $pass_array .= "&amp;check%5B%5D=$check[$i]";
