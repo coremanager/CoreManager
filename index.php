@@ -388,7 +388,13 @@ else
       while ( $change = $sql['mgr']->fetch_assoc($result) )
       {
         $change_char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$change['guid']."'"));
-        $change_acct = $sql['logon']->fetch_assoc($sql['logon']->query("SELECT * FROM accounts WHERE acct='".$change_char['acct']."'"));
+
+        if ( $core == 1 )
+          $change_acct_query = "SELECT * FROM accounts WHERE acct='".$change_char['acct']."'";
+        else
+          $change_acct_query = "SELECT * FROM account WHERE id='".$change_char['acct']."'";
+
+        $change_acct = $sql['logon']->fetch_assoc($sql['logon']->query($change_acct_query));
         if ( isset($change['new_name']) )
           $output .= '
               <tr>

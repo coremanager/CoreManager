@@ -1684,8 +1684,8 @@ tr td.rep0
 /* USER.PHP */
 #user_bubble
 {
-  width: 900px;
-  margin-left: -50px; /* half of the difference in width */
+  width: 920px;
+  margin-left: -60px; /* half of the difference in width */
 }
 
 
