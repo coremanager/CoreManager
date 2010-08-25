@@ -22,6 +22,7 @@ INSTALLATION:
 
    1. Copy the contents of the \CoreManager\ directory into your webserver's www or htdocs directory.
       (If you're NOT planning on using CoreManager as your primary website, copy the entire directory)
+      To save transfer time, you may skip the following directories: doc, outdated, and Tools.
 
    2. Create a new database for CoreManager's Configuration data.
 
