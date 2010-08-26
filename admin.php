@@ -921,10 +921,8 @@ function general()
       }
       else
       {
-        if ( isset($_GET['allowanony']) )
-          $acp_allow_anony = 1;
-        else
-          $acp_allow_anony = 0;
+        // Allow Anonymous is disabled but must stay checked
+        $acp_allow_anony = 1;
         $acp_anony_name = $sqlm->quote_smart($_GET['anonyname']);
         $acp_anony_realm_id = $sqlm->quote_smart($_GET['anonyrealmid']);
 

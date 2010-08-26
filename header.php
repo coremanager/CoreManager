@@ -102,7 +102,7 @@ $output .= '
     <meta http-equiv="Content-Type" content="text/html; charset='.$site_encoding.'" />
     <meta http-equiv="Content-Type" content="text/javascript; charset='.$site_encoding.'" />
     <link rel="stylesheet" type="text/css" href="themes/'.$theme.'/'.$theme.'_1024.css" title="1024" />
-    <link rel="stylesheet" type="text/css" href="themes/'.$theme.'/'.$theme.'_1280.css" title="1280" />
+    <!-- link rel="stylesheet" type="text/css" href="themes/'.$theme.'/'.$theme.'_1280.css" title="1280" / -->
     <link rel="SHORTCUT ICON" href="img/favicon.ico" />
     <script type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" src="libs/js/general.js"></script>
@@ -361,8 +361,14 @@ if($allow_anony && empty($_SESSION['logged_in']))
 }
 
 //---------------------Start of Body-------------------------------------------
+if ( isset($_SESSION['logged_in']) )
+  $output .= '
+      <div id="body_main" class="body_main_shallow">';
+else
+  $output .= '
+      <div id="body_main" class="body_main_deep">';
+
 $output .= '
-      <div id="body_main">
         <!-- end of header.php -->';
 
 ?>

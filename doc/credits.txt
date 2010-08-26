@@ -9,13 +9,16 @@ LANGUAGE PACK TRANSLATORS:
 - Persian -- Lurker
 
 
-THANKS:
+CoreManager is based on ArcManager which was based on MiniManager. https://www.ohloh.net/p/arcmanager
 
-- CoreManager is based off ArcManager which was based off MiniManager. https://www.ohloh.net/p/arcmanager
 
-- To the ArcEmu, MaNGOS, and Trinity Core project teams.
+THANKS TO:
+
+- The ArcEmu, MaNGOS, and Trinity Core project teams.
 
 - The MiniManager Team for providing the original work http://mangos.osh.nu/forums/
+
+THE FOLLOWING ARE USE IN THIS PROJECT:
 
 - BBCode to HTML parser by Louai Munajim from http://elouai.com/scripts.php
 
@@ -45,6 +48,8 @@ THANKS:
 
 - SSH/Telnet terminal by Matthias L. Jugel and Marcus Meiﬂner (no longer used) from http://www.javassh.org/
 
-- PHPTelnet by Antone Roundy (no longer used).
+- PHPTelnet by Antone Roundy.
 
 - ip2nation database by Per Gustafsson (no longer used) from http://www.ip2nation.com/
+
+- Chunk by Meredith Mandel (font, used in Sulfur Logo) from http://www.theleagueofmoveabletype.com/

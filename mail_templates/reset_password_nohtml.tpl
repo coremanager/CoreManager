@@ -1,5 +1,4 @@
-Subject: Password reset requested.
-
+Subject: Password reset requested
 Hello <username>,
 
 You have requested to reset your password at <title>.

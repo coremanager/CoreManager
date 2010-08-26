@@ -500,13 +500,21 @@ tr th a.DESC
  {
 	position: absolute;
   left: 50%;
-  top: 150px;
   width: 800px;
   margin-left: -400px; /* half of the width */
 	line-height: 120%;
 	text-align: center;
 	font-size: 11px;
 	color: #d4d4d4;
+}
+
+.body_main_deep
+{
+  top: 150px;
+}
+.body_main_shallow
+{
+  top: 135px;
 }
 
 .error

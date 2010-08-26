@@ -1,6 +1,6 @@
 Subject: Welcome to <title>.
 
-Thank you for registering in our <core> Server at <base_url>.
+Thank you for registering for our <core> Server at <base_url>.
 
 We require that all new accounts confirm their email for activation.
 

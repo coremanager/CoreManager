@@ -9,6 +9,8 @@
 
 function authgMail($from, $namefrom, $to, $nameto, $subject, $message, $smtp_cfg)
 {
+  global $format_mail_html;
+
   /*  your configuration here  */
 
   $smtpServer = $smtp_cfg['host']; //does not accept STARTTLS
@@ -88,15 +90,16 @@ function authgMail($from, $namefrom, $to, $nameto, $subject, $message, $smtp_cfg
 
   //construct headers
   $headers = "MIME-Version: 1.0".$newLine;
-  $headers .= 'Content-type: text/html; charset="iso-8859-1"'.$newLine;
   $headers .= "To: ".$nameto." <".$to.">".$newLine;
   $headers .= "From: ".$namefrom." <".$from.">".$newLine;
+  $headers .= "Subject: ".$subject.$newLine;
+  if ( $format_mail_html )
+    $headers .= "Content-Type: text/html; charset=ISO-8859-1";
+  else
+    $headers .= "Content-Type: text/plain; charset=ISO-8859-1";
 
   //observe the . after the newline, it signals the end of message
-  $content = "To: ".$to.$newLine;
-  $content .= "From: ".$from.$newLine;
-  $content .= "Subject: ".$subject.$newLine;
-  $content .= $headers.$newLine.$newLine;
+  $content = $headers.$newLine.$newLine;
   $content .= $message.$newLine.".".$newLine;
   fputs($smtpConnect, $content);
   $smtpResponse = fgets($smtpConnect, 4096);

@@ -1,5 +1,4 @@
-Subject: Password recovery requested.
-
+Subject: Password recovery requested
 Hello <username>,
 
 You have requested to recieve your password at <title>.

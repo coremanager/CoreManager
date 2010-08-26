@@ -1,6 +1,5 @@
-Subject: Welcome to <title>.
-
-Thank you for registering in our <core> Server at <base_url>.
+Subject: Welcome to <title>
+Thank you for registering for our <core> Server at <base_url>.
 
 Your account details are:
 Username: <username>

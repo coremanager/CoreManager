@@ -343,6 +343,8 @@ function doregister()
         }
         $fh = fopen($file_name, 'r');
         $subject = fgets($fh, 4096);
+        $subject = str_replace("Subject: ", "", $subject);
+        $subject = trim($subject);
         $body = fread($fh, filesize($file_name));
         fclose($fh);
 
@@ -350,7 +352,7 @@ function doregister()
         if ( $format_mail_html )
         {
           $body = str_replace("\n", "<br />", $body);
-          $body = str_replace("\r", " ", $body);
+          $body = str_replace("\r", "", $body);
         }
         $body = str_replace("<core>", core_name($core), $body);
         $body = str_replace("<username>", $user_name, $body);
