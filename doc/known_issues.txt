@@ -7,9 +7,6 @@ them yet)
 When viewed with Firefox, the legend (only the styled ones) of fieldsets are a
 few pixels lower than where they belong.
 
-Item quantities in the right-most column of the Guild Bank contents are a few pixels lower
-than they should be.
-
 The Search feature on most pages doesn't work.
 
 Trinity Core support is only for the "Stable" release.  Revisions marked "NOT for

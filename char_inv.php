@@ -454,7 +454,7 @@ function char_inv()
                     </div>
                   </td>
                   <td colspan="2" class="bank" align="center">
-                    <div style="width:'.(7*43).'px;height:'.(ceil(24/7)*41).'px;">';
+                    <div style="width:'.((7*43)+2).'px;height:'.(ceil(24/7)*41).'px;">';
 
       // bank items
       foreach ($bank[0] as $pos => $item)
@@ -540,7 +540,7 @@ function char_inv()
         // this_is_junk: style left hardcoded because it's calculated.
         $output .= '
                   <td class="bank" align="center">
-                    <div style="width:'.(4*43).'px;height:'.(ceil($equip_bnk_bag_id[$t][1]/4)*41).'px;">';
+                    <div style="width:'.((4*43)+2).'px;height:'.(ceil($equip_bnk_bag_id[$t][1]/4)*41).'px;">';
         $dsp=$equip_bnk_bag_id[$t][1]%4;
         if ($dsp)
           $output .= '

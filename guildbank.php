@@ -155,7 +155,7 @@ function guild_bank()
               <table id="guildbank_tabs">
                 <tr>
                   <td class="bag" align="center">
-                    <div style="width:'.(14*43).'px;height:'.(7*41).'px;">';
+                    <div style="width:'.((14*43)+2).'px;height:'.(7*41).'px;">';
 
     $item_position = 0;
     for ( $i=0; $i<7; ++$i )
