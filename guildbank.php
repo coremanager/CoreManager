@@ -29,7 +29,7 @@ function guild_bank()
 {
   global  $output, $realm_id, $characters_db, $arcm_db, $world_db, $item_datasite, $item_icons, $sql;
 
-  //wowhead_tt();
+  wowhead_tt();
 
   if ( empty($_GET['id']) ) 
     error(lang('global', 'empty_fields'));
@@ -116,9 +116,9 @@ function guild_bank()
                     <img src="img/INV/INV_blank_32.gif" class="icon_border_0"';
         }
         if ( $tabs[$i]['TabName'] == '' )
-          $output .= ' onmousemove="toolTip(\''.lang('guildbank', 'tab').($i+1).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />';
+          $output .= ' onmousemove="oldtoolTip(\''.lang('guildbank', 'tab').($i+1).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />';
         else
-          $output .= ' onmousemove="toolTip(\''.$tabs[$i]['TabName'].'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />';
+          $output .= ' onmousemove="oldtoolTip(\''.$tabs[$i]['TabName'].'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />';
         $output .= '
                   </a>
                 </li>';
@@ -134,9 +134,14 @@ function guild_bank()
         ii.count AS stack_count,
         FROM guild_bankitems gbi INNER JOIN playeritems ii on ii.guid = gbi.itemGuid
         WHERE gbi.guildid = '.$guild_id.' AND TabID = '.$current_tab.'');
-    else
+    elseif ( $core == 2 )
       $result = $sql['char']->query('SELECT gbi.SlotId, gbi.item_guid AS itemGuid, gbi.item_entry AS entry, 
         SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", 15), " ", -1) as stack_count 
+        FROM guild_bank_item gbi INNER JOIN item_instance ii on ii.guid = gbi.item_guid 
+        WHERE gbi.guildid = '.$guild_id.' AND TabID = '.$current_tab.'');
+    else
+      $result = $sql['char']->query('SELECT gbi.SlotId, gbi.item_guid AS itemGuid, gbi.item_entry AS entry, 
+        ii.count as stack_count 
         FROM guild_bank_item gbi INNER JOIN item_instance ii on ii.guid = gbi.item_guid 
         WHERE gbi.guildid = '.$guild_id.' AND TabID = '.$current_tab.'');
         

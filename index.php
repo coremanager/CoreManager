@@ -246,8 +246,12 @@ else
           </script>';
 
   $output .= '
-          <center>
-            <table class="lined">
+          <center>';
+
+  $output .= '
+            <table class="lined">';
+  if ( $sql['mgr']->num_rows($motd_result) > 0 )
+    $output .= '
               <tr><th>'.lang('index', 'motd').'</th></tr>';
 
   while ( $temp = $sql['mgr']->fetch_assoc($motd_result) )
@@ -302,7 +306,8 @@ else
             </table>';
 
   // show gm tickets
-  $output .= '<br />
+  $output .= '
+            <br />
             <table class="lined">';
   if ( $user_lvl >= $action_permission['insert'] )
   {
@@ -376,7 +381,8 @@ else
 
   
   // show pending character changes
-  $output .= '<br />
+  $output .= '
+            <br />
             <table class="lined">';
   if ( $user_lvl >= $action_permission['update'] )
   {

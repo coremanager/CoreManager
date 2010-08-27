@@ -107,8 +107,7 @@ function top100($realmid)
   {
     $query = "SELECT characters.guid, characters.name, race, class, gender, level, 
               totaltime, online, money AS gold, health, power1,
-							arenaPoints as arena, totalHonorPoints as honor, totalKills as kills, 
-              guildid as gname,
+							arenaPoints as arena, totalHonorPoints as honor, totalKills as kills,
               strength AS str,
               agility AS agi,
               stamina AS sta,
@@ -137,8 +136,8 @@ function top100($realmid)
               power1 AS melee_hit,
               power2 AS range_hit,
               power3 AS spell_hit
-              FROM characters, character_stats, guild_member 
-              WHERE guild_member.guid = characters.guid 
+              FROM characters
+              LEFT JOIN character_stats ON character_stats.guid = characters.guid
               ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
     $result = $sql['char']->query($query);
   }
@@ -299,6 +298,16 @@ function top100($realmid)
   $i=0;
   while($char = $sql['char']->fetch_assoc($result))
   {
+    // MaNGOS & Trinity don't save guild info on the character
+    if ( $core != 1 )
+    {
+      $g_query = "SELECT * FROM guild_member WHERE guid='".$char['guid']."'";
+      $g_result = $sql['char']->query($g_query);
+      $guildinfo = $sql['char']->fetch_assoc($g_result);
+
+      $char['gname'] = $guildinfo['guildid'];
+    }
+
     $output .= '
               <tr valign="top">
                 <td>'.(++$i+$start).'</td>
