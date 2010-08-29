@@ -330,7 +330,8 @@ function count_days( $a, $b )
 function view_guild()
 {
   global $output,  $logon_db, $characters_db, $arcm_db, $realm_id, $itemperpage,
-    $action_permission, $user_lvl, $user_id, $showcountryflag, $sql, $core;
+    $action_permission, $user_lvl, $user_id, $showcountryflag,
+    $show_guild_emblem, $sql, $core;
 
   if(!isset($_GET['id'])) redirect("guild.php?error=1");
   $guild_id = $sql['char']->quote_smart($_GET['id']);
@@ -376,13 +377,19 @@ function view_guild()
     $query = $sql['char']->query("SELECT guildid, guildname, guildinfo, MOTD, createdate,
       (SELECT count(*) FROM guild_data WHERE guildid = '$guild_id') AS mtotal,
       (SELECT count(*) FROM guild_data WHERE guildid = '$guild_id' AND playerid IN
-      (SELECT guid FROM characters WHERE online = 1)) AS monline
+      (SELECT guid FROM characters WHERE online = 1)) AS monline,
+      emblemStyle AS EmblemStyle,
+      emblemColor AS EmblemColor,
+      borderStyle AS BorderStyle,
+      borderColor AS BorderColor,
+      backgroundColor AS BackgroundColor
       FROM guilds WHERE guildid = '$guild_id'");
   else
     $query = $sql['char']->query("SELECT guildid, name, info, MOTD, createdate,
       (select count(*) from guild_member where guildid = '$guild_id') as mtotal,
       (select count(*) from guild_member where guildid = '$guild_id' and guid in
-      (select guid from characters where online = 1)) as monline
+      (select guid from characters where online = 1)) as monline,
+      EmblemStyle, EmblemColor, BorderStyle, BorderColor, BackgroundColor
       FROM guild WHERE guildid = '$guild_id'");
   $guild_data = $sql['char']->fetch_row($query);
 
@@ -397,7 +404,22 @@ function view_guild()
             <table class=\"hidden\" id=\"guild_edit_guild\">
               <tr>
                 <td>
-                  <table class=\"lined\">
+                  <table class=\"lined\">";
+  if ( $show_guild_emblem )
+    $output .= "
+                    <tr>
+                      <td colspan='3'>
+                        <div id='guild_emblem'>
+                          <center>
+                            <img id='guild_view_background' src='img/emblems/Background_".doubledigit($guild_data[11]).".png' />
+                            <img id='guild_view_emblem' src='img/emblems/Emblem_".doubledigit($guild_data[7])."_".doubledigit($guild_data[8]).".png' />
+                            <img id='guild_view_border' src='img/emblems/Border_".doubledigit($guild_data[9])."_".doubledigit($guild_data[10]).".png' />
+                            <img id='guild_emblem_border' src='img/EmblemBorder.png' />
+                          </center>
+                        </div>
+                      </td>
+                    </tr>";
+  $output .= "
                     <tr>
                       <td width=\"25%\"><b>".lang('guild', 'create_date').":</b><br />".date('o-m-d', $guild_data[4])."</td>
                       <td width=\"50%\" class=\"bold\">$guild_data[1]</td>
@@ -665,6 +687,14 @@ function rem_char_from_guild()
   $sql['char']->query("UPDATE `characters` SET data = '$data' WHERE guid = '$guid'");
   $sql['char']->query("DELETE FROM guild_member WHERE guid = '$guid'");
   redirect("guild.php?action=view_guild&amp;id=$guld_id");
+}
+
+function doubledigit($inp)
+{
+  if ( strlen($inp) < 2 )
+    return "0".$inp;
+  else
+    return $inp;
 }
 
 

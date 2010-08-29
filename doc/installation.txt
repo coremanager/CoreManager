@@ -45,8 +45,12 @@ INSTALLATION:
    8. Run the included DBC to MySQL Convertor tool. Instructions are in \Tools\README (DBC to MySQL).txt
       (This must be run from Windows XP or greater, but the destination database may be hosted on *Nix)
 
-   9. Extract \img\icons\icons.zip into \img\icons\.
+   9. Extract all 5 of \img\icons\*_icons.part*.rar into \img\icons\.
   10. Extract any .zip files in \img\icons\updates\ into \img\icons\.
+
+      OPTIONAL
+  11. Extract \img\emblems\*_emblems.zip into \img\emblems\.
+  12. Extract any .zip files in \img\emblems\updates into \img\emblems\.
 
 
 CONFIGURATION:

@@ -1308,6 +1308,7 @@ function general()
         $debug = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Debug'"));
         $test_mode = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Test_Mode'"));
         $multi_realm = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Multi_Realm'"));
+        $show_emblem = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Show_Guild_Emblem'"));
         $language_locales_search_option = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Language_Locales_Search_Option'"));
         $language_site_encoding = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Language_Site_Encoding'"));
         $output .= '
@@ -1432,6 +1433,10 @@ function general()
               <td><input type="text" name="multirealm" value="'.$multi_realm['Value'].'" readonly="readonly" /></td>
             </tr>
             <tr>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'showemblem').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'showemblem').'</a>: </td>
+              <td><input type="text" name="showemblem" value="'.$show_emblem['Value'].'" /></td>
+            </tr>
+            <tr>
               <td colspan=2><b>'.lang('admin', 'language').'</b.</td>
             </tr>
             <tr>
@@ -1487,6 +1492,10 @@ function general()
         $debug = $sqlm->quote_smart($_GET['debug']);
         $test_mode = $sqlm->quote_smart($_GET['testmode']);
         $multi_realm = $sqlm->quote_smart($_GET['multirealm']);
+        if ( isset($_GET['showemblem']) )
+          $show_emblem = 1;
+        else
+          $show_emblem = 0;
         $language_locales_search_option = $sqlm->quote_smart($_GET['languagelocalessearchoption']);
         $language_site_encoding = $sqlm->quote_smart($_GET['languagesiteencoding']);
         $hide_server_mem = $sqlm->quote_smart($_GET['hideservermem']);
@@ -1510,6 +1519,7 @@ function general()
         $result = $sqlm->query("UPDATE config_misc SET Value='".$debug."' WHERE `Key`='Debug'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$test_mode."' WHERE `Key`='Test_Mode'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$multi_realm."' WHERE `Key`='Multi_Realm'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$show_emblem."' WHERE `Key`='Show_Guild_Emblem'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$language_locales_search_option."' WHERE `Key`='Language_Locales_Search_Option'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$language_site_encoding."' WHERE `Key`='Language_Site_Encoding'");
 		

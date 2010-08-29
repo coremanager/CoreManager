@@ -1611,6 +1611,39 @@ tr td.rep0
 {
 	cursor: pointer;
 }
+#guild_view_background
+{
+  position: absolute;
+  left: 315px;
+  top: 44px;
+  z-index: 1;
+}
+#guild_view_border
+{
+  position: absolute;
+  left: 315px;
+  top: 44px;
+  z-index: 3;
+}
+#guild_view_emblem
+{
+  position: absolute;
+  left: 315px;
+  top: 44px;
+  z-index: 2;
+}
+#guild_emblem
+{
+  position: relative;
+  height: 140px;
+}
+#guild_emblem_border
+{
+  position: absolute;
+  left: -5px;
+  top: 5px;
+  z-index: 99;
+}
 
 /* GUILDBANK.PHP */
 #guildbank_tabs

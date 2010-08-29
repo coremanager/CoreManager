@@ -570,6 +570,11 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $page_bottom_ad_content = $misc_row['Value'];
       break;
     }
+    case "Show_Guild_Emblem":
+    {
+      $show_guild_emblem = $misc_row['Value'];
+      break;
+    }
   }
 }
 
