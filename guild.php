@@ -55,19 +55,25 @@ function browse_guilds()
   //==========================MyGuild==========================================
 
   if ( $core == 1 )
-    $query_myGuild = $sql['char']->query("SELECT g.guildid AS gid, g.guildname, g.leaderguid AS lguid,
-      (SELECT name FROM characters WHERE guid=lguid), (SELECT race IN (2, 5, 6, 8, 10) FROM characters WHERE guid=lguid) AS faction,
+    $query_myGuild = $sql['char']->query("SELECT g.guildid AS gid, g.guildname AS gname, g.leaderguid AS lguid,
+      (SELECT name FROM characters WHERE guid=lguid) AS lname, (SELECT race IN (2, 5, 6, 8, 10) FROM characters WHERE guid=lguid) AS faction,
       (SELECT COUNT(*) FROM characters WHERE guid IN (SELECT guid FROM guild_data WHERE guildid = lguid) AND online=1) AS gonline,
-      (SELECT COUNT(*) FROM guild_data WHERE guildid=gid), SUBSTRING_INDEX(g.MOTD,' ',6), g.createdate,
-      (SELECT acct FROM characters WHERE guid=lguid) FROM guilds AS g
+      (SELECT COUNT(*) FROM guild_data WHERE guildid=gid) AS mcount, g.guildInfo AS info, g.motd AS motd, g.createdate AS createdate,
+      (SELECT acct FROM characters WHERE guid=lguid) AS macct,
+      (SELECT race FROM characters WHERE guid=lguid) AS lrace, (SELECT class FROM characters WHERE guid=lguid) AS lclass,
+      (SELECT level FROM characters WHERE guid=lguid) AS llevel, (SELECT gender FROM characters WHERE guid=lguid) AS lgender
+      FROM guilds AS g
       LEFT OUTER JOIN guild_data AS gm ON gm.guildid=g.guildid LEFT OUTER JOIN characters AS c ON c.guid=gm.playerid
       WHERE c.acct=".$user_id." GROUP BY g.guildid ORDER BY gid");
   else
-    $query_myGuild = $sql['char']->query("SELECT g.guildid AS gid, g.name AS guildname, g.leaderguid AS lguid,
-      (SELECT name FROM characters WHERE guid=lguid), (SELECT race IN (2, 5, 6, 8, 10) FROM characters WHERE guid=lguid) AS faction,
+    $query_myGuild = $sql['char']->query("SELECT g.guildid AS gid, g.name AS gname, g.leaderguid AS lguid,
+      (SELECT name FROM characters WHERE guid=lguid) AS lname, (SELECT race IN (2, 5, 6, 8, 10) FROM characters WHERE guid=lguid) AS faction,
       (SELECT COUNT(*) FROM characters WHERE guid IN (SELECT guid FROM guild_member WHERE guildid=lguid) AND online = 1) AS gonline,
-      (SELECT COUNT(*) FROM guild_member WHERE guildid=gid), SUBSTRING_INDEX(g.MOTD,' ',6), g.createdate,
-      (SELECT account FROM characters WHERE guid=lguid) FROM guild AS g
+      (SELECT COUNT(*) FROM guild_member WHERE guildid=gid) AS mcount, g.info AS info, g.motd AS motd, g.createdate AS createdate,
+      (SELECT account FROM characters WHERE guid=lguid) AS macct,
+      (SELECT race FROM characters WHERE guid=lguid) AS lrace, (SELECT class FROM characters WHERE guid=lguid) AS lclass,
+      (SELECT level FROM characters WHERE guid=lguid) AS llevel, (SELECT gender FROM characters WHERE guid=lguid) AS lgender
+      FROM guild AS g
       LEFT OUTER JOIN guild_member AS gm ON gm.guildid=g.guildid LEFT OUTER JOIN characters AS c ON c.guid=gm.guid
       WHERE c.account=".$user_id." GROUP BY g.guildid ORDER BY gid");
 
@@ -84,34 +90,36 @@ function browse_guilds()
                 <th width="10%">'.lang('guild', 'guild_leader').'</th>
                 <th width="1%">'.lang('guild', 'guild_faction').'</th>
                 <th width="10%">'.lang('guild', 'tot_m_online').'</th>
+                <th width="20%">'.lang('guild', 'info').'</th>
                 <th width="20%">'.lang('guild', 'guild_motd').'</th>
                 <th width="20%">'.lang('guild', 'create_date').'</th>
               </tr>';
-    while ( $data = $sql['char']->fetch_row($query_myGuild) )
+    while ( $data = $sql['char']->fetch_assoc($query_myGuild) )
     {
       if ( $core == 1 )
-        $result = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$data[9]."'");
+        $result = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$data['macct']."'");
       else
-        $result = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$data[9]."'");
-        
+        $result = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$data['macct']."'");
+
       $uname = $sql['logon']->result($result, 0, 'login');
-      
+
       $result = $sql['mgr']->query("SELECT SecurityLevel FROM config_accounts WHERE Login='".$uname."'");
-      
+
       $owner_gmlvl = $sql['logon']->result($result, 0, 'SecurityLevel');
       if ( !isset($owner_gmlvl) )
         $owner_gmlvl = 0;
-      
+
       $output .= '
               <tr>
-                <td>'.$data[0].'</td>
-                <td><a href="guild.php?action=view_guild&amp;error=3&amp;id='.$data[0].'">'.$data[1].'</a></td>';
-      $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '<td>'.htmlentities($data[3]).'</td>' : '<td><a href="char.php?id='.$data[2].'">' ).htmlentities($data[3]).'</a></td>';
+                <td>'.$data['gid'].'</td>
+                <td><a href="guild.php?action=view_guild&amp;error=3&amp;id='.$data['gid'].'">'.$data['gname'].'</a></td>';
+      $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '<td><a href="char.php?id='.$data['lguid'].'" onmousemove="oldtoolTip(\''.lang('char', 'level_short').$data['llevel'].' '.char_get_race_name($data['lrace']).' '.char_get_class_name($data['lclass']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($data['lname']).'</td>' : '<td><spanonmousemove="oldtoolTip(\''.lang('char', 'level_short').$data['llevel'].' '.char_get_race_name($data['lrace']).' '.char_get_class_name($data['lclass']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($data['lname']) ).'</span></td>';
       $output .= '
-                <td><img src="img/'.( ( $data[4]==0 ) ? "alliance" : "horde" ).'_small.gif" alt="" /></td>
-                <td>'.$data[5].'/'.$data[6].'</td>
-                <td>'.htmlentities($data[7]).' ...</td>
-                <td class="small">'.date('o-m-d', $data[8]).'</td>
+                <td><img src="img/'.( ( $data['faction']==0 ) ? "alliance" : "horde" ).'_small.gif" alt="" /></td>
+                <td>'.$data['gonline'].'/'.$data['mcount'].'</td>
+                <td>'.htmlentities($data['info']).'</td>
+                <td>'.htmlentities($data['motd']).'</td>
+                <td class="small">'.date('o-m-d', $data['createdate']).'</td>
               </tr>';
     }
     unset($data);
@@ -147,7 +155,10 @@ function browse_guilds()
         {
           $query = $sql['char']->query("SELECT g.guildid AS gid, g.guildname, g.leaderguid AS lguid,
             (SELECT name FROM characters WHERE guid=lguid) AS lname, c.race IN (2, 5, 6, 8, 10) AS lfaction,
-            (SELECT COUNT(*) FROM guild_data WHERE guildid=gid) AS tot_chars, createdate, c.acct AS laccount
+            (SELECT COUNT(*) FROM guild_data WHERE guildid=gid) AS tot_chars, createdate, c.acct AS laccount,
+            g.guildInfo AS info,
+            (SELECT race FROM characters WHERE guid=lguid) AS lrace, (SELECT class FROM characters WHERE guid=lguid) AS lclass,
+            (SELECT level FROM characters WHERE guid=lguid) AS llevel, (SELECT gender FROM characters WHERE guid=lguid) AS lgender
             FROM guilds AS g LEFT OUTER JOIN characters AS c ON c.guid=g.leaderguid
             WHERE g.name LIKE '%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
           $query_count = $sql['char']->query("SELECT 1 FROM guilds WHERE guildname LIKE '%".$search_value."%'");
@@ -156,7 +167,10 @@ function browse_guilds()
         {
           $query = $sql['char']->query("SELECT g.guildid AS gid, g.name AS guildname, g.leaderguid AS lguid,
             (SELECT name FROM characters WHERE guid=lguid) AS lname, c.race IN (2, 5, 6, 8, 10) AS lfaction,
-            (SELECT COUNT(*) FROM guild_member WHERE guildid=gid) AS tot_chars, createdate, c.account AS laccount
+            (SELECT COUNT(*) FROM guild_member WHERE guildid=gid) AS tot_chars, createdate, c.account AS laccount,
+            g.info AS info,
+            (SELECT race FROM characters WHERE guid=lguid) AS lrace, (SELECT class FROM characters WHERE guid=lguid) AS lclass,
+            (SELECT level FROM characters WHERE guid=lguid) AS llevel, (SELECT gender FROM characters WHERE guid=lguid) AS lgender
             FROM guild AS g LEFT OUTER JOIN characters AS c ON c.guid=g.leaderguid
             WHERE g.name LIKE '%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
           $query_count = $sql['char']->query("SELECT 1 FROM guild WHERE name LIKE '%".$search_value."%'");
@@ -171,7 +185,10 @@ function browse_guilds()
         {
           $query = $sql['char']->query("SELECT g.guildid AS gid, g.guildname, g.leaderguid AS lguid,
             (SELECT name FROM characters WHERE guid=lguid) AS lname, c.race IN (2, 5, 6, 8, 10) AS lfaction,
-            (SELECT COUNT(*) FROM guild_data WHERE guildid=gid) AS tot_chars, createdate, c.acct AS laccount
+            (SELECT COUNT(*) FROM guild_data WHERE guildid=gid) AS tot_chars, createdate, c.acct AS laccount,
+            g.guildInfo AS info,
+            (SELECT race FROM characters WHERE guid=lguid) AS lrace, (SELECT class FROM characters WHERE guid=lguid) AS lclass,
+            (SELECT level FROM characters WHERE guid=lguid) AS llevel, (SELECT gender FROM characters WHERE guid=lguid) AS lgender
             FROM guilds AS g LEFT OUTER JOIN characters AS c ON c.guid=g.leaderguid WHERE g.leaderguid IN
             (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%') ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
           $query_count = $sql['char']->query("SELECT 1 FROM guilds WHERE leaderguid IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%')");
@@ -180,7 +197,10 @@ function browse_guilds()
         {
           $query = $sql['char']->query("SELECT g.guildid AS gid, g.name, g.leaderguid AS lguid,
             (SELECT name FROM characters WHERE guid=lguid) AS lname, c.race IN (2, 5, 6, 8, 10) AS lfaction,
-            (SELECT COUNT(*) FROM guild_member WHERE guildid=gid) AS tot_chars, createdate, c.account AS laccount
+            (SELECT COUNT(*) FROM guild_member WHERE guildid=gid) AS tot_chars, createdate, c.account AS laccount,
+            g.info AS info,
+            (SELECT race FROM characters WHERE guid=lguid) AS lrace, (SELECT class FROM characters WHERE guid=lguid) AS lclass,
+            (SELECT level FROM characters WHERE guid=lguid) AS llevel, (SELECT gender FROM characters WHERE guid=lguid) AS lgender
             FROM guild AS g LEFT OUTER JOIN characters AS c ON c.guid=g.leaderguid WHERE g.leaderguid IN
             (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%') ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
           $query_count = $sql['char']->query("SELECT 1 FROM guild WHERE leaderguid IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%')");
@@ -197,7 +217,10 @@ function browse_guilds()
         {
           $query = $sql['char']->query("SELECT g.guildid AS gid, g.guildname, g.leaderguid AS lguid,
             (SELECT name FROM characters WHERE guid=lguid) AS lname, c.race IN (2, 5, 6, 8, 10) AS lfaction,
-            (SELECT COUNT(*) FROM guild_data WHERE guildid=gid) AS tot_chars, createdate, c.acct AS laccount
+            (SELECT COUNT(*) FROM guild_data WHERE guildid=gid) AS tot_chars, createdate, c.acct AS laccount,
+            g.guildInfo AS info,
+            (SELECT race FROM characters WHERE guid=lguid) AS lrace, (SELECT class FROM characters WHERE guid=lguid) AS lclass,
+            (SELECT level FROM characters WHERE guid=lguid) AS llevel, (SELECT gender FROM characters WHERE guid=lguid) AS lgender
             FROM guilds AS g LEFT OUTER JOIN characters AS c ON c.guid=g.leaderguid
             WHERE g.guildid='".$search_value."' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
           $query_count = $sql['char']->query("SELECT 1 FROM guilds WHERE guildid='".$search_value."'");
@@ -206,7 +229,10 @@ function browse_guilds()
         {
           $query = $sql['char']->query("SELECT g.guildid AS gid, g.name, g.leaderguid AS lguid,
             (SELECT name FROM characters WHERE guid=lguid) AS lname, c.race in (2, 5, 6, 8, 10) AS lfaction,
-            (SELECT COUNT(*) FROM guild_member WHERE guildid=gid) AS tot_chars, createdate, c.account AS laccount
+            (SELECT COUNT(*) FROM guild_member WHERE guildid=gid) AS tot_chars, createdate, c.account AS laccount,
+            g.info AS info,
+            (SELECT race FROM characters WHERE guid=lguid) AS lrace, (SELECT class FROM characters WHERE guid=lguid) AS lclass,
+            (SELECT level FROM characters WHERE guid=lguid) AS llevel, (SELECT gender FROM characters WHERE guid=lguid) AS lgender
             FROM guild AS g LEFT OUTER JOIN characters AS c ON c.guid=g.leaderguid
             WHERE g.guildid='".$search_value."' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
           $query_count = $sql['char']->query("SELECT 1 FROM guild WHERE guildid='".$search_value."'");
@@ -223,7 +249,10 @@ function browse_guilds()
     {
       $query = $sql['char']->query("SELECT g.guildid AS gid, g.guildname, g.leaderguid AS lguid,
         (SELECT name FROM characters WHERE guid=lguid) AS lname, c.race IN (2, 5, 6, 8, 10) AS lfaction,
-        (SELECT COUNT(*) FROM guild_data WHERE guildid=gid) AS tot_chars, createdate, c.acct AS laccount
+        (SELECT COUNT(*) FROM guild_data WHERE guildid=gid) AS tot_chars, createdate, c.acct AS laccount,
+        g.guildInfo AS info,
+        (SELECT race FROM characters WHERE guid=lguid) AS lrace, (SELECT class FROM characters WHERE guid=lguid) AS lclass,
+        (SELECT level FROM characters WHERE guid=lguid) AS llevel, (SELECT gender FROM characters WHERE guid=lguid) AS lgender
         FROM guilds AS g LEFT OUTER JOIN characters AS c ON c.guid=g.leaderguid
         ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
       $query_count = $sql['char']->query("SELECT 1 FROM guilds");
@@ -232,7 +261,10 @@ function browse_guilds()
     {
       $query = $sql['char']->query("SELECT g.guildid AS gid, g.name AS guildname, g.leaderguid AS lguid, 
         (SELECT name FROM characters where guid=lguid) AS lname, c.race in (2,5,6,8,10) AS lfaction, 
-        (SELECT COUNT(*) FROM guild_member where guildid=gid) AS tot_chars, createdate,  c.account AS laccount 
+        (SELECT COUNT(*) FROM guild_member where guildid=gid) AS tot_chars, createdate,  c.account AS laccount,
+        g.info AS info,
+        (SELECT race FROM characters WHERE guid=lguid) AS lrace, (SELECT class FROM characters WHERE guid=lguid) AS lclass,
+        (SELECT level FROM characters WHERE guid=lguid) AS llevel, (SELECT gender FROM characters WHERE guid=lguid) AS lgender
         FROM guild AS g LEFT OUTER JOIN characters AS c ON c.guid=g.leaderguid 
         ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
       $query_count = $sql['char']->query("SELECT 1 FROM guild");
@@ -289,30 +321,32 @@ function browse_guilds()
                   <th width="20%"><a href="guild.php?order_by=lname&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='lname' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang('guild', 'guild_leader').'</a></th>
                   <th width="10%"><a href="guild.php?order_by=lfaction&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='lfaction' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang('guild', 'guild_faction').'</a></th>
                   <th width="15%"><a href="guild.php?order_by=tot_chars&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='tot_chars' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang('guild', 'tot_members').'</a></th>
+                  <th width="20%">'.lang('guild', 'info').'</th>
                   <th width="20%"><a href="guild.php?order_by=createdate&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='createdate' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang('guild', 'create_date').'</a></th>
                 </tr>';
-  while ( $data = $sql['char']->fetch_row($query) )
+  while ( $data = $sql['char']->fetch_assoc($query) )
   {
     if ( $core == 1 )
-      $a_query = "SELECT * FROM accounts WHERE acct='".$data[7]."'";
+      $a_query = "SELECT * FROM accounts WHERE acct='".$data['laccount']."'";
     else
-      $a_query = "SELECT *, username AS login FROM account WHERE id='".$data[7]."'";
-      
+      $a_query = "SELECT *, username AS login FROM account WHERE id='".$data['laccount']."'";
+
     $a_result = $sql['logon']->query($a_query);
     $a_result = $sql['logon']->fetch_assoc($a_result);
-    $user = $result['login'];
-    
+    $user = $a_result['login'];
+
     $result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$user."'");
     $owner_gmlvl = $sql['logon']->result($result, 0, 'gm');
     $output .= '
                 <tr>
-                  <td>'.$data[0].'</td>';
-    $output .= ( ( $user_lvl >= $action_permission['update'] ) ? '<td><a href="guild.php?action=view_guild&amp;error=3&amp;id='.$data[0].'">'.htmlentities($data[1]).'</a></td>' : '<td>'.htmlentities($data[1]).'</td>' );
-    $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '<td>'.htmlentities($data[3]).'</td>' : '<td><a href="char.php?id='.$data[2].'">'.htmlentities($data[3]).'</a></td>' );
+                  <td>'.$data['gid'].'</td>';
+    $output .= ( ( $user_lvl >= $action_permission['update'] ) ? '<td><a href="guild.php?action=view_guild&amp;error=3&amp;id='.$data['gid'].'">'.htmlentities($data['guildname']).'</a></td>' : '<td>'.htmlentities($data['guildname']).'</td>' );
+    $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '<td><a href="char.php?id='.$data['lguid'].'" onmousemove="oldtoolTip(\''.lang('char', 'level_short').$data['llevel'].' '.char_get_race_name($data['lrace']).' '.char_get_class_name($data['lclass']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($data['lname']).'</a></td>' : '<td><span onmousemove="oldtoolTip(\''.lang('char', 'level_short').$data['llevel'].' '.char_get_race_name($data['lrace']).' '.char_get_class_name($data['lclass']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($data['lname']).'</span></td>' );
     $output .= '
-                  <td><img src="img'.( ( $data[4] == 0 ) ? "alliance" : "horde" ).'_small.gif" alt="" /></td>
-                  <td>'.$data[5].'</td>
-                  <td class="small">'.date('o-m-d', $data[6]).'</td>
+                  <td><img src="img/'.( ( $data['lfaction'] == 0 ) ? "alliance" : "horde" ).'_small.gif" alt="" /></td>
+                  <td>'.$data['tot_chars'].'</td>
+                  <td>'.$data['info'].'</td>
+                  <td class="small">'.date('o-m-d', $data['createdate']).'</td>
                 </tr>';
   }
   $output .= '
@@ -399,7 +433,7 @@ function view_guild()
   //==========================$_GET and SECURE end=============================
 
   if ( $core == 1 )
-    $query = $sql['char']->query("SELECT guildid, guildname, guildinfo, MOTD, createdate,
+    $query = $sql['char']->query("SELECT guildid, guildname AS name, guildinfo AS info, MOTD, createdate,
       (SELECT COUNT(*) FROM guild_data WHERE guildid='".$guild_id."') AS mtotal,
       (SELECT COUNT(*) FROM guild_data WHERE guildid='".$guild_id."' AND playerid IN
       (SELECT guid FROM characters WHERE online=1)) AS monline,
@@ -416,7 +450,7 @@ function view_guild()
       (SELECT guid FROM characters WHERE online=1)) AS monline,
       EmblemStyle, EmblemColor, BorderStyle, BorderColor, BackgroundColor
       FROM guild WHERE guildid='".$guild_id."'");
-  $guild_data = $sql['char']->fetch_row($query);
+  $guild_data = $sql['char']->fetch_assoc($query);
 
   $output .= '
         <script type=\"text/javascript\">
@@ -432,35 +466,29 @@ function view_guild()
                   <table class="lined">';
   $output .= '
                     <tr>
-                      <td width="25%"><b>'.lang('guild', 'create_date').':</b><br />'.date('o-m-d', $guild_data[4]).'</td>
-                      <td width="50%" class="bold">'.$guild_data[1].'</td>
-                      <td width="25%"><b>'.lang('guild', 'tot_m_online').':</b><br />'.$guild_data[6].' / '.$guild_data[5].'</td>
+                      <td width="25%"><b>'.lang('guild', 'create_date').':</b><br />'.date('o-m-d', $guild_data['createdate']).'</td>
+                      <td width="50%" class="bold" colspan="2">'.$guild_data['name'].'</td>
+                      <td width="25%"><b>'.lang('guild', 'tot_m_online').':</b><br />'.$guild_data['monline'].' / '.$guild_data['mtotal'].'</td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"><b>'.lang('guild', 'info').':</b><br />'.$guild_data['info'].'</td>
+                      <td colspan="2"><b>'.lang('guild', 'motd').':</b><br />'.$guild_data['MOTD'].'</td>
                     </tr>';
+  $output .= '';
   if ( $show_guild_emblem )
     $output .= '
                     <tr>
-                      <td colspan="3">
+                      <td colspan="4">
                         <div id="guild_emblem">
                           <center>
-                            <img id="guild_view_background" src="img/emblems/Background_'.doubledigit($guild_data[11]).'.png" />
-                            <img id="guild_view_emblem" src="img/emblems/Emblem_'.doubledigit($guild_data[7]).'_'.doubledigit($guild_data[8]).'.png" />
-                            <img id="guild_view_border" src="img/emblems/Border_'.doubledigit($guild_data[9]).'_'.doubledigit($guild_data[10]).'.png" />
+                            <img id="guild_view_background" src="img/emblems/Background_'.doubledigit($guild_data['BackgroundColor']).'.png" />
+                            <img id="guild_view_emblem" src="img/emblems/Emblem_'.doubledigit($guild_data['EmblemStyle']).'_'.doubledigit($guild_data['EmblemColor']).'.png" />
+                            <img id="guild_view_border" src="img/emblems/Border_'.doubledigit($guild_data['BorderStyle']).'_'.doubledigit($guild_data['BorderColor']).'.png" />
                             <img id="guild_emblem_border" src="img/EmblemBorder.png" />
                           </center>
                         </div>
                       </td>
-                    </tr>';
-  if ( $guild_data[2] != '' )
-    $output .= '
-                    <tr>
-                      <td colspan="3"><b>'.lang('guild', 'info').':</b><br />'.$guild_data[2].'</td>
-                    </tr>';
-  if ($guild_data[3] != '')
-    $output .= '
-                    <tr>
-                      <td colspan="3"><b>'.lang('guild', 'motd').':</b><br />'.$guild_data[3].'</td>
-                    </tr>';
-  $output .= '
+                    </tr>
                   </table>
                 </td>
               </tr>
@@ -497,7 +525,7 @@ function view_guild()
     $members = $sql['char']->query("SELECT gm.playerid AS cguid, c.name AS cname, c.`race` AS crace, c.`class` AS cclass,
       c.`level` AS clevel,
       gm.guildrank AS mrank, (SELECT rankname FROM guild_ranks WHERE guildid='".$guild_id."' AND rankid=mrank) AS rname,
-      gm.publicnote, gm.officernote, gender,
+      gm.publicNote AS pnote, gm.officerNote AS offnote, gender,
       c.`online` AS conline, c.`acct`, c.`timestamp` AS clogout
       FROM guild_data AS gm LEFT OUTER JOIN characters AS c ON c.guid=gm.playerid
       WHERE gm.guildid='".$guild_id."' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
@@ -505,7 +533,7 @@ function view_guild()
     $members = $sql['char']->query("SELECT gm.guid AS cguid, c.name AS cname, c.`race` AS crace, c.`class` AS cclass,
       c.`level` AS clevel,
       gm.rank AS mrank, (SELECT rname FROM guild_rank WHERE guildid='".$guild_id."' AND rid=mrank) AS rname,
-      gm.Pnote, gm.OFFnote, gender,
+      gm.pnote AS pnote, gm.offnote AS offnote, gender,
       c.`online` AS conline, c.`account` AS acct, c.`logout_time` AS clogout
       FROM guild_member AS gm LEFT OUTER JOIN characters AS c ON c.guid=gm.guid
       WHERE gm.guildid='".$guild_id."' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
@@ -533,22 +561,15 @@ function view_guild()
     $output .= '
                     <tr>';
     // gm, guildleader or own account! are allowed to remove from guild
-    $output .= ( ( $user_lvl >= $action_permission['delete'] || $amIguildleader || $member['acct'] == $user_id ) ? "
-                      <td>
-                        <img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{".lang('global', 'delete')."}: &lt;font color=white&gt;{".$member['cname']."}&lt;/font&gt;&lt;br /&gt;{".lang('global', 'are_you_sure')."}', 'guild.php?action=rem_char_from_guild&amp;realm=".$realmid."&amp;id=".$member['cguid']."&amp;guld_id=".$guild_id."');\" id=\"guild_edit_delete_cursor\" />
-                      </td>" : "
-                      <td>
-                      </td>" );
-    $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '
-                      <td>'.htmlentities($member['cname']).'</td>' : '
-                      <td><a href="char.php?id='.$member['cguid'].'">'.htmlentities($member['cname']).'</a></td>' );
+    $output .= ( ( $user_lvl >= $action_permission['delete'] || $amIguildleader || $member['acct'] == $user_id ) ? '<td><img src="img/aff_cross.png" alt="" onclick="answerBox(\''.lang('global', 'delete').': &lt;font color=white&gt;'.$member['cname'].'&lt;/font&gt;&lt;br /&gt;'.lang('global', 'are_you_sure').'\', \'guild.php?action=rem_char_from_guild&amp;realm='.$realmid.'&amp;id='.$member['cguid'].'&amp;guld_id='.$guild_id.'\');" id="guild_edit_delete_cursor" /></td>' : '<td></td>' );
+    $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '<td><a href="char.php?id='.$member['cguid'].'">'.htmlentities($member['cname']).'</a></td>' : '<td>'.htmlentities($member['cname']).'</td>' );
     $output .= '
                       <td><img src="img/c_icons/'.$member['crace'].'-'.$member['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member['crace']).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
                       <td><img src="img/c_icons/'.$member['cclass'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member['cclass']).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
                       <td>'.char_get_level_color($member['clevel']).'</td>
                       <td>'.htmlentities($member['rname']).' ('.$member['mrank'].')</td>
-                      <td>'.htmlentities($member['publicnote']).'</td>
-                      <td>'.htmlentities($member['officernote']).'</td>
+                      <td>'.htmlentities($member['pnote']).'</td>
+                      <td>'.htmlentities($member['offnote']).'</td>
                       <td>'.get_days_with_color($member['clogout']).'</td>
                       <td>'.( ( $member['conline'] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />').'</td>';
 
