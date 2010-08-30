@@ -1615,33 +1615,33 @@ tr td.rep0
 {
   position: absolute;
   left: 315px;
-  top: 44px;
+  top: 19px;
   z-index: 1;
 }
 #guild_view_border
 {
   position: absolute;
   left: 315px;
-  top: 44px;
+  top: 19px;
   z-index: 3;
 }
 #guild_view_emblem
 {
   position: absolute;
   left: 315px;
-  top: 44px;
+  top: 19px;
   z-index: 2;
 }
 #guild_emblem
 {
   position: relative;
-  height: 140px;
+  height: 115px;
 }
 #guild_emblem_border
 {
   position: absolute;
   left: -5px;
-  top: 5px;
+  top: -20px;
   z-index: 99;
 }
 

@@ -1434,7 +1434,7 @@ function general()
             </tr>
             <tr>
               <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'showemblem').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'showemblem').'</a>: </td>
-              <td><input type="text" name="showemblem" value="'.$show_emblem['Value'].'" /></td>
+              <td><input type="checkbox" name="showemblem" '.($show_emblem['Value'] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
               <td colspan=2><b>'.lang('admin', 'language').'</b.</td>
