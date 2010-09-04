@@ -720,66 +720,66 @@ function add_new()
 
   valid_login($action_permission['insert']);
 
-  $output .= "
+  $output .= '
     <center>
-      <script type=\"text/javascript\" src=\"libs/js/sha1.js\">
+      <script type="text/javascript" src="libs/js/sha1.js">
       </script>
-      <script type=\"text/javascript\">
+      <script type="text/javascript">
         // <![CDATA[
         function do_submit_data ()
         {
           if (document.form.new_pass1.value != document.form.new_pass2.value)
           {
-            alert('".lang('user', 'nonidentical_passes')."');
+            alert("'.lang('user', 'nonidentical_passes').'");
             return;
           }
           else
           {
-            //document.form.pass.value = hex_sha1(document.form.new_user.value.toUpperCase()+':'+document.form.new_pass1.value.toUpperCase());
+            //document.form.pass.value = hex_sha1(document.form.new_user.value.toUpperCase()+":"+document.form.new_pass1.value.toUpperCase());
             document.form.pass.value = document.form.new_pass1.value;
-            document.form.new_pass1.value = '0';
-            document.form.new_pass2.value = '0';
+            document.form.new_pass1.value = "0";
+            document.form.new_pass2.value = "0";
             do_submit();
           }
         }
         // ]]>
       </script>
-      <fieldset id=\"user_new_account\">
-        <legend>".lang('user', 'create_new_acc')."</legend>
-        <form method=\"get\" action=\"user.php\" name=\"form\">
-          <input type=\"hidden\" name=\"pass\" value=\"\" maxlength=\"256\" />
-          <input type=\"hidden\" name=\"action\" value=\"doadd_new\" />
-          <table class=\"flat\">
+      <div id="user_new_account">
+        <span class="legend">'.lang('user', 'create_new_acc').'</span>
+        <form method="get" action="user.php" name="form">
+          <input type="hidden" name="pass" value="" maxlength="256" />
+          <input type="hidden" name="action" value="doadd_new" />
+          <table class="flat">
             <tr>
-              <td>".lang('user', 'login')."</td>
+              <td>'.lang('user', 'login').'</td>
               <td>
-                <input type=\"text\" name=\"new_user\" size=\"24\" maxlength=\"15\" value=\"New_Account\" />
+                <input type="text" name="new_user" size="24" maxlength="15" value="New_Account" />
               </td>
             </tr>
             <tr>
-              <td>".lang('user', 'password')."</td>
+              <td>'.lang('user', 'password').'</td>
               <td>
-                <input type=\"text\" name=\"new_pass1\" size=\"24\" maxlength=\"25\" value=\"123456\" />
+                <input type="text" name="new_pass1" size="24" maxlength="25" value="123456" />
               </td>
             </tr>
             <tr>
-              <td>".lang('user', 'confirm')."</td>
+              <td>'.lang('user', 'confirm').'</td>
               <td>
-                <input type=\"text\" name=\"new_pass2\" size=\"24\" maxlength=\"25\" value=\"123456\" />
+                <input type="text" name="new_pass2" size="24" maxlength="25" value="123456" />
               </td>
             </tr>
             <tr>
-              <td>".lang('user', 'email')."</td>
+              <td>'.lang('user', 'email').'</td>
               <td>
-                <input type=\"text\" name=\"new_mail\" size=\"24\" maxlength=\"225\" value=\"none@mail.com\" />
+                <input type="text" name="new_mail" size="24" maxlength="225" value="none@mail.com" />
               </td>
             </tr>
             <tr>
-              <td>".lang('user', 'locked')."</td>
+              <td>'.lang('user', 'locked').'</td>
               <td>
-                <input type=\"checkbox\" name=\"new_locked\" value=\"1\" />
+                <input type="checkbox" name="new_locked" value="1" />
               </td>
-            </tr>";
+            </tr>';
   if ( $expansion_select )
     $output .= "
             <tr>
@@ -806,11 +806,10 @@ function add_new()
             </tr>
           </table>
         </form>
-      </fieldset>
+      </div>
       <br />
       <br />
-    </center>
-";
+    </center>";
 }
 
 
@@ -934,8 +933,8 @@ function edit_user()
               }
             // ]]>
           </script>
-          <fieldset id="user_edit_account">
-            <legend>'.lang('user', 'edit_acc').'</legend>
+          <div id="user_edit_account">
+            <span class="legend">'.lang('user', 'edit_acc').'</span>
             <form method="post" action="user.php?action=doedit_user" name="form">
             <input type="hidden" name="pass" value="" maxlength="256" />
             <input type="hidden" name="acct" value="'.$acct.'" />
@@ -1302,9 +1301,9 @@ function edit_user()
                 </tr>
               </table>
             </form>
-          </fieldset>
-
-          <br /><br />
+          </div>
+          <br />
+          <br />
         </center>";
   }
   else

@@ -42,8 +42,8 @@ function show_list()
           <tr>
             <td>
               <center>
-                <fieldset class="half_frame">
-                  <legend>'.lang('ultra', 'selectchar').'</legend>';
+                <div class="half_frame">
+                  <span class="legend">'.lang('ultra', 'selectchar').'</span>';
   if ( $num_rows == 0 )
   {
     $output .= '
@@ -81,15 +81,21 @@ function show_list()
                         </tr>';
     }
     $output .= '
-                      </table>
-                      <br />';
+                        <tr>
+                          <td>';
     makebutton(lang('ultra', 'select'), "javascript:do_submit()\" type=\"def",180);
+    $output .= '
+                          </td>
+                          <td>';
     makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
     $output .= '
+                          </td>
+                        </tr>
+                      </table>
                     </form>';
   }
   $output .= '
-                  </fieldset>
+                  </div>
                 </center>
               </td>
             </tr>
@@ -115,8 +121,8 @@ function select_item()
             <tr>
               <td>
                 <center>
-                  <fieldset class="half_frame">
-                    <legend>'.lang('ultra', 'selectitem').'</legend>
+                  <div class="half_frame">
+                    <span class="legend">'.lang('ultra', 'selectitem').'</span>
                     <form method="get" action="ultra_vendor.php" name="form">
                       <input type="hidden" name="action" value="selected_item" />
                       <input type="hidden" name="charname" value="'.$_GET['charname'].'" />'
@@ -132,11 +138,21 @@ function select_item()
                       <br />
                       <input name="myItem" type="text">
                       <br />
-                      <br />';
+                      <br />
+                      <table>
+                        <tr>
+                          <td>';
   makebutton(lang('ultra', 'select'), "javascript:do_submit()\" type=\"def",180);
+  $output .= '
+                          </td>
+                          <td>';
   makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
-  $output .= '      </form>
-                  </fieldset>
+  $output .= '
+                          </td>
+                        </tr>
+                      </table>
+                    </form>
+                  </div>
                 </center>
               </td>
             </tr>
@@ -203,8 +219,8 @@ function select_quantity()
             <tr>
               <td>
                 <center>
-                  <fieldset class="half_frame">
-                    <legend>'.lang('ultra', 'selectquantity').'</legend>';
+                  <div class="half_frame">
+                    <span class="legend">'.lang('ultra', 'selectquantity').'</span>';
 
   $gold = $mul * $base_price;
   $gold = str_pad($gold, 4, "0", STR_PAD_LEFT);
@@ -259,12 +275,21 @@ function select_quantity()
                       .lang('ultra', 'wanted').':
                       <input type="text" name="want" value="0" />
                       <br />
-                      <br />';
+                      <br />
+                      <table>
+                        <tr>
+                          <td>';
   makebutton(lang('ultra', 'submit'), "javascript:do_submit()\" type=\"def",180);
+  $output .= '
+                          </td>
+                          <td>';
   makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
   $output .= '
+                          </td>
+                        </tr>
+                      </table>
                     </form>
-                  </fieldset>
+                  </div>
                 </center>
               </td>
             </tr>
@@ -317,8 +342,8 @@ function approve()
             <tr>
               <td>
                 <center>
-                  <fieldset class="half_frame">
-                    <legend>'.lang('ultra', 'approvecost').'</legend>';
+                  <div class="half_frame">
+                    <span class="legend">'.lang('ultra', 'approvecost').'</span>';
   if ( $_GET['want'] <> 0 )
   {
     if ( $total > $char['gold'] )
@@ -342,10 +367,19 @@ function approve()
                       .$item['name1'].'</b> '.lang('ultra', 'for').' '.$cg.'<img src="img/gold.gif" alt="" align="middle" /> '
                       .$cs.'<img src="img/silver.gif" alt="" align="middle" /> '
                       .$cc.'<img src="img/copper.gif" alt="" align="middle" />?<br />
-                      <br />';
+                      <br />
+                      <table>
+                        <tr>
+                          <td>';
       makebutton(lang('ultra', 'submit'), "javascript:do_submit()\" type=\"def",180);
+      $output .= '
+                          </td>
+                          <td>';
       makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
       $output .= '
+                          </td>
+                        </tr>
+                      </table>
                     </form>';
     }
   }
@@ -355,7 +389,7 @@ function approve()
     makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
   }
   $output .= '
-                  </fieldset>
+                  </div>
                 </center>
               </td>
             </tr>

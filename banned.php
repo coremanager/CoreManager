@@ -358,52 +358,57 @@ function add_entry()
   global $output, $action_permission, $user_lvl;
   valid_login($action_permission['insert']);
 
-  $output .= "
+  $output .= '
         <center>
-          <fieldset class=\"half_frame\">
-            <legend>".lang('banned', 'ban_entry')."</legend>
-            <form method=\"get\" action=\"banned.php\" name=\"form\">
-              <input type=\"hidden\" name=\"action\" value=\"do_add_entry\" />
-              <table class=\"flat\">
+          <div class="half_frame">
+            <span class="legend">'.lang('banned', 'ban_entry').'</span>
+            <form method="get" action="banned.php" name="form">
+              <input type="hidden" name="action" value="do_add_entry" />
+              <table class="flat">
                 <tr>
-                  <td>".lang('banned', 'ban_type')."</td>
+                  <td>'.lang('banned', 'ban_type').'</td>
                   <td>
-                    <select name=\"ban_type\">
-                      <option value=\"ipbans\" >".lang('banned', 'ip')."</option>
-                      <option value=\"accounts\" >".lang('banned', 'account')."</option>
-                      <option value=\"characters\" >".lang('banned', 'character')."</option>
+                    <select name="ban_type">
+                      <option value="ipbans">'.lang('banned', 'ip').'</option>
+                      <option value="accounts">'.lang('banned', 'account').'</option>
+                      <option value="characters">'.lang('banned', 'character').'</option>
                     </select>
                   </td>
                 </tr>
                 <tr>
-                  <td>".lang('banned', 'entry')."</td>
-                  <td><input type=\"text\" name=\"entry\" size=\"24\" maxlength=\"20\" value=\"\" /></td>
-                </tr>
-                <tr>
-                  <td>".lang('banned', 'ban_time')."</td>
-                  <td><input type=\"text\" name=\"bantime\" size=\"24\" maxlength=\"40\" value=\"1\" /></td>
-                </tr>
-                <tr>
-                  <td>".lang('banned', 'ban_reason')."</td>
-                  <td><input type=\"text\" name=\"banreason\" size=\"24\" maxlength=\"255\" value=\"\" /></td>
-                </tr>
-                <tr>
-                  <td>";
-                    makebutton(lang('banned', 'ban'), "javascript:do_submit()\" type=\"wrn",180);
-  $output .= "
+                  <td>'.lang('banned', 'entry').'</td>
+                  <td>
+                    <input type="text" name="entry" size="24" maxlength="20" value="" />
                   </td>
-                  <td>";
+                </tr>
+                <tr>
+                  <td>'.lang('banned', 'ban_time').'</td>
+                  <td>
+                    <input type="text" name="bantime" size="24" maxlength="40" value="1" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>'.lang('banned', 'ban_reason').'</td>
+                  <td>
+                    <input type="text" name="banreason" size="24" maxlength="255" value="" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>';
+                    makebutton(lang('banned', 'ban'), "javascript:do_submit()\" type=\"wrn",180);
+  $output .= '
+                  </td>
+                  <td>';
                     makebutton(lang('global', 'back'), "banned.php\" type=\"def",130);
-  $output .= "
+  $output .= '
                   </td>
                 </tr>
               </table>
             </form>
-          </fieldset>
-          <br/><br/>
-        </center>
-";
-
+          </div>
+          <br/>
+          <br/>
+        </center>';
 }
 
 

@@ -123,8 +123,8 @@ function show()
   $output .= '
       <form name="form" action="setup.php" method="GET">
         <input type="hidden" name="action" value="save" />
-        <fieldset id="setup_logon_field">
-          <legend>'.lang('setup', 'logon_db').'</legend>
+        <div id="setup_logon_field">
+          <span class="legend">'.lang('setup', 'logon_db').'</span>
           <table>
             <tr>
               <td>'.lang('setup', 'host').': </td>
@@ -157,28 +157,28 @@ function show()
               </td>
             </tr>
           </table>
-        </fieldset>
+        </div>
         <br />
-        <fieldset id="setup_acp_field">
-          <legend>'.lang('setup', 'webadmin').'</legend>
+        <div id="setup_acp_field">
+          <span class="legend">'.lang('setup', 'webadmin').'</span>
           <table>
             <tr>
               <td colspan="2"><span style="color:red">'.lang('setup', 'acctinfo').'</span></td>
             </tr>
             <tr>
-              <td>'.lang('setup', 'acctname').': </td>
+              <td align="right">'.lang('setup', 'acctname').': </td>
               <td>
                 <input type="text" name="acctname" value="" />
               </td>
             </tr>
             <tr>
-              <td>'.lang('setup', 'screenname').': </td>
+              <td align="right">'.lang('setup', 'screenname').': </td>
               <td>
                 <input type="text" name="screenname" value="" />
               </td>
             </tr>
           </table>
-        </fieldset>
+        </div>
         <br />
         <input type="submit" name="save" value="'.lang('setup', 'save').'" />
       </form>

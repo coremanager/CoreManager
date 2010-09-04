@@ -36,8 +36,8 @@ function sel_char()
 
   $output .= '
           <center>
-            <fieldset id="xname_fieldset">
-              <legend>'.lang('unstuck', 'selectchar').'</legend>
+            <div id="xname_fieldset">
+              <span class="legend">'.lang('unstuck', 'selectchar').'</span>
               <span class="xname_info">'.lang('unstuck', 'info').'</span>
               <br />
               <br />
@@ -76,12 +76,15 @@ function sel_char()
   }
 
   $output .= '
-                </table>
-                <br />';
+                  <tr>
+                    <td colspan="5" class="hidden">';
   makebutton(lang('unstuck', 'selectchar'), "javascript:do_submit()",180);
   $output .= '
+                    </td>
+                  </tr>
+                </table>
               </form>
-            </fieldset>
+            </div>
           </center>
           <br />';
 }
@@ -131,8 +134,8 @@ function approve()
 
   $output .= '
     <center>
-      <fieldset id="xname_fieldset">
-        <legend>'.lang('unstuck', 'newloc_legend').'</legend>
+      <div id="xname_fieldset">
+        <span class="legend">'.lang('unstuck', 'newloc_legend').'</span>
         <form method="GET" action="hearthstone.php" name="form">
           <input type="hidden" name="action" value="save" />
           <input type="hidden" name="guid" value="'.$char['guid'].'" />
@@ -181,7 +184,7 @@ function approve()
             </tr>
           </table>
         </form>
-      </fieldset>
+      </div>
     </center>
     <br />';
 }

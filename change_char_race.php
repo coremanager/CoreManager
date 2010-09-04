@@ -35,8 +35,8 @@ function sel_char()
 
   $output .= '
           <center>
-            <fieldset id="xname_fieldset">
-              <legend>'.lang('xrace', 'selectchar').'</legend>
+            <div id="xname_fieldset">
+              <span class="legend">'.lang('xrace', 'selectchar').'</span>
               <span class="xname_info">'.lang('xrace', 'info').'</span>
               <br />
               <br />
@@ -75,12 +75,15 @@ function sel_char()
   }
 
   $output .= '
-                </table>
-                <br />';
+                  <tr>
+                    <td colspan="5" class="hidden">';
   makebutton(lang('xrace', 'selectchar'), "javascript:do_submit()",180);
   $output .= '
+                    </td>
+                  </tr>
+                </table>
               </form>
-            </fieldset>
+            </div>
           </center>
           <br />';
 }
@@ -122,8 +125,8 @@ function chooserace()
   $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$guid."'"));
   $output .= '
           <center>
-            <fieldset id="xname_fieldset">
-              <legend>'.lang('xrace', 'chooserace').'</legend>
+            <div id="xname_fieldset">
+              <span class="legend">'.lang('xrace', 'chooserace').'</span>
               <form method="GET" action="change_char_race.php" name="form">
                 <input type="hidden" name="action" value="getapproval" />
                 <input type="hidden" name="guid" value="'.$char['guid'].'" />
@@ -178,7 +181,7 @@ function chooserace()
                   </tr>
                 </table>
               </form>
-            </fieldset>
+            </div>
           </center>
           <br />';
 }

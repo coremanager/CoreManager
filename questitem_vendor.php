@@ -43,8 +43,8 @@ function show_list()
               <td>
                 <center>';
   $output .= '
-                  <fieldset class="half_frame">
-                    <legend>'.lang('questitem', 'selectchar').'</legend>';
+                  <div class="half_frame">
+                    <span class="legend">'.lang('questitem', 'selectchar').'</span>';
   if( $num_rows == 0 )
   {
     $output .= '
@@ -82,15 +82,22 @@ function show_list()
                         </tr>';
     }
     $output .= '
-                      </table>
-                      <br />';
+                        <tr>
+                          <td>';
     makebutton(lang('questitem', 'select'), "javascript:do_submit()\" type=\"def",180);
+    $output .= '
+                          </td>
+                          <td>';
     makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
+    $output .= '
+                          </td>
+                        </tr>
+                      </table>';
     $output .= '
                     </form>';
   }
   $output .= '
-                  </fieldset>
+                  </div>
                 </center>
               </td>
             </tr>
@@ -131,8 +138,8 @@ function select_quest()
             <tr>
               <td>
                 <center>
-                  <fieldset class="half_frame">
-                    <legend>'.lang('questitem', 'selectquest').'</legend>';
+                  <div class="half_frame">
+                    <span class="legend">'.lang('questitem', 'selectquest').'</span>';
 
   if ( $num_rows == 0 )
   {
@@ -188,15 +195,22 @@ function select_quest()
                         </tr>';
     }
     $output .= '
-                      </table>
-                      <br />';
+                        <tr>
+                          <td>';
     makebutton(lang('questitem', 'select'), "javascript:do_submit()\" type=\"def",180);
+    $output .= '
+                          </td>
+                          <td>';
     makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
+    $output .= '
+                          </td>
+                        </tr>
+                      </table>';
     $output .= '
                     </form>';
   }
   $output .= '
-                  </fieldset>
+                  </div>
                 </center>
               </td>
             </tr>
@@ -228,8 +242,8 @@ function select_item()
             <tr>
               <td>
                 <center>
-                  <fieldset class="half_frame">
-                    <legend>'.lang('questitem', 'selectitem').'</legend>';
+                  <div class="half_frame">
+                    <span class="legend">'.lang('questitem', 'selectitem').'</span>';
 
   if ( $quest['ReqItemId1'] == 0 )
   {
@@ -305,15 +319,22 @@ function select_item()
                         </tr>';
     }
     $output .= '
-                      </table>
-                      <br />';
+                        <tr>
+                          <td>';
     makebutton(lang('questitem', 'select'), "javascript:do_submit()\" type=\"def",180);
+    $output .= '
+                          </td>
+                          <td>';
     makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
+    $output .= '
+                          </td>
+                        </tr>
+                      </table>';
     $output .= '
                     </form>';
   }
   $output .= '
-                  </fieldset>
+                  </div>
                 </center>
               </td>
             </tr>
@@ -364,9 +385,7 @@ function select_quantity()
   if ( $core == 1 )
     $ciquery = "SELECT * FROM playeritems WHERE ownerguid='".$char['guid']."' AND entry='".$questitem."'";
   else
-    $ciquery = "SELECT *, 
-      SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 15), ' ', -1) AS count
-      FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid='".$char['guid']."' AND item_template='".$questitem."'";
+    $ciquery = "SELECT * FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid='".$char['guid']."' AND item_template='".$questitem."'";
   $ciresult = $sql['char']->query($ciquery);
   $cifield = $sql['char']->fetch_assoc($ciresult);
   $cinumrows = $sql['char']->num_rows($ciresult);
@@ -416,8 +435,8 @@ function select_quantity()
             <tr>
               <td>
                 <center>
-                  <fieldset class="half_frame">
-                    <legend>'.lang('questitem', 'selectquantity').'</legend>';
+                  <div class="half_frame">
+                    <span class="legend">'.lang('questitem', 'selectquantity').'</span>';
   $output .= '
                     <b>'.$_GET['charname'].'</b> '.lang('questitem', 'has').' '
                     .$pg.'<img src="img/gold.gif" alt="" align="middle" />'
@@ -470,23 +489,29 @@ function select_quantity()
                       <input type="hidden" name="action" value="selected_quantity" />
                       <table>
                         <tr>
-                          <td>'
-                            .lang('questitem', 'wanted').':
+                          <td colspan="2">
+                            <center>'
+                              .lang('questitem', 'wanted').': <input type="text" name="want" value="'.$need.'" />
+                              <input type="hidden" name="charname" value="'.$_GET['charname'].'" />
+                              <input type="hidden" name="gold" value="'.$gold.'" />
+                              <input type="hidden" name="item" value="'.$item['entry'].'" />
+                            </center>
                           </td>
-                          <td>
-                            <input type="text" name="want" value="'.$need.'" />
-                            <input type="hidden" name="charname" value="'.$_GET['charname'].'" />
-                            <input type="hidden" name="gold" value="'.$gold.'" />
-                            <input type="hidden" name="item" value="'.$item['entry'].'" />
-                          </td>
+                        </tr>
                         <tr>
-                      </table>
-                      <br />';
+                          <td>';
   makebutton(lang('questitem', 'submit'), "javascript:do_submit()\" type=\"def",180);
+  $output .= '
+                          </td>
+                          <td>';
   makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
   $output .= '
+                          </td>
+                        </tr>
+                      </table>';
+  $output .= '
                     </form>
-                  </fieldset>
+                  </div>
                 </center>
               </td>
             </tr>
@@ -539,8 +564,8 @@ function approve()
             <tr>
               <td>
                 <center>
-                  <fieldset class="half_frame">
-                    <legend>'.lang('questitem', 'approvecost').'</legend>';
+                  <div class="half_frame">
+                    <span class="legend">'.lang('questitem', 'approvecost').'</span>';
   if ( $total > $char['gold'] )
   {
     $output .= '
@@ -557,20 +582,33 @@ function approve()
                       <input type="hidden" name="char" value="'.$char['name'].'" />
                       <input type="hidden" name="item" value="'.$item['entry'].'" />
                       <input type="hidden" name="want" value="'.$_GET['want'].'" />
-                      <input type="hidden" name="total" value="'.$total.'" />'
-                      .lang('questitem', 'purchase').' <span id="qiv_approve_quantity">'.$_GET['want'].'</span>x <b>'.$item['name1'].'</b> '.lang('questitem', 'for').' '
-                      .$cg.'<img src="img/gold.gif" alt="" align="middle" /> '
-                      .$cs.'<img src="img/silver.gif" alt="" align="middle" /> '
-                      .$cc.'<img src="img/copper.gif" alt="" align="middle" />?
-                      <br />
-                      <br />';
+                      <input type="hidden" name="total" value="'.$total.'" />
+                      <table>
+                        <tr>
+                          <td colspan="2">
+                            <center>'
+                              .lang('questitem', 'purchase').' <span id="qiv_approve_quantity">'.$_GET['want'].'</span>x <b>'.$item['name1'].'</b> '.lang('questitem', 'for').' '
+                              .$cg.'<img src="img/gold.gif" alt="" align="middle" /> '
+                              .$cs.'<img src="img/silver.gif" alt="" align="middle" /> '
+                              .$cc.'<img src="img/copper.gif" alt="" align="middle" />?
+                            </center>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>';
     makebutton(lang('questitem', 'submit'), "javascript:do_submit()\" type=\"def",180);
+    $output .= '
+                          </td>
+                          <td>';
     makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
     $output .= '
+                          </td>
+                        </tr>
+                      </table>
                     </form>';
   }
   $output .= '
-                  </fieldset>
+                  </div>
                 </center>
               </td>
             </tr>

@@ -175,8 +175,8 @@ function edit_realm()
   {
     $output .= '
           <center>
-            <fieldset class="half_frame">
-              <legend>'.lang('realm', 'edit_realm').'</legend>
+            <div class="half_frame">
+              <span class="legend">'.lang('realm', 'edit_realm').'</span>
               <form method="get" action="realm.php" name="form">
                 <input type="hidden" name="action" value="doedit_realm" />
                 <input type="hidden" name="id" value="'.$id.'" />
@@ -263,8 +263,9 @@ function edit_realm()
                   </tr>
                 </table>
               </form>
-            </fieldset>
-            <br /><br />
+            </div>
+            <br />
+            <br />
           </center>';
   }
   else

@@ -451,8 +451,8 @@ function register()
         answerbox.btn_cancel="'.lang('register', 'i_dont_agree').'";
         answerbox.btn_icon="";
       </script>
-      <fieldset class="half_frame">
-        <legend>'.lang('register', 'create_acc').'</legend>
+      <div class="half_frame">
+        <span class="legend">'.lang('register', 'create_acc').'</span>
         <form method="post" action="register.php?action=doregister" name="form">
           <input type="hidden" name="pass" value="" maxlength="256" />
           <table class="flat">
@@ -601,7 +601,7 @@ function register()
             </tr>
           </table>
         </form>
-      </fieldset>
+      </div>
       <br />
       <br />
     </center>';
@@ -617,8 +617,8 @@ function pass_recovery()
 
   $output .= '
     <center>
-      <fieldset class="half_frame">
-      <legend>'.lang('register', 'recover_acc_password'.( ( $core == 1 ) ? 'A' : 'MT' )).'</legend>
+      <div class="half_frame">
+      <span class="legend">'.lang('register', 'recover_acc_password'.( ( $core == 1 ) ? 'A' : 'MT' )).'</span>
       <form method="post" action="register.php?action=do_pass_recovery" name="form">
         <table class="flat">
           <tr>
@@ -650,7 +650,7 @@ function pass_recovery()
           </tr>
         </table>
       </form>
-    </fieldset>
+    </div>
     <br />
     <br />
   </center>';

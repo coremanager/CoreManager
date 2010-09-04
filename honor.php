@@ -59,8 +59,8 @@ $output .= '
           answerbox.btn_cancel="'.lang('global', 'no').'";
         </script>
         <center>
-          <fieldset id="honor_faction">
-            <legend><img src="img/alliance.gif" /></legend>
+          <div id="honor_faction">
+            <span class="legend"><img src="img/alliance.gif" /></span>
             <table class="lined" id="honor_faction_ranks">
               <tr class="bold">
                 <td colspan="11">'.lang('honor', 'allied').' '.lang('honor ', 'browse_honor').'</td>
@@ -128,7 +128,7 @@ while ( $char = $sql['char']->fetch_assoc($query) )
 $output .= '
             </table>
             <br />
-          </fieldset>
+          </div>
         </center>';
 
 if ( $core == 1 )
@@ -158,8 +158,8 @@ $output .= '
           answerbox.btn_cancel="'.lang('global', 'no').'";
         </script>
         <center>
-          <fieldset id="honor_faction">
-            <legend><img src="img/horde.gif" /></legend>
+          <div id="honor_faction">
+            <span class="legend"><img src="img/horde.gif" /></span>
             <table class="lined" id="honor_faction_ranks">
               <tr class="bold">
                 <td colspan="11">'.lang('honor', 'horde')." ".lang('honor ', 'browse_honor').'</td>
@@ -225,7 +225,7 @@ while ( $char = $sql['char']->fetch_assoc($query) )
 
 $output .= '
             </table>
-          </fieldset>
+          </div>
         </center>';
 
 require_once("footer.php");

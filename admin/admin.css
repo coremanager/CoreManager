@@ -185,7 +185,7 @@ a:link, a:visited
 /* Simple Table (for General) */
 #misc
 {
-	position:absolute;
+	position: absolute;
 	top: 94px;
 	left: 225px;
 }
@@ -194,7 +194,7 @@ a:link, a:visited
 /* Simple Table Errors (for General) */
 #misc_error
 {
-	position:absolute;
+	position: absolute;
 	top: 135px;
 	left: 225px;
 }
@@ -220,91 +220,91 @@ a:link, a:visited
 /* Misc */
 #admin_editdb_field
 {
-	width:350px;
+	width: 350px;
 }
 #admin_showversion_field
 {
-	width:146px;
+	width: 146px;
 }
 #admin_mailertype_field
 {
-	width:146px;
+	width: 146px;
 }
 #admin_datasite
 {
-	width:600px;
+	width: 600px;
 }
 #admin_acct_creation
 {
-	width:600px;
+	width: 600px;
 }
 #admin_more
 {
-	width:500px;
+	width: 500px;
 }
 #admin_gm_level
 {
-	width:325px;
+	width: 325px;
 }
 #admin_servers
 {
-	width:900px;
+	width: 900px;
 }
 #admin_edit_server
 {
-	width:325px;
+	width: 325px;
 }
 #admin_top_menus
 {
-	width:300px;
+	width: 300px;
 }
 #admin_edit_top_menu_nameaction
 {
-	width:900px;
+	width: 900px;
 }
 #admin_edit_top_menu_name
 {
-	width:260px;
+	width: 260px;
 }
 #admin_edit_top_menu_action
 {
-	width:260px;
+	width: 260px;
 }
 #admin_edit_top_menu_submenus
 {
-	width:900px;
+	width: 900px;
 }
 #admin_edit_menu_field
 {
-	width:300px;
+	width: 300px;
 }
 #admin_edit_forum_field
 {
-	width:400px;
+	width: 400px;
 }
 #admin_edit_menu
 {
-	width:300px;
+	width: 300px;
 }
 #admin_edit_menu_fields
 {
-	width:260px;
+	width: 260px;
 }
 #admin_forum_lang
 {
-	width:500px;
+	width: 500px;
 }
 #admin_edit_forum_lang
 {
-	width:600px;
+	width: 600px;
 }
 #admin_accounts
 {
-	width:450px;
+	width: 450px;
 }
 #admin_edit_account
 {
-	width:310px;
+	width: 310px;
 }
 
 /* End Tooltips */
@@ -312,7 +312,7 @@ a:link, a:visited
 /* SETUP.PHP */
 #setup_fields
 {
-	color:blue;
+	color: blue;
 }
 #setup_emptyfields
 {
@@ -320,11 +320,30 @@ a:link, a:visited
 }
 #setup_logon_field
 {
-	width:300px
+	width: 300px;
+	position: relative;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	border: 1px solid #d4d4d4;
 }
 #setup_acp_field
 {
-	width:300px
+	width: 360px;
+	position: relative;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	border: 1px solid #d4d4d4;
+}
+.legend
+{
+	margin-top: -5px;
+	background-color: white;
+	padding: 2px 6px;
+	position: absolute;
+	top: -5px;
+	left: 5px;
 }
 
 /* ADMIN_LOGIN.PHP */

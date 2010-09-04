@@ -344,7 +344,13 @@ else
       </table>';
 }
 // show login and register buttons at top of every page if guest mode is activated
-if($allow_anony && empty($_SESSION['logged_in']))
+// we don't need to display the Register & Login Buttons on the Register & Login
+// pages.  So, we'll get the current file's name and test for it below.
+$filename = $_SERVER["SCRIPT_NAME"];
+$filename = Explode('/', $filename);
+$filename = $filename[count($filename) - 1];
+
+if ( ( $allow_anony && empty($_SESSION['logged_in']) ) && ( ( $filename != 'login.php' ) && ( $filename != 'register.php' ) ) )
 {
   $output .= '
       <center>
@@ -361,7 +367,8 @@ if($allow_anony && empty($_SESSION['logged_in']))
 }
 
 //---------------------Start of Body-------------------------------------------
-if ( isset($_SESSION['logged_in']) )
+
+if ( ( isset($_SESSION['logged_in']) ) || ( $filename == 'login.php' ) || ( $filename == 'register.php' ) )
   $output .= '
       <div id="body_main" class="body_main_shallow">';
 else

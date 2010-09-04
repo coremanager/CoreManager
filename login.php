@@ -155,8 +155,8 @@ function login()
                 }
               // ]]>
             </script>
-            <fieldset class="half_frame">
-              <legend>'.lang('login', 'login').'</legend>
+            <div class="half_frame">
+              <span class="legend">'.lang('login', 'login').'</span>
               <form method="post" action="login.php?action=dologin" name="form" onsubmit="return dologin()">
                 <input type="hidden" name="password" value="" maxlength="256" />
                 <table class="hidden" id="login_table">
@@ -245,7 +245,7 @@ function login()
                 </script>
               </form>
               <br />
-            </fieldset>
+            </div>
             <br /><br />
           </center>';
 }
@@ -359,8 +359,6 @@ if ( isset($_COOKIE["login"]) && isset($_COOKIE["password"]) && isset($_COOKIE["
 
 $err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
 $info = ( ( isset($_GET['info']) ) ? $_GET['info'] : NULL );
-
-//$lang_login = lang_login();
 
 $output .= '
       <div class="bubble">

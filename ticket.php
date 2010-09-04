@@ -228,8 +228,8 @@ function edit_ticket()
   {
     $output .= '
         <center>
-          <fieldset id="ticket_edit_field">
-            <legend>'.lang('ticket', 'edit_reply').'</legend>
+          <div id="ticket_edit_field">
+            <span class="legend">'.lang('ticket', 'edit_reply').'</span>
             <form method="post" action="ticket.php?action=do_edit_ticket" name="form">
               <input type="hidden" name="id" value="'.$id.'" />
                 <table class="flat">
@@ -298,8 +298,9 @@ function edit_ticket()
                   </tr>
                 </table>
               </form>
-            </fieldset>
-            <br /><br />
+            </div>
+            <br />
+            <br />
           </center>';
   }
   else

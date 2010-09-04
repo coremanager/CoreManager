@@ -34,8 +34,8 @@ function print_mail_form()
         <center>
           <form action="mail.php" method="get" name="form">
             <input type="hidden" name="action" value="send_mail" />
-            <fieldset id="mail_type_field">
-              <legend>'.lang('mail', 'mail_type').'</legend>
+            <div id="mail_type_field">
+              <span class="legend">'.lang('mail', 'mail_type').'</span>
               <br />
               <table class="top_hidden" id="mail_type">
                 <tr>
@@ -115,9 +115,9 @@ function print_mail_form()
                   </td>
                 </tr>
               </table>
-            </fieldset>
-            <fieldset id="mail_body_field">
-              <legend>'.lang('mail', 'mail_body').'</legend>
+            </div>
+            <div id="mail_body_field">
+              <span class="legend">'.lang('mail', 'mail_body').'</span>
               <br />
               <textarea name="body" rows="14" cols="92"></textarea>
               <br />
@@ -130,7 +130,7 @@ function print_mail_form()
                   </td>
                 </tr>
               </table>
-            </fieldset>
+            </div>
             <br />
           </form>
         </center>';

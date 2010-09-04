@@ -334,6 +334,49 @@ legend
 	top: -5px;
 	left: 5px;
 }
+div.half_frame
+{
+	width: 550px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
+}
+div.tquarter_frame
+{
+	width: 680px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
+}
+div.full_frame
+{
+	width: 760px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
+}
+span.legend
+{
+	margin-top: -5px;
+	color: #f6b620;
+	background-color: #383838;
+	padding: 2px 6px;
+	position: absolute;
+	top: -5px;
+	left: 5px;
+}
 
 /*****TABLES******/
 table.flat
@@ -1107,6 +1150,24 @@ tr td.rep0
 #xname_fieldset
 {
 	width: 310px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
+}
+#xname_choose
+{
+	width: 370px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
 }
 #xname_char_table
 {
@@ -1206,6 +1267,13 @@ tr td.rep0
 #ticket_edit_field
 {
 	width: 550px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
 }
 
 /* TOP100.PHP */
@@ -1268,10 +1336,24 @@ tr td.rep0
 #user_new_account
 {
 	width: 550px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
 }
 #user_edit_account
 {
 	width: 550px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
 }
 
 /* WORLDBROADCAST.PHP */
@@ -1504,6 +1586,13 @@ tr td.rep0
 #ch_read_mail_field
 {
   width: 425px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
 }
 #ch_read_mail
 {
@@ -1520,10 +1609,24 @@ tr td.rep0
 #edit_fieldset
 {
 	width: 550px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
 }
 #edit_theme_fieldset
 {
 	width: 550px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
 }
 #edit_theme_table
 {
@@ -1603,6 +1706,17 @@ tr td.rep0
 }
 
 /* GUILD.PHP */
+.guild_fieldset
+{
+  width: 100%;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
+}
 #guild_edit_guild
 {
 	width: 100%;
@@ -1673,6 +1787,13 @@ tr td.rep0
 #honor_faction
 {
 	width: 776px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
 }
 #honor_faction_ranks
 {
@@ -1712,6 +1833,13 @@ tr td.rep0
 #mail_type_field
 {
 	width: 770px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
 }
 #mail_type
 {
@@ -1720,6 +1848,13 @@ tr td.rep0
 #mail_body_field
 {
 	width: 770px;
+	position: relative;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	top: 5px;
+	background-color: #383838;
+	border: 1px solid #d4d4d4;
 }
 
 /* USER.PHP */

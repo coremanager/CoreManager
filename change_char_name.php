@@ -35,8 +35,8 @@ function sel_char()
 
   $output .= '
           <center>
-            <fieldset id="xname_fieldset">
-              <legend>'.lang('xname', 'selectchar').'</legend>
+            <div id="xname_fieldset">
+              <span class="legend">'.lang('xname', 'selectchar').'</span>
               <span class="xname_info">'.lang('xname', 'info').'</span>
               <br />
               <br />
@@ -75,12 +75,16 @@ function sel_char()
   }
 
   $output .= '
-                </table>
-                <br />';
+                  <tr>
+                    <td class="hidden" colspan="5">';
   makebutton(lang('xname', 'selectchar'), "javascript:do_submit()",180);
   $output .= '
+                    </td>
+                  </tr>
+                </table>
+                <br />
               </form>
-            </fieldset>
+            </div>
           </center>
           <br />';
 }
@@ -108,8 +112,8 @@ function choosename()
   $char = $sql['char']->fetch_assoc($sql['char']->query($query));
   $output .= '
           <center>
-            <fieldset id="xname_fieldset">
-              <legend>'.lang('xname', 'choosename').'</legend>
+            <div id="xname_choose">
+              <span class="legend">'.lang('xname', 'choosename').'</span>
               <form method="GET" action="change_char_name.php" name="form">
                 <input type="hidden" name="action" value="getapproval" />
                 <input type="hidden" name="guid" value="'.$char['guid'].'" />
@@ -152,7 +156,7 @@ function choosename()
                   </tr>
                 </table>
               </form>
-            </fieldset>
+            </div>
           </center>
           <br />';
 }

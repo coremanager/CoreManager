@@ -4,10 +4,20 @@ Here's a list of the things we're aware are wrong with CoreManager
 them yet)
 ================================================================================
 
-When viewed with Firefox, the legend (only the styled ones) of fieldsets are a
-few pixels lower than where they belong.
-
 The Search feature on most pages doesn't work.
 
-Trinity Core support is only for the "Stable" release.  Revisions marked "NOT for
-production environments" may not function.
+Trinity Core support is only for the "Stable" release.  Revisions marked "NOT
+for production environments" may not function.
+
+The Character Sheet Page on Trinity Servers will display "ERR" for some stats.
+(see below for list)
+
+
+THINGS COREMANAGER CAN DO THAT SERVERS DON'T SUPPORT:
+================================================================================
+Online Player List on Main Page can show the Zone, Map AND Area of players.
+MaNGOS and Trinity do not save Area.
+
+The Character Sheet can display the following stats: Melee Hit, Expertise,
+Spell Heal, Spell Hit, Spell Haste, and Ranged Hit.  Trinity does that save
+these.
