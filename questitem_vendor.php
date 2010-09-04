@@ -43,7 +43,7 @@ function show_list()
               <td>
                 <center>';
   $output .= '
-                  <div class="half_frame">
+                  <div class="half_frame fieldset_border">
                     <span class="legend">'.lang('questitem', 'selectchar').'</span>';
   if( $num_rows == 0 )
   {
@@ -138,7 +138,7 @@ function select_quest()
             <tr>
               <td>
                 <center>
-                  <div class="half_frame">
+                  <div class="half_frame fieldset_border">
                     <span class="legend">'.lang('questitem', 'selectquest').'</span>';
 
   if ( $num_rows == 0 )
@@ -242,7 +242,7 @@ function select_item()
             <tr>
               <td>
                 <center>
-                  <div class="half_frame">
+                  <div class="half_frame fieldset_border">
                     <span class="legend">'.lang('questitem', 'selectitem').'</span>';
 
   if ( $quest['ReqItemId1'] == 0 )
@@ -435,7 +435,7 @@ function select_quantity()
             <tr>
               <td>
                 <center>
-                  <div class="half_frame">
+                  <div class="half_frame fieldset_border">
                     <span class="legend">'.lang('questitem', 'selectquantity').'</span>';
   $output .= '
                     <b>'.$_GET['charname'].'</b> '.lang('questitem', 'has').' '
@@ -564,7 +564,7 @@ function approve()
             <tr>
               <td>
                 <center>
-                  <div class="half_frame">
+                  <div class="half_frame fieldset_border">
                     <span class="legend">'.lang('questitem', 'approvecost').'</span>';
   if ( $total > $char['gold'] )
   {

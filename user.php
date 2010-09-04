@@ -744,7 +744,7 @@ function add_new()
         }
         // ]]>
       </script>
-      <div id="user_new_account">
+      <div id="user_new_account" class="fieldset_border">
         <span class="legend">'.lang('user', 'create_new_acc').'</span>
         <form method="get" action="user.php" name="form">
           <input type="hidden" name="pass" value="" maxlength="256" />
@@ -933,7 +933,7 @@ function edit_user()
               }
             // ]]>
           </script>
-          <div id="user_edit_account">
+          <div id="user_edit_account" class="fieldset_border">
             <span class="legend">'.lang('user', 'edit_acc').'</span>
             <form method="post" action="user.php?action=doedit_user" name="form">
             <input type="hidden" name="pass" value="" maxlength="256" />

@@ -321,7 +321,7 @@ function read_mail()
         $c_name = $sql['char']->fetch_assoc($c_result);
           
         $output .= '
-                <div id="ch_read_mail_field">
+                <div id="ch_read_mail_field" class="fieldset_border">
                   <table class="hidden" id="ch_read_mail">
                     <tr>
                       <td align="left"><b>'.lang('char', 'sender').':</b></td>

@@ -60,7 +60,7 @@ function edit_user()
                 }
               // ]]>
             </script>
-            <div id="edit_fieldset">
+            <div id="edit_fieldset" class="fieldset_border">
               <span class="legend">'.lang('edit', 'edit_acc').'</span>
               <form method="post" action="edit.php?action=doedit_user" name="form">
                 <input type="hidden" name="pass" value="" maxlength="256" />
@@ -276,7 +276,7 @@ function edit_user()
               </form>
             </div>
             <br />
-            <div id="edit_theme_fieldset">
+            <div id="edit_theme_fieldset" class="fieldset_border">
               <span class="legend">'.lang('edit', 'theme_options').'</span>
               <table class="hidden" id="edit_theme_table">
                 <tr>

@@ -123,7 +123,7 @@ function show()
   $output .= '
       <form name="form" action="setup.php" method="GET">
         <input type="hidden" name="action" value="save" />
-        <div id="setup_logon_field">
+        <div id="setup_logon_field" class="fieldset_border">
           <span class="legend">'.lang('setup', 'logon_db').'</span>
           <table>
             <tr>
@@ -159,7 +159,7 @@ function show()
           </table>
         </div>
         <br />
-        <div id="setup_acp_field">
+        <div id="setup_acp_field" class="fieldset_border">
           <span class="legend">'.lang('setup', 'webadmin').'</span>
           <table>
             <tr>

@@ -81,7 +81,7 @@ function browse_guilds()
   {
     $output .= '
         <center>
-          <div class="guild_fieldset">
+          <div class="guild_fieldset fieldset_border">
             <span class="legend">'.lang('guild', 'my_guilds').'</span>
             <table class="lined" align="center">
               <tr>
@@ -306,7 +306,7 @@ function browse_guilds()
   //==========================top tage navigaion ENDS here ====================
   $output .= '
         <center>
-          <div class="guild_fieldset">
+          <div class="guild_fieldset fieldset_border">
             <span class="legend">'.lang('guild', 'browse_guilds').'</span>
               <table class="lined" align="center">
                 <tr class="hidden">
@@ -458,22 +458,22 @@ function view_guild()
           answerbox.btn_cancel="'.lang('global', 'no').'";
         </script>
         <center>
-          <div class="guild_fieldset">
+          <div class="guild_fieldset fieldset_border">
             <span class="legend">'.lang('guild', 'guild').'</span>
             <table class="lined">
               <tr>
-                <td width="25%"><b>'.lang('guild', 'create_date').':</b><br />'.date('o-m-d', $guild_data['createdate']).'</td>
-                <td width="50%" class="bold" colspan="2">'.$guild_data['name'].'</td>
-                <td width="25%"><b>'.lang('guild', 'tot_m_online').':</b><br />'.$guild_data['monline'].' / '.$guild_data['mtotal'].'</td>
+                <td width="25%" class="hidden"><b>'.lang('guild', 'create_date').':</b><br />'.date('o-m-d', $guild_data['createdate']).'</td>
+                <td width="50%" class="bold hidden" colspan="2">'.$guild_data['name'].'</td>
+                <td width="25%" class="hidden"><b>'.lang('guild', 'tot_m_online').':</b><br />'.$guild_data['monline'].' / '.$guild_data['mtotal'].'</td>
               </tr>
               <tr>
-                <td colspan="2"><b>'.lang('guild', 'info').':</b><br />'.$guild_data['info'].'</td>
-                <td colspan="2"><b>'.lang('guild', 'motd').':</b><br />'.$guild_data['MOTD'].'</td>
+                <td colspan="2" class="hidden"><b>'.lang('guild', 'info').':</b><br />'.$guild_data['info'].'</td>
+                <td colspan="2" class="hidden"><b>'.lang('guild', 'motd').':</b><br />'.$guild_data['MOTD'].'</td>
               </tr>';
   if ( $show_guild_emblem )
     $output .= '
               <tr>
-                <td colspan="4">
+                <td colspan="4" class="hidden">
                   <div id="guild_emblem">
                     <center>
                       <img id="guild_view_background" src="img/emblems/Background_'.doubledigit($guild_data['BackgroundColor']).'.png" />

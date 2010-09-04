@@ -35,7 +35,7 @@ function sel_char()
 
   $output .= '
           <center>
-            <div id="xname_fieldset">
+            <div id="xname_fieldset" class="fieldset_border">
               <span class="legend">'.lang('xname', 'selectchar').'</span>
               <span class="xname_info">'.lang('xname', 'info').'</span>
               <br />
@@ -112,7 +112,7 @@ function choosename()
   $char = $sql['char']->fetch_assoc($sql['char']->query($query));
   $output .= '
           <center>
-            <div id="xname_choose">
+            <div id="xname_choose" class="fieldset_border">
               <span class="legend">'.lang('xname', 'choosename').'</span>
               <form method="GET" action="change_char_name.php" name="form">
                 <input type="hidden" name="action" value="getapproval" />

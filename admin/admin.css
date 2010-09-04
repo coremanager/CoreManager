@@ -321,16 +321,15 @@ a:link, a:visited
 #setup_logon_field
 {
 	width: 300px;
-	position: relative;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	top: 5px;
-	border: 1px solid #d4d4d4;
 }
 #setup_acp_field
 {
 	width: 360px;
+}
+.fieldset_border
+{
 	position: relative;
+	margin-top: 20px;
 	padding-top: 10px;
 	padding-bottom: 10px;
 	top: 5px;

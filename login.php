@@ -155,7 +155,7 @@ function login()
                 }
               // ]]>
             </script>
-            <div class="half_frame">
+            <div class="half_frame fieldset_border">
               <span class="legend">'.lang('login', 'login').'</span>
               <form method="post" action="login.php?action=dologin" name="form" onsubmit="return dologin()">
                 <input type="hidden" name="password" value="" maxlength="256" />

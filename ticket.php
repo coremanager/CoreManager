@@ -228,7 +228,7 @@ function edit_ticket()
   {
     $output .= '
         <center>
-          <div id="ticket_edit_field">
+          <div id="ticket_edit_field" class="fieldset_border">
             <span class="legend">'.lang('ticket', 'edit_reply').'</span>
             <form method="post" action="ticket.php?action=do_edit_ticket" name="form">
               <input type="hidden" name="id" value="'.$id.'" />

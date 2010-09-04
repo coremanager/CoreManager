@@ -175,7 +175,7 @@ function edit_realm()
   {
     $output .= '
           <center>
-            <div class="half_frame">
+            <div class="half_frame fieldset_border">
               <span class="legend">'.lang('realm', 'edit_realm').'</span>
               <form method="get" action="realm.php" name="form">
                 <input type="hidden" name="action" value="doedit_realm" />

@@ -35,7 +35,7 @@ function sel_char()
 
   $output .= '
           <center>
-            <div id="xname_fieldset">
+            <div id="xname_fieldset" class="fieldset_border">
               <span class="legend">'.lang('xrace', 'selectchar').'</span>
               <span class="xname_info">'.lang('xrace', 'info').'</span>
               <br />
@@ -125,7 +125,7 @@ function chooserace()
   $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$guid."'"));
   $output .= '
           <center>
-            <div id="xname_fieldset">
+            <div id="xname_fieldset" class="fieldset_border">
               <span class="legend">'.lang('xrace', 'chooserace').'</span>
               <form method="GET" action="change_char_race.php" name="form">
                 <input type="hidden" name="action" value="getapproval" />

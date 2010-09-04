@@ -59,7 +59,7 @@ $output .= '
           answerbox.btn_cancel="'.lang('global', 'no').'";
         </script>
         <center>
-          <div id="honor_faction">
+          <div id="honor_faction" class="fieldset_border">
             <span class="legend"><img src="img/alliance.gif" /></span>
             <table class="lined" id="honor_faction_ranks">
               <tr class="bold">
@@ -158,7 +158,7 @@ $output .= '
           answerbox.btn_cancel="'.lang('global', 'no').'";
         </script>
         <center>
-          <div id="honor_faction">
+          <div id="honor_faction" class="fieldset_border">
             <span class="legend"><img src="img/horde.gif" /></span>
             <table class="lined" id="honor_faction_ranks">
               <tr class="bold">

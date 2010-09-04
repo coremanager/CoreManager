@@ -36,7 +36,7 @@ function sel_char()
 
   $output .= '
           <center>
-            <div id="xname_fieldset">
+            <div id="xname_fieldset" class="fieldset_border">
               <span class="legend">'.lang('unstuck', 'selectchar').'</span>
               <span class="xname_info">'.lang('unstuck', 'info').'</span>
               <br />
@@ -134,7 +134,7 @@ function approve()
 
   $output .= '
     <center>
-      <div id="xname_fieldset">
+      <div id="xname_fieldset" class="fieldset_border">
         <span class="legend">'.lang('unstuck', 'newloc_legend').'</span>
         <form method="GET" action="hearthstone.php" name="form">
           <input type="hidden" name="action" value="save" />

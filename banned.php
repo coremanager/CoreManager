@@ -360,7 +360,7 @@ function add_entry()
 
   $output .= '
         <center>
-          <div class="half_frame">
+          <div class="half_frame fieldset_border">
             <span class="legend">'.lang('banned', 'ban_entry').'</span>
             <form method="get" action="banned.php" name="form">
               <input type="hidden" name="action" value="do_add_entry" />

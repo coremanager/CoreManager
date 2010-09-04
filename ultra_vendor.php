@@ -42,7 +42,7 @@ function show_list()
           <tr>
             <td>
               <center>
-                <div class="half_frame">
+                <div class="half_frame fieldset_border">
                   <span class="legend">'.lang('ultra', 'selectchar').'</span>';
   if ( $num_rows == 0 )
   {
@@ -121,7 +121,7 @@ function select_item()
             <tr>
               <td>
                 <center>
-                  <div class="half_frame">
+                  <div class="half_frame fieldset_border">
                     <span class="legend">'.lang('ultra', 'selectitem').'</span>
                     <form method="get" action="ultra_vendor.php" name="form">
                       <input type="hidden" name="action" value="selected_item" />
@@ -219,7 +219,7 @@ function select_quantity()
             <tr>
               <td>
                 <center>
-                  <div class="half_frame">
+                  <div class="half_frame fieldset_border">
                     <span class="legend">'.lang('ultra', 'selectquantity').'</span>';
 
   $gold = $mul * $base_price;
@@ -342,7 +342,7 @@ function approve()
             <tr>
               <td>
                 <center>
-                  <div class="half_frame">
+                  <div class="half_frame fieldset_border">
                     <span class="legend">'.lang('ultra', 'approvecost').'</span>';
   if ( $_GET['want'] <> 0 )
   {
