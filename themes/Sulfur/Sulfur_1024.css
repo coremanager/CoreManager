@@ -1310,6 +1310,11 @@ tr td.rep0
 {
 	width: 550px;
 }
+#user_bubble
+{
+  width: 960px;
+  margin-left: -80px; /* half of the difference in width of normal body_main*/
+}
 
 /* WORLDBROADCAST.PHP */
 #delete_entry_cursor
@@ -1723,6 +1728,10 @@ tr td.rep0
 {
 	color: white;
 }
+#honor_faction_icon
+{
+  top: -25px;
+}
 
 /* INDEX.PHP */
 #index_explorer_warning
@@ -1761,13 +1770,6 @@ tr td.rep0
 #mail_body_field
 {
 	width: 770px;
-}
-
-/* USER.PHP */
-#user_bubble
-{
-  width: 920px;
-  margin-left: -60px; /* half of the difference in width */
 }
 
 

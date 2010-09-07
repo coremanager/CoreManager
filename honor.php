@@ -60,10 +60,10 @@ $output .= '
         </script>
         <center>
           <div id="honor_faction" class="fieldset_border">
-            <span class="legend"><img src="img/alliance.gif" /></span>
+            <span class="legend" id="honor_faction_icon"><img src="img/alliance.gif" /></span>
             <table class="lined" id="honor_faction_ranks">
               <tr class="bold">
-                <td colspan="11">'.lang('honor', 'allied').' '.lang('honor ', 'browse_honor').'</td>
+                <td colspan="11" class="hidden">'.lang('honor', 'allied').' '.lang('honor ', 'browse_honor').'</td>
               </tr>
               <tr>
                 <th width="30%">'.lang('honor', 'guid').'</th>
@@ -129,7 +129,8 @@ $output .= '
             </table>
             <br />
           </div>
-        </center>';
+        </center>
+        <br />';
 
 if ( $core == 1 )
   $query = $sql['char']->query("SELECT
@@ -159,10 +160,10 @@ $output .= '
         </script>
         <center>
           <div id="honor_faction" class="fieldset_border">
-            <span class="legend"><img src="img/horde.gif" /></span>
+            <span class="legend" id="honor_faction_icon"><img src="img/horde.gif" /></span>
             <table class="lined" id="honor_faction_ranks">
               <tr class="bold">
-                <td colspan="11">'.lang('honor', 'horde')." ".lang('honor ', 'browse_honor').'</td>
+                <td colspan="11" class="hidden">'.lang('honor', 'horde')." ".lang('honor ', 'browse_honor').'</td>
               </tr>
               <tr>
                 <th width="30%">'.lang('honor', 'guid').'</th>

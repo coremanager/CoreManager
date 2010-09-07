@@ -49,36 +49,134 @@ function browse_users()
   //-------------------Search--------------------------------------------------
   $search_by = '';
   $search_value = '';
+  // build the list of Search Types (varies by core)
+  if ( $core == 1 )
+  {
+    $search_menu = array(
+          array('login',                  'by_name'),
+          array('acct',                   'by_id'),
+          array('gm',                     'by_gm_level'),
+          array('greater_gmlevel',        'greater_gm_level'),
+          array('email',                  'by_email'),
+          array('lastip',                 'by_ip'),
+          array('lastlogin',              'by_last_login'),
+          array('banned',                 'by_banned'),
+          array('muted',                  'by_muted'),
+          array('expansion',              'by_expansion'));
+  }
+  elseif ( $core == 2 )
+  {
+    $search_menu = array(
+          array('username',               'by_name'),
+          array('id',                     'by_id'),
+          array('gmlevel',                'by_gm_level'),
+          array('greater_gmlevel',        'greater_gm_level'),
+          array('email',                  'by_email'),
+          array('last_ip',                'by_ip'),
+          array('last_login',             'by_last_login'),
+          array('banned',                 'by_banned'),
+          array('locked',                 'by_locked'),
+          array('expansion',              'by_expansion'));
+  }
+  else
+  {
+    $search_menu = array(
+          array('username',               'by_name'),
+          array('account.id',             'by_id'),
+          array('gmlevel',                'by_gm_level'),
+          array('greater_gmlevel',        'greater_gm_level'),
+          array('email',                  'by_email'),
+          array('last_ip',                'by_ip'),
+          array('last_login',             'by_last_login'),
+          array('banned',                 'by_banned'),
+          array('locked',                 'by_locked'),
+          array('expansion',              'by_expansion'));
+  }
   // if we have a search request, if not we just return everything
-  if(isset($_GET['search_value']) && isset($_GET['search_by']))
+  if ( isset($_GET['search_value']) && isset($_GET['search_by']) )
   {
     // injection prevention
     $search_value = $sql['logon']->quote_smart($_GET['search_value']);
     $search_by = $sql['logon']->quote_smart($_GET['search_by']);
-    $search_menu = array('login', 'acct', 'gm', 'greater_gmlevel', 'email', 'lastip', 'lastlogin', 'banned', 'muted', 'flags');
-    if (in_array($search_by, $search_menu));
-    else $search_by = 'login';
-    unset($search_menu);
 
     // special search cases
     // developer note: 'if else' is always faster then 'switch case'
-    if ($search_by === 'greater_gmlevel')
+    if ( $search_by === 'greater_gmlevel' )
     {
       //TODO
-      $sql_query = 'SELECT acct,login,gm,email,lastip,muted,UNIX_TIMESTAMP(lastlogin) as lastlogin,flags
-        FROM accounts WHERE gm > "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+      $sql_query = 'SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) as lastlogin, flags
+        FROM accounts WHERE gm>"%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
       $query_1 = $sql['logon']->query('SELECT count(*) FROM accounts WHERE gm > "%'.$search_value.'%"');
     }
-    elseif ($search_by === 'banned')
+    elseif ( $search_by === 'gmlevel' )
     {
-      $sql_query = 'SELECT acct,login,gm,email,lastip,muted,UNIX_TIMESTAMP(lastlogin) as lastlogin,flags
-        FROM accounts WHERE acct = 0 ';
-      $count_query = 'SELECT count(*) FROM accounts WHERE banned <> 0 ';
-      $que = $sql['logon']->query('SELECT acct FROM accounts WHERE banned <> 0');
+      if ( $core == 1 )
+      {
+        $sql_query = 'SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) as lastlogin, flags
+          FROM accounts WHERE gm="'.$search_value.'" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+        $query_1 = $sql['logon']->query('SELECT count(*) FROM accounts WHERE gm="'.$search_value.'"');
+      }
+      elseif ( $core == 2 )
+      {
+        $sql_query = 'SELECT account.id AS acct, username AS login, gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) as lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+          FROM account
+            LEFT JOIN account_banned ON account_banned.id=account.id
+          WHERE gmlevel="'.$search_value.'" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+        $query_1 = $sql['logon']->query('SELECT count(*) FROM account WHERE gm="'.$search_value.'"');
+      }
+      else
+      {
+        $sql_query = 'SELECT account.id AS acct, username AS login, account_access.gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) as lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+          FROM account
+            LEFT JOIN account_access ON account_access.id=account.id
+            LEFT JOIN account_banned ON account_banned.id=account.id
+          WHERE account_access.gmlevel="'.$search_value.'" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+        $query_1 = $sql['logon']->query('SELECT count(*)
+          FROM account
+            LEFT JOIN account_access ON account_access.id=account.id
+          WHERE IFNULL(account_access.gmlevel, 0)="'.$search_value.'"');
+      }
+    }
+    elseif ( $search_by === 'banned' )
+    {
+      if ( $core == 1 )
+      {
+        $sql_query = 'SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) as lastlogin, flags, banned
+          FROM accounts WHERE banned<>0';
+        $count_query = 'SELECT count(*) FROM accounts';
+        $que = $sql['logon']->query('SELECT acct FROM accounts WHERE banned<>0');
+      }
+      elseif ( $core == 2 )
+      {
+        $sql_query = 'SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) as lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+          FROM account
+            LEFT JOIN account_banned ON account_banned.id=account.id
+          WHERE unbandate>UNIX_TIMESTAMP()';
+        $count_query = 'SELECT count(*) FROM account_banned WHERE unbandate>UNIX_TIMESTAMP()';
+        $que = $sql['logon']->query('SELECT id AS acct FROM account_banned WHERE unbandate>UNIX_TIMESTAMP()');
+      }
+      else
+      {
+        $sql_query = 'SELECT account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) as lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+          FROM account
+            LEFT JOIN account_banned ON account_banned.id=account.id
+            LEFT JOIN account_access ON account_access.id=account.id
+          WHERE unbandate>UNIX_TIMESTAMP()';
+        $count_query = 'SELECT count(*) FROM account_banned WHERE unbandate>UNIX_TIMESTAMP()';
+        $que = $sql['logon']->query('SELECT id AS acct FROM account_banned WHERE unbandate>UNIX_TIMESTAMP()');
+      }
       while ($banned = $sql['logon']->fetch_assoc($que))
       {
-        $sql_query .= 'OR acct = '.$banned['acct'].'';
-        $count_query .= 'OR acct = '.$banned['acct'].'';
+        if ( $core == 1 )
+        {
+          $sql_query .= ' OR acct='.$banned['acct'].'';
+          $count_query .= 'OR acct='.$banned['acct'].'';
+        }
+        else
+        {
+          $sql_query .= ' OR account.id='.$banned['acct'].'';
+          $count_query .= ' OR account_banned.id='.$banned['acct'].'';
+        }
       }
       $sql_query .= ' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
       $query_1 = $sql['logon']->query($count_query);
@@ -87,9 +185,29 @@ function browse_users()
     else
     {
       // default search case
-      $sql_query = 'SELECT acct,login,gm,email,lastip,muted,UNIX_TIMESTAMP(lastlogin) as lastlogin,flags
-        FROM accounts WHERE '.$search_by.' LIKE "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
-      $query_1 = $sql['logon']->query('SELECT count(*) FROM accounts WHERE '.$search_by.' LIKE "%'.$search_value.'%"');
+      if ( $core == 1 )
+      {
+        $sql_query = 'SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) as lastlogin, flags, banned
+          FROM accounts WHERE '.$search_by.' LIKE "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+        $query_1 = $sql['logon']->query('SELECT count(*) FROM accounts WHERE '.$search_by.' LIKE "%'.$search_value.'%"');
+      }
+      elseif ( $core == 2 )
+      {
+        $sql_query = 'SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) as lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+          FROM account
+            LEFT JOIN account_banned ON account_banned.id=account.id
+          WHERE '.$search_by.' LIKE "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+        $query_1 = $sql['logon']->query('SELECT count(*) FROM account WHERE '.$search_by.' LIKE "%'.$search_value.'%"');
+      }
+      else
+      {
+        $sql_query = 'SELECT account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) as lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+          FROM account
+            LEFT JOIN account_access ON account_access.id=account.id
+            LEFT JOIN account_banned ON account_banned.id=account.id
+          WHERE '.$search_by.' LIKE "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+        $query_1 = $sql['logon']->query('SELECT count(*) FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE '.$search_by.' LIKE "%'.$search_value.'%"');
+      }
     }
     $query = $sql['logon']->query($sql_query);
   }
@@ -105,14 +223,19 @@ function browse_users()
     elseif ( $core == 2 )
     {
       $query_1 = $sql['logon']->query('SELECT count(*) FROM account');
-      $query = $sql['logon']->query('SELECT *, account.id AS acct, username AS login, gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags
-        FROM account LEFT JOIN account_banned ON account_banned.id = account.id ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
+      $query = $sql['logon']->query('SELECT *, account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+        FROM account
+          LEFT JOIN account_banned ON account_banned.id=account.id
+        ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
     }
     else
     {
       $query_1 = $sql['logon']->query('SELECT count(*) FROM account');
-      $query = $sql['logon']->query('SELECT *, account.id AS acct, username AS login, account_access.gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags
-        FROM account LEFT JOIN account_access ON account_access.id = account.id LEFT JOIN account_banned ON account_banned.id = account.id ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
+      $query = $sql['logon']->query('SELECT *, account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+        FROM account
+          LEFT JOIN account_access ON account_access.id=account.id
+          LEFT JOIN account_banned ON account_banned.id=account.id
+        ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
     }
   }
   // this is for multipage support
@@ -165,25 +288,13 @@ function browse_users()
                         <form action="user.php" method="get" name="form">
                           <input type="hidden" name="error" value="3" />
                           <input type="text" size="24" maxlength="50" name="search_value" value="'.$search_value.'" />
-                          <select name="search_by">
-                            <option value="login"'.($search_by === 'login' ? ' selected="selected"' : '').'>'.lang('user', 'by_name').'</option>
-                            <option value="acct"'.($search_by === 'id' ? ' selected="selected"' : '').'>'.lang('user', 'by_id').'</option>
-                            <option value="gmlevel"'.($search_by === 'gmlevel' ? ' selected="selected"' : '').'>'.lang('user', 'by_gm_level').'</option>
-                            <option value="greater_gmlevel"'.($search_by === 'greater_gmlevel' ? ' selected="selected"' : '').'>'.lang('user', 'greater_gm_level').'</option>
-                            <option value="expansion"'.($search_by === 'expansion' ? ' selected="selected"' : '').'>'.lang('user', 'by_expansion').'</option>
-                            <option value="email"'.($search_by === 'email' ? ' selected="selected"' : '').'>'.lang('user', 'by_email').'</option>
-                            <!-- option value="joindate"'.($search_by === 'joindate' ? ' selected="selected"' : '').'>'.lang('user', 'by_join_date').'</option -->
-                            <option value="last_ip"'.($search_by === 'last_ip' ? ' selected="selected"' : '').'>'.lang('user', 'by_ip').'</option>
-                            <option value="last_login"'.($search_by === 'last_login' ? ' selected="selected"' : '').'>'.lang('user', 'by_last_login').'</option>
-                            <option value="online"'.($search_by === 'online' ? ' selected="selected"' : '').'>'.lang('user', 'by_online').'</option>';
-  if ( $core == 1 )
+                          <select name="search_by">';
+  foreach ( $search_menu as $row )
+  {
     $output .= '
-                            <option value="locked"'.($search_by === 'locked' ? ' selected="selected"' : '').'>'.lang('user', 'by_muted').'</option>';
-  else
-    $output .= '
-                            <option value="locked"'.($search_by === 'locked' ? ' selected="selected"' : '').'>'.lang('user', 'by_locked').'</option>';
+                            <option value="'.$row[0].'"'.($search_by === $row[0] ? ' selected="selected"' : '').'>'.lang('user', $row[1]).'</option>';
+  }
   $output .= '
-                            <option value="banned"'.($search_by === 'banned' ? ' selected="selected"' : '').'>'.lang('user', 'by_banned').'</option>
                           </select>
                         </form>
                       </td>
@@ -218,7 +329,8 @@ function browse_users()
                   <th width="1%"><a href="user.php?order_by=acct&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='acct' ? ' class="'.$order_dir.'"' : '').'>'.lang('user', 'acct').'</a></th>
                   <th width="1%"><a href="user.php?order_by=login&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='login' ? ' class="'.$order_dir.'"' : '').'>'.lang('user', 'login').'</a></th>
                   <th width="1%">'.lang('user', 'screenname').'</th>
-                  <th width="1%"><a href="user.php?order_by=gm&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='gm' ? ' class="'.$order_dir.'"' : '').'>'.lang('user', 'gm_level').'</a></th>';
+                  <th width="1%"><a href="user.php?order_by=gm&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='gm' ? ' class="'.$order_dir.'"' : '').'>'.lang('user', 'gm_level').'</a></th>
+                  <th width="1%">'.lang('user', 'sec_level').'</th>';
   if ($expansion_select)
     $output .='
                   <th width="1%"><a href="user.php?order_by=flags&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='flags' ? ' class="'.$order_dir.'"' : '').'>EXP</a></th>';
@@ -243,21 +355,21 @@ function browse_users()
                   <th width="1%">'.lang('global', 'country').'</th>';
   }
   $output .= '
-                  <th width="1%"><a href="user.php?order_by=banned&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='banned' ? ' class="'.$order_dir.'"' : '').'>'.lang('user', 'banned').'</a></th>
+                  <th width="1%">'.lang('user', 'banned').'</th>
                 </tr>';
 
   //---------------Page Specific Data Starts Here--------------------------
   while ($data = $sql['logon']->fetch_assoc($query))
   {
     // get screen name for each account
-    $sn_query = "SELECT *, SecurityLevel AS gm FROM config_accounts WHERE Login = '".$data['login']."'";
+    $sn_query = "SELECT *, SecurityLevel AS sec_lvl FROM config_accounts WHERE Login='".$data['login']."'";
     $sn_result = $sql['mgr']->query($sn_query);
     $screenname = $sql['mgr']->fetch_assoc($sn_result);
     
     // if the user doesn't have a value in their SecurityLevel field,
     // assume it's Player (ZERO)
-    if ( !isset($screenname['gm']) )
-      $screenname['gm'] = 0;
+    if ( !isset($screenname['sec_lvl']) )
+      $screenname['sec_lvl'] = 0;
     
     // clear character count from previous account
     $char_count = 0;
@@ -276,7 +388,7 @@ function browse_users()
         $char_count += $char_count_fields['COUNT(*)'];
     }
 
-    if ( ($user_lvl >= gmlevel($screenname['gm'])) || ($user_name == $data['login']) )
+    if ( ($user_lvl >= gmlevel($screenname['sec_lvl'])) || ($user_name == $data['login']) )
     {
       $output .= '
                 <tr>';
@@ -286,7 +398,7 @@ function browse_users()
       else
         $output .= '
                   <td>*</td>';
-      if ( ($user_lvl >= gmlevel($screenname['gm'])) || ($user_name == $data['login']) )
+      if ( ($user_lvl >= gmlevel($screenname['sec_lvl'])) || ($user_name == $data['login']) )
         $output .= '
                   <td>'.$data['acct'].'</td>
                   <td>
@@ -296,7 +408,7 @@ function browse_users()
         $output .= '
                   <td>***</td>
                   <td>*****</td>';
-      if ( ($user_lvl >= gmlevel($screenname['gm'])) || ($user_name == $data['login']) )
+      if ( ($user_lvl >= gmlevel($screenname['sec_lvl'])) || ($user_name == $data['login']) )
         $output .= '
                   <td>
                     <a href="user.php?action=edit_user&amp;error=11&amp;acct='.$data['acct'].'">'.$screenname['ScreenName'].'</a>
@@ -305,7 +417,9 @@ function browse_users()
         $output .= '
                   <td>*****</td>';
       $output .= '
-                  <td>'.gmlevel_short($screenname['gm']).'</td>';
+                  <td>'.$data['gm'].'</td>';
+      $output .= '
+                  <td>'.gmlevel_short($screenname['sec_lvl']).'</td>';
       if ($expansion_select)
       {
         $exp_lvl_arr = id_get_exp_lvl();
@@ -364,18 +478,34 @@ function browse_users()
       {
         $country = misc_get_country_by_ip($data['lastip']);
         $output .= '
-                  <td>'.(($country['code']) ? '<img src="img/flags/'.$country['code'].'.png" onmousemove="toolTip(\''.($country['country']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />' : '-').'</td>';
+                  <td>'.(($country['code']) ? '<img src="img/flags/'.$country['code'].'.png" onmousemove="oldtoolTip(\''.($country['country']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
       }
       if ( $core == 1 )
-        ;
-      else
-        if ( $data['active'] )
-          if ( time() < $data['unbandate'] )
-            $output .= '<td><img src="img/flag_red.png" /></td>';
-          else
-            $output .= '<td>-</td>';
+      {
+        if ( time() < $data['banned'] )
+          $output .= '
+                  <td><img src="img/flag_red.png" /></td>';
         else
-          $output .= '<td>-</td>';
+          $output .= '
+                  <td>-</td>';
+      }
+      else
+      {
+        if ( $data['active'] )
+          if ( time() < $data['banned'] )
+            $output .= '
+                  <td><img src="img/aff_tick.png" /></td>';
+          else
+            $output .= '
+                  <td>-</td>';
+        else
+          if ( time() < $data['banned'] )
+            $output .= '
+                  <td><img src="img/flag_red.png" onmousemove="oldtoolTip(\''.lang('user', 'ban_inactive').'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>';
+          else
+            $output .= '
+                  <td>-</td>';
+      }
       $output .= '
                 </tr>';
     }

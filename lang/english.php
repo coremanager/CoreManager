@@ -909,6 +909,7 @@ $GLOBALS['lang_user'] = array
   'login' => 'User Name',
   'screenname' => 'Screen Name',
   'gm_level' => 'GM',
+  'sec_level' => 'Security Level',
   'email' => 'Mail',
   'join_date' => 'Join Date',
   'banned' => 'Banned',
@@ -963,7 +964,8 @@ $GLOBALS['lang_user'] = array
   'tbc' => 'TBC',
   'wotlk' => 'WotLK',
   'wotlktbc' => 'WotLK+TBC',
-  'invited_by' => 'Invited By'
+  'invited_by' => 'Invited By',
+  'ban_inactive' => 'Ban not currently active',
 );
 
 
@@ -1100,9 +1102,12 @@ $GLOBALS['lang_arenateam'] = array
   'type' => 'Type',
   'arenateam_online' => 'Members online',
   'create_date' => '...',
-  '0' => '2 VS 2',
-  '1' => '3 VS 3',
-  '2' => '5 VS 5',
+  '0A' => '2 VS 2',
+  '1A' => '3 VS 3',
+  '2A' => '5 VS 5',
+  '2MT' => '2 VS 2',
+  '3MT' => '3 VS 3',
+  '5MT' => '5 VS 5',
   'err_no_members_found' => 'No Members Found!',
   'err_no_team_found' => 'No Arena Teams Found!',
   'del_team' => 'Delete Arena Team',
@@ -1129,9 +1134,12 @@ $GLOBALS['lang_arenateam'] = array
   'ratio' => 'Win Percentage',
   'this_week' => 'This week',
   'this_season' => 'This season',
-  'standings' => 'Standing :',
+  'standings' => 'Standing',
   'tot_found' => 'Total Found',
-  'arenateam' => 'Arena Team'
+  'arenateam' => 'Arena Team',
+  'personalrating' => 'Personal Rating',
+  'lastlogin' => 'Last Login (Days)',
+  'win' => 'Win',
 );
   
 // ----- HONOR.PHP -----

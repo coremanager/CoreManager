@@ -317,7 +317,7 @@ function browse_guilds()
                 </tr>
                 <tr>
                   <th width="5%"><a href="guild.php?order_by=gid&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='gid' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang('guild', 'id').'</a></th>
-                  <th width="30%"><a href="guild.php?order_by=name&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='name' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang('guild', 'guild_name').'</a></th>
+                  <th width="30%"><a href="guild.php?order_by=guildname&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='guildname' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang('guild', 'guild_name').'</a></th>
                   <th width="20%"><a href="guild.php?order_by=lname&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='lname' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang('guild', 'guild_leader').'</a></th>
                   <th width="10%"><a href="guild.php?order_by=lfaction&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='lfaction' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang('guild', 'guild_faction').'</a></th>
                   <th width="15%"><a href="guild.php?order_by=tot_chars&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='tot_chars' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang('guild', 'tot_members').'</a></th>
@@ -760,7 +760,9 @@ switch ( $err )
     $output .= '
           <h1><font class="error">'.lang('global', 'err_no_search_passed').'</font></h1>';
     break;
-  case 3: //keep blank
+  case 3:
+    $output .= '
+          <h1>'.lang('guild', 'guild').'</h1>';
     break;
   case 4:
     $output .= '

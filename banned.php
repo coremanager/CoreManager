@@ -103,7 +103,7 @@ function show_list()
       if ( $core == 1 )
         $result = $sql['logon']->query("SELECT acct, banned FROM accounts WHERE banned <> 0 ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
       else
-        $result = $sql['logon']->query("SELECT id AS acct, active AS banned FROM account_banned WHERE active <> 0 ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+        $result = $sql['logon']->query("SELECT id AS acct, active AS banned FROM account_banned WHERE active<>0 AND unbandate>UNIX_TIMESTAMP() ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
       break;
     }
     case "characters":
@@ -135,8 +135,16 @@ function show_list()
   {
     case "accounts":
     {
-      makebutton(lang('banned', 'banned_characters'), "banned.php?ban_type=characters",130);
-      makebutton(lang('banned', 'banned_ips'), "banned.php?ban_type=ipbans",130);
+      if ( $core == 1 )
+      {
+        makebutton(lang('banned', 'banned_characters'), "banned.php?ban_type=characters",130);
+        makebutton(lang('banned', 'banned_ips'), "banned.php?ban_type=ipbans",130);
+      }
+      else
+      {
+        // MaNGOS & Trinity don't ban characters, so don't show the "Characters" button
+        makebutton(lang('banned', 'banned_ips'), "banned.php?ban_type=ipbans",130);
+      }
       break;
     }
     case "characters":
@@ -147,8 +155,16 @@ function show_list()
     }
     case "ipbans":
     {
-      makebutton(lang('banned', 'banned_accounts'), "banned.php?ban_type=accounts",130);
-      makebutton(lang('banned', 'banned_characters'), "banned.php?ban_type=characters",130);
+      if ( $core == 1 )
+      {
+        makebutton(lang('banned', 'banned_accounts'), "banned.php?ban_type=accounts",130);
+        makebutton(lang('banned', 'banned_characters'), "banned.php?ban_type=characters",130);
+      }
+      else
+      {
+        // MaNGOS & Trinity don't ban characters, so don't show the "Characters" button
+        makebutton(lang('banned', 'banned_accounts'), "banned.php?ban_type=accounts",130);
+      }
       break;
     }
   }
@@ -214,7 +230,10 @@ function show_list()
   {
     if ($ban_type == "accounts")
     {
-      $result1 = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$ban['acct']."'");
+      if ( $core == 1 )
+        $result1 = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$ban['acct']."'");
+      else
+        $result1 = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$ban['acct']."'");
       $row_name = $sql['logon']->result($result1, 0, 'login');
       $name_out = "<a href=\"user.php?action=edit_user&amp;error=11&amp;acct=".$ban['acct']."\">$row_name</a>";
     }
