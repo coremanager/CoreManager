@@ -12,8 +12,7 @@ function.
 The Character Sheet Page on Trinity Servers will display "ERR" for some stats.
 (see below for list)
 
-Arena Teams also have Emblems.  But, unlike Guild Emblems, the colors are done
-by chosing from a color wheel.
+The Arena Team Banner for 5 vs 5 is one row lower than it should be.
 
 
 THINGS COREMANAGER CAN DO THAT SERVERS DON'T SUPPORT:

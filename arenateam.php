@@ -324,7 +324,7 @@ function browse_teams()
               <td>'.$data['atid'].'</td>
               <td><a href="arenateam.php?action=view_team&amp;error=3&amp;id='.$data['atid'].'">'.htmlentities($data['atname']).'</a></td>
               <td><a href="char.php?id='.$data['lguid'].'">'.htmlentities($data['lname']).'</a></td>
-              <td>'.lang('arenateam',$data['attype'].( ( $core == 1 ) ? "A" : "MT" )).'</td>
+              <td>'.lang('arenateam',$data['attype'].( ( $core == 3 ) ? "T" : "AM" )).'</td>
               <td>'.$member_count.'</td>
               <td>'.$members_online.'</td>
               <td>'.$data['atrating'].'</td>
@@ -365,9 +365,21 @@ function view_team()
   $arenateam_id = $sql['char']->quote_smart($_GET['id']);
 
   if ( $core == 1 )
-    $query = $sql['char']->query("SELECT id, name, type FROM arenateams WHERE id='".$arenateam_id."'");
+    $query = $sql['char']->query("SELECT id, name, type,
+    INET_NTOA(backgroundcolour) AS BackgroundColor,
+    INET_NTOA(bordercolour) AS BorderColor,
+    INET_NTOA(emblemcolour) AS EmblemColor,
+    emblemstyle AS EmblemStyle, borderstyle AS BorderStyle
+    FROM arenateams
+    WHERE id='".$arenateam_id."'");
   else
-    $query = $sql['char']->query("SELECT arenateamid AS id, name, type FROM arena_team WHERE arenateamid='".$arenateam_id."'");
+    $query = $sql['char']->query("SELECT arenateamid AS id, name, type,
+    INET_NTOA(BackgroundColor) AS BackgroundColor,
+    INET_NTOA(BorderColor) AS BorderColor,
+    INET_NTOA(EmblemColor) AS EmblemColor,
+    EmblemStyle, BorderStyle
+    FROM arena_team
+    WHERE arenateamid='".$arenateam_id."'");
   $arenateam_data = $sql['char']->fetch_assoc($query);
 
   if ( $core == 1 )
@@ -450,16 +462,66 @@ function view_team()
   else
     $winperc_season = $arenateamstats_data[4];
 
+  // extract banner colors
+  $background_color = explode(".", $arenateam_data['BackgroundColor']);
+  $border_color = explode(".", $arenateam_data['BorderColor']);
+  $emblem_color = explode(".", $arenateam_data['EmblemColor']);
+
+  // Trinity stores Team type as 2, 3, 5; ArcEmu & MaNGOS use 0, 1, 2
+  if ( $core != 3 )
+  {
+    if ( $arenateam_data['type'] == 0 )
+    {
+      $banner_style = 2;
+      $banner_span = 8;
+    }
+    elseif ( $arenateam_data['type'] == 1 )
+    {
+      $banner_style = 3;
+      $banner_span = 9;
+    }
+    elseif ( $arenateam_data['type'] == 2 )
+    {
+      $banner_style = 5;
+      $banner_span = 11;
+    }
+  }
+  else
+  {
+    if ( $arenateam_data['type'] == 2 )
+    {
+      $banner_style = 2;
+      $banner_span = 8;
+    }
+    elseif ( $arenateam_data['type'] == 3 )
+    {
+      $banner_style = 3;
+      $banner_span = 9;
+    }
+    elseif ( $arenateam_data['type'] == 5 )
+    {
+      $banner_style = 5;
+      $banner_span = 11;
+    }
+  }
+
   $output .= '
         <script type="text/javascript">
           answerbox.btn_ok="'.lang('global', 'yes_low').'";
           answerbox.btn_cancel="'.lang('global', 'no').'";
         </script>
         <center>
-          <fieldset>
-            <legend>'.lang('arenateam', 'arenateam').' ('.lang('arenateam', $arenateam_data['type'].( ( $core == 1 ) ? "A" : "MT" )).')</legend>
-            <table class="lined">
+          <div class="fieldset_border arena_fieldset">
+            <span class="legend">'.lang('arenateam', 'arenateam').' ('.lang('arenateam', $arenateam_data['type'].( ( $core == 3 ) ? "T" : "AM" )).')</span>
+            <table class="lined" id="arena_table_with_banner">
               <tr class="bold">
+                <td rowspan="'.$banner_span.'">
+                  <div class="arena_banner">
+                    <img src="libs/banner_lib.php?action=banner&f='.$banner_style.'&r='.$background_color[1].'&g='.$background_color[2].'&b='.$background_color[3].'" class="banner_img" />
+                    <img src="libs/banner_lib.php?action=border&f='.$arenateam_data['BorderStyle'].'&f2='.$banner_style.'&r='.$border_color[1].'&g='.$border_color[2].'&b='.$border_color[3].'" class="border_img" />
+                    <img src="libs/banner_lib.php?action=emblem&f='.$arenateam_data['EmblemStyle'].'&r='.$emblem_color[1].'&g='.$emblem_color[2].'&b='.$emblem_color[3].'&s=0.55" class="emblem_img" />
+                  </div>
+                </td>
                 <td colspan="'.( ( $showcountryflag ) ? 14 : 13 ).'">'.htmlentities($arenateam_data['name']).'</td>
               </tr>
               <tr>
@@ -648,7 +710,7 @@ function view_team()
     }
     $output .= '
             </table>
-          </fieldset>
+          </div>
         </center>';
 
 }
@@ -714,8 +776,10 @@ function rem_char_from_team()
 //########################################################################################################################
 $err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
 
+$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
+
 $output .= '
-      <div class="bubble">
+      <div class="bubble" '.( ( $action == 'view_team' ) ? 'id="arenateam_bubble"' : '' ).'>
         <div class="top">';
 
 switch ( $err )
@@ -743,8 +807,6 @@ switch ( $err )
 
 $output .= '
         </div>';
-
-$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
 
 switch ( $action )
 {

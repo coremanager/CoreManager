@@ -3,6 +3,7 @@ REQUIREMENTS:
   WebServer with PHP support.
   MySQL 5.0.61 and above.     ( http://dev.mysql.com/downloads/mysql/5.0.html#downloads )
   PHP 5.1.0 and above.        ( http://www.php.net/downloads.php)
+  GD Libraries Enabled.
 
   For Windows users:
     If you are using Apache2,  ( http://httpd.apache.org/ )
@@ -48,9 +49,12 @@ INSTALLATION:
    9. Extract all 5 of \img\icons\*_icons.part*.rar into \img\icons\.
   10. Extract any .zip files in \img\icons\updates\ into \img\icons\.
 
+  11. Extract \img\arena_emblems\*_arena_emblems.zip into \img\arena_emblems\.
+  12. Extract any .zip files in \img\arena_emblems\updates into \img\arena_emblems\.
+
       OPTIONAL
-  11. Extract \img\emblems\*_emblems.zip into \img\emblems\.
-  12. Extract any .zip files in \img\emblems\updates into \img\emblems\.
+  13. Extract \img\emblems\*_emblems.zip into \img\emblems\.
+  14. Extract any .zip files in \img\emblems\updates into \img\emblems\.
 
 
 CONFIGURATION:

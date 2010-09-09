@@ -1345,6 +1345,44 @@ tr td.rep0
 {
 	cursor: pointer;
 }
+#arenateam_bubble
+{
+  width: 928px;
+  left: -64px;
+}
+.arena_fieldset
+{
+  width: 100%;
+}
+#arena_table_with_banner
+{
+  width: 898px;
+}
+.arena_banner
+{
+  position: relative;
+  width: 128px;
+  height: 256px;
+}
+.banner_img
+{
+  position: absolute;
+  left: 10px;
+  z-index: 97;
+}
+.border_img
+{
+  position: absolute;
+  left: 10px;
+  z-index: 98;
+}
+.emblem_img
+{
+  position: absolute;
+  top: 40px;
+  left: 22px;
+  z-index: 99;
+}
 
 /* BANNED.PHP */
 #banned_delete_cursor
