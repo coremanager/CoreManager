@@ -570,7 +570,7 @@ else
       }
 
       if ( $core == 1 )
-        $ca_query = "SELECT name FROM `".$logon_db['name']."`.accounts LEFT JOIN `".$corem_db['name']."`.config_accounts ON accounts.name = `".$corem_db['name']."`.config_accounts.Login WHERE acct='".$char['acct']."'";
+        $ca_query = "SELECT accounts.login AS name FROM `".$logon_db['name']."`.accounts LEFT JOIN `".$corem_db['name']."`.config_accounts ON accounts.login = `".$corem_db['name']."`.config_accounts.Login WHERE acct='".$char['acct']."'";
       else
         $ca_query = "SELECT *, username AS name FROM `".$logon_db['name']."`.account LEFT JOIN `".$corem_db['name']."`.config_accounts ON account.username = `".$corem_db['name']."`.config_accounts.Login WHERE id='".$char['acct']."'";
         
