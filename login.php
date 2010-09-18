@@ -169,7 +169,7 @@ function login()
                     <td align="right">'.lang('login', 'username').' :</td>
 										<td>&nbsp;</td>
                     <td align="left">
-                      <input type="text" name="login" size="24" maxlength="16" />
+                      <input type="text" name="login" size="24" maxlength="16" onfocus="this.select()" />
                     </td>
                   </tr>
                   <tr>
@@ -240,7 +240,7 @@ function login()
                 </table>
                 <script type="text/javascript">
                   // <![CDATA[
-                    document.form.user.focus();
+                    document.form.login.focus();
                   // ]]>
                 </script>
               </form>
