@@ -200,7 +200,7 @@ function show_map()
       $query = "SELECT *, gm FROM characters LEFT JOIN `".$logon_db['name']."`.accounts ON characters.acct = accounts.acct WHERE ".( ($online <> -1) ? "online='".$online."' AND " : "" )."mapid IN (0,1,571) AND zoneid<>876";
     }
     else
-      $query = "SELECT *, gm FROM characters LEFT JOIN `".$logon_db['name']."`.accounts ON characters.acct = account.acct WHERE ".( ($online <> -1) ? "online='".$online."' AND " : "" )."mapid='".$showmap."'".( ( $showmap == 1 ) ? " AND zoneid<>876" : "" ).( ( $showmap == 530 )  ? "  AND positionY>0"  : "" );
+      $query = "SELECT *, gm FROM characters LEFT JOIN `".$logon_db['name']."`.accounts ON characters.acct = accounts.acct WHERE ".( ($online <> -1) ? "online='".$online."' AND " : "" )."mapid='".$showmap."'".( ( $showmap == 1 ) ? " AND zoneid<>876" : "" ).( ( $showmap == 530 )  ? "  AND positionY>0"  : "" );
 
     // don't want this query at all if we're viewing Outland or Northrend
     if ( ( $showmap <> 530 ) && ( $showmap <> 571 ) )

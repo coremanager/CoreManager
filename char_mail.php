@@ -47,7 +47,7 @@ function char_mail()
   if (is_numeric($id)); else $id = 0;
 
   if ( $core == 1 )
-    $result = $sql['char']->query("'SELECT acct, name, race, class, level, gender
+    $result = $sql['char']->query("SELECT acct, name, race, class, level, gender
       FROM characters WHERE guid='".$id."' LIMIT 1");
   else
     $result = $sql['char']->query("SELECT account AS acct, name, race, class, level, gender

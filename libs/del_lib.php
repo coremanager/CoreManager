@@ -25,7 +25,7 @@ require_once 'tab_lib.php';
 function del_char($guid, $realm)
 {
   global $characters_db, $logon_db, $realm_id,
-    $user_lvl, $user_id, $tab_del_user_characters, $sql;
+    $user_lvl, $user_id, $tab_del_user_characters, $sql, $core;
 
   if ( $core == 1 )
     $query = $sql['char']->query("SELECT acct, online FROM characters WHERE guid='".$guid."' LIMIT 1");
