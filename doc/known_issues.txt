@@ -20,6 +20,9 @@ THINGS COREMANAGER CAN DO THAT SERVERS DON'T SUPPORT:
 Online Player List on Main Page can show the Zone, Map AND Area of players.
 MaNGOS and Trinity do not save Area.
 
-The Character Sheet can display the following stats: Melee Hit, Expertise,
-Spell Heal, Spell Hit, Spell Haste, and Ranged Hit.  Trinity does that save
-these.
+The Character Sheet is meant to display the following stats: Melee Hit,
+Expertise, Spell Heal, Spell Hit, Spell Haste, and Ranged Hit.  MaNGOS & Trinity
+do not save these.
+
+MaNGOS doesn't store Player Latency so Average Latency & Player Latency are
+unavailable.

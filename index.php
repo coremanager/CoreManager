@@ -177,18 +177,22 @@ else
                   .lang('index', 'maxplayers').
                   ': <font id="index_realm_info_value">'
                   .$stats['maxplayers'].'</font>';
-      if ( !$hide_avg_latency )
+      // this_is_junk: MaNGOS doesn't store player latency. :/
+      if ( $core == 3 )
       {
-        $lat_query = "SELECT SUM(latency), COUNT(*) FROM characters WHERE online=1 OR logout_time>'".$stats['starttime']."'";
-        $lat_result = $sql['char']->query($lat_query);
-        $lat_fields = $sql['char']->fetch_assoc($lat_result);
-        $avglat = number_format($lat_fields['SUM(latency)'] / $lat_fields['COUNT(*)'], 3);
-        
-        $output .= '
-                  <br />'
-                  .lang('index', 'avglat').
-                  ': <font id="index_realm_info_value">'
-                  .$avglat.'</font>';
+        if ( !$hide_avg_latency )
+        {
+          $lat_query = "SELECT SUM(latency), COUNT(*) FROM characters WHERE online=1 OR logout_time>'".$stats['starttime']."'";
+          $lat_result = $sql['char']->query($lat_query);
+          $lat_fields = $sql['char']->fetch_assoc($lat_result);
+          $avglat = number_format($lat_fields['SUM(latency)'] / $lat_fields['COUNT(*)'], 3);
+          
+          $output .= '
+                    <br />'
+                    .lang('index', 'avglat').
+                    ': <font id="index_realm_info_value">'
+                    .$avglat.'</font>';
+        }
       }
       $output .= '
                 </font>
@@ -506,6 +510,10 @@ else
         $result = $sql['char']->query("SELECT guid, name, race, class, zoneid, mapid, level, acct, gender,
                               CAST( SUBSTRING_INDEX( SUBSTRING_INDEX( data, ';', ".(PLAYER_FIELD_HONOR_CURRENCY+1)." ), ';', -1 ) AS UNSIGNED ) AS highest_rank
                               FROM characters WHERE online=1 ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
+      elseif ( $core == 2 ) // this_is_junk: MaNGOS doesn't store player latency
+        $result = $sql['char']->query("SELECT guid, name, race, class, zone AS zoneid, map AS mapid, level, account AS acct, gender,
+                              totalHonorPoints AS highest_rank
+                              FROM characters WHERE online=1 ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
       else
         $result = $sql['char']->query("SELECT guid, name, race, class, zone AS zoneid, map AS mapid, level, account AS acct, gender,
                               totalHonorPoints AS highest_rank, latency
@@ -544,10 +552,14 @@ else
       $output .= '
                 <th width="25%">'.lang('index', 'area').'</a></th>';
     
-    if ( !$hide_plr_latency )
+    // this_is_junk: MaNGOS doesn't store player latency
+    if ( $core != 2 )
     {
-      $output .= '
-                <th width="1%">'.lang('index', 'latency').'</th>';
+      if ( !$hide_plr_latency )
+      {
+        $output .= '
+                  <th width="1%">'.lang('index', 'latency').'</th>';
+      }
     }
 
     if ( $showcountryflag )
@@ -657,8 +669,12 @@ else
           }
         }
         else
-          $output .= '
+        {
+          // this_is_junk: MaNGOS doesn't store player latency
+          if ( $core == 3 )
+            $output .= '
                 <td>'.$char['latency'].'</td>';
+        }
       }
 
       if ( $showcountryflag )
