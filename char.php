@@ -122,11 +122,8 @@ function char_main()
       {
         $result = $sql['char']->query("SELECT guid, name, race, class, level, zone AS zoneid, map AS mapid, 
           online, gender, totaltime, account AS acct, logout_time AS timestamp, health, 
-					power1, power2, power3, power4, power5, power6, power7,
-          SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 1011), ' ', -1) AS xp,
-          SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 1650), ' ', -1) AS arenaPoints,
-          SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 1649), ' ', -1) AS totalHonorPoints,
-          SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 1603), ' ', -1) AS totalKills
+					power1, power2, power3, power4, power5, power6, power7, xp,
+          arenaPoints, totalHonorPoints, totalKills
           FROM characters WHERE guid = '".$id."'");
       }
       else
@@ -150,6 +147,7 @@ function char_main()
         $query = "SELECT * FROM characters LEFT JOIN character_stats ON characters.guid=character_stats.guid WHERE characters.guid='".$id."'";
         $char_data_result = $sql['char']->query($query);
         $char_data_fields = $sql['char']->fetch_assoc($char_data_result);
+
         $char_data[PLAYER_BLOCK_PERCENTAGE] = $char_data_fields['blockPct'];
         $char_data[PLAYER_DODGE_PERCENTAGE] = $char_data_fields['dodgePct'];
         $char_data[PLAYER_PARRY_PERCENTAGE] = $char_data_fields['parryPct'];
