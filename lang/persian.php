@@ -900,7 +900,8 @@ $GLOBALS['lang_user'] = array
   'by_email' => 'با ایمیل',
   'by_join_date' => 'با تاریخ ورود',
   'by_ip' => 'با آی پی',
-  'by_last_login' => 'با آخرین اتصال',
+  'by_gt_last_login' => '>= Last Login (mm/dd/yyyy)', // do not change the (mm/dd/yyyy) part
+  'by_lt_last_login' => '<= Last Login (mm/dd/yyyy)', // do not change the (mm/dd/yyyy) part
   'by_online' => 'با آنلاین بودن',
   'by_banned' => 'توقیف شده',
   'by_locked' => 'قفل شده',

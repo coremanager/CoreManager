@@ -4,7 +4,8 @@ Here's a list of the things we're aware are wrong with CoreManager
 them yet)
 ================================================================================
 
-The Search feature on most pages doesn't work under Trinity & MaNGOS.
+The Search feature on the Character List Page doesn't work under Trinity &
+MaNGOS.
 
 Trinity Core support is only for the "Stable" release.  Other revisions may not
 function.

@@ -195,7 +195,7 @@ function browse_guilds()
         }
         else
         {
-          $query = $sql['char']->query("SELECT g.guildid AS gid, g.name, g.leaderguid AS lguid,
+          $query = $sql['char']->query("SELECT g.guildid AS gid, g.name AS guildname, g.leaderguid AS lguid,
             (SELECT name FROM characters WHERE guid=lguid) AS lname, c.race IN (2, 5, 6, 8, 10) AS lfaction,
             (SELECT COUNT(*) FROM guild_member WHERE guildid=gid) AS tot_chars, createdate, c.account AS laccount,
             g.info AS info,
@@ -227,7 +227,7 @@ function browse_guilds()
         }
         else
         {
-          $query = $sql['char']->query("SELECT g.guildid AS gid, g.name, g.leaderguid AS lguid,
+          $query = $sql['char']->query("SELECT g.guildid AS gid, g.name AS guildname, g.leaderguid AS lguid,
             (SELECT name FROM characters WHERE guid=lguid) AS lname, c.race in (2, 5, 6, 8, 10) AS lfaction,
             (SELECT COUNT(*) FROM guild_member WHERE guildid=gid) AS tot_chars, createdate, c.account AS laccount,
             g.info AS info,

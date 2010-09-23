@@ -900,7 +900,8 @@ $GLOBALS['lang_user'] = array
   'by_email' => 'nach Email',
   'by_join_date' => 'Beitrittsdatum',
   'by_ip' => 'nach IP',
-  'by_last_login' => 'Letztem Login',
+  'by_gt_last_login' => '>= Last Login (mm/dd/yyyy)', // do not change the (mm/dd/yyyy) part
+  'by_lt_last_login' => '<= Last Login (mm/dd/yyyy)', // do not change the (mm/dd/yyyy) part
   'by_online' => 'nach Online',
   'by_banned' => 'nach Bann',
   'by_locked' => 'nach Sperrung',

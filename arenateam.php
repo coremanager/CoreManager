@@ -72,7 +72,7 @@ function browse_teams()
             arenateams.leader AS lguid, arenateams.type AS attype,
             (SELECT name FROM `characters` WHERE guid = lguid) AS lname,
             rating AS atrating, SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', -2), ' ', 1) AS atgames, 
-            SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', -2), ' ', -1) As atwins,
+            SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', -2), ' ', -1) AS atwins,
             SUBSTRING_INDEX(player_data1, ' ', 1) AS p1, 
             SUBSTRING_INDEX(player_data2, ' ', 1) AS p2, 
             SUBSTRING_INDEX(player_data3, ' ', 1) AS p3, 
@@ -97,7 +97,8 @@ function browse_teams()
             arena_team.captainguid AS lguid, arena_team.type AS attype, 
             (SELECT name FROM `characters` WHERE guid=lguid) AS lname, 
             (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
-            rating AS atrating, games as atgames, wins as atwins FROM arena_team, arena_team_stats 
+            rating AS atrating, games AS atgames, wins AS atwins
+            FROM arena_team, arena_team_stats 
             WHERE arena_team.arenateamid=arena_team_stats.arenateamid AND arena_team.name LIKE '%".$search_value."%' 
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
@@ -105,6 +106,7 @@ function browse_teams()
             FROM arena_team 
             WHERE arena_team.name LIKE '%".$search_value."%'");
         }
+        break;
       }
       case "leadername":
       {
@@ -139,7 +141,7 @@ function browse_teams()
             arena_team.captainguid AS lguid, arena_team.type AS attype, 
             (SELECT name FROM `characters` WHERE guid=lguid) AS lname,
             (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
-            rating AS atrating, games as atgames, wins as atwins 
+            rating AS atrating, games AS atgames, wins AS atwins 
             FROM arena_team, arena_team_stats 
             WHERE arena_team.arenateamid=arena_team_stats.arenateamid AND arena_team.captainguid IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%') 
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
@@ -148,6 +150,7 @@ function browse_teams()
             FROM arena_team 
             WHERE arena_team.captainguid IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%')");
         }
+        break;
       }
       case "atid":
       {
