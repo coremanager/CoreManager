@@ -1,0 +1,7 @@
+Q: I'm getting this message:
+  Fatal error: Call to undefined function error() in /XXXX/coremanager/libs/db_lib/mysql.php on line 46
+    or
+  Error - Connection to database is not established !
+  
+A: Most likely you've made a mistake in the database configuration your provided for CoreManager.
+  Please note: For usernames and passwords MySQL is case sensitive.
