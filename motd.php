@@ -41,10 +41,25 @@ function browse_motd()
               <th width="1%">'.lang('global', 'edit').'</th>
               <th width="1%">'.lang('motd', 'enabled').'</th>
               <th width="20%">'.lang('motd', 'message').'</th>
+              <th width="1%">'.lang('motd', 'target').'</th>
             </tr>';
 
   while ( $motd = $sql['mgr']->fetch_assoc($motds) )
   {
+    if ( $motd['Target'] != 0 )
+    {
+      if ( $core == 1 )
+        $un_query = "SELECT login FROM accounts WHERE acct=".$motd['Target'];
+      else
+        $un_query = "SELECT username AS login FROM account WHERE id=".$motd['Target'];
+
+      $un_result = $sql['logon']->query($un_query);
+      $un = $sql['logon']->fetch_assoc($un_result);
+      $un = $un['login'];
+    }
+    else
+      $un = "-";
+
     $output .= '
             <tr>
               <td>
@@ -58,6 +73,9 @@ function browse_motd()
               </td>
               <td>
                 '.bb2html($motd['Message']).'
+              </td>
+              <td>
+                '.$un.'
               </td>
             </tr>';
   }
@@ -118,6 +136,10 @@ function add_motd()
                     <input type="checkbox" name="enabled" checked="checked" />
                     '.lang('motd', 'enabled').'
                   </td>
+                  <td>
+                    '.lang('motd', 'targetname').':
+                    <input type="text" name="target" />
+                  </td>
                 </tr>
                 <tr>
                   <td colspan="3">
@@ -169,14 +191,27 @@ function edit_motd()
     redirect('motd.php?error=1');
 
   if ( !isset($_GET['msg']) )
-    $msg = $sql['mgr']->result($sql['mgr']->query('SELECT message FROM motd WHERE id='.$id.''), 0);
+    $msg = $sql['mgr']->result($sql['mgr']->query('SELECT Message FROM motd WHERE ID='.$id.''), 0);
   else
     $msg = $_GET['msg'];
 
-  $priority = $sql['mgr']->result($sql['mgr']->query('SELECT priority FROM motd WHERE id='.$id.''), 0);
-  $enabled = $sql['mgr']->result($sql['mgr']->query('SELECT enabled FROM motd WHERE id='.$id.''), 0);
+  $priority = $sql['mgr']->result($sql['mgr']->query('SELECT Priority FROM motd WHERE ID='.$id.''), 0);
+  $enabled = $sql['mgr']->result($sql['mgr']->query('SELECT Enabled FROM motd WHERE ID='.$id.''), 0);
 
   $redirect = ( ( isset($_GET['redirect']) ) ? $sql['mgr']->quote_smart($_GET['redirect']) : NULL );
+
+  $target = $sql['mgr']->result($sql['mgr']->query('SELECT Target FROM motd WHERE ID='.$id.''), 0);
+  if ( $target != 0 )
+  {
+    if ( $core == 1 )
+      $un_query = "SELECT login FROM accounts WHERE acct=".$motd['Target'];
+    else
+      $un_query = "SELECT username AS login FROM account WHERE id=".$motd['Target'];
+
+    $un_result = $sql['logon']->query($un_query);
+    $un = $sql['logon']->fetch_assoc($un_result);
+  }
+  $target = $un;
 
   $output .= '
           <script>
@@ -212,6 +247,10 @@ function edit_motd()
                   <td>
                     <input type="checkbox" name="enabled" '.($enabled ? 'checked="checked"' : '').' />
                     '.lang('motd', 'enabled').'
+                  </td>
+                  <td>
+                    '.lang('motd', 'targetname').':
+                    <input type="text" name="target" value="'.$target.'" />
                   </td>
                 </tr>
                 <tr>
@@ -269,6 +308,21 @@ function do_add_motd()
   else
     $enabled = 0;
 
+  if ( empty($_GET['target']) )
+    $target = 0;
+  else
+  {
+    $target = $sql['mgr']->quote_smart($_GET['target']);
+    if ( $core == 1 )
+      $target_query = "SELECT acct FROM accounts WHERE login='".$_GET['target']."'";
+    else
+      $target_query = "SELECT id AS acct FROM account WHERE username='".$_GET['target']."'";
+
+    $target_result = $sql['logon']->query($target_query);
+    $target = $sql['logon']->fetch_assoc($target_result);
+    $target = $target['acct'];
+  }
+
   $msg = $sql['mgr']->quote_smart($_GET['msg']);
   $oldmsg = $sql['mgr']->quote_smart($_GET['oldmsg']);
   if ( strlen($msg) > 4096 )
@@ -279,7 +333,7 @@ function do_add_motd()
     $name = $user_name;
 
   $by = 'Posted by: '.$name.' ('.date('m/d/Y H:i:s').')';
-  $sql['mgr']->query("INSERT INTO motd (Message, Priority, Enabled, `By`) VALUES ('".$msg."', '".$priority."', '".$enabled."', '".$by."')");
+  $sql['mgr']->query("INSERT INTO motd (Message, Priority, Enabled, `By`, Target) VALUES ('".$msg."', '".$priority."', '".$enabled."', '".$by."', '".$target."')");
 
   unset($by);
   unset($msg);
@@ -313,6 +367,21 @@ function do_edit_motd()
   else
     $enabled = 0;
 
+  if ( empty($_GET['target']) )
+    $target = 0;
+  else
+  {
+    $target = $sql['mgr']->quote_smart($_GET['target']);
+    if ( $core == 1 )
+      $target_query = "SELECT acct FROM accounts WHERE login='".$_GET['target']."'";
+    else
+      $target_query = "SELECT id AS acct FROM account WHERE username='".$_GET['target']."'";
+
+    $target_result = $sql['logon']->query($target_query);
+    $target = $sql['logon']->fetch_assoc($target_result);
+    $target = $target['acct'];
+  }
+
   $id = $sql['mgr']->quote_smart($_GET['id']);
   if( is_numeric($id) )
     ;
@@ -320,7 +389,7 @@ function do_edit_motd()
     redirect('motd.php?error=1');
 
   $msg = $sql['mgr']->quote_smart($_GET['msg']);
-  $oldmsg = $sql['mgr']->quote_smart($sql['mgr']->result($sql['mgr']->query("SELECT Message FROM motd WHERE ID = '".$id."'"), 0));
+  $oldmsg = $sql['mgr']->quote_smart($sql['mgr']->result($sql['mgr']->query("SELECT Message FROM motd WHERE ID='".$id."'"), 0));
   if ( strlen($msg) > 4096 )
     redirect('motd.php?error=2');
 
@@ -330,14 +399,14 @@ function do_edit_motd()
 
   if ( $oldmsg <> $msg )
   {
-    $by = $sql['mgr']->result($sql['mgr']->query("SELECT `By` FROM motd WHERE ID = '".$id."'"), 0);
+    $by = $sql['mgr']->result($sql['mgr']->query("SELECT `By` FROM motd WHERE ID='".$id."'"), 0);
     $by = split('<br />', $by, 2);
     $by = $by[0].'<br />'.'Edited by: '.$name.' ('.date('m/d/Y H:i:s').')';
-    $sql['mgr']->query("UPDATE motd SET Message = '".$msg."', Priority = '".$priority."', Enabled = '".$enabled."', `By` = '".$by."' WHERE ID = '".$id."'");
+    $sql['mgr']->query("UPDATE motd SET Message='".$msg."', Priority='".$priority."', Enabled='".$enabled."', `By`='".$by."', Target='".$target."' WHERE ID='".$id."'");
   }
   else
   {
-    $sql['mgr']->query("UPDATE motd SET Message = '".$msg."', Priority = '".$priority."', Enabled = '".$enabled."' WHERE ID = '".$id."'");
+    $sql['mgr']->query("UPDATE motd SET Message='".$msg."', Priority='".$priority."', Enabled='".$enabled."', Target='".$target."' WHERE ID='".$id."'");
   }
 
   unset($by);

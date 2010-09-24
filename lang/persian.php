@@ -805,6 +805,9 @@ $GLOBALS['lang_motd'] = array
   'low' => 'Low',
   'verylow' => 'Very Low',
   'enabled' => 'Enabled',
+  'target' => 'Target',
+  'targetname' => 'Target User',
+  'private' => 'Private Message',
 );
 
 

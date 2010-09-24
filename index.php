@@ -228,15 +228,15 @@ else
     $start_m = 0;
 
   if ( $core == 1 )
-    $all_record_m = $sql['char']->result($sql['char']->query('SELECT count(*) FROM gm_tickets WHERE deleted=0'), 0);
+    $all_record_m = $sql['char']->result($sql['char']->query('SELECT COUNT(*) FROM gm_tickets WHERE deleted=0'), 0);
   elseif ( $core == 2 )
-    $all_record_m = $sql['char']->result($sql['char']->query('SELECT count(*) FROM character_ticket'), 0);
+    $all_record_m = $sql['char']->result($sql['char']->query('SELECT COUNT(*) FROM character_ticket'), 0);
   else
-    $all_record_m = $sql['char']->result($sql['char']->query('SELECT count(*) FROM gm_tickets WHERE closed=0'), 0);
+    $all_record_m = $sql['char']->result($sql['char']->query('SELECT COUNT(*) FROM gm_tickets WHERE closed=0'), 0);
 
   // get our MotDs...
   $motd = "";
-  $motd_result = $sql['mgr']->query("SELECT * FROM motd WHERE Enabled <> 0 ORDER BY Priority ASC");
+  $motd_result = $sql['mgr']->query("SELECT * FROM motd WHERE Enabled<>0 AND (Target='".$user_id."' OR Target=0) ORDER BY Priority ASC");
   // if we don't get any MotDs, it'll stay empty
 
   if ( $user_lvl >= $action_permission['update'] )
@@ -263,8 +263,13 @@ else
     $motd = bb2html($temp['Message'])."<br /><br />";
     if ( $motd )
     {
+      if ( $temp['Target'] != 0 )
+        $output .= '
+              <tr>
+                <td align="left">'.lang('motd', 'private').'</td>
+              </tr>';
+
       $output .= '
-              <tr></tr>
               <tr>
                 <td align="left">';
       $output .= $motd;
