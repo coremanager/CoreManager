@@ -157,6 +157,7 @@ $GLOBALS['lang_register'] = array
   'bad_chars_used' => 'باشد [A-Z][a-z][0-9]نام کاربری/اسم رمز فقط باید شامل',
   'invalid_email' => 'لطفا ایمیل صحیح وارد کنید',
   'banned_ip' => 'آی پی شما توقیف شده است',
+  'used_ip' => 'Your IP Address is already in use',
   'contact_serv_admin' => 'با مسئول سایت تماس بگیرید',
   'users_ip_range' => 'کاربران با رنج آی پی',
   'cannot_create_acc' => 'نمی توانند اکانت بسازند',

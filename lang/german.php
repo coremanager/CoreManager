@@ -157,6 +157,7 @@ $GLOBALS['lang_register'] = array
   'bad_chars_used' => 'Der Benutzername darf nur Buchstaben und Zahlen enthalten!',
   'invalid_email' => 'Bitte eine G&Uuml;LTIGE E-Mail-Adresse angeben!',
   'banned_ip' => 'Deine IP-Addresse ist gebannt.',
+  'used_ip' => 'Your IP Address is already in use',
   'contact_serv_admin' => 'Kontaktiere den Serveradministrator.',
   'users_ip_range' => 'Benutzer im IP-Bereich',
   'cannot_create_acc' => 'k&ouml;nnen keine Accounts erstellen.',

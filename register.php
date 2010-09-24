@@ -146,17 +146,26 @@ function doregister()
     redirect("register.php?err=7");
   }
 
-  if ( $core == 1 )
-    $per_ip = ( ( $limit_acc_per_ip ) ? "OR lastip='".$last_ip."'" : "" );
-  else
-    $per_ip = ( ( $limit_acc_per_ip ) ? "OR last_ip='".$last_ip."'" : "" );
+  // if we limit accounts per ip, we'll need to throw an error
+  if ( $limit_acc_per_ip )
+  {
+    if ( $core == 1 )
+      $result = $sql['logon']->query("SELECT login, email FROM accounts WHERE lastip='".$last_ip."'");
+    else
+      $result = $sql['logon']->query("SELECT username AS login, email FROM account WHERE last_ip='".$last_ip."'");
+      
+    if ( $sql['logon']->num_rows($result) )
+    {
+      redirect("register.php?err=15");
+    }
+  }
 
-  if ( $core == 1 )
-    $result = $sql['logon']->query("SELECT ip FROM ipbans WHERE ip = '".$last_ip."'");
-  else
-    $result = $sql['logon']->query("SELECT ip FROM ip_banned WHERE ip = '".$last_ip."'");
-  
   // IP is in ban list
+  if ( $core == 1 )
+    $result = $sql['logon']->query("SELECT ip FROM ipbans WHERE ip='".$last_ip."'");
+  else
+    $result = $sql['logon']->query("SELECT ip FROM ip_banned WHERE ip='".$last_ip."'");
+  
   if ( $sql['logon']->num_rows($result) )
   {
     redirect("register.php?err=8&usr=".$last_ip);
@@ -164,24 +173,30 @@ function doregister()
 
   // Email check
   if ( $core == 1 )
-    $result = $sql['logon']->query("SELECT login, email FROM accounts WHERE login='".$user_name."' OR login='".$screenname."' OR email='".$mail."' ".$per_ip);
+    $result = $sql['logon']->query("SELECT login, email FROM accounts WHERE email='".$mail."'");
   else
-    $result = $sql['logon']->query("SELECT username AS login, email FROM account WHERE username='".$user_name."' OR username='".$screenname."' OR email='".$mail."' ".$per_ip);
+    $result = $sql['logon']->query("SELECT username AS login, email FROM account WHERE email='".$mail."'");
     
   if ( $sql['logon']->num_rows($result) )
   {
     redirect("register.php?err=14");
   }
 
-  // there is already someone with same account name
+  // username check
+  if ( $core == 1 )
+    $result = $sql['logon']->query("SELECT login, email FROM accounts WHERE login='".$user_name."' OR login='".$screenname."'");
+  else
+    $result = $sql['logon']->query("SELECT username AS login, email FROM account WHERE username='".$user_name."' OR username='".$screenname."'");
+    
   if ( $sql['logon']->num_rows($result) )
   {
+    // there is already someone with same account name
     redirect("register.php?err=3&usr=".$user_name);
   }
   else
   {
     // check for existing screen name
-    $query = "SELECT * FROM config_accounts WHERE ScreenName ='".$screenname."'";
+    $query = "SELECT * FROM config_accounts WHERE ScreenName='".$screenname."'";
     $result = $sql['mgr']->query($query);
     if ( $sql['mgr']->num_rows($result) )
       redirect("register.php?err=3&usr=".$screenname);
@@ -927,6 +942,9 @@ switch ( $err )
     break;
   case 14:
     $output .= '<h1><font class="error">'.lang('register', 'email_address_used').'</font></h1>';
+    break;
+  case 15:
+    $output .= '<h1><font class="error">'.lang('register', 'used_ip').'</font></h1>';
     break;
   default:
     $output .= '<h1><font class="error">'.lang('register', 'fill_all_fields').'</font></h1>';
