@@ -29,7 +29,7 @@ valid_login($action_permission['view']);
 
 function sel_char()
 {
-  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sql, $core;
+  global $output, $action_permission, $characters_db, $corem_db, $realm_id, $user_id, $sql, $core;
 
   valid_login($action_permission['view']);
 
@@ -52,9 +52,9 @@ function sel_char()
                   </tr>';
 
   if ( $core == 1 )
-    $chars = $sql['char']->query("SELECT * FROM characters WHERE acct='".$user_id."'");
+    $chars = $sql['char']->query("SELECT * FROM characters WHERE acct='".$user_id."' AND guid NOT IN (SELECT guid FROM ".$corem_db['name'].".char_changes)");
   else
-    $chars = $sql['char']->query("SELECT * FROM characters WHERE account='".$user_id."'");
+    $chars = $sql['char']->query("SELECT * FROM characters WHERE account='".$user_id."' AND guid NOT IN (SELECT guid FROM ".$corem_db['name'].".char_changes)");
 
   while ( $char = $sql['char']->fetch_assoc($chars) )
   {
@@ -66,10 +66,10 @@ function sel_char()
                     <td>'.$char['name'].'</td>
                     <td>'.char_get_level_color($char['level']).'</td>
                     <td>
-                      <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="toolTip(\''.char_get_race_name($char['race']).'\',\'item_tooltip\')" onmouseout="toolTip()" alt="" />
+                      <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char['race']).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
                     </td>
                     <td>
-                      <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="toolTip(\''.char_get_class_name($char['class']).'\',\'item_tooltip\')" onmouseout="toolTip()" alt="" />
+                      <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char['class']).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
                     </td>
                   </tr>';
   }
