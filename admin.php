@@ -2612,13 +2612,25 @@ function accounts()
     {
       $acct_result = $sqlm->query("SELECT * FROM config_accounts WHERE Login='".$acct['login']."'");
       $sn_web = $sqlm->fetch_assoc($acct_result);
+
+      if ( $sn_web == NULL )
+      {
+        $sn_web['SecurityLevel'] = 0;
+        $sn_web['WebAdmin'] = 0;
+        $sn_web['ScreenName'] = '';
+      }
+
+      $sl_query = "SELECT * FROM config_gm_level_names WHERE Security_Level='".$sn_web['SecurityLevel']."'";
+      $sl_result = $sqlm->query($sl_query);
+      $sl = $sqlm->fetch_assoc($sl_result);
+
       $output .= '
               <tr>
                 <td style="background-color:'.$color.'"><center><a href="admin.php?section=accounts&acct='.$acct['login'].'&editacct=editaccount"><img src="img/edit.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center>'.ucfirst(strtolower($acct['login'])).'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$sn_web['ScreenName'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$sn_web['SecurityLevel'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.($sn_web['WebAdmin'] ? '<img src="img/up.gif">' : '<img src="img/down.gif">').'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$sl['Full_Name'].' ('.$sn_web['SecurityLevel'].')</center></td>
+                <td style="background-color:'.$color.'"><center>'.( ( $sn_web['WebAdmin'] ) ? '<img src="img/up.gif">' : '<img src="img/down.gif">' ).'</center></td>
               </tr>';
       if ( $color == "#EEEEEE" )
         $color = "#FFFFFF";
@@ -2643,6 +2655,9 @@ function accounts()
     else
       $logon_acct = $sqll->fetch_assoc($sqll->query("SELECT *, username AS login FROM account WHERE username='".$acct."'"));
 
+    $sl_query = "SELECT * FROM config_gm_level_names";
+    $sl_result = $sqlm->query($sl_query);
+
     $sn_acct = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_accounts WHERE Login='".$acct."'"));
     $output .= '
         <center>
@@ -2661,7 +2676,16 @@ function accounts()
                 </tr>
                 <tr>
                   <td>'.lang('admin', 'seclvl').': </td>
-                  <td><input type="text" name="sec" value="'.$sn_acct['SecurityLevel'].'">
+                  <td>
+                    <select name="sec">';
+    while ( $row = $sqlm->fetch_assoc($sl_result) )
+    {
+      $output .= '
+                      <option value="'.$row['Security_Level'].'" '.( ( $sn_acct['SecurityLevel'] == $row['Security_Level'] ) ? 'selected="selected"' : '' ).'>'.$row['Full_Name'].' ('.$row['Security_Level'].')</option>';
+    }
+    $output .= '
+                    </select>
+                  </td>
                 </tr>
                 <tr>
                   <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'acpaccess').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'acpaccess').'</a>: </td>

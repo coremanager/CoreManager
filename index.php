@@ -425,6 +425,8 @@ else
         if ( $change_char['online'] )
            $output .= '
                   <br />
+                  <br />
+                  <img src="img/aff_warn.gif" />
                   <font class="error">'.lang('xname', 'online').'</font>';
 
         $output .= '

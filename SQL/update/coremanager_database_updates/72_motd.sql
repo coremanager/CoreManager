@@ -1,0 +1,1 @@
+UPDATE `motd` SET `Target`=0;

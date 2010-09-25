@@ -1447,7 +1447,7 @@ $GLOBALS['lang_xname'] = array
   'already' => 'A name or race change request is already on file for that character.',
   'inuse' => 'That name is already in use.',
   'done' => 'The name change request has been filed.',
-  'online' => 'The Character is currently online.  We cannot change the name at this time.',
+  'online' => 'The Character is currently online.  We cannot perform the change at this time.',
   // The following is for the ingame mail message about name change denial.
   // It MUST be URL compatible! (e.g. ü = %FC)
   // spaces MUST be replaced, use + or %20
@@ -1486,7 +1486,7 @@ $GLOBALS['lang_xrace'] = array
   'already' => 'A name or race change request is already on file for that character.',
   'inuse' => 'That name is in use.',
   'done' => 'The race change request has been filed.',
-  'online' => 'The Character is currently online.  We cannot change the race at this time.',
+  'online' => 'The Character is currently online.  We cannot perform the change at this time.',
   // The following is for the ingame mail message about race change denial.
   // It MUST be URL compatible! (e.g. ü = %FC)
   // spaces MUST be replaced, use + or %20
@@ -1956,6 +1956,7 @@ $GLOBALS['lang_setup'] = array
   'welcome' => 'Welcome to the',
   'fields' => 'All fields are required.',
   'logon_db' => 'Logon Database',
+  'dbc_db' => 'DBC Database',
   'host' => 'Host',
   'port' => 'Port',
   'user' => 'Username',

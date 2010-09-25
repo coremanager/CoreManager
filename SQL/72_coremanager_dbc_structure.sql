@@ -1,25 +1,3 @@
--- MySQL dump 10.13  Distrib 5.1.48, for Win32 (ia32)
---
--- Host: localhost    Database: test_config
--- ------------------------------------------------------
--- Server version	5.1.48-community
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `achievement`
---
-
-DROP TABLE IF EXISTS `achievement`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `achievement` (
@@ -40,21 +18,6 @@ CREATE TABLE `achievement` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `achievement`
---
-
-LOCK TABLES `achievement` WRITE;
-/*!40000 ALTER TABLE `achievement` DISABLE KEYS */;
-/*!40000 ALTER TABLE `achievement` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `achievement_category`
---
-
-DROP TABLE IF EXISTS `achievement_category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `achievement_category` (
@@ -65,21 +28,6 @@ CREATE TABLE `achievement_category` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `achievement_category`
---
-
-LOCK TABLES `achievement_category` WRITE;
-/*!40000 ALTER TABLE `achievement_category` DISABLE KEYS */;
-/*!40000 ALTER TABLE `achievement_category` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `achievement_criteria`
---
-
-DROP TABLE IF EXISTS `achievement_criteria`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `achievement_criteria` (
@@ -101,21 +49,6 @@ CREATE TABLE `achievement_criteria` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `achievement_criteria`
---
-
-LOCK TABLES `achievement_criteria` WRITE;
-/*!40000 ALTER TABLE `achievement_criteria` DISABLE KEYS */;
-/*!40000 ALTER TABLE `achievement_criteria` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `areatable`
---
-
-DROP TABLE IF EXISTS `areatable`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `areatable` (
@@ -142,21 +75,6 @@ CREATE TABLE `areatable` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `areatable`
---
-
-LOCK TABLES `areatable` WRITE;
-/*!40000 ALTER TABLE `areatable` DISABLE KEYS */;
-/*!40000 ALTER TABLE `areatable` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `faction`
---
-
-DROP TABLE IF EXISTS `faction`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `faction` (
@@ -184,21 +102,6 @@ CREATE TABLE `faction` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `faction`
---
-
-LOCK TABLES `faction` WRITE;
-/*!40000 ALTER TABLE `faction` DISABLE KEYS */;
-/*!40000 ALTER TABLE `faction` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `factiontemplate`
---
-
-DROP TABLE IF EXISTS `factiontemplate`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `factiontemplate` (
@@ -219,21 +122,6 @@ CREATE TABLE `factiontemplate` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `factiontemplate`
---
-
-LOCK TABLES `factiontemplate` WRITE;
-/*!40000 ALTER TABLE `factiontemplate` DISABLE KEYS */;
-/*!40000 ALTER TABLE `factiontemplate` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `gemproperties`
---
-
-DROP TABLE IF EXISTS `gemproperties`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `gemproperties` (
@@ -245,21 +133,6 @@ CREATE TABLE `gemproperties` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `gemproperties`
---
-
-LOCK TABLES `gemproperties` WRITE;
-/*!40000 ALTER TABLE `gemproperties` DISABLE KEYS */;
-/*!40000 ALTER TABLE `gemproperties` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `glyphproperties`
---
-
-DROP TABLE IF EXISTS `glyphproperties`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `glyphproperties` (
@@ -270,21 +143,6 @@ CREATE TABLE `glyphproperties` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `glyphproperties`
---
-
-LOCK TABLES `glyphproperties` WRITE;
-/*!40000 ALTER TABLE `glyphproperties` DISABLE KEYS */;
-/*!40000 ALTER TABLE `glyphproperties` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `item`
---
-
-DROP TABLE IF EXISTS `item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `item` (
@@ -299,21 +157,6 @@ CREATE TABLE `item` (
   PRIMARY KEY (`ItemID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `item`
---
-
-LOCK TABLES `item` WRITE;
-/*!40000 ALTER TABLE `item` DISABLE KEYS */;
-/*!40000 ALTER TABLE `item` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `itemdisplayinfo`
---
-
-DROP TABLE IF EXISTS `itemdisplayinfo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `itemdisplayinfo` (
@@ -322,21 +165,6 @@ CREATE TABLE `itemdisplayinfo` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `itemdisplayinfo`
---
-
-LOCK TABLES `itemdisplayinfo` WRITE;
-/*!40000 ALTER TABLE `itemdisplayinfo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `itemdisplayinfo` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `itemextendedcost`
---
-
-DROP TABLE IF EXISTS `itemextendedcost`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `itemextendedcost` (
@@ -359,21 +187,6 @@ CREATE TABLE `itemextendedcost` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `itemextendedcost`
---
-
-LOCK TABLES `itemextendedcost` WRITE;
-/*!40000 ALTER TABLE `itemextendedcost` DISABLE KEYS */;
-/*!40000 ALTER TABLE `itemextendedcost` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `itemrandomproperties`
---
-
-DROP TABLE IF EXISTS `itemrandomproperties`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `itemrandomproperties` (
@@ -389,21 +202,6 @@ CREATE TABLE `itemrandomproperties` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `itemrandomproperties`
---
-
-LOCK TABLES `itemrandomproperties` WRITE;
-/*!40000 ALTER TABLE `itemrandomproperties` DISABLE KEYS */;
-/*!40000 ALTER TABLE `itemrandomproperties` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `itemrandomsuffix`
---
-
-DROP TABLE IF EXISTS `itemrandomsuffix`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `itemrandomsuffix` (
@@ -423,21 +221,6 @@ CREATE TABLE `itemrandomsuffix` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `itemrandomsuffix`
---
-
-LOCK TABLES `itemrandomsuffix` WRITE;
-/*!40000 ALTER TABLE `itemrandomsuffix` DISABLE KEYS */;
-/*!40000 ALTER TABLE `itemrandomsuffix` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `itemset`
---
-
-DROP TABLE IF EXISTS `itemset`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `itemset` (
@@ -474,21 +257,6 @@ CREATE TABLE `itemset` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `itemset`
---
-
-LOCK TABLES `itemset` WRITE;
-/*!40000 ALTER TABLE `itemset` DISABLE KEYS */;
-/*!40000 ALTER TABLE `itemset` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `map`
---
-
-DROP TABLE IF EXISTS `map`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `map` (
@@ -512,21 +280,6 @@ CREATE TABLE `map` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `map`
---
-
-LOCK TABLES `map` WRITE;
-/*!40000 ALTER TABLE `map` DISABLE KEYS */;
-/*!40000 ALTER TABLE `map` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `skillline`
---
-
-DROP TABLE IF EXISTS `skillline`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `skillline` (
@@ -541,21 +294,6 @@ CREATE TABLE `skillline` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `skillline`
---
-
-LOCK TABLES `skillline` WRITE;
-/*!40000 ALTER TABLE `skillline` DISABLE KEYS */;
-/*!40000 ALTER TABLE `skillline` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `skilllineability`
---
-
-DROP TABLE IF EXISTS `skilllineability`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `skilllineability` (
@@ -576,21 +314,6 @@ CREATE TABLE `skilllineability` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `skilllineability`
---
-
-LOCK TABLES `skilllineability` WRITE;
-/*!40000 ALTER TABLE `skilllineability` DISABLE KEYS */;
-/*!40000 ALTER TABLE `skilllineability` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `skillraceclassinfo`
---
-
-DROP TABLE IF EXISTS `skillraceclassinfo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `skillraceclassinfo` (
@@ -605,21 +328,6 @@ CREATE TABLE `skillraceclassinfo` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `skillraceclassinfo`
---
-
-LOCK TABLES `skillraceclassinfo` WRITE;
-/*!40000 ALTER TABLE `skillraceclassinfo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `skillraceclassinfo` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `spell`
---
-
-DROP TABLE IF EXISTS `spell`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `spell` (
@@ -801,21 +509,6 @@ CREATE TABLE `spell` (
   PRIMARY KEY (`Id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `spell`
---
-
-LOCK TABLES `spell` WRITE;
-/*!40000 ALTER TABLE `spell` DISABLE KEYS */;
-/*!40000 ALTER TABLE `spell` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `spellicon`
---
-
-DROP TABLE IF EXISTS `spellicon`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `spellicon` (
@@ -824,21 +517,6 @@ CREATE TABLE `spellicon` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `spellicon`
---
-
-LOCK TABLES `spellicon` WRITE;
-/*!40000 ALTER TABLE `spellicon` DISABLE KEYS */;
-/*!40000 ALTER TABLE `spellicon` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `spellitemenchantment`
---
-
-DROP TABLE IF EXISTS `spellitemenchantment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `spellitemenchantment` (
@@ -847,21 +525,6 @@ CREATE TABLE `spellitemenchantment` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `spellitemenchantment`
---
-
-LOCK TABLES `spellitemenchantment` WRITE;
-/*!40000 ALTER TABLE `spellitemenchantment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `spellitemenchantment` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `talent`
---
-
-DROP TABLE IF EXISTS `talent`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `talent` (
@@ -891,21 +554,6 @@ CREATE TABLE `talent` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `talent`
---
-
-LOCK TABLES `talent` WRITE;
-/*!40000 ALTER TABLE `talent` DISABLE KEYS */;
-/*!40000 ALTER TABLE `talent` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `talenttab`
---
-
-DROP TABLE IF EXISTS `talenttab`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `talenttab` (
@@ -920,21 +568,6 @@ CREATE TABLE `talenttab` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `talenttab`
---
-
-LOCK TABLES `talenttab` WRITE;
-/*!40000 ALTER TABLE `talenttab` DISABLE KEYS */;
-/*!40000 ALTER TABLE `talenttab` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `worldmaparea`
---
-
-DROP TABLE IF EXISTS `worldmaparea`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `worldmaparea` (
@@ -952,23 +585,3 @@ CREATE TABLE `worldmaparea` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `worldmaparea`
---
-
-LOCK TABLES `worldmaparea` WRITE;
-/*!40000 ALTER TABLE `worldmaparea` DISABLE KEYS */;
-/*!40000 ALTER TABLE `worldmaparea` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2010-08-15  8:58:49
