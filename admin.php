@@ -1896,7 +1896,7 @@ function servers()
         }
       }
 
-      $result = $sqlm->query("INSERT INTO config_servers (Port, Both_Factions) VALUES ('".$port."', 1)");
+      $result = $sqlm->query("INSERT INTO config_servers (Port, Both_Factions, Telnet_Port, Address) VALUES ('".$port."', 1, 0, '127.0.0.1')");
       $result = $sqlm->query("INSERT INTO realmlist (port, name) VALUES ('".$port."', '".$name."')");
 
       redirect("admin.php?section=servers");
