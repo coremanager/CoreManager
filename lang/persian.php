@@ -1571,6 +1571,8 @@ $GLOBALS['lang_admin'] = array
   'key' => 'Key',
   'lang' => 'Language',
   'value' => 'Value',
+  'internalname' => 'Internal Name',
+  'internalname2' => 'Internal<br />Name',
 
   'editforum' => 'Edit Forum',
   'delforum' => 'Delete Forum',
@@ -1794,7 +1796,8 @@ $GLOBALS['lang_admin_tip'] = array
   'delete' => 'Security Level to allow Deletes.',
   'enabled' => 'Enabled',
   'menu' => 'Top-level menu to which this submenu belongs.',
-  'menuname' => "Name to display for menu item.<br />If the language pack (&#36;lang_header) doesn\'t have the entry we will use the value entered.",
+  // do not translate the \'lang_header\' portion in this one...
+  'menuname' => "Name to display for menu item.<br />If the Language Pack (in \'lang_header\') doesn\'t have the entry we will use the value entered.",
   'key' => 'Internal name',
   'lang' => 'Language',
   'value' => 'The text that will be printed',

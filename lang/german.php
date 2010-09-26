@@ -1571,6 +1571,8 @@ $GLOBALS['lang_admin'] = array
   'key' => 'Schl&uuml;ssel',
   'lang' => 'Sprache',
   'value' => 'Wert',
+  'internalname' => 'Internal Name',
+  'internalname2' => 'Internal<br />Name',
 
   'editforum' => 'Forum &auml;ndern',
   'delforum' => 'Forum l&ouml;schen',
@@ -1794,7 +1796,8 @@ $GLOBALS['lang_admin_tip'] = array
   'delete' => 'Security Level f&uuml;r Deletes.',
   'enabled' => 'Aktiviert',
   'menu' => '&Uuml;bermen&uuml; zu welchem dieses Submen&uuml; geh&ouml;rt.',
-  'menuname' => "Name f&uuml;r den Men&uuml;eintrag.<br />Wenn das Sprachpaket (&#36;lang_header) keinen eintrag hat, benutzen wir diesen Eintrag",
+  // do not translate the \'lang_header\' portion in this one...
+  'menuname' => "Name f&uuml;r den Men&uuml;eintrag.<br />Wenn das Sprachpaket (in \'lang_header\') keinen eintrag hat, benutzen wir diesen Eintrag",
   'key' => 'Interner Name',
   'lang' => 'Sprache',
   'value' => 'Dieser Text wird angezeigt',

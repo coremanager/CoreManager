@@ -1966,7 +1966,7 @@ function menus()
               <tr>
                 <th>'.lang('admin', 'edit').'</th>
                 <th>'.lang('admin', 'remove').'</th>
-                <th>'.lang('admin', 'name').': </th>
+                <th>'.lang('admin', 'internalname').': </th>
                 <th>'.lang('admin', 'action').': </th>
               </tr>';
       $color = "#EEEEEE";
@@ -2012,7 +2012,7 @@ function menus()
                 <th colspan=2>'.lang('admin', 'top_menu').'</th>
               </tr>
               <tr>
-                <td>'.lang('admin', 'name').': </td>
+                <td>'.lang('admin', 'internalname2').': </td>
                 <td><input type="text" name="top_name" value="'.$top['Name'].'" id="admin_edit_top_menu_action"></td>
               </tr>
               <tr>
@@ -2024,7 +2024,7 @@ function menus()
               <tr>
                 <th>'.lang('admin', 'edit').'</th>
                 <th>'.lang('admin', 'remove').'</th>
-                <th>'.lang('admin', 'name').'</th>
+                <th>'.lang('admin', 'internalname').'</th>
                 <th>'.lang('admin', 'action').'</th>
                 <th>'.lang('admin', 'view').'</th>
                 <th>'.lang('admin', 'insert').'</th>
@@ -2092,14 +2092,14 @@ function menus()
       while ( $row = $sqlm->fetch_assoc($top_menu_result) )
       {
         $output .= '
-                      <option value='.$row['Index'].'" '.( ( $row['Index'] == $menu['Menu'] ) ? 'selected="selected"' : '').' id="admin_edit_menu_fields">'.$row['Name'].'</option>';
+                      <option value="'.$row['Index'].'" '.( ( $row['Index'] == $menu['Menu'] ) ? 'selected="selected"' : '').' id="admin_edit_menu_fields">'.$row['Name'].'</option>';
       }
       $output .= '
                     </select>
                   </td>
                 </tr>
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'menuname').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'name').'</a>: </td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'menuname').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'internalname2').'</a>: </td>
                   <td><input type="text" name="name" value="'.$menu['Name'].'" id="admin_edit_menu_fields"></td>
                 </tr>
                 <tr>
