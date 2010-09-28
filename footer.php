@@ -51,19 +51,40 @@
   $output .= '
         </div><!-- bubble -->
         <!-- start of footer.php -->
-        <div id="body_bottom">';
-  $output .= '
+        <div id="body_bottom">
           <table class="table_bottom">
             <tr>
               <td class="table_bottom_left"></td>
               <td class="table_bottom_middle">';
+  // we can't get the newest user if we are in debug mode
+  if ( $show_newest_user && !$debug )
+  {
+    if ( $core == 1 )
+    {
+      $new_query = "SELECT accounts.acct, Login, MAX(JoinDate) AS joindate
+        FROM config_accounts
+        LEFT JOIN accounts ON accounts.login=config_accounts.Login";
+      $new_result = $sql['mgr']->query($new_query);
+      $new = $sql['mgr']->fetch_assoc($new_result);
+    }
+    else
+    {
+      $new_query = "SELECT id AS acct, username AS Login, MAX(JoinDate) AS joindate
+        FROM account";
+      $new_result = $sql['logon']->query($new_query);
+      $new = $sql['logon']->fetch_assoc($new_result);
+    }
+
+    $output .= 
+                lang('footer', 'newest').': '.( ( $user_lvl >= gmlevel('4') ) ? '<a href="http://thisisjunk.servegame.org/user.php?action=edit_user&error=11&acct='.$new['acct'].'">' : '' ).$new['Login'].( ( $user_lvl >= gmlevel('4') ) ? '</a>' : '' ).'
+                <br />';
+  }
 
   $output .=
                 lang('footer', 'bugs_to_admin').' <a href="mailto:'.$admin_mail.'">'.lang('footer', 'site_admin').'</a><br />';
 
   unset($admin_mail);
-  $output .= sprintf('
-                Execute time: %.5f', (microtime(true) - $time_start)).' Seconds.';
+  $output .= sprintf(lang('footer', 'execute').': %.5f', (microtime(true) - $time_start)).' '.lang('footer', 'seconds').'.';
   unset($time_start);
 
   // if any debug mode is activated, show memory usage
@@ -80,7 +101,7 @@
   //---------------------Version Information-------------------------------------
 
   $output .= '
-                <div id="version">'.lang('footer', 'powered').' ';
+                <div id="version">'.lang('footer', 'powered').': ';
   if ( $show_version['show'] && $user_lvl >= $show_version['version_lvl'] )
   {
     if ( ( 1 < $show_version['show']) && $user_lvl >= $show_version['svnrev_lvl'] )
@@ -96,16 +117,15 @@
         unset($file_obj);
       }
 	  $output .= 
-        $show_version['version'].lang('footer', 'revision').' <a href="http://trac6.assembla.com/coremanager/changeset/'.$show_version['svnrev'].'">'.$show_version['svnrev'].'</a>';
+        $show_version['version'].lang('footer', 'revision').': <a href="http://trac6.assembla.com/coremanager/changeset/'.$show_version['svnrev'].'">'.$show_version['svnrev'].'</a>';
     }
     else
     {
       $output .= 
-        lang('footer', 'version').' '.$show_version['version'].lang('footer', 'revision').' '.$show_version['svnrev'];
+        lang('footer', 'version').': '.$show_version['version'].lang('footer', 'revision').' '.$show_version['svnrev'];
     }
   }
   $output .= '</div>';
-  //unset($lang_footer);
 
   // links at footer
   $output .= '

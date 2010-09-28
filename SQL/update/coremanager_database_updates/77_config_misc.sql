@@ -1,0 +1,1 @@
+INSERT INTO `config_misc` (`Key`, `Value`) VALUES ('Show_Newest_User', '0');

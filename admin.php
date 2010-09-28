@@ -1311,6 +1311,7 @@ function general()
         $show_emblem = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Show_Guild_Emblem'"));
         $language_locales_search_option = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Language_Locales_Search_Option'"));
         $language_site_encoding = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Language_Site_Encoding'"));
+        $show_newest_user = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Show_Newest_User'"));
         $output .= '
         <form name="form" action="admin.php" method="GET">
           <input type="hidden" name="section" value="general">
@@ -1384,7 +1385,8 @@ function general()
                   <option value="10.0" '.($timezone['Value'] == "10.0" ? 'selected="selected"' : '').'>(UTC +10:00) Eastern Australia, Guam, Vladivostok</option>
                   <option value="11.0" '.($timezone['Value'] == "11.0" ? 'selected="selected"' : '').'>(UTC +11:00) Magadan, Solomon Islands, New Caledonia</option>
                   <option value="12.0" '.($timezone['Value'] == "12.0" ? 'selected="selected"' : '').'>(UTC +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
-</select></td>
+                </select>
+              </td>
             </tr>
             <tr>
               <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'gmonline').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'gmonline').'</a>: </td>
@@ -1447,6 +1449,10 @@ function general()
               <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'languagesiteencoding').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'languagesiteencoding').'</a>: </td>
               <td><input type="text" name="languagesiteencoding" value="'.$language_site_encoding['Value'].'" /></td>
             </tr>
+            <tr>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'shownewuser').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'shownewuser').'</a>: </td>
+              <td><input type="checkbox" name="shownewuser" '.($show_newest_user['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+            </tr>
           </table>
           <input type="submit" name="save" value="'.lang('admin', 'save').'" />
         </form>';
@@ -1499,6 +1505,10 @@ function general()
         $language_locales_search_option = $sqlm->quote_smart($_GET['languagelocalessearchoption']);
         $language_site_encoding = $sqlm->quote_smart($_GET['languagesiteencoding']);
         $hide_server_mem = $sqlm->quote_smart($_GET['hideservermem']);
+        if ( isset($_GET['shownewuser']) )
+          $show_newest_user = 1;
+        else
+          $show_newest_user = 0;
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$sql_search_limit."' WHERE `Key`='SQL_Search_Limit'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$item_icons."' WHERE `Key`='Item_Icons'");
@@ -1522,6 +1532,7 @@ function general()
         $result = $sqlm->query("UPDATE config_misc SET Value='".$show_emblem."' WHERE `Key`='Show_Guild_Emblem'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$language_locales_search_option."' WHERE `Key`='Language_Locales_Search_Option'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$language_site_encoding."' WHERE `Key`='Language_Site_Encoding'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$show_newest_user."' WHERE `Key`='Show_Newest_User'");
 		
         redirect("admin.php?section=general&subsection=more");
       }

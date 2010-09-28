@@ -575,6 +575,11 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $show_guild_emblem = $misc_row['Value'];
       break;
     }
+    case "Show_Newest_User":
+    {
+      $show_newest_user = $misc_row['Value'];
+      break;
+    }
   }
 }
 

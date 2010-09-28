@@ -294,8 +294,11 @@ $GLOBALS['lang_footer'] = array
   'bugs_to_admin' => 'در صورت مشاهده اشکال یا باگ اطلاع دهید',
   'site_admin' => 'مدیر سایت',
   'powered' => 'Powered by <a href="http://coremanager.0fees.net/">CoreManager</a>',
-  'version' => 'نسخه:',
-  'revision' => 'تجدید نظر:',
+  'version' => 'نسخه',
+  'revision' => 'تجدید نظر',
+  'execute' => 'Execute Time',
+  'seconds' => 'Seconds',
+  'newest' => 'Our Newest Member',
 );
 
 
@@ -1725,6 +1728,7 @@ $GLOBALS['lang_admin'] = array
   'language' => 'Language',
   'languagelocalessearchoption' => 'Locales Search Option',
   'languagesiteencoding' => 'Site Encoding',
+  'shownewuser' => 'Show Newest Member',
 
   'edit' => 'Edit',
   'remove' => 'Remove',
@@ -1947,6 +1951,7 @@ $GLOBALS['lang_admin_tip'] = array
   'language' => 'Language',
   'languagelocalessearchoption' => 'DISABLED: Unused.',
   'languagesiteencoding' => 'Site Encoding Character Set.',
+  'shownewuser' => 'Show Newest Member message at bottom of page.',
 
   'edit' => 'Edit',
   'save' => 'Save Changes',
