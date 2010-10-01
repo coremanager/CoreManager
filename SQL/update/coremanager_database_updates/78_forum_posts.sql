@@ -1,0 +1,1 @@
+ALTER TABLE `forum_posts` CHANGE COLUMN `annouced` `announced` TINYINT(3);

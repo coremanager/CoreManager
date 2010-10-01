@@ -21,19 +21,19 @@
 function bbcode_editor_js()
 {
   //By Tucefa, http://www.4claverie.com/forums/index.php?showtopic=3904
-  return "
-    <script type=\"text/javascript\">
+  return '
+    <script type="text/javascript">
       function ajtTexte(txt)
       {
-        var obj = document.getElementsByName(\"msg\")[0], sel;
+        var obj = document.getElementsByName("msg")[0], sel;
         obj.focus();
-        if(document.selection && document.selection.createRange)
+        if ( document.selection && document.selection.createRange )
         {
           sel = document.selection.createRange();
           if (sel.parentElement()==obj)
           sel.text = sel.text+txt;
         }
-        else if(String(typeof obj.selectionStart)!=\"undefined\")
+        elseif ( String(typeof obj.selectionStart) != "undefined" )
         {
           sel = obj.selectionStart;
           obj.value = (obj.value).substring(0,sel) + txt + (obj.value).substring(sel,obj.value.length);
@@ -44,28 +44,28 @@ function bbcode_editor_js()
       }
       function ajtBBCode(Tag, fTag)
       {
-        var obj = document.getElementsByName(\"msg\")[0], sel;
+        var obj = document.getElementsByName("msg")[0], sel;
         obj.focus();
-        if (document.selection && document.selection.createRange)
+        if ( document.selection && document.selection.createRange )
         {
           sel = document.selection.createRange();
-          if (sel.parentElement()==obj)
+          if ( sel.parentElement() == obj )
             sel.text = Tag+sel.text+fTag;
         }
-        else if(String(typeof obj.selectionStart)!=\"undefined\")
+        elseif ( String(typeof obj.selectionStart) != "undefined" )
         {
-          var longueur= parseInt(obj.textLength);
+          var longueur = parseInt(obj.textLength);
           var selStart = obj.selectionStart;
           var selEnd = obj.selectionEnd;
-          if (selEnd == 2 || selEnd == 1)
+          if ( ( selEnd == 2 ) || ( selEnd == 1 ) )
             selEnd = longueur;
-          obj.value = (obj.value).substring(0,selStart)+Tag+(obj.value).substring(selStart,selEnd)+fTag+(obj.value).substring(selEnd,longueur);
+          obj.value = (obj.value).substring(0, selStart)+Tag+(obj.value).substring(selStart, selEnd)+fTag+(obj.value).substring(selEnd, longueur);
         }
         else
-          obj.value+=Tag+fTag;
+          obj.value += Tag+fTag;
         obj.focus();
       }
-    </script>";
+    </script>';
 }
 
 function bbcode_callbacks_wow($item)
@@ -75,24 +75,24 @@ function bbcode_callbacks_wow($item)
   wowhead_tt();
   require_once("scripts/id_tab.php");
   require_once("scripts/get_lib.php");
-  return "
-    <a href=\"$item_datasite{$item[1]}\" target=\"_blank\"onmouseover=\"toolTip('".addslashes(get_item_tooltip($item[1]))."','item_tooltip')\" onmouseout=\"toolTip()\">
-      <img src=\"".get_item_icon($item[1])."\" class=\"icon_border\" alt=\"\" />
-    </a>";
+  return '
+    <a href="'.$item_datasite.$item[1].'" target="_blank" onmouseover="oldtoolTip(\''.addslashes(get_item_tooltip($item[1])).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()">
+      <img src="'.get_item_icon($item[1]).'" class="icon_border" alt="" />
+    </a>';
 }
 
 function handle_url_tag($url, $link = '')
 {
   // From PunBB
   $full_url = str_replace(array(' ', '\'', '`', '"'), array('%20', '', '', ''), $url);
-  if (strpos($url, 'www.') === 0)            // If it starts with www, we add http://
+  if ( strpos($url, 'www.') === 0 )            // If it starts with www, we add http://
     $full_url = 'http://'.$full_url;
-  else if (strpos($url, 'ftp.') === 0)    // Else if it starts with ftp, we add ftp://
+  elseif ( strpos($url, 'ftp.') === 0 )    // Else if it starts with ftp, we add ftp://
     $full_url = 'ftp://'.$full_url;
-  else if (!preg_match('#^([a-z0-9]{3,6})://#', $url, $bah))     // Else if it doesn't start with abcdef://, we add http://
+  elseif ( !preg_match('#^([a-z0-9]{3,6})://#', $url, $bah) )     // Else if it doesn't start with abcdef://, we add http://
     $full_url = 'http://'.$full_url;
   // Ok, not very pretty :-)
-  $link = ($link == '' || $link == $url) ? ((strlen($url) > 55) ? substr($url, 0 , 39).' &hellip; '.substr($url, -10) : $url) : stripslashes($link);
+  $link = ( ( $link == '' || $link == $url ) ? ((strlen($url) > 55) ? substr($url, 0 , 39).' &hellip; '.substr($url, -10) : $url) : stripslashes($link) );
   return '<a href="'.$full_url.'">'.$link.'</a>';
 }
 
@@ -106,8 +106,8 @@ function do_clickable($text)
   $text = preg_replace('#([\s\(\)])(www|ftp)\.(([\w\-]+\.)*[\w]+(:[0-9]+)?(/[^"\s\(\)<\[]*)?)#sie', '\'$1\'.handle_url_tag(\'$2.$3\', \'$2.$3\')', $text);
   // Regex [youtube] et [/youtube]
   $uid = $userid;
-  $text = preg_replace("#\[youtube\](.*?)\[/youtube\]#si", "[youtube:$uid]\\1[/youtube:$uid]", $text);
-  $text = preg_replace("#\[media\](([a-z]+?)://([^, \n\r]+))\[/media\]#si", "[media:$uid]\\1[/media:$uid]", $text);
+  $text = preg_replace("#\[youtube\](.*?)\[/youtube\]#si", "[youtube:".$uid."]\\1[/youtube:".$uid."]", $text);
+  $text = preg_replace("#\[media\](([a-z]+?)://([^, \n\r]+))\[/media\]#si", "[media:".$uid."]\\1[/media:".$uid."]", $text);
   return substr($text, 1);
 }
 
@@ -126,51 +126,51 @@ function bbcode_parse($text, $brfix = 1, $emoticons = 1, $wow = 1)
   $text = preg_replace("/\[left\](.+?)\[\/left\]/", "<span align='left'>$1</span>", $text); //these don't work, but at least you don't get bbcode junk
   $text = preg_replace("/\[right\](.+?)\[\/right\]/", "<span align='right'>$1</span>", $text); //these don't work, but at least you don't get bbcode junk
   $text = preg_replace("/\[code\](.+?)\[\/code\]/", "<table width=100%><tr><th align=left>Code :</th></tr><tr><td align=left><code>$1</code></td></tr></table>", $text);
-  $text = preg_replace("/\[quote\](.+?)\[\/quote\]/", "<table width=100%><tr><th align=left>{$forum_lang["quote"]} :</th></tr><tr><td align=left>$1</td></tr></table>", $text);
-  $text = preg_replace("/\[quote=(.+?)\](.+?)\[\/quote\]/", "<table width=100%><tr><th align=left>$1 {$forum_lang["wrote"]} :</th></tr><tr><td align=left>$2</td></tr></table>", $text);
+  $text = preg_replace("/\[quote\](.+?)\[\/quote\]/", "<table width=100%><tr><th align=left>".$forum_lang["quote"]." :</th></tr><tr><td align=left>$1</td></tr></table>", $text);
+  $text = preg_replace("/\[quote=(.+?)\](.+?)\[\/quote\]/", "<table width=100%><tr><th align=left>$1 ".$forum_lang["wrote"]." :</th></tr><tr><td align=left>$2</td></tr></table>", $text);
   $text = preg_replace("/\[color=(.+?)\](.+?)\[\/color\]/", "<font color=$1>$2</font>", $text);
   $uid = $userid;
-  $text = preg_replace("#\[youtube\](.*?)\[/youtube\]#si", "[youtube:$uid]\\1[/youtube:$uid]", $text);
-  $text = preg_replace("#\[media\](([a-z]+?)://([^, \n\r]+))\[/media\]#si", "[media:$uid]\\1[/media:$uid]", $text);
-  if($wow = 1)
-    $text = preg_replace_callback("/\[wow\](.+?)\[\/wow\]/","bbcode_callbacks_wow",$text);
+  $text = preg_replace("#\[youtube\](.*?)\[/youtube\]#si", "[youtube:".$uid."]\\1[/youtube:".$uid."]", $text);
+  $text = preg_replace("#\[media\](([a-z]+?)://([^, \n\r]+))\[/media\]#si", "[media:".$uid."]\\1[/media:".$uid."]", $text);
+  if ( $wow == 1 )
+    $text = preg_replace_callback("/\[wow\](.+?)\[\/wow\]/","bbcode_callbacks_wow", $text);
 
   // Emoticons.
-  if($emoticons = 1)
+  if ( $emoticons == 1 )
   {
     // Emoticons from PunBB
-    $text = str_replace(":)", "<img src=\"img/emoticons/smile.gif\" />", $text);
-    $text = str_replace("=)", "<img src=\"img/emoticons/smile.gif\" />", $text);
-    $text = str_replace(":|", "<img src=\"img/emoticons/neutral.gif\" />", $text);
-    $text = str_replace("=|", "<img src=\"img/emoticons/neutral.gif\" />", $text);
-    $text = str_replace(":(", "<img src=\"img/emoticons/sad.gif\" />", $text);
-    $text = str_replace("=(", "<img src=\"img/emoticons/sad.gif\" />", $text);
-    $text = str_replace(":D", "<img src=\"img/emoticons/razz.gif\" />", $text);
-    $text = str_replace("=D", "<img src=\"img/emoticons/razz.gif\" />", $text);
-    $text = str_replace(":o", "<img src=\"img/emoticons/yikes.gif\" />", $text);
-    $text = str_replace(":0", "<img src=\"img/emoticons/yikes.gif\" />", $text);
-    $text = str_replace(";)", "<img src=\"img/emoticons/wink.gif\" />", $text);
-    $text = preg_replace("/([^p|s])\:\//", "$1<img src=\"img/emoticons/hmm.gif\" />", $text);
-    $text = str_replace(":P", "<img src=\"img/emoticons/tongue.gif\" />", $text);
-    $text = str_replace(":p", "<img src=\"img/emoticons/tongue.gif\" />", $text);
-    $text = str_replace(":lol:", "<img src=\"img/emoticons/lol.gif\" />", $text);
-    $text = str_replace(":mad:", "<img src=\"img/emoticons/angry.gif\" />", $text);
-    $text = str_replace(":rolleyes:", "<img src=\"img/emoticons/roll.gif\" />", $text);
-    $text = str_replace(":cool:", "<img src=\"img/emoticons/cool.gif\" />", $text);
+    $text = str_replace(":)", '<img src="img/emoticons/smile.gif" />', $text);
+    $text = str_replace("=)", '<img src="img/emoticons/smile.gif" />', $text);
+    $text = str_replace(":|", '<img src="img/emoticons/neutral.gif" />', $text);
+    $text = str_replace("=|", '<img src="img/emoticons/neutral.gif" />', $text);
+    $text = str_replace(":(", '<img src="img/emoticons/sad.gif" />', $text);
+    $text = str_replace("=(", '<img src="img/emoticons/sad.gif" />', $text);
+    $text = str_replace(":D", '<img src="img/emoticons/razz.gif" />', $text);
+    $text = str_replace("=D", '<img src="img/emoticons/razz.gif" />', $text);
+    $text = str_replace(":o", '<img src="img/emoticons/yikes.gif" />', $text);
+    $text = str_replace(":0", '<img src="img/emoticons/yikes.gif" />', $text);
+    $text = str_replace(";)", '<img src="img/emoticons/wink.gif" />', $text);
+    $text = preg_replace("/([^p|s])\:\//", '$1<img src="img/emoticons/hmm.gif" />', $text);
+    $text = str_replace(":P", '<img src="img/emoticons/tongue.gif" />', $text);
+    $text = str_replace(":p", '<img src="img/emoticons/tongue.gif" />', $text);
+    $text = str_replace(":lol:", '<img src="img/emoticons/lol.gif" />', $text);
+    $text = str_replace(":mad:", '<img src="img/emoticons/angry.gif" />', $text);
+    $text = str_replace(":rolleyes:", '<img src="img/emoticons/roll.gif" />', $text);
+    $text = str_replace(":cool:", '<img src="img/emoticons/cool.gif" />', $text);
   }
 
-  if($brfix = 1)
+  if ( $brfix == 1 )
     $text = str_replace("&lt;br /&gt;", "<br /> ", $text);
   else
     $text = str_replace("<br />", "<br /> ", $text); // no comment :)
 
   $text = do_clickable(htmlspecialchars_decode($text));
   //WindowMediaPlayer
-  $text = preg_replace("#\[media:$uid\](.*?)\[/media:$uid\]#si", "<object id=\"WMP\" type=\"video/x-ms-asf\" data=\"video.asx\" src=\"\\1\" width=\"450\" height=\"350\"><param name=\"AutoStart\" value=\"0\"> <embed width=\"450\" height=\"350\" AutoStart=\"0\" src=\"\\1\" ShowTracker=\"true\" ShowControls=\"true\" ShowGotoBar=\"true\" ShowDisplay=\"true\" ShowStatusBar=\"true\" AutoSize=\"true\" pluginspage=\"http://www.microsoft.com/windows/windowsmedia/download/\"></embed></OBJECT>", $text);
-  $text = str_replace("[/win:$uid]", "", $text);
+  $text = preg_replace("#\[media:".$uid."\](.*?)\[/media:".$uid."\]#si", "<object id=\"WMP\" type=\"video/x-ms-asf\" data=\"video.asx\" src=\"\\1\" width=\"450\" height=\"350\"><param name=\"AutoStart\" value=\"0\"> <embed width=\"450\" height=\"350\" AutoStart=\"0\" src=\"\\1\" ShowTracker=\"true\" ShowControls=\"true\" ShowGotoBar=\"true\" ShowDisplay=\"true\" ShowStatusBar=\"true\" AutoSize=\"true\" pluginspage=\"http://www.microsoft.com/windows/windowsmedia/download/\"></embed></OBJECT>", $text);
+  $text = str_replace("[/win:".$uid."]", "", $text);
   //youtube
-  $text = preg_replace("#\[youtube:$uid\](.*?)\[/youtube:$uid\]#si", "<object width=\"425\" height=\"350\"><param name=\"movie\" value=\"\\1\"></param><embed src=\"\\1\" type=\"application/x-shockwave-flash\" width=\"425\" height=\"350\"></embed></object>"."[/youtube:$uid]", $text);
-  $text = str_replace("[/youtube:$uid]", "", $text);
+  $text = preg_replace("#\[youtube:".$uid."\](.*?)\[/youtube:".$uid."\]#si", "<object width=\"425\" height=\"350\"><param name=\"movie\" value=\"\\1\"></param><embed src=\"\\1\" type=\"application/x-shockwave-flash\" width=\"425\" height=\"350\"></embed></object>"."[/youtube:".$uid."]", $text);
+  $text = str_replace("[/youtube:".$uid."]", "", $text);
   $text = str_replace("http://www.youtube.com/watch?v=", "http://www.youtube.com/v/", $text);
   $text = str_replace("http://www.youtube.com", "http://youtube.com", $text);
   $text = str_replace("http://www.youtube.com", "http://fr.youtube.com", $text);
@@ -185,65 +185,69 @@ function get_side()
     $result = $sql['char']->query("SELECT race FROM `characters` WHERE acct = '$user_id';");
   else
     $result = $sql['char']->query("SELECT race FROM `characters` WHERE account = '$user_id';");
-  if(!$sql['char']->num_rows($result))
+  if ( !$sql['char']->num_rows($result) )
     return "NO";
-  $a = 0; $h = 0;
-  while($race = $sql['char']->fetch_row($result))
+  $a = 0;
+  $h = 0;
+  while ( $race = $sql['char']->fetch_row($result) )
   {
-    if($race[0] == 1 || $race[0] == 3 || $race[0] == 4 || $race[0] == 7 || $race[0] == 11)
+    if ( ( $race[0] == 1 ) || ( $race[0] == 3 ) || ( $race[0] == 4 ) || ( $race[0] == 7 ) || ( $race[0] == 11 ) )
       $a++;
-    else if($race[0] == 2 || $race[0] == 5 || $race[0] == 6 || $race[0] == 8 || $race[0] == 10)
+    elseif ( ( $race[0] == 2 ) || ( $race[0] == 5 ) || ( $race[0] == 6 ) || ( $race[0] == 8 ) || ( $race[0] == 10 ) )
       $h++;
     else
       continue;
   }
-  if($a != 0 && $h == 0)
+  if ( ( $a != 0 ) && ( $h == 0 ) )
     return "A";
-  else if($a == 0 && $h != 0)
+  elseif ( ( $a == 0 ) && ( $h != 0 ) )
     return "H";
   else
     return "NO";
 }
 
-function gen_avatar_panel($level,$sex,$race,$class,$info=1,$gm=0)
+function gen_avatar_panel($level, $sex, $race, $class, $info = 1, $gm = 0)
 {
   require_once("libs/char_lib.php");
 
-  $return = "
-    <div border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\" background: transparent url(";
-
+  $return = '
+                <div border="0" cellpadding="0" cellspacing="0" style=" background: transparent url(';
   $return .= char_get_avatar_img($level, $sex, $race, $class, $gm);
+  $return .= ') repeat scroll 0%; width: 64px; height: 64px;">';
 
-  $return .= ") repeat scroll 0%; width: 64px; height: 64px;\">";
+  $return .= '
+                  <div style="background: transparent url(img/avatars/frame/full'.( ( $gm ) ? 'gm' : '' ).'.gif) repeat scroll 0%; position: relative; left: 0px; top: 0px; width: 64px; height: 64px;">
+                  </div>';
+  if ( !$gm )
+    $return .= '
+                  <div style="text-align: center; font-weight: bold; color: white; position: relative; left: 21px; top: -18px; width: 24px; height: 24px;">'
+                    .$level.'
+                  </div>';
+  $return .= '
+                </div>';
 
-  $return .= "
-      <div style=\"background: transparent url(img/avatars/frame/full.gif) repeat scroll 0%; position:relative;left:0px;top:0px; width: 64px; height: 64px;\">
-      </div>";
-  $return .= "
-      <div style=\"text-align:center;font-weight:bold;color:white;position:relative;left:21px;top:-18px; width: 24px; height: 24px;\">
-        $level
-      </div>
-    </div>";
-
-  if($gm>0)
+  if ( $gm > 0 )
   {
     require_once("libs/get_lib.php");
-    $return .= id_get_gm_level($gm) . "<br />";
+    $return .= 
+                id_get_gm_level($gm).'
+                <br />';
   }
 
-  if($info == 1)
+  if ( $info == 1 )
   {
-    $return .= "
-      <div style=\"margin-top:2px;\">
-        <a href=\"#\" onmouseover=\"toolTip('".lang('index', "class")." : ".char_get_class_name($class)."','item_tooltip')\" onmouseout=\"toolTip()\">
-          <img src=\"img/c_icons/$class.gif\" border=\"0\" alt=\"\" />
-        </a>
-        <a href=\"#\" onmouseover=\"toolTip('".lang('index', "race")." : ".char_get_race_name($race)."','item_tooltip')\" onmouseout=\"toolTip()\">
-          <img src=\"img/c_icons/$race-$sex.gif\" border=\"0\" alt=\"\" />
-        </a>";
+    $return .= '
+                <div style="margin-top:2px;">
+                  <a href="#" onmouseover="oldtoolTip(\''.char_get_race_name($race).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()">
+                    <img src="img/c_icons/'.$race.'-'.$sex.'.gif" border="0" alt="" />
+                  </a>
+                  <a href="#" onmouseover="oldtoolTip(\''.char_get_class_name($class).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()">
+                    <img src="img/c_icons/'.$class.'.gif" border="0" alt="" />
+                  </a>
+                </div>';
   }
 
-  $return .= "</div>";
   return $return;
 }
+
 ?>

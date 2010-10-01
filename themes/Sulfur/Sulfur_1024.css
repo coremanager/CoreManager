@@ -1609,6 +1609,11 @@ tr td.rep0
 {
 	width: 450px;
 }
+#edit_profile_table
+{
+	width: 540px;
+  text-align: left;
+}
 
 /* FOOTER.PHP */
 #footer_register_login
@@ -1636,7 +1641,7 @@ tr td.rep0
 }
 #forum_topic_header_info
 {
-	width: 15%;
+	width: 25%;
 }
 #forum_topic_header_text
 {

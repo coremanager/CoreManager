@@ -94,8 +94,7 @@
                 Queries: '.$tot_queries.' on '.$_SERVER['SERVER_SOFTWARE'];
     unset($tot_queries);
     if ( function_exists('memory_get_usage') )
-      $output .= sprintf('
-                <br />Mem. Usage: %.0f/%.0fK Peek: %.0f/%.0fK Global: %.0fK Limit: %s',memory_get_usage()/1024, memory_get_usage(true)/1024,memory_get_peak_usage()/1024,memory_get_peak_usage(true)/1024,sizeof($GLOBALS),ini_get('memory_limit'));
+      $output .= sprintf('<br />Mem. Usage: %.0f/%.0fK Peek: %.0f/%.0fK Global: %.0fK Limit: %s', memory_get_usage()/1024, memory_get_usage(true)/1024, memory_get_peak_usage()/1024, memory_get_peak_usage(true)/1024, sizeof($GLOBALS), ini_get('memory_limit'));
   }
 
   //---------------------Version Information-------------------------------------
@@ -113,7 +112,7 @@
         $file_obj = new SplFileObject('.svn/entries');
         // line 4 is where svn revision is stored
         $file_obj->seek(3);
-        $show_version['svnrev'] = $file_obj->current();
+        $show_version['svnrev'] = rtrim($file_obj->current());
         unset($file_obj);
       }
 	  $output .= 
@@ -125,7 +124,8 @@
         lang('footer', 'version').': '.$show_version['version'].lang('footer', 'revision').' '.$show_version['svnrev'];
     }
   }
-  $output .= '</div>';
+  $output .= '
+                </div>';
 
   // links at footer
   $output .= '

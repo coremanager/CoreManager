@@ -25,7 +25,7 @@ $output = '';
 
 //#############################################################################
 //to avoid Strict Standards notices in php 5.1
-if (function_exists ('date_default_timezone_set'))
+if ( function_exists ('date_default_timezone_set') )
 {
   date_default_timezone_set(time_offset_to_zone($timezone));
 }
@@ -157,17 +157,20 @@ function wowhead_tt()
 //validates sessions' vars and restricting access to given level
 function valid_login($restrict_lvl, $info)
 {
-  if (isset($_SESSION['user_lvl']) && isset($_SESSION['user_id']) && isset($_SESSION['realm_id']) && isset($_SESSION['login']))
+  if ( isset($_SESSION['user_lvl']) && isset($_SESSION['user_id']) && isset($_SESSION['realm_id']) && isset($_SESSION['login']) )
   {
     $user_lvl = $_SESSION['user_lvl'];
     $ip = ( isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
-    if ($ip === $_SESSION['client_ip']);
-    else redirect('login.php?error=5'.( (isset($info)) ? '&info='.$info : '') );
+    if ( $ip === $_SESSION['client_ip'] )
+      ;
+    else
+      redirect('login.php?error=5'.( ( isset($info) ) ? '&info='.$info : '' ) );
   }
-  else redirect('login.php?error=5'.( (isset($info)) ? '&info='.$info : '') );
+  else
+    redirect('login.php?error=5'.( ( isset($info) ) ? '&info='.$info : '' ) );
 
-  if ($user_lvl < $restrict_lvl)
-    redirect('login.php?error=5'.( (isset($info)) ? '&info='.$info : '') );
+  if ( $user_lvl < $restrict_lvl )
+    redirect('login.php?error=5'.( ( isset($info) ) ? '&info='.$info : '' ) );
 }
 
 
@@ -175,12 +178,13 @@ function valid_login($restrict_lvl, $info)
 // Fix reditection error under MS-IIS fuckedup-servers.
 function redirect($url)
 {
-  if (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false)
+  if ( strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false )
   {
     header('Location: '.$url);
     exit();
   }
-  else die('<meta http-equiv="refresh" content="0;URL='.$url.'" />');
+  else
+    die('<meta http-equiv="refresh" content="0;URL='.$url.'" />');
 }
 
 
@@ -200,7 +204,7 @@ function error($err)
 function test_port($server,$port)
 {
   $sock = @fsockopen($server, $port, $ERROR_NO, $ERROR_STR, (float)0.5);
-  if($sock)
+  if ( $sock )
   {
     @fclose($sock);
     return true;
@@ -213,9 +217,9 @@ function test_port($server,$port)
 //#############################################################################
 function aasort(&$array, $field, $order = false)
 {
-  if (is_string($field))
-    $field = "'$field'";
-  $order = ($order ? '<' : '>');
+  if ( is_string($field) )
+    $field = "'".$field."'";
+  $order = ( ( $order ) ? '<' : '>' );
   usort
   (
     $array,
@@ -242,22 +246,6 @@ function makebutton($xtext, $xlink, $xwidth)
 function gmlevel($gm)
 {
   return $gm;
-
-  /*global $gm_level_arr;
-
-  switch ($gm)
-  {
-    case '-1':
-    case '0':
-    case 'a':
-    case 'z':
-    case 'az':
-      return $gm_level_arr[$gm][0];
-      break;
-    default:
-      return $gm_level_arr['1'][0];
-      break;
-  }*/
 }
 
 
@@ -268,20 +256,6 @@ function gmlevel_name($gm)
   global $gm_level_arr;
   
   return $gm_level_arr[$gm][0];
-
-  /*switch ($gm)
-  {
-    case '-1':
-    case '0':
-    case 'a':
-    case 'z':
-    case 'az':
-      return $gm_level_arr[$gm][1];
-      break;
-    default:
-      return $gm_level_arr['1'][1];
-      break;
-  }*/
 }
 
 
@@ -292,20 +266,6 @@ function gmlevel_short($gm)
   global $gm_level_arr;
   
   return $gm_level_arr[$gm][1];
-
-  /*switch ($gm)
-  {
-    case '-1':
-    case '0':
-    case 'a':
-    case 'z':
-    case 'az':
-      return $gm_level_arr[$gm][2];
-      break;
-    default:
-      return $gm_level_arr['1'][2];
-      break;
-  }*/
 }
 
 
@@ -326,55 +286,58 @@ function maketooltip($text, $link, $tip, $class, $target = 'target="_self"')
 // Original from PHPBB with some modifications to make them more simple
 function generate_pagination($base_url, $num_items, $per_page, $start_item, $start_tag = 'start', $add_prevnext_text = TRUE)
 {
-  if ($num_items);
-  else return '';
+  if ( $num_items )
+    ;
+  else
+    return '';
+
   $total_pages = ceil($num_items/$per_page);
-  if (1 == $total_pages)
+  if ( $total_pages == 1)
   {
     return '';
   }
   $on_page = floor($start_item / $per_page)+1;
   $page_string = '';
-  if (10 < $total_pages)
+  if ( $total_pages > 10 )
   {
     $init_page_max = (3 < $total_pages) ? 3 : $total_pages;
     $count = $init_page_max+1;
-    for($i=1; $i<$count; ++$i)
+    for ( $i=1; $i<$count; ++$i )
     {
-      $page_string .= ($i == $on_page) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>';
-      if ($i < $init_page_max)
+      $page_string .= ( ( $i == $on_page ) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>' );
+      if ( $i < $init_page_max )
       {
         $page_string .= ', ';
       }
     }
-    if (3 < $total_pages)
+    if ( $total_pages > 3 )
     {
-      if (1 < $on_page && $on_page < $total_pages)
+      if ( ( $on_page > 1 ) && ( $on_page < $total_pages ) )
       {
-        $page_string  .= (5 < $on_page) ? ' ... ' : ', ';
-        $init_page_min = (4 < $on_page) ? $on_page : 5;
-        $init_page_max = ($on_page < $total_pages - 4 ) ? $on_page : $total_pages - 4;
+        $page_string  .= ( ( $on_page > 5 ) ? ' ... ' : ', ' );
+        $init_page_min = ( ( $on_page > 4 ) ? $on_page : 5 );
+        $init_page_max = ( ( $on_page < $total_pages - 4 ) ? $on_page : $total_pages - 4 );
 
         $count = $init_page_max+2;
-        for($i=$init_page_min-1; $i<$count; ++$i)
+        for ( $i=$init_page_min-1; $i<$count; ++$i )
         {
-          $page_string .= ($i === $on_page) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>';
-          if ($i <  $init_page_max+1)
+          $page_string .= ( ( $i === $on_page ) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>' );
+          if ( $i <  $init_page_max+1 )
           {
             $page_string .= ', ';
           }
         }
-        $page_string .= ($on_page < $total_pages-4) ? ' ... ' : ', ';
+        $page_string .= ( ( $on_page < $total_pages-4 ) ? ' ... ' : ', ' );
       }
       else
       {
         $page_string .= ' ... ';
       }
       $count = $total_pages+1;
-      for($i=$total_pages-2; $i<$count; ++$i)
+      for ( $i=$total_pages-2; $i<$count; ++$i )
       {
-        $page_string .= ($i == $on_page) ? '<b>'.$i.'</b>'  : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>';
-        if($i < $total_pages)
+        $page_string .= ( ( $i == $on_page ) ? '<b>'.$i.'</b>'  : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>' );
+        if ( $i < $total_pages )
         {
           $page_string .= ', ';
         }
@@ -384,22 +347,22 @@ function generate_pagination($base_url, $num_items, $per_page, $start_item, $sta
   else
   {
     $count = $total_pages+1;
-    for($i=1; $i<$count; ++$i)
+    for ( $i=1; $i<$count; ++$i )
     {
-      $page_string .= ($i == $on_page) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>';
-      if ($i <  $total_pages)
+      $page_string .= ( ( $i == $on_page ) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>' );
+      if ( $i <  $total_pages )
       {
         $page_string .= ', ';
       }
     }
   }
-  if ($add_prevnext_text)
+  if ( $add_prevnext_text )
   {
-    if (1 < $on_page)
+    if ( $on_page > 1 )
     {
       $page_string = '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($on_page-2)*$per_page).'">Prev</a>&nbsp;&nbsp;'.$page_string;
     }
-    if ($on_page < $total_pages)
+    if ( $on_page < $total_pages )
     {
       $page_string .= '&nbsp;&nbsp;<a href="'.$base_url.'&amp;'.$start_tag.'='.($on_page*$per_page).'">Next</a>';
     }

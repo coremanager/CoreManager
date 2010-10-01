@@ -22,9 +22,15 @@ $maxqueries = 20; // Max topic / post by pages
 $minfloodtime = 15; // Minimum time beetween two post
 $enablesidecheck = true; // if you dont use side specific forum, desactive it, because it will do one less query.
 
+//#############################################################################
+//
+// DO NOT CHANGE ANYTHING AFTER THIS POINT
+//
+//#############################################################################
+
 $forum_array = array();
 $temp = $sql['mgr']->query('SELECT * FROM config_forum_categories');
-while ($fcats = $sql['mgr']->fetch_assoc($temp))
+while ( $fcats = $sql['mgr']->fetch_assoc($temp) )
 {
   $cat = array();
   $cat[0] = $fcats['Index'];
@@ -32,7 +38,7 @@ while ($fcats = $sql['mgr']->fetch_assoc($temp))
 
   $m = array();
   $temp_forums = $sql['mgr']->query("SELECT * FROM config_forums WHERE Category='".$fcats['Index']."'");
-  while ($forums = $sql['mgr']->fetch_assoc($temp_forums))
+  while ( $forums = $sql['mgr']->fetch_assoc($temp_forums) )
   {
     $forum = array();
     array_push($forum, $forums['Index']);
