@@ -21,6 +21,7 @@
 // page header, and any additional required libraries
 require_once 'header.php';
 require_once 'libs/char_lib.php';
+require_once 'libs/forum_lib.php';
 // minimum permission to view page
 valid_login($action_permission['view']);
 
@@ -473,7 +474,7 @@ function browse_users()
         $char_count += $char_count_fields['COUNT(*)'];
     }
 
-    if ( ( $user_lvl >= gmlevel($screenname['sec_lvl']) ) || ( $user_name == $data['login'] ) )
+    //if ( ( $user_lvl >= gmlevel($screenname['sec_lvl']) ) || ( $user_name == $data['login'] ) )
     {
       $output .= '
                 <tr>';
@@ -483,7 +484,7 @@ function browse_users()
       else
         $output .= '
                   <td>*</td>';
-      if ( ( $user_lvl >= gmlevel($screenname['sec_lvl']) ) || ( $user_name == $data['login'] ) )
+      if ( ( $user_lvl >= gmlevel('4') ) || ( $user_name == $data['login'] ) )
         $output .= '
                   <td>'.$data['acct'].'</td>
                   <td>
@@ -493,10 +494,14 @@ function browse_users()
         $output .= '
                   <td>***</td>
                   <td>*****</td>';
-      if ( ( $user_lvl >= gmlevel($screenname['sec_lvl']) ) || ( $user_name == $data['login'] ) )
+      $temp_screenname = $screenname['ScreenName'];
+      if ( ( $temp_screenname == '' ) || ( $temp_screenname == NULL ) )
+        $temp_screenname = "-";
+
+      if ( ( $user_lvl >= gmlevel('0') ) || ( $user_name == $data['login'] ) )
         $output .= '
                   <td>
-                    <a href="user.php?action=edit_user&amp;error=11&amp;acct='.$data['acct'].'">'.$screenname['ScreenName'].'</a>
+                    <a href="user.php?action=edit_user&amp;error=11&amp;acct='.$data['acct'].'">'.$temp_screenname.'</a>
                   </td>';
       else
         $output .= '
@@ -594,7 +599,7 @@ function browse_users()
       $output .= '
                 </tr>';
     }
-    else
+    /*else
     {
       $output .= '
                 <tr>
@@ -608,7 +613,7 @@ function browse_users()
                   <td>*</td>';
     $output .= '
                 </tr>';
-    }
+    }*/
   }
   $output .= '
                 <tr>
@@ -1158,7 +1163,12 @@ function edit_user()
   else
     $acct_online = 0;
 
-  $query = "SELECT * FROM config_accounts WHERE Login='".$data['login']."'";
+  $query = "SELECT *,
+        SUBSTRING_INDEX(SUBSTRING_INDEX(Avatar, ' ', 1), ' ', -1) AS avatarsex,
+        SUBSTRING_INDEX(SUBSTRING_INDEX(Avatar, ' ', 2), ' ', -1) AS avatarrace,
+        SUBSTRING_INDEX(SUBSTRING_INDEX(Avatar, ' ', 3), ' ', -1) AS avatarclass,
+        SUBSTRING_INDEX(SUBSTRING_INDEX(Avatar, ' ', 4), ' ', -1) AS avatarlevel
+        FROM config_accounts WHERE Login='".$data['login']."'";
   $sn_result = $sql['mgr']->query($query);
   $screenname = $sql['mgr']->fetch_assoc($sn_result);
 
@@ -1177,6 +1187,16 @@ function edit_user()
     $lastlog = date("F j, Y @ Hi", $data['lastlogin'] + $time_offset);
   else
     $lastlog = '-';
+
+  // only display an Avatar if the player has specified one or if they're a GM.
+  if ( ( $screenname['Avatar'] != '' ) || $screenname['SecurityLevel'] )
+    $avatar = gen_avatar_panel($screenname['avatarlevel'], $screenname['avatarsex'], $screenname['avatarrace'], $screenname['avatarclass'], 0, $screenname['SecurityLevel']);
+  else
+    $avatar = '';
+
+  $info = $screenname['Info'];
+  if ( ( $info == '' ) || ( $info == NULL ) )
+    $info = '...';
 
   if ( $sql['logon']->num_rows($result) )
   {
@@ -1202,6 +1222,31 @@ function edit_user()
               }
             // ]]>
           </script>
+          <div id="user_edit_account" class="fieldset_border">
+            <span class="legend">'.lang('edit', 'profile_info').'</span>
+            <table class="flat" id="user_edit_account">';
+
+    if ( $avatar != '' )
+      $output .= '
+              <tr>
+                <td id="forum_topic_header_info">
+                  <center>'.$avatar.'</center>
+                </td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <hr />
+                </td>
+              </tr>';
+
+    $output .= '
+              <tr>
+                <td colspan="2">'.$info.'</td>
+              </tr>
+            </table>
+          </div>
+          <br />
           <div id="user_edit_account" class="fieldset_border">
             <span class="legend">'.lang('user', 'edit_acc').'</span>
             <form method="post" action="user.php?action=doedit_user" name="form">
@@ -1302,7 +1347,7 @@ function edit_user()
     else
     {
       $output .= '
-                <td>'.id_get_gm_level($data['gm']).' ( '.$data['gm'].' )</td>';
+                <td>'.$data['gm'].'</td>';
     }
     $output .= '
               </tr>
@@ -1335,7 +1380,7 @@ function edit_user()
     else
     {
       $output .= '
-                <td>'.id_get_gm_level($screenname['SecurityLevel']).' ( '.$screenname['SecurityLevel'].' )</td>';
+                <td>'.id_get_gm_level($screenname['SecurityLevel']).'</td>';
     }
     $output .= '
               </tr>
@@ -1429,7 +1474,47 @@ function edit_user()
       else
       {
         $output .= '
+                <td>'.lang('user', 'client_type').':</td>';
+        if ( $core == 1 )
+        {
+          switch ( $data['flags'] )
+          {
+            case 0:
+              $output .= '
                 <td>'.lang('user', 'classic').'</td>';
+              break;
+            case 8:
+              $output .= '
+                <td>'.lang('user', 'tbc').'</td>';
+              break;
+            case 16:
+              $output .= '
+                <td>'.lang('user', 'wotlk').'</td>';
+              break;
+            case 24:
+              $output .= '
+                <td>'.lang('user', 'wotlktbc').'</td>';
+              break;
+          }
+        }
+        else
+        {
+          switch ( $data['flags'] )
+          {
+            case 0:
+              $output .= '
+                <td>'.lang('user', 'classic').'</td>';
+              break;
+            case 1:
+              $output .= '
+                <td>'.lang('user', 'tbc').'</td>';
+              break;
+            case 2:
+              $output .= '
+                <td>'.lang('user', 'wotlktbc').'</td>';
+              break;
+          }
+        }
       }
     }
     $output .= '
@@ -1569,13 +1654,13 @@ function edit_user()
     if ( $user_lvl >= $action_permission['update'] )
       makebutton(lang('user', 'update_data'), "javascript:do_submit_data()", 130);
     makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def", 130);
+
     $output .= '
                 </td>
                 </tr>
               </table>
             </form>
           </div>
-          <br />
           <br />
         </center>';
   }
