@@ -68,29 +68,32 @@ function dologin()
   $sql['mgr'] = new SQL;
   $sql['mgr']->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
 
-  if (empty($_POST['login']) || empty($_POST['password']))
+  if ( empty($_POST['login']) || empty($_POST['password']) )
     redirect('admin_login.php?error=2');
 
   $user_name  = $sql['mgr']->quote_smart($_POST['login']);
   $user_pass  = $sql['mgr']->quote_smart($_POST['password']);
 
-  if (255 < strlen($user_name) || 255 < strlen($user_pass))
+  if ( ( strlen($user_name) > 255 ) || ( strlen($user_pass) > 255 ) )
     redirect('admin_login.php?error=1');
 
   // Users may log in using either their username or screen name
   // check for matching login
   if ( $core == 1 )
-    $query = "SELECT * FROM accounts WHERE login = '".$user_name."' AND password = '".$user_pass."'";
+    $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
   else
-    $query = "SELECT * FROM account WHERE username = '".$user_name."' AND sha_pass_hash = '".$user_pass."'";
+  {
+    $pass_hash = sha1(strtoupper($user_name.":".$user_pass));
+    $query = "SELECT * FROM account WHERE username='".$user_name."' AND sha_pass_hash='".$pass_hash."'";
+  }
 
   $name_result = $sql['logon']->query($query);
-  if (!$sql['logon']->num_rows($name_result))
+  if ( !$sql['logon']->num_rows($name_result) )
   {
     // if we didn't find one, check for matching screen name
-    $query = "SELECT * FROM config_accounts WHERE ScreenName = '".$user_name."'";
+    $query = "SELECT * FROM config_accounts WHERE ScreenName='".$user_name."'";
     $name_result = $sql['mgr']->query($query);
-    if ($sql['mgr']->num_rows($name_result))
+    if ( $sql['mgr']->num_rows($name_result) )
     {
       $name = $sql['mgr']->fetch_assoc($name_result);
       $user_name = $name['Login'];
@@ -106,12 +109,15 @@ function dologin()
   // if we didn't find the name given for either entries, then the name will come up bad below
 
   if ( $core == 1 )
-    $query = "SELECT * FROM accounts WHERE login = '".$user_name."'";
+    $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
   else
-    $query = "SELECT * FROM account WHERE username = '".$user_name."'";
+  {
+    $pass_hash = sha1(strtoupper($user_name.":".$user_pass));
+    $query = "SELECT * FROM account WHERE username='".$user_name."' AND sha_pass_hash='".$pass_hash."'";
+  }
 
   $result = $sql['logon']->query($query);
-  $s_result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE login = '".$user_name."'");
+  $s_result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$user_name."'");
   $temp = $sql['mgr']->fetch_assoc($s_result);
   $_SESSION['gm_lvl'] = $temp['gm'];
 
@@ -123,9 +129,9 @@ function dologin()
       $acct = $sql['logon']->result($result, 0, 'id');
 
     if ( $core == 1 )
-      $ban_query = "SELECT banned FROM accounts WHERE login = '".$user_name."' AND password = '".$user_pass."'";
+      $ban_query = "SELECT banned FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
     else
-      $ban_query = "SELECT COUNT(*) FROM account_banned WHERE id = '".$acct."' AND active = 1";
+      $ban_query = "SELECT COUNT(*) FROM account_banned WHERE id='".$acct."' AND active=1";
 
     if ($sql['logon']->result($sql['logon']->query($ban_query), 0))
     {
@@ -133,17 +139,17 @@ function dologin()
     }
     else
     {
-      $_SESSION['user_id']   = $acct;
+      $_SESSION['user_id'] = $acct;
       if ( $core == 1 )
-        $_SESSION['login']     = $sql['logon']->result($result, 0, 'login');
+        $_SESSION['login'] = $sql['logon']->result($result, 0, 'login');
       else
-        $_SESSION['login']     = $sql['logon']->result($result, 0, 'username');
+        $_SESSION['login'] = $sql['logon']->result($result, 0, 'username');
       // if we got a screen name, we'll want it later.
-      $_SESSION['screenname']     = $name['ScreenName'];
-      //gets our numerical level based on ArcEmu level.
-      $_SESSION['user_lvl']  = gmlevel($temp['gm']);
-      $_SESSION['realm_id']  = $sql['logon']->quote_smart($_POST['realm']);
-      $_SESSION['client_ip'] = (isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
+      $_SESSION['screenname'] = $name['ScreenName'];
+      //gets our numerical level based on Security Level.
+      $_SESSION['user_lvl'] = gmlevel($temp['gm']);
+      $_SESSION['realm_id'] = $sql['logon']->quote_smart($_POST['realm']);
+      $_SESSION['client_ip'] = ( ( isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR') );
       $_SESSION['logged_in'] = true;
 
       redirect('admin.php');
@@ -169,15 +175,8 @@ function login()
             <script type="text/javascript">
               // <![CDATA[
                 function dologin ()
-                {';
-  if ( $core == 1 )
-    $output .= '
-                  document.form.password.value = document.form.login_pass.value;';
-  else
-    $output .= '
-                  document.form.password.value = hex_sha1(document.form.login.value.toUpperCase()+":"+document.form.login_pass.value.toUpperCase());
-                  //document.form.login_pass.value = "0";';
-  $output .= '
+                {
+                  document.form.password.value = document.form.login_pass.value;
                   do_submit();
                 }
               // ]]>

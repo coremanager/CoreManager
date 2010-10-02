@@ -27,27 +27,30 @@ function dologin()
 {
   global $corem_db, $sql, $core;
 
-  if (empty($_POST['login']) || empty($_POST['password']))
+  if ( empty($_POST['login']) || empty($_POST['password']) )
     redirect('login.php?error=2');
 
   $user_name  = $sql['mgr']->quote_smart($_POST['login']);
   $user_pass  = $sql['mgr']->quote_smart($_POST['password']);
 
-  if (255 < strlen($user_name) || 255 < strlen($user_pass))
+  if ( ( strlen($user_name) > 255 ) || ( strlen($user_pass) > 255 ) )
     redirect('login.php?error=1');
 
   // Users may log in using either their username or screen name
   // check for matching login
   if ( $core == 1 )
-    $query = "SELECT * FROM accounts WHERE login = '".$user_name."' AND password = '".$user_pass."'";
+    $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
   else
-    $query = "SELECT * FROM account WHERE username = '".$user_name."' AND sha_pass_hash = '".$user_pass."'";
+  {
+    $pass_hash = sha1(strtoupper($user_name.":".$user_pass));
+    $query = "SELECT * FROM account WHERE username='".$user_name."' AND sha_pass_hash='".$pass_hash."'";
+  }
 
   $name_result = $sql['logon']->query($query);
-  if (!$sql['logon']->num_rows($name_result))
+  if ( !$sql['logon']->num_rows($name_result) )
   {
     // if we didn't find one, check for matching screen name
-    $query = "SELECT * FROM config_accounts WHERE ScreenName = '".$user_name."'";
+    $query = "SELECT * FROM config_accounts WHERE ScreenName='".$user_name."'";
     $name_result = $sql['mgr']->query($query);
     if ($sql['mgr']->num_rows($name_result))
     {
@@ -58,19 +61,22 @@ function dologin()
   else
   {
     // we'll still need the screen name if we have one
-    $query = "SELECT * FROM config_accounts WHERE Login = '".$user_name."'";
+    $query = "SELECT * FROM config_accounts WHERE Login='".$user_name."'";
     $name_result = $sql['mgr']->query($query);
     $name = $sql['mgr']->fetch_assoc($name_result);
   }
   // if we didn't find the name given for either entries, then the name will come up bad below
 
   if ( $core == 1 )
-    $query = "SELECT * FROM accounts WHERE login = '".$user_name."'";
+    $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
   else
-    $query = "SELECT * FROM account WHERE username = '".$user_name."'";
+  {
+    $pass_hash = sha1(strtoupper($user_name.":".$user_pass));
+    $query = "SELECT * FROM account WHERE username='".$user_name."' AND sha_pass_hash='".$pass_hash."'";
+  }
 
   $result = $sql['logon']->query($query);
-  $s_result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE login = '".$user_name."'");
+  $s_result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$user_name."'");
   $temp = $sql['mgr']->fetch_assoc($s_result);
   $_SESSION['gm_lvl'] = $temp['gm'];
 
@@ -85,9 +91,9 @@ function dologin()
       $acct = $sql['logon']->result($result, 0, 'id');
 
     if ( $core == 1 )
-      $ban_query = "SELECT banned FROM accounts WHERE login = '".$user_name."' AND password = '".$user_pass."'";
+      $ban_query = "SELECT banned FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
     else
-      $ban_query = "SELECT COUNT(*) FROM account_banned WHERE id = '".$acct."' AND active = 1";
+      $ban_query = "SELECT COUNT(*) FROM account_banned WHERE id='".$acct."' AND active=1";
 
     if ($sql['logon']->result($sql['logon']->query($ban_query), 0))
     {
@@ -95,24 +101,24 @@ function dologin()
     }
     else
     {
-      $_SESSION['user_id']   = $acct;
+      $_SESSION['user_id'] = $acct;
       if ( $core == 1 )
-        $_SESSION['login']     = $sql['logon']->result($result, 0, 'login');
+        $_SESSION['login'] = $sql['logon']->result($result, 0, 'login');
       else
-        $_SESSION['login']     = $sql['logon']->result($result, 0, 'username');
+        $_SESSION['login'] = $sql['logon']->result($result, 0, 'username');
       // if we got a screen name, we'll want it later.
-      $_SESSION['screenname']     = $name['ScreenName'];
-      //gets our numerical level based on ArcEmu level.
-      $_SESSION['user_lvl']  = gmlevel($temp['gm']);
-      $_SESSION['realm_id']  = $sql['logon']->quote_smart($_POST['realm']);
-      $_SESSION['client_ip'] = (isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
+      $_SESSION['screenname'] = $name['ScreenName'];
+      //gets our numerical level based on Security Level.
+      $_SESSION['user_lvl'] = gmlevel($temp['gm']);
+      $_SESSION['realm_id'] = $sql['logon']->quote_smart($_POST['realm']);
+      $_SESSION['client_ip'] = ( ( isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR') );
       $_SESSION['logged_in'] = true;
 
-      if (isset($_POST['remember']) && $_POST['remember'] != '')
+      if ( isset($_POST['remember']) && $_POST['remember'] != '' )
       {
         setcookie(   'login', $_SESSION['login'], time()+60*60*24*30);
         setcookie('realm_id', $_SESSION['realm_id'], time()+60*60*24*30);
-        setcookie(  'password', $user_pass, time()+60*60*24*30);
+        setcookie('password', $user_pass, time()+60*60*24*30);
       }
       redirect('index.php');
     }
@@ -142,15 +148,8 @@ function login()
             <script type="text/javascript">
               // <![CDATA[
                 function dologin ()
-                {';
-  if ( $core == 1 )
-    $output .= '
-                  document.form.password.value = document.form.login_pass.value;';
-  else
-    $output .= '
-                  document.form.password.value = hex_sha1(document.form.login.value.toUpperCase()+":"+document.form.login_pass.value.toUpperCase());
-                  //document.form.login_pass.value = "0";';
-  $output .= '
+                {
+                  document.form.password.value = document.form.login_pass.value;
                   do_submit();
                 }
               // ]]>
@@ -182,7 +181,7 @@ function login()
 
   $result = $sql['mgr']->query('SELECT id, name FROM realmlist LIMIT 10');
 
-  if ($sql['mgr']->num_rows($result) > 1 && (count($server) > 1) && (count($characters_db) > 1))
+  if ( ( $sql['mgr']->num_rows($result) > 1 ) && ( count($server) > 1 ) && ( count($characters_db) > 1 ) )
   {
     $output .= '
                   <tr align="right">
@@ -190,8 +189,8 @@ function login()
 										<td>&nbsp;</td>
                     <td align="left">
                       <select name="realm" id="login_realm">';
-    while ($realm = $sql['mgr']->fetch_assoc($result))
-      if(isset($server[$realm['id']]))
+    while ( $realm = $sql['mgr']->fetch_assoc($result) )
+      if ( isset($server[$realm['id']]) )
         $output .= '
                         <option value="'.$realm['id'].'" '.( $_SESSION['realm_id'] == $realm['id'] ? 'selected="selected"' : '' ).'>'.htmlentities($realm['name']).'</option>';
     $output .= '
@@ -258,7 +257,7 @@ function do_cookie_login()
 {
   global $corem_db, $sql, $core;
   
-  if (empty($_COOKIE['login']) || empty($_COOKIE['password']) || empty($_COOKIE['realm_id']))
+  if ( empty($_COOKIE['login']) || empty($_COOKIE['password']) || empty($_COOKIE['realm_id']) )
     redirect('login.php?error=2');
 
   $user_name = $sql['logon']->quote_smart($_COOKIE['login']);
@@ -267,16 +266,16 @@ function do_cookie_login()
   // Users may log in using either their username or screen name
   // check for matching login
   if ( $core == 1 )
-    $query = "SELECT * FROM accounts WHERE login = '".$user_name."'";
+    $query = "SELECT * FROM accounts WHERE login='".$user_name."'";
   else
-    $query = "SELECT * FROM account WHERE username = '".$user_name."'";
+    $query = "SELECT * FROM account WHERE username='".$user_name."'";
   $name_result = $sql['logon']->query($query);
-  if (!$sql['logon']->num_rows($name_result))
+  if ( !$sql['logon']->num_rows($name_result) )
   {
     // if we didn't find one, check for matching screen name
-    $query = "SELECT * FROM config_accounts WHERE ScreenName = '".$user_name."'";
+    $query = "SELECT * FROM config_accounts WHERE ScreenName='".$user_name."'";
     $name_result = $sql['mgr']->query($query);
-    if ($sql['mgr']->num_rows($name_result))
+    if ( $sql['mgr']->num_rows($name_result) )
     {
       $name = $sql['mgr']->fetch_assoc($name_result);
       $user_name = $name['Login'];
@@ -285,20 +284,20 @@ function do_cookie_login()
   else
   {
     // we'll still need the screen name if we have one
-    $query = "SELECT * FROM config_accounts WHERE Login = '".$user_name."'";
+    $query = "SELECT * FROM config_accounts WHERE Login='".$user_name."'";
     $name_result = $sql['mgr']->query($query);
     $name = $sql['mgr']->fetch_assoc($name_result);
   }
   // if we didn't find the name given for either entries, then the name will come up bad below
   
   if ( $core == 1 )
-    $query = "SELECT * FROM accounts WHERE login = '".$user_name."'";
+    $query = "SELECT * FROM accounts WHERE login='".$user_name."'";
   else
-    $query = "SELECT *, username AS login FROM account WHERE username = '".$user_name."'";
+    $query = "SELECT *, username AS login FROM account WHERE username='".$user_name."'";
 
   $result = $sql['logon']->query($query);
 
-  $s_result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE login = '".$user_name."'");
+  $s_result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE login='".$user_name."'");
   $temp = $sql['mgr']->fetch_assoc($s_result);
   $_SESSION['gm_lvl'] = $temp['gm'];
 
@@ -312,7 +311,7 @@ function do_cookie_login()
   //unset($user_name);
   //unset($user_pass);
 
-  if ($sql['logon']->num_rows($result))
+  if ( $sql['logon']->num_rows($result) )
   {
     if ( $core == 1)
       $acct = $sql['logon']->result($result, 0, 'acct');
@@ -323,20 +322,20 @@ function do_cookie_login()
       $ban_query = "SELECT COUNT(*) FROM accounts WHERE acct='".$acct."' AND banned='1'";
     else
       $ban_query = "SELECT COUNT(*) FROM account_banned WHERE id = '".$acct."' AND active = 1";
-    if ($sql['logon']->result($sql['logon']->query($ban_query), 0))
+    if ( $sql['logon']->result($sql['logon']->query($ban_query), 0) )
     {
       redirect('login.php?error=3');
     }
     else
     {
-      $_SESSION['user_id']   = $acct;
-      $_SESSION['login']     = $sql['logon']->result($result, 0, 'login');
+      $_SESSION['user_id'] = $acct;
+      $_SESSION['login'] = $sql['logon']->result($result, 0, 'login');
       // if we got a screen name, we'll want it later.
-      $_SESSION['screenname']     = $name['ScreenName'];
+      $_SESSION['screenname'] = $name['ScreenName'];
       //gets our numerical level based on ArcEmu level.
-      $_SESSION['user_lvl']  = gmlevel($temp['gm']);
-      $_SESSION['realm_id']  = $sql['logon']->quote_smart($_COOKIE['realm_id']);
-      $_SESSION['client_ip'] = (isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
+      $_SESSION['user_lvl'] = gmlevel($temp['gm']);
+      $_SESSION['realm_id'] = $sql['logon']->quote_smart($_COOKIE['realm_id']);
+      $_SESSION['client_ip'] = ( ( isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR') );
       $_SESSION['logged_in'] = true;
       redirect('index.php');
     }
@@ -345,7 +344,7 @@ function do_cookie_login()
   {
     setcookie (   'login', '', time() - 3600);
     setcookie ('realm_id', '', time() - 3600);
-    setcookie (  'password', '', time() - 3600);
+    setcookie ('password', '', time() - 3600);
     redirect('login.php?error=1');
   }
 }
@@ -398,7 +397,7 @@ unset($err);
 $output .= '
           </div>';
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
 
 if ('dologin' === $action)
   dologin();
@@ -407,7 +406,6 @@ else
 
 unset($action);
 unset($action_permission);
-//unset($lang_login);
 
 require_once 'footer.php';
 
