@@ -38,19 +38,19 @@ function char_inv()
   //wowhead_tt();
 
   // we need at least an id or we would have nothing to show
-  if (empty($_GET['id']))
+  if ( empty($_GET['id']) )
     error(lang('global', 'empty_fields'));
   else
     $cid = $_GET['id'];
 
   // this is multi realm support, as of writing still under development
   //  this page is already implementing it
-  if (empty($_GET['realm']))
+  if ( empty($_GET['realm']) )
     $realmid = $realm_id;
   else
   {
     $realmid = $sql['logon']->quote_smart($_GET['realm']);
-    if (is_numeric($realmid))
+    if ( is_numeric($realmid) )
       $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
@@ -66,13 +66,13 @@ function char_inv()
   // getting character data from database
   if ( $core == 1 )
     $result = $sql['char']->query("SELECT acct, name, race, class, level, gender, gold
-      FROM characters WHERE guid = '".$cid."' LIMIT 1");
+      FROM characters WHERE guid='".$cid."' LIMIT 1");
   else
     $result = $sql['char']->query("SELECT account AS acct, name, race, class, level, gender, money AS gold
-      FROM characters WHERE guid = '".$cid."' LIMIT 1");
+      FROM characters WHERE guid='".$cid."' LIMIT 1");
 
   // no point going further if character does not exist
-  if ($sql['char']->num_rows($result))
+  if ( $sql['char']->num_rows($result) )
   {
     $char = $sql['char']->fetch_assoc($result);
 
@@ -88,31 +88,34 @@ function char_inv()
     $owner_gmlvl = $sql['mgr']->result($query, 0, 'gm');
 
     // check user permission
-    if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
+    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
     {
       // main data that we need for this page, character inventory
       if ( $core == 1 )
-        $result = $sql['char']->query('SELECT 
+        $result = $sql['char']->query("SELECT 
           containerslot, slot, entry, enchantments AS enchantment, randomprop AS property, count, flags
-          FROM playeritems WHERE ownerguid = '.$cid.' ORDER BY containerslot, slot');
+          FROM playeritems WHERE ownerguid='".$cid."' ORDER BY containerslot, slot");
       elseif ( $core == 2 )
-        $result = $sql['char']->query('SELECT 
+        $result = $sql['char']->query("SELECT 
           bag, slot, item_template AS entry, item, 
-          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 11), " ", -1) AS creator,
-          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 23), " ", -1) AS enchantment, 
-          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 60), " ", -1) AS property, 
-          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 15), " ", -1) AS count,
-          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 62), " ", -1) AS durability,
-          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, " ", 22), " ", -1) AS flags
-          FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid = '.$cid.' ORDER BY bag, slot');
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 11), ' ', -1) AS creator,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 23), ' ', -1) AS enchantment, 
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 60), ' ', -1) AS property, 
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 15), ' ', -1) AS count,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 62), ' ', -1) AS durability,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 22), ' ', -1) AS flags
+          FROM character_inventory LEFT JOIN item_instance ON character_inventory.item=item_instance.guid
+          WHERE character_inventory.guid='".$cid."' ORDER BY bag, slot");
       else
-        $result = $sql['char']->query('SELECT 
+        $result = $sql['char']->query("SELECT 
           bag, slot, item_template AS entry, item, 
           creatorGuid AS creator,
           enchantments AS enchantment, 
           randomPropertyId AS property, 
           count, durability, flags
-          FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid = '.$cid.' ORDER BY bag, slot');
+          FROM character_inventory 
+            LEFT JOIN item_instance ON character_inventory.item=item_instance.guid
+          WHERE character_inventory.guid='".$cid."' ORDER BY bag, slot");
 
       //---------------Page Specific Data Starts Here--------------------------
       // lets start processing first before we display anything
@@ -146,24 +149,24 @@ function char_inv()
       // this is where we will put items that are in main bank
       $bank_bag_id = array();
       // this is where we will put items that are in character bags, 4 arrays, 1 for each
-      $equiped_bag_id = array(0,0,0,0,0);
+      $equiped_bag_id = array(0, 0, 0, 0, 0);
       // this is where we will put items that are in bank bangs, 7 arrays, 1 for each
-      $equip_bnk_bag_id = array(0,0,0,0,0,0,0,0);
+      $equip_bnk_bag_id = array(0, 0, 0, 0, 0, 0, 0, 0);
       // we load the things in each bag slot
-      while ($slot = $sql['char']->fetch_assoc($result))
+      while ( $slot = $sql['char']->fetch_assoc($result) )
       {
         if ( $core == 1 )
         {
-          if ($slot['containerslot'] == -1 && $slot['slot'] > 18)
+          if ( ( $slot['containerslot'] == -1 ) && ( $slot['slot'] > 18 ) )
           {
-            if($slot['slot'] < 23) // SLOT 19 TO 22 (Bags)
+            if ( $slot['slot'] < 23 ) // SLOT 19 TO 22 (Bags)
             {
               $bag_id[$slot['slot']] = ($slot['slot']-18);
               $equiped_bag_id[$slot['slot']-18] = array($slot['entry'],
                 $sql['world']->result($sql['world']->query('SELECT containerslots FROM items
                   WHERE entry = '.$slot['entry'].''), 0, 'containerslots'), $slot['count']);
             }
-            elseif($slot['slot'] < 39) // SLOT 23 TO 38 (BackPack)
+            elseif ( $slot['slot'] < 39 ) // SLOT 23 TO 38 (BackPack)
             {
               $i_query = "SELECT 
                 *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
@@ -175,11 +178,12 @@ function char_inv()
               $i_result = $sql['world']->query($i_query);
               $i = $sql['world']->fetch_assoc($i_result);
 
-              if(isset($bag[0][$slot['slot']-23]))
+              if ( isset($bag[0][$slot['slot']-23]) )
                 $bag[0][$slot['slot']-23][0]++;
-              else $bag[0][$slot['slot']-23] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
+              else
+                $bag[0][$slot['slot']-23] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
             }
-            elseif($slot['slot'] < 67) // SLOT 39 TO 66 (Bank)
+            elseif ( $slot['slot'] < 67 ) // SLOT 39 TO 66 (Bank)
             {
               $i_query = "SELECT
                 *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
@@ -193,18 +197,18 @@ function char_inv()
 
               $bank[0][$slot['slot']-39] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
             }
-            elseif($slot['slot'] < 74) // SLOT 67 TO 73 (Bank Bags)
+            elseif ( $slot['slot'] < 74 ) // SLOT 67 TO 73 (Bank Bags)
             {
               $bank_bag_id[$slot['slot']] = ($slot['slot']-66);
               $equip_bnk_bag_id[$slot['slot']-66] = array($slot['entry'], 
-                $sql['world']->result($sql['world']->query('SELECT containerslots FROM items
-                  WHERE entry = '.$slot['entry'].''), 0, 'containerslots'), $slot['count']);
+                $sql['world']->result($sql['world']->query("SELECT containerslots FROM items
+                  WHERE entry='".$slot['entry']."'"), 0, 'containerslots'), $slot['count']);
             }
           }
           else
           {
             // Bags
-            if (isset($bag_id[$slot['containerslot']]))
+            if ( isset($bag_id[$slot['containerslot']]) )
             {
               $i_query = "SELECT
                 *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
@@ -216,13 +220,13 @@ function char_inv()
               $i_result = $sql['world']->query($i_query);
               $i = $sql['world']->fetch_assoc($i_result);
 
-              if(isset($bag[$bag_id[$slot['containerslot']]][$slot['slot']]))
+              if ( isset($bag[$bag_id[$slot['containerslot']]][$slot['slot']]) )
                 $bag[$bag_id[$slot['containerslot']]][$slot['slot']][1]++;
               else
                 $bag[$bag_id[$slot['containerslot']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
             }
             // Bank Bags
-            elseif (isset($bank_bag_id[$slot['containerslot']]))
+            elseif ( isset($bank_bag_id[$slot['containerslot']]) )
             {
               $i_query = "SELECT
                 *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
@@ -240,27 +244,28 @@ function char_inv()
         }
         else
         {
-          if ($slot['bag'] == 0 && $slot['slot'] > 18)
+          if ( ( $slot['bag'] == 0 ) && ( $slot['slot'] > 18 ) )
           {
-            if($slot['slot'] < 23) // SLOT 19 TO 22 (Bags)
+            if ( $slot['slot'] < 23 ) // SLOT 19 TO 22 (Bags)
             {
               $bag_id[$slot['item']] = ($slot['slot']-18);
               $equiped_bag_id[$slot['slot']-18] = array($slot['entry'],
-                $sql['world']->result($sql['world']->query('SELECT ContainerSlots FROM item_template
-                  WHERE entry = '.$slot['entry'].''), 0, 'containerslots'), $slot['count']);
+                $sql['world']->result($sql['world']->query("SELECT ContainerSlots FROM item_template
+                  WHERE entry='".$slot['entry']."'"), 0, 'containerslots'), $slot['count']);
             }
-            elseif($slot['slot'] < 39) // SLOT 23 TO 38 (BackPack)
+            elseif ( $slot['slot'] < 39 ) // SLOT 23 TO 38 (BackPack)
             {
               $i_query = "SELECT * FROM item_template WHERE entry='".$slot['entry']."'";
 
               $i_result = $sql['world']->query($i_query);
               $i = $sql['world']->fetch_assoc($i_result);
 
-              if(isset($bag[0][$slot['slot']-23]))
+              if ( isset($bag[0][$slot['slot']-23]) )
                 $bag[0][$slot['slot']-23][0]++;
-              else $bag[0][$slot['slot']-23] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
+              else
+                $bag[0][$slot['slot']-23] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
             }
-            elseif($slot['slot'] < 67) // SLOT 39 TO 66 (Bank)
+            elseif ( $slot['slot'] < 67 ) // SLOT 39 TO 66 (Bank)
             {
               $i_query = "SELECT * FROM item_template WHERE entry='".$slot['entry']."'";
 
@@ -269,7 +274,7 @@ function char_inv()
 
               $bank[0][$slot['slot']-39] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
             }
-            elseif($slot['slot'] < 74) // SLOT 67 TO 73 (Bank Bags)
+            elseif ( $slot['slot'] < 74 ) // SLOT 67 TO 73 (Bank Bags)
             {
               $bank_bag_id[$slot['item']] = ($slot['slot']-66);
               $equip_bnk_bag_id[$slot['slot']-66] = array($slot['entry'], 
@@ -280,20 +285,20 @@ function char_inv()
           else
           {
             // Bags
-            if (isset($bag_id[$slot['bag']]))
+            if ( isset($bag_id[$slot['bag']]) )
             {
               $i_query = "SELECT * FROM item_template WHERE entry='".$slot['entry']."'";
 
               $i_result = $sql['world']->query($i_query);
               $i = $sql['world']->fetch_assoc($i_result);
 
-              if(isset($bag[$bag_id[$slot['bag']]][$slot['slot']]))
+              if ( isset($bag[$bag_id[$slot['bag']]][$slot['slot']]) )
                 $bag[$bag_id[$slot['bag']]][$slot['slot']][1]++;
               else
                 $bag[$bag_id[$slot['bag']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
             }
             // Bank Bags
-            elseif (isset($bank_bag_id[$slot['bag']]))
+            elseif ( isset($bank_bag_id[$slot['bag']]) )
             {
               $i_query = "SELECT * FROM item_template WHERE entry='".$slot['entry']."'";
 
@@ -343,13 +348,13 @@ function char_inv()
       //---------------Page Specific Data Starts Here--------------------------
 
       // equipped bags
-      for($i=4; $i > 0; --$i)
+      for ( $i=4; $i > 0; --$i )
       {
         $output .= '
                   <th>';
         if($equiped_bag_id[$i])
         {
-          $output .='
+          $output .= '
                     <a id="ch_inv_padding" href="'.$item_datasite.$equiped_bag_id[$i][0].'" target="_blank">
                       <img class="bag_icon" src="'.get_item_icon($equiped_bag_id[$i][0]).'" alt="" />
                     </a>
@@ -364,7 +369,7 @@ function char_inv()
                 <tr>';
 
       // equipped bag slots
-      for($t = 4; $t > 0; --$t)
+      for ( $t = 4; $t > 0; --$t )
       {
         // this_is_junk: style left hardcoded because it's calculated.
         $output .= '
@@ -372,14 +377,14 @@ function char_inv()
                     <div style="width:'.(4*43).'px;height:'.(ceil($equiped_bag_id[$t][1]/4)*41).'px;">';
         $dsp = $equiped_bag_id[$t][1]%4;
 
-        if ($dsp)
+        if ( $dsp )
           $output .= '
                       <div class="no_slot"></div>';
 
-        foreach ($bag[$t] as $pos => $item)
+        foreach ( $bag[$t] as $pos => $item )
         {
           // this_is_junk: style left hardcoded because it's calculated.
-          $item[2] = $item[2] == 1 ? '' : $item[2];
+          $item[2] = ( ( $item[2] == 1 ) ? '' : $item[2] );
           $output .= '
                       <div style="left:'.(($pos+$dsp)%4*42).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">
                         <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');">
@@ -388,8 +393,8 @@ function char_inv()
                         <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
                         <div id="ch_inv_quantity">'.$item[2].'</div>
                       </div>';
-                      // build a tooltip object for this item
-                      $output .= '
+          // build a tooltip object for this item
+          $output .= '
                       <div class="item_tooltip" id="tooltip_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'" style="left: '.((($pos+$dsp)%4*42)-129).'px; top:'.((floor(($pos+$dsp)/4)*41)+42).'px;">
                         <table>
                           <td>
@@ -420,7 +425,7 @@ function char_inv()
                     <div style="width:'.(4*43).'px;height:'.(ceil(16/4)*41).'px;">';
 
       // inventory items
-      foreach ($bag[0] as $pos => $item)
+      foreach ( $bag[0] as $pos => $item )
       {
         // this_is_junk: style left hardcoded because it's calculated.
         $item[2] = $item[2] == 1 ? '' : $item[2];
@@ -432,8 +437,8 @@ function char_inv()
                         <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
                         <div id="ch_inv_quantity">'.$item[2].'</div>
                       </div>';
-                      // build a tooltip object for this item
-                      $output .= '
+        // build a tooltip object for this item
+        $output .= '
                       <div class="item_tooltip" id="tooltip_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'" style="left: '.(($pos%4*42)-129).'px; top:'.((floor($pos/4)*41)+42).'px;">
                         <table>
                           <td>
@@ -457,10 +462,10 @@ function char_inv()
                     <div style="width:'.((7*43)+2).'px;height:'.(ceil(24/7)*41).'px;">';
 
       // bank items
-      foreach ($bank[0] as $pos => $item)
+      foreach ( $bank[0] as $pos => $item )
       {
         // this_is_junk: style left hardcoded because it's calculated.
-        $item[2] = $item[2] == 1 ? '' : $item[2];
+        $item[2] = ( ( $item[2] == 1 ) ? '' : $item[2] );
         $output .= '
                       <div style="left:'.($pos%7*43).'px;top:'.(floor($pos/7)*41).'px;">
                         <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');" onmouseout="HideTooltip(\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');">
@@ -469,8 +474,8 @@ function char_inv()
                         <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
                         <div id="ch_inv_quantity">'.$item[2].'</div>
                       </div>';
-                      // build a tooltip object for this item
-                      $output .= '
+        // build a tooltip object for this item
+        $output .= '
                       <div class="item_tooltip" id="tooltip_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'" style="left: '.(($pos%7*43)-129).'px; top:'.((floor($pos/7)*41)+42).'px;">
                         <table>
                           <td>
@@ -486,11 +491,11 @@ function char_inv()
                 <tr>';
 
       // equipped bank bags, first 4
-      for($i=1; $i < 5; ++$i)
+      for ( $i=1; $i < 5; ++$i )
       {
         $output .= '
                   <th>';
-        if($equip_bnk_bag_id[$i])
+        if ( $equip_bnk_bag_id[$i] )
         {
           $output .= '
                     <a id="ch_inv_padding" href="'.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
@@ -507,19 +512,19 @@ function char_inv()
                 <tr>';
 
       // equipped bank bag slots
-      for($t=1; $t < 8; ++$t)
+      for ( $t=1; $t < 8; ++$t )
       {
         // equipped bank bags, last 3
-        if($t===5)
+        if ( $t === 5 )
         {
           $output .= '
                 </tr>
                 <tr>';
-          for($i=5; $i < 8; ++$i)
+          for ( $i=5; $i < 8; ++$i )
           {
             $output .= '
                   <th>';
-            if($equip_bnk_bag_id[$i])
+            if ( $equip_bnk_bag_id[$i] )
             {
               $output .= '
                     <a id="ch_inv_padding" href="'.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
@@ -541,14 +546,14 @@ function char_inv()
         $output .= '
                   <td class="bank" align="center">
                     <div style="width:'.((4*43)+2).'px;height:'.(ceil($equip_bnk_bag_id[$t][1]/4)*41).'px;">';
-        $dsp=$equip_bnk_bag_id[$t][1]%4;
-        if ($dsp)
+        $dsp = $equip_bnk_bag_id[$t][1]%4;
+        if ( $dsp )
           $output .= '
                       <div class="no_slot"></div>';
-        foreach ($bank[$t] as $pos => $item)
+        foreach ( $bank[$t] as $pos => $item )
         {
           // this_is_junk: style left hardcoded because it's calculated.
-          $item[2] = $item[2] == 1 ? '' : $item[2];
+          $item[2] = ( ( $item[2] == 1 ) ? '' : $item[2] );
           $output .= '
                       <div style="left:'.(($pos+$dsp)%4*43).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">
                         <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');">
@@ -586,15 +591,15 @@ function char_inv()
             <table class="hidden">
               <tr>
                 <td>';
-                  // button to user account page, user account page has own security
-                  makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
+      // button to user account page, user account page has own security
+      makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
       $output .= '
                 </td>
                 <td>';
 
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
-      if ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) )
+      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) )
       {
                   //makebutton($lang_char['edit_button'], 'char_edit.php?id='.$cid.'&amp;realm='.$realmid.'', 130);
         $output .= '
@@ -604,20 +609,20 @@ function char_inv()
       // only higher level GM with delete access, or character owner can delete character
       if ( ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) ) || ($owner_name === $user_name) )
       {
-                  makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$cid.'" type="wrn', 130);
+        makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$cid.'" type="wrn', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only GM with update permission can send mail, mail can send items, so update permission is needed
-      if ($user_lvl >= $action_permission['update'])
+      if ( $user_lvl >= $action_permission['update'] )
       {
-                  makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
+        makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
         $output .= '
                 </td>
                 <td>';
       }
-                  makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+      makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>
               </tr>
@@ -642,17 +647,12 @@ function char_inv()
 // action variable reserved for future use
 //$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-// load language
-//$lang_char = lang_char();
-
 $output .= "
       <div class=\"bubble\">";
 
 char_inv();
 
-//unset($action);
 unset($action_permission);
-//unset($lang_char);
 
 require_once 'footer.php';
 

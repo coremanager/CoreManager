@@ -29,22 +29,25 @@ function char_mail()
 {
   global $output, $realm_id, $characters_db, $action_permission, $user_lvl, $user_name, $user_id, $sql, $core;
 
-  if (empty($_GET['id']))
+  if ( empty($_GET['id']) )
     error(lang('global', 'empty_fields'));
 
-  if (empty($_GET['realm']))
+  if ( empty($_GET['realm']) )
     $realmid = $realm_id;
   else
   {
     $realmid = $sql['logon']->quote_smart($_GET['realm']);
-    if (is_numeric($realmid))
+    if ( is_numeric($realmid) )
       $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
   $id = $sql['char']->quote_smart($_GET['id']);
-  if (is_numeric($id)); else $id = 0;
+  if ( is_numeric($id) )
+    ;
+  else
+    $id = 0;
 
   if ( $core == 1 )
     $result = $sql['char']->query("SELECT acct, name, race, class, level, gender
@@ -53,7 +56,7 @@ function char_mail()
     $result = $sql['char']->query("SELECT account AS acct, name, race, class, level, gender
       FROM characters WHERE guid='".$id."' LIMIT 1");
 
-  if ($sql['char']->num_rows($result))
+  if ( $sql['char']->num_rows($result) )
   {
     $char = $sql['char']->fetch_assoc($result);
     
@@ -69,7 +72,7 @@ function char_mail()
     $result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
     $owner_gmlvl = $sql['mgr']->result($result, 0, 'gm');
 
-    if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
+    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
     {
       $output .= '
           <center>
@@ -77,7 +80,7 @@ function char_mail()
               <ul>
                 <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>
                 <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'inventory').'</a></li>
-                '.(($char['level'] < 10) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>').'
+                '.( ( $char['level'] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>' ).'
                 <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'achievements').'</a></li>
                 <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'quests').'</a></li>
                 <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'friends').'</a></li>
@@ -88,7 +91,7 @@ function char_mail()
               <div id="tab">
                 <ul>
                   <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>';
-        if (char_get_class_name($char['class']) === 'Hunter' )
+        if ( char_get_class_name($char['class']) === 'Hunter' )
           $output .= '
                   <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'pets').'</a></li>';
         $output .= '
@@ -103,10 +106,8 @@ function char_mail()
               <div id="tab_content2">
                 <font class="bold">
                   '.htmlentities($char['name']).' -
-                  <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif"
-                    onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
-                  <img src="img/c_icons/'.$char['class'].'.gif"
-                    onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'
+                  <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                  <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'
                 </font>
                 <br /><br />';
 
@@ -115,7 +116,7 @@ function char_mail()
       else
         $result = $sql['char']->query("SELECT *, sender AS sender_guid, checked AS read_flag, id AS message_id FROM mail WHERE receiver='".$id."'");
 
-      if ($sql['char']->num_rows($result))
+      if ( $sql['char']->num_rows($result) )
       {
         $output .= '
                 <table class="lined" id="ch_mail_table">
@@ -124,7 +125,7 @@ function char_mail()
                     <th>'.lang('char', 'sender').'</th>
                     <th width="55%">'.lang('char', 'subject').'</th>
                   </tr>';
-        while($mail = $sql['char']->fetch_assoc($result))
+        while ( $mail = $sql['char']->fetch_assoc($result) )
         {
           $c_query = "SELECT name FROM characters WHERE guid = '".$mail['sender_guid']."'";
           $c_result = $sql['char']->query($c_query);
@@ -167,15 +168,15 @@ function char_mail()
             <table class="hidden">
               <tr>
                 <td>';
-                  // button to user account page, user account page has own security
-                  makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
+      // button to user account page, user account page has own security
+      makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
       $output .= '
                 </td>
                 <td>';
 
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
-      if ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) )
+      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) )
       {
                   //makebutton($lang_char['edit_button'], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
         $output .= '
@@ -183,22 +184,22 @@ function char_mail()
                 <td>';
       }
       // only higher level GM with delete access, or character owner can delete character
-      if ( ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) ) || ($owner_name === $user_name) )
+      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) ) || ( $owner_name === $user_name ) )
       {
-                  makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
+        makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only GM with update permission can send mail, mail can send items, so update permission is needed
-      if ($user_lvl >= $action_permission['update'])
+      if ( $user_lvl >= $action_permission['update'] )
       {
-                  makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
+        makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
         $output .= '
                 </td>
                 <td>';
       }
-                  makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+      makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>
               </tr>
@@ -222,37 +223,43 @@ function read_mail()
 {
   global $output, $realm_id, $characters_db, $action_permission, $user_lvl, $user_name, $user_id, $sql, $core;
 
-  if (empty($_GET['id']))
+  if ( empty($_GET['id']) )
     error(lang('global', 'empty_fields'));
     
-  if (empty($_GET['message']))
+  if ( empty($_GET['message']) )
     error(lang('global', 'empty_fields'));
 
-  if (empty($_GET['realm']))
+  if ( empty($_GET['realm']) )
     $realmid = $realm_id;
   else
   {
     $realmid = $sql['logon']->quote_smart($_GET['realm']);
-    if (is_numeric($realmid))
+    if ( is_numeric($realmid) )
       $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
   $id = $sql['char']->quote_smart($_GET['id']);
-  if (is_numeric($id)); else $id = 0;
+  if ( is_numeric($id) )
+    ;
+  else
+    $id = 0;
 
   $message = $sql['char']->quote_smart($_GET['message']);
-  if (is_numeric($message)); else $message = 0;
+  if ( is_numeric($message) )
+    ;
+  else
+    $message = 0;
 
   if ( $core == 1 )
-    $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
-      FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql['char']->query("SELECT acct, name, race, class, level, gender
+      FROM characters WHERE guid='".$id."' LIMIT 1");
   else
-    $result = $sql['char']->query('SELECT account AS acct, name, race, class, level, gender
-      FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql['char']->query("SELECT account AS acct, name, race, class, level, gender
+      FROM characters WHERE guid='".$id."' LIMIT 1");
 
-  if ($sql['char']->num_rows($result))
+  if ( $sql['char']->num_rows($result) )
   {
     $char = $sql['char']->fetch_assoc($result);
     
@@ -268,7 +275,7 @@ function read_mail()
     $result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
     $owner_gmlvl = $sql['mgr']->result($result, 0, 'gm');
 
-    if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
+    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
     {
       $output .= '
           <center>
@@ -276,7 +283,7 @@ function read_mail()
               <ul>
                 <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>
                 <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'inventory').'</a></li>
-                '.(($char['level'] < 10) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>').'
+                '.( ( $char['level'] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>' ).'
                 <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'achievements').'</a></li>
                 <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'quests').'</a></li>
                 <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'friends').'</a></li>
@@ -286,7 +293,7 @@ function read_mail()
               <div id="tab">
                 <ul>
                   <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>';
-        if (char_get_class_name($char['class']) === 'Hunter' )
+        if ( char_get_class_name($char['class']) === 'Hunter' )
           $output .= '
                   <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'pets').'</a></li>';
         $output .= '
@@ -301,22 +308,20 @@ function read_mail()
               <div id="tab_content2">
                 <font class="bold">
                   '.htmlentities($char['name']).' -
-                  <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif"
-                    onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
-                  <img src="img/c_icons/'.$char['class'].'.gif"
-                    onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /> - lvl '.char_get_level_color($char['level']).'
+                  <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                  <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - lvl '.char_get_level_color($char['level']).'
                 </font>
                 <br />';
 
       if ( $core == 1 )
-        $result = $sql['char']->query("SELECT * FROM mailbox WHERE message_id = '".$message."'");
+        $result = $sql['char']->query("SELECT * FROM mailbox WHERE message_id='".$message."'");
       else
-        $result = $sql['char']->query("SELECT *, sender AS sender_guid FROM mail WHERE id = '".$message."'");
+        $result = $sql['char']->query("SELECT *, sender AS sender_guid FROM mail WHERE id='".$message."'");
       $mail = $sql['char']->fetch_assoc($result);
 
-      if ($sql['char']->num_rows($result))
+      if ( $sql['char']->num_rows($result) )
       {
-        $c_query = "SELECT name FROM characters WHERE guid = '".$mail['sender_guid']."'";
+        $c_query = "SELECT name FROM characters WHERE guid='".$mail['sender_guid']."'";
         $c_result = $sql['char']->query($c_query);
         $c_name = $sql['char']->fetch_assoc($c_result);
           
@@ -349,44 +354,44 @@ function read_mail()
         {
           $attgold = str_pad($mail['money'], 4, "0", STR_PAD_LEFT);
           $pg = substr($attgold,  0, -4);
-          if ($pg == '')
+          if ( $pg == '' )
             $pg = 0;
           $pg = $pg * 1;
           $ps = substr($attgold, -4,  2);
-          if ( ($ps == '') || ($ps == '00') )
+          if ( ( $ps == '' ) || ( $ps == '00' ) )
             $ps = 0;
           $ps = $ps * 1;
           $pc = substr($attgold, -2);
-          if ( ($pc == '') || ($pc == '00') )
+          if ( ( $pc == '' ) || ( $pc == '00' ) )
             $pc = 0;
           $pc = $pc * 1;
           $output .= '
                       <td colspan="3">'.lang('char', 'messagehas').' '.
-                        ($pg ? $pg.'<img src="img/gold.gif" alt="" align="middle" />' : '').
-                        ($ps ? $ps.'<img src="img/silver.gif" alt="" align="middle" />' : '').
-                        ($pc ? $pc.'<img src="img/copper.gif" alt="" align="middle" />' : '').
+                        ( ( $pg ) ? $pg.'<img src="img/gold.gif" alt="" align="middle" />' : '' ).
+                        ( ( $ps ) ? $ps.'<img src="img/silver.gif" alt="" align="middle" />' : '' ).
+                        ( ( $pc ) ? $pc.'<img src="img/copper.gif" alt="" align="middle" />' : '' ).
                       ' '.lang('char', 'attached').'.</td>';
         }
         if ( $mail['cod'] <> 0 )
         {
           $codgold = str_pad($mail['cod'], 4, "0", STR_PAD_LEFT);
           $pg = substr($codgold,  0, -4);
-          if ($pg == '')
+          if ( $pg == '' )
             $pg = 0;
           $pg = $pg * 1;
           $ps = substr($codgold, -4,  2);
-          if ( ($ps == '') || ($ps == '00') )
+          if ( ( $ps == '' ) || ( $ps == '00' ) )
             $ps = 0;
           $ps = $ps * 1;
           $pc = substr($codgold, -2);
-          if ( ($pc == '') || ($pc == '00') )
+          if ( ( $pc == '' ) || ( $pc == '00' ) )
             $pc = 0;
           $pc = $pc * 1;
           $output .= '
                       <td colspan="3">'.lang('char', 'cod').'; '.
-                        ($pg ? $pg.'<img src="img/gold.gif" alt="" align="middle" />' : '').
-                        ($ps ? $ps.'<img src="img/silver.gif" alt="" align="middle" />' : '').
-                        ($pc ? $pc.'<img src="img/copper.gif" alt="" align="middle" />' : '').
+                        ( ( $pg ) ? $pg.'<img src="img/gold.gif" alt="" align="middle" />' : '' ).
+                        ( ( $ps ) ? $ps.'<img src="img/silver.gif" alt="" align="middle" />' : '' ).
+                        ( ( $pc ) ? $pc.'<img src="img/copper.gif" alt="" align="middle" />' : '' ).
                       ' '.lang('char', 'isdue').'.</td>';
         };
         if ( $mail['attached_item_guids'] <> 0 )
@@ -423,12 +428,12 @@ function read_mail()
 // MAIN
 //########################################################################################################################
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
 
-$output .= "
-      <div class=\"bubble\">";
+$output .= '
+      <div class="bubble">';
 
-switch ($action)
+switch ( $action )
 {
   case 'readmail':
   {
@@ -439,9 +444,7 @@ switch ($action)
     char_mail();
 }
 
-//unset($action);
 unset($action_permission);
-//unset($lang_char);
 
 require_once 'footer.php';
 

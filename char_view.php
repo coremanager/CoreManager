@@ -54,9 +54,9 @@ function wowhead_did($item)
   global $sql, $core;
 
   if ( $core == 1)
-    $query = $sql['world']->query("SELECT `displayid` FROM items WHERE `entry` = '" . $item . "' LIMIT 1");
+    $query = $sql['world']->query("SELECT `displayid` FROM items WHERE `entry`='".$item."' LIMIT 1");
   else
-    $query = $sql['world']->query("SELECT `displayid` FROM item_template WHERE `entry` = '" . $item . "' LIMIT 1");
+    $query = $sql['world']->query("SELECT `displayid` FROM item_template WHERE `entry`='".$item."' LIMIT 1");
 
   $result = $sql['world']->fetch_assoc($query);
 
@@ -73,23 +73,23 @@ function char_view()
 {
   global $output, $action_permission, $user_lvl, $user_name, $sql, $core;
 
-  if (empty($_GET['id']))
+  if ( empty($_GET['id']) )
     error(lang('global', 'empty_fields'));
   else
     $id = $_GET['id'];
 
   if ( $core == 1 )
-    $query = $sql['char']->query("SELECT * FROM characters WHERE `guid` = '" . $id . "'");
+    $query = $sql['char']->query("SELECT * FROM characters WHERE `guid`='".$id."'");
   else
-    $query = $sql['char']->query("SELECT *, account AS acct FROM characters WHERE `guid` = '" . $id . "'");
+    $query = $sql['char']->query("SELECT *, account AS acct FROM characters WHERE `guid`='".$id."'");
   $char = $sql['char']->fetch_assoc($query);
 
   // we get owner permissions first
   $owner_acc_id = $char['acct'];
   if ( $core == 1 )
-    $aresult = $sql['logon']->query('SELECT login FROM accounts WHERE acct = '.$owner_acc_id.'');
+    $aresult = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$owner_acc_id."'");
   else
-    $aresult = $sql['logon']->query('SELECT username AS login FROM account WHERE id = '.$owner_acc_id.'');
+    $aresult = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$owner_acc_id."'");
   $owner = $sql['logon']->fetch_assoc($aresult);
   $owner_name = $owner['login'];
   $s_query = "SELECT SecurityLevel FROM config_accounts WHERE Login='".$owner_name."'";
@@ -97,7 +97,7 @@ function char_view()
   $s_fields = $sql['mgr']->fetch_assoc($s_result);
   $owner_gmlvl = $s_fields['gm'];
   
-  if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
+  if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
   {
     if ( $core == 1 )
     {
@@ -275,7 +275,7 @@ function char_view()
               <ul>
                 <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>
                 <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'inventory').'</a></li>
-                '.(($char['level'] < 10) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>').'
+                '.( ( $char['level'] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>' ).'
                 <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'achievements').'</a></li>
                 <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'quests').'</a></li>
                 <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'friends').'</a></li>
@@ -285,10 +285,8 @@ function char_view()
             <div id="tab_content">
               <font class="bold">
                 '.htmlentities($char['name']).' -
-                <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif"
-                  onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
-                <img src="img/c_icons/'.$char['class'].'.gif"
-                  onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'
+                <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'
               </font>
               <div id="model_scene" align="center">
                 <object id="wowhead" type="application/x-shockwave-flash"
@@ -301,43 +299,43 @@ function char_view()
                   <param name="flashvars" value="model='.char_racegender($char['race'], $char['gender']).'
                     &modelType=16&ha='.$ha.'&hc='.$hc.'&fa='.$fa.'&sk='.$sk.'&fh='.$fh.'&fc=0
                     &contentPath=http://static.wowhead.com/modelviewer/&blur=1&equipList=';
-    if ($item_head)
+    if ( $item_head )
       $output .= '
                     1,'.wowhead_did($item_head).',';
-    if ($item_shoulder)
+    if ( $item_shoulder )
       $output .= '
                     3,'.wowhead_did($item_shoulder).',';
-    if ($item_back)
+    if ( $item_back )
       $output .= '
                     16,'.wowhead_did($item_back).',';
-    if ($item_shirt)
+    if ( $item_shirt )
       $output .= '
                     4,'.wowhead_did($item_shirt).',';
-    if ($item_chest)
+    if ( $item_chest )
       $output .= '
                     5,'.wowhead_did($item_chest).',';
-    if ($item_wrist)
+    if ( $item_wrist )
       $output .= '
                     9,'.wowhead_did($item_wrist).',';
-    if ($item_gloves)
+    if ( $item_gloves )
       $output .= '
                     10,'.wowhead_did($item_gloves).',';
-    if ($item_belt)
+    if ( $item_belt )
       $output .= '
                     6,'.wowhead_did($item_belt).',';
-    if ($item_legs)
+    if ( $item_legs )
       $output .= '
                     7,'.wowhead_did($item_legs).',';
-    if ($item_feet)
+    if ( $item_feet )
       $output .= '
                     8,'.wowhead_did($item_feet).',';
-    if ($item_off_hand)
+    if ( $item_off_hand )
       $output .= '
                     14,'.wowhead_did($item_off_hand).',';
-    if ($item_main_hand)
+    if ( $item_main_hand )
       $output .= '
                     21,'.wowhead_did($item_main_hand).',';
-    if ($item_tabard)
+    if ( $item_tabard )
       $output .= '
                     19,'.wowhead_did($item_tabard).',';
                     
@@ -354,15 +352,15 @@ function char_view()
             <table class="hidden">
               <tr>
                 <td>';
-                  // button to user account page, user account page has own security
-                  makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
+      // button to user account page, user account page has own security
+      makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
       $output .= '
                 </td>
                 <td>';
 
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
-      if ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) )
+      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) )
       {
                   //makebutton($lang_char['edit_button'], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
         $output .= '
@@ -370,22 +368,22 @@ function char_view()
                 <td>';
       }
       // only higher level GM with delete access, or character owner can delete character
-      if ( ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) ) || ($owner_name === $user_name) )
+      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) ) || ( $owner_name === $user_name ) )
       {
-                  makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
+        makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only GM with update permission can send mail, mail can send items, so update permission is needed
-      if ($user_lvl >= $action_permission['update'])
+      if ( $user_lvl >= $action_permission['update'] )
       {
-                  makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
+        makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
         $output .= '
                 </td>
                 <td>';
       }
-                  makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+      makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>
               </tr>
@@ -402,8 +400,8 @@ function char_view()
 // MAIN
 //########################################################################################################################
 
-$output .= "
-      <div class=\"bubble\">";
+$output .= '
+      <div class="bubble">';
 
 char_view();
 

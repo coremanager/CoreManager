@@ -34,31 +34,34 @@ function char_rep()
   $reputation_rank = fact_get_reputation_rank_arr();
   $reputation_rank_length = fact_get_reputation_rank_length();
 
-  if (empty($_GET['id']))
+  if ( empty($_GET['id']) )
     error(lang('global', 'empty_fields'));
 
   // this is multi realm support, as of writing still under development
   //  this page is already implementing it
-  if (empty($_GET['realm']))
+  if ( empty($_GET['realm']) )
     $realmid = $realm_id;
   else
   {
     $realmid = $sql['logon']->quote_smart($_GET['realm']);
-    if (is_numeric($realmid))
+    if ( is_numeric($realmid) )
       $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
   $id = $sql['char']->quote_smart($_GET['id']);
-  if (is_numeric($id)); else $id = 0;
+  if ( is_numeric($id) )
+    ;
+  else
+    $id = 0;
 
   if ( $core == 1 )
-    $result = $sql['char']->query('SELECT acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql['char']->query("SELECT acct, name, race, class, level, gender FROM characters WHERE guid='".$id."' LIMIT 1");
   else
-    $result = $sql['char']->query('SELECT account AS acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql['char']->query("SELECT account AS acct, name, race, class, level, gender FROM characters WHERE guid='".$id."' LIMIT 1");
 
-  if ($sql['char']->num_rows($result))
+  if ( $sql['char']->num_rows($result) )
   {
     $char = $sql['char']->fetch_assoc($result);
 
@@ -72,7 +75,7 @@ function char_rep()
     $result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
     $owner_gmlvl = $sql['mgr']->result($result, 0, 'gm');
 
-    if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
+    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
     {
       // this_is_junk: ArcEmu stores reputation in a single field
       //               [faction id][unk1][unk2][standing],
@@ -88,9 +91,9 @@ function char_rep()
         $factions = array();
         $faction_ranks = array();
         $pick = 0;
-        foreach ($result as $t)
+        foreach ( $result as $t )
         {
-          switch($pick)
+          switch ( $pick )
           {
             case 0:
             {
@@ -138,7 +141,7 @@ function char_rep()
               <ul>
                 <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>
                 <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'inventory').'</a></li>
-                '.(($char['level'] < 10) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>').'
+                '.( ( $char['level'] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>' ).'
                 <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'achievements').'</a></li>
                 <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'quests').'</a></li>
                 <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'friends').'</a></li>
@@ -149,7 +152,7 @@ function char_rep()
               <div id="tab">
                 <ul>
                   <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>';
-      if( char_get_class_name($char['class']) == 'Hunter' )
+      if ( char_get_class_name($char['class']) == 'Hunter' )
         $output .= '
                   <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'pets').'</a></li>';
       $output .= '
@@ -164,10 +167,8 @@ function char_rep()
               <div id="tab_content2">
                 <font class="bold">
                   '.htmlentities($char['name']).' -
-                  <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif"
-                    onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
-                  <img src="img/c_icons/'.$char['class'].'.gif"
-                    onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'
+                  <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                  <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'
                 </font>
                 <br /><br />';
 
@@ -183,7 +184,7 @@ function char_rep()
                   </tr>
                   <tr>
                     <td>
-                      <table id="i1" class="lined" style="width: 535px; display: table;">',0),
+                      <table id="i1" class="lined" style="width: 535px; display: table;">', 0),
         2 => array('
                 <table class="lined" id="ch_rep_rep">
                   <tr>
@@ -193,7 +194,7 @@ function char_rep()
                   </tr>
                   <tr>
                     <td>
-                      <table id="i2" class="lined" style="width: 535px; display: table;">',0),
+                      <table id="i2" class="lined" style="width: 535px; display: table;">', 0),
         3 => array('
                 <table class="lined" id="ch_rep_rep">
                   <tr>
@@ -203,7 +204,7 @@ function char_rep()
                   </tr>
                   <tr>
                     <td>
-                      <table id="i3" class="lined" style="width: 535px; display: table;">',0),
+                      <table id="i3" class="lined" style="width: 535px; display: table;">', 0),
         4 => array('
                 <table class="lined" id="ch_rep_rep">
                   <tr>
@@ -213,7 +214,7 @@ function char_rep()
                   </tr>
                   <tr>
                     <td>
-                      <table id="i4" class="lined" style="width: 535px; display: table;">',0),
+                      <table id="i4" class="lined" style="width: 535px; display: table;">', 0),
         5 => array('
                 <table class="lined" id="ch_rep_rep">
                   <tr>
@@ -223,7 +224,7 @@ function char_rep()
                   </tr>
                   <tr>
                     <td>
-                      <table id="i5" class="lined" style="width: 535px; display: table;">',0),
+                      <table id="i5" class="lined" style="width: 535px; display: table;">', 0),
         6 => array('
                 <table class="lined" id="ch_rep_rep">
                   <tr>
@@ -233,7 +234,7 @@ function char_rep()
                   </tr>
                   <tr>
                     <td>
-                      <table id="i6" class="lined" style="width: 535px; display: table;">',0),
+                      <table id="i6" class="lined" style="width: 535px; display: table;">', 0),
         7 => array('
                 <table class="lined" id="ch_rep_rep">
                   <tr>
@@ -243,7 +244,7 @@ function char_rep()
                   </tr>
                   <tr>
                     <td>
-                      <table id="i7" class="lined" style="width: 535px; display: table;">',0),
+                      <table id="i7" class="lined" style="width: 535px; display: table;">', 0),
         8 => array('
                 <table class="lined" id="ch_rep_rep">
                   <tr>
@@ -253,7 +254,7 @@ function char_rep()
                   </tr>
                   <tr>
                     <td>
-                      <table id="i8" class="lined" style="width: 535px; display: table;">',0),
+                      <table id="i8" class="lined" style="width: 535px; display: table;">', 0),
         9 => array('
                 <table class="lined" id="ch_rep_rep">
                   <tr>
@@ -263,7 +264,7 @@ function char_rep()
                   </tr>
                   <tr>
                     <td>
-                      <table id="i9" class="lined" style="width: 535px; display: table;">',0),
+                      <table id="i9" class="lined" style="width: 535px; display: table;">', 0),
        10 => array('
                 <table class="lined" id="ch_rep_rep">
                   <tr>
@@ -273,7 +274,7 @@ function char_rep()
                   </tr>
                   <tr>
                     <td>
-                      <table id="i10" class="lined" style="width: 535px; display: table;">',0),
+                      <table id="i10" class="lined" style="width: 535px; display: table;">', 0),
        11 => array('
                 <table class="lined" id="ch_rep_rep">
                   <tr>
@@ -283,7 +284,7 @@ function char_rep()
                   </tr>
                   <tr>
                     <td>
-                      <table id="i11" class="lined" style="width: 535px; display: table;">',0),
+                      <table id="i11" class="lined" style="width: 535px; display: table;">', 0),
        12 => array('
                 <table class="lined" id="ch_rep_rep">
                   <tr>
@@ -293,7 +294,7 @@ function char_rep()
                   </tr>
                   <tr>
                     <td>
-                      <table id="i12" class="lined" style="width: 535px; display: table;">',0),
+                      <table id="i12" class="lined" style="width: 535px; display: table;">', 0),
         0 => array('
                 <table class="lined" id="ch_rep_rep">
                   <tr>
@@ -303,12 +304,12 @@ function char_rep()
                   </tr>
                   <tr>
                     <td>
-                      <table id="i13" class="lined" style="width: 535px; display: table;">',0),
+                      <table id="i13" class="lined" style="width: 535px; display: table;">', 0),
       );
 
-      if (count($factions) > 1)
+      if ( count($factions) > 1 )
       {
-        for ($i = 0; $i < count($factions); $i++)
+        for ( $i = 0; $i < count($factions); $i++ )
         {
           $faction  = $factions[$i];
           $standing = $faction_ranks[$i];
@@ -321,8 +322,8 @@ function char_rep()
           $ft            = fact_get_faction_tree($faction);
 
           // not show alliance rep for horde and vice versa:
-          if ((((1 << ($char['race'] - 1)) & 690) && ($ft == 1 || $ft == 3))
-            || ( ((1 << ($char['race'] - 1)) & 1101) && ($ft == 2 || $ft == 4)));
+          if ( ( ((1 << ($char['race'] - 1)) & 690) && ( ( $ft == 1 ) || ( $ft == 3 ) ) ) || ( ((1 << ($char['race'] - 1)) & 1101) && ( ( $ft == 2 ) || ( $ft == 4 ) ) ) )
+            ;
           else
           {
             // this_is_junk: style left hardcoded because it's calculated.
@@ -349,8 +350,8 @@ function char_rep()
                           <td colspan="2"><br /><br />'.lang('global', 'err_no_records_found').'<br /><br /></td>
                         </tr>';
 
-      foreach ($temp_out as $out)
-        if ($out[1])
+      foreach ( $temp_out as $out )
+        if ( $out[1] )
           $output .= $out[0].'
                       </table>
                     </td>
@@ -365,15 +366,15 @@ function char_rep()
             <table class="hidden">
               <tr>
                 <td>';
-                  // button to user account page, user account page has own security
-                  makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
+      // button to user account page, user account page has own security
+      makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
       $output .= '
                 </td>
                 <td>';
 
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
-      if ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) )
+      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) )
       {
                   //makebutton($lang_char['edit_button'], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
         $output .= '
@@ -381,22 +382,22 @@ function char_rep()
                 <td>';
       }
       // only higher level GM with delete access, or character owner can delete character
-      if ( ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) ) || ($owner_name === $user_name) )
+      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) ) || ( $owner_name === $user_name ) )
       {
-                  makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
+        makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only GM with update permission can send mail, mail can send items, so update permission is needed
-      if ($user_lvl >= $action_permission['update'])
+      if ( $user_lvl >= $action_permission['update'] )
       {
-                  makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
+        makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
         $output .= '
                 </td>
                 <td>';
       }
-                  makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+      makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>
               </tr>
@@ -420,16 +421,12 @@ function char_rep()
 
 //$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-//$lang_char = lang_char();
-
-$output .= "
-      <div class=\"bubble\">";
+$output .= '
+      <div class="bubble">';
 
 char_rep();
 
-//unset($action);
 unset($action_permission);
-//unset($lang_char);
 
 require_once 'footer.php';
 

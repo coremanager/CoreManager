@@ -38,30 +38,30 @@ function char_main()
   //wowhead_tt();
 
   // we need at either an id or a name or we would have nothing to show
-  if (empty($_GET['id']))
-    if (empty($_GET['name']))
+  if ( empty($_GET['id']) )
+    if ( empty($_GET['name']) )
       error(lang('global', 'empty_fields'));
 
   // this is multi realm support, as of writing still under development
   // this page is already implementing it
-  if (empty($_GET['realm']))
+  if ( empty($_GET['realm']) )
     $realmid = $realm_id;
   else
   {
     $realmid = $sql['logon']->quote_smart($_GET['realm']);
-    if (is_numeric($realmid))
+    if ( is_numeric($realmid) )
       $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
-  if (empty($_GET['id']))
+  if ( empty($_GET['id']) )
   {
     $name = $sql['char']->quote_smart($_GET['name']);
     if ( $core == 1 )
-      $result = $sql['char']->query("SELECT guid, acct, race FROM characters WHERE name = '".$name."' LIMIT 1");
+      $result = $sql['char']->query("SELECT guid, acct, race FROM characters WHERE name='".$name."' LIMIT 1");
     else
-      $result = $sql['char']->query("SELECT guid, id AS acct, race FROM characters WHERE name = '".$name."' LIMIT 1");
+      $result = $sql['char']->query("SELECT guid, id AS acct, race FROM characters WHERE name='".$name."' LIMIT 1");
     $id_result = $sql['char']->fetch_assoc($result);
     $id = $id_result['guid'];
   }
@@ -70,17 +70,17 @@ function char_main()
     $id = $sql['char']->quote_smart($_GET['id']);
   }
 
-  if (is_numeric($id))
+  if ( is_numeric($id) )
     ;
   else 
     error(lang('global', 'empty_fields'));
 
   if ( $core == 1 )
-    $result = $sql['char']->query('SELECT acct, race FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql['char']->query('SELECT acct, race FROM characters WHERE guid='.$id.' LIMIT 1');
   else
-    $result = $sql['char']->query('SELECT account AS acct, race FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql['char']->query('SELECT account AS acct, race FROM characters WHERE guid='.$id.' LIMIT 1');
 
-  if ($sql['char']->num_rows($result))
+  if ( $sql['char']->num_rows($result) )
   {
     //resrict by owner's gmlvl
     $owner_acc_id = $sql['char']->result($result, 0, 'acct');
@@ -93,30 +93,30 @@ function char_main()
     $query = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
     $owner_gmlvl = $sql['mgr']->result($query, 0, 'gm');
 
-    if($user_lvl || $server[$realmid]['both_factions'])
+    if ( $user_lvl || $server[$realmid]['both_factions'] )
     {
       $side_v = 0;
       $side_p = 0;
     }
     else
     {
-      $side_p = (in_array($sql['char']->result($result, 0, 'race'),array(2,5,6,8,10))) ? 1 : 2;
-      $result_1 = $sql['char']->query('SELECT race FROM characters WHERE acct = '.$user_id.' LIMIT 1');
-      if ($sql['char']->num_rows($result))
-        $side_v = (in_array($sql['char']->result($result_1, 0, 'race'), array(2,5,6,8,10))) ? 1 : 2;
+      $side_p = ( ( in_array($sql['char']->result($result, 0, 'race'), array(2, 5, 6, 8, 10)) ) ? 1 : 2 );
+      $result_1 = $sql['char']->query('SELECT race FROM characters WHERE acct='.$user_id.' LIMIT 1');
+      if ( $sql['char']->num_rows($result) )
+        $side_v = ( ( in_array($sql['char']->result($result_1, 0, 'race'), array(2, 5, 6, 8, 10)) ) ? 1 : 2 );
       else
         $side_v = 0;
       unset($result_1);
     }
 
-    if ($user_lvl >= gmlevel($owner_gmlvl) && (($side_v === $side_p) || !$side_v))
+    if ( ( $user_lvl >= gmlevel($owner_gmlvl) ) && ( ( $side_v === $side_p ) || !$side_v ) )
     {
       if ( $core == 1 )
       {
         $result = $sql['char']->query("SELECT guid, name, race, class, level, zoneid, mapid, online, gender,
           SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1) AS totaltime,
           acct, data, timestamp, xp 
-          FROM characters WHERE guid = '".$id."'");
+          FROM characters WHERE guid='".$id."'");
       }
       elseif ( $core == 2 )
       {
@@ -124,21 +124,21 @@ function char_main()
           online, gender, totaltime, account AS acct, logout_time AS timestamp, health, 
 					power1, power2, power3, power4, power5, power6, power7, xp,
           arenaPoints, totalHonorPoints, totalKills
-          FROM characters WHERE guid = '".$id."'");
+          FROM characters WHERE guid='".$id."'");
       }
       else
       {
         $result = $sql['char']->query("SELECT guid, name, race, class, level, zone AS zoneid, map AS mapid, 
           online, gender, totaltime, account AS acct, logout_time AS timestamp, health, 
 					power1, power2, power3, power4, power5, power6, power7, xp, arenaPoints, totalHonorPoints, totalKills
-          FROM characters WHERE guid = '".$id."'");
+          FROM characters WHERE guid='".$id."'");
       }
       $char = $sql['char']->fetch_assoc($result);
       
       if ( $core == 1 )
       {
         $char_data = $char['data'];
-        if (empty($char_data))
+        if ( empty($char_data) )
           $char_data = str_repeat('0;', PLAYER_END);
         $char_data = explode(';',$char_data);
       }
@@ -212,17 +212,17 @@ function char_main()
         $guild_name = $sql['char']->result($sql['char']->query("SELECT name AS guildName FROM guild WHERE guildid='".$guild_id."'"));
       }
 
-      $online = ($char['online']) ? lang('char', 'online') : lang('char', 'offline');
+      $online = ( ( $char['online'] ) ? lang('char', 'online') : lang('char', 'offline') );
 
-      if($guild_id)
+      if ( $guild_id )
       {
         //$guild_name = $sql['char']->result($sql['char']->query('SELECT name FROM guild WHERE guildid ='.$char_data[CHAR_DATA_OFFSET_GUILD_ID].''), 0, 'name');
         $guild_name = '<a href="guild.php?action=view_guild&amp;realm='.$realmid.'&amp;error=3&amp;id='.$guild_id.'" >'.$guild_name.'</a>';
         $mrank = $guild_rank;
         if ( $core == 1 )
-          $guild_rank = $sql['char']->result($sql['char']->query('SELECT rankname FROM guild_ranks WHERE guildid ='.$guild_id.' AND rankId='.$mrank.''), 0, 'rankname');
+          $guild_rank = $sql['char']->result($sql['char']->query('SELECT rankname FROM guild_ranks WHERE guildid='.$guild_id.' AND rankId='.$mrank.''), 0, 'rankname');
         else
-          $guild_rank = $sql['char']->result($sql['char']->query('SELECT rname AS rankname FROM guild_rank WHERE guildid ='.$guild_id.' AND rid='.$mrank.''), 0, 'rankname');
+          $guild_rank = $sql['char']->result($sql['char']->query('SELECT rname AS rankname FROM guild_rank WHERE guildid='.$guild_id.' AND rid='.$mrank.''), 0, 'rankname');
       }
       else
       {
@@ -276,11 +276,11 @@ function char_main()
       if ( $core == 1 )
       {
         $spell_crit = 100;
-        for ($i=0; $i<6; ++$i)
+        for ( $i=0; $i<6; ++$i )
         {
           $temp = unpack('f', pack('L', $char_data[PLAYER_SPELL_CRIT_PERCENTAGE1+1+$i]));
-          if ($temp[1] < $spell_crit)
-          $spell_crit = $temp[1];
+          if ( $temp[1] < $spell_crit )
+            $spell_crit = $temp[1];
         }
         $spell_crit = round($spell_crit,2);
       }
@@ -293,10 +293,10 @@ function char_main()
       if ( $core == 1 )
       {
         $spell_damage = 9999;
-        for ($i=0; $i<6; ++$i)
+        for ( $i=0; $i<6; ++$i )
         {
-          if ($char_data[PLAYER_FIELD_MOD_DAMAGE_DONE_POS+1+$i] < $spell_damage)
-          $spell_damage = $char_data[PLAYER_FIELD_MOD_DAMAGE_DONE_POS+1+$i];
+          if ( $char_data[PLAYER_FIELD_MOD_DAMAGE_DONE_POS+1+$i] < $spell_damage )
+            $spell_damage = $char_data[PLAYER_FIELD_MOD_DAMAGE_DONE_POS+1+$i];
         }
       }
       else
@@ -364,14 +364,18 @@ function char_main()
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 60), ' ', -1) AS property,
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 62), ' ', -1) AS durability,
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 22), ' ', -1) AS flags
-        FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid='".$id."' AND character_inventory.bag=0";
+          FROM character_inventory
+            LEFT JOIN item_instance ON character_inventory.item=item_instance.guid
+          WHERE character_inventory.guid='".$id."' AND character_inventory.bag=0";
       }
       else
       {
         $char_equip_query = "SELECT *,
           creatorGuid AS creator, enchantments AS enchantment,
           randomPropertyId AS property, durability, flags
-        FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid='".$id."' AND character_inventory.bag=0";
+          FROM character_inventory
+            LEFT JOIN item_instance ON character_inventory.item=item_instance.guid
+          WHERE character_inventory.guid='".$id."' AND character_inventory.bag=0";
       }
 
       $char_equip_result = $sql['char']->query($char_equip_query);
@@ -497,55 +501,28 @@ function char_main()
         }
       }
       //}
-/*
-// reserved incase we want to use back CoreManager's built in tooltip, instead of wowheads'
-// CoreManager's item tooltip needs updating, but it can show enchantments and sockets.
 
       $equiped_items = array
       (
-         1 => array(($EQU_HEAD      ? get_item_tooltip($EQU_HEAD)      : 0),($EQU_HEAD      ? get_item_icon($EQU_HEAD)      : 0),($EQU_HEAD      ? get_item_border($EQU_HEAD)      : 0)),
-         2 => array(($EQU_NECK      ? get_item_tooltip($EQU_NECK)      : 0),($EQU_NECK      ? get_item_icon($EQU_NECK)      : 0),($EQU_NECK      ? get_item_border($EQU_NECK)      : 0)),
-         3 => array(($EQU_SHOULDER  ? get_item_tooltip($EQU_SHOULDER)  : 0),($EQU_SHOULDER  ? get_item_icon($EQU_SHOULDER)  : 0),($EQU_SHOULDER  ? get_item_border($EQU_SHOULDER)  : 0)),
-         4 => array(($EQU_SHIRT     ? get_item_tooltip($EQU_SHIRT)     : 0),($EQU_SHIRT     ? get_item_icon($EQU_SHIRT)     : 0),($EQU_SHIRT     ? get_item_border($EQU_SHIRT)     : 0)),
-         5 => array(($EQU_CHEST     ? get_item_tooltip($EQU_CHEST)     : 0),($EQU_CHEST     ? get_item_icon($EQU_CHEST)     : 0),($EQU_CHEST     ? get_item_border($EQU_CHEST)     : 0)),
-         6 => array(($EQU_BELT      ? get_item_tooltip($EQU_BELT)      : 0),($EQU_BELT      ? get_item_icon($EQU_BELT)      : 0),($EQU_BELT      ? get_item_border($EQU_BELT)      : 0)),
-         7 => array(($EQU_LEGS      ? get_item_tooltip($EQU_LEGS)      : 0),($EQU_LEGS      ? get_item_icon($EQU_LEGS)      : 0),($EQU_LEGS      ? get_item_border($EQU_LEGS)      : 0)),
-         8 => array(($EQU_FEET      ? get_item_tooltip($EQU_FEET)      : 0),($EQU_FEET      ? get_item_icon($EQU_FEET)      : 0),($EQU_FEET      ? get_item_border($EQU_FEET)      : 0)),
-         9 => array(($EQU_WRIST     ? get_item_tooltip($EQU_WRIST)     : 0),($EQU_WRIST     ? get_item_icon($EQU_WRIST)     : 0),($EQU_WRIST     ? get_item_border($EQU_WRIST)     : 0)),
-        10 => array(($EQU_GLOVES    ? get_item_tooltip($EQU_GLOVES)    : 0),($EQU_GLOVES    ? get_item_icon($EQU_GLOVES)    : 0),($EQU_GLOVES    ? get_item_border($EQU_GLOVES)    : 0)),
-        11 => array(($EQU_FINGER1   ? get_item_tooltip($EQU_FINGER1)   : 0),($EQU_FINGER1   ? get_item_icon($EQU_FINGER1)   : 0),($EQU_FINGER1   ? get_item_border($EQU_FINGER1)   : 0)),
-        12 => array(($EQU_FINGER2   ? get_item_tooltip($EQU_FINGER2)   : 0),($EQU_FINGER2   ? get_item_icon($EQU_FINGER2)   : 0),($EQU_FINGER2   ? get_item_border($EQU_FINGER2)   : 0)),
-        13 => array(($EQU_TRINKET1  ? get_item_tooltip($EQU_TRINKET1)  : 0),($EQU_TRINKET1  ? get_item_icon($EQU_TRINKET1)  : 0),($EQU_TRINKET1  ? get_item_border($EQU_TRINKET1)  : 0)),
-        14 => array(($EQU_TRINKET2  ? get_item_tooltip($EQU_TRINKET2)  : 0),($EQU_TRINKET2  ? get_item_icon($EQU_TRINKET2)  : 0),($EQU_TRINKET2  ? get_item_border($EQU_TRINKET2)  : 0)),
-        15 => array(($EQU_BACK      ? get_item_tooltip($EQU_BACK)      : 0),($EQU_BACK      ? get_item_icon($EQU_BACK)      : 0),($EQU_BACK      ? get_item_border($EQU_BACK)      : 0)),
-        16 => array(($EQU_MAIN_HAND ? get_item_tooltip($EQU_MAIN_HAND) : 0),($EQU_MAIN_HAND ? get_item_icon($EQU_MAIN_HAND) : 0),($EQU_MAIN_HAND ? get_item_border($EQU_MAIN_HAND) : 0)),
-        17 => array(($EQU_OFF_HAND  ? get_item_tooltip($EQU_OFF_HAND)  : 0),($EQU_OFF_HAND  ? get_item_icon($EQU_OFF_HAND)  : 0),($EQU_OFF_HAND  ? get_item_border($EQU_OFF_HAND)  : 0)),
-        18 => array(($EQU_RANGED    ? get_item_tooltip($EQU_RANGED)    : 0),($EQU_RANGED    ? get_item_icon($EQU_RANGED)    : 0),($EQU_RANGED    ? get_item_border($EQU_RANGED)    : 0)),
-        19 => array(($EQU_TABARD    ? get_item_tooltip($EQU_TABARD)    : 0),($EQU_TABARD    ? get_item_icon($EQU_TABARD)    : 0),($EQU_TABARD    ? get_item_border($EQU_TABARD)    : 0))
-      );
-*/
-
-      $equiped_items = array
-      (
-         1 => array('',($EQU_HEAD      ? get_item_icon($EQU_HEAD)      : 0),($EQU_HEAD      ? get_item_border($EQU_HEAD)      : 0), $EQU_HEAD_ROW),
-         2 => array('',($EQU_NECK      ? get_item_icon($EQU_NECK)      : 0),($EQU_NECK      ? get_item_border($EQU_NECK)      : 0), $EQU_NECK_ROW),
-         3 => array('',($EQU_SHOULDER  ? get_item_icon($EQU_SHOULDER)  : 0),($EQU_SHOULDER  ? get_item_border($EQU_SHOULDER)  : 0), $EQU_SHOULDER_ROW),
-         4 => array('',($EQU_SHIRT     ? get_item_icon($EQU_SHIRT)     : 0),($EQU_SHIRT     ? get_item_border($EQU_SHIRT)     : 0), $EQU_SHIRT_ROW),
-         5 => array('',($EQU_CHEST     ? get_item_icon($EQU_CHEST)     : 0),($EQU_CHEST     ? get_item_border($EQU_CHEST)     : 0), $EQU_CHEST_ROW),
-         6 => array('',($EQU_BELT      ? get_item_icon($EQU_BELT)      : 0),($EQU_BELT      ? get_item_border($EQU_BELT)      : 0), $EQU_BELT_ROW),
-         7 => array('',($EQU_LEGS      ? get_item_icon($EQU_LEGS)      : 0),($EQU_LEGS      ? get_item_border($EQU_LEGS)      : 0), $EQU_LEGS_ROW),
-         8 => array('',($EQU_FEET      ? get_item_icon($EQU_FEET)      : 0),($EQU_FEET      ? get_item_border($EQU_FEET)      : 0), $EQU_FEET_ROW),
-         9 => array('',($EQU_WRIST     ? get_item_icon($EQU_WRIST)     : 0),($EQU_WRIST     ? get_item_border($EQU_WRIST)     : 0), $EQU_WRIST_ROW),
-        10 => array('',($EQU_GLOVES    ? get_item_icon($EQU_GLOVES)    : 0),($EQU_GLOVES    ? get_item_border($EQU_GLOVES)    : 0), $EQU_GLOVES_ROW),
-        11 => array('',($EQU_FINGER1   ? get_item_icon($EQU_FINGER1)   : 0),($EQU_FINGER1   ? get_item_border($EQU_FINGER1)   : 0), $EQU_FINGER1_ROW),
-        12 => array('',($EQU_FINGER2   ? get_item_icon($EQU_FINGER2)   : 0),($EQU_FINGER2   ? get_item_border($EQU_FINGER2)   : 0), $EQU_FINGER2_ROW),
-        13 => array('',($EQU_TRINKET1  ? get_item_icon($EQU_TRINKET1)  : 0),($EQU_TRINKET1  ? get_item_border($EQU_TRINKET1)  : 0), $EQU_TRINKET1_ROW),
-        14 => array('',($EQU_TRINKET2  ? get_item_icon($EQU_TRINKET2)  : 0),($EQU_TRINKET2  ? get_item_border($EQU_TRINKET2)  : 0), $EQU_TRINKET2_ROW),
-        15 => array('',($EQU_BACK      ? get_item_icon($EQU_BACK)      : 0),($EQU_BACK      ? get_item_border($EQU_BACK)      : 0), $EQU_BACK_ROW),
-        16 => array('',($EQU_MAIN_HAND ? get_item_icon($EQU_MAIN_HAND) : 0),($EQU_MAIN_HAND ? get_item_border($EQU_MAIN_HAND) : 0), $EQU_MAIN_HAND_ROW),
-        17 => array('',($EQU_OFF_HAND  ? get_item_icon($EQU_OFF_HAND)  : 0),($EQU_OFF_HAND  ? get_item_border($EQU_OFF_HAND)  : 0), $EQU_OFF_HAND_ROW),
-        18 => array('',($EQU_RANGED    ? get_item_icon($EQU_RANGED)    : 0),($EQU_RANGED    ? get_item_border($EQU_RANGED)    : 0), $EQU_RANGED_ROW),
-        19 => array('',($EQU_TABARD    ? get_item_icon($EQU_TABARD)    : 0),($EQU_TABARD    ? get_item_border($EQU_TABARD)    : 0), $EQU_TABARD_ROW)
+         1 => array('', ( ( $EQU_HEAD )      ? get_item_icon($EQU_HEAD)      : 0 ), ( ( $EQU_HEAD )      ? get_item_border($EQU_HEAD)      : 0 ), $EQU_HEAD_ROW),
+         2 => array('', ( ( $EQU_NECK )      ? get_item_icon($EQU_NECK)      : 0 ), ( ( $EQU_NECK )      ? get_item_border($EQU_NECK)      : 0 ), $EQU_NECK_ROW),
+         3 => array('', ( ( $EQU_SHOULDER )  ? get_item_icon($EQU_SHOULDER)  : 0 ), ( ( $EQU_SHOULDER )  ? get_item_border($EQU_SHOULDER)  : 0 ), $EQU_SHOULDER_ROW),
+         4 => array('', ( ( $EQU_SHIRT )     ? get_item_icon($EQU_SHIRT)     : 0 ), ( ( $EQU_SHIRT )     ? get_item_border($EQU_SHIRT)     : 0 ), $EQU_SHIRT_ROW),
+         5 => array('', ( ( $EQU_CHEST )     ? get_item_icon($EQU_CHEST)     : 0 ), ( ( $EQU_CHEST )     ? get_item_border($EQU_CHEST)     : 0 ), $EQU_CHEST_ROW),
+         6 => array('', ( ( $EQU_BELT )      ? get_item_icon($EQU_BELT)      : 0 ), ( ( $EQU_BELT )      ? get_item_border($EQU_BELT)      : 0 ), $EQU_BELT_ROW),
+         7 => array('', ( ( $EQU_LEGS )      ? get_item_icon($EQU_LEGS)      : 0 ), ( ( $EQU_LEGS )      ? get_item_border($EQU_LEGS)      : 0 ), $EQU_LEGS_ROW),
+         8 => array('', ( ( $EQU_FEET )      ? get_item_icon($EQU_FEET)      : 0 ), ( ( $EQU_FEET )      ? get_item_border($EQU_FEET)      : 0 ), $EQU_FEET_ROW),
+         9 => array('', ( ( $EQU_WRIST )     ? get_item_icon($EQU_WRIST)     : 0 ), ( ( $EQU_WRIST )     ? get_item_border($EQU_WRIST)     : 0 ), $EQU_WRIST_ROW),
+        10 => array('', ( ( $EQU_GLOVES )    ? get_item_icon($EQU_GLOVES)    : 0 ), ( ( $EQU_GLOVES )    ? get_item_border($EQU_GLOVES)    : 0 ), $EQU_GLOVES_ROW),
+        11 => array('', ( ( $EQU_FINGER1 )   ? get_item_icon($EQU_FINGER1)   : 0 ), ( ( $EQU_FINGER1 )   ? get_item_border($EQU_FINGER1)   : 0 ), $EQU_FINGER1_ROW),
+        12 => array('', ( ( $EQU_FINGER2 )   ? get_item_icon($EQU_FINGER2)   : 0 ), ( ( $EQU_FINGER2 )   ? get_item_border($EQU_FINGER2)   : 0 ), $EQU_FINGER2_ROW),
+        13 => array('', ( ( $EQU_TRINKET1 )  ? get_item_icon($EQU_TRINKET1)  : 0 ), ( ( $EQU_TRINKET1 )  ? get_item_border($EQU_TRINKET1)  : 0 ), $EQU_TRINKET1_ROW),
+        14 => array('', ( ( $EQU_TRINKET2 )  ? get_item_icon($EQU_TRINKET2)  : 0 ), ( ( $EQU_TRINKET2 )  ? get_item_border($EQU_TRINKET2)  : 0 ), $EQU_TRINKET2_ROW),
+        15 => array('', ( ( $EQU_BACK )      ? get_item_icon($EQU_BACK)      : 0 ), ( ( $EQU_BACK )      ? get_item_border($EQU_BACK)      : 0 ), $EQU_BACK_ROW),
+        16 => array('', ( ( $EQU_MAIN_HAND ) ? get_item_icon($EQU_MAIN_HAND) : 0 ), ( ( $EQU_MAIN_HAND ) ? get_item_border($EQU_MAIN_HAND) : 0 ), $EQU_MAIN_HAND_ROW),
+        17 => array('', ( ( $EQU_OFF_HAND )  ? get_item_icon($EQU_OFF_HAND)  : 0 ), ( ( $EQU_OFF_HAND )  ? get_item_border($EQU_OFF_HAND)  : 0 ), $EQU_OFF_HAND_ROW),
+        18 => array('', ( ( $EQU_RANGED )    ? get_item_icon($EQU_RANGED)    : 0 ), ( ( $EQU_RANGED )    ? get_item_border($EQU_RANGED)    : 0 ), $EQU_RANGED_ROW),
+        19 => array('', ( ( $EQU_TABARD )    ? get_item_icon($EQU_TABARD)    : 0 ), ( ( $EQU_TABARD )    ? get_item_border($EQU_TABARD)    : 0 ), $EQU_TABARD_ROW)
       );
 
       $output .= '
@@ -555,11 +532,11 @@ function char_main()
               <ul>
                 <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>';
 
-      if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
       {
         $output .= '
                 <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'inventory').'</a></li>
-                '.(($char['level'] < 10) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>').'
+                '.( ( $char['level'] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>' ).'
                 <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'achievements').'</a></li>
                 <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'quests').'</a></li>
                 <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'friends').'</a></li>
@@ -570,7 +547,7 @@ function char_main()
               <div id="tab">
                 <ul>
                   <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>';
-        if (char_get_class_name($char['class']) === 'Hunter' )
+        if ( char_get_class_name($char['class']) === 'Hunter' )
           $output .= '
                   <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'pets').'</a></li>';
         $output .= '
@@ -581,13 +558,14 @@ function char_main()
                   <li><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'mail').'</a></li>';
       }
       else
-        $output .='
+        $output .= '
               </ul>
             </div>
             <div id="tab_content">
               <div id="tab">
                 <ul>';
-      $output .='
+
+      $output .= '
                 </ul>
               </div>
               <div id="tab_content2">
@@ -605,9 +583,9 @@ function char_main()
       else
         $a_results = $sql['char']->query("SELECT DISTINCT spell FROM character_aura WHERE guid='".$id."'");
 
-      if ($sql['char']->num_rows($a_results))
+      if ( $sql['char']->num_rows($a_results) )
       {
-        while ($aura = $sql['char']->fetch_assoc($a_results))
+        while ( $aura = $sql['char']->fetch_assoc($a_results) )
         {
                  $output .= '
                         <a id="char_icon_padding" href="'.$spell_datasite.$aura['spell'].'" target="_blank">
@@ -621,19 +599,19 @@ function char_main()
                     <td colspan="4">
                       <font class="bold">
                         '.htmlentities($char['name']).' -
-                        <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
-                        <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
+                        <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                        <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
                        - '.lang('char', 'level_short').char_get_level_color($char['level']).'
                       </font>
                       <br />'.lang('char', 'location').': '.get_map_name($char['mapid']).' - '.get_zone_name($char['zoneid']).'
                       <br />'.lang('char', 'honor_points').': '.$char_data[PLAYER_FIELD_HONOR_CURRENCY].' | '.lang('char', 'arena_points').': '.$char_data[PLAYER_FIELD_ARENA_CURRENCY].' | '.lang('char', 'honor_kills').': '.$char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS].'
                       <br />'.lang('char', 'guild').': '.$guild_name.' | '.lang('char', 'rank').': '.htmlentities($guild_rank).'
-                      <br />'.lang('char', 'online').': '.(($char['online']) ? '<img src="img/up.gif" onmousemove="toolTip(\'Online\', \'item_tooltip\')" onmouseout="toolTip()" alt="online" />' : '<img src="img/down.gif" onmousemove="toolTip(\'Offline\', \'item_tooltip\')" onmouseout="toolTip()" alt="offline" />');
-      if ($showcountryflag)
+                      <br />'.lang('char', 'online').': '.( ( $char['online'] ) ? '<img src="img/up.gif" onmousemove="oldtoolTip(\'Online\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="online" />' : '<img src="img/down.gif" onmousemove="oldtoolTip(\'Offline\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="offline" />' );
+      if ( $showcountryflag )
       {
         require_once 'libs/misc_lib.php';
         $country = misc_get_country_by_account($char['acct']);
-        $output .= ' | '.lang('global', 'country').': '.(($country['code']) ? '<img src="img/flags/'.$country['code'].'.png" onmousemove="toolTip(\''.($country['country']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />' : '-');
+        $output .= ' | '.lang('global', 'country').': '.( ( $country['code'] ) ? '<img src="img/flags/'.$country['code'].'.png" onmousemove="oldtoolTip(\''.($country['country']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-' );
         unset($country);
       }
       $output .= '
@@ -641,7 +619,7 @@ function char_main()
                   </tr>
                   <tr>
                     <td width="6%">';
-      if (($equiped_items[1][1]))
+      if ( $equiped_items[1][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_HEAD.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'HEAD'.'\');" onmouseout="HideTooltip(\'_b'.'HEAD'.'\');">
@@ -655,7 +633,8 @@ function char_main()
             socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
             requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
             sellprice AS SellPrice, itemlevel AS ItemLevel
-            FROM items WHERE entry='".$equiped_items[1][3]['item_template']."'";
+            FROM items
+            WHERE entry='".$equiped_items[1][3]['item_template']."'";
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[1][3]['item_template']."'";
 
@@ -679,7 +658,7 @@ function char_main()
                     <td class="half_line" colspan="2" align="center" width="50%">
                       <div class="gradient_p" id="char_hp_name">'.lang('item', 'health').':</div>
                       <div class="gradient_pp" id="char_hp_value">'.$char_data[UNIT_FIELD_HEALTH].'/'.$char_data[UNIT_FIELD_MAXHEALTH].'</li></ul></div>';
-      if ($char['class'] == 11) //druid
+      if ( $char['class'] == 11 ) //druid
         $output .= '
                       </br>
                       <div class="gradient_p" id="char_energy_name">'.lang('item', 'mana').':</div>
@@ -687,25 +666,25 @@ function char_main()
       $output .= '
                     </td>
                     <td class="half_line" colspan="2" align="center" width="50%">';
-      if ($char['class'] == 1) // warrior
+      if ( $char['class'] == 1 ) // warrior
       {
         $output .= '
                       <div class="gradient_p" id="char_energy_name">'.lang('item', 'rage').':</div>
                       <div class="gradient_pp" id="char_energy_value">'.($char_data[UNIT_FIELD_POWER2]/10).'/'.($char_data[UNIT_FIELD_MAXPOWER2]/10).'</div>';
       }
-      elseif ($char['class'] == 4) // rogue
+      elseif ( $char['class'] == 4 ) // rogue
       {
         $output .= '
                       <div class="gradient_p" id="char_energy_name">'.lang('item', 'energy').':</div>
                       <div class="gradient_pp" id="char_energy_value">'.$char_data[UNIT_FIELD_POWER4].'/'.$char_data[UNIT_FIELD_MAXPOWER4].'</div>';
       }
-      elseif ($char['class'] == 6) // death knight
+      elseif ( $char['class'] == 6 ) // death knight
       {
         $output .= '
                       <div class="gradient_p" id="char_energy_name">'.lang('item', 'runic').':</div>
                       <div class="gradient_pp" id="char_energy_value">'.($char_data[UNIT_FIELD_POWER7]/10).'/'.($char_data[UNIT_FIELD_MAXPOWER7]/10).'</div>';
       }
-      elseif ($char['class'] == 11) // druid
+      elseif ( $char['class'] == 11 ) // druid
       {
         $output .= '
                       <div class="gradient_p" id="char_energy_name"">'.lang('item', 'mana').':</div>
@@ -714,12 +693,12 @@ function char_main()
                       <div class="gradient_p" id="char_energy_name"">'.lang('item', 'rage').':</div>
                       <div class="gradient_pp" id="char_energy_value">'.($char_data[UNIT_FIELD_POWER2]/10).'/'.($char_data[UNIT_FIELD_MAXPOWER2]/10).'</div>';
       }
-      elseif ($char['class'] == 2 || // paladin
-              $char['class'] == 3 || // hunter
-              $char['class'] == 5 || // priest
-              $char['class'] == 7 || // shaman
-              $char['class'] == 8 || // mage
-              $char['class'] == 9)   // warlock
+      elseif ( ( $char['class'] == 2 ) || // paladin
+               ( $char['class'] == 3 ) || // hunter
+               ( $char['class'] == 5 ) || // priest
+               ( $char['class'] == 7 ) || // shaman
+               ( $char['class'] == 8 ) || // mage
+               ( $char['class'] == 9 ) )  // warlock
       {
         $output .= '
                       <div class="gradient_p" id="char_energy_name"">'.lang('item', 'mana').':</div>
@@ -728,7 +707,7 @@ function char_main()
       $output .= '
                     </td>
                     <td width="6%">';
-      if (($equiped_items[10][1]))
+      if ( $equiped_items[10][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_GLOVES.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'GLOVES'.'\');" onmouseout="HideTooltip(\'_b'.'GLOVES'.'\');">
@@ -742,7 +721,8 @@ function char_main()
             socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
             requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
             sellprice AS SellPrice, itemlevel AS ItemLevel
-            FROM items WHERE entry='".$equiped_items[10][3]['item_template']."'";
+            FROM items
+            WHERE entry='".$equiped_items[10][3]['item_template']."'";
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[10][3]['item_template']."'";
 
@@ -766,7 +746,7 @@ function char_main()
                   </tr>
                   <tr>
                     <td width="1%">';
-      if (($equiped_items[2][1]))
+      if ( $equiped_items[2][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_NECK.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'NECK'.'\');" onmouseout="HideTooltip(\'_b'.'NECK'.'\');">
@@ -838,7 +818,7 @@ function char_main()
                       </div>
                     </td>
                     <td width="1%">';
-      if (($equiped_items[6][1]))
+      if ( $equiped_items[6][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_BELT.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'BELT'.'\');" onmouseout="HideTooltip(\'_b'.'BELT'.'\');">
@@ -876,7 +856,7 @@ function char_main()
                   </tr>
                   <tr>
                     <td width="1%">';
-      if (($equiped_items[3][1]))
+      if ( $equiped_items[3][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_SHOULDER.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'SHOULDER'.'\');" onmouseout="HideTooltip(\'_b'.'SHOULDER'.'\');">
@@ -912,7 +892,7 @@ function char_main()
       $output .= '
                     </td>
                     <td width="1%">';
-      if (($equiped_items[7][1]))
+      if ( $equiped_items[7][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_LEGS.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'LEGS'.'\');" onmouseout="HideTooltip(\'_b'.'LEGS'.'\');">
@@ -950,7 +930,7 @@ function char_main()
                   </tr>
                   <tr>
                     <td width="1%">';
-      if (($equiped_items[15][1]))
+      if ( $equiped_items[15][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_BACK.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'BACK'.'\');" onmouseout="HideTooltip(\'_b'.'BACK'.'\');">
@@ -986,7 +966,7 @@ function char_main()
       $output .= '
                     </td>
                     <td width="1%">';
-      if (($equiped_items[8][1]))
+      if ( $equiped_items[8][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_FEET.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FEET'.'\');" onmouseout="HideTooltip(\'_b'.'FEET'.'\');">
@@ -1024,7 +1004,7 @@ function char_main()
                   </tr>
                   <tr>
                     <td width="1%">';
-      if (($equiped_items[5][1]))
+      if ( $equiped_items[5][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_CHEST.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'CHEST'.'\');" onmouseout="HideTooltip(\'_b'.'CHEST'.'\');">
@@ -1092,7 +1072,7 @@ function char_main()
                       </div>
                     </td>
                     <td width="1%">';
-      if (($equiped_items[11][1]))
+      if ( $equiped_items[11][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_FINGER1.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FINGER1'.'\');" onmouseout="HideTooltip(\'_b'.'FINGER1'.'\');">
@@ -1130,7 +1110,7 @@ function char_main()
                   </tr>
                   <tr>
                     <td width="1%">';
-      if (($equiped_items[4][1]))
+      if ( $equiped_items[4][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_SHIRT.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'SHIRT'.'\');" onmouseout="HideTooltip(\'_b'.'SHIRT'.'\');">
@@ -1166,7 +1146,7 @@ function char_main()
       $output .= '
                     </td>
                     <td width="1%">';
-      if (($equiped_items[12][1]))
+      if ( $equiped_items[12][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_FINGER2.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FINGER2'.'\');" onmouseout="HideTooltip(\'_b'.'FINGER2'.'\');">
@@ -1203,7 +1183,7 @@ function char_main()
                   </tr>
                   <tr>
                     <td width="1%">';
-      if (($equiped_items[19][1]))
+      if ( $equiped_items[19][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_TABARD.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TABARD'.'\');" onmouseout="HideTooltip(\'_b'.'TABARD'.'\');">
@@ -1264,7 +1244,7 @@ function char_main()
                       </div>
                     </td>
                     <td width="1%">';
-      if (($equiped_items[13][1]))
+      if ( $equiped_items[13][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_TRINKET1.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TRINKET1'.'\');" onmouseout="HideTooltip(\'_b'.'TRINKET1'.'\');">
@@ -1302,7 +1282,7 @@ function char_main()
                   </tr>
                   <tr>
                     <td width="1%">';
-      if (($equiped_items[9][1]))
+      if ( $equiped_items[9][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_WRIST.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'WRIST'.'\');" onmouseout="HideTooltip(\'_b'.'WRIST'.'\');">
@@ -1338,7 +1318,7 @@ function char_main()
       $output .= '
                     </td>
                     <td width="1%">';
-      if (($equiped_items[14][1]))
+      if ( $equiped_items[14][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_TRINKET2.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TRINKET2'.'\');" onmouseout="HideTooltip(\'_b'.'TRINKET2'.'\');">
@@ -1377,7 +1357,7 @@ function char_main()
                   <tr>
                     <td></td>
                     <td width="15%">';
-      if (($equiped_items[16][1]))
+      if ( $equiped_items[16][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_MAIN_HAND.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'MAIN_HAND'.'\');" onmouseout="HideTooltip(\'_b'.'MAIN_HAND'.'\');">
@@ -1413,7 +1393,7 @@ function char_main()
       $output .= '
                     </td>
                     <td width="15%">';
-      if (($equiped_items[17][1]))
+      if ( $equiped_items[17][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_OFF_HAND.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'OFF_HAND'.'\');" onmouseout="HideTooltip(\'_b'.'OFF_HAND'.'\');">
@@ -1449,7 +1429,7 @@ function char_main()
       $output .= '
                     </td>
                     <td width="15%">';
-      if (($equiped_items[18][1]))
+      if ( $equiped_items[18][1] )
       {
         $output .= '
                       <a id="char_icon_padding" href="'.$item_datasite.$EQU_RANGED.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'RANGED'.'\');" onmouseout="HideTooltip(\'_b'.'RANGED'.'\');">
@@ -1543,15 +1523,15 @@ function char_main()
             <table class="hidden">
               <tr>
                 <td>';
-                  // button to user account page, user account page has own security
-                  makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;acct='.$owner_acc_id.'', 130);
+      // button to user account page, user account page has own security
+      makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;acct='.$owner_acc_id.'', 130);
       $output .= '
                 </td>
                 <td>';
 
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
-      if ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) )
+      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) )
       {
                   //makebutton($lang_char['edit_button'], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
         $output .= '
@@ -1559,22 +1539,22 @@ function char_main()
                 <td>';
       }
       // only higher level GM with delete access, or character owner can delete character
-      if ( ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) ) || ($owner_name === $user_name) )
+      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) ) || ( $owner_name === $user_name ) )
       {
-                  makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
+        makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only GM with update permission can send mail, mail can send items, so update permission is needed
-      if ($user_lvl >= $action_permission['update'])
+      if ( $user_lvl >= $action_permission['update'] )
       {
-                  makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
+        makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
         $output .= '
                 </td>
                 <td>';
       }
-                  makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+      makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>
               </tr>
@@ -1598,16 +1578,12 @@ function char_main()
 
 //$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-//$lang_char = lang_char();
-
-$output .= "
-      <div class=\"bubble\">";
+$output .= '
+      <div class="bubble">';
 
 char_main();
 
-//unset($action);
 unset($action_permission);
-//unset($lang_char);
 
 require_once 'footer.php';
 

@@ -37,17 +37,17 @@ function char_talent()
   wowhead_tt();
 
   // we need at least an id or we would have nothing to show
-  if (empty($_GET['id']))
+  if ( empty($_GET['id']) )
     error(lang('global', 'empty_fields'));
 
   // this is multi realm support, as of writing still under development
   //  this page is already implementing it
-  if (empty($_GET['realm']))
+  if ( empty($_GET['realm']) )
     $realmid = $realm_id;
   else
   {
     $realmid = $sql['logon']->quote_smart($_GET['realm']);
-    if (is_numeric($realmid))
+    if ( is_numeric($realmid) )
       $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
@@ -56,18 +56,20 @@ function char_talent()
   //-------------------SQL Injection Prevention--------------------------------
   // no point going further if we don have a valid ID
   $id = $sql['char']->quote_smart($_GET['id']);
-  if (is_numeric($id));
-  else error(lang('global', 'empty_fields'));
+  if ( is_numeric($id) )
+    ;
+  else
+    error(lang('global', 'empty_fields'));
 
   if ( $core == 1 )
-    $result = $sql['char']->query('SELECT acct, name, race, class, level, gender,
-      CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_POINTS1+1).'), " ", -1) AS UNSIGNED) AS talent_points
-      FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql['char']->query("SELECT acct, name, race, class, level, gender,
+      CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', ".(CHAR_DATA_OFFSET_POINTS1+1)."), ' ', -1) AS UNSIGNED) AS talent_points
+      FROM characters WHERE guid='".$id."' LIMIT 1");
   else
-    $result = $sql['char']->query('SELECT account AS acct, name, race, class, level, gender
-      FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql['char']->query("SELECT account AS acct, name, race, class, level, gender
+      FROM characters WHERE guid='".$id."' LIMIT 1");
 
-  if ($sql['char']->num_rows($result))
+  if ( $sql['char']->num_rows($result) )
   {
     $char = $sql['char']->fetch_assoc($result);
 
@@ -79,18 +81,18 @@ function char_talent()
       $query = $sql['logon']->query("SELECT username as login FROM account WHERE id='".$owner_acc_id."'");
     $owner_name = $sql['logon']->result($query, 0, 'login');
 
-    if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name)||($user_lvl == gmlevel('4')))
+    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
     {
-      if (strlen($_GET['curspec']) == 0)
+      if ( strlen($_GET['curspec']) == 0 )
       {
         if ( $core == 1 )
-          $spec_query = "SELECT currentspec FROM characters WHERE guid = '".$id."'";
+          $spec_query = "SELECT currentspec FROM characters WHERE guid='".$id."'";
         else
-          $spec_query = "SELECT activespec AS currentspec FROM characters WHERE guid = '".$id."'";
+          $spec_query = "SELECT activespec AS currentspec FROM characters WHERE guid='".$id."'";
         $spec_results = $sql['char']->query($spec_query);
         $spec_field = $sql['char']->fetch_assoc($spec_results);
         $cur_spec = $spec_field['currentspec'] + 1;
-        if ($cur_spec == 1)
+        if ( $cur_spec == 1 )
           $opp_spec = 2;
         else
           $opp_spec = 1;
@@ -98,7 +100,7 @@ function char_talent()
       else
       {
         $cur_spec = $_GET['curspec'];
-        if ($cur_spec == 1)
+        if ( $cur_spec == 1 )
           $opp_spec = 2;
         else
           $opp_spec = 1;
@@ -108,16 +110,16 @@ function char_talent()
         // this_is_junk: ArcEmu stores talents in a characters table field in the following format:
         //               [talent id][spell offset],[talent id2][spell offset2],...[talent idN][spell offsetN],
         //               So, we have to explode it into an array, then into a pair of arrays.
-        $result = $sql['char']->query("SELECT talents".$cur_spec." FROM characters WHERE guid = '".$id."'");
+        $result = $sql['char']->query("SELECT talents".$cur_spec." FROM characters WHERE guid='".$id."'");
         $talent_list = $sql['char']->result($result, 0);
         $talent_list = substr($talent_list, 0, strlen($talent_list) - 1);
         $talent_list = explode(",", $talent_list);
         $talents = array();
         $talent_ranks = array();
         $pick = 0;
-        foreach ($talent_list as $t)
+        foreach ( $talent_list as $t )
         {
-          if ($pick)
+          if ( $pick )
           {
             array_push($talent_ranks, $t);
             $pick = 0;
@@ -156,10 +158,10 @@ function char_talent()
             </div>
             <div id="tab_content">
               <font class="bold">'.htmlentities($char['name']).' -
-              <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
-              <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'</font>
+              <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+              <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'</font>
               <br /><br />';
-      if($cur_spec == 1)
+      if ( $cur_spec == 1 )
         $output .= '<font class="bold">'.lang('char', 'talentspec').': '.$cur_spec.'&nbsp;<a href="char_talent.php?id='.$id.'&realm='.$realm_id.'&curspec='.$opp_spec.'">'.$opp_spec.'</a></font><br />';
       else
         $output .= '<font class="bold">'.lang('char', 'talentspec').': <a href="char_talent.php?id='.$id.'&realm='.$realm_id.'&curspec='.$opp_spec.'">'.$opp_spec.'</a>&nbsp;'.$cur_spec.'</font><br />';
@@ -167,9 +169,9 @@ function char_talent()
       $output .= '<table class="lined" id="ch_tal_main">
                 <tr valign="top" align="center">';
 
-      if (count($talents) > 1)
+      if ( count($talents) > 1 )
       {
-        $talent_rate = (isset($server[$realmid]['talent_rate']) ? $server[$realmid]['talent_rate'] : 1);
+        $talent_rate = ( ( isset($server[$realmid]['talent_rate']) ) ? $server[$realmid]['talent_rate'] : 1 );
         $talent_points = ($char['level'] - 9) * $talent_rate;
         $talent_points_left = $char['talent_points'];
         $talent_points_used = $talent_points - $talent_points_left;
@@ -177,11 +179,11 @@ function char_talent()
         $tabs = array();
         $l = 0;
 
-        for ($i = 0; $i < count($talents); $i++)
+        for ( $i = 0; $i < count($talents); $i++ )
         {
           if ( $core == 1 )
           {
-            $talent_spell = $sql['dbc']->query("SELECT spell".($talent_ranks[$i] + 1)." FROM talent WHERE id = '".$talents[$i]."'");
+            $talent_spell = $sql['dbc']->query("SELECT spell".($talent_ranks[$i] + 1)." FROM talent WHERE id='".$talents[$i]."'");
             $talent_spell = $sql['dbc']->result($talent_spell,0);
           }
           else
@@ -189,54 +191,54 @@ function char_talent()
             $talent_spell = $talents[$i];
           }
 
-          if ($tab = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell5 = '.$talent_spell.' LIMIT 1')))
+          if ( $tab = $sql['dbc']->fetch_assoc($sql['dbc']->query("SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell5='".$talent_spell."' LIMIT 1")) )
           {
-              if (isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]))
+              if ( isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]) )
                 $l -=$tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']][1];
 
               $tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']] = array($talent_spell, '5', '5');
               $l += 5;
-              if ($tab['Talent1'])
+              if ( $tab['Talent1'] )
                 talent_dependencies($tabs, $tab, $l);
           }
-          elseif ($tab = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell4 = '.$talent_spell.' LIMIT 1')))
+          elseif ( $tab = $sql['dbc']->fetch_assoc($sql['dbc']->query("SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell4='".$talent_spell."' LIMIT 1")) )
           {
-              if (isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]))
+              if ( isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]) )
                 $l -=$tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']][1];
 
-              $tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']] = array($talent_spell, '4', ($tab['Spell5'] ? '2' : '5'));
+              $tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']] = array($talent_spell, '4', ( ( $tab['Spell5'] ) ? '2' : '5' ));
               $l += 4;
-              if ($tab['Talent1'])
+              if ( $tab['Talent1'] )
                 talent_dependencies($tabs, $tab, $l);
           }
-          elseif ($tab = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell3 = '.$talent_spell.' LIMIT 1')))
+          elseif ( $tab = $sql['dbc']->fetch_assoc($sql['dbc']->query("SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell3='".$talent_spell."' LIMIT 1")) )
           {
-              if (isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]))
+              if ( isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]) )
                 $l -=$tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']][1];
 
-              $tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']] = array($talent_spell,'3', ($tab['Spell4'] ? '2' : '5'));
+              $tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']] = array($talent_spell,'3', ( ( $tab['Spell4'] ) ? '2' : '5' ));
               $l += 3;
-              if ($tab['Talent1'])
+              if ( $tab['Talent1'] )
                 talent_dependencies($tabs, $tab, $l);
           }
-          elseif ($tab = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell2 = '.$talent_spell.' LIMIT 1')))
+          elseif ( $tab = $sql['dbc']->fetch_assoc($sql['dbc']->query("SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell2='".$talent_spell."' LIMIT 1")) )
           {
-              if (isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]))
+              if ( isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]) )
                 $l -=$tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']][1];
 
-              $tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']] = array($talent_spell,'2', ($tab['Spell3'] ? '2' : '5'));
+              $tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']] = array($talent_spell,'2', ( ( $tab['Spell3'] ) ? '2' : '5' ));
               $l += 2;
-              if ($tab['Talent1'])
+              if ( $tab['Talent1'] )
                 talent_dependencies($tabs, $tab, $l);
           }
-          elseif ($tab = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell1 = '.$talent_spell.' LIMIT 1')))
+          elseif ( $tab = $sql['dbc']->fetch_assoc($sql['dbc']->query("SELECT TalentTab, Row, Col, Talent1, TalentCount1 FROM talent WHERE spell1='".$talent_spell."' LIMIT 1")) )
           {
-              if (isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]))
+              if ( isset($tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']]) )
                 $l -=$tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']][1];
 
-              $tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']] = array($talent_spell,'1', ($tab['Spell2'] ? '2' : '5'));
+              $tabs[$tab['TalentTab']][$tab['Row']][$tab['Col']] = array($talent_spell,'1', ( ( $tab['Spell2'] ) ? '2' : '5' ));
               $l += 1;
-              if ($tab['Talent1'])
+              if ( $tab['Talent1'] )
                 talent_dependencies($tabs, $tab, $l);
           }
         }
@@ -244,9 +246,9 @@ function char_talent()
         unset($talent);
 
         $class_name = get_class_name($char['class']);
-        foreach ($tabs as $k=>$data)
+        foreach ( $tabs as $k=>$data )
         {
-          $talent_name = $sql['dbc']->result($sql['dbc']->query('SELECT name FROM talenttab WHERE id = '.$k.''), 0, 'name');
+          $talent_name = $sql['dbc']->result($sql['dbc']->query("SELECT name FROM talenttab WHERE id='".$k."'"), 0, 'name');
           $talent_name = str_replace(" ", "", $talent_name);
           $points = 0;
           $output .= '
@@ -257,11 +259,11 @@ function char_talent()
                        </td>
                      </tr>
                      <tr>';
-          for($i=0;$i<11;++$i)
+          for ( $i=0; $i<11; ++$i )
           {
-            for($j=0;$j<4;++$j)
+            for ( $j=0; $j<4; ++$j )
             {
-              if(isset($data[$i][$j]))
+              if ( isset($data[$i][$j]) )
               {
                 // this_is_junk: style left hardcoded because it's calculated.
                 $output .= '
@@ -329,7 +331,7 @@ function char_talent()
         unset($talent_points_left);
         if ( $core == 1)
         {
-          $glyph_query = "SELECT glyphs".$cur_spec." FROM characters WHERE guid = '".$id."'";
+          $glyph_query = "SELECT glyphs".$cur_spec." FROM characters WHERE guid='".$id."'";
           $glyph_results = $sql['char']->query($glyph_query);
           $glyph_field = $sql['char']->fetch_assoc($glyph_results);
           $glyphs = $glyph_field['glyphs1'];
@@ -355,9 +357,9 @@ function char_talent()
           if ( isset($glyph_field['glyph6']) )
             array_push($glyphs, $glyph_field['glyph6']);
         }
-        for($i=0;$i<6;++$i)
+        for ( $i=0; $i<6; ++$i )
         {
-          if ($glyphs[$i])
+          if ( $glyphs[$i] )
           {
             $glyph = $sql['dbc']->result($sql['dbc']->query("SELECT spellid FROM glyphproperties WHERE id = '".$glyphs[$i]."'"), 0);
 
@@ -381,15 +383,15 @@ function char_talent()
             <table class="hidden">
               <tr>
                 <td>';
-                  // button to user account page, user account page has own security
-                  makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
+      // button to user account page, user account page has own security
+      makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
       $output .= '
                 </td>
                 <td>';
 
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
-      if ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) )
+      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) )
       {
                   //makebutton($lang_char['edit_button'], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
         $output .= '
@@ -397,22 +399,22 @@ function char_talent()
                 <td>';
       }
       // only higher level GM with delete access, or character owner can delete character
-      if ( ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) ) || ($owner_name === $user_name) )
+      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) ) || ( $owner_name === $user_name ) )
       {
-                  makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
+        makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only GM with update permission can send mail, mail can send items, so update permission is needed
-      if ($user_lvl >= $action_permission['update'])
+      if ( $user_lvl >= $action_permission['update'] )
       {
-                  makebutton(lang('char','send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
+        makebutton(lang('char','send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
         $output .= '
                 </td>
                 <td>';
       }
-                  makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+      makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>
               </tr>
@@ -457,15 +459,15 @@ function talent_dependencies(&$tabs, &$tab, &$i)
 {
   global $sql;
 
-  $query = 'SELECT TalentTab, Row, Col, Spell'.($tab['TalentCount1'] + 1).', Talent1, TalentCount1'.(($tab['TalentCount1'] < 4) ? ', Spell'.($tab['TalentCount1'] + 2).'' : '').' FROM talent WHERE id = '.$tab['Talent1'].' AND Spell'.($tab['TalentCount1'] + 1).' != 0 LIMIT 1';
+  $query = 'SELECT TalentTab, Row, Col, Spell'.($tab['TalentCount1'] + 1).', Talent1, TalentCount1'.( ( $tab['TalentCount1'] < 4 ) ? ', Spell'.($tab['TalentCount1'] + 2).'' : '' ).' FROM talent WHERE id = '.$tab['Talent1'].' AND Spell'.($tab['TalentCount1'] + 1).' != 0 LIMIT 1';
 
-  if ($dep = $sql['dbc']->fetch_assoc($sql['dbc']->query($query)))
+  if ( $dep = $sql['dbc']->fetch_assoc($sql['dbc']->query($query)) )
   {
-    if(empty($tabs[$dep['TalentTab']][$dep['Row']][$dep['Col']]))
+    if ( empty($tabs[$dep['TalentTab']][$dep['Row']][$dep['Col']]) )
     {
-      $tabs[$dep['TalentTab']][$dep['Row']][$dep['Col']] = array($dep['Spell'.($tab['TalentCount1'] + 1).''], ''.($tab['TalentCount1'] + 1).'', (($tab['TalentCount1'] < 4) ? ($dep['Spell'.($tab['TalentCount1'] + 2).''] ? '2' : '5') : '5'));
+      $tabs[$dep['TalentTab']][$dep['Row']][$dep['Col']] = array($dep['Spell'.($tab['TalentCount1'] + 1).''], ''.($tab['TalentCount1'] + 1).'', ( ( $tab['TalentCount1'] < 4 ) ? ($dep['Spell'.($tab['TalentCount1'] + 2).''] ? '2' : '5' ) : '5'));
       $i += ($tab['TalentCount1'] + 1);
-      if ($dep['Talent1'])
+      if ( $dep['Talent1'] )
         talent_dependencies($tabs, $dep, $i);
     }
   }
@@ -479,18 +481,12 @@ function talent_dependencies(&$tabs, &$tab, &$i)
 // action variable reserved for future use
 //$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-//$lang_char = lang_char();
+$output .= '
+      <div class="bubble">';
 
-$output .= "
-      <div class=\"bubble\">";
-
-// we getting links to realm database and character database left behind by header
-// header does not need them anymore, might as well reuse the link
 char_talent();
 
-//unset($action);
 unset($action_permission);
-//unset($lang_char);
 
 require_once 'footer.php';
 

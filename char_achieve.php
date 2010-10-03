@@ -39,17 +39,17 @@ function char_achievements()
   wowhead_tt();
 
   // we need at least an id or we would have nothing to show
-  if (empty($_GET['id']))
+  if ( empty($_GET['id']) )
     error(lang('global', 'empty_fields'));
 
   // this is multi realm support, as of writing still under development
   //  this page is already implementing it
-  if (empty($_GET['realm']))
+  if ( empty($_GET['realm']) )
     $realmid = $realm_id;
   else
   {
     $realmid = $sql['logon']->quote_smart($_GET['realm']);
-    if (is_numeric($realmid))
+    if ( is_numeric($realmid) )
       $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
@@ -58,22 +58,27 @@ function char_achievements()
   //-------------------SQL Injection Prevention--------------------------------
   // no point going further if we don have a valid ID
   $id = $sql['char']->quote_smart($_GET['id']);
-  if (is_numeric($id));
-  else error(lang('global', 'empty_fields'));
+  if ( is_numeric($id) )
+    ;
+  else
+    error(lang('global', 'empty_fields'));
 
-  $show_type = (isset($_POST['show_type'])) ? $sql['char']->quote_smart($_POST['show_type']) : 0;
-  if (is_numeric($show_type)); else $show_type = 0;
+  $show_type = ( ( isset($_POST['show_type']) ) ? $sql['char']->quote_smart($_POST['show_type']) : 0 );
+  if ( is_numeric($show_type) )
+    ;
+  else
+    $show_type = 0;
 
   // getting character data from database
   if ( $core == 1 )
-    $result = $sql['char']->query('SELECT acct, name, race, class, level, gender
-      FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql['char']->query("SELECT acct, name, race, class, level, gender
+      FROM characters WHERE guid='".$id."' LIMIT 1");
   else
-    $result = $sql['char']->query('SELECT account AS acct, name, race, class, level, gender
-      FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql['char']->query("SELECT account AS acct, name, race, class, level, gender
+      FROM characters WHERE guid='".$id."' LIMIT 1");
 
   // no point going further if character does not exist
-  if ($sql['char']->num_rows($result))
+  if ( $sql['char']->num_rows($result) )
   {
     $char = $sql['char']->fetch_assoc($result);
 
@@ -91,7 +96,7 @@ function char_achievements()
     $owner_gmlvl = $sql['mgr']->result($sec_res, 0, 'gm');
 
     // check user permission
-    if ( ($user_lvl > $owner_gmlvl) || ($owner_name === $user_name) ||($user_lvl == gmlevel('4')))
+    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
     {
       //------------------------Character Tabs---------------------------------
       // we start with a lead of 10 spaces,
@@ -224,7 +229,7 @@ function char_achievements()
               <ul>
                 <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>
                 <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'inventory').'</a></li>
-                '.(($char['level'] < 10) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>').'
+                '.( ( $char['level'] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>' ).'
                 <li id="selected"><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'achievements').'</a></li>
                 <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'quests').'</a></li>
                 <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'friends').'</a></li>
@@ -234,10 +239,8 @@ function char_achievements()
             <div id="tab_content">
               <font class="bold">
                 '.htmlentities($char['name']).' -
-                <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif"
-                  onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
-                <img src="img/c_icons/'.$char['class'].'.gif"
-                  onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'
+                <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'
               </font>
               <br /><br />';
       //---------------Page Specific Data Starts Here--------------------------
@@ -252,23 +255,14 @@ function char_achievements()
                     <form action="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'" method="post" name="form">
                       '.lang('char', 'show').' :
                       <select name="show_type">
-                        <option value="1"';
-      if (1 == $show_type)
-        $output .= ' selected="selected"';
-      $output .= '>'.lang('char', 'all').'</option>
-                        <option value="0"';
-      if (0 == $show_type)
-        $output .= ' selected="selected"';
-      $output .= '>'.lang('char', 'earned').'</option>
-                        <option value="2"';
-      if (2 == $show_type)
-        $output .= ' selected="selected"';
-      $output .= '>'.lang('char', 'incomplete').'</option>
+                        <option value="1"'.( ( $show_type == 1 ) ? ' selected="selected"' : '' ).'>'.lang('char', 'all').'</option>
+                        <option value="0"'.( ( $show_type == 0 ) ? ' selected="selected"' : '' ).'>'.lang('char', 'earned').'</option>
+                        <option value="2"'.( ( $show_type == 2 ) ? ' selected="selected"' : '' ).'>'.lang('char', 'incomplete').'</option>
                       </select>
                     </form>
                   </td>
                   <td align="right">';
-                    makebutton('View', 'javascript:do_submit()', 130);
+      makebutton('View', 'javascript:do_submit()', 130);
       $output .= '
                   </td>
                 </tr>
@@ -286,11 +280,11 @@ function char_achievements()
                         <td>
                         </td>
                       </tr>';
-      $result = $sql['char']->query('SELECT achievement, date FROM character_achievement WHERE guid = '.$id.'');
+      $result = $sql['char']->query("SELECT achievement, date FROM character_achievement WHERE guid='".$id."'");
       $char_achieve = array();
-      while ($temp = $sql['char']->fetch_assoc($result))
+      while ( $temp = $sql['char']->fetch_assoc($result) )
         $char_achieve[$temp['achievement']] = $temp['date'];
-      $result = $sql['char']->query('SELECT achievement, date FROM character_achievement WHERE guid = \''.$id.'\' order by date DESC limit 4');
+      $result = $sql['char']->query("SELECT achievement, date FROM character_achievement WHERE guid='".$id."' ORDER BY date DESC LIMIT 4");
 
       $points = 0;
 
@@ -312,21 +306,21 @@ function char_achievements()
                 var main_sub_cats_name = new Array();
                 var main_sub_cats_achieve = new Array();';
 
-      foreach($main_cats as $cat_id => $cat)
+      foreach ( $main_cats as $cat_id => $cat )
       {
-        if (isset($cat['Name']))
+        if ( isset($cat['Name']) )
         {
-          $i=0;
+          $i = 0;
           $output_achieve_main_cat[$cat_id] = '';
           $output_u_achieve_main_cat[$cat_id] = '';
           $achieve_main_cat = achieve_get_id_category($cat['ID']);
-          foreach($achieve_main_cat as $achieve_id => $cid)
+          foreach ( $achieve_main_cat as $achieve_id => $cid )
           {
-            if (isset($achieve_id) && isset($cid['id']))
+            if ( isset($achieve_id) && isset($cid['id']) )
             {
-              if (isset($char_achieve[$cid['id']]))
+              if ( isset($char_achieve[$cid['id']]) )
               {
-                if (2 > $show_type)
+                if ( $show_type < 2 )
                 {
                   $cid['name01'] = str_replace('&', '&amp;', $cid['name']);
                   $cid['description01'] = str_replace('&', '&amp;', $cid['description']);
@@ -350,7 +344,7 @@ function char_achievements()
                 }
                 $points += $cid['rewpoints'];
               }
-              elseif ($show_type && isset($achieve_id))
+              elseif ( $show_type && isset($achieve_id) )
               {
                 $cid['name'] = str_replace('&', '&amp;', $cid['name']);
                 $cid['description'] = str_replace('&', '&amp;', $cid['description']);
@@ -392,24 +386,24 @@ function char_achievements()
 
           $output_sub_cat = '';
           $total_sub_cat = 0;
-          if (isset($sub_cats[$cat['ID']]))
+          if ( isset($sub_cats[$cat['ID']]) )
           {
             $main_sub_cats = $sub_cats[$cat['ID']];
-            foreach($main_sub_cats as $sub_cat_id => $sub_cat)
+            foreach ( $main_sub_cats as $sub_cat_id => $sub_cat )
             {
-              if (isset($sub_cat))
+              if ( isset($sub_cat) )
               {
-                $j=0;
+                $j = 0;
                 $output_achieve_sub_cat[$sub_cat_id] = '';
                 $output_u_achieve_sub_cat[$sub_cat_id] = '';
                 $achieve_sub_cat = achieve_get_id_category($sub_cat_id);
-                foreach($achieve_sub_cat as $achieve_id => $cid)
+                foreach ( $achieve_sub_cat as $achieve_id => $cid )
                 {
-                  if (isset($achieve_id) && isset($cid['id']))
+                  if ( isset($achieve_id) && isset($cid['id']) )
                   {
-                    if (isset($char_achieve[$cid['id']]))
+                    if ( isset($char_achieve[$cid['id']]) )
                     {
-                      if (2 > $show_type)
+                      if ( $show_type < 2 )
                       {
                         $cid['name'] = str_replace('&', '&amp;', $cid['name']);
                         $cid['description'] = str_replace('&', '&amp;', $cid['description']);
@@ -433,7 +427,7 @@ function char_achievements()
                       }
                       $points += $cid['points'];
                     }
-                    elseif ($show_type && isset($achieve_id))
+                    elseif ( $show_type && isset($achieve_id) )
                     {
                       $cid['name'] = str_replace('&', '&amp;', $cid['name']);
                       $cid['description'] = str_replace('&', '&amp;', $cid['description']);
@@ -461,7 +455,7 @@ function char_achievements()
                 }
                 unset($achieve_sub_cat);
                 $total_sub_cat = $total_sub_cat + $j;
-                if($j)
+                if ( $j )
                 {
                   $sub_cat['name'] = str_replace('&', '&amp;', $sub_cat['name']);
                   $output_sub_cat .='
@@ -491,11 +485,11 @@ function char_achievements()
             }
             unset($main_sub_cats);
           }
-          if($total_sub_cat || $i)
+          if ( $total_sub_cat || $i )
           {
             $cat['Name'] = str_replace('&', '&amp;', $cat['Name']);
             // this_is_junk: unfortunately the CSS here needs to be hardcoded.
-            $output .='
+            $output .= '
                         <tr>
                           <th align="left">
                             <div id="div'.$cat_id.'" onclick="expand(\'t'.$cat_id.'\');">[+] '.$cat['Name'].' ('.($i+$total_sub_cat).')</div>
@@ -531,9 +525,9 @@ function char_achievements()
                   </td>
                   <td>';
 
-      foreach($output_achieve_main_cat as $temp)
+      foreach ( $output_achieve_main_cat as $temp )
         $output .= $temp;
-      foreach($output_achieve_sub_cat as $temp)
+      foreach ( $output_achieve_sub_cat as $temp )
         $output .= $temp;
       unset($temp);
       unset($output_achieve_main_cat);
@@ -552,7 +546,7 @@ function char_achievements()
                         <th width="5%">'.lang('char', 'achievement_points').'</th>
                         <th width="15%">'.lang('char', 'achievement_date').'</th>
                       </tr>';
-      while ($temp = $sql['char']->fetch_assoc($result))
+      while ( $temp = $sql['char']->fetch_assoc($result) )
       {
         $cid = achieve_get_details($temp['achievement']);
         $cid['name'] = str_replace('&', '&amp;', $cid['name']);
@@ -590,15 +584,15 @@ function char_achievements()
             <table class="hidden">
               <tr>
                 <td>';
-                  // button to user account page, user account page has own security
-                  makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
+      // button to user account page, user account page has own security
+      makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
       $output .= '
                 </td>
                 <td>';
 
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
-      if ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) )
+      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) )
       {
                   //makebutton($lang_char['edit_button'], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
         $output .= '
@@ -606,22 +600,22 @@ function char_achievements()
                 <td>';
       }
       // only higher level GM with delete access, or character owner can delete character
-      if ( ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) ) || ($owner_name === $user_name) )
+      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) ) || ( $owner_name === $user_name ) )
       {
-                  makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
+        makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only GM with update permission can send mail, mail can send items, so update permission is needed
-      if ($user_lvl >= $action_permission['update'])
+      if ( $user_lvl >= $action_permission['update'] )
       {
-                  makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
+        makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
         $output .= '
                 </td>
                 <td>';
       }
-                  makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+      makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>
               </tr>
@@ -646,17 +640,12 @@ function char_achievements()
 // action variable reserved for future use
 //$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-// load language
-//$lang_char = lang_char();
-
-$output .= "
-      <div class=\"bubble\">";
+$output .= '
+      <div class="bubble">';
 
 char_achievements();
 
-//unset($action);
 unset($action_permission);
-//unset($lang_char);
 
 require_once 'footer.php';
 
