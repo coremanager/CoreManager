@@ -120,13 +120,13 @@ function browse_users()
       if ( $core == 1 )
       {
         $sql_query = "SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) AS lastlogin, flags
-          FROM accounts WHERE gm>'%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          FROM accounts WHERE gm>'%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM accounts WHERE gm>'%".$search_value."%'");
       }
       elseif ( $core == 2 )
       {
         $sql_query = "SELECT account.id AS acct, username AS login, gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags
-          FROM account WHERE gmlevel>'%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          FROM account WHERE gmlevel>'%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*)
           FROM account WHERE gmlevel>'%".$search_value."%'");
       }
@@ -135,7 +135,7 @@ function browse_users()
         $sql_query = "SELECT account.id AS acct, username AS login, gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags
           FROM account
             LEFT JOIN account_access ON account_access.id=account.id
-          WHERE gmlevel>'%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          WHERE gmlevel>'%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*)
           FROM account
             LEFT JOIN account_access ON account_access.id=account.id
@@ -147,7 +147,7 @@ function browse_users()
       if ( $core == 1 )
       {
         $sql_query = "SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) AS lastlogin, flags
-          FROM accounts WHERE gm='".$search_value."' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          FROM accounts WHERE gm='".$search_value."' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM accounts WHERE gm='".$search_value."'");
       }
       elseif ( $core == 2 )
@@ -155,7 +155,7 @@ function browse_users()
         $sql_query = "SELECT account.id AS acct, username AS login, gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
           FROM account
             LEFT JOIN account_banned ON account_banned.id=account.id
-          WHERE gmlevel='".$search_value."' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          WHERE gmlevel='".$search_value."' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM account WHERE gm='".$search_value."'");
       }
       else
@@ -164,7 +164,7 @@ function browse_users()
           FROM account
             LEFT JOIN account_access ON account_access.id=account.id
             LEFT JOIN account_banned ON account_banned.id=account.id
-          WHERE account_access.gmlevel='".$search_value."' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          WHERE account_access.gmlevel='".$search_value."' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*)
           FROM account
             LEFT JOIN account_access ON account_access.id=account.id
@@ -212,7 +212,7 @@ function browse_users()
           $count_query .= " OR account_banned.id='".$banned['acct']."'";
         }
       }
-      $sql_query .= " ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+      $sql_query .= " ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
       $query_1 = $sql['logon']->query($count_query);
       unset($count_query);
     }
@@ -221,7 +221,7 @@ function browse_users()
       if ( $core == 1 )
       {
         $sql_query = "SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) AS lastlogin, flags, banned
-          FROM accounts WHERE UNIX_TIMESTAMP(lastlogin)>=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          FROM accounts WHERE UNIX_TIMESTAMP(lastlogin)>=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM accounts WHERE UNIX_TIMESTAMP(lastlogin)>=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y'))");
       }
       elseif ( $core == 2 )
@@ -229,7 +229,7 @@ function browse_users()
         $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
           FROM account
             LEFT JOIN account_banned ON account_banned.id=account.id
-          WHERE UNIX_TIMESTAMP(last_login)>=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          WHERE UNIX_TIMESTAMP(last_login)>=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM account WHERE UNIX_TIMESTAMP(last_login)>=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y'))");
       }
       else
@@ -238,7 +238,7 @@ function browse_users()
           FROM account
             LEFT JOIN account_access ON account_access.id=account.id
             LEFT JOIN account_banned ON account_banned.id=account.id
-          WHERE UNIX_TIMESTAMP(last_login)>=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          WHERE UNIX_TIMESTAMP(last_login)>=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE last_login>=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y'))");
       }
     }
@@ -247,7 +247,7 @@ function browse_users()
       if ( $core == 1 )
       {
         $sql_query = "SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) AS lastlogin, flags, banned
-          FROM accounts WHERE UNIX_TIMESTAMP(lastlogin)<=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          FROM accounts WHERE UNIX_TIMESTAMP(lastlogin)<=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM accounts WHERE UNIX_TIMESTAMP(lastlogin)<=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y'))");
       }
       elseif ( $core == 2 )
@@ -255,7 +255,7 @@ function browse_users()
         $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
           FROM account
             LEFT JOIN account_banned ON account_banned.id=account.id
-          WHERE UNIX_TIMESTAMP(last_login)<=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          WHERE UNIX_TIMESTAMP(last_login)<=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM account WHERE UNIX_TIMESTAMP(last_login)<=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y'))");
       }
       else
@@ -264,7 +264,7 @@ function browse_users()
           FROM account
             LEFT JOIN account_access ON account_access.id=account.id
             LEFT JOIN account_banned ON account_banned.id=account.id
-          WHERE UNIX_TIMESTAMP(last_login)<=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          WHERE UNIX_TIMESTAMP(last_login)<=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE UNIX_TIMESTAMP(last_login)<=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y'))");
       }
     }
@@ -274,7 +274,7 @@ function browse_users()
       if ( $core == 1 )
       {
         $sql_query = "SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) AS lastlogin, flags, banned
-          FROM accounts WHERE ".$search_by." LIKE '%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          FROM accounts WHERE ".$search_by." LIKE '%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM accounts WHERE ".$search_by." LIKE '%".$search_value."%'");
       }
       elseif ( $core == 2 )
@@ -291,7 +291,7 @@ function browse_users()
           FROM account
             LEFT JOIN account_access ON account_access.id=account.id
             LEFT JOIN account_banned ON account_banned.id=account.id
-          WHERE ".$search_by." LIKE '%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          WHERE ".$search_by." LIKE '%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE ".$search_by." LIKE '%".$search_value."%'");
       }
     }
