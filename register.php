@@ -37,7 +37,7 @@ function doregister()
       require_once('libs/recaptcha/recaptchalib.php');
 
       $resp = recaptcha_check_answer($recaptcha_private_key, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
-      
+
       if ( !$resp->is_valid )
       {
         redirect("register.php?err=13");
@@ -114,15 +114,18 @@ function doregister()
       redirect("register.php?err=5");
     }
   }
-
-  // make sure screen name is at least 4 chars long and less than max
-  // Screen Name may be left blank
-  if ( $screenname )
+  else
   {
-    if ( ( strlen($screenname) < 4 ) || ( strlen($screenname) > 15 ) )
+    if ( ( strlen($pass1) < 4 ) || ( strlen($pass1) > 15 ) )
     {
       redirect("register.php?err=5");
     }
+  }
+
+  // make sure screen name is at least 4 chars long and less than max
+  if ( ( strlen($screenname) < 4 ) || ( strlen($screenname) > 15 ) )
+  {
+    redirect("register.php?err=5");
   }
 
   require_once("libs/valid_lib.php");
@@ -153,7 +156,7 @@ function doregister()
       $result = $sql['logon']->query("SELECT login, email FROM accounts WHERE lastip='".$last_ip."'");
     else
       $result = $sql['logon']->query("SELECT username AS login, email FROM account WHERE last_ip='".$last_ip."'");
-      
+
     if ( $sql['logon']->num_rows($result) )
     {
       redirect("register.php?err=15");
@@ -165,7 +168,7 @@ function doregister()
     $result = $sql['logon']->query("SELECT ip FROM ipbans WHERE ip='".$last_ip."'");
   else
     $result = $sql['logon']->query("SELECT ip FROM ip_banned WHERE ip='".$last_ip."'");
-  
+
   if ( $sql['logon']->num_rows($result) )
   {
     redirect("register.php?err=8&usr=".$last_ip);
@@ -176,7 +179,7 @@ function doregister()
     $result = $sql['logon']->query("SELECT login, email FROM accounts WHERE email='".$mail."'");
   else
     $result = $sql['logon']->query("SELECT username AS login, email FROM account WHERE email='".$mail."'");
-    
+
   if ( $sql['logon']->num_rows($result) )
   {
     redirect("register.php?err=14");
@@ -187,7 +190,7 @@ function doregister()
     $result = $sql['logon']->query("SELECT login, email FROM accounts WHERE login='".$user_name."' OR login='".$screenname."'");
   else
     $result = $sql['logon']->query("SELECT username AS login, email FROM account WHERE username='".$user_name."' OR username='".$screenname."'");
-    
+
   if ( $sql['logon']->num_rows($result) )
   {
     // there is already someone with same account name
@@ -237,7 +240,7 @@ function doregister()
         $query = "INSERT INTO accounts (login, password, gm, banned, email, flags) VALUES ('".$user_name."', '".$pass."', '0', '0', '".$mail."', '".$expansion."')";
       else
         $query = "INSERT INTO account (username, sha_pass_hash, email, expansion) VALUES ('".$user_name."', '".(sha1(strtoupper($user_name.":".$pass)))."', '".$mail."', '".$expansion."')";
-      
+
       $a_result = $sql['logon']->query($query);
     }
     else
@@ -247,10 +250,10 @@ function doregister()
         $query = "INSERT INTO accounts (login, password, gm, banned, email, flags) VALUES ('".$user_name."', '".$pass."', '0', '0', '".$mail."', '".$expansion."')";
       else
         $query = "INSERT INTO account (username, sha_pass_hash, email, expansion) VALUES ('".$user_name."', '".$pass."', '".$mail."', '".$expansion."')";
-      
+
       $a_result = $sql['logon']->query($query);
     }
-    
+
     if ( $core == 1 )
       ;
     else
@@ -466,7 +469,7 @@ function register()
         answerbox.btn_cancel="'.lang('register', 'i_dont_agree').'";
         answerbox.btn_icon="";
       </script>
-      <div class="half_frame">
+      <div class="half_frame fieldset_border">
         <span class="legend">'.lang('register', 'create_acc').'</span>
         <form method="post" action="register.php?action=doregister" name="form">
           <input type="hidden" name="pass" value="" maxlength="256" />
@@ -844,7 +847,7 @@ function do_activate()
     $p_query = "UPDATE config_accounts SET TempPassword='' WHERE Login='".$row['Login']."'";
     $p_result = $sql['mgr']->query($p_query);
   }
-  
+
   if ( $u_result )
     redirect('login.php?error=7');
 }
