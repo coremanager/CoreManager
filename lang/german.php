@@ -763,6 +763,8 @@ $GLOBALS['lang_edit'] = array
   'female' => 'Female',
   'unavailable' => 'Not available to GM\'s',
   'use_valid_level' => 'Try providing a VALID Level for the Avatar!',
+  'email_changed' => 'An Email Change has been requested.<br />(Click to <b>cancel</b> the request)',
+  'email_change_failed' => 'Unable to change Email Address!',
 );
 
 
@@ -1744,6 +1746,7 @@ $GLOBALS['lang_admin'] = array
   'languagelocalessearchoption' => 'Lokale Such Option',
   'languagesiteencoding' => 'Seitenencoding',
   'shownewuser' => 'Show Newest Member',
+  'sendonemail' => 'Send Mail On Email Change',
 
   'edit' => '&Auml;ndern',
   'remove' => 'L&ouml;schen',
@@ -1967,6 +1970,7 @@ $GLOBALS['lang_admin_tip'] = array
   'languagelocalessearchoption' => 'Deaktiviert: Ungenutzt.',
   'languagesiteencoding' => 'Seitenencoding Character Set.',
   'shownewuser' => 'Show Newest Member message at bottom of page.',
+  'sendonemail' => 'Send a confirmation email to their old address when a user attempts to change their email address.',
 
   'edit' => '&Auml;ndern',
   'save' => 'Speichern',

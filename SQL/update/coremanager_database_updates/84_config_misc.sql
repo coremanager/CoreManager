@@ -1,0 +1,1 @@
+INSERT INTO `config_misc` VALUES ('Send_Mail_On_Email_Change', '0');

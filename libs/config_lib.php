@@ -580,6 +580,11 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $show_newest_user = $misc_row['Value'];
       break;
     }
+    case "Send_Mail_On_Email_Change":
+    {
+      $send_mail_on_email_change = $misc_row['Value'];
+      break;
+    }
   }
 }
 

@@ -1,0 +1,1 @@
+ALTER TABLE `config_accounts` ADD COLUMN `TempEmail` VARCHAR(255) NOT NULL DEFAULT '' AFTER `TempPassword`;

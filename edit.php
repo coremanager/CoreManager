@@ -106,8 +106,19 @@ function edit_user()
                     <td><input type="text" name="user_pass" size="42" maxlength="40" value="******" /></td>
                   </tr>
                   <tr>
-                    <td>'.lang('edit', 'mail').':</td>
-                    <td><input type="text" name="mail" size="42" maxlength="225" value="'.$acc['email'].'" /></td>
+                    <td>'.lang('edit', 'mail').':</td>';
+    if ( $screen_name['TempEmail'] )
+      $output .= '
+                    <td>
+                      <a href="edit.php?action=cancel_email_change" >
+                        <img src="img/aff_warn.gif" onmousemove="oldtoolTip(\''.lang('edit', 'email_changed').'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" />
+                      </a>
+                      <input type="text" name="mail" size="39" maxlength="225" value="'.$acc['email'].'" />
+                    </td>';
+    else
+      $output .= '
+                    <td><input type="text" name="mail" size="42" maxlength="225" value="'.$acc['email'].'" /></td>';
+    $output .= '
                   </tr>
                   <tr>
                     <td>'.lang('edit', 'invited_by').':</td>
@@ -552,7 +563,8 @@ function edit_user()
 //#############################################################################################################
 function doedit_user()
 {
-  global $output, $user_name, $logon_db, $corem_db, $sql, $core;
+  global $output, $user_name, $logon_db, $corem_db, $send_mail_on_email_change,
+    $format_mail_html, $GMailSender, $smtp_cfg, $title, $sql, $core;
 
   if ( ( empty($_POST['pass']) || ( $_POST['pass'] == '' ) )
     && ( empty($_POST['mail']) || ( $_POST['mail'] == '' ) )
@@ -596,16 +608,114 @@ function doedit_user()
     }
   }
 
-  //make sure the mail is valid mail format
-  require_once 'libs/valid_lib.php';
-  if ( ( valid_email($new_mail) ) && ( strlen($new_mail) < 225 ) )
-    ;
-  else
-    redirect('edit.php?error=2');
-
   // set screen name
   if ( $screenname )
-    $sn_result = $sql['mgr']->query("INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '".$screenname."')");
+  {
+    $sn_check_query = "SELECT * FROM config_accounts WHERE Login='".$user_name."'";
+    $sn_check_result = $sql['mgr']->query($sn_check_query);
+
+    // don't add a new entry if we already have one
+    if ( $sql['mgr']->num_rows($sn_check_result) == 0 )
+      $sn_result = $sql['mgr']->query("INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '".$screenname."')");
+    else
+      $sn_result = $sql['mgr']->query("UPDATE config_accounts SET ScreenName='".$screenname."' WHERE Login='".$user_name."'");
+  }
+
+  //make sure the mail is valid mail format
+  require_once 'libs/valid_lib.php';
+  if ( !( ( valid_email($new_mail) ) && ( strlen($new_mail) < 225 ) ) )
+    redirect('edit.php?error=2');
+
+  // find out if our email changed
+  if ( $core == 1 )
+    $email_query = "SELECT email FROM accounts WHERE login='".$user_name."'";
+  else
+    $email_query = "SELECT email FROM account WHERE username='".$user_name."'";
+  $email_result = $sql['logon']->query($email_query);
+  $email = $sql['logon']->fetch_assoc($email_result);
+
+  // if it did change, then save it
+  // if we didn't have an email address already, we just accept the new one
+  if ( ( $email['email'] != '' ) && ( $email['email'] != $new_mail ) )
+  {
+    // if we have to send a confirm message, do so
+    // if not, we're clear to just save it as usual
+    if ( $send_mail_on_email_change )
+    {
+      // generate a private key based on the new email
+      $new_mail_sha = sha1($new_mail);
+
+      // prepare our confirmation message
+      if ( $format_mail_html )
+      {
+        $file_name = "mail_templates/change_email.tpl";
+      }
+      else
+      {
+        $file_name = "mail_templates/change_email_nohtml.tpl";
+      }
+      $fh = fopen($file_name, 'r');
+      $subject = fgets($fh, 4096);
+      $body = fread($fh, filesize($file_name));
+      fclose($fh);
+
+      $mail = $email['email'];
+
+      $subject = str_replace("<title>", $title, $subject);
+      if ( $format_mail_html )
+      {
+        $body = str_replace("\n", "<br />", $body);
+        $body = str_replace("\r", " ", $body);
+      }
+      $body = str_replace("<username>", $user_name, $body);
+      $body = str_replace("<email>", $new_mail, $body);
+      $body = str_replace("<key>", $new_mail_sha, $body);
+      $body = str_replace("<title>", $title, $body);
+      $body = str_replace("<base_url>", $_SERVER['SERVER_NAME'], $body);
+
+      if ( $GMailSender )
+      {
+        require_once("libs/mailer/authgMail_lib.php");
+
+        $fromName = $title." Admin";
+        authgMail($from_mail, $fromName, $mail, $mail, $subject, $body, $smtp_cfg);
+      }
+      else
+      {
+        require_once("libs/mailer/class.phpmailer.php");
+        $mailer = new PHPMailer();
+        $mailer->Mailer = $mailer_type;
+        if ( $mailer_type == "smtp" )
+        {
+          $mailer->Host = $smtp_cfg['host'];
+          $mailer->Port = $smtp_cfg['port'];
+          if( $smtp_cfg['user'] != "" )
+          {
+            $mailer->SMTPAuth  = true;
+            $mailer->Username  = $smtp_cfg['user'];
+            $mailer->Password  =  $smtp_cfg['pass'];
+          }
+        }
+
+        $mailer->WordWrap = 50;
+        $mailer->From = $from_mail;
+        $mailer->FromName = $title." Admin";
+        $mailer->Subject = $subject;
+        $mailer->IsHTML($format_mail_html);
+        $mailer->Body = $body;
+        $mailer->AddAddress($mail);
+        $mailer->Send();
+        $mailer->ClearAddresses();
+      }
+
+      // save new email
+      $temp_email_query = "UPDATE config_accounts SET TempEmail='".$new_mail."' WHERE Login='".$user_name."'";
+      $temp_email_result = $sql['mgr']->query($temp_email_query);
+
+      // save OLD email back for now
+      $new_mail = $email['email'];
+    }
+  }
     
   // Overriding Remember Me is done via a cookie
   // usage is backward from the name
@@ -657,12 +767,14 @@ function doupdate_referral($referredby)
 
     if ( $referred_by != NULL )
     {
+      // get the account to which the character belongs
       if ( $core == 1 )
         $query = "SELECT acct FROM characters WHERE guid='".$referred_by."'";
       else
         $query = "SELECT account AS acct FROM characters WHERE guid='".$referred_by."'";
       $c_acct = $sql['char']->fetch_row($sql['char']->query($query));
 
+      // check that the account actually exists (that we don't have an orphan character)
       if ( $core == 1 )
         $query = "SELECT acct FROM accounts WHERE acct='".$c_acct[0]."'";
       else
@@ -671,6 +783,7 @@ function doupdate_referral($referredby)
       $result = $sql['logon']->fetch_assoc($result);
       $result = $result['acct'];
 
+      // save
       if ( $result != $user_id )
       {
         $query = "INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES ('".$user_id."', '".$referred_by."', '".$result."')";
@@ -762,6 +875,53 @@ function profile_set()
 
 
 //###############################################################################################################
+// CONFIRM or CANCEL EMAIL CHANGE
+//###############################################################################################################
+function confirm_email()
+{
+  global $user_name, $sql, $core;
+
+  // get our confirmation key
+  $key = $sql['mgr']->quote_smart($_GET['key']);
+
+  // check that we have an account with that key
+  $check_email_query = "SELECT TempEmail FROM config_accounts WHERE SHA(TempEmail)='".$key."'";
+  $check_email_result = $sql['mgr']->query($check_email_query);
+
+  if ( $sql['mgr']->num_rows($check_email_result) != 0 )
+  {
+    // get our new email
+    $temp_email = $sql['mgr']->fetch_assoc($check_email_result);
+    $temp_email = $temp_email['TempEmail'];
+
+    // save the email
+    if ( $core == 1 )
+      $set_email_query = "UPDATE accounts SET email='".$temp_email."' WHERE login='".$user_name."'";
+    else
+      $set_email_query = "UPDATE account SET email='".$temp_email."' WHERE username='".$user_name."'";
+    $sql['logon']->query($set_email_query);
+
+    // clear our temp
+    $clear_temp_query = "UPDATE config_accounts SET TempEmail='' WHERE Login='".$user_name."'";
+    $sql['mgr']->query($clear_temp_query);
+
+    redirect("edit.php?error=3");
+  }
+  else
+    redirect("edit.php?error=8");
+}
+
+function cancel_email_change()
+{
+  global $user_name, $sql;
+
+  $cancel_query = "UPDATE config_accounts SET TempEmail='' WHERE Login='".$user_name."'";
+  $sql['mgr']->query($cancel_query);
+
+  redirect('edit.php');
+}
+
+//###############################################################################################################
 // MAIN
 //###############################################################################################################
 $err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
@@ -791,6 +951,9 @@ elseif ( $err == 6 )
 elseif ( $err == 7 )
   $output .= '
             <h1><font class="error">'.lang('edit', 'use_valid_level').'</font></h1>';
+elseif ( $err == 8 )
+  $output .= '
+            <h1><font class="error">'.lang('edit', 'email_change_failed').'</font></h1>';
 else
   $output .= '
             <h1>'.lang('edit', 'edit_your_acc').'</h1>';
@@ -810,6 +973,10 @@ elseif ( $action == 'theme_set' )
   theme_set();
 elseif ( $action == 'profile_set' )
   profile_set();
+elseif ( $action == 'confirm_email' )
+  confirm_email();
+elseif ( $action == 'cancel_email_change' )
+  cancel_email_change();
 else
   edit_user();
 

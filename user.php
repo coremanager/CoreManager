@@ -1309,7 +1309,16 @@ function edit_user()
                 <td>'.lang('user', 'email').':</td>';
     if ( $user_lvl >= $action_permission['update'] )
     {
-      $output .= '
+      if ( $screenname['TempEmail'] )
+        $output .= '
+                    <td>
+                      <a href="user.php?action=cancel_email_change&username='.$data['login'].'&acct='.$data['acct'].'" >
+                        <img src="img/aff_warn.gif" onmousemove="oldtoolTip(\''.lang('edit', 'email_changed').'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" />
+                      </a>
+                      <input type="text" name="mail" size="39" maxlength="225" value="'.$data['email'].'" />
+                    </td>';
+      else
+        $output .= '
                 <td><input type="text" name="mail" size="42" maxlength="225" value="'.$data['email'].'" /></td>';
     }
     else
@@ -1871,12 +1880,14 @@ function doupdate_referral($referredby, $user_id)
 
     if ( $referred_by != NULL )
     {
+      // get the account to which the character belongs
       if ( $core == 1 )
         $query = "SELECT acct FROM characters WHERE guid='".$referred_by."'";
       else
         $query = "SELECT account AS acct FROM characters WHERE guid='".$referred_by."'";
       $c_acct = $sql['char']->fetch_row($sql['char']->query($query));
 
+      // check that the account actually exists (that we don't have an orphan character)
       if ( $core == 1 )
         $query = "SELECT acct FROM accounts WHERE acct='".$c_acct[0]."'";
       else
@@ -1885,6 +1896,7 @@ function doupdate_referral($referredby, $user_id)
       $result = $sql['logon']->fetch_assoc($result);
       $result = $result['acct'];
 
+      // save
       if ( $result != $user_id )
       {
         $query = "INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES ('".$user_id."', '".$referred_by."', '".$result."')";
@@ -1895,6 +1907,23 @@ function doupdate_referral($referredby, $user_id)
         return false;
     }
   }
+}
+
+
+//###############################################################################################################
+// CANCEL EMAIL CHANGE
+//###############################################################################################################
+function cancel_email_change()
+{
+  global $sql;
+
+  $user_name = $sql['mgr']->quote_smart($_GET['username']);
+  $acct = $sql['mgr']->quote_smart($_GET['acct']);
+
+  $cancel_query = "UPDATE config_accounts SET TempEmail='' WHERE Login='".$user_name."'";
+  $sql['mgr']->query($cancel_query);
+
+  redirect('user.php?action=edit_user&error=13&acct='.$acct);
 }
 
 
@@ -2007,6 +2036,9 @@ switch ( $action )
     break;
   case "backup_user":
     backup_user();
+    break;
+  case "cancel_email_change":
+    cancel_email_change();
     break;
   default:
     browse_users();
