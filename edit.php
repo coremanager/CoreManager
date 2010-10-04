@@ -114,7 +114,7 @@ function edit_user()
                     <td>';
     if ( $referred_by == NULL )
       $output .= '
-                      <input type="text" name="referredby" size="42" maxlength="12" value="'.$referred_by.'" />';
+                      <input type="text" name="referredby" size="20" maxlength="12" value="'.$referred_by.'" /> ('.lang('user', 'charname').')';
     else
       $output .= '
                     '.$referred_by.'';
@@ -605,7 +605,7 @@ function doedit_user()
 
   // set screen name
   if ( $screenname )
-    $sql['mgr']->query("INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '".$screenname."')");
+    $sn_result = $sql['mgr']->query("INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '".$screenname."')");
     
   // Overriding Remember Me is done via a cookie
   // usage is backward from the name
@@ -632,9 +632,9 @@ function doedit_user()
   else
     $query = "UPDATE account SET email='".$new_mail."', ".$new_pass." expansion='".$new_expansion."' WHERE username='".$user_name."'";
 
-  $sql['logon']->query($query);
+  $acct_result = $sql['logon']->query($query);
 
-  if ( doupdate_referral($referredby) || $sql['logon']->affected_rows() || $sql['mgr']->affected_rows() || $other_changes )
+  if ( doupdate_referral($referredby) || $acct_result || $sn_result || $other_changes )
     redirect('edit.php?error=3');
   else
     redirect('edit.php?error=4');
@@ -644,27 +644,43 @@ function doedit_user()
 function doupdate_referral($referredby)
 {
   global $corem_db, $logon_db, $user_id, $sql;
+  
+  $result = $sql['mgr']->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount='".$user_id."'");
+  $result = $sql['mgr']->fetch_assoc($result);
+  $result = $result['InvitedBy'];
 
-  if ( NULL == $sql['mgr']->result($sql['mgr']->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount='".$user_id."'"), 0))
+  if ( $result == NULL )
   {
-    $referred_by = $sql['char']->result($sql['char']->query("SELECT guid FROM characters WHERE name='".$referredby."'"), 0);
+    $referred_by_result = $sql['char']->query("SELECT guid FROM characters WHERE name='".$referredby."'");
+    $referred_by = $sql['char']->fetch_assoc($referred_by_result);
+    $referred_by = $referred_by['guid'];
 
-    if ( $referred_by == NULL )
-      ;
-    else
+    if ( $referred_by != NULL )
     {
-      $char = $sql['char']->result($sql['char']->query("SELECT acct FROM characters WHERE guid='".$referred_by."'"), 0, 'account');
-      $result = $sql['logon']->result($sql['logon']->query("SELECT acct FROM accounts WHERE acct='".$char."'"), 0, 'id');
-      if ( $result == $user_id );
+      if ( $core == 1 )
+        $query = "SELECT acct FROM characters WHERE guid='".$referred_by."'";
       else
+        $query = "SELECT account AS acct FROM characters WHERE guid='".$referred_by."'";
+      $c_acct = $sql['char']->fetch_row($sql['char']->query($query));
+
+      if ( $core == 1 )
+        $query = "SELECT acct FROM accounts WHERE acct='".$c_acct[0]."'";
+      else
+        $query = "SELECT id AS acct FROM account WHERE id='".$c_acct[0]."'";
+      $result = $sql['logon']->query($query);
+      $result = $sql['logon']->fetch_assoc($result);
+      $result = $result['acct'];
+
+      if ( $result != $user_id )
       {
-        $sql['mgr']->query("INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES ('".$user_id."', '".$referred_by."', '".$result."')");
+        $query = "INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES ('".$user_id."', '".$referred_by."', '".$result."')";
+        $sql['mgr']->query($query);
         return true;
       }
+      else
+        return false;
     }
-
   }
-  return false;
 }
 
 

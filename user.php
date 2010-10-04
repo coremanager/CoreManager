@@ -1176,7 +1176,7 @@ function edit_user()
     $screenname['SecurityLevel'] = 0;
 
   $refguid = $sql['mgr']->fetch_assoc($sql['mgr']->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount='".$data['acct']."'"));
-  $refguid = $refguid['InveitedBy'];
+  $refguid = $refguid['InvitedBy'];
   $referred_by = $sql['char']->fetch_assoc($sql['char']->query("SELECT name FROM characters WHERE guid='".$refguid."'"));
   unset($refguid);
   $referred_by = $referred_by['name'];
@@ -1325,7 +1325,7 @@ function edit_user()
     if ( ( $user_lvl >= $action_permission['update'] ) && ( !$referred_by != NULL ) )
     {
       $output .= '
-                  <input type="text" name="referredby" size="42" maxlength="12" value="'.$referred_by.'" />';
+                  <input type="text" name="referredby" size="20" maxlength="12" value="'.$referred_by.'" /> ('.lang('user', 'charname').')';
     }
     else
     {
@@ -1713,7 +1713,10 @@ function doedit_user()
     $sn_result = $sql['mgr']->query($query);
     if ( $sql['mgr']->num_rows($sn_result) <> 0 )
       redirect('user.php?action=edit_user&acct='.$acct.'&error=7&');
-    $query = "SELECT * FROM accounts WHERE login='".$screenname."'";
+    if ( $core == 1 )
+      $query = "SELECT * FROM accounts WHERE login='".$screenname."'";
+    else
+      $query = "SELECT * FROM account WHERE username='".$screenname."'";
     $sn_result = $sql['logon']->query($query);
     if ( $sql['logon']->num_rows($sn_result) <> 0 )
       redirect('user.php?action=edit_user&acct='.$acct.'&error=7');
@@ -1730,6 +1733,8 @@ function doedit_user()
   require_once("libs/valid_lib.php");
   if ( !valid_alphabetic($login) )
     redirect("user.php?action=edit_user&error=9&acct=".$acct);
+
+  // record changes to Banned status
   if ( !$banned )
   {
     if ( $core == 1 )
@@ -1740,22 +1745,48 @@ function doedit_user()
   else
   {
     if ( $core == 1 )
-      $result = $sql['logon']->query("SELECT COUNT(*) FROM accounts WHERE banned<>0 AND acct='".$acct."'");
+      $ban_count = "SELECT COUNT(*) FROM accounts WHERE banned<>0 AND acct='".$acct."'";
     else
-      $result = $sql['logon']->query("SELECT COUNT(*) FROM account_banned WHERE active<>0 AND id='".$acct."'");
+      $ban_count = "SELECT COUNT(*) FROM account_banned WHERE active<>0 AND id='".$acct."'";
+    $result = $sql['logon']->query($ban_count);
 
     if ( !$sql['logon']->result($result, 0) )
     {
       if ( $core == 1 )
-        $ban_query = "UPDATE accounts SET banned='".(time()+(365*24*3600))."', banreason='".$banreason."' WHERE acct='".$acct."'";
+        $ban_query = "INSERT INTO accounts (acct, banned, banreason) VALUES ('".$acct."', '".(time()+(365*24*3600))."', '".$banreason."')";
       else
         $ban_query = "INSERT INTO account_banned (id, bandate, unbandate, bannedby, banreason, active)
                  VALUES (".$acct.", ".time().", ".(time()+(365*24*3600)).", '".$user_name."', '".$banreason."', 1)";
-
-      $sql['logon']->query($ban_query);
     }
+    else
+    {
+      if ( $core == 1 )
+        $ban_query = "UPDATE accounts SET banned='".(time()+(365*24*3600))."', banreason='".$banreason."' WHERE acct='".$acct."'";
+      else
+        $ban_query = "UPDATE account_banned SET bandate='".time()."', unbandate='".(time()+(365*24*3600))."', bannedby='".$user_name."', banreason='".$banreason."', active=1 WHERE id='".$acct."'";
+    }
+
+    $sql['logon']->query($ban_query);
   }
 
+  // record changes in Security Level
+  if ( $core == 1 )
+    $acct_name_query = "SELECT login FROM `".$logon_db['name']."`.accounts WHERE acct='".$acct."'";
+  else
+    $acct_name_query = "SELECT username AS login FROM `".$logon_db['name']."`.account WHERE id='".$acct."'";
+
+  $sec_level_query = "SELECT * FROM config_accounts WHERE Login=(".$acct_name_query.")";
+  $sec_level_result = $sql['mgr']->query($sec_level_query);
+  $sec_level_fields = $sql['mgr']->fetch_assoc($sec_level_result);
+
+  if ( ( $sec_level_fields['SecurityLevel'] != NULL ) && ( $sec_level_fields['SecurityLevel'] != $seclevel ) )
+    $sec_level_query = "UPDATE config_accounts SET SecurityLevel='".$seclevel."' WHERE Login=(".$acct_name_query.")";
+  else
+    $sec_level_query = "INSERT INTO config_accounts (Login, SecurityLevel) VALUES ((".$acct_name_query."), '".$seclevel."')";
+
+  $sec_level_result = $sql['mgr']->query($sec_level_query);
+
+  // record Screen Name
   if ( ( $screenname <> $_POST['oldscreenname'] ) || ( $login <> $_POST['oldlogin']) )
   {
     if ($login == $_POST['oldlogin'])
@@ -1772,6 +1803,7 @@ function doedit_user()
   else
       $s_result = true;
 
+  // record changes in password
   if ( $password == "******" )
   {
     if ( $core == 1 )
@@ -1825,24 +1857,38 @@ function doedit_user()
 
 function doupdate_referral($referredby, $user_id)
 {
-  global $logon_db, $corem_db, $characters_db, $realm_id, $sql;
+  global $logon_db, $corem_db, $characters_db, $realm_id, $sql, $core;
 
-  $result = $sql['mgr']->fetch_row($sql['mgr']->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount='".$user_id."'"));
-  $result = $result[0];
+  $result = $sql['mgr']->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount='".$user_id."'");
+  $result = $sql['mgr']->fetch_assoc($result);
+  $result = $result['InvitedBy'];
 
   if ( $result == NULL )
   {
-    $referred_by = $sql['char']->fetch_row($sql['char']->query("SELECT guid FROM characters WHERE name='".$referredby."'"));
-    $referred_by = $referred_by[0];
+    $referred_by_result = $sql['char']->query("SELECT guid FROM characters WHERE name='".$referredby."'");
+    $referred_by = $sql['char']->fetch_assoc($referred_by_result);
+    $referred_by = $referred_by['guid'];
 
     if ( $referred_by != NULL )
     {
-      $c_acct = $sql['char']->fetch_row($sql['char']->query("SELECT acct FROM characters WHERE guid='".$referred_by."'"));
-      $result = $sql['logon']->fetch_row($sql['logon']->query("SELECT acct FROM accounts WHERE acct='".$c_acct."'"));
-      $result = $result[0];
+      if ( $core == 1 )
+        $query = "SELECT acct FROM characters WHERE guid='".$referred_by."'";
+      else
+        $query = "SELECT account AS acct FROM characters WHERE guid='".$referred_by."'";
+      $c_acct = $sql['char']->fetch_row($sql['char']->query($query));
+
+      if ( $core == 1 )
+        $query = "SELECT acct FROM accounts WHERE acct='".$c_acct[0]."'";
+      else
+        $query = "SELECT id AS acct FROM account WHERE id='".$c_acct[0]."'";
+      $result = $sql['logon']->query($query);
+      $result = $sql['logon']->fetch_assoc($result);
+      $result = $result['acct'];
+
       if ( $result != $user_id )
       {
-        $sql['mgr']->query("INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES ('".$user_id."', '".$referred_by."', '".$result."')");
+        $query = "INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES ('".$user_id."', '".$referred_by."', '".$result."')";
+        $sql['mgr']->query($query);
         return true;
       }
       else
