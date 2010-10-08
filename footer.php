@@ -76,7 +76,7 @@
     }
 
     $output .= 
-                lang('footer', 'newest').': '.( ( $user_lvl >= gmlevel('4') ) ? '<a href="http://thisisjunk.servegame.org/user.php?action=edit_user&error=11&acct='.$new['acct'].'">' : '' ).$new['Login'].( ( $user_lvl >= gmlevel('4') ) ? '</a>' : '' ).'
+                lang('footer', 'newest').': '.( ( $user_lvl >= gmlevel('4') ) ? '<a href="user.php?action=edit_user&error=11&acct='.$new['acct'].'">' : '' ).$new['Login'].( ( $user_lvl >= gmlevel('4') ) ? '</a>' : '' ).'
                 <br />';
   }
 
