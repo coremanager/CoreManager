@@ -87,6 +87,15 @@ function char_inv()
     $query = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
     $owner_gmlvl = $sql['mgr']->result($query, 0, 'gm');
 
+    // find out what mode we're in View or Delete (0 = View, 1 = Delete)
+    $mode = ( ( isset($_GET['mode']) ) ? $_GET['mode'] : 0 );
+    // only the character's owner or a GM with Delete privs can enter Delete Mode
+    if ( $owner_name != $user_name )
+      if ( $user_lvl < $action_permission['delete'] )
+        $mode = 0;
+    else
+      $mode = $mode;
+
     // check user permission
     if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
     {
@@ -181,7 +190,7 @@ function char_inv()
               if ( isset($bag[0][$slot['slot']-23]) )
                 $bag[0][$slot['slot']-23][0]++;
               else
-                $bag[0][$slot['slot']-23] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
+                $bag[0][$slot['slot']-23] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
             }
             elseif ( $slot['slot'] < 67 ) // SLOT 39 TO 66 (Bank)
             {
@@ -195,7 +204,7 @@ function char_inv()
               $i_result = $sql['world']->query($i_query);
               $i = $sql['world']->fetch_assoc($i_result);
 
-              $bank[0][$slot['slot']-39] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
+              $bank[0][$slot['slot']-39] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
             }
             elseif ( $slot['slot'] < 74 ) // SLOT 67 TO 73 (Bank Bags)
             {
@@ -223,7 +232,7 @@ function char_inv()
               if ( isset($bag[$bag_id[$slot['containerslot']]][$slot['slot']]) )
                 $bag[$bag_id[$slot['containerslot']]][$slot['slot']][1]++;
               else
-                $bag[$bag_id[$slot['containerslot']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
+                $bag[$bag_id[$slot['containerslot']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
             }
             // Bank Bags
             elseif ( isset($bank_bag_id[$slot['containerslot']]) )
@@ -238,7 +247,7 @@ function char_inv()
               $i_result = $sql['world']->query($i_query);
               $i = $sql['world']->fetch_assoc($i_result);
 
-              $bank[$bank_bag_id[$slot['containerslot']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
+              $bank[$bank_bag_id[$slot['containerslot']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
             }
           }
         }
@@ -263,7 +272,7 @@ function char_inv()
               if ( isset($bag[0][$slot['slot']-23]) )
                 $bag[0][$slot['slot']-23][0]++;
               else
-                $bag[0][$slot['slot']-23] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
+                $bag[0][$slot['slot']-23] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
             }
             elseif ( $slot['slot'] < 67 ) // SLOT 39 TO 66 (Bank)
             {
@@ -272,7 +281,7 @@ function char_inv()
               $i_result = $sql['world']->query($i_query);
               $i = $sql['world']->fetch_assoc($i_result);
 
-              $bank[0][$slot['slot']-39] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
+              $bank[0][$slot['slot']-39] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
             }
             elseif ( $slot['slot'] < 74 ) // SLOT 67 TO 73 (Bank Bags)
             {
@@ -295,7 +304,7 @@ function char_inv()
               if ( isset($bag[$bag_id[$slot['bag']]][$slot['slot']]) )
                 $bag[$bag_id[$slot['bag']]][$slot['slot']][1]++;
               else
-                $bag[$bag_id[$slot['bag']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
+                $bag[$bag_id[$slot['bag']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
             }
             // Bank Bags
             elseif ( isset($bank_bag_id[$slot['bag']]) )
@@ -305,7 +314,7 @@ function char_inv()
               $i_result = $sql['world']->query($i_query);
               $i = $sql['world']->fetch_assoc($i_result);
 
-              $bank[$bank_bag_id[$slot['bag']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags']);
+              $bank[$bank_bag_id[$slot['bag']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
             }
           }
         }
@@ -389,9 +398,19 @@ function char_inv()
                       <div style="left:'.(($pos+$dsp)%4*42).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">
                         <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');">
                           <img src="'.get_item_icon($item[0]).'" alt="" />
-                        </a>
+                        </a>';
+          if ( $mode )
+            $output .= '
+                        <div>
+                          <a href="char_inv.php?action=delete_item&id='.$cid.'&bag='.$item[9].'&slot='.$item[10].'&item='.$item[0].'&mode='.$mode.'">
+                            <img src="img/aff_cross.png" id="ch_inv_delete" />
+                          </a>
+                        </div>';
+          else
+            $output .= '
                         <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
-                        <div id="ch_inv_quantity">'.$item[2].'</div>
+                        <div id="ch_inv_quantity">'.$item[2].'</div>';
+          $output .= '
                       </div>';
           // build a tooltip object for this item
           $output .= '
@@ -433,9 +452,19 @@ function char_inv()
                       <div style="left:'.($pos%4*42).'px;top:'.(floor($pos/4)*41).'px;">
                         <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');">
                           <img src="'.get_item_icon($item[0]).'" alt="" />
-                        </a>
+                        </a>';
+          if ( $mode )
+            $output .= '
+                        <div>
+                          <a href="char_inv.php?action=delete_item&id='.$cid.'&bag='.$item[9].'&slot='.$item[10].'&item='.$item[0].'&mode='.$mode.'">
+                            <img src="img/aff_cross.png" id="ch_inv_delete" />
+                          </a>
+                        </div>';
+          else
+            $output .= '
                         <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
-                        <div id="ch_inv_quantity">'.$item[2].'</div>
+                        <div id="ch_inv_quantity">'.$item[2].'</div>';
+          $output .= '
                       </div>';
         // build a tooltip object for this item
         $output .= '
@@ -470,9 +499,19 @@ function char_inv()
                       <div style="left:'.($pos%7*43).'px;top:'.(floor($pos/7)*41).'px;">
                         <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');" onmouseout="HideTooltip(\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');">
                           <img src="'.get_item_icon($item[0]).'" class="inv_icon" alt="" />
-                        </a>
+                        </a>';
+          if ( $mode )
+            $output .= '
+                        <div>
+                          <a href="char_inv.php?action=delete_item&id='.$cid.'&bag='.$item[9].'&slot='.$item[10].'&item='.$item[0].'&mode='.$mode.'">
+                            <img src="img/aff_cross.png" id="ch_inv_delete" />
+                          </a>
+                        </div>';
+          else
+            $output .= '
                         <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
-                        <div id="ch_inv_quantity">'.$item[2].'</div>
+                        <div id="ch_inv_quantity">'.$item[2].'</div>';
+           $output .= '
                       </div>';
         // build a tooltip object for this item
         $output .= '
@@ -558,9 +597,19 @@ function char_inv()
                       <div style="left:'.(($pos+$dsp)%4*43).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">
                         <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');">
                           <img src="'.get_item_icon($item[0]).'" alt="" />
-                        </a>
+                        </a>';
+          if ( $mode )
+            $output .= '
+                        <div>
+                          <a href="char_inv.php?action=delete_item&id='.$cid.'&bag='.$item[9].'&slot='.$item[10].'&item='.$item[0].'&mode='.$mode.'">
+                            <img src="img/aff_cross.png" id="ch_inv_delete" />
+                          </a>
+                        </div>';
+          else
+            $output .= '
                         <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
-                        <div id="ch_inv_quantity">'.$item[2].'</div>
+                        <div id="ch_inv_quantity">'.$item[2].'</div>';
+          $output .= '
                       </div>';
                       // build a tooltip object for this item
                       $output .= '
@@ -597,6 +646,14 @@ function char_inv()
                 </td>
                 <td>';
 
+      // show Delete Mode / View Mode button depending on current mode
+      if ( $mode )
+        makebutton(lang('char', 'viewmode'), 'char_inv.php?id='.$cid.'&realm='.$realmid.'&mode=0" type="def', 130);
+      else
+        makebutton(lang('char', 'deletemode'), 'char_inv.php?id='.$cid.'&realm='.$realmid.'&mode=1" type="def', 130);
+      $output .= '
+                </td>
+                <td>';
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
       if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) )
@@ -641,16 +698,91 @@ function char_inv()
 
 
 //#############################################################################
+// DELETE ITEM FORM
+//#############################################################################
+function delete_item()
+{
+  global $output, $action_permission;
+
+  valid_login($action_permission['delete']);
+
+  $output .= '
+          <center>
+            <img src="img/warn_red.gif" width="48" height="48" alt="" />
+              <h1>
+                <font class="error">'.lang('global', 'are_you_sure').'</font>
+              </h1>
+              <br />
+              <font class="bold">'.
+                lang('char', 'thisitem').'
+                <br />'.
+                lang('global', 'will_be_erased').'
+              </font>
+              <br /><br />
+              <table width="300" class="hidden">
+                <tr>
+                  <td>';
+  makebutton(lang('global', 'yes'), 'char_inv.php?action=dodelete_item&id='.$_GET['id'].'&bag='.$_GET['bag'].'&slot='.$_GET['slot'].'&item='.$_GET['item'].'&mode='.$_GET['mode'].'" type="wrn', 130);
+  makebutton(lang('global', 'no'), 'char_inv.php?id='.$_GET['id'].'&mode='.$_GET['mode'].'" type="def', 130);
+  $output .= '
+                  </td>
+                </tr>
+              </table>
+            </center>';
+}
+
+
+//#############################################################################
+// DELETE ITEM
+//#############################################################################
+function dodelete_item()
+{
+  global $output, $action_permission, $sql, $core;
+
+  valid_login($action_permission['delete']);
+
+  // get our variables
+  $cid = $sql['char']->quote_smart($_GET['id']);
+  $bag = $sql['char']->quote_smart($_GET['bag']);
+  $slot = $sql['char']->quote_smart($_GET['slot']);
+  $item = $sql['char']->quote_smart($_GET['item']);
+
+  if ( ( empty($cid) ) || ( empty($bag) ) || ( empty($slot) ) || ( empty($item) ) )
+    redirect("char_inv.php");
+
+  if ( $core == 1 )
+    $query = "DELETE FROM playeritems WHERE ownerguid='".$cid."' AND entry='".$item."' AND containerslot='".$bag."' AND slot='".$slot."'";
+  else
+  {
+    $query = "SELECT item FROM character_inventory WHERE guid='".$cid."' AND item_template='".$item."' AND bag='".$bag."' AND slot='".$slot."'";
+    $result = $sql['char']->query($query);
+    $result = $sql['char']->fetch_assoc($result);
+    $item_guid = $result['item'];
+
+    $query = "DELETE FROM character_inventory WHERE item=".$item_guid;
+  }
+
+  $result = $sql['char']->query($query);
+
+  redirect("char_inv.php?id=".$cid."&mode=".$_GET['mode']);
+}
+
+
+//#############################################################################
 // MAIN
 //#############################################################################
 
-// action variable reserved for future use
-//$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
 
-$output .= "
-      <div class=\"bubble\">";
+$output .= '
+      <div class="bubble">';
 
-char_inv();
+if ( $action == 'delete_item' )
+  delete_item();
+elseif ( $action == 'dodelete_item' )
+  dodelete_item();
+else
+  char_inv();
 
 unset($action_permission);
 

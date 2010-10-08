@@ -1494,6 +1494,14 @@ tr td.rep0
 	font-size: 14px;
   pointer-events: none;
 }
+#ch_inv_delete
+{
+  position: relative;
+	width: 16px;
+  height: 16px;
+  top: -20px;
+  left: 20px;
+}
 #ch_backpack_icon_margin
 {
 	margin-left: 100px;

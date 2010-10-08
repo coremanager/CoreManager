@@ -473,6 +473,10 @@ $GLOBALS['lang_char'] = array
   'itemsattached' => 'item(s) attached',
   'cod' => 'Message is COD',
   'isdue' => 'is due',
+  // ---- char_inv.php ----
+  'deletemode' => 'Delete Mode',
+  'viewmode' => 'View Mode',
+  'thisitem' => 'This Item',
 );
 
 
