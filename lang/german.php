@@ -765,6 +765,7 @@ $GLOBALS['lang_edit'] = array
   'use_valid_level' => 'Try providing a VALID Level for the Avatar!',
   'email_changed' => 'An Email Change has been requested.<br />(Click to <b>cancel</b> the request)',
   'email_change_failed' => 'Unable to change Email Address!',
+  'pass_warning' => 'There may be some delay before the new password will work for game access.',
 );
 
 

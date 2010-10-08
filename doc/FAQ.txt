@@ -5,3 +5,10 @@ Q: I'm getting this message:
   
 A: Most likely you've made a mistake in the database configuration your provided for CoreManager.
   Please note: For usernames and passwords MySQL is case sensitive.
+
+
+Q: Why is the Character Sheet page incomplete or garbled?
+
+A: Because your Game Server isn't saving all of Character Data we need.
+  For ArcEmu: Set SaveExtendedCharData to "1".
+  For MaNGOS/Trinity: Set PlayerSave.Stats.MinLevel to 1.

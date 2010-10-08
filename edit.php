@@ -103,7 +103,10 @@ function edit_user()
     $output .= '
                   <tr>
                     <td>'.lang('edit', 'password').':</td>
-                    <td><input type="text" name="user_pass" size="42" maxlength="40" value="******" /></td>
+                    <td>
+                      <input type="text" name="user_pass" size="39" maxlength="40" value="******" />
+                      <img src="img/information.png" onmousemove="oldtoolTip(\''.lang('edit', 'pass_warning').'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" />
+                    </td>
                   </tr>
                   <tr>
                     <td>'.lang('edit', 'mail').':</td>';
