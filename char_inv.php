@@ -65,10 +65,10 @@ function char_inv()
 
   // getting character data from database
   if ( $core == 1 )
-    $result = $sql['char']->query("SELECT acct, name, race, class, level, gender, gold
+    $result = $sql['char']->query("SELECT acct, name, race, class, level, gender, gold, online
       FROM characters WHERE guid='".$cid."' LIMIT 1");
   else
-    $result = $sql['char']->query("SELECT account AS acct, name, race, class, level, gender, money AS gold
+    $result = $sql['char']->query("SELECT account AS acct, name, race, class, level, gender, money AS gold, online
       FROM characters WHERE guid='".$cid."' LIMIT 1");
 
   // no point going further if character does not exist
@@ -95,6 +95,10 @@ function char_inv()
         $mode = 0;
     else
       $mode = $mode;
+
+    // View Mode is only availble on characters that are offline
+    if ( $char['online'] != 0 )
+      $mode = 0;
 
     // check user permission
     if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )

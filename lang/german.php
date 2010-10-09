@@ -274,8 +274,9 @@ $GLOBALS['lang_header'] = array
   'irc' => 'IRC Applet',
   'questitemvendor' => 'Quest-Item Verk&auml;ufer',
   'ultravendor' => 'Ultra Verk&auml;ufer',
-  'namechanger' => 'Name &auml;ndern',
-  'racechanger' => 'Rasse &auml;ndern',
+  'namechanger' => 'Character Name Change',
+  'racechanger' => 'Character Race Change',
+  'transfer' => 'Character Transfer',
   'bugreport' => 'Bug Report',
   'unstuck' => 'Ruhestein',
 
@@ -1470,7 +1471,7 @@ $GLOBALS['lang_xname'] = array
   'to' => 'zu',
   // end message
   'nomatch' => 'Der Charaktername stimmt nicht &uuml;berein!',
-  'already' => 'Es ist bereits eine Namens- oder Rassen&auml;nderung f&uuml;r diesen Charakter beantragt.',
+  'already' => 'A Name Change, Race Change, or Transfer request is already on file for that character.',
   'inuse' => 'Der Name wird bereits benutzt.',
   'done' => 'Der Antrag wurde ausgef&uuml;llt.',
   'online' => 'The Character is currently online.  We cannot perform the change at this time.',
@@ -1478,7 +1479,7 @@ $GLOBALS['lang_xname'] = array
   // It MUST be URL compatible! (e.g. ü = %FC)
   // spaces MUST be replaced, use + or %20
   // To help with grammar, the body portion will look like this:
-  // Sorry, [name], your name change request has been denied.
+  // Sorry, [name], your Name Change request has been denied.
   'subject' => 'Namens%E4nderung+abgelehnt',
   'body1' => 'Entschuldige,+',
   'body2' => ',+dein+Namen%E4nderungsantrag+wurde+abgelehnt.',
@@ -1509,7 +1510,7 @@ $GLOBALS['lang_xrace'] = array
   'to' => 'zu',
   // end message
   'nomatch' => 'Die ausgewählte Klasse ist nicht kompatibel mit der Charakterklasse!',
-  'already' => 'Es ist bereits eine Namens- oder Rassen&auml;nderung f&uuml;r diesen Charakter beantragt.',
+  'already' => 'A Name Change, Race Change, or Transfer request is already on file for that character.',
   'inuse' => 'Dieser Name wird bereits genutzt.',
   'done' => 'Der Antrag wurde ausgef&uuml;llt.',
   'online' => 'The Character is currently online.  We cannot perform the change at this time.',
@@ -1521,6 +1522,43 @@ $GLOBALS['lang_xrace'] = array
   'subject' => 'Rassen%E4nderung+abgelehnt',
   'body1' => 'Entschuldige,+',
   'body2' => ',+dein+Rassen%E4nderungsantrag+wurde+abgelehnt.',
+  // end message
+);
+
+// ----- CHANGE_CHAR_ACCOUNT.PHP -----
+$GLOBALS['lang_xacct'] = array
+(
+  'changename' => 'Transfer',
+  'info' => 'The Character Tranfer process is not immediate and may take several hours to complete because of the approval process involved.<br /><br />Your character WILL be available for play during this time.',
+  'char' => 'Character',
+  'lvl' => 'Lvl',
+  'level' => 'Level',
+  'race' => 'Race',
+  'class' => 'Class',
+  'selectchar' => 'Select Character',
+  'chooseacct' => 'Select New Account',
+  'enteracct' => 'Select your desired target account',
+  'newacct' => 'New Account',
+  'save' => 'Save Changes',
+  // The following is the message that asks GMs permission to change the character's account
+  // To help with grammar it will look like this:
+  // Player [account] has requested to transfer [character] to [new acct].
+  'player' => 'Player',
+  'hasreq' => 'has requested to <b>transfer</b>',
+  'to' => 'to',
+  // end message
+  'nomatch' => 'The character names do not match!',
+  'already' => 'A Name Change, Race Change, or Transfer request is already on file for that character.',
+  'done' => 'The Transfer request has been filed.',
+  'online' => 'The Character is currently online.  We cannot perform the change at this time.',
+  // The following is for the ingame mail message about transfer denial.
+  // It MUST be URL compatible! (e.g. ü = %FC)
+  // spaces MUST be replaced, use + or %20
+  // To help with grammar, the body portion will look like this:
+  // Sorry, [name], your Transfer request has been denied.
+  'subject' => 'Transfer+denied',
+  'body1' => 'Sorry,+',
+  'body2' => ',+your+Transfer+request+has+been+denied.',
   // end message
 );
 
@@ -1599,6 +1637,7 @@ $GLOBALS['lang_admin'] = array
   'value' => 'Wert',
   'internalname' => 'Internal Name',
   'internalname2' => 'Internal<br />Name',
+  'order' => 'Order',
 
   'editforum' => 'Forum &auml;ndern',
   'delforum' => 'Forum l&ouml;schen',
@@ -1829,6 +1868,7 @@ $GLOBALS['lang_admin_tip'] = array
   'key' => 'Interner Name',
   'lang' => 'Sprache',
   'value' => 'Dieser Text wird angezeigt',
+  'order' => 'Menu display position.',
 
   'editforum' => 'Forum &auml;ndern',
   'delforum' => 'Delete Forum',

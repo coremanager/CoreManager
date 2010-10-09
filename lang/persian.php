@@ -274,8 +274,9 @@ $GLOBALS['lang_header'] = array
   'irc' => 'IRC Applet',
   'questitemvendor' => 'Quest Item Vendor',
   'ultravendor' => 'Ultra Vendor',
-  'namechanger' => 'Name Change',
-  'racechanger' => 'Race Change',
+  'namechanger' => 'Character Name Change',
+  'racechanger' => 'Character Race Change',
+  'transfer' => 'Character Transfer',
   'bugreport' => 'Bug Report',
   'unstuck' => 'Hearthstone',
 
@@ -1470,7 +1471,7 @@ $GLOBALS['lang_xname'] = array
   'to' => 'to',
   // end message
   'nomatch' => 'The character names do not match!',
-  'already' => 'A name or race change request is already on file for that character.',
+  'already' => 'A Name Change, Race Change, or Transfer request is already on file for that character.',
   'inuse' => 'That name is already in use.',
   'done' => 'The name change request has been filed.',
   'online' => 'The Character is currently online.  We cannot perform the change at this time.',
@@ -1478,10 +1479,10 @@ $GLOBALS['lang_xname'] = array
   // It MUST be URL compatible! (e.g. ü = %FC)
   // spaces MUST be replaced, use + or %20
   // To help with grammar, the body portion will look like this:
-  // Sorry, [name], your name change request has been denied.
-  'subject' => 'Name+change+denied',
+  // Sorry, [name], your Name Change request has been denied.
+  'subject' => 'Name+Change+denied',
   'body1' => 'Sorry,+',
-  'body2' => ',+your+name+change+request+has+been+denied.',
+  'body2' => ',+your+Name+Change+request+has+been+denied.',
   // end message
 );
 
@@ -1509,7 +1510,7 @@ $GLOBALS['lang_xrace'] = array
   'to' => 'to',
   // end message
   'nomatch' => 'The selected race is not compatible with the character\'s class!',
-  'already' => 'A name or race change request is already on file for that character.',
+  'already' => 'A Name Change, Race Change, or Transfer request is already on file for that character.',
   'inuse' => 'That name is in use.',
   'done' => 'The race change request has been filed.',
   'online' => 'The Character is currently online.  We cannot perform the change at this time.',
@@ -1517,10 +1518,47 @@ $GLOBALS['lang_xrace'] = array
   // It MUST be URL compatible! (e.g. ü = %FC)
   // spaces MUST be replaced, use + or %20
   // To help with grammar, the body portion will look like this:
-  // Sorry, [name], your race change request has been denied.
-  'subject' => 'Race+change+denied',
+  // Sorry, [name], your Race Change request has been denied.
+  'subject' => 'Race+Change+denied',
   'body1' => 'Sorry,+',
-  'body2' => ',+your+race+change+request+has+been+denied.',
+  'body2' => ',+your+Race+Change+request+has+been+denied.',
+  // end message
+);
+
+// ----- CHANGE_CHAR_ACCOUNT.PHP -----
+$GLOBALS['lang_xacct'] = array
+(
+  'changename' => 'Transfer',
+  'info' => 'The Character Tranfer process is not immediate and may take several hours to complete because of the approval process involved.<br /><br />Your character WILL be available for play during this time.',
+  'char' => 'Character',
+  'lvl' => 'Lvl',
+  'level' => 'Level',
+  'race' => 'Race',
+  'class' => 'Class',
+  'selectchar' => 'Select Character',
+  'chooseacct' => 'Select New Account',
+  'enteracct' => 'Select your desired target account',
+  'newacct' => 'New Account',
+  'save' => 'Save Changes',
+  // The following is the message that asks GMs permission to change the character's account
+  // To help with grammar it will look like this:
+  // Player [account] has requested to transfer [character] to [new acct].
+  'player' => 'Player',
+  'hasreq' => 'has requested to <b>transfer</b>',
+  'to' => 'to',
+  // end message
+  'nomatch' => 'The character names do not match!',
+  'already' => 'A Name Change, Race Change, or Transfer request is already on file for that character.',
+  'done' => 'The Transfer request has been filed.',
+  'online' => 'The Character is currently online.  We cannot perform the change at this time.',
+  // The following is for the ingame mail message about transfer denial.
+  // It MUST be URL compatible! (e.g. ü = %FC)
+  // spaces MUST be replaced, use + or %20
+  // To help with grammar, the body portion will look like this:
+  // Sorry, [name], your Transfer request has been denied.
+  'subject' => 'Transfer+denied',
+  'body1' => 'Sorry,+',
+  'body2' => ',+your+Transfer+request+has+been+denied.',
   // end message
 );
 
@@ -1599,6 +1637,7 @@ $GLOBALS['lang_admin'] = array
   'value' => 'Value',
   'internalname' => 'Internal Name',
   'internalname2' => 'Internal<br />Name',
+  'order' => 'Order',
 
   'editforum' => 'Edit Forum',
   'delforum' => 'Delete Forum',
@@ -1829,6 +1868,7 @@ $GLOBALS['lang_admin_tip'] = array
   'key' => 'Internal name',
   'lang' => 'Language',
   'value' => 'The text that will be printed',
+  'order' => 'Menu display position.',
 
   'editforum' => 'Edit Forum',
   'delforum' => 'Delete Forum',

@@ -1,0 +1,1 @@
+INSERT INTO `config_menus` (Menu, Action, Name, `View`, `Insert`, `Update`, `Delete`, Enabled) VALUES ('1', 'change_char_account.php', 'transfer', 0, 4, 4, 4, 1);

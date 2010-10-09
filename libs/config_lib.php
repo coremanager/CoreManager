@@ -94,7 +94,7 @@ while ($tmenus = $sqlm->fetch_assoc($temp))
   $top[1] = $tmenus['Name'];
 
   $m = array();
-  $temp_menus = $sqlm->query("SELECT * FROM config_menus WHERE Menu = '".$tmenus['Index']."'");
+  $temp_menus = $sqlm->query("SELECT * FROM config_menus WHERE Menu = '".$tmenus['Index']."' ORDER BY `Order`");
   while ($menus = $sqlm->fetch_assoc($temp_menus))
   {
     if ($menus['Enabled'])

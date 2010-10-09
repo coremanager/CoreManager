@@ -78,6 +78,10 @@ function dologin()
   $result = $sql['logon']->query($query);
   $s_result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$user_name."'");
   $temp = $sql['mgr']->fetch_assoc($s_result);
+
+  if ( $temp['gm'] == NULL )
+    $temp['gm'] = 0;
+
   $_SESSION['gm_lvl'] = $temp['gm'];
 
   //we need this later

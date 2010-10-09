@@ -2045,6 +2045,7 @@ function menus()
               <tr>
                 <th>'.lang('admin', 'edit').'</th>
                 <th>'.lang('admin', 'remove').'</th>
+                <th>'.lang('admin', 'order').'</th>
                 <th>'.lang('admin', 'internalname').'</th>
                 <th>'.lang('admin', 'action').'</th>
                 <th>'.lang('admin', 'view').'</th>
@@ -2061,8 +2062,9 @@ function menus()
               <tr>
                 <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&menu_item='.$menu['Index'].'&editmenu_item=editmenuitem"><img src="img/edit.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&menu_item='.$menu['Index'].'&delmenu_item=delmenuitem"><img src="img/aff_cross.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center>'.$menu['Order'].'</center></td>
                 <td width="15%" style="background-color:'.$color.'"><center>'.$menu['Name'].'</center></td>
-                <td width="35%" style="background-color:'.$color.'"><center>'.$menu['Action'].'</center></td>
+                <td width="25%" style="background-color:'.$color.'"><center>'.$menu['Action'].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.sec_level_name($menu['View']).' ('.$menu['View'].')'.'</center></td>
                 <td style="background-color:'.$color.'"><center>'.sec_level_name($menu['Insert']).' ('.$menu['Insert'].')'.'</center></td>
                 <td style="background-color:'.$color.'"><center>'.sec_level_name($menu['Update']).' ('.$menu['Update'].')'.'</center></td>
@@ -2118,6 +2120,10 @@ function menus()
       $output .= '
                     </select>
                   </td>
+                </tr>
+                <tr>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'order').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'order').'</a>: </td>
+                  <td><input type="text" name="order" value="'.$menu['Order'].'" id="admin_edit_menu_fields"></td>
                 </tr>
                 <tr>
                   <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'menuname').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'internalname2').'</a>: </td>
@@ -2263,6 +2269,7 @@ function savemenu()
 
   $menu_item = $sqlm->quote_smart($_GET['menu_item']);
   $menu = $sqlm->quote_smart($_GET['menu']);
+  $order = $sqlm->quote_smart($_GET['order']);
   $name = $sqlm->quote_smart($_GET['name']);
   $action = $sqlm->quote_smart($_GET['menu_action']);
   $view = $sqlm->quote_smart($_GET['view']);
@@ -2276,9 +2283,9 @@ function savemenu()
 
   $result = $sqlm->query("SELECT * FROM config_menus WHERE `Index`='".$menu_item."'");
   if ( $sqlm->num_rows($result) )
-    $result = $sqlm->query("UPDATE config_menus SET Menu='".$menu."', Name='".$name."', Action='".$action."', View='".$view."', `Insert`='".$insert."', `Update`='".$update."', `Delete`='".$delete."', Enabled='".$enabled."' WHERE `Index`='".$menu_item."'");
+    $result = $sqlm->query("UPDATE config_menus SET Menu='".$menu."', `Order`='".$order."', Name='".$name."', Action='".$action."', View='".$view."', `Insert`='".$insert."', `Update`='".$update."', `Delete`='".$delete."', Enabled='".$enabled."' WHERE `Index`='".$menu_item."'");
   else
-    $result = $sqlm->query("INSERT INTO config_menus (Menu, Name, Action, View, Insert, Update, Delete, Enabled) VALUES ('".$menu."', '".$name."', '".$action."', '".$view."', '".$insert."', '".$update."', '".$delete."', '".$enabled."')");
+    $result = $sqlm->query("INSERT INTO config_menus (Menu, `Order`, Name, Action, View, Insert, Update, Delete, Enabled) VALUES ('".$menu."', '".$order."', '".$name."', '".$action."', '".$view."', '".$insert."', '".$update."', '".$delete."', '".$enabled."')");
 
   redirect("admin.php?section=menus");
 }

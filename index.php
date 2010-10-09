@@ -402,12 +402,16 @@ else
       $result = $sql['mgr']->query("SELECT * FROM char_changes");
       while ( $change = $sql['mgr']->fetch_assoc($result) )
       {
-        $change_char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$change['guid']."'"));
+        if ( $core == 1 )
+          $change_char_query = "SELECT * FROM characters WHERE guid='".$change['guid']."'";
+        else
+          $change_char_query = "SELECT *, account AS acct FROM characters WHERE guid='".$change['guid']."'";
+        $change_char = $sql['char']->fetch_assoc($sql['char']->query($change_char_query));
 
         if ( $core == 1 )
           $change_acct_query = "SELECT * FROM accounts WHERE acct='".$change_char['acct']."'";
         else
-          $change_acct_query = "SELECT * FROM account WHERE id='".$change_char['acct']."'";
+          $change_acct_query = "SELECT *, username AS login FROM account WHERE id='".$change_char['acct']."'";
 
         $change_acct = $sql['logon']->fetch_assoc($sql['logon']->query($change_acct_query));
         if ( isset($change['new_name']) )
@@ -422,6 +426,22 @@ else
                 <td align="left" class="large">
                   <span>'.lang('xrace', 'player').' '.$change_acct['login'].' '.lang('xrace', 'hasreq').' '.$change_char['name'].' '.lang('xrace', 'to').' '.char_get_race_name($change['new_race']).'</span>';
 
+        if ( isset($change['new_acct']) )
+        {
+          if ( $core == 1 )
+            $new_acct_query = "SELECT login FROM accounts WHERE acct='".$change['new_acct']."'";
+          else
+            $new_acct_query = "SELECT username AS login FROM account WHERE id='".$change['new_acct']."'";
+          $new_acct_result = $sql['logon']->query($new_acct_query);
+          $new_acct_result = $sql['logon']->fetch_assoc($new_acct_result);
+          $new_acct_name = $new_acct_result['login'];
+
+          $output .= '
+              <tr>
+                <td align="left" class="large">
+                  <span>'.lang('xacct', 'player').' '.$change_acct['login'].' '.lang('xacct', 'hasreq').' '.$change_char['name'].' '.lang('xname', 'to').' '.$new_acct_name.'</span>';
+        }
+
         if ( $change_char['online'] )
            $output .= '
                   <br />
@@ -434,8 +454,10 @@ else
               </tr>';
         if ( isset($change['new_name']) )
           $file = 'change_char_name.php';
-        else
+        elseif ( isset($change['new_race']) )
           $file = 'change_char_race.php';
+        else
+          $file = 'change_char_account.php';
 
         $output .= '
               <tr>
