@@ -1816,7 +1816,7 @@ function doedit_user()
   if ( $password == "******" )
   {
     if ( $core == 1 )
-      $a_result = $sql['logon']->query("UPDATE account SET login='".$login."', email='".$mail."', muted='".$locked."', gm='".$gmlevel."', flags='".$expansion."' WHERE acct=".$acct);
+      $a_result = $sql['logon']->query("UPDATE accounts SET login='".$login."', email='".$mail."', muted='".$locked."', gm='".$gmlevel."', flags='".$expansion."' WHERE acct=".$acct);
     elseif ( $core == 2 )
       $a_result = $sql['logon']->query("UPDATE account SET username='".$login."', email='".$mail."', locked='".$locked."', gmlevel='".$gmlevel."', expansion='".$expansion."' WHERE id=".$acct);
     else
@@ -1839,11 +1839,11 @@ function doedit_user()
     if ( $core == 1 )
       $a_result = $sql['logon']->query("UPDATE accounts SET login='".$login."', email='".$mail."', password='".$password."', muted='".$locked."', gm='".$gmlevel."', flags='".$expansion."' WHERE acct=".$acct);
     elseif ( $core == 2 )
-      $a_result = $sql['logon']->query("UPDATE account SET username='".$login."', email='".$mail."', sha_pass_hash=UCASE('".$password."'), locked='".$locked."', gmlevel='".$gmlevel."', expansion='".$expansion."' WHERE id=".$acct);
+      $a_result = $sql['logon']->query("UPDATE account SET username='".$login."', email='".$mail."', sha_pass_hash=UCASE('".$password."'), locked='".$locked."', gmlevel='".$gmlevel."', expansion='".$expansion."', v=0, s=0 WHERE id=".$acct);
     else
     {
       // Trinity makes things a little more complex
-      $a_result = $sql['logon']->query("UPDATE account SET username='".$login."', email='".$mail."', sha_pass_hash=UCASE('".$password."'), locked='".$locked."', expansion='".$expansion."' WHERE id=".$acct);
+      $a_result = $sql['logon']->query("UPDATE account SET username='".$login."', email='".$mail."', sha_pass_hash=UCASE('".$password."'), locked='".$locked."', expansion='".$expansion."', v=0, s=0 WHERE id=".$acct);
 
       $gm_query = "SELECT * FROM account_access WHERE id='".$acct."'";
       $gm_result = $sql['logon']->query($gm_query);

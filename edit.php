@@ -743,7 +743,7 @@ function doedit_user()
   if ( $core == 1 )
     $query = "UPDATE accounts SET email='".$new_mail."', ".$new_pass." flags='".$new_expansion."' WHERE login='".$user_name."'";
   else
-    $query = "UPDATE account SET email='".$new_mail."', ".$new_pass." expansion='".$new_expansion."' WHERE username='".$user_name."'";
+    $query = "UPDATE account SET email='".$new_mail."', ".$new_pass." expansion='".$new_expansion."', v=0, s=0 WHERE username='".$user_name."'";
 
   $acct_result = $sql['logon']->query($query);
 
