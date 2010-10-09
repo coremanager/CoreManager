@@ -310,7 +310,8 @@ $GLOBALS['lang_banned'] = array
   'tot_banned' => 'تمامی توقیف شده ها',
   'ip_acc' => 'آی پی/اکانت',
   'will_be_removed_from_banned' => 'از لیست توقیف شده ها خارج می شود',
-  'ban_entry' => 'توقیف کردن آی پی/اکانت/کاراکتر',
+  'ban_entryA' => 'Ban IP / Account / Character',
+  'ban_entryMT' => 'Ban IP / Account',
   'ban' => 'توقیف',
   'delete' => 'حذف توقیف برای',
   'err_del_entry' => 'خطا در حذف کد توقیفی',
@@ -332,7 +333,8 @@ $GLOBALS['lang_banned'] = array
   'ipbans' => 'آی پی های توقیف شده',
   'characters' => 'کاراکترها',
   'ban_time' => '(توقیف شده برای(ساعت',
-  'entry' => 'کد (Acc. name / IP)',
+  'entryA' => 'Entry (Acct Name / IP / Char Name)',
+  'entryMT' => 'Entry (Acct Name / IP)',
   'acc_not_found' => 'اکانت پیدا نشد'
 );
 

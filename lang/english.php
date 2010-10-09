@@ -310,7 +310,8 @@ $GLOBALS['lang_banned'] = array
   'tot_banned' => 'Total Banned',
   'ip_acc' => 'Account',
   'will_be_removed_from_banned' => 'Will be removed from Banned List',
-  'ban_entry' => 'Ban IP / Account / Character',
+  'ban_entryA' => 'Ban IP / Account / Character',
+  'ban_entryMT' => 'Ban IP / Account',
   'ban' => 'Ban',
   'delete' => 'Delete ban for',
   'err_del_entry' => 'Error deleting banned entry',
@@ -332,7 +333,8 @@ $GLOBALS['lang_banned'] = array
   'ipbans' => 'IPs',
   'characters' => 'Characters',
   'ban_time' => 'Ban for amount of (hours)',
-  'entry' => 'Entry (Acct name / IP / Char name)',
+  'entryA' => 'Entry (Acct Name / IP / Char Name)',
+  'entryMT' => 'Entry (Acct Name / IP)',
   'acc_not_found' => 'Account Not Found'
 );
 
