@@ -999,7 +999,10 @@ $GLOBALS['lang_user'] = array
   'wotlk' => 'WotLK',
   'wotlktbc' => 'WotLK+TBC',
   'invited_by' => 'eingeladen von',
-  'ban_inactive' => 'Ban not currently active',
+  'ban_inactive' => 'The Ban is <b>not</b> currently Active',
+  'ban_active' => 'The Ban is currently Active',
+  'ban_active_expired' => 'The Ban is Active, but has Expired',
+  'ban_expired' => 'The Ban has Expired',
   'charname' => 'Character Name',
 );
 

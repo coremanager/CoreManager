@@ -125,16 +125,19 @@ function browse_users()
       }
       elseif ( $core == 2 )
       {
-        $sql_query = "SELECT account.id AS acct, username AS login, gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags
-          FROM account WHERE gmlevel>'%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
+        $sql_query = "SELECT account.id AS acct, username AS login, gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
+          FROM account
+            LEFT JOIN account_banned ON account_banned.id=account.id
+          WHERE gmlevel>'%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*)
           FROM account WHERE gmlevel>'%".$search_value."%'");
       }
       else
       {
-        $sql_query = "SELECT account.id AS acct, username AS login, gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags
+        $sql_query = "SELECT account.id AS acct, username AS login, gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
           FROM account
             LEFT JOIN account_access ON account_access.id=account.id
+            LEFT JOIN account_banned ON account_banned.id=account.id
           WHERE gmlevel>'%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql['logon']->query("SELECT COUNT(*)
           FROM account
@@ -152,7 +155,7 @@ function browse_users()
       }
       elseif ( $core == 2 )
       {
-        $sql_query = "SELECT account.id AS acct, username AS login, gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+        $sql_query = "SELECT account.id AS acct, username AS login, gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
           FROM account
             LEFT JOIN account_banned ON account_banned.id=account.id
           WHERE gmlevel='".$search_value."' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
@@ -160,7 +163,7 @@ function browse_users()
       }
       else
       {
-        $sql_query = "SELECT account.id AS acct, username AS login, account_access.gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+        $sql_query = "SELECT account.id AS acct, username AS login, account_access.gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
           FROM account
             LEFT JOIN account_access ON account_access.id=account.id
             LEFT JOIN account_banned ON account_banned.id=account.id
@@ -182,7 +185,7 @@ function browse_users()
       }
       elseif ( $core == 2 )
       {
-        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
           FROM account
             LEFT JOIN account_banned ON account_banned.id=account.id
           WHERE unbandate>UNIX_TIMESTAMP()";
@@ -191,7 +194,7 @@ function browse_users()
       }
       else
       {
-        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
           FROM account
             LEFT JOIN account_banned ON account_banned.id=account.id
             LEFT JOIN account_access ON account_access.id=account.id
@@ -226,7 +229,7 @@ function browse_users()
       }
       elseif ( $core == 2 )
       {
-        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
           FROM account
             LEFT JOIN account_banned ON account_banned.id=account.id
           WHERE UNIX_TIMESTAMP(last_login)>=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
@@ -234,7 +237,7 @@ function browse_users()
       }
       else
       {
-        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
           FROM account
             LEFT JOIN account_access ON account_access.id=account.id
             LEFT JOIN account_banned ON account_banned.id=account.id
@@ -252,7 +255,7 @@ function browse_users()
       }
       elseif ( $core == 2 )
       {
-        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
           FROM account
             LEFT JOIN account_banned ON account_banned.id=account.id
           WHERE UNIX_TIMESTAMP(last_login)<=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y')) ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
@@ -260,7 +263,7 @@ function browse_users()
       }
       else
       {
-        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
           FROM account
             LEFT JOIN account_access ON account_access.id=account.id
             LEFT JOIN account_banned ON account_banned.id=account.id
@@ -279,7 +282,7 @@ function browse_users()
       }
       elseif ( $core == 2 )
       {
-        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
           FROM account
             LEFT JOIN account_banned ON account_banned.id=account.id
           WHERE ".$search_by." LIKE '%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
@@ -287,7 +290,7 @@ function browse_users()
       }
       else
       {
-        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+        $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
           FROM account
             LEFT JOIN account_access ON account_access.id=account.id
             LEFT JOIN account_banned ON account_banned.id=account.id
@@ -309,7 +312,7 @@ function browse_users()
     elseif ( $core == 2 )
     {
       $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM account");
-      $query = $sql['logon']->query("SELECT *, account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+      $query = $sql['logon']->query("SELECT *, account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
         FROM account
           LEFT JOIN account_banned ON account_banned.id=account.id
         ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
@@ -317,7 +320,7 @@ function browse_users()
     else
     {
       $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM account");
-      $query = $sql['logon']->query("SELECT *, account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned
+      $query = $sql['logon']->query("SELECT *, account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
         FROM account
           LEFT JOIN account_access ON account_access.id=account.id
           LEFT JOIN account_banned ON account_banned.id=account.id
@@ -574,7 +577,10 @@ function browse_users()
       {
         if ( time() < $data['banned'] )
           $output .= '
-                  <td><img src="img/flag_red.png" /></td>';
+                  <td><img src="img/flag_red.png" onmousemove="oldtoolTip(\''.lang('user', 'ban_active').'\',  \'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>';
+        elseif ( ( time() > $data['banned'] ) && ( $data['banned'] != 0 ) )
+          $output .= '
+                  <td><img src="img/flag_green.png" onmousemove="oldtoolTip(\''.lang('user', 'ban_expired').'\',  \'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>';
         else
           $output .= '
                   <td>-</td>';
@@ -584,14 +590,14 @@ function browse_users()
         if ( $data['active'] )
           if ( time() < $data['banned'] )
             $output .= '
-                  <td><img src="img/aff_tick.png" /></td>';
+                  <td><img src="img/flag_red.png" onmousemove="oldtoolTip(\''.lang('user', 'ban_active').'\',  \'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>';
           else
             $output .= '
-                  <td>-</td>';
+                  <td><img src="img/flag_blue.png" onmousemove="oldtoolTip(\''.lang('user', 'ban_active_expired').'\',  \'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>';
         else
           if ( time() < $data['banned'] )
             $output .= '
-                  <td><img src="img/flag_red.png" onmousemove="oldtoolTip(\''.lang('user', 'ban_inactive').'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>';
+                  <td><img src="img/flag_green.png" onmousemove="oldtoolTip(\''.lang('user', 'ban_inactive').'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>';
           else
             $output .= '
                   <td>-</td>';
@@ -1769,10 +1775,12 @@ function doedit_user()
     }
     else
     {
+      // this_is_junk: I removed the SETs for when the ban expires because it was extending the ban
+      // hopefully this won't cause other problems
       if ( $core == 1 )
-        $ban_query = "UPDATE accounts SET banned='".(time()+(365*24*3600))."', banreason='".$banreason."' WHERE acct='".$acct."'";
+        $ban_query = "UPDATE accounts SET banreason='".$banreason."' WHERE acct='".$acct."'";
       else
-        $ban_query = "UPDATE account_banned SET bandate='".time()."', unbandate='".(time()+(365*24*3600))."', bannedby='".$user_name."', banreason='".$banreason."', active=1 WHERE id='".$acct."'";
+        $ban_query = "UPDATE account_banned SET banreason='".$banreason."', active=1 WHERE id='".$acct."'";
     }
 
     $sql['logon']->query($ban_query);
