@@ -1835,3 +1835,10 @@ tr td.rep0
 {
   z-index: -1;
 }
+
+/* CHAR_LIST.PHP */
+#char_list_bubble
+{
+  width: 813px;
+  left: -7px;
+}

@@ -716,6 +716,7 @@ $GLOBALS['lang_char_list'] = array
   'tot_chars' => 'Total Characters',
   'total' => 'Total',
   'zone' => 'Zone',
+  'transfer' => 'Account Transfer',
 );
 
 

@@ -106,6 +106,11 @@ function chooseacct()
   if ( isset($_GET['new']) )
     $new = $sql['char']->quote_smart($_GET['new']);
 
+  // if we came here from char_list.php (and have permission)
+  // then we need to skip the approval process
+  if ( ( $_GET['priority'] == 1 ) && ( $user_lvl >= $action_permission['update'] ) )
+    $priority = 1;
+
   if ( $core == 1 )
     $accts_query = "SELECT acct, login, IFNULL(`".$corem_db['name']."`.config_accounts.ScreenName, '')
     FROM accounts
@@ -125,7 +130,7 @@ function chooseacct()
             <div id="xname_choose" class="fieldset_border">
               <span class="legend">'.lang('xacct', 'chooseacct').'</span>
               <form method="GET" action="change_char_account.php" name="form">
-                <input type="hidden" name="action" value="getapproval" />
+                <input type="hidden" name="action" value="'.( ( $priority != 1 ) ? 'getapproval' : 'direct' ).'" />
                 <input type="hidden" name="guid" value="'.$char['guid'].'" />
                 <table id="xname_char_table">
                   <tr>
@@ -260,6 +265,29 @@ function savename()
 }
 
 
+//#############################################################################
+// SAVE NEW NAME (DIRECT APPROVAL VIA CHAR_LIST.PHP)
+//#############################################################################
+
+function savename_direct()
+{
+  global $output, $action_permission, $corem_db, $characters_db, $realm_id,
+    $user_id, $sql, $core;
+
+  valid_login($action_permission['update']);
+
+  $guid = $sql['mgr']->quote_smart($_GET['guid']);
+  $new = $sql['mgr']->quote_smart($_GET['new']);
+
+  if ( $core == 1 )
+    $result = $sql['char']->query("UPDATE characters SET acct='".$new."' WHERE guid='".$guid."'");
+  else
+    $result = $sql['char']->query("UPDATE characters SET account='".$new."' WHERE guid='".$guid."'");
+
+  redirect("char_list.php");
+}
+
+
 //########################################################################################################################
 // MAIN
 //########################################################################################################################
@@ -300,6 +328,8 @@ elseif ( $action == 'denied' )
   denied();
 elseif ( $action == 'approve' )
   savename();
+elseif ( $action == 'direct' )
+  savename_direct();
 else
   sel_char();
 

@@ -380,6 +380,12 @@ function browse_chars()
                 <th width="1%">'.lang('global', 'country').'</th>';
   }
 
+  if ( $user_lvl >= $action_permission['update'] )
+  {
+    $output .= '
+                <th width="1%"><img src="img/arrow_switch.png" onmousemove="oldtoolTip(\''.lang('char_list', 'transfer').'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" /></th>';
+  }
+
   $output .= '
               </tr>';
 
@@ -463,6 +469,9 @@ function browse_chars()
         $output .= '
                 <td>'.( ( $country['code'] ) ? '<img src="img/flags/'.$country['code'].'.png" onmousemove="oldtoolTip(\''.($country['country']).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
       }
+      if ( $user_lvl >= $action_permission['update'] )
+        $output .= '
+                <td><a href="change_char_account.php?action=chooseacct&priority=1&char='.$char['guid'].'"><img src="img/arrow_switch.png"  /></a></td>';
       $output .= '
               </tr>';
     }
@@ -617,7 +626,7 @@ function dodel_char()
 $err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
 
 $output .= '
-      <div class="bubble">
+      <div class="bubble" id="char_list_bubble">
           <div class="top">';
 
 switch ( $err )
