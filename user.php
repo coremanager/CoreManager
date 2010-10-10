@@ -312,7 +312,7 @@ function browse_users()
     elseif ( $core == 2 )
     {
       $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM account");
-      $query = $sql['logon']->query("SELECT *, account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
+      $query = $sql['logon']->query("SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
         FROM account
           LEFT JOIN account_banned ON account_banned.id=account.id
         ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
@@ -320,7 +320,7 @@ function browse_users()
     else
     {
       $query_1 = $sql['logon']->query("SELECT COUNT(*) FROM account");
-      $query = $sql['logon']->query("SELECT *, account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
+      $query = $sql['logon']->query("SELECT account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
         FROM account
           LEFT JOIN account_access ON account_access.id=account.id
           LEFT JOIN account_banned ON account_banned.id=account.id
@@ -557,14 +557,8 @@ function browse_users()
       else
         $lastlog = '-';
 
-      if ( $core == 1 )
-        $output .= '
-                  <td>'.( ( $data['muted'] ) ? '<img src="img/lock.png" />' : '-' ).'</td>';
-      else
-        $output .= '
-                  <td>'.( ( $data['locked'] ) ? '<img src="img/lock.png" />' : '-' ).'</td>';
-
       $output .= '
+                  <td>'.( ( $data['muted'] ) ? '<img src="img/lock.png" />' : '-' ).'</td>
                   <td class="small">'.$lastlog.'</td>
                   <td>'.( ( $o_temp <> 0 ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>';
       if ( $showcountryflag )
