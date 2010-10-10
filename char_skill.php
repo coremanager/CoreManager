@@ -21,7 +21,7 @@
 require_once 'header.php';
 require_once 'libs/char_lib.php';
 require_once 'libs/skill_lib.php';
-valid_login($action_permission['view']);
+valid_login($action_permission["view"]);
 
 //########################################################################################################################
 // SHOW CHARACTERS SKILLS
@@ -33,31 +33,31 @@ function char_skill()
 
   //wowhead_tt();
 
-  if ( empty($_GET['id']) )
-    error(lang('global', 'empty_fields'));
+  if ( empty($_GET["id"]) )
+    error(lang("global", "empty_fields"));
 
   // this is multi realm support, as of writing still under development
   //  this page is already implementing it
-  if ( empty($_GET['realm']) )
+  if ( empty($_GET["realm"]) )
     $realmid = $realm_id;
   else
   {
-    $realmid = $sql['logon']->quote_smart($_GET['realm']);
+    $realmid = $sql["logon"]->quote_smart($_GET["realm"]);
     if ( is_numeric($realmid) )
-      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql["char"]->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
-  $id = $sql['char']->quote_smart($_GET['id']);
+  $id = $sql["char"]->quote_smart($_GET["id"]);
   if ( is_numeric($id) )
     ;
   else
     $id = 0;
 
-  $order_by = ( ( isset($_GET['order_by']) ) ? $sql['char']->quote_smart($_GET['order_by']) : 1 );
+  $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["char"]->quote_smart($_GET["order_by"]) : 1 );
 
-  $dir = ( ( isset($_GET['dir']) ) ? $sql['char']->quote_smart($_GET['dir']) : 1 );
+  $dir = ( ( isset($_GET["dir"]) ) ? $sql["char"]->quote_smart($_GET["dir"]) : 1 );
   if ( preg_match('/^[01]{1}$/', $dir) )
     ;
   else
@@ -67,46 +67,46 @@ function char_skill()
   $dir = ( ( $dir ) ? 0 : 1 );
 
   if ( $core == 1 )
-    $result = $sql['char']->query('SELECT acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql["char"]->query('SELECT acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
   else
-    $result = $sql['char']->query('SELECT account AS acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
+    $result = $sql["char"]->query('SELECT account AS acct, name, race, class, level, gender FROM characters WHERE guid = '.$id.' LIMIT 1');
 
-  if ( $sql['char']->num_rows($result) )
+  if ( $sql["char"]->num_rows($result) )
   {
-    $char = $sql['char']->fetch_assoc($result);
+    $char = $sql["char"]->fetch_assoc($result);
 
     // we get user permissions first
-    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
+    $owner_acc_id = $sql["char"]->result($result, 0, 'acct');
     if ( $core == 1 )
-      $result = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$char['acct']."'");
+      $result = $sql["logon"]->query("SELECT login FROM accounts WHERE acct='".$char["acct"]."'");
     else
-      $result = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$char['acct']."'");
-    $owner_name = $sql['logon']->result($result, 0, 'login');
-    $result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
-    $owner_gmlvl = $sql['mgr']->result($result, 0, 'gm');
+      $result = $sql["logon"]->query("SELECT username AS login FROM account WHERE id='".$char["acct"]."'");
+    $owner_name = $sql["logon"]->result($result, 0, 'login');
+    $result = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql["mgr"]->result($result, 0, 'gm');
 
     if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
     {
       if ( $core == 1 )
       {
-        $result = $sql['char']->query("SELECT data, name, race, class, level, gender FROM characters WHERE guid = '".$id."'");
-        $char = $sql['char']->fetch_assoc($result);
-        $char_data = explode(';',$char['data']);
+        $result = $sql["char"]->query("SELECT data, name, race, class, level, gender FROM characters WHERE guid = '".$id."'");
+        $char = $sql["char"]->fetch_assoc($result);
+        $char_data = explode(';',$char["data"]);
       }
       else
       {
-        $result = $sql['char']->query("SELECT name, race, class, level, gender FROM characters WHERE guid='".$id."'");
-        $char = $sql['char']->fetch_assoc($result);
-        $result = $sql['char']->query("SELECT * FROM character_skills WHERE guid='".$id."'");
+        $result = $sql["char"]->query("SELECT name, race, class, level, gender FROM characters WHERE guid='".$id."'");
+        $char = $sql["char"]->fetch_assoc($result);
+        $result = $sql["char"]->query("SELECT * FROM character_skills WHERE guid='".$id."'");
 
         // make TC's skill data work like our treatment of Arc's
         $char_data = array();
         $i = 0;
-        while ( $skill_row = $sql['char']->fetch_assoc($result) )
+        while ( $skill_row = $sql["char"]->fetch_assoc($result) )
         {
-          $char_data[PLAYER_SKILL_INFO_1_1 + $i] = $skill_row['skill'];
-          $char_data[PLAYER_SKILL_INFO_1_1 + $i+1] = $skill_row['value'];
-          $char_data[PLAYER_SKILL_INFO_1_1 + $i+2] = $skill_row['max'];
+          $char_data[PLAYER_SKILL_INFO_1_1 + $i] = $skill_row["skill"];
+          $char_data[PLAYER_SKILL_INFO_1_1 + $i+1] = $skill_row["value"];
+          $char_data[PLAYER_SKILL_INFO_1_1 + $i+2] = $skill_row["max"];
           $i+=3;
         }
       }
@@ -115,46 +115,46 @@ function char_skill()
           <center>
             <div id="tab">
               <ul>
-                <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>
-                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'inventory').'</a></li>
-                '.( ( $char['level'] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>' ).'
-                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'achievements').'</a></li>
-                <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'quests').'</a></li>
-                <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'friends').'</a></li>
-                <li><a href="char_view.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'view').'</a></li>
+                <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>
+                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "inventory").'</a></li>
+                '.( ( $char["level"] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "talents").'</a></li>' ).'
+                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "achievements").'</a></li>
+                <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "quests").'</a></li>
+                <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "friends").'</a></li>
+                <li><a href="char_view.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "view").'</a></li>
                </ul>
             </div>
             <div id="tab_content">
               <div id="tab">
                 <ul>
-                  <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>';
-      if ( char_get_class_name($char['class']) == 'Hunter' )
+                  <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
+      if ( char_get_class_name($char["class"]) == 'Hunter' )
         $output .= '
-                  <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'pets').'</a></li>';
+                  <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pets").'</a></li>';
       $output .= '
-                  <li><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'reputation').'</a></li>
-                  <li id="selected"><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'skills').'</a></li>';
+                  <li><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "reputation").'</a></li>
+                  <li id="selected"><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>';
       if ( $owner_name == $user_name )
         $output .= '
-                  <li><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'mail').'</a></li>';
+                  <li><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "mail").'</a></li>';
       $output .= '
                 </ul>
               </div>
               <div id="tab_content2">
                 <font class="bold">
-                  '.htmlentities($char['name']).' -
-                  <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
-                  <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'
+                  '.htmlentities($char["name"]).' -
+                  <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                  <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
                 </font>
                 <br /><br />
                 <table class="lined" id="ch_ski_main">
                   <tr>
-                    <th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2' ).'" align="left">'.lang('char', 'skills').'</th>
+                    <th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2' ).'" align="left">'.lang("char", "skills").'</th>
                   </tr>
                   <tr>
-                    '.( ( $user_lvl ) ? '<th><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=0&amp;dir='.$dir.'"'.( ( $order_by == 0 ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang('char', 'skill_id').'</a></th>' : '' ).'
-                    <th align="right"><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=1&amp;dir='.$dir.'"'.( ( $order_by == 1 ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang('char', 'skill_name').'</a></th>
-                    <th><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=2&amp;dir='.$dir.'"'.( ( $order_by == 2 ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang('char', 'skill_value').'</a></th>
+                    '.( ( $user_lvl ) ? '<th><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=0&amp;dir='.$dir.'"'.( ( $order_by == 0 ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("char", "skill_id").'</a></th>' : '' ).'
+                    <th align="right"><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=1&amp;dir='.$dir.'"'.( ( $order_by == 1 ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("char", "skill_name").'</a></th>
+                    <th><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=2&amp;dir='.$dir.'"'.( ( $order_by == 2 ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("char", "skill_value").'</a></th>
                   </tr>';
 
       $skill_array = array();
@@ -166,13 +166,13 @@ function char_skill()
       $language_array = array();
 
       $skill_rank_array = array(
-         75 => lang('char', 'apprentice'),
-        150 => lang('char', 'journeyman'),
-        225 => lang('char', 'expert'),
-        300 => lang('char', 'artisan'),
-        375 => lang('char', 'master'),
-        450 => lang('char', 'inherent'),
-        385 => lang('char', 'wise')
+         75 => lang("char", "apprentice"),
+        150 => lang("char", "journeyman"),
+        225 => lang("char", "expert"),
+        300 => lang("char", "artisan"),
+        375 => lang("char", "master"),
+        450 => lang("char", "inherent"),
+        385 => lang("char", "wise")
       );
 
       for ( $i = PLAYER_SKILL_INFO_1_1; $i <= PLAYER_SKILL_INFO_1_1+384; $i+=3 )
@@ -225,7 +225,7 @@ function char_skill()
       foreach ( $skill_array as $data )
       {
         // this_is_junk: style left hardcoded because it's calculated.
-        $max = ( ( $data[2] < $char['level']*5 ) ? $char['level']*5 : $data[2] );
+        $max = ( ( $data[2] < $char["level"]*5 ) ? $char["level"]*5 : $data[2] );
         $output .= '
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '' ).'
@@ -238,14 +238,14 @@ function char_skill()
 
       if ( count($class_array) )
         $output .= '
-                  <tr><th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2' ).'" align="left">'.lang('char', 'classskills').'</th></tr>';
+                  <tr><th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2' ).'" align="left">'.lang("char", "classskills").'</th></tr>';
       foreach ( $class_array as $data )
       {
-        $max = ( ( $data[2] < $char['level']*5 ) ? $char['level']*5 : $data[2] );
+        $max = ( ( $data[2] < $char["level"]*5 ) ? $char["level"]*5 : $data[2] );
         $output .= '
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '' ).'
-                    <td align="right"><a href="'.$skill_datasite.'7.'.$char['class'].'.'.$data[0].'" target="_blank">'.$data[1].'</td>
+                    <td align="right"><a href="'.$skill_datasite.'7.'.$char["class"].'.'.$data[0].'" target="_blank">'.$data[1].'</td>
                     <td valign="center" class="bar skill_bar" id="ch_ski_bg_pos0">
                     </td>
                   </tr>';
@@ -253,7 +253,7 @@ function char_skill()
 
       if ( count($prof_1_array) )
         $output .= '
-                  <tr><th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2').'" align="left">'.lang('char', 'professions').'</th></tr>';
+                  <tr><th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2').'" align="left">'.lang("char", "professions").'</th></tr>';
       foreach ( $prof_1_array as $data )
       {
         // this_is_junk: style left hardcoded because it's calculated.
@@ -270,7 +270,7 @@ function char_skill()
 
       if ( count($prof_2_array) )
         $output .= '
-                  <tr><th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2' ).'" align="left">'.lang('char', 'secondaryskills').'</th></tr>';
+                  <tr><th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2' ).'" align="left">'.lang("char", "secondaryskills").'</th></tr>';
       foreach ( $prof_2_array as $data )
       {
         // this_is_junk: style left hardcoded because it's calculated.
@@ -287,11 +287,11 @@ function char_skill()
 
       if ( count($weapon_array) )
         $output .= '
-                  <tr><th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2' ).'" align="left">'.lang('char', 'weaponskills').'</th></tr>';
+                  <tr><th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2' ).'" align="left">'.lang("char", "weaponskills").'</th></tr>';
       foreach ( $weapon_array as $data )
       {
         // this_is_junk: style left hardcoded because it's calculated.
-        $max = ( ( $data[2] < $char['level']*5 ) ? $char['level']*5 : $data[2] );
+        $max = ( ( $data[2] < $char["level"]*5 ) ? $char["level"]*5 : $data[2] );
         $output .= '
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '' ).'
@@ -304,10 +304,10 @@ function char_skill()
 
       if ( count($armor_array) )
         $output .= '
-                  <tr><th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2' ).'" align="left">'.lang('char', 'armorproficiencies').'</th></tr>';
+                  <tr><th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2' ).'" align="left">'.lang("char", "armorproficiencies").'</th></tr>';
       foreach ( $armor_array as $data )
       {
-        $max = ( ( $data[2] < $char['level']*5 ) ? $char['level']*5 : $data[2] );
+        $max = ( ( $data[2] < $char["level"]*5 ) ? $char["level"]*5 : $data[2] );
         $output .= '
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '' ).'
@@ -319,11 +319,11 @@ function char_skill()
 
       if ( count($language_array) )
         $output .= '
-                  <tr><th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2' ).'" align="left">'.lang('char', 'languages').'</th></tr>';
+                  <tr><th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2' ).'" align="left">'.lang("char", "languages").'</th></tr>';
       foreach ( $language_array as $data )
       {
         // this_is_junk: style left hardcoded because it's calculated.
-        $max = ( ( $data[2] < $char['level']*5 ) ? $char['level']*5 : $data[2] );
+        $max = ( ( $data[2] < $char["level"]*5 ) ? $char["level"]*5 : $data[2] );
         $output .= '
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '' ).'
@@ -345,37 +345,37 @@ function char_skill()
               <tr>
                 <td>';
       // button to user account page, user account page has own security
-      makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
+      makebutton(lang("char", "chars_acc"), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
       $output .= '
                 </td>
                 <td>';
 
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
-      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) )
+      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission["delete"] ) )
       {
-                  //makebutton($lang_char['edit_button'], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
+                  //makebutton($lang_char["edit_button"], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only higher level GM with delete access, or character owner can delete character
-      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) ) || ( $owner_name === $user_name ) )
+      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission["delete"] ) ) || ( $owner_name === $user_name ) )
       {
-        makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
+        makebutton(lang("char", "del_char"), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only GM with update permission can send mail, mail can send items, so update permission is needed
-      if ( $user_lvl >= $action_permission['update'] )
+      if ( $user_lvl >= $action_permission["update"] )
       {
-        makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
+        makebutton(lang("char", "send_mail"), 'mail.php?type=ingame_mail&amp;to='.$char["name"].'', 130);
         $output .= '
                 </td>
                 <td>';
       }
-      makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+      makebutton(lang("global", "back"), 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>
               </tr>
@@ -385,10 +385,10 @@ function char_skill()
           <!-- end of char_achieve.php -->';
     }
     else
-      error(lang('char', 'no_permission'));
+      error(lang("char", "no_permission"));
   }
   else
-    error(lang('char', 'no_char_found'));
+    error(lang("char", "no_char_found"));
 
 }
 
@@ -397,7 +397,7 @@ function char_skill()
 // MAIN
 //########################################################################################################################
 
-//$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+//$action = (isset($_GET["action"])) ? $_GET["action"] : NULL;
 
 $output .= '
       <div class="bubble">';

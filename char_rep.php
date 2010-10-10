@@ -20,7 +20,7 @@
 
 require_once 'header.php';
 require_once 'libs/char_lib.php';
-valid_login($action_permission['view']);
+valid_login($action_permission["view"]);
 
 //########################################################################################################################
 // SHOW CHAR REPUTATION
@@ -34,46 +34,46 @@ function char_rep()
   $reputation_rank = fact_get_reputation_rank_arr();
   $reputation_rank_length = fact_get_reputation_rank_length();
 
-  if ( empty($_GET['id']) )
-    error(lang('global', 'empty_fields'));
+  if ( empty($_GET["id"]) )
+    error(lang("global", "empty_fields"));
 
   // this is multi realm support, as of writing still under development
   //  this page is already implementing it
-  if ( empty($_GET['realm']) )
+  if ( empty($_GET["realm"]) )
     $realmid = $realm_id;
   else
   {
-    $realmid = $sql['logon']->quote_smart($_GET['realm']);
+    $realmid = $sql["logon"]->quote_smart($_GET["realm"]);
     if ( is_numeric($realmid) )
-      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql["char"]->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
-  $id = $sql['char']->quote_smart($_GET['id']);
+  $id = $sql["char"]->quote_smart($_GET["id"]);
   if ( is_numeric($id) )
     ;
   else
     $id = 0;
 
   if ( $core == 1 )
-    $result = $sql['char']->query("SELECT acct, name, race, class, level, gender FROM characters WHERE guid='".$id."' LIMIT 1");
+    $result = $sql["char"]->query("SELECT acct, name, race, class, level, gender FROM characters WHERE guid='".$id."' LIMIT 1");
   else
-    $result = $sql['char']->query("SELECT account AS acct, name, race, class, level, gender FROM characters WHERE guid='".$id."' LIMIT 1");
+    $result = $sql["char"]->query("SELECT account AS acct, name, race, class, level, gender FROM characters WHERE guid='".$id."' LIMIT 1");
 
-  if ( $sql['char']->num_rows($result) )
+  if ( $sql["char"]->num_rows($result) )
   {
-    $char = $sql['char']->fetch_assoc($result);
+    $char = $sql["char"]->fetch_assoc($result);
 
     // we get user permissions first
-    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
+    $owner_acc_id = $sql["char"]->result($result, 0, 'acct');
     if ( $core == 1 )
-      $result = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$char['acct']."'");
+      $result = $sql["logon"]->query("SELECT login FROM accounts WHERE acct='".$char["acct"]."'");
     else
-      $result = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$char['acct']."'");
-    $owner_name = $sql['logon']->result($result, 0, 'login');
-    $result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
-    $owner_gmlvl = $sql['mgr']->result($result, 0, 'gm');
+      $result = $sql["logon"]->query("SELECT username AS login FROM account WHERE id='".$char["acct"]."'");
+    $owner_name = $sql["logon"]->result($result, 0, 'login');
+    $result = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql["mgr"]->result($result, 0, 'gm');
 
     if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
     {
@@ -83,9 +83,9 @@ function char_rep()
       //               But, we're going to break the values into two arrays
       if ( $core == 1 )
       {
-        $result = $sql['char']->query("SELECT reputation FROM characters WHERE guid='".$id."'");
-        $result = $sql['char']->fetch_assoc($result);
-        $result = $result['reputation'];
+        $result = $sql["char"]->query("SELECT reputation FROM characters WHERE guid='".$id."'");
+        $result = $sql["char"]->fetch_assoc($result);
+        $result = $result["reputation"];
         $result = substr($result, 0, strlen($result) - 1);
         $result = explode(",", $result);
         $factions = array();
@@ -124,14 +124,14 @@ function char_rep()
       }
       else
       {
-        $result = $sql['char']->query("SELECT faction, standing FROM character_reputation WHERE guid='".$id."' AND (flags & 1 = 1)");
+        $result = $sql["char"]->query("SELECT faction, standing FROM character_reputation WHERE guid='".$id."' AND (flags & 1 = 1)");
         $factions = array();
         $faction_ranks = array();
         
-        while ( $fact = $sql['char']->fetch_assoc($result) )
+        while ( $fact = $sql["char"]->fetch_assoc($result) )
         {
-          array_push($factions, $fact['faction']);
-          array_push($faction_ranks, $fact['standing']);
+          array_push($factions, $fact["faction"]);
+          array_push($faction_ranks, $fact["standing"]);
         }
       }
 
@@ -139,36 +139,36 @@ function char_rep()
           <center>
             <div id="tab">
               <ul>
-                <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>
-                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'inventory').'</a></li>
-                '.( ( $char['level'] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>' ).'
-                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'achievements').'</a></li>
-                <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'quests').'</a></li>
-                <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'friends').'</a></li>
-                <li><a href="char_view.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'view').'</a></li>
+                <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>
+                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "inventory").'</a></li>
+                '.( ( $char["level"] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "talents").'</a></li>' ).'
+                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "achievements").'</a></li>
+                <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "quests").'</a></li>
+                <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "friends").'</a></li>
+                <li><a href="char_view.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "view").'</a></li>
                </ul>
             </div>
             <div id="tab_content">
               <div id="tab">
                 <ul>
-                  <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>';
-      if ( char_get_class_name($char['class']) == 'Hunter' )
+                  <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
+      if ( char_get_class_name($char["class"]) == 'Hunter' )
         $output .= '
-                  <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'pets').'</a></li>';
+                  <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pets").'</a></li>';
       $output .= '
-                  <li id="selected"><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'reputation').'</a></li>
-                  <li><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'skills').'</a></li>';
+                  <li id="selected"><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "reputation").'</a></li>
+                  <li><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>';
       if ( $owner_name == $user_name )
         $output .= '
-                  <li><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'mail').'</a></li>';
+                  <li><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "mail").'</a></li>';
       $output .= '
                 </ul>
               </div>
               <div id="tab_content2">
                 <font class="bold">
-                  '.htmlentities($char['name']).' -
-                  <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
-                  <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'
+                  '.htmlentities($char["name"]).' -
+                  <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                  <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
                 </font>
                 <br /><br />';
 
@@ -314,15 +314,15 @@ function char_rep()
           $faction  = $factions[$i];
           $standing = $faction_ranks[$i];
 
-          $rep_rank      = fact_get_reputation_rank($faction, $standing, $char['race']);
+          $rep_rank      = fact_get_reputation_rank($faction, $standing, $char["race"]);
           $rep_rank_name = $reputation_rank[$rep_rank];
           $rep_cap       = $reputation_rank_length[$rep_rank];
-          $rep           = fact_get_reputation_at_rank($faction, $standing, $char['race']);
+          $rep           = fact_get_reputation_at_rank($faction, $standing, $char["race"]);
           $faction_name  = fact_get_faction_name($faction);
           $ft            = fact_get_faction_tree($faction);
 
           // not show alliance rep for horde and vice versa:
-          if ( ( ((1 << ($char['race'] - 1)) & 690) && ( ( $ft == 1 ) || ( $ft == 3 ) ) ) || ( ((1 << ($char['race'] - 1)) & 1101) && ( ( $ft == 2 ) || ( $ft == 4 ) ) ) )
+          if ( ( ((1 << ($char["race"] - 1)) & 690) && ( ( $ft == 1 ) || ( $ft == 3 ) ) ) || ( ((1 << ($char["race"] - 1)) & 1101) && ( ( $ft == 2 ) || ( $ft == 4 ) ) ) )
             ;
           else
           {
@@ -347,7 +347,7 @@ function char_rep()
       else
         $output .= '
                         <tr>
-                          <td colspan="2"><br /><br />'.lang('global', 'err_no_records_found').'<br /><br /></td>
+                          <td colspan="2"><br /><br />'.lang("global", "err_no_records_found").'<br /><br /></td>
                         </tr>';
 
       foreach ( $temp_out as $out )
@@ -367,37 +367,37 @@ function char_rep()
               <tr>
                 <td>';
       // button to user account page, user account page has own security
-      makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
+      makebutton(lang("char", "chars_acc"), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
       $output .= '
                 </td>
                 <td>';
 
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
-      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) )
+      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission["delete"] ) )
       {
-                  //makebutton($lang_char['edit_button'], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
+                  //makebutton($lang_char["edit_button"], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only higher level GM with delete access, or character owner can delete character
-      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) ) || ( $owner_name === $user_name ) )
+      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission["delete"] ) ) || ( $owner_name === $user_name ) )
       {
-        makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
+        makebutton(lang("char", "del_char"), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only GM with update permission can send mail, mail can send items, so update permission is needed
-      if ( $user_lvl >= $action_permission['update'] )
+      if ( $user_lvl >= $action_permission["update"] )
       {
-        makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
+        makebutton(lang("char", "send_mail"), 'mail.php?type=ingame_mail&amp;to='.$char["name"].'', 130);
         $output .= '
                 </td>
                 <td>';
       }
-      makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+      makebutton(lang("global", "back"), 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>
               </tr>
@@ -407,10 +407,10 @@ function char_rep()
           <!-- end of char_achieve.php -->';
     }
     else
-      error(lang('char', 'no_permission'));
+      error(lang("char", "no_permission"));
   }
   else
-    error(lang('char', 'no_char_found'));
+    error(lang("char", "no_char_found"));
 
 }
 
@@ -419,7 +419,7 @@ function char_rep()
 // MAIN
 //########################################################################################################################
 
-//$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+//$action = (isset($_GET["action"])) ? $_GET["action"] : NULL;
 
 $output .= '
       <div class="bubble">';

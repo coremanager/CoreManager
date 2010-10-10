@@ -23,7 +23,7 @@ require_once 'header.php';
 require_once 'libs/char_lib.php';
 require_once 'libs/item_lib.php';
 // minimum permission to view page
-valid_login($action_permission['view']);
+valid_login($action_permission["view"]);
 
 //#############################################################################
 // SHOW INV. AND BANK ITEMS
@@ -38,20 +38,20 @@ function char_inv()
   //wowhead_tt();
 
   // we need at least an id or we would have nothing to show
-  if ( empty($_GET['id']) )
-    error(lang('global', 'empty_fields'));
+  if ( empty($_GET["id"]) )
+    error(lang("global", "empty_fields"));
   else
-    $cid = $_GET['id'];
+    $cid = $_GET["id"];
 
   // this is multi realm support, as of writing still under development
   //  this page is already implementing it
-  if ( empty($_GET['realm']) )
+  if ( empty($_GET["realm"]) )
     $realmid = $realm_id;
   else
   {
-    $realmid = $sql['logon']->quote_smart($_GET['realm']);
+    $realmid = $sql["logon"]->quote_smart($_GET["realm"]);
     if ( is_numeric($realmid) )
-      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql["char"]->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
@@ -59,45 +59,45 @@ function char_inv()
   //-------------------SQL Injection Prevention--------------------------------
   // no point going further if we don have a valid ID
   // this_is_junk: char.php doesn't post account.   Why is this even here?
-  //$acct = $sql['char']->quote_smart($_GET['acct']);
+  //$acct = $sql["char"]->quote_smart($_GET["acct"]);
   //if (is_numeric($acct));
-  //else error($lang_global['empty_fields']);
+  //else error($lang_global["empty_fields"]);
 
   // getting character data from database
   if ( $core == 1 )
-    $result = $sql['char']->query("SELECT acct, name, race, class, level, gender, gold, online
+    $result = $sql["char"]->query("SELECT acct, name, race, class, level, gender, gold, online
       FROM characters WHERE guid='".$cid."' LIMIT 1");
   else
-    $result = $sql['char']->query("SELECT account AS acct, name, race, class, level, gender, money AS gold, online
+    $result = $sql["char"]->query("SELECT account AS acct, name, race, class, level, gender, money AS gold, online
       FROM characters WHERE guid='".$cid."' LIMIT 1");
 
   // no point going further if character does not exist
-  if ( $sql['char']->num_rows($result) )
+  if ( $sql["char"]->num_rows($result) )
   {
-    $char = $sql['char']->fetch_assoc($result);
+    $char = $sql["char"]->fetch_assoc($result);
 
     // we get user permissions first
-    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
+    $owner_acc_id = $sql["char"]->result($result, 0, 'acct');
     if ( $core == 1 )
-      $query = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$owner_acc_id."'");
+      $query = $sql["logon"]->query("SELECT login FROM accounts WHERE acct='".$owner_acc_id."'");
     else
-      $query = $sql['logon']->query("SELECT username as login FROM account WHERE id='".$owner_acc_id."'");
-    $owner_name = $sql['logon']->result($query, 0, 'login');
+      $query = $sql["logon"]->query("SELECT username as login FROM account WHERE id='".$owner_acc_id."'");
+    $owner_name = $sql["logon"]->result($query, 0, 'login');
 
-    $query = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
-    $owner_gmlvl = $sql['mgr']->result($query, 0, 'gm');
+    $query = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql["mgr"]->result($query, 0, 'gm');
 
     // find out what mode we're in View or Delete (0 = View, 1 = Delete)
-    $mode = ( ( isset($_GET['mode']) ) ? $_GET['mode'] : 0 );
+    $mode = ( ( isset($_GET["mode"]) ) ? $_GET["mode"] : 0 );
     // only the character's owner or a GM with Delete privs can enter Delete Mode
     if ( $owner_name != $user_name )
-      if ( $user_lvl < $action_permission['delete'] )
+      if ( $user_lvl < $action_permission["delete"] )
         $mode = 0;
     else
       $mode = $mode;
 
     // View Mode is only availble on characters that are offline
-    if ( $char['online'] != 0 )
+    if ( $char["online"] != 0 )
       $mode = 0;
 
     // check user permission
@@ -105,11 +105,11 @@ function char_inv()
     {
       // main data that we need for this page, character inventory
       if ( $core == 1 )
-        $result = $sql['char']->query("SELECT 
+        $result = $sql["char"]->query("SELECT 
           containerslot, slot, entry, enchantments AS enchantment, randomprop AS property, count, flags
           FROM playeritems WHERE ownerguid='".$cid."' ORDER BY containerslot, slot");
       elseif ( $core == 2 )
-        $result = $sql['char']->query("SELECT 
+        $result = $sql["char"]->query("SELECT 
           bag, slot, item_template AS entry, item, 
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 11), ' ', -1) AS creator,
           SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ', 23), ' ', -1) AS enchantment, 
@@ -120,7 +120,7 @@ function char_inv()
           FROM character_inventory LEFT JOIN item_instance ON character_inventory.item=item_instance.guid
           WHERE character_inventory.guid='".$cid."' ORDER BY bag, slot");
       else
-        $result = $sql['char']->query("SELECT 
+        $result = $sql["char"]->query("SELECT 
           bag, slot, item_template AS entry, item, 
           creatorGuid AS creator,
           enchantments AS enchantment, 
@@ -166,159 +166,159 @@ function char_inv()
       // this is where we will put items that are in bank bangs, 7 arrays, 1 for each
       $equip_bnk_bag_id = array(0, 0, 0, 0, 0, 0, 0, 0);
       // we load the things in each bag slot
-      while ( $slot = $sql['char']->fetch_assoc($result) )
+      while ( $slot = $sql["char"]->fetch_assoc($result) )
       {
         if ( $core == 1 )
         {
-          if ( ( $slot['containerslot'] == -1 ) && ( $slot['slot'] > 18 ) )
+          if ( ( $slot["containerslot"] == -1 ) && ( $slot["slot"] > 18 ) )
           {
-            if ( $slot['slot'] < 23 ) // SLOT 19 TO 22 (Bags)
+            if ( $slot["slot"] < 23 ) // SLOT 19 TO 22 (Bags)
             {
-              $bag_id[$slot['slot']] = ($slot['slot']-18);
-              $equiped_bag_id[$slot['slot']-18] = array($slot['entry'],
-                $sql['world']->result($sql['world']->query('SELECT containerslots FROM items
-                  WHERE entry = '.$slot['entry'].''), 0, 'containerslots'), $slot['count']);
+              $bag_id[$slot["slot"]] = ($slot["slot"]-18);
+              $equiped_bag_id[$slot["slot"]-18] = array($slot["entry"],
+                $sql["world"]->result($sql["world"]->query('SELECT containerslots FROM items
+                  WHERE entry = '.$slot["entry"].''), 0, 'containerslots'), $slot["count"]);
             }
-            elseif ( $slot['slot'] < 39 ) // SLOT 23 TO 38 (BackPack)
+            elseif ( $slot["slot"] < 39 ) // SLOT 23 TO 38 (BackPack)
             {
               $i_query = "SELECT 
                 *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
                 socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
                 requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
                 sellprice AS SellPrice, itemlevel AS ItemLevel
-                FROM items WHERE entry='".$slot['entry']."'";
+                FROM items WHERE entry='".$slot["entry"]."'";
 
-              $i_result = $sql['world']->query($i_query);
-              $i = $sql['world']->fetch_assoc($i_result);
+              $i_result = $sql["world"]->query($i_query);
+              $i = $sql["world"]->fetch_assoc($i_result);
 
-              if ( isset($bag[0][$slot['slot']-23]) )
-                $bag[0][$slot['slot']-23][0]++;
+              if ( isset($bag[0][$slot["slot"]-23]) )
+                $bag[0][$slot["slot"]-23][0]++;
               else
-                $bag[0][$slot['slot']-23] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
+                $bag[0][$slot["slot"]-23] = array($slot["entry"], 0, $slot["count"], $i, $slot["enchantment"], $slot["property"], $slot["creator"], $slot["durability"], $slot["flags"], $slot["bag"], $slot["slot"]);
             }
-            elseif ( $slot['slot'] < 67 ) // SLOT 39 TO 66 (Bank)
+            elseif ( $slot["slot"] < 67 ) // SLOT 39 TO 66 (Bank)
             {
               $i_query = "SELECT
                 *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
                 socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
                 requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
                 sellprice AS SellPrice, itemlevel AS ItemLevel
-                FROM items WHERE entry='".$slot['entry']."'";
+                FROM items WHERE entry='".$slot["entry"]."'";
 
-              $i_result = $sql['world']->query($i_query);
-              $i = $sql['world']->fetch_assoc($i_result);
+              $i_result = $sql["world"]->query($i_query);
+              $i = $sql["world"]->fetch_assoc($i_result);
 
-              $bank[0][$slot['slot']-39] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
+              $bank[0][$slot["slot"]-39] = array($slot["entry"], 0, $slot["count"], $i, $slot["enchantment"], $slot["property"], $slot["creator"], $slot["durability"], $slot["flags"], $slot["bag"], $slot["slot"]);
             }
-            elseif ( $slot['slot'] < 74 ) // SLOT 67 TO 73 (Bank Bags)
+            elseif ( $slot["slot"] < 74 ) // SLOT 67 TO 73 (Bank Bags)
             {
-              $bank_bag_id[$slot['slot']] = ($slot['slot']-66);
-              $equip_bnk_bag_id[$slot['slot']-66] = array($slot['entry'], 
-                $sql['world']->result($sql['world']->query("SELECT containerslots FROM items
-                  WHERE entry='".$slot['entry']."'"), 0, 'containerslots'), $slot['count']);
+              $bank_bag_id[$slot["slot"]] = ($slot["slot"]-66);
+              $equip_bnk_bag_id[$slot["slot"]-66] = array($slot["entry"], 
+                $sql["world"]->result($sql["world"]->query("SELECT containerslots FROM items
+                  WHERE entry='".$slot["entry"]."'"), 0, 'containerslots'), $slot["count"]);
             }
           }
           else
           {
             // Bags
-            if ( isset($bag_id[$slot['containerslot']]) )
+            if ( isset($bag_id[$slot["containerslot"]]) )
             {
               $i_query = "SELECT
                 *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
                 socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
                 requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
                 sellprice AS SellPrice, itemlevel AS ItemLevel
-                FROM items WHERE entry='".$slot['entry']."'";
+                FROM items WHERE entry='".$slot["entry"]."'";
 
-              $i_result = $sql['world']->query($i_query);
-              $i = $sql['world']->fetch_assoc($i_result);
+              $i_result = $sql["world"]->query($i_query);
+              $i = $sql["world"]->fetch_assoc($i_result);
 
-              if ( isset($bag[$bag_id[$slot['containerslot']]][$slot['slot']]) )
-                $bag[$bag_id[$slot['containerslot']]][$slot['slot']][1]++;
+              if ( isset($bag[$bag_id[$slot["containerslot"]]][$slot["slot"]]) )
+                $bag[$bag_id[$slot["containerslot"]]][$slot["slot"]][1]++;
               else
-                $bag[$bag_id[$slot['containerslot']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
+                $bag[$bag_id[$slot["containerslot"]]][$slot["slot"]] = array($slot["entry"], 0, $slot["count"], $i, $slot["enchantment"], $slot["property"], $slot["creator"], $slot["durability"], $slot["flags"], $slot["bag"], $slot["slot"]);
             }
             // Bank Bags
-            elseif ( isset($bank_bag_id[$slot['containerslot']]) )
+            elseif ( isset($bank_bag_id[$slot["containerslot"]]) )
             {
               $i_query = "SELECT
                 *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
                 socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
                 requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
                 sellprice AS SellPrice, itemlevel AS ItemLevel
-                FROM items WHERE entry='".$slot['entry']."'";
+                FROM items WHERE entry='".$slot["entry"]."'";
 
-              $i_result = $sql['world']->query($i_query);
-              $i = $sql['world']->fetch_assoc($i_result);
+              $i_result = $sql["world"]->query($i_query);
+              $i = $sql["world"]->fetch_assoc($i_result);
 
-              $bank[$bank_bag_id[$slot['containerslot']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
+              $bank[$bank_bag_id[$slot["containerslot"]]][$slot["slot"]] = array($slot["entry"], 0, $slot["count"], $i, $slot["enchantment"], $slot["property"], $slot["creator"], $slot["durability"], $slot["flags"], $slot["bag"], $slot["slot"]);
             }
           }
         }
         else
         {
-          if ( ( $slot['bag'] == 0 ) && ( $slot['slot'] > 18 ) )
+          if ( ( $slot["bag"] == 0 ) && ( $slot["slot"] > 18 ) )
           {
-            if ( $slot['slot'] < 23 ) // SLOT 19 TO 22 (Bags)
+            if ( $slot["slot"] < 23 ) // SLOT 19 TO 22 (Bags)
             {
-              $bag_id[$slot['item']] = ($slot['slot']-18);
-              $equiped_bag_id[$slot['slot']-18] = array($slot['entry'],
-                $sql['world']->result($sql['world']->query("SELECT ContainerSlots FROM item_template
-                  WHERE entry='".$slot['entry']."'"), 0, 'containerslots'), $slot['count']);
+              $bag_id[$slot["item"]] = ($slot["slot"]-18);
+              $equiped_bag_id[$slot["slot"]-18] = array($slot["entry"],
+                $sql["world"]->result($sql["world"]->query("SELECT ContainerSlots FROM item_template
+                  WHERE entry='".$slot["entry"]."'"), 0, 'containerslots'), $slot["count"]);
             }
-            elseif ( $slot['slot'] < 39 ) // SLOT 23 TO 38 (BackPack)
+            elseif ( $slot["slot"] < 39 ) // SLOT 23 TO 38 (BackPack)
             {
-              $i_query = "SELECT * FROM item_template WHERE entry='".$slot['entry']."'";
+              $i_query = "SELECT * FROM item_template WHERE entry='".$slot["entry"]."'";
 
-              $i_result = $sql['world']->query($i_query);
-              $i = $sql['world']->fetch_assoc($i_result);
+              $i_result = $sql["world"]->query($i_query);
+              $i = $sql["world"]->fetch_assoc($i_result);
 
-              if ( isset($bag[0][$slot['slot']-23]) )
-                $bag[0][$slot['slot']-23][0]++;
+              if ( isset($bag[0][$slot["slot"]-23]) )
+                $bag[0][$slot["slot"]-23][0]++;
               else
-                $bag[0][$slot['slot']-23] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
+                $bag[0][$slot["slot"]-23] = array($slot["entry"], 0, $slot["count"], $i, $slot["enchantment"], $slot["property"], $slot["creator"], $slot["durability"], $slot["flags"], $slot["bag"], $slot["slot"]);
             }
-            elseif ( $slot['slot'] < 67 ) // SLOT 39 TO 66 (Bank)
+            elseif ( $slot["slot"] < 67 ) // SLOT 39 TO 66 (Bank)
             {
-              $i_query = "SELECT * FROM item_template WHERE entry='".$slot['entry']."'";
+              $i_query = "SELECT * FROM item_template WHERE entry='".$slot["entry"]."'";
 
-              $i_result = $sql['world']->query($i_query);
-              $i = $sql['world']->fetch_assoc($i_result);
+              $i_result = $sql["world"]->query($i_query);
+              $i = $sql["world"]->fetch_assoc($i_result);
 
-              $bank[0][$slot['slot']-39] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
+              $bank[0][$slot["slot"]-39] = array($slot["entry"], 0, $slot["count"], $i, $slot["enchantment"], $slot["property"], $slot["creator"], $slot["durability"], $slot["flags"], $slot["bag"], $slot["slot"]);
             }
-            elseif ( $slot['slot'] < 74 ) // SLOT 67 TO 73 (Bank Bags)
+            elseif ( $slot["slot"] < 74 ) // SLOT 67 TO 73 (Bank Bags)
             {
-              $bank_bag_id[$slot['item']] = ($slot['slot']-66);
-              $equip_bnk_bag_id[$slot['slot']-66] = array($slot['entry'], 
-                $sql['world']->result($sql['world']->query('SELECT ContainerSlots FROM item_template
-                  WHERE entry = '.$slot['entry'].''), 0, 'ContainerSlots'), $slot['count']);
+              $bank_bag_id[$slot["item"]] = ($slot["slot"]-66);
+              $equip_bnk_bag_id[$slot["slot"]-66] = array($slot["entry"], 
+                $sql["world"]->result($sql["world"]->query('SELECT ContainerSlots FROM item_template
+                  WHERE entry = '.$slot["entry"].''), 0, 'ContainerSlots'), $slot["count"]);
             }
           }
           else
           {
             // Bags
-            if ( isset($bag_id[$slot['bag']]) )
+            if ( isset($bag_id[$slot["bag"]]) )
             {
-              $i_query = "SELECT * FROM item_template WHERE entry='".$slot['entry']."'";
+              $i_query = "SELECT * FROM item_template WHERE entry='".$slot["entry"]."'";
 
-              $i_result = $sql['world']->query($i_query);
-              $i = $sql['world']->fetch_assoc($i_result);
+              $i_result = $sql["world"]->query($i_query);
+              $i = $sql["world"]->fetch_assoc($i_result);
 
-              if ( isset($bag[$bag_id[$slot['bag']]][$slot['slot']]) )
-                $bag[$bag_id[$slot['bag']]][$slot['slot']][1]++;
+              if ( isset($bag[$bag_id[$slot["bag"]]][$slot["slot"]]) )
+                $bag[$bag_id[$slot["bag"]]][$slot["slot"]][1]++;
               else
-                $bag[$bag_id[$slot['bag']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
+                $bag[$bag_id[$slot["bag"]]][$slot["slot"]] = array($slot["entry"], 0, $slot["count"], $i, $slot["enchantment"], $slot["property"], $slot["creator"], $slot["durability"], $slot["flags"], $slot["bag"], $slot["slot"]);
             }
             // Bank Bags
-            elseif ( isset($bank_bag_id[$slot['bag']]) )
+            elseif ( isset($bank_bag_id[$slot["bag"]]) )
             {
-              $i_query = "SELECT * FROM item_template WHERE entry='".$slot['entry']."'";
+              $i_query = "SELECT * FROM item_template WHERE entry='".$slot["entry"]."'";
 
-              $i_result = $sql['world']->query($i_query);
-              $i = $sql['world']->fetch_assoc($i_result);
+              $i_result = $sql["world"]->query($i_query);
+              $i = $sql["world"]->fetch_assoc($i_result);
 
-              $bank[$bank_bag_id[$slot['bag']]][$slot['slot']] = array($slot['entry'], 0, $slot['count'], $i, $slot['enchantment'], $slot['property'], $slot['creator'], $slot['durability'], $slot['flags'], $slot['bag'], $slot['slot']);
+              $bank[$bank_bag_id[$slot["bag"]]][$slot["slot"]] = array($slot["entry"], 0, $slot["count"], $i, $slot["enchantment"], $slot["property"], $slot["creator"], $slot["durability"], $slot["flags"], $slot["bag"], $slot["slot"]);
             }
           }
         }
@@ -337,22 +337,22 @@ function char_inv()
           <center>
             <div id="tab">
               <ul>
-              <li><a href="char.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>
-              <li id="selected"><a href="char_inv.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang('char', 'inventory').'</a></li>
-              '.(($char['level'] < 10) ? '' : '<li><a href="char_talent.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>').'
-              <li><a href="char_achieve.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang('char', 'achievements').'</a></li>
-              <li><a href="char_quest.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang('char', 'quests').'</a></li>
-              <li><a href="char_friends.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang('char', 'friends').'</a></li>
-                <li><a href="char_view.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang('char', 'view').'</a></li>
+              <li><a href="char.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>
+              <li id="selected"><a href="char_inv.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang("char", "inventory").'</a></li>
+              '.(($char["level"] < 10) ? '' : '<li><a href="char_talent.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang("char", "talents").'</a></li>').'
+              <li><a href="char_achieve.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang("char", "achievements").'</a></li>
+              <li><a href="char_quest.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang("char", "quests").'</a></li>
+              <li><a href="char_friends.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang("char", "friends").'</a></li>
+                <li><a href="char_view.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang("char", "view").'</a></li>
               </ul>
             </div>
             <div id="tab_content">
               <font class="bold">
-                '.htmlentities($char['name']).' -
-                <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif"
-                  onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
-                <img src="img/c_icons/'.$char['class'].'.gif"
-                  onmousemove="toolTip(\''.char_get_class_name($char['class']).'\',\'item_tooltip\')" onmouseout="toolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'
+                '.htmlentities($char["name"]).' -
+                <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif"
+                  onmousemove="toolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
+                <img src="img/c_icons/'.$char["class"].'.gif"
+                  onmousemove="toolTip(\''.char_get_class_name($char["class"]).'\',\'item_tooltip\')" onmouseout="toolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
               </font>
               <br /><br />
               <table class="lined" id="ch_inv_bags">
@@ -371,8 +371,8 @@ function char_inv()
                     <a id="ch_inv_padding" href="'.$item_datasite.$equiped_bag_id[$i][0].'" target="_blank">
                       <img class="bag_icon" src="'.get_item_icon($equiped_bag_id[$i][0]).'" alt="" />
                     </a>
-                    '.lang('item', 'bag').' '.$i.'<br />
-                    <font class="small">'.$equiped_bag_id[$i][1].' '.lang('item', 'slots').'</font>';
+                    '.lang("item", "bag").' '.$i.'<br />
+                    <font class="small">'.$equiped_bag_id[$i][1].' '.lang("item", "slots").'</font>';
         }
         $output .= '
                   </th>';
@@ -437,10 +437,10 @@ function char_inv()
                 <tr>
                   <th colspan="2" align="left">
                     <img class="bag_icon" src="'.get_item_icon(3960).'" alt="" align="middle" id="ch_backpack_icon_margin" />
-                    <font id="ch_backpack_name_margin">'.lang('char', 'backpack').'</font>
+                    <font id="ch_backpack_name_margin">'.lang("char", "backpack").'</font>
                   </th>
                   <th colspan="2">
-                    '.lang('char', 'bank_items').'
+                    '.lang("char", "bank_items").'
                   </th>
                 </tr>
                 <tr>
@@ -485,9 +485,9 @@ function char_inv()
                     </div>
                     <div id="ch_money">
                       <b>
-                        '.substr($char['gold'],  0, -4).'<img src="img/gold.gif" alt="" align="middle" />
-                        '.substr($char['gold'], -4,  2).'<img src="img/silver.gif" alt="" align="middle" />
-                        '.substr($char['gold'], -2).'<img src="img/copper.gif" alt="" align="middle" />
+                        '.substr($char["gold"],  0, -4).'<img src="img/gold.gif" alt="" align="middle" />
+                        '.substr($char["gold"], -4,  2).'<img src="img/silver.gif" alt="" align="middle" />
+                        '.substr($char["gold"], -2).'<img src="img/copper.gif" alt="" align="middle" />
                       </b>
                     </div>
                   </td>
@@ -544,8 +544,8 @@ function char_inv()
                     <a id="ch_inv_padding" href="'.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
                       <img class="bag_icon" src="'.get_item_icon($equip_bnk_bag_id[$i][0]).'" alt="" />
                     </a>
-                    '.lang('item', 'bag').' '.$i.'<br />
-                    <font class="small">'.$equip_bnk_bag_id[$i][1].' '.lang('item', 'slots').'</font>';
+                    '.lang("item", "bag").' '.$i.'<br />
+                    <font class="small">'.$equip_bnk_bag_id[$i][1].' '.lang("item", "slots").'</font>';
         }
         $output .= '
                   </th>';
@@ -573,8 +573,8 @@ function char_inv()
                     <a id="ch_inv_padding" href="'.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
                       <img class="bag_icon" src="'.get_item_icon($equip_bnk_bag_id[$i][0]).'" alt="" />
                     </a>
-                    '.lang('item', 'bag').' '.$i.'<br />
-                    <font class="small">'.$equip_bnk_bag_id[$i][1].' '.lang('item', 'slots').'</font>';
+                    '.lang("item", "bag").' '.$i.'<br />
+                    <font class="small">'.$equip_bnk_bag_id[$i][1].' '.lang("item", "slots").'</font>';
             }
             $output .= '
                   </th>';
@@ -645,45 +645,45 @@ function char_inv()
               <tr>
                 <td>';
       // button to user account page, user account page has own security
-      makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
+      makebutton(lang("char", "chars_acc"), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
       $output .= '
                 </td>
                 <td>';
 
       // show Delete Mode / View Mode button depending on current mode
       if ( $mode )
-        makebutton(lang('char', 'viewmode'), 'char_inv.php?id='.$cid.'&realm='.$realmid.'&mode=0" type="def', 130);
+        makebutton(lang("char", "viewmode"), 'char_inv.php?id='.$cid.'&realm='.$realmid.'&mode=0" type="def', 130);
       else
-        makebutton(lang('char', 'deletemode'), 'char_inv.php?id='.$cid.'&realm='.$realmid.'&mode=1" type="def', 130);
+        makebutton(lang("char", "deletemode"), 'char_inv.php?id='.$cid.'&realm='.$realmid.'&mode=1" type="def', 130);
       $output .= '
                 </td>
                 <td>';
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
-      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) )
+      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission["delete"] ) )
       {
-                  //makebutton($lang_char['edit_button'], 'char_edit.php?id='.$cid.'&amp;realm='.$realmid.'', 130);
+                  //makebutton($lang_char["edit_button"], 'char_edit.php?id='.$cid.'&amp;realm='.$realmid.'', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only higher level GM with delete access, or character owner can delete character
-      if ( ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) ) || ($owner_name === $user_name) )
+      if ( ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission["delete"]) ) || ($owner_name === $user_name) )
       {
-        makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$cid.'" type="wrn', 130);
+        makebutton(lang("char", "del_char"), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$cid.'" type="wrn', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only GM with update permission can send mail, mail can send items, so update permission is needed
-      if ( $user_lvl >= $action_permission['update'] )
+      if ( $user_lvl >= $action_permission["update"] )
       {
-        makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
+        makebutton(lang("char", "send_mail"), 'mail.php?type=ingame_mail&amp;to='.$char["name"].'', 130);
         $output .= '
                 </td>
                 <td>';
       }
-      makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+      makebutton(lang("global", "back"), 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>
               </tr>
@@ -693,10 +693,10 @@ function char_inv()
           <!-- end of char_inv.php -->';
     }
     else
-      error(lang('char', 'no_permission'));
+      error(lang("char", "no_permission"));
   }
   else
-    error(lang('char', 'no_char_found'));
+    error(lang("char", "no_char_found"));
 
 }
 
@@ -708,26 +708,26 @@ function delete_item()
 {
   global $output, $action_permission;
 
-  valid_login($action_permission['delete']);
+  valid_login($action_permission["delete"]);
 
   $output .= '
           <center>
             <img src="img/warn_red.gif" width="48" height="48" alt="" />
               <h1>
-                <font class="error">'.lang('global', 'are_you_sure').'</font>
+                <font class="error">'.lang("global", "are_you_sure").'</font>
               </h1>
               <br />
               <font class="bold">'.
-                lang('char', 'thisitem').'
+                lang("char", "thisitem").'
                 <br />'.
-                lang('global', 'will_be_erased').'
+                lang("global", "will_be_erased").'
               </font>
               <br /><br />
               <table width="300" class="hidden">
                 <tr>
                   <td>';
-  makebutton(lang('global', 'yes'), 'char_inv.php?action=dodelete_item&id='.$_GET['id'].'&bag='.$_GET['bag'].'&slot='.$_GET['slot'].'&item='.$_GET['item'].'&mode='.$_GET['mode'].'" type="wrn', 130);
-  makebutton(lang('global', 'no'), 'char_inv.php?id='.$_GET['id'].'&mode='.$_GET['mode'].'" type="def', 130);
+  makebutton(lang("global", "yes"), 'char_inv.php?action=dodelete_item&id='.$_GET["id"].'&bag='.$_GET["bag"].'&slot='.$_GET["slot"].'&item='.$_GET["item"].'&mode='.$_GET["mode"].'" type="wrn', 130);
+  makebutton(lang("global", "no"), 'char_inv.php?id='.$_GET["id"].'&mode='.$_GET["mode"].'" type="def', 130);
   $output .= '
                   </td>
                 </tr>
@@ -743,13 +743,13 @@ function dodelete_item()
 {
   global $output, $action_permission, $sql, $core;
 
-  valid_login($action_permission['delete']);
+  valid_login($action_permission["delete"]);
 
   // get our variables
-  $cid = $sql['char']->quote_smart($_GET['id']);
-  $bag = $sql['char']->quote_smart($_GET['bag']);
-  $slot = $sql['char']->quote_smart($_GET['slot']);
-  $item = $sql['char']->quote_smart($_GET['item']);
+  $cid = $sql["char"]->quote_smart($_GET["id"]);
+  $bag = $sql["char"]->quote_smart($_GET["bag"]);
+  $slot = $sql["char"]->quote_smart($_GET["slot"]);
+  $item = $sql["char"]->quote_smart($_GET["item"]);
 
   if ( ( empty($cid) ) || ( empty($bag) ) || ( empty($slot) ) || ( empty($item) ) )
     redirect("char_inv.php");
@@ -759,16 +759,16 @@ function dodelete_item()
   else
   {
     $query = "SELECT item FROM character_inventory WHERE guid='".$cid."' AND item_template='".$item."' AND bag='".$bag."' AND slot='".$slot."'";
-    $result = $sql['char']->query($query);
-    $result = $sql['char']->fetch_assoc($result);
-    $item_guid = $result['item'];
+    $result = $sql["char"]->query($query);
+    $result = $sql["char"]->fetch_assoc($result);
+    $item_guid = $result["item"];
 
     $query = "DELETE FROM character_inventory WHERE item=".$item_guid;
   }
 
-  $result = $sql['char']->query($query);
+  $result = $sql["char"]->query($query);
 
-  redirect("char_inv.php?id=".$cid."&mode=".$_GET['mode']);
+  redirect("char_inv.php?id=".$cid."&mode=".$_GET["mode"]);
 }
 
 
@@ -776,7 +776,7 @@ function dodelete_item()
 // MAIN
 //#############################################################################
 
-$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
+$action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
 $output .= '
       <div class="bubble">';

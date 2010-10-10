@@ -172,8 +172,8 @@ function fact_get_faction_name($id)
 {
   global $sql;
   
-  $faction_name = $sql['dbc']->fetch_assoc($sql['dbc']->query('SELECT name FROM faction WHERE id = '.$id.' LIMIT 1'));
-  return $faction_name['name'];
+  $faction_name = $sql["dbc"]->fetch_assoc($sql["dbc"]->query('SELECT name FROM faction WHERE id = '.$id.' LIMIT 1'));
+  return $faction_name["name"];
 }
 
 
@@ -198,9 +198,9 @@ function fact_get_base_reputation($id, $race)
 {
   global $sql;
 
-  //$faction_base_reputation = $sql['mgr']->fetch_array($sql['mgr']->query('SELECT field_1, field_2, field_3, field_4,
+  //$faction_base_reputation = $sql["mgr"]->fetch_array($sql["mgr"]->query('SELECT field_1, field_2, field_3, field_4,
     //field_5, field_10, field_11, field_12, field_13 FROM dbc_faction WHERE id = '.$id.' LIMIT 1'));
-  $faction_base_reputation = $sql['dbc']->fetch_array($sql['dbc']->query('SELECT UniqueGainID, AtWar, Allied, Unknown1, 
+  $faction_base_reputation = $sql["dbc"]->fetch_array($sql["dbc"]->query('SELECT UniqueGainID, AtWar, Allied, Unknown1, 
     Unknown2, BaseReputation, Modifier1, Modifier2, Modifier3 FROM faction WHERE id = '.$id.' LIMIT 1'));
 
   if(isset($faction_base_reputation));

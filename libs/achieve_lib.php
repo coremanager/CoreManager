@@ -22,41 +22,41 @@
 //#############################################################################
 //get achievement name by its id
 
-function achieve_get_name($id, &$sql['mgr'])
+function achieve_get_name($id, &$sql["mgr"])
 {
-  $achievement_name = $sql['mgr']->fetch_assoc($sql['mgr']->query('SELECT name FROM achievement WHERE id= '.$id.' LIMIT 1'));
-  return $achievement_name['name'];
+  $achievement_name = $sql["mgr"]->fetch_assoc($sql["mgr"]->query('SELECT name FROM achievement WHERE id= '.$id.' LIMIT 1'));
+  return $achievement_name["name"];
 }
 
 
 //#############################################################################
 //get achievement reward name by its id
 
-function achieve_get_reward($id, &$sql['mgr'])
+function achieve_get_reward($id, &$sql["mgr"])
 {
-  $achievement_reward = $sql['mgr']->fetch_assoc($sql['mgr']->query('SELECT reward FROM achievement WHERE id ='.$id.' LIMIT 1'));
-  return $achievement_reward['reward'];
+  $achievement_reward = $sql["mgr"]->fetch_assoc($sql["mgr"]->query('SELECT reward FROM achievement WHERE id ='.$id.' LIMIT 1'));
+  return $achievement_reward["reward"];
 }
 
 
 //#############################################################################
 //get achievement points name by its id
 
-function achieve_get_points($id, &$sql['mgr'])
+function achieve_get_points($id, &$sql["mgr"])
 {
-  $achievement_points = $sql['mgr']->fetch_assoc($sql['mgr']->query('SELECT points FROM achievement WHERE id = '.$id.' LIMIT 1'));
-  return $achievement_points['points'];
+  $achievement_points = $sql["mgr"]->fetch_assoc($sql["mgr"]->query('SELECT points FROM achievement WHERE id = '.$id.' LIMIT 1'));
+  return $achievement_points["points"];
 }
 
 
 //#############################################################################
 //get achievement category name by its id
 
-function achieve_get_category($id, &$sql['mgr'])
+function achieve_get_category($id, &$sql["mgr"])
 {
-  $category_id= $sql['mgr']->fetch_assoc($sql['mgr']->query('SELECT category FROM achievement WHERE id = '.$id.' LIMIT 1'));
-  $category_name = $sql['mgr']->fetch_assoc($sql['mgr']->query('SELECT Name FROM achievement_category WHERE ID = '.$category_id['category'].' LIMIT 1'));
-  return $category_name['Name'];
+  $category_id= $sql["mgr"]->fetch_assoc($sql["mgr"]->query('SELECT category FROM achievement WHERE id = '.$id.' LIMIT 1'));
+  $category_name = $sql["mgr"]->fetch_assoc($sql["mgr"]->query('SELECT Name FROM achievement_category WHERE ID = '.$category_id["category"].' LIMIT 1'));
+  return $category_name["Name"];
 }
 */
 
@@ -69,8 +69,8 @@ function achieve_get_id_category($id)
   global $sql;
 
   $achieve_cat = array();
-  $result = ($sql['dbc']->query('SELECT id, name, description, reward, points FROM achievement WHERE category = \''.$id.'\' ORDER BY `orderInGroup` DESC'));
-  while ($achieve_cat[] = $sql['dbc']->fetch_assoc($result));
+  $result = ($sql["dbc"]->query('SELECT id, name, description, reward, points FROM achievement WHERE category = \''.$id.'\' ORDER BY `orderInGroup` DESC'));
+  while ($achieve_cat[] = $sql["dbc"]->fetch_assoc($result));
   return $achieve_cat;
 }
 
@@ -83,8 +83,8 @@ function achieve_get_main_category()
   global $sql;
 
   $main_cat = array();
-  $result = $sql['dbc']->query('SELECT ID, Name FROM achievement_category WHERE ParentID = -1 and ID != 1 ORDER BY `GroupID` ASC');
-  while ($main_cat[] = $sql['dbc']->fetch_assoc($result));
+  $result = $sql["dbc"]->query('SELECT ID, Name FROM achievement_category WHERE ParentID = -1 and ID != 1 ORDER BY `GroupID` ASC');
+  while ($main_cat[] = $sql["dbc"]->fetch_assoc($result));
   return $main_cat;
 }
 
@@ -97,11 +97,11 @@ function achieve_get_sub_category()
   global $sql;
 
   $sub_cat = array();
-  $result = $sql['dbc']->query('SELECT ID, ParentID, Name FROM achievement_category WHERE ParentID != -1 ORDER BY `GroupID` ASC');
-  $temp = $sql['dbc']->fetch_assoc($result);
-  while ($sub_cat[$temp['ParentID']][$temp['ID']] = $temp['Name'])
+  $result = $sql["dbc"]->query('SELECT ID, ParentID, Name FROM achievement_category WHERE ParentID != -1 ORDER BY `GroupID` ASC');
+  $temp = $sql["dbc"]->fetch_assoc($result);
+  while ($sub_cat[$temp["ParentID"]][$temp["ID"]] = $temp["Name"])
   {
-    $temp = $sql['dbc']->fetch_assoc($result);
+    $temp = $sql["dbc"]->fetch_assoc($result);
   }
   return $sub_cat;
 }
@@ -114,8 +114,8 @@ function achieve_get_details($id)
 {
   global $sql;
 
-  $result = ($sql['dbc']->query('SELECT id, name, description, reward, points FROM achievement WHERE id = \''.$id.'\' LIMIT 1'));
-  $details = $sql['dbc']->fetch_assoc($result);
+  $result = ($sql["dbc"]->query('SELECT id, name, description, reward, points FROM achievement WHERE id = \''.$id.'\' LIMIT 1'));
+  $details = $sql["dbc"]->fetch_assoc($result);
   return $details;
 }
 
@@ -127,21 +127,21 @@ function achieve_get_icon($achieveid)
 {
   global $proxy_cfg, $get_icons_from_web, $item_icons, $sql;
 
-  $result = $sql['dbc']->query('SELECT spellIcon FROM achievement WHERE id = \''.$achieveid.'\' LIMIT 1');
+  $result = $sql["dbc"]->query('SELECT spellIcon FROM achievement WHERE id = \''.$achieveid.'\' LIMIT 1');
 
 
   if ($result)
-    $displayid = $sql['dbc']->result($result, 0);
+    $displayid = $sql["dbc"]->result($result, 0);
   else
     $displayid = 0;
 
   if ($displayid)
   {
-    $result = $sql['dbc']->query('SELECT Name FROM spellicon WHERE ID = '.$displayid.' LIMIT 1');
+    $result = $sql["dbc"]->query('SELECT Name FROM spellicon WHERE ID = '.$displayid.' LIMIT 1');
 
     if($result)
     {
-      $achieve = $sql['dbc']->result($result, 0);
+      $achieve = $sql["dbc"]->result($result, 0);
       // this_is_junk: we now extract data unaltered from the DBCs, so the spell icons have paths,
       // we remove them.
       // The parser reads \ as starting an escape sequence, so we have to
@@ -162,7 +162,7 @@ function achieve_get_icon($achieveid)
           //else
           //{
             // this_is_junk: disabled deletion from DBC data
-            //$sql['mgr']->query('DELETE FROM spellicon WHERE id = '.$displayid.'');
+            //$sql["mgr"]->query('DELETE FROM spellicon WHERE id = '.$displayid.'');
             //if (file_exists(''.$item_icons.'/'.$achieve.'.png'))
             //  unlink(''.$item_icons.'/'.$achieve.'.png');
             //$achieve = '';
@@ -184,10 +184,10 @@ function achieve_get_icon($achieveid)
   /*if($get_icons_from_web)
   {
     $xmlfilepath='http://www.wowhead.com/?achievement=';
-    $proxy = $proxy_cfg['addr'];
-    $port = $proxy_cfg['port'];
+    $proxy = $proxy_cfg["addr"];
+    $port = $proxy_cfg["port"];
 
-    if (empty($proxy_cfg['addr']))
+    if (empty($proxy_cfg["addr"]))
     {
       $proxy = 'www.wowhead.com';
       $xmlfilepath = '?achievement=';
@@ -202,8 +202,8 @@ function achieve_get_icon($achieveid)
       else
         return 'img/INV/INV_blank_32.gif';
       $out = "GET /$xmlfilepath$achieveid HTTP/1.0\r\nHost: www.wowhead.com\r\n";
-      if (isset($proxy_cfg['user']))
-        $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
+      if (isset($proxy_cfg["user"]))
+        $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg["user"]}:{$proxy_cfg["pass"]}")."\r\n";
       $out .="Connection: Close\r\n\r\n";
 
       $temp = '';
@@ -226,19 +226,19 @@ function achieve_get_icon($achieveid)
     {
       if (filesize(''.$item_icons.'/'.$achieve.'.jpg') > 349)
       {
-        $sql['mgr']->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
+        $sql["mgr"]->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
         return ''.$item_icons.'/'.$achieve.'.jpg';
       }
       else
       {
-        $sql['mgr']->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
+        $sql["mgr"]->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
         if (file_exists(''.$item_icons.'/'.$achieve.'.jpg'))
           unlink(''.$item_icons.'/'.$achieve.'.jpg');
       }
     }
 
     //get the icon itself
-    if (empty($proxy_cfg['addr']))
+    if (empty($proxy_cfg["addr"]))
     {
       $proxy = 'static.wowhead.com';
       $port = 80;
@@ -250,8 +250,8 @@ function achieve_get_icon($achieveid)
     $iconfilename = strtolower($achieve);
     $file = 'http://static.wowhead.com/images/icons/medium/'.$iconfilename.'.jpg';
     $out = "GET $file HTTP/1.0\r\nHost: static.wowhead.com\r\n";
-    if (isset($proxy_cfg['user']))
-      $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
+    if (isset($proxy_cfg["user"]))
+      $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg["user"]}:{$proxy_cfg["pass"]}")."\r\n";
     $out .="Connection: Close\r\n\r\n";
     fwrite($fp, $out);
 
@@ -267,12 +267,12 @@ function achieve_get_icon($achieveid)
     {
       if (filesize(''.$item_icons.'/'.$achieve.'.jpg') > 349)
       {
-        $sql['mgr']->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
+        $sql["mgr"]->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
         return ''.$item_icons.'/'.$achieve.'.jpg';
       }
       else
       {
-        $sql['mgr']->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
+        $sql["mgr"]->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
         if (file_exists(''.$item_icons.'/'.$achieve.'.jpg'))
           unlink(''.$item_icons.'/'.$achieve.'.jpg');
       }
@@ -288,12 +288,12 @@ function achieve_get_icon($achieveid)
     {
       if (filesize(''.$item_icons.'/'.$achieve.'.jpg') > 349)
       {
-        $sql['mgr']->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
+        $sql["mgr"]->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
         return ''.$item_icons.'/'.$achieve.'.jpg';
       }
       else
       {
-        $sql['mgr']->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
+        $sql["mgr"]->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
         if (file_exists(''.$item_icons.'/'.$achieve.'.jpg'))
           unlink(''.$item_icons.'/'.$achieve.'.jpg');
       }

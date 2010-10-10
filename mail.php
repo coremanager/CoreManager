@@ -19,7 +19,7 @@
 
 
 require_once("header.php");
-valid_login($action_permission['update']);
+valid_login($action_permission["update"]);
 
 //###########################################################################
 // print mail form
@@ -27,34 +27,34 @@ function print_mail_form()
 {
   global $output;
 
-  $to = ( ( isset($_GET['to']) ) ? $_GET['to'] : NULL );
-  $type = ( ( isset($_GET['type']) ) ? $_GET['type'] : "email" );
+  $to = ( ( isset($_GET["to"]) ) ? $_GET["to"] : NULL );
+  $type = ( ( isset($_GET["type"]) ) ? $_GET["type"] : "email" );
 
   $output .= '
         <center>
           <form action="mail.php" method="get" name="form">
             <input type="hidden" name="action" value="send_mail" />
             <div id="mail_type_field" class="fieldset_border">
-              <span class="legend">'.lang('mail', 'mail_type').'</span>
+              <span class="legend">'.lang("mail", "mail_type").'</span>
               <br />
               <table class="top_hidden" id="mail_type">
                 <tr>
-                  <td align="left">'.lang('mail', 'recipient').': 
+                  <td align="left">'.lang("mail", "recipient").': 
                     <input type="text" name="to" size="32" value="'.$to.'" maxlength="225" />
                   </td>
-                  <td align="left">'.lang('mail', 'subject').': 
+                  <td align="left">'.lang("mail", "subject").': 
                     <input type="text" name="subject" size="32" maxlength="50" />
                   </td>
                   <td width="1" align="right">
                     <select name="type">';
   if ( $type == "email" )
     $output .= '
-                      <option value="ingame_mail">'.lang('mail', 'ingame_mail').'</option>
-                      <option value="email">'.lang('mail', 'email').'</option>';
+                      <option value="ingame_mail">'.lang("mail", "ingame_mail").'</option>
+                      <option value="email">'.lang("mail", "email").'</option>';
   else
     $output .= '
-                      <option value="email">'.lang('mail', 'email').'</option>
-                      <option value="ingame_mail">'.lang('mail', 'ingame_mail').'</option>';
+                      <option value="email">'.lang("mail", "email").'</option>
+                      <option value="ingame_mail">'.lang("mail", "ingame_mail").'</option>';
   $output .= '
                     </select>
                   </td>
@@ -66,22 +66,22 @@ function print_mail_form()
                 </tr>
                 <tr>
                   <td colspan="3">'
-                    .lang('mail', 'dont_use_both_groupsend_and_to').'
+                    .lang("mail", "dont_use_both_groupsend_and_to").'
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="3">'.lang('mail', 'group_send').':
+                  <td colspan="3">'.lang("mail", "group_send").':
                     <select name="group_send">
-                      <optgroup label="'.lang('mail', 'both').'">
-                        <option value="gm_level">'.lang('mail', 'gm_level').'</option>
+                      <optgroup label="'.lang("mail", "both").'">
+                        <option value="gm_level">'.lang("mail", "gm_level").'</option>
                       </optgroup>
-                      <optgroup label="'.lang('mail', 'email').'">
-                        <option value="locked">'.lang('mail', 'locked_accouns').'</option>
-                        <option value="banned">'.lang('mail', 'banned_accounts').'</option>
+                      <optgroup label="'.lang("mail", "email").'">
+                        <option value="locked">'.lang("mail", "locked_accouns").'</option>
+                        <option value="banned">'.lang("mail", "banned_accounts").'</option>
                       </optgroup>
-                      <optgroup label="'.lang('mail', 'ingame_mail').'">
-                        <option value="char_level">'.lang('mail', 'char_level').'</option>
-                        <option value="online">'.lang('mail', 'online').'</option>
+                      <optgroup label="'.lang("mail", "ingame_mail").'">
+                        <option value="char_level">'.lang("mail", "char_level").'</option>
+                        <option value="online">'.lang("mail", "online").'</option>
                       </optgroup>
                     </select>
                     <select name="group_sign">
@@ -100,14 +100,14 @@ function print_mail_form()
                 </tr>
                 <tr>
                   <td colspan="3" align="left">'
-                    .lang('mail', 'attachments').':
+                    .lang("mail", "attachments").':
                   </td>
                 </tr>
                 <tr>
                   <td colspan="3" align="right">'
-                    .lang('mail', 'money').' : <input type="text" name="money" value="0" size="10" maxlength="10" />'
-                    .lang('mail', 'item').' : <input type="text" name="att_item" value="0" size="10" maxlength="10" />'
-                    .lang('mail', 'stack').' : <input type="text" name="att_stack" value="0" size="10" maxlength="10" />
+                    .lang("mail", "money").' : <input type="text" name="money" value="0" size="10" maxlength="10" />'
+                    .lang("mail", "item").' : <input type="text" name="att_item" value="0" size="10" maxlength="10" />'
+                    .lang("mail", "stack").' : <input type="text" name="att_stack" value="0" size="10" maxlength="10" />
                   </td>
                 </tr>
                 <tr>
@@ -117,7 +117,7 @@ function print_mail_form()
               </table>
             </div>
             <div id="mail_body_field" class="fieldset_border">
-              <span class="legend">'.lang('mail', 'mail_body').'</span>
+              <span class="legend">'.lang("mail", "mail_body").'</span>
               <br />
               <textarea name="body" rows="14" cols="92"></textarea>
               <br />
@@ -125,7 +125,7 @@ function print_mail_form()
               <table>
                 <tr>
                   <td>';
-                   makebutton(lang('mail', 'send'), "javascript:do_submit()",130);
+                   makebutton(lang("mail", "send"), "javascript:do_submit()",130);
   $output .= '
                   </td>
                 </tr>
@@ -144,31 +144,31 @@ function send_mail()
   global $output, $logon_db, $characters_db, $realm_id,
          $user_name, $from_mail, $mailer_type, $smtp_cfg, $GMailSender, $sql, $core;
 
-  if ( empty($_GET['body']) || empty($_GET['subject']) || empty($_GET['type']) || empty($_GET['group_sign']) || empty($_GET['group_send']) )
+  if ( empty($_GET["body"]) || empty($_GET["subject"]) || empty($_GET["type"]) || empty($_GET["group_sign"]) || empty($_GET["group_send"]) )
     redirect("mail.php?error=1");
 
-  $body = explode("\n",$_GET['body']);
-  $subject = $sql['char']->quote_smart($_GET['subject']);
+  $body = explode("\n",$_GET["body"]);
+  $subject = $sql["char"]->quote_smart($_GET["subject"]);
 
-  if ( isset($_GET['to']) && ($_GET['to'] != '') )
-    $to = $sql['char']->quote_smart($_GET['to']);
+  if ( isset($_GET["to"]) && ($_GET["to"] != '') )
+    $to = $sql["char"]->quote_smart($_GET["to"]);
   else
   {
     $to = 0;
-    if ( !isset($_GET['group_value']) || $_GET['group_value'] === '' )
+    if ( !isset($_GET["group_value"]) || $_GET["group_value"] === '' )
       redirect("mail.php?error=1");
     else
     {
-      $group_value = $sql['char']->quote_smart($_GET['group_value']);
-      $group_sign = $sql['char']->quote_smart($_GET['group_sign']);
-      $group_send = $sql['char']->quote_smart($_GET['group_send']);
+      $group_value = $sql["char"]->quote_smart($_GET["group_value"]);
+      $group_sign = $sql["char"]->quote_smart($_GET["group_sign"]);
+      $group_send = $sql["char"]->quote_smart($_GET["group_send"]);
     }
   }
 
-  $type = addslashes($_GET['type']);
-  $att_gold = $sql['char']->quote_smart($_GET['money']);
-  $att_item = $sql['char']->quote_smart($_GET['att_item']);
-  $att_stack = $sql['char']->quote_smart($_GET['att_stack']);
+  $type = addslashes($_GET["type"]);
+  $att_gold = $sql["char"]->quote_smart($_GET["money"]);
+  $att_item = $sql["char"]->quote_smart($_GET["att_item"]);
+  $att_stack = $sql["char"]->quote_smart($_GET["att_stack"]);
 
   if ( ( $att_item <> 0 ) && ( $att_stack == 0 ) )
     $att_stack = 1;
@@ -183,13 +183,13 @@ function send_mail()
       $mail->Mailer = $mailer_type;
       if ( $mailer_type == "smtp" )
       {
-        $mail->Host = $smtp_cfg['host'];
-        $mail->Port = $smtp_cfg['port'];
-        if ( $smtp_cfg['user'] != '' )
+        $mail->Host = $smtp_cfg["host"];
+        $mail->Port = $smtp_cfg["port"];
+        if ( $smtp_cfg["user"] != '' )
         {
           $mail->SMTPAuth  = true;
-          $mail->Username  = $smtp_cfg['user'];
-          $mail->Password  =  $smtp_cfg['pass'];
+          $mail->Username  = $smtp_cfg["user"];
+          $mail->Password  =  $smtp_cfg["pass"];
         }
       }
 
@@ -233,8 +233,8 @@ function send_mail()
         {
           //single Recipient
           $mail_result = authgMail($from_mail, $user_name, $to, $to, $subject, $body, $smtp_cfg);
-          if ( $mail_result['quitcode'] <> 221 )
-            redirect("mail.php?error=3&mail_err=".$mail_result['die']);
+          if ( $mail_result["quitcode"] <> 221 )
+            redirect("mail.php?error=3&mail_err=".$mail_result["die"]);
           else
             redirect("mail.php?error=2");
         }
@@ -246,7 +246,7 @@ function send_mail()
         switch ( $group_send )
         {
           case "gm_level":
-            $result = $sql['logon']->query("SELECT email FROM accounts WHERE gm ".$group_sign." '".$group_value."'");
+            $result = $sql["logon"]->query("SELECT email FROM accounts WHERE gm ".$group_sign." '".$group_value."'");
             while ( $user = $sql->fetch_row($result) )
             {
               if ( $user[0] != "" )
@@ -255,8 +255,8 @@ function send_mail()
             break;
           case "locked":
             //this_is_junk: I'm going to pretend that locked is muted.
-            $result = $sql['logon']->query("SELECT email FROM accounts WHERE muted ".$group_sign." '".$group_value."'");
-            while ( $user = $sql['logon']->fetch_row($result) )
+            $result = $sql["logon"]->query("SELECT email FROM accounts WHERE muted ".$group_sign." '".$group_value."'");
+            while ( $user = $sql["logon"]->fetch_row($result) )
             {
               if ( $user[0] != "" )
                 array_push($email_array, $user[0]);
@@ -264,10 +264,10 @@ function send_mail()
             break;
           case "banned":
             //this_is_junk: sigh...
-            $que = $sql['logon']->query("SELECT id FROM account_banned");
+            $que = $sql["logon"]->query("SELECT id FROM account_banned");
             while ( $banned = $sql->fetch_row($que) )
             {
-              $result = $sql['logon']->query("SELECT email FROM accounts WHERE acct = '".$banned[0]."'");
+              $result = $sql["logon"]->query("SELECT email FROM accounts WHERE acct = '".$banned[0]."'");
               if ( $sqlr->result($result, 0, 'email') )
                 array_push($email_array, $sql->result($result, 0, 'email'));
             }
@@ -294,8 +294,8 @@ function send_mail()
         {
           $mail_to = implode(",", $email_array);
           $mail_result = authgMail($from_mail, $user_name, $mail_to, "", $subject, $body, $smtp_cfg);
-          if ( $mail_result['quitcode'] <> 221 )
-            redirect("mail.php?error=3&mail_err=".$mail_result['die']);
+          if ( $mail_result["quitcode"] <> 221 )
+            redirect("mail.php?error=3&mail_err=".$mail_result["die"]);
           else
             redirect("mail.php?error=2");
           
@@ -311,23 +311,23 @@ function send_mail()
         $value .= $body[$i]." ";
       $body = $value;
       $body = str_replace("\r", " ", $body);
-      $body = $sql['char']->quote_smart($body);
+      $body = $sql["char"]->quote_smart($body);
 
       if ( $to )
       {
         //single Recipient
-        $result = $sql['char']->query("SELECT guid FROM characters WHERE name = '$to'");
-        if ( $sql['char']->num_rows($result) == 1 )
+        $result = $sql["char"]->query("SELECT guid FROM characters WHERE name = '$to'");
+        if ( $sql["char"]->num_rows($result) == 1 )
         {
-          $receiver = $sql['char']->result($result, 0, 'guid');
+          $receiver = $sql["char"]->result($result, 0, 'guid');
           $mails = array();
-          $mail['receiver'] = $receiver;
-          $mail['subject'] = $subject;
-          $mail['body'] = $body;
-          $mail['att_gold'] = $att_gold;
-          $mail['att_item'] = $att_item;
-          $mail['att_stack'] = $att_stack;
-          $mail['receiver_name'] = $to;
+          $mail["receiver"] = $receiver;
+          $mail["subject"] = $subject;
+          $mail["body"] = $body;
+          $mail["att_gold"] = $att_gold;
+          $mail["att_item"] = $att_item;
+          $mail["att_stack"] = $att_stack;
+          $mail["receiver_name"] = $to;
           //array_push($mails, array($receiver, $subject, $body, $att_gold, $att_item, $att_stack));
           array_push($mails, $mail);
           if ( $core == 1 )
@@ -348,42 +348,42 @@ function send_mail()
         switch ( $group_send )
         {
           case "gm_level":
-            $result = $sql['logon']->query("SELECT acct FROM accounts WHERE gm ".$group_sign." '".$group_value."'");
-            while ( $acc = $sql['char']->fetch_row($result) )
+            $result = $sql["logon"]->query("SELECT acct FROM accounts WHERE gm ".$group_sign." '".$group_value."'");
+            while ( $acc = $sql["char"]->fetch_row($result) )
             {
-              $result_2 = $sql['char']->query("SELECT name FROM `characters` WHERE acct = '".$acc[0]."'");
-              while ( $char = $sql['char']->fetch_row($result_2) )
+              $result_2 = $sql["char"]->query("SELECT name FROM `characters` WHERE acct = '".$acc[0]."'");
+              while ( $char = $sql["char"]->fetch_row($result_2) )
                 array_push($char_array, $char[0]);
             }
             break;
           case "online":
-            $result = $sql['char']->query("SELECT name FROM `characters` WHERE online ".$group_sign." '".$group_value."'");
-            while ( $user = $sql['char']->fetch_row($result) )
+            $result = $sql["char"]->query("SELECT name FROM `characters` WHERE online ".$group_sign." '".$group_value."'");
+            while ( $user = $sql["char"]->fetch_row($result) )
               array_push($char_array, $user[0]);
             break;
           case "char_level":
-            $result = $sql['char']->query("SELECT name FROM `characters` WHERE level ".$group_sign." '".$group_value."'");
-            while ( $user = $sql['char']->fetch_row($result) )
+            $result = $sql["char"]->query("SELECT name FROM `characters` WHERE level ".$group_sign." '".$group_value."'");
+            while ( $user = $sql["char"]->fetch_row($result) )
               array_push($char_array, $user[0]);
             break;
           default:
             redirect("mail.php?error=5");
         }
         $mails = array();
-        if ( $sql['char']->num_rows($result) )
+        if ( $sql["char"]->num_rows($result) )
         {
           foreach ( $char_array as $receiver )
           {
-            $result = $sql['char']->query("SELECT guid FROM characters WHERE name = '".$receiver."'");
-            $char_guid = $sql['char']->fetch_row($result);
+            $result = $sql["char"]->query("SELECT guid FROM characters WHERE name = '".$receiver."'");
+            $char_guid = $sql["char"]->fetch_row($result);
             $mail = array();
-            $mail['receiver'] = $char_guid[0];
-            $mail['subject'] = $subject;
-            $mail['body'] = $body;
-            $mail['att_gold'] = $att_gold;
-            $mail['att_item'] = $att_item;
-            $mail['att_stack'] = $att_stack;
-            $mail['receiver_name'] = $receiver;
+            $mail["receiver"] = $char_guid[0];
+            $mail["subject"] = $subject;
+            $mail["body"] = $body;
+            $mail["att_gold"] = $att_gold;
+            $mail["att_item"] = $att_item;
+            $mail["att_stack"] = $att_stack;
+            $mail["receiver_name"] = $receiver;
             //array_push($mails, array($receiver, $subject, $body, $att_gold, $att_item, $att_stack));
             array_push($mails, $mail);
           }
@@ -415,28 +415,28 @@ function send_ingame_mail_A($realm_id, $massmails)
   $result = '';
   foreach ( $massmails as $mails )
   {
-    $sql['char']->query("INSERT INTO mailbox_insert_queue (sender_guid, receiver_guid, subject, body, stationary, money, item_id, item_stack)
-                  VALUES ('".$from_char."', '".$mails['receiver']."', '".$mails['subject']."', '".$mails['body']."', '".$stationary."', '".$mails['att_gold']."', '".$mails['att_item']."', '".$mails['att_stack']."')");
-    if ( $sql['char']->affected_rows() )
+    $sql["char"]->query("INSERT INTO mailbox_insert_queue (sender_guid, receiver_guid, subject, body, stationary, money, item_id, item_stack)
+                  VALUES ('".$from_char."', '".$mails["receiver"]."', '".$mails["subject"]."', '".$mails["body"]."', '".$stationary."', '".$mails["att_gold"]."', '".$mails["att_item"]."', '".$mails["att_stack"]."')");
+    if ( $sql["char"]->affected_rows() )
     {
-      //$mess_str .= "Successfully sent message sent to ". $mails['receiver_name']."<br />";
+      //$mess_str .= "Successfully sent message sent to ". $mails["receiver_name"]."<br />";
       $mess = 0; // success
       $result = "RESULT";
     }
     else
     {
-      //$mess_str .= "Failed to send message to ".$mails['receiver_name']."<br />";
+      //$mess_str .= "Failed to send message to ".$mails["receiver_name"]."<br />";
       $mess = -1; // failure
       $result = "RESULT";
     }
   }
 
-  if ( !isset($_GET['redirect']) )
+  if ( !isset($_GET["redirect"]) )
     //redirect("mail.php?action=result&error=6&mess=$mess_str");
-    redirect("mail.php?action=result&error=6&mess=".$mess."&recipient=".$mails['receiver_name']);
+    redirect("mail.php?action=result&error=6&mess=".$mess."&recipient=".$mails["receiver_name"]);
   else
   {
-    $redirect = $sql['char']->quote_smart($_GET['redirect']);
+    $redirect = $sql["char"]->quote_smart($_GET["redirect"]);
     redirect($redirect);
   }
 
@@ -462,31 +462,31 @@ function send_ingame_mail_MT($realm_id, $massmails)
     $result = '';
     foreach($massmails as $mails)
     {
-      if ( $mails['att_gold'] && $mails['att_item'] )
+      if ( $mails["att_gold"] && $mails["att_item"] )
       {
-        $mess_str1 = "send money ".$mails['receiver_name']." \"".$mails['subject']."\" \"".$mails['body']."\" ".$mails['att_gold']."";
+        $mess_str1 = "send money ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\" ".$mails["att_gold"]."";
         $telnet->DoCommand($mess_str1, $result1);
 
         $mess_str .= $mess_str1."<br >";
         $result .= $result1."";
 
-        $mess_str1 = "send item ".$mails['receiver_name']." \"".$mails['subject']."\" \"".$mails['body']."\" ".$mails['att_item'].( ( $mails['att_stack'] > 1 ) ? "[:count".$mails['att_stack']."]" : " " );
-        $telnet->DoCommand($mess_str1, $result1);
-
-        $mess_str .= $mess_str1."<br >";
-        $result .= $result1."";
-      }
-      elseif ( $mails['att_gold'] )
-      {
-        $mess_str1 = "send money ".$mails['receiver_name']." \"".$mails['subject']."\" \"".$mails['body']."\" ".$mails['att_gold']."";
+        $mess_str1 = "send item ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\" ".$mails["att_item"].( ( $mails["att_stack"] > 1 ) ? "[:count".$mails["att_stack"]."]" : " " );
         $telnet->DoCommand($mess_str1, $result1);
 
         $mess_str .= $mess_str1."<br >";
         $result .= $result1."";
       }
-      elseif ( $mails['att_item'] )
+      elseif ( $mails["att_gold"] )
       {
-        $mess_str1 = "send item ".$mails['receiver_name']." \"".$mails['subject']."\" \"".$mails['body']."\" ".$mails['att_item'].( ( $mails['att_stack'] > 1 ) ? "[:count".$mails['att_stack']."]" : " " );
+        $mess_str1 = "send money ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\" ".$mails["att_gold"]."";
+        $telnet->DoCommand($mess_str1, $result1);
+
+        $mess_str .= $mess_str1."<br >";
+        $result .= $result1."";
+      }
+      elseif ( $mails["att_item"] )
+      {
+        $mess_str1 = "send item ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\" ".$mails["att_item"].( ( $mails["att_stack"] > 1 ) ? "[:count".$mails["att_stack"]."]" : " " );
         $telnet->DoCommand($mess_str1, $result1);
 
         $mess_str .= $mess_str1."<br >";
@@ -494,7 +494,7 @@ function send_ingame_mail_MT($realm_id, $massmails)
       }
       else
       {
-        $mess_str1 = "send mail ".$mails['receiver_name']." \"".$mails['subject']."\" \"".$mails['body']."\"";
+        $mess_str1 = "send mail ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\"";
         $telnet->DoCommand($mess_str1, $result1);
 
         $mess_str .= $mess_str1."<br >";
@@ -511,15 +511,15 @@ function send_ingame_mail_MT($realm_id, $massmails)
     $telnet->Disconnect();
   }
   elseif ( $result == 1 )
-    $mess_str = lang('telnet', 'unable');
+    $mess_str = lang("telnet", "unable");
   elseif ( $result == 2 )
-    $mess_str = lang('telnet', 'unknown_host');
+    $mess_str = lang("telnet", "unknown_host");
   elseif ( $result == 3 )
-    $mess_str = lang('telnet', 'login_failed');
+    $mess_str = lang("telnet", "login_failed");
   elseif ( $result == 4 )
-    $mess_str = lang('telnet', 'not_supported');
+    $mess_str = lang("telnet", "not_supported");
 
-  redirect("mail.php?action=result&error=6&mess=".$mess_str."&recipient=".$mails['receiver_name']);
+  redirect("mail.php?action=result&error=6&mess=".$mess_str."&recipient=".$mails["receiver_name"]);
 
 }
 
@@ -534,18 +534,18 @@ function send_ingame_mail_MT($realm_id, $massmails)
 function result()
 {
   global $output;
-  $mess = ( ( isset($_GET['mess']) ) ? $_GET['mess'] : NULL );
-  $recipient = $_GET['recipient'];
+  $mess = ( ( isset($_GET["mess"]) ) ? $_GET["mess"] : NULL );
+  $recipient = $_GET["recipient"];
   switch ( $mess )
   {
     case 0: // success
     {
-      $mess = lang('mail', 'result_success');
+      $mess = lang("mail", "result_success");
       break;
     }
     case -1: //failure
     {
-      $mess = lang('mail', 'result_failed');
+      $mess = lang("mail", "result_failed");
       break;
     }
   }
@@ -566,7 +566,7 @@ function result()
           <table width="400" class="hidden">
             <tr>
               <td align="center">';
-                makebutton(lang('global', 'back'), 'mail.php', 130);
+                makebutton(lang("global", "back"), 'mail.php', 130);
   $output .= '
               </td>
             </tr>
@@ -580,7 +580,7 @@ function result()
 //########################################################################################################################
 // MAIN
 //########################################################################################################################
-$err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
+$err = ( ( isset($_GET["error"]) ) ? $_GET["error"] : NULL );
 
 $output .= '
       <div class="bubble">
@@ -590,41 +590,41 @@ switch ( $err )
 {
   case 1:
     $output .= '
-          <h1><font class="error">'.lang('global', 'empty_fields').'</font></h1>';
+          <h1><font class="error">'.lang("global", "empty_fields").'</font></h1>';
     break;
   case 2:
     $output .= '
-          <h1><font class="error">'.lang('mail', 'mail_sent').'</font></h1>';
+          <h1><font class="error">'.lang("mail", "mail_sent").'</font></h1>';
     break;
   case 3:
-    $mail_err = ( ( isset($_GET['mail_err']) ) ? $_GET['mail_err'] : NULL );
+    $mail_err = ( ( isset($_GET["mail_err"]) ) ? $_GET["mail_err"] : NULL );
     $output .= '
-          <h1><font class="error">'.lang('mail', 'mail_err').': '.$mail_err.'</font></h1>';
+          <h1><font class="error">'.lang("mail", "mail_err").': '.$mail_err.'</font></h1>';
     break;
   case 4:
     $output .= '
-          <h1><font class=\"error">'.lang('mail', 'no_recipient_found').'</font></h1>'
-          .lang('mail', 'use_name_or_email');
+          <h1><font class=\"error">'.lang("mail", "no_recipient_found").'</font></h1>'
+          .lang("mail", "use_name_or_email");
     break;
   case 5:
     $output .= '
-          <h1><font class="error">'.lang('mail', 'option_unavailable').'</font></h1>'
-          .lang('mail', 'use_currect_option');
+          <h1><font class="error">'.lang("mail", "option_unavailable").'</font></h1>'
+          .lang("mail", "use_currect_option");
     break;
   case 6:
     $output .= '
-          <h1><font class="error">'.lang('mail', 'result').'</font></h1>';
+          <h1><font class="error">'.lang("mail", "result").'</font></h1>';
     break;
   default: //no error
     $output .= '
-          <h1>'.lang('mail', 'send_mail').'</h1>';
+          <h1>'.lang("mail", "send_mail").'</h1>';
 }
 unset($err);
 
 $output .= '
         </div>';
 
-$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
+$action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
 switch ( $action )
 {

@@ -24,9 +24,9 @@ require_once("configs/config.php");
 // HEADER SECTION
 //#############################################################################
 
-if ( isset($_COOKIE['lang']) )
+if ( isset($_COOKIE["lang"]) )
 {
-  $lang = $_COOKIE['lang'];
+  $lang = $_COOKIE["lang"];
   if ( file_exists('../lang/'.$lang.'.php') )
     ;
   else
@@ -52,7 +52,7 @@ $output .= '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>'.lang('setup', 'title').'</title>
+    <title>'.lang("setup", "title").'</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="Content-Type" content="text/javascript; charset=utf-8" />
     <link rel="stylesheet" type="text/css" href="admin/admin.css" />
@@ -68,7 +68,7 @@ $output .= '
 // Fix reditection error under MS-IIS fuckedup-servers.
 function redirect($url)
 {
-  if ( strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false )
+  if ( strpos($_SERVER["SERVER_SOFTWARE"], 'Microsoft-IIS') === false )
   {
     header('Location: '.$url);
     exit();
@@ -93,37 +93,37 @@ function show()
   global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
   // first we check that we even have a config_misc table...
-  $check_for_table = $sqlm->fetch_assoc($sqlm->query("SHOW TABLES FROM ".$corem_db['name']." LIKE 'config_misc'"));
+  $check_for_table = $sqlm->fetch_assoc($sqlm->query("SHOW TABLES FROM ".$corem_db["name"]." LIKE 'config_misc'"));
 
-  if ( $check_for_table['Tables_in_'.$corem_db['name'].' (config_misc)'] != NULL )
+  if ( $check_for_table["Tables_in_".$corem_db["name"]." (config_misc)"] != NULL )
   {
     // if we do have one, make sure we aren't installed
     $check_installed = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Installed'"));
 
-    if ( $check_installed['Value'] == 1 )
+    if ( $check_installed["Value"] == 1 )
       redirect("index.php");
   }
 
   $output .= '
     <center>
-      <b>'.lang('setup', 'welcome').' '.lang('setup', 'title').'</b>
+      <b>'.lang("setup", "welcome").' '.lang("setup", "title").'</b>
       <br />
       <br />
-      <b id="setup_fields">'.lang('setup', 'fields').'</b>
+      <b id="setup_fields">'.lang("setup", "fields").'</b>
       <br />
       <br />';
 
-  if ( isset($_GET['error']) )
+  if ( isset($_GET["error"]) )
   {
-    switch ( $_GET['error'] )
+    switch ( $_GET["error"] )
     {
       case 1:
       {
         $output .= '
-      <h1 id="setup_emptyfields">'.lang('global', 'empty_fields').'</h1>';
+      <h1 id="setup_emptyfields">'.lang("global", "empty_fields").'</h1>';
         break;
       }
     }
@@ -133,34 +133,34 @@ function show()
       <form name="form" action="setup.php" method="GET">
         <input type="hidden" name="action" value="save" />
         <div id="setup_logon_field" class="fieldset_border">
-          <span class="legend">'.lang('setup', 'logon_db').'</span>
+          <span class="legend">'.lang("setup", "logon_db").'</span>
           <table>
             <tr>
-              <td>'.lang('setup', 'host').': </td>
+              <td>'.lang("setup", "host").': </td>
               <td>
                 <input type="text" name="host" value="" />
               </td>
             </tr>
             <tr>
-              <td>'.lang('setup', 'port').': </td>
+              <td>'.lang("setup", "port").': </td>
               <td>
                 <input type="text" name="port" value="" />
               </td>
             </tr>
             <tr>
-              <td>'.lang('setup', 'user').': </td>
+              <td>'.lang("setup", "user").': </td>
               <td>
                 <input type="text" name="user" value="" />
               </td>
             </tr>
             <tr>
-              <td>'.lang('setup', 'pass').': </td>
+              <td>'.lang("setup", "pass").': </td>
               <td>
                 <input type="text" name="pass" value="" />
               </td>
             </tr>
             <tr>
-              <td>'.lang('setup', 'name').': </td>
+              <td>'.lang("setup", "name").': </td>
               <td>
                 <input type="text" name="name" value="" />
               </td>
@@ -169,34 +169,34 @@ function show()
         </div>
         <br />
         <div id="setup_logon_field" class="fieldset_border">
-          <span class="legend">'.lang('setup', 'dbc_db').'</span>
+          <span class="legend">'.lang("setup", "dbc_db").'</span>
           <table>
             <tr>
-              <td>'.lang('setup', 'host').': </td>
+              <td>'.lang("setup", "host").': </td>
               <td>
                 <input type="text" name="dbchost" value="" />
               </td>
             </tr>
             <tr>
-              <td>'.lang('setup', 'port').': </td>
+              <td>'.lang("setup", "port").': </td>
               <td>
                 <input type="text" name="dbcport" value="" />
               </td>
             </tr>
             <tr>
-              <td>'.lang('setup', 'user').': </td>
+              <td>'.lang("setup", "user").': </td>
               <td>
                 <input type="text" name="dbcuser" value="" />
               </td>
             </tr>
             <tr>
-              <td>'.lang('setup', 'pass').': </td>
+              <td>'.lang("setup", "pass").': </td>
               <td>
                 <input type="text" name="dbcpass" value="" />
               </td>
             </tr>
             <tr>
-              <td>'.lang('setup', 'name').': </td>
+              <td>'.lang("setup", "name").': </td>
               <td>
                 <input type="text" name="dbcname" value="" />
               </td>
@@ -205,19 +205,19 @@ function show()
         </div>
         <br />
         <div id="setup_acp_field" class="fieldset_border">
-          <span class="legend">'.lang('setup', 'webadmin').'</span>
+          <span class="legend">'.lang("setup", "webadmin").'</span>
           <table>
             <tr>
-              <td colspan="2"><span style="color:red">'.lang('setup', 'acctinfo').'</span></td>
+              <td colspan="2"><span style="color:red">'.lang("setup", "acctinfo").'</span></td>
             </tr>
             <tr>
-              <td align="right">'.lang('setup', 'acctname').': </td>
+              <td align="right">'.lang("setup", "acctname").': </td>
               <td>
                 <input type="text" name="acctname" value="" />
               </td>
             </tr>
             <tr>
-              <td align="right">'.lang('setup', 'screenname').': </td>
+              <td align="right">'.lang("setup", "screenname").': </td>
               <td>
                 <input type="text" name="screenname" value="" />
               </td>
@@ -225,7 +225,7 @@ function show()
           </table>
         </div>
         <br />
-        <input type="submit" name="save" value="'.lang('setup', 'save').'" />
+        <input type="submit" name="save" value="'.lang("setup", "save").'" />
       </form>
     </center>';
 }
@@ -235,69 +235,69 @@ function save()
   global $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
 
   // then we get the config data
-  if ( $_GET['host'] <> "" )
-    $host = $sqlm->quote_smart($_GET['host']);
+  if ( $_GET["host"] <> "" )
+    $host = $sqlm->quote_smart($_GET["host"]);
   else
     redirect("setup.php?error=1");
 
-  if ( $_GET['port'] <> "" )
-    $port = $sqlm->quote_smart($_GET['port']);
+  if ( $_GET["port"] <> "" )
+    $port = $sqlm->quote_smart($_GET["port"]);
   else
     redirect("setup.php?error=1");
 
-  if ( $_GET['user'] <> "" )
-    $user = $sqlm->quote_smart($_GET['user']);
+  if ( $_GET["user"] <> "" )
+    $user = $sqlm->quote_smart($_GET["user"]);
   else
     redirect("setup.php?error=1");
 
-  if ( $_GET['pass'] <> "" )
-    $pass = $sqlm->quote_smart($_GET['pass']);
+  if ( $_GET["pass"] <> "" )
+    $pass = $sqlm->quote_smart($_GET["pass"]);
   else
     redirect("setup.php?error=1");
 
-  if ( $_GET['name'] <> "" )
-    $name = $sqlm->quote_smart($_GET['name']);
-  else
-    redirect("setup.php?error=1");
-
-
-  if ( $_GET['dbchost'] <> "" )
-    $dbchost = $sqlm->quote_smart($_GET['dbchost']);
-  else
-    redirect("setup.php?error=1");
-
-  if ( $_GET['dbcport'] <> "" )
-    $dbcport = $sqlm->quote_smart($_GET['dbcport']);
-  else
-    redirect("setup.php?error=1");
-
-  if ( $_GET['dbcuser'] <> "" )
-    $dbcuser = $sqlm->quote_smart($_GET['dbcuser']);
-  else
-    redirect("setup.php?error=1");
-
-  if ( $_GET['dbcpass'] <> "" )
-    $dbcpass = $sqlm->quote_smart($_GET['dbcpass']);
-  else
-    redirect("setup.php?error=1");
-
-  if ( $_GET['dbcname'] <> "" )
-    $dbcname = $sqlm->quote_smart($_GET['dbcname']);
+  if ( $_GET["name"] <> "" )
+    $name = $sqlm->quote_smart($_GET["name"]);
   else
     redirect("setup.php?error=1");
 
 
-  if ( $_GET['acctname'] <> "" )
-    $acctname = $sqlm->quote_smart($_GET['acctname']);
+  if ( $_GET["dbchost"] <> "" )
+    $dbchost = $sqlm->quote_smart($_GET["dbchost"]);
   else
     redirect("setup.php?error=1");
 
-  if ( $_GET['screenname'] <> "" )
-    $screenname = $sqlm->quote_smart($_GET['screenname']);
+  if ( $_GET["dbcport"] <> "" )
+    $dbcport = $sqlm->quote_smart($_GET["dbcport"]);
+  else
+    redirect("setup.php?error=1");
+
+  if ( $_GET["dbcuser"] <> "" )
+    $dbcuser = $sqlm->quote_smart($_GET["dbcuser"]);
+  else
+    redirect("setup.php?error=1");
+
+  if ( $_GET["dbcpass"] <> "" )
+    $dbcpass = $sqlm->quote_smart($_GET["dbcpass"]);
+  else
+    redirect("setup.php?error=1");
+
+  if ( $_GET["dbcname"] <> "" )
+    $dbcname = $sqlm->quote_smart($_GET["dbcname"]);
+  else
+    redirect("setup.php?error=1");
+
+
+  if ( $_GET["acctname"] <> "" )
+    $acctname = $sqlm->quote_smart($_GET["acctname"]);
+  else
+    redirect("setup.php?error=1");
+
+  if ( $_GET["screenname"] <> "" )
+    $screenname = $sqlm->quote_smart($_GET["screenname"]);
   else
     redirect("setup.php?error=1");
 
@@ -308,12 +308,12 @@ function save()
 
   // save logon database configs
   $logon_count = $sqlm->fetch_assoc($sqlm->query("SELECT COUNT(*) FROM config_logon_database"));
-  if ( $logon_count['COUNT(*)'] == 1 )
+  if ( $logon_count["COUNT(*)"] == 1 )
   {
     $logon_upper = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_logon_database"));
-    $result = $sqlm->query("UPDATE config_logon_database SET Address='".$host."', Port='".$port."', Name='".$name."', User='".$user."', Password='".$pass."', Encoding='utf8' WHERE `Index`='".$logon_upper['MAX(`Index`)']."'");
+    $result = $sqlm->query("UPDATE config_logon_database SET Address='".$host."', Port='".$port."', Name='".$name."', User='".$user."', Password='".$pass."', Encoding='utf8' WHERE `Index`='".$logon_upper["MAX(`Index`)"]."'");
   }
-  elseif ( $logon_count['COUNT(*)'] > 1 )
+  elseif ( $logon_count["COUNT(*)"] > 1 )
   {
     $result = $sqlm->query("TRUNCATE TABLE config_logon_database");
     $result = $sqlm->query("INSERT INTO config_logon_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$host."', '".$port."', '".$user."', '".$name."', '".$pass."', 'utf8')");
@@ -326,12 +326,12 @@ function save()
 
   // save dbc database configs
   $dbc_count = $sqlm->fetch_assoc($sqlm->query("SELECT COUNT(*) FROM config_dbc_database"));
-  if ( $dbc_count['COUNT(*)'] == 1)
+  if ( $dbc_count["COUNT(*)"] == 1)
   {
     $dbc_upper = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_dbc_database"));
-    $result = $sqlm->query("UPDATE config_dbc_database SET Address='".$dbchost."', Port='".$dbcport."', Name='".$dbcname."', User='".$dbcuser."', Password='".$dbcpass."', Encoding='utf8' WHERE `Index`='".$dbc_upper['MAX(`Index`)']."'");
+    $result = $sqlm->query("UPDATE config_dbc_database SET Address='".$dbchost."', Port='".$dbcport."', Name='".$dbcname."', User='".$dbcuser."', Password='".$dbcpass."', Encoding='utf8' WHERE `Index`='".$dbc_upper["MAX(`Index`)"]."'");
   }
-  elseif ( $dbc_count['COUNT(*)'] > 1 )
+  elseif ( $dbc_count["COUNT(*)"] > 1 )
   {
     $result = $sqlm->query("TRUNCATE TABLE config_dbc_database");
     $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbchost."', '".$dbcport."', '".$dbcuser."', '".$dbcname."', '".$dbcpass."', 'utf8')");
@@ -344,7 +344,7 @@ function save()
 
   // set up web admin account
   $account = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_accounts WHERE Login='".$acctname."'"));
-  if ( $account['Login'] <> '' )
+  if ( $account["Login"] <> '' )
     $result = $sqlm->query("UPDATE config_accounts SET ScreenName='".$screenname."', SecurityLevel='4', WebAdmin='1' WHERE Login='".$acctname."'");
   else
     $result = $sqlm->query("INSERT INTO config_accounts (Login, ScreenName, SecurityLevel, WebAdmin) VALUES (UPPER('".$acctname."'), '".$screenname."', '4', '1')");
@@ -359,7 +359,7 @@ function import_db($dbchost, $dbcport, $dbcuser, $dbcpass, $dbcname)
   global $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
   $sqld = new SQL;
   $sqld->connect($dbchost.":".$dbcport, $dbcuser, $dbcpass, $dbcname);
@@ -530,7 +530,7 @@ function import_db($dbchost, $dbcport, $dbcuser, $dbcpass, $dbcname)
 // MAIN
 //#############################################################################
 
-$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
+$action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
 switch ( $action )
 {

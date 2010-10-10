@@ -21,7 +21,7 @@
 require_once("header.php");
 require_once("libs/get_lib.php");
 require_once("libs/item_lib.php");
-valid_login($action_permission['view']);
+valid_login($action_permission["view"]);
 
 //#############################################################################
 // BROWSE AUCTIONS
@@ -39,17 +39,17 @@ function browse_auctions()
   $hiddencols = array(1, 8, 9, 10);
 
   //==========================$_GET and SECURE=================================
-  $start = ( ( isset($_GET['start']) ) ? $sql['char']->quote_smart($_GET['start']) : 0 );
+  $start = ( ( isset($_GET["start"]) ) ? $sql["char"]->quote_smart($_GET["start"]) : 0 );
   if ( is_numeric($start) )
     ;
   else
     $start = 0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sql['char']->quote_smart($_GET['order_by']) : "time";
+  $order_by = (isset($_GET["order_by"])) ? $sql["char"]->quote_smart($_GET["order_by"]) : "time";
   if ( !preg_match("/^[_[:lower:]]{1,15}$/", $order_by) )
     $order_by = "time";
 
-  $dir = ( ( isset($_GET['dir']) ) ? $sql['char']->quote_smart($_GET['dir']) : 1 );
+  $dir = ( ( isset($_GET["dir"]) ) ? $sql["char"]->quote_smart($_GET["dir"]) : 1 );
   if ( !preg_match("/^[01]{1}$/", $dir) )
     $dir = 1;
 
@@ -59,12 +59,12 @@ function browse_auctions()
 
   if ( !$user_lvl && !$server[$realm_id]['both_factions'] )
   {
-    $result = $sql['char']->query("SELECT race FROM characters
+    $result = $sql["char"]->query("SELECT race FROM characters
       WHERE account=".$user_id." AND totaltime=(SELECT MAX(totaltime) FROM characters WHERE account=".$user_id.")
       LIMIT 1");
-    if ( $sql['char']->num_rows($result) )
+    if ( $sql["char"]->num_rows($result) )
     {
-      $order_side = ( ( in_array($sql['char']->result($result, 0, 'race'),array(2,5,6,8,10)) ) ?
+      $order_side = ( ( in_array($sql["char"]->result($result, 0, 'race'),array(2,5,6,8,10)) ) ?
       " AND characters.race IN (2,5,6,8,10) " : " AND characters.race IN (1,3,4,7,11) " );
     }
     else
@@ -80,12 +80,12 @@ function browse_auctions()
   $search_class = -1;
   $search_quality = -1;
 
-  if ( ( isset($_GET['search_value']) && isset($_GET['search_by']) ) || ( isset($_GET['search_class']) ) || ( isset($_GET['search_quality']) ) )
+  if ( ( isset($_GET["search_value"]) && isset($_GET["search_by"]) ) || ( isset($_GET["search_class"]) ) || ( isset($_GET["search_quality"]) ) )
   {
-    $search_value = $sql['char']->quote_smart($_GET['search_value']);
-    $search_by = $sql['char']->quote_smart($_GET['search_by']);
-    $search_class = $sql['char']->quote_smart($_GET['search_class']);
-    $search_quality = $sql['char']->quote_smart($_GET['search_quality']);
+    $search_value = $sql["char"]->quote_smart($_GET["search_value"]);
+    $search_by = $sql["char"]->quote_smart($_GET["search_by"]);
+    $search_class = $sql["char"]->quote_smart($_GET["search_class"]);
+    $search_quality = $sql["char"]->quote_smart($_GET["search_quality"]);
 
     switch ( $search_by )
     {
@@ -105,9 +105,9 @@ function browse_auctions()
           if ( $search_quality >= 0 )
             $item_prefix .= "AND item_template.Quality = '".$search_quality."' ";
 
-          $result = $sql['char']->query("SELECT entry FROM ".$world_db[$realm_id]['name'].".item_template WHERE name LIKE '%".$search_value."%' ".$item_prefix);
+          $result = $sql["char"]->query("SELECT entry FROM ".$world_db[$realm_id]['name'].".item_template WHERE name LIKE '%".$search_value."%' ".$item_prefix);
           $search_filter = "AND auctionhouse.item_template IN(0";
-          while ( $item = $sql['char']->fetch_row($result) )
+          while ( $item = $sql["char"]->fetch_row($result) )
             $search_filter .= ", ".$item[0];
             $search_filter .= ")";
         }
@@ -131,10 +131,10 @@ function browse_auctions()
           if ( $search_quality >= 0 )
             $item_prefix .= "AND item_template.Quality = '".$search_quality."' ";
 
-          $result = $sql['char']->query("SELECT guid FROM characters WHERE name LIKE '%".$search_value."%'");
+          $result = $sql["char"]->query("SELECT guid FROM characters WHERE name LIKE '%".$search_value."%'");
           $search_filter = $item_prefix;
           $search_filter .= "AND auctionhouse.itemowner IN(0";
-          while ( $char = $sql['char']->fetch_row($result) )
+          while ( $char = $sql["char"]->fetch_row($result) )
             $search_filter .= ", ".$char[0];
           $search_filter .= ")";
           $search_filter .= $item_prefix;
@@ -156,10 +156,10 @@ function browse_auctions()
           if ( $search_quality >= 0 )
             $item_prefix .= "AND item_template.Quality = '".$search_quality."' ";
 
-          $result = $sql['char']->query("SELECT guid FROM characters WHERE name LIKE '%".$search_value."%'");
+          $result = $sql["char"]->query("SELECT guid FROM characters WHERE name LIKE '%".$search_value."%'");
           $search_filter = $item_prefix;
           $search_filter .= "AND auctionhouse.buyguid IN(-1";
-          while ( $char = $sql['char']->fetch_row($result) )
+          while ( $char = $sql["char"]->fetch_row($result) )
             $search_filter .= ", ".$char[0];
           $search_filter .= ")";
         }
@@ -167,7 +167,7 @@ function browse_auctions()
       default:
         redirect("ahstats.php?error=1");
     }
-    /*$query_1 = $sql['char']->query("SELECT count(*)
+    /*$query_1 = $sql["char"]->query("SELECT count(*)
       FROM `".$characters_db[$realm_id]['name']."`.`characters` , `".$characters_db[$realm_id]['name']."`.`item_instance` ,
       `".$world_db[$realm_id]['name']."`.`item_template` , `".$characters_db[$realm_id]['name']."`.`auctionhouse`
       LEFT JOIN `".$characters_db[$realm_id]['name']."`.`characters` c2 ON `c2`.`guid`=`auctionhouse`.`buyguid`
@@ -176,23 +176,23 @@ function browse_auctions()
 
     // this_is_junk: really?
     if ( $core == 1 )
-      $query_1 = $sql['char']->query("SELECT COUNT(*) FROM auctions");
+      $query_1 = $sql["char"]->query("SELECT COUNT(*) FROM auctions");
     elseif ( $core == 2 )
-      $query_1 = $sql['char']->query("SELECT COUNT(*) FROM auction");
+      $query_1 = $sql["char"]->query("SELECT COUNT(*) FROM auction");
     else
-      $query_1 = $sql['char']->query("SELECT COUNT(*) FROM auctionhouse");
+      $query_1 = $sql["char"]->query("SELECT COUNT(*) FROM auctionhouse");
   }
   else
   {
     if ( $core == 1 )
-      $query_1 = $sql['char']->query("SELECT COUNT(*) FROM auctions");
+      $query_1 = $sql["char"]->query("SELECT COUNT(*) FROM auctions");
     elseif ( $core == 2 )
-      $query_1 = $sql['char']->query("SELECT COUNT(*) FROM auction");
+      $query_1 = $sql["char"]->query("SELECT COUNT(*) FROM auction");
     else
-      $query_1 = $sql['char']->query("SELECT COUNT(*) FROM auctionhouse");
+      $query_1 = $sql["char"]->query("SELECT COUNT(*) FROM auctionhouse");
   }
 
-  /*$result = $sql['char']->query("SELECT `characters`.`name` AS `seller`, `auctionhouse`.`item_template` AS `itemid`,
+  /*$result = $sql["char"]->query("SELECT `characters`.`name` AS `seller`, `auctionhouse`.`item_template` AS `itemid`,
     `item_template`.`name` AS `itemname`, `auctionhouse`.`buyoutprice` AS `buyout`, `auctionhouse`.`time`-unix_timestamp(),
     `c2`.`name` AS `encherisseur`, `auctionhouse`.`lastbid`, `auctionhouse`.`startbid`,
     SUBSTRING_INDEX(SUBSTRING_INDEX(`item_instance`.`data`, ' ',15), ' ',-1) AS qty, `characters`.`race` AS seller_race,
@@ -239,9 +239,9 @@ function browse_auctions()
         AND auctionhouse.itemguid=item_instance.guid
       ".$search_filter." ".$order_side." ORDER BY auctionhouse.".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
 
-  $result = $sql['char']->query($query);
+  $result = $sql["char"]->query($query);
 
-  $all_record = $sql['char']->result($query_1,0);
+  $all_record = $sql["char"]->result($query_1,0);
 
   //=====================top tage navigaion starts here========================
   $output .= '
@@ -258,45 +258,45 @@ function browse_auctions()
                       </td>
                       <td>
                         <select name="search_by">
-                          <option'.( $search_by == 'item_name' ? ' selected="selected"' : '' ).' value="item_name">'.lang('auctionhouse', 'item_name').'</option>
-                          <option'.( $search_by == 'item_id' ? ' selected="selected"' : '' ).' value="item_id">'.lang('auctionhouse', 'item_id').'</option>
-                          <option'.( $search_by == 'seller_name' ? ' selected="selected"' : '' ).' value="seller_name">'.lang('auctionhouse', 'seller_name').'</option>
-                          <option'.( $search_by == 'buyer_name' ? ' selected="selected"' : '' ).' value="buyer_name">'.lang('auctionhouse', 'buyer_name').'</option>
+                          <option'.( $search_by == 'item_name' ? ' selected="selected"' : '' ).' value="item_name">'.lang("auctionhouse", "item_name").'</option>
+                          <option'.( $search_by == 'item_id' ? ' selected="selected"' : '' ).' value="item_id">'.lang("auctionhouse", "item_id").'</option>
+                          <option'.( $search_by == 'seller_name' ? ' selected="selected"' : '' ).' value="seller_name">'.lang("auctionhouse", "seller_name").'</option>
+                          <option'.( $search_by == 'buyer_name' ? ' selected="selected"' : '' ).' value="buyer_name">'.lang("auctionhouse", "buyer_name").'</option>
                         </select>
                       </td>
                       <td>
                         <select name="search_class">
-                          <option'.( $search_class == -1 ? ' selected="selected"' : '' ).' value="-1">'.lang('auctionhouse', 'all').'</option>
-                          <option'.( $search_class == 0 ? ' selected="selected"' : '' ).' value="0">'.lang('item', 'consumable').'</option>
-                          <option'.( $search_class == 1 ? ' selected="selected"' : '' ).' value="1">'.lang('item', 'bag').'</option>
-                          <option'.( $search_class == 2 ? ' selected="selected"' : '' ).' value="2">'.lang('item', 'weapon').'</option>
-                          <option'.( $search_class == 4 ? ' selected="selected"' : '' ).' value="4">'.lang('item', 'armor').'</option>
-                          <option'.( $search_class == 5 ? ' selected="selected"' : '' ).' value="5">'.lang('item', 'reagent').'</option>
-                          <option'.( $search_class == 7 ? ' selected="selected"' : '' ).' value="7">'.lang('item', 'trade_goods').'</option>
-                          <option'.( $search_class == 9 ? ' selected="selected"' : '' ).' value="9">'.lang('item', 'recipe').'</option>
-                          <option'.( $search_class == 11 ? ' selected="selected"' : '' ).' value="11">'.lang('item', 'quiver').'</option>
-                          <option'.( $search_class == 14 ? ' selected="selected"' : '' ).' value="14">'.lang('item', 'permanent').'</option>
-                          <option'.( $search_class == 15 ? ' selected="selected"' : '' ).' value="15">'.lang('item', 'misc_short').'</option>
+                          <option'.( $search_class == -1 ? ' selected="selected"' : '' ).' value="-1">'.lang("auctionhouse", "all").'</option>
+                          <option'.( $search_class == 0 ? ' selected="selected"' : '' ).' value="0">'.lang("item", "consumable").'</option>
+                          <option'.( $search_class == 1 ? ' selected="selected"' : '' ).' value="1">'.lang("item", "bag").'</option>
+                          <option'.( $search_class == 2 ? ' selected="selected"' : '' ).' value="2">'.lang("item", "weapon").'</option>
+                          <option'.( $search_class == 4 ? ' selected="selected"' : '' ).' value="4">'.lang("item", "armor").'</option>
+                          <option'.( $search_class == 5 ? ' selected="selected"' : '' ).' value="5">'.lang("item", "reagent").'</option>
+                          <option'.( $search_class == 7 ? ' selected="selected"' : '' ).' value="7">'.lang("item", "trade_goods").'</option>
+                          <option'.( $search_class == 9 ? ' selected="selected"' : '' ).' value="9">'.lang("item", "recipe").'</option>
+                          <option'.( $search_class == 11 ? ' selected="selected"' : '' ).' value="11">'.lang("item", "quiver").'</option>
+                          <option'.( $search_class == 14 ? ' selected="selected"' : '' ).' value="14">'.lang("item", "permanent").'</option>
+                          <option'.( $search_class == 15 ? ' selected="selected"' : '' ).' value="15">'.lang("item", "misc_short").'</option>
                         </select>
                       </td>
                       <td>
                         <select name="search_quality">
-                          <option'.( $search_quality == -1 ? ' selected="selected"' : '' ).' value="-1">'.lang('auctionhouse', 'all').'</option>
-                          <option'.( $search_quality == 0 ? ' selected="selected"' : '' ).' value="0">'.lang('item', 'poor').'</option>
-                          <option'.( $search_quality == 1 ? ' selected="selected"' : '' ).' value="1">'.lang('item', 'common').'</option>
-                          <option'.( $search_quality == 2 ? ' selected="selected"' : '').' value="2">'.lang('item', 'uncommon').'</option>
-                          <option'.( $search_quality == 3 ? ' selected="selected"' : '' ).' value="3">'.lang('item', 'rare').'</option>
-                          <option'.( $search_quality == 4 ? ' selected="selected"' : '' ).' value="4">'.lang('item', 'epic').'</option>
-                          <option'.( $search_quality == 5 ? ' selected="selected"' : '' ).' value="5">'.lang('item', 'legendary').'</option>
-                          <option'.( $search_quality == 6 ? ' selected="selected"' : '' ).' value="6">'.lang('item', 'artifact').'</option>
+                          <option'.( $search_quality == -1 ? ' selected="selected"' : '' ).' value="-1">'.lang("auctionhouse", "all").'</option>
+                          <option'.( $search_quality == 0 ? ' selected="selected"' : '' ).' value="0">'.lang("item", "poor").'</option>
+                          <option'.( $search_quality == 1 ? ' selected="selected"' : '' ).' value="1">'.lang("item", "common").'</option>
+                          <option'.( $search_quality == 2 ? ' selected="selected"' : '').' value="2">'.lang("item", "uncommon").'</option>
+                          <option'.( $search_quality == 3 ? ' selected="selected"' : '' ).' value="3">'.lang("item", "rare").'</option>
+                          <option'.( $search_quality == 4 ? ' selected="selected"' : '' ).' value="4">'.lang("item", "epic").'</option>
+                          <option'.( $search_quality == 5 ? ' selected="selected"' : '' ).' value="5">'.lang("item", "legendary").'</option>
+                          <option'.( $search_quality == 6 ? ' selected="selected"' : '' ).' value="6">'.lang("item", "artifact").'</option>
                         </select>
                       </td>
                       <td>';
-                        makebutton(lang('global', 'search'), "javascript:do_submit()",80);
+                        makebutton(lang("global", "search"), "javascript:do_submit()",80);
   $output .= '
                       </td>
                       <td>';
-  ( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? makebutton(lang('global', 'back'), "javascript:window.history.back()",80) : $output .= "" );
+  ( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? makebutton(lang("global", "back"), "javascript:window.history.back()",80) : $output .= "" );
   $output .= '
                       </td>
                     </tr>
@@ -313,25 +313,25 @@ function browse_auctions()
   if ( $core == 1 )
     $output .= '
             <tr>
-              <th width="10%"><a href="ahstats.php?order_by=characters.name&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='owner' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang('auctionhouse', 'seller').'</a></th>
-              <th width="20%"><a href="ahstats.php?order_by=playeritems.entry&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='item_entry' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang('auctionhouse', 'item').'</a></th>
-              <th width="15%"><a href="ahstats.php?order_by=buyout&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='buyout' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang('auctionhouse', 'buyoutprice').'</a></th>
-              <th width="15%"><a href="ahstats.php?order_by=time-unix_timestamp()&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='time' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang('auctionhouse', 'timeleft').'</a></th>
-              <th width="10%"><a href="ahstats.php?order_by=bidder&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='bidder' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang('auctionhouse', 'buyer').'</a></th>
-              <th width="15%"><a href="ahstats.php?order_by=bid&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='bid' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang('auctionhouse', 'lastbid').'</a></th>
+              <th width="10%"><a href="ahstats.php?order_by=characters.name&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='owner' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "seller").'</a></th>
+              <th width="20%"><a href="ahstats.php?order_by=playeritems.entry&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='item_entry' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "item").'</a></th>
+              <th width="15%"><a href="ahstats.php?order_by=buyout&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='buyout' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "buyoutprice").'</a></th>
+              <th width="15%"><a href="ahstats.php?order_by=time-unix_timestamp()&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='time' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "timeleft").'</a></th>
+              <th width="10%"><a href="ahstats.php?order_by=bidder&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='bidder' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "buyer").'</a></th>
+              <th width="15%"><a href="ahstats.php?order_by=bid&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='bid' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "lastbid").'</a></th>
             </tr>';
   else
     $output .= '
             <tr>
-              <th width="10%"><a href="ahstats.php?order_by=characters.name&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='owner' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang('auctionhouse', 'seller').'</a></th>
-              <th width="20%"><a href="ahstats.php?order_by=auctionhouse.item_template&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='item_entry' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang('auctionhouse', 'item').'</a></th>
-              <th width="15%"><a href="ahstats.php?order_by=auctionhouse.buyoutprice&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='buyout' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang('auctionhouse', 'buyoutprice').'</a></th>
-              <th width="15%"><a href="ahstats.php?order_by=time-unix_timestamp()&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='time' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang('auctionhouse', 'timeleft').'</a></th>
-              <th width="10%"><a href="ahstats.php?order_by=auctionhouse.buyguid&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='bidder' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang('auctionhouse', 'buyer').'</a></th>
-              <th width="15%"><a href="ahstats.php?order_by=auctionhouse.lastbid&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='bid' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang('auctionhouse', 'lastbid').'</a></th>
+              <th width="10%"><a href="ahstats.php?order_by=characters.name&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='owner' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "seller").'</a></th>
+              <th width="20%"><a href="ahstats.php?order_by=auctionhouse.item_template&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='item_entry' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "item").'</a></th>
+              <th width="15%"><a href="ahstats.php?order_by=auctionhouse.buyoutprice&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='buyout' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "buyoutprice").'</a></th>
+              <th width="15%"><a href="ahstats.php?order_by=time-unix_timestamp()&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='time' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "timeleft").'</a></th>
+              <th width="10%"><a href="ahstats.php?order_by=auctionhouse.buyguid&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='bidder' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "buyer").'</a></th>
+              <th width="15%"><a href="ahstats.php?order_by=auctionhouse.lastbid&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='bid' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "lastbid").'</a></th>
             </tr>';
   
-  while ( $rows = $sql['char']->fetch_assoc($result) )
+  while ( $rows = $sql["char"]->fetch_assoc($result) )
   {
     // get item info
     if ( $core == 1 )
@@ -339,15 +339,15 @@ function browse_auctions()
             socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
             requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
             sellprice AS SellPrice, itemlevel AS ItemLevel
-            FROM items WHERE entry=".$rows['item_entry'];
+            FROM items WHERE entry=".$rows["item_entry"];
     else
-      $i_query = "SELECT *, name AS name1, Quality AS quality FROM item_template WHERE entry=".$rows['item_entry'];
+      $i_query = "SELECT *, name AS name1, Quality AS quality FROM item_template WHERE entry=".$rows["item_entry"];
 
-    $i_result = $sql['world']->query($i_query);
-    $item_result = $sql['world']->fetch_assoc($i_result);
+    $i_result = $sql["world"]->query($i_query);
+    $item_result = $sql["world"]->fetch_assoc($i_result);
 
     // calculate the buyout value
-    $value = $rows['buyout'];
+    $value = $rows["buyout"];
     $g = floor($value/10000);
     $value -= $g*10000;
     $s = floor($value/100);
@@ -356,7 +356,7 @@ function browse_auctions()
     $buyout = $g.'<img src="./img/gold.gif" alt="" /> '.$s.'<img src="./img/silver.gif" alt="" /> '.$c.'<img src="./img/copper.gif" alt="" /> ';
     
     // calculate the remaining time
-    $tot_time = $rows['time'];
+    $tot_time = $rows["time"];
     $total_days = (int)($tot_time/86400);
     $tot_time = $tot_time - ($tot_days*86400);
     $total_hours = (int)($tot_time/3600);
@@ -364,10 +364,10 @@ function browse_auctions()
     $total_min = (int)($tot_time/60);
 
     // get bidder name
-    $bidder_result = $sql['char']->result($sql['char']->query("SELECT name FROM characters WHERE guid = '".$rows['bidder']."'"), 0);
+    $bidder_result = $sql["char"]->result($sql["char"]->query("SELECT name FROM characters WHERE guid = '".$rows["bidder"]."'"), 0);
 
     // calculate the last bid value
-    $value = $rows['bid'];
+    $value = $rows["bid"];
     $g = floor($value/10000);
     $value -= $g*10000;
     $s = floor($value/100);
@@ -380,12 +380,12 @@ function browse_auctions()
             <tr>
               <td>
                 <center>
-                  <a href="./char.php?id='.$rows['owner'].'">'.$rows['owner_name'].'</a>
+                  <a href="./char.php?id='.$rows["owner"].'">'.$rows["owner_name"].'</a>
                 </center>
               </td>
               <td>
                 <center>
-                  <a href="'.$item_datasite.$rows['item_entry'].'" target="_blank" onmouseover=\"toolTip,\'item_tooltip\')\" style="color:'.get_item_quality_color($item_result['quality']).'">'.$item_result['name1'].'</a>
+                  <a href="'.$item_datasite.$rows["item_entry"].'" target="_blank" onmouseover=\"toolTip,\'item_tooltip\')\" style="color:'.get_item_quality_color($item_result["quality"]).'">'.$item_result["name1"].'</a>
                 </center>
               </td>
               <td>
@@ -400,7 +400,7 @@ function browse_auctions()
               </td>
               <td>
                 <center>
-                  <a href="./char.php?id='.$rows['bidder'].'">'.$bidder_result.'</a>
+                  <a href="./char.php?id='.$rows["bidder"].'">'.$bidder_result.'</a>
                 </center>
               </td>
               <td>
@@ -419,7 +419,7 @@ function browse_auctions()
               </td>
             </tr>
             <tr>
-              <td colspan="7" class="hidden" align="right">'.lang('auctionhouse', 'total_auctions').' : '.$all_record.'
+              <td colspan="7" class="hidden" align="right">'.lang("auctionhouse", "total_auctions").' : '.$all_record.'
               </td>
             </tr>
           </table>
@@ -430,7 +430,7 @@ function browse_auctions()
 //#############################################################################
 // MAIN
 //#############################################################################
-$err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
+$err = ( ( isset($_GET["error"]) ) ? $_GET["error"] : NULL );
 
 $output .= '
       <div class="bubble">
@@ -440,15 +440,15 @@ switch ( $err )
 {
   case 1:
     $output .= '
-          <h1><font class="error">'.lang('global', 'empty_fields').'</font></h1>';
+          <h1><font class="error">'.lang("global", "empty_fields").'</font></h1>';
     break;
   case 2:
     $output .= '
-          <h1><font class="error">'.lang('auctionhouse', 'search_results').'</font></h1>';
+          <h1><font class="error">'.lang("auctionhouse", "search_results").'</font></h1>';
     break;
  default:
     $output .= '
-          <h1>'.lang('auctionhouse', 'auctionhouse').'</h1>';
+          <h1>'.lang("auctionhouse", "auctionhouse").'</h1>';
 }
 
 unset($err);
@@ -456,7 +456,7 @@ unset($err);
 $output .= '
         </div>';
 
-$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
+$action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
 switch ( $action )
 {

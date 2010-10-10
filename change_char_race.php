@@ -20,7 +20,7 @@
 
 require_once 'header.php';
 require_once 'libs/char_lib.php';
-valid_login($action_permission['view']);
+valid_login($action_permission["view"]);
 
 
 //#############################################################################
@@ -31,13 +31,13 @@ function sel_char()
 {
   global $output, $action_permission, $characters_db, $corem_db, $realm_id, $user_id, $sql, $core;
 
-  valid_login($action_permission['view']);
+  valid_login($action_permission["view"]);
 
   $output .= '
           <center>
             <div id="xname_fieldset" class="fieldset_border">
-              <span class="legend">'.lang('xrace', 'selectchar').'</span>
-              <span class="xname_info">'.lang('xrace', 'info').'</span>
+              <span class="legend">'.lang("xrace", "selectchar").'</span>
+              <span class="xname_info">'.lang("xrace", "info").'</span>
               <br />
               <br />
               <form method="GET" action="change_char_race.php" name="form">
@@ -45,31 +45,31 @@ function sel_char()
                 <table class="lined" id="xname_char_table">
                   <tr>
                     <th class="xname_radio">&nbsp;</th>
-                    <th class="xname_name">'.lang('xrace', 'char').'</th>
-                    <th class="xname_LRC">'.lang('xrace', 'lvl').'</th>
-                    <th class="xname_LRC">'.lang('xrace', 'race').'</th>
-                    <th class="xname_LRC">'.lang('xrace', 'class').'</th>
+                    <th class="xname_name">'.lang("xrace", "char").'</th>
+                    <th class="xname_LRC">'.lang("xrace", "lvl").'</th>
+                    <th class="xname_LRC">'.lang("xrace", "race").'</th>
+                    <th class="xname_LRC">'.lang("xrace", "class").'</th>
                   </tr>';
 
   if ( $core == 1 )
-    $chars = $sql['char']->query("SELECT * FROM characters WHERE acct='".$user_id."' AND guid NOT IN (SELECT guid FROM ".$corem_db['name'].".char_changes)");
+    $chars = $sql["char"]->query("SELECT * FROM characters WHERE acct='".$user_id."' AND guid NOT IN (SELECT guid FROM ".$corem_db["name"].".char_changes)");
   else
-    $chars = $sql['char']->query("SELECT * FROM characters WHERE account='".$user_id."' AND guid NOT IN (SELECT guid FROM ".$corem_db['name'].".char_changes)");
+    $chars = $sql["char"]->query("SELECT * FROM characters WHERE account='".$user_id."' AND guid NOT IN (SELECT guid FROM ".$corem_db["name"].".char_changes)");
 
-  while ( $char = $sql['char']->fetch_assoc($chars) )
+  while ( $char = $sql["char"]->fetch_assoc($chars) )
   {
     $output .= '
                   <tr>
                     <td>
-                      <input type="radio" name="char" value="'.$char['guid'].'"/>
+                      <input type="radio" name="char" value="'.$char["guid"].'"/>
                     </td>
-                    <td>'.$char['name'].'</td>
-                    <td>'.char_get_level_color($char['level']).'</td>
+                    <td>'.$char["name"].'</td>
+                    <td>'.char_get_level_color($char["level"]).'</td>
                     <td>
-                      <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char['race']).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                      <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
                     </td>
                     <td>
-                      <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char['class']).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                      <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
                     </td>
                   </tr>';
   }
@@ -77,7 +77,7 @@ function sel_char()
   $output .= '
                   <tr>
                     <td colspan="5" class="hidden">';
-  makebutton(lang('xrace', 'selectchar'), "javascript:do_submit()",180);
+  makebutton(lang("xrace", "selectchar"), "javascript:do_submit()",180);
   $output .= '
                     </td>
                   </tr>
@@ -112,54 +112,54 @@ function chooserace()
   global $output, $action_permission, $characters_db, $realm_id, $user_id,
     $Class_Races, $sql;
 
-  valid_login($action_permission['view']);
+  valid_login($action_permission["view"]);
 
-  $guid = $sql['char']->quote_smart($_GET['char']);
+  $guid = $sql["char"]->quote_smart($_GET["char"]);
   $new1 = '';
-  if ( isset($_GET['new1']) )
-    $new1 = $sql['char']->quote_smart($_GET['new1']);
+  if ( isset($_GET["new1"]) )
+    $new1 = $sql["char"]->quote_smart($_GET["new1"]);
   $new2 = '';
-  if ( isset($_GET['new2']) )
-    $new2 = $sql['char']->quote_smart($_GET['new2']);
+  if ( isset($_GET["new2"]) )
+    $new2 = $sql["char"]->quote_smart($_GET["new2"]);
 
-  $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$guid."'"));
+  $char = $sql["char"]->fetch_assoc($sql["char"]->query("SELECT * FROM characters WHERE guid='".$guid."'"));
   $output .= '
           <center>
             <div id="xname_fieldset" class="fieldset_border">
-              <span class="legend">'.lang('xrace', 'chooserace').'</span>
+              <span class="legend">'.lang("xrace", "chooserace").'</span>
               <form method="GET" action="change_char_race.php" name="form">
                 <input type="hidden" name="action" value="getapproval" />
-                <input type="hidden" name="guid" value="'.$char['guid'].'" />
+                <input type="hidden" name="guid" value="'.$char["guid"].'" />
                 <table id="xname_char_table">
                   <tr>
-                    <td rowspan="4"><img src="'.char_get_avatar_img($char['level'], $char['gender'],  $char['race'],  $char['class']).'" alt="" /></td>
-                    <td><span class="xname_char_name">'.$char['name'].'</span></td>
+                    <td rowspan="4"><img src="'.char_get_avatar_img($char["level"], $char["gender"],  $char["race"],  $char["class"]).'" alt="" /></td>
+                    <td><span class="xname_char_name">'.$char["name"].'</span></td>
                   </tr>
                   <tr>
-                    <td>'.lang('xrace', 'level').': '.$char['level'].'</td>
+                    <td>'.lang("xrace", "level").': '.$char["level"].'</td>
                   </tr>
                   <tr>
-                    <td>'.lang('xrace', 'race').': '.char_get_race_name($char['race']).'</td>
+                    <td>'.lang("xrace", "race").': '.char_get_race_name($char["race"]).'</td>
                   </tr>
                   <tr>
-                    <td>'.lang('xrace', 'class').': '.char_get_class_name($char['class']).'</td>
+                    <td>'.lang("xrace", "class").': '.char_get_class_name($char["class"]).'</td>
                   </tr>
                   <tr>
                     <td>&nbsp;</td>
                   </tr>
                   <tr>
-                    <td colspan="2"><b>'.lang('xrace', 'enterrace').':</b></td>
+                    <td colspan="2"><b>'.lang("xrace", "enterrace").':</b></td>
                   </tr>
                   <tr>
-                    <td>'.lang('xrace', 'newrace').':</td>
+                    <td>'.lang("xrace", "newrace").':</td>
                     <td>
                       <select name="newrace">';
-  $races = $Class_Races[$char['class']];
+  $races = $Class_Races[$char["class"]];
   for ($i = 0; $i < count($races); $i++)
   {
-    if ( !($races[$i] == $char['race']) )
+    if ( !($races[$i] == $char["race"]) )
     {
-      if ( char_get_side_id($races[$i]) == char_get_side_id($char['race']) )
+      if ( char_get_side_id($races[$i]) == char_get_side_id($char["race"]) )
       {
         $output .= '
                         <option value="'.$races[$i].'">'.char_get_race_name($races[$i]).'</option>';
@@ -175,7 +175,7 @@ function chooserace()
                   </tr>
                   <tr>
                     <td>';
-  makebutton(lang('xrace', 'save'), "javascript:do_submit()",180);
+  makebutton(lang("xrace", "save"), "javascript:do_submit()",180);
   $output .= '
                     </td>
                   </tr>
@@ -196,20 +196,20 @@ function getapproval()
   global $output, $action_permission, $corem_db, $characters_db, $realm_id,
     $user_id, $Class_Races, $sql;
 
-  valid_login($action_permission['view']);
+  valid_login($action_permission["view"]);
 
-  $guid = $sql['mgr']->quote_smart($_GET['guid']);
-  $newrace = $sql['mgr']->quote_smart($_GET['newrace']);
+  $guid = $sql["mgr"]->quote_smart($_GET["guid"]);
+  $newrace = $sql["mgr"]->quote_smart($_GET["newrace"]);
 
-  $count = $sql['mgr']->num_rows($sql['mgr']->query("SELECT * FROM char_changes WHERE `guid`='".$guid."'"));
+  $count = $sql["mgr"]->num_rows($sql["mgr"]->query("SELECT * FROM char_changes WHERE `guid`='".$guid."'"));
   if ($count)
     redirect("change_char_race.php?error=3");
 
-  $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE `guid`='".$guid."'"));
-  if ( !in_array($newrace, $Class_Races[$char['class']]) )
+  $char = $sql["char"]->fetch_assoc($sql["char"]->query("SELECT * FROM characters WHERE `guid`='".$guid."'"));
+  if ( !in_array($newrace, $Class_Races[$char["class"]]) )
     redirect("change_char_race.php?error=2");
 
-  $result = $sql['mgr']->query("INSERT INTO char_changes (guid, new_race) VALUES ('".$guid."', '".$newrace."')");
+  $result = $sql["mgr"]->query("INSERT INTO char_changes (guid, new_race) VALUES ('".$guid."', '".$newrace."')");
 
   redirect("change_char_race.php?error=5");
 }
@@ -223,15 +223,15 @@ function denied()
 {
   global $output, $action_permission, $corem_db, $characters_db, $realm_id, $user_id, $sql, $core;
 
-  valid_login($action_permission['update']);
+  valid_login($action_permission["update"]);
 
-  $guid = $sql['mgr']->quote_smart($_GET['guid']);
+  $guid = $sql["mgr"]->quote_smart($_GET["guid"]);
 
-  $result = $sql['mgr']->query("DELETE FROM char_changes WHERE `guid`='".$guid."'");
+  $result = $sql["mgr"]->query("DELETE FROM char_changes WHERE `guid`='".$guid."'");
 
-  $char = $sql['char']->fetch_assoc($sql['char']->query("SELECT * FROM characters WHERE guid='".$guid."'"));
+  $char = $sql["char"]->fetch_assoc($sql["char"]->query("SELECT * FROM characters WHERE guid='".$guid."'"));
 
-  redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char['name']."&subject=".lang('xrace', 'subject')."&body=".lang('xrace', 'body1').$char['name'].lang('xrace', 'body2')."&group_sign==&group_send=gm_level&money=0&att_item=0&att_stack=0&redirect=index.php");
+  redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char["name"]."&subject=".lang("xrace", "subject")."&body=".lang("xrace", "body1").$char["name"].lang("xrace", "body2")."&group_sign==&group_send=gm_level&money=0&att_item=0&att_stack=0&redirect=index.php");
 }
 
 
@@ -243,15 +243,15 @@ function saverace()
 {
   global $output, $action_permission, $corem_db, $characters_db, $realm_id, $sql, $user_id;
 
-  valid_login($action_permission['update']);
+  valid_login($action_permission["update"]);
 
-  $guid = $sql['mgr']->quote_smart($_GET['guid']);
+  $guid = $sql["mgr"]->quote_smart($_GET["guid"]);
 
-  $name = $sql['mgr']->fetch_assoc($sql['mgr']->query("SELECT * FROM char_changes WHERE guid='".$guid."'"));
+  $name = $sql["mgr"]->fetch_assoc($sql["mgr"]->query("SELECT * FROM char_changes WHERE guid='".$guid."'"));
 
-  $result = $sql['char']->query("UPDATE characters SET race='".$name['new_race']."' WHERE guid='".$guid."'");
+  $result = $sql["char"]->query("UPDATE characters SET race='".$name["new_race"]."' WHERE guid='".$guid."'");
 
-  $result = $sql['mgr']->query("DELETE FROM char_changes WHERE guid='".$guid."'");
+  $result = $sql["mgr"]->query("DELETE FROM char_changes WHERE guid='".$guid."'");
 
   // this_is_junk: The retail version of this swaps the character's old home faction reputation with
   // their reputation with the new faction.  So, an Orc wanting to become a Blood Elf would have
@@ -267,7 +267,7 @@ function saverace()
 //########################################################################################################################
 // MAIN
 //########################################################################################################################
-$err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
+$err = ( ( isset($_GET["error"]) ) ? $_GET["error"] : NULL );
 
 $output .= '
         <div class="bubble">
@@ -275,26 +275,26 @@ $output .= '
 
 if ( $err == 1 )
   $output .= '
-            <h1><font class="error">'.lang('global', 'empty_fields').'</font></h1>';
+            <h1><font class="error">'.lang("global", "empty_fields").'</font></h1>';
 elseif ( $err == 2 )
   $output .= '
-            <h1><font class="error">'.lang('xrace', 'nomatch').'</font></h1>';
+            <h1><font class="error">'.lang("xrace", "nomatch").'</font></h1>';
 elseif ( $err == 3 )
   $output .= '
-            <h1><font class="error">'.lang('xrace', 'already').'</font></h1>';
+            <h1><font class="error">'.lang("xrace", "already").'</font></h1>';
 elseif ( $err == 5 )
   $output .= '
-            <h1>'.lang('xrace', 'done').'</h1>';
+            <h1>'.lang("xrace", "done").'</h1>';
 else
   $output .= '
-            <h1>'.lang('xrace', 'changerace').'</h1>';
+            <h1>'.lang("xrace", "changerace").'</h1>';
 
 unset($err);
 
 $output .= '
           </div>';
 
-$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
+$action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
 if ( $action == 'chooserace' )
   chooserace();

@@ -45,14 +45,14 @@ function doregister()
     }
     else
     {
-      if ( ( $_POST['security_code'] ) != ( $_SESSION['security_code'] ) )
+      if ( ( $_POST["security_code"] ) != ( $_SESSION["security_code"] ) )
       {
         redirect("register.php?err=13");
       }
     }
   }
 
-  if ( empty($_POST['pass']) || empty($_POST['email']) || empty($_POST['username']) )
+  if ( empty($_POST["pass"]) || empty($_POST["email"]) || empty($_POST["username"]) )
   {
     redirect("register.php?err=1");
   }
@@ -97,10 +97,10 @@ function doregister()
       redirect("register.php?err=9&usr=$last_ip");
   }
 
-  $user_name = $sql['logon']->quote_smart(trim($_POST['username']));
-  $screenname = $sql['mgr']->quote_smart(trim($_POST['screenname']));
-  $pass = $sql['logon']->quote_smart($_POST['pass']);
-  $pass1 = $sql['logon']->quote_smart($_POST['pass1']);
+  $user_name = $sql["logon"]->quote_smart(trim($_POST["username"]));
+  $screenname = $sql["mgr"]->quote_smart(trim($_POST["screenname"]));
+  $pass = $sql["logon"]->quote_smart($_POST["pass"]);
+  $pass1 = $sql["logon"]->quote_smart($_POST["pass1"]);
 
   // make sure username/pass at least 4 chars long and less than max
   if ( ( strlen($user_name) < 4 ) || ( strlen($user_name) > 15 ) )
@@ -143,7 +143,7 @@ function doregister()
   }
 
   // make sure the mail is valid mail format
-  $mail = $sql['logon']->quote_smart(trim($_POST['email']));
+  $mail = $sql["logon"]->quote_smart(trim($_POST["email"]));
   if ( ( !valid_email($mail) ) || ( strlen($mail) > 224 ) )
   {
     redirect("register.php?err=7");
@@ -153,11 +153,11 @@ function doregister()
   if ( $limit_acc_per_ip )
   {
     if ( $core == 1 )
-      $result = $sql['logon']->query("SELECT login, email FROM accounts WHERE lastip='".$last_ip."'");
+      $result = $sql["logon"]->query("SELECT login, email FROM accounts WHERE lastip='".$last_ip."'");
     else
-      $result = $sql['logon']->query("SELECT username AS login, email FROM account WHERE last_ip='".$last_ip."'");
+      $result = $sql["logon"]->query("SELECT username AS login, email FROM account WHERE last_ip='".$last_ip."'");
 
-    if ( $sql['logon']->num_rows($result) )
+    if ( $sql["logon"]->num_rows($result) )
     {
       redirect("register.php?err=15");
     }
@@ -165,33 +165,33 @@ function doregister()
 
   // IP is in ban list
   if ( $core == 1 )
-    $result = $sql['logon']->query("SELECT ip FROM ipbans WHERE ip='".$last_ip."'");
+    $result = $sql["logon"]->query("SELECT ip FROM ipbans WHERE ip='".$last_ip."'");
   else
-    $result = $sql['logon']->query("SELECT ip FROM ip_banned WHERE ip='".$last_ip."'");
+    $result = $sql["logon"]->query("SELECT ip FROM ip_banned WHERE ip='".$last_ip."'");
 
-  if ( $sql['logon']->num_rows($result) )
+  if ( $sql["logon"]->num_rows($result) )
   {
     redirect("register.php?err=8&usr=".$last_ip);
   }
 
   // Email check
   if ( $core == 1 )
-    $result = $sql['logon']->query("SELECT login, email FROM accounts WHERE email='".$mail."'");
+    $result = $sql["logon"]->query("SELECT login, email FROM accounts WHERE email='".$mail."'");
   else
-    $result = $sql['logon']->query("SELECT username AS login, email FROM account WHERE email='".$mail."'");
+    $result = $sql["logon"]->query("SELECT username AS login, email FROM account WHERE email='".$mail."'");
 
-  if ( $sql['logon']->num_rows($result) )
+  if ( $sql["logon"]->num_rows($result) )
   {
     redirect("register.php?err=14");
   }
 
   // username check
   if ( $core == 1 )
-    $result = $sql['logon']->query("SELECT login, email FROM accounts WHERE login='".$user_name."' OR login='".$screenname."'");
+    $result = $sql["logon"]->query("SELECT login, email FROM accounts WHERE login='".$user_name."' OR login='".$screenname."'");
   else
-    $result = $sql['logon']->query("SELECT username AS login, email FROM account WHERE username='".$user_name."' OR username='".$screenname."'");
+    $result = $sql["logon"]->query("SELECT username AS login, email FROM account WHERE username='".$user_name."' OR username='".$screenname."'");
 
-  if ( $sql['logon']->num_rows($result) )
+  if ( $sql["logon"]->num_rows($result) )
   {
     // there is already someone with same account name
     redirect("register.php?err=3&usr=".$user_name);
@@ -200,12 +200,12 @@ function doregister()
   {
     // check for existing screen name
     $query = "SELECT * FROM config_accounts WHERE ScreenName='".$screenname."'";
-    $result = $sql['mgr']->query($query);
-    if ( $sql['mgr']->num_rows($result) )
+    $result = $sql["mgr"]->query($query);
+    if ( $sql["mgr"]->num_rows($result) )
       redirect("register.php?err=3&usr=".$screenname);
 
     if ( $expansion_select )
-      $expansion = ( ( isset($_POST['expansion']) ) ? $sql['logon']->quote_smart($_POST['expansion']) : 0 );
+      $expansion = ( ( isset($_POST["expansion"]) ) ? $sql["logon"]->quote_smart($_POST["expansion"]) : 0 );
     else
       $expansion = $defaultoption;
 
@@ -213,7 +213,7 @@ function doregister()
     if ( $screenname )
     {
       $query = "INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '".$screenname."')";
-      $s_result = $sql['mgr']->query($query);
+      $s_result = $sql["mgr"]->query($query);
     }
     else
       $s_result = true;
@@ -234,14 +234,14 @@ function doregister()
       $pass .= $pass_gen_list[rand(0, 25)];
       // save their real password
       $query = "UPDATE config_accounts SET TempPassword='".$temppass."' WHERE Login='".$user_name."'";
-      $q_result = $sql['mgr']->query($query);
+      $q_result = $sql["mgr"]->query($query);
       // now; we create their, temporarily crippled, account
       if ( $core == 1 )
         $query = "INSERT INTO accounts (login, password, gm, banned, email, flags) VALUES ('".$user_name."', '".$pass."', '0', '0', '".$mail."', '".$expansion."')";
       else
         $query = "INSERT INTO account (username, sha_pass_hash, email, expansion) VALUES ('".$user_name."', '".(sha1(strtoupper($user_name.":".$pass)))."', '".$mail."', '".$expansion."')";
 
-      $a_result = $sql['logon']->query($query);
+      $a_result = $sql["logon"]->query($query);
     }
     else
     {
@@ -251,7 +251,7 @@ function doregister()
       else
         $query = "INSERT INTO account (username, sha_pass_hash, email, expansion) VALUES ('".$user_name."', '".$pass."', '".$mail."', '".$expansion."')";
 
-      $a_result = $sql['logon']->query($query);
+      $a_result = $sql["logon"]->query($query);
     }
 
     if ( $core == 1 )
@@ -259,12 +259,12 @@ function doregister()
     else
     {
       $id_query = "SELECT * FROM account WHERE username='".$user_name."'";
-      $id_result = $sql['logon']->query($id_query);
-      $id_fields = $sql['logon']->fetch_assoc($id_result);
-      $new_id = $id_fields['id'];
+      $id_result = $sql["logon"]->query($id_query);
+      $id_fields = $sql["logon"]->fetch_assoc($id_result);
+      $new_id = $id_fields["id"];
       
       $query = "INSERT INTO account_access (id, gmlevel, RealmID) VALUES ('".$new_id."', '0', '-1')";
-      $aa_result = $sql['logon']->query($query);
+      $aa_result = $sql["logon"]->query($query);
     }
 
     if ( $core == 1 )
@@ -304,7 +304,7 @@ function doregister()
       else
         $body = str_replace("<screenname>", "NONE GIVEN", $body);
       $body = str_replace("<password>", $pass1, $body);
-      $body = str_replace("<base_url>", $_SERVER['SERVER_NAME'], $body);
+      $body = str_replace("<base_url>", $_SERVER["SERVER_NAME"], $body);
       if ( $core == 1 )
         $body = str_replace("<key>", sha1(strtoupper($user_name.":".$temppass)), $body);
       else
@@ -324,13 +324,13 @@ function doregister()
         $mailer->Mailer = $mailer_type;
         if ( $mailer_type == "smtp" )
         {
-          $mailer->Host = $smtp_cfg['host'];
-          $mailer->Port = $smtp_cfg['port'];
-          if( $smtp_cfg['user'] != "" )
+          $mailer->Host = $smtp_cfg["host"];
+          $mailer->Port = $smtp_cfg["port"];
+          if( $smtp_cfg["user"] != "" )
           {
             $mailer->SMTPAuth  = true;
-            $mailer->Username  = $smtp_cfg['user'];
-            $mailer->Password  =  $smtp_cfg['pass'];
+            $mailer->Username  = $smtp_cfg["user"];
+            $mailer->Password  =  $smtp_cfg["pass"];
           }
         }
 
@@ -379,7 +379,7 @@ function doregister()
         else
           $body = str_replace("<screenname>", "NONE GIVEN", $body);
         $body = str_replace("<password>", $pass1, $body);
-        $body = str_replace("<base_url>", $_SERVER['SERVER_NAME'], $body);
+        $body = str_replace("<base_url>", $_SERVER["SERVER_NAME"], $body);
 
         if ( $GMailSender )
         {
@@ -395,13 +395,13 @@ function doregister()
           $mailer->Mailer = $mailer_type;
           if ( $mailer_type == "smtp" )
           {
-            $mailer->Host = $smtp_cfg['host'];
-            $mailer->Port = $smtp_cfg['port'];
-            if( $smtp_cfg['user'] != "" )
+            $mailer->Host = $smtp_cfg["host"];
+            $mailer->Port = $smtp_cfg["port"];
+            if( $smtp_cfg["user"] != "" )
             {
               $mailer->SMTPAuth  = true;
-              $mailer->Username  = $smtp_cfg['user'];
-              $mailer->Password  =  $smtp_cfg['pass'];
+              $mailer->Username  = $smtp_cfg["user"];
+              $mailer->Password  =  $smtp_cfg["pass"];
             }
           }
 
@@ -444,12 +444,12 @@ function register()
         {
           if (document.form.pass1.value != document.form.pass2.value)
           {
-            alert("'.lang('register', 'diff_pass_entered').'");
+            alert("'.lang("register", "diff_pass_entered").'");
             return;
           }
           else if (document.form.pass1.value.length > 225)
           {
-            alert("'.lang('register', 'pass_too_long').'");
+            alert("'.lang("register", "pass_too_long").'");
             return;
           }
           else
@@ -465,60 +465,60 @@ function register()
             do_submit();
           }
         }
-        answerbox.btn_ok="'.lang('register', 'i_agree').'";
-        answerbox.btn_cancel="'.lang('register', 'i_dont_agree').'";
+        answerbox.btn_ok="'.lang("register", "i_agree").'";
+        answerbox.btn_cancel="'.lang("register", "i_dont_agree").'";
         answerbox.btn_icon="";
       </script>
       <div class="half_frame fieldset_border">
-        <span class="legend">'.lang('register', 'create_acc').'</span>
+        <span class="legend">'.lang("register", "create_acc").'</span>
         <form method="post" action="register.php?action=doregister" name="form">
           <input type="hidden" name="pass" value="" maxlength="256" />
           <table class="flat">
             <tr>
-              <td valign="top">'.lang('register', 'username').':</td>
+              <td valign="top">'.lang("register", "username").':</td>
               <td>
                 <input type="text" name="username" id="reg_username" maxlength="14" />
                 <br />
-                '.lang('register', 'use_eng_chars_limited_len').'
+                '.lang("register", "use_eng_chars_limited_len").'
                 <br />
               </td>
             </tr>
             <tr>
               <td valign="top">
-                '.lang('register', 'screenname').':
+                '.lang("register", "screenname").':
                 <br />
-                '.lang('register', 'optional').'
+                '.lang("register", "optional").'
               </td>
               <td>
                 <input type="text" name="screenname" id="reg_screenname" maxlength="14" />
                 <br />
-                '.lang('register', 'willbeused').'
+                '.lang("register", "willbeused").'
                 <br />
-                '.lang('register', 'use_eng_chars_limited_len').'
+                '.lang("register", "use_eng_chars_limited_len").'
                 <br />
               </td>
             </tr>
             <tr>
-              <td valign="top">'.lang('register', 'password').':</td>
+              <td valign="top">'.lang("register", "password").':</td>
               <td>
                 <input type="password" name="pass1" id="reg_pass1" maxlength="25" />
               </td>
             </tr>
             <tr>
-              <td valign="top">'.lang('register', 'confirm_password').':</td>
+              <td valign="top">'.lang("register", "confirm_password").':</td>
               <td>
                 <input type="password" name="pass2" id="reg_pass2" maxlength="25" />
                 <br />
-                '.lang('register', 'min_pass_len').'
+                '.lang("register", "min_pass_len").'
                 <br />
               </td>
             </tr>
             <tr>
-              <td valign="top">'.lang('register', 'email').':</td>
+              <td valign="top">'.lang("register", "email").':</td>
               <td>
                 <input type="text" name="email" id="reg_email" maxlength="225" />
                 <br />
-                '.lang('register', 'use_valid_mail').'
+                '.lang("register", "use_valid_mail").'
               </td>
             </tr>';
   if ( $expansion_select )
@@ -526,28 +526,28 @@ function register()
     if ( $core == 1 )
       $output .= '
             <tr>
-              <td valign="top">'.lang('register', 'acc_type').':</td>
+              <td valign="top">'.lang("register", "acc_type").':</td>
               <td>
                 <select name="expansion">
-                  <option value="24">'.lang('register', 'wotlktbc').'</option>
-                  <option value="16">'.lang('register', 'wotlk').'</option>
-                  <option value="8">'.lang('register', 'tbc').'</option>
-                  <option value="0">'.lang('register', 'classic').'</option>
+                  <option value="24">'.lang("register", "wotlktbc").'</option>
+                  <option value="16">'.lang("register", "wotlk").'</option>
+                  <option value="8">'.lang("register", "tbc").'</option>
+                  <option value="0">'.lang("register", "classic").'</option>
                 </select>
-                - '.lang('register', 'acc_type_desc').'
+                - '.lang("register", "acc_type_desc").'
               </td>
             </tr>';
     else
       $output .= '
             <tr>
-              <td valign="top">'.lang('register', 'acc_type').':</td>
+              <td valign="top">'.lang("register", "acc_type").':</td>
               <td>
                 <select name="expansion">
-                  <option value="2">'.lang('register', 'wotlktbc').'</option>
-                  <option value="1">'.lang('register', 'tbc').'</option>
-                  <option value="0">'.lang('register', 'classic').'</option>
+                  <option value="2">'.lang("register", "wotlktbc").'</option>
+                  <option value="1">'.lang("register", "tbc").'</option>
+                  <option value="0">'.lang("register", "classic").'</option>
                 </select>
-                - '.lang('register', 'acc_type_desc').'
+                - '.lang("register", "acc_type_desc").'
               </td>
             </tr>';
   }
@@ -579,7 +579,7 @@ function register()
               </td>
             </tr>
             <tr>
-              <td valign="top">'.lang('captcha', 'security_code').':</td>
+              <td valign="top">'.lang("captcha", "security_code").':</td>
               <td>
                 <input type="text" name="security_code" size="45" />
                 <br />
@@ -594,7 +594,7 @@ function register()
               </td>
             </tr>
             <tr>
-              <td colspan="2">'.lang('register', 'read_terms').'.</td>
+              <td colspan="2">'.lang("register", "read_terms").'.</td>
             </tr>
             <tr>
               <td colspan="2">
@@ -611,9 +611,9 @@ function register()
   fclose($fp);
   $terms .= "</textarea>";
 
-  makebutton(lang('register', 'create_acc_button'), "javascript:answerBox('".lang('register', 'terms')."<br />".$terms."', 'javascript:do_submit_data()')",150);
+  makebutton(lang("register", "create_acc_button"), "javascript:answerBox('".lang("register", "terms")."<br />".$terms."', 'javascript:do_submit_data()')",150);
   $output .= '</td><td>';
-  makebutton(lang('global', 'back'), "login.php", 328);
+  makebutton(lang("global", "back"), "login.php", 328);
   $output .= '
               </td>
             </tr>
@@ -636,33 +636,33 @@ function pass_recovery()
   $output .= '
     <center>
       <div class="half_frame">
-      <span class="legend">'.lang('register', 'recover_acc_password'.( ( $core == 1 ) ? 'A' : 'MT' )).'</span>
+      <span class="legend">'.lang("register", "recover_acc_password".( ( $core == 1 ) ? "A" : "MT" )).'</span>
       <form method="post" action="register.php?action=do_pass_recovery" name="form">
         <table class="flat">
           <tr>
-            <td valign="top">'.lang('register', 'username').' :</td>
+            <td valign="top">'.lang("register", "username").' :</td>
             <td>
               <input type="text" name="username" size="45" maxlength="14" />
               <br />
-              '.lang('register', 'user_pass_rec_desc').'
+              '.lang("register", "user_pass_rec_desc").'
               <br />
             </td>
           </tr>
           <tr>
-            <td valign="top">'.lang('register', 'email').' :</td>
+            <td valign="top">'.lang("register", "email").' :</td>
             <td>
               <input type="text" name="email" size="45" maxlength="225" />
               <br />
-              '.lang('register', 'mail_pass_rec_desc').'
+              '.lang("register", "mail_pass_rec_desc").'
             </td>
           </tr>
           <tr>
             <td>';
-  makebutton(lang('register', 'recover_pass'.( ( $core == 1 ) ? 'A' : 'MT' )), "javascript:do_submit()",150);
+  makebutton(lang("register", "recover_pass".( ( $core == 1 ) ? "A" : "MT" )), "javascript:do_submit()",150);
   $output .= '
             </td>
             <td>';
-  makebutton(lang('global', 'back'), "javascript:window.history.back()", 328);
+  makebutton(lang("global", "back"), "javascript:window.history.back()", 328);
   $output .= '
             </td>
           </tr>
@@ -682,20 +682,20 @@ function do_pass_recovery()
   global $logon_db, $from_mail, $mailer_type, $smtp_cfg, $title, $GMailSender,
     $format_mail_html, $sql, $core;
 
-  if ( empty($_POST['username']) || empty($_POST['email']) )
+  if ( empty($_POST["username"]) || empty($_POST["email"]) )
     redirect("register.php?action=pass_recovery&err=1");
 
-  $user_name = $sql['logon']->quote_smart(trim($_POST['username']));
-  $email_addr = $sql['logon']->quote_smart($_POST['email']);
+  $user_name = $sql["logon"]->quote_smart(trim($_POST["username"]));
+  $email_addr = $sql["logon"]->quote_smart($_POST["email"]);
 
   if ( $core == 1 )
-    $result = $sql['logon']->query("SELECT password FROM accounts WHERE login='".$user_name."' AND email='".$email_addr."'");
+    $result = $sql["logon"]->query("SELECT password FROM accounts WHERE login='".$user_name."' AND email='".$email_addr."'");
   else
-    $result = $sql['logon']->query("SELECT *, username AS login FROM account WHERE username='".$user_name."' AND email='".$email_addr."'");
+    $result = $sql["logon"]->query("SELECT *, username AS login FROM account WHERE username='".$user_name."' AND email='".$email_addr."'");
 
-  if ( $sql['logon']->num_rows($result) == 1 )
+  if ( $sql["logon"]->num_rows($result) == 1 )
   {
-    $pass = $sql['logon']->fetch_assoc($result);
+    $pass = $sql["logon"]->fetch_assoc($result);
 
     // Password recovery is, basically, impossible on MaNGOS and Trinity
     // so we just generate a new one
@@ -710,14 +710,14 @@ function do_pass_recovery()
       $temppass .= rand(1, 9);
       $temppass .= rand(1, 9);
       $temppass .= $pass_gen_list[rand(0, 25)];
-      $pass['password'] = $temppass;
+      $pass["password"] = $temppass;
     }
 
     if ( $core != 1 )
     {
-      $sha = sha1(strtoupper($pass['login'].":".$pass['password']));
-      $query = "UPDATE account SET sha_pass_hash='".$sha."' WHERE username='".$pass['login']."'";
-      $result = $sql['logon']->query($query);
+      $sha = sha1(strtoupper($pass["login"].":".$pass["password"]));
+      $query = "UPDATE account SET sha_pass_hash='".$sha."' WHERE username='".$pass["login"]."'";
+      $result = $sql["logon"]->query($query);
     }
 
     if ( $core == 1 )
@@ -746,8 +746,8 @@ function do_pass_recovery()
       $body = str_replace("\r", " ", $body);
     }
     $body = str_replace("<username>", $user_name, $body);
-    $body = str_replace("<password>", $pass['password'], $body);
-    $body = str_replace("<base_url>", $_SERVER['HTTP_HOST'], $body);
+    $body = str_replace("<password>", $pass["password"], $body);
+    $body = str_replace("<base_url>", $_SERVER["HTTP_HOST"], $body);
     $body = str_replace("<title>", $title, $body);
 
     if ( $GMailSender )
@@ -757,9 +757,9 @@ function do_pass_recovery()
       $namefrom = $title." Admin";
       $result = authgMail($from_mail, $namefrom, $email_addr, $email_addr, $subject, $body, $smtp_cfg);
 
-      if ( !($result['quitcode'] = 221) ) 
+      if ( !($result["quitcode"] = 221) ) 
       {
-        redirect("register.php?action=pass_recovery&err=11&usr=".$result['quitcode']);
+        redirect("register.php?action=pass_recovery&err=11&usr=".$result["quitcode"]);
       } 
       else 
       {
@@ -773,13 +773,13 @@ function do_pass_recovery()
       $mail->Mailer = $mailer_type;
       if ( $mailer_type == "smtp" )
       {
-        $mail->Host = $smtp_cfg['host'];
-        $mail->Port = $smtp_cfg['port'];
-        if( $smtp_cfg['user'] != "" ) 
+        $mail->Host = $smtp_cfg["host"];
+        $mail->Port = $smtp_cfg["port"];
+        if( $smtp_cfg["user"] != "" ) 
         {
           $mail->SMTPAuth  = true;
-          $mail->Username  = $smtp_cfg['user'];
-          $mail->Password  =  $smtp_cfg['pass'];
+          $mail->Username  = $smtp_cfg["user"];
+          $mail->Password  =  $smtp_cfg["pass"];
         }
       }
 
@@ -815,37 +815,37 @@ function do_activate()
 {
   global $sql, $core;
 
-  $key = $sql['mgr']->quote_smart($_GET['key']);
+  $key = $sql["mgr"]->quote_smart($_GET["key"]);
 
   if ( $core == 1 )
   {
     // because we don't support ArcEmu's encrypted password feature, we have more work to do :/
     $query = "SELECT Login, TempPassword FROM config_accounts";
-    $result = $sql['mgr']->query($query);
-    while ( $row = $sql['mgr']->fetch_assoc($result) )
+    $result = $sql["mgr"]->query($query);
+    while ( $row = $sql["mgr"]->fetch_assoc($result) )
     {
-      if ( sha1(strtoupper($row['Login'].":".$row['TempPassword'])) == $key )
+      if ( sha1(strtoupper($row["Login"].":".$row["TempPassword"])) == $key )
       {
         // update our user's account to correct their password
-        $u_query = "UPDATE accounts SET password='".$row['TempPassword']."' WHERE login='".$row['Login']."'";
-        $u_result = $sql['logon']->query($u_query);
+        $u_query = "UPDATE accounts SET password='".$row["TempPassword"]."' WHERE login='".$row["Login"]."'";
+        $u_result = $sql["logon"]->query($u_query);
         // destroy the temporary password
-        $p_query = "UPDATE config_accounts SET TempPassword='' WHERE Login='".$row['Login']."'";
-        $p_result = $sql['mgr']->query($p_query);
+        $p_query = "UPDATE config_accounts SET TempPassword='' WHERE Login='".$row["Login"]."'";
+        $p_result = $sql["mgr"]->query($p_query);
       }
     }
   }
   else
   {
     $query = "SELECT Login, TempPassword FROM config_accounts WHERE TempPassword='".$key."'";
-    $result = $sql['mgr']->query($query);
-    $row = $sql['mgr']->fetch_assoc($result);
+    $result = $sql["mgr"]->query($query);
+    $row = $sql["mgr"]->fetch_assoc($result);
     // update our user's account to correct their password
-    $u_query = "UPDATE account SET sha_pass_hash='".$row['TempPassword']."' WHERE username='".$row['Login']."'";
-    $u_result = $sql['logon']->query($u_query);
+    $u_query = "UPDATE account SET sha_pass_hash='".$row["TempPassword"]."' WHERE username='".$row["Login"]."'";
+    $u_result = $sql["logon"]->query($u_query);
     // destroy the temporary password
-    $p_query = "UPDATE config_accounts SET TempPassword='' WHERE Login='".$row['Login']."'";
-    $p_result = $sql['mgr']->query($p_query);
+    $p_query = "UPDATE config_accounts SET TempPassword='' WHERE Login='".$row["Login"]."'";
+    $p_result = $sql["mgr"]->query($p_query);
   }
 
   if ( $u_result )
@@ -863,19 +863,19 @@ function do_pass_activate()
 {
   global $logon_db, $sql;
 
-  if ( empty($_GET['h']) || empty($_GET['p']) )
+  if ( empty($_GET["h"]) || empty($_GET["p"]) )
     redirect("register.php?action=pass_recovery&err=1");
 
-  $pass = $sql['logon']->quote_smart(trim($_GET['p']));
-  $hash = $sql['logon']->quote_smart($_GET['h']);
+  $pass = $sql["logon"]->quote_smart(trim($_GET["p"]));
+  $hash = $sql["logon"]->quote_smart($_GET["h"]);
 
-  $result = $sql['logon']->query("SELECT id,login FROM accounts WHERE password = '".$hash."'");
+  $result = $sql["logon"]->query("SELECT id,login FROM accounts WHERE password = '".$hash."'");
 
-  if ( $sql['logon']->num_rows($result) == 1 )
+  if ( $sql["logon"]->num_rows($result) == 1 )
   {
-    $username = $sql['logon']->result($result, 0, 'username');
-    $id = $sql['logon']->result($result, 0, 'id');
-    if ( substr(sha1(strtoupper($sql['logon']->result($result, 0, 'username'))),0,7) == $pass )
+    $username = $sql["logon"]->result($result, 0, 'username');
+    $id = $sql["logon"]->result($result, 0, 'id');
+    if ( substr(sha1(strtoupper($sql["logon"]->result($result, 0, 'username'))),0,7) == $pass )
     {
       $sql->query("UPDATE account SET sha_pass_hash=SHA1(CONCAT(UPPER('".$username."'),':',UPPER('".$pass."'))), v=0, s=0 WHERE id = '".$id."'");
       redirect("login.php");
@@ -891,10 +891,10 @@ function do_pass_activate()
 //#####################################################################################################
 // MAIN
 //#####################################################################################################
-$err = ( ( isset($_GET['err']) ) ? $_GET['err'] : NULL );
+$err = ( ( isset($_GET["err"]) ) ? $_GET["err"] : NULL );
 
-if ( isset($_GET['usr']) )
-  $usr = $_GET['usr'];
+if ( isset($_GET["usr"]) )
+  $usr = $_GET["usr"];
 else
   $usr = NULL;
 
@@ -905,52 +905,52 @@ $output .=  '
 switch ( $err )
 {
   case 1:
-    $output .= '<h1><font class="error">'.lang('global', 'empty_fields').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("global", "empty_fields").'</font></h1>';
     break;
   case 2:
-    $output .= '<h1><font class="error">'.lang('register', 'diff_pass_entered').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("register", "diff_pass_entered").'</font></h1>';
     break;
   case 3:
-    $output .= '<h1><font class="error">'.lang('register', 'username').' '.$usr.' '.lang('register', 'already_exist').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("register", "username").' '.$usr.' '.lang("register", "already_exist").'</font></h1>';
     break;
   case 4:
-    $output .= '<h1><font class="error">'.lang('register', 'acc_reg_closed').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("register", "acc_reg_closed").'</font></h1>';
     break;
   case 5:
-    $output .= '<h1><font class="error">'.lang('register', 'wrong_pass_username_size').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("register", "wrong_pass_username_size").'</font></h1>';
     break;
   case 6:
-    $output .= '<h1><font class="error">'.lang('register', 'bad_chars_used').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("register", "bad_chars_used").'</font></h1>';
     break;
   case 7:
-    $output .= '<h1><font class="error">'.lang('register', 'invalid_email').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("register", "invalid_email").'</font></h1>';
     break;
   case 8:
-    $output .= '<h1><font class="error">'.lang('register', 'banned_ip').' ('.$usr.')<br />'.lang('register', 'contact_serv_admin').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("register", "banned_ip").' ('.$usr.')<br />'.lang("register", "contact_serv_admin").'</font></h1>';
     break;
   case 9:
-    $output .= '<h1><font class="error">'.lang('register', 'users_ip_range').': '.$usr.' '.lang('register', 'cannot_create_acc').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("register", "users_ip_range").': '.$usr.' '.lang("register", "cannot_create_acc").'</font></h1>';
     break;
   case 10:
-    $output .= '<h1><font class="error">'.lang('register', 'user_mail_not_found').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("register", "user_mail_not_found").'</font></h1>';
     break;
   case 11:
     $output .= '<h1><font class="error">Mailer Error: '.$usr.'</font></h1>';
     break;
   case 12:
-    $output .= '<h1><font class="error">'.lang('register', 'recovery_mail_sent'.( ( $core == 1 ) ? 'A' : 'MT' )).'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("register", "recovery_mail_sent".( ( $core == 1 ) ? "A" : "MT" )).'</font></h1>';
     break;
   case 13:
-    $output .= '<h1><font class="error">'.lang('captcha', 'invalid_code').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("captcha", "invalid_code").'</font></h1>';
     break;
   case 14:
-    $output .= '<h1><font class="error">'.lang('register', 'email_address_used').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("register", "email_address_used").'</font></h1>';
     break;
   case 15:
-    $output .= '<h1><font class="error">'.lang('register', 'used_ip').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("register", "used_ip").'</font></h1>';
     break;
   default:
-    $output .= '<h1><font class="error">'.lang('register', 'fill_all_fields').'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("register", "fill_all_fields").'</font></h1>';
 }
 
 unset($err);
@@ -958,7 +958,7 @@ unset($err);
 $output .= "
     </div>";
 
-$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
+$action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
 switch ( $action )
 {

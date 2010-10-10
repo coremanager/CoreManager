@@ -51,16 +51,16 @@ else
   error_reporting (E_COMPILE_ERROR);
 
 //---------------------Loading User Theme and Language Settings----------------
-if (isset($_COOKIE['theme']))
+if (isset($_COOKIE["theme"]))
 {
-  if (is_dir('themes/'.$_COOKIE['theme']))
-    if (is_file('themes/'.$_COOKIE['theme'].'/'.$_COOKIE['theme'].'_1024.css'))
-      $theme = $_COOKIE['theme'];
+  if (is_dir('themes/'.$_COOKIE["theme"]))
+    if (is_file('themes/'.$_COOKIE["theme"].'/'.$_COOKIE["theme"].'_1024.css'))
+      $theme = $_COOKIE["theme"];
 }
 
-if (isset($_COOKIE['lang']))
+if (isset($_COOKIE["lang"]))
 {
-  $lang = $_COOKIE['lang'];
+  $lang = $_COOKIE["lang"];
   if (file_exists('lang/'.$lang.'.php'));
   else
     $lang = $language;
@@ -133,38 +133,38 @@ if (ini_get('max_execution_time') < 1800)
 }
 
 //---------------------Guest login Predefines----------------------------------
-if ($allow_anony && empty($_SESSION['logged_in']))
+if ($allow_anony && empty($_SESSION["logged_in"]))
 {
-  $_SESSION['user_lvl'] = -1;
-  $_SESSION['gm_lvl'] = '-1';
-  $_SESSION['login'] = $anony_uname;
-  $_SESSION['user_id'] = -1;
-  $_SESSION['realm_id'] = $anony_realm_id;
-  $_SESSION['client_ip'] = ( isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
+  $_SESSION["user_lvl"] = -1;
+  $_SESSION["gm_lvl"] = '-1';
+  $_SESSION["login"] = $anony_uname;
+  $_SESSION["user_id"] = -1;
+  $_SESSION["realm_id"] = $anony_realm_id;
+  $_SESSION["client_ip"] = ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv('REMOTE_ADDR');
 }
 
-$realm_id = ( isset($_GET['realm_id']) ) ? (int)$_GET['realm_id'] : $_SESSION['realm_id'];
+$realm_id = ( isset($_GET["realm_id"]) ) ? (int)$_GET["realm_id"] : $_SESSION["realm_id"];
 
 // set up databse global
 $sql = array();
 
-$sql['logon'] = new SQL;
-$sql['logon']->connect($logon_db['addr'], $logon_db['user'], $logon_db['pass'], $logon_db['name']);
+$sql["logon"] = new SQL;
+$sql["logon"]->connect($logon_db["addr"], $logon_db["user"], $logon_db["pass"], $logon_db["name"]);
 
-$sql['dbc'] = new SQL;
-$sql['dbc']->connect($dbc_db['addr'], $dbc_db['user'], $dbc_db['pass'], $dbc_db['name']);
+$sql["dbc"] = new SQL;
+$sql["dbc"]->connect($dbc_db["addr"], $dbc_db["user"], $dbc_db["pass"], $dbc_db["name"]);
 
-$sql['mgr'] = new SQL;
-$sql['mgr']->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+$sql["mgr"] = new SQL;
+$sql["mgr"]->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
-$sql['char'] = new SQL;
-$sql['char']->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+$sql["char"] = new SQL;
+$sql["char"]->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-$sql['world'] = new SQL;
-$sql['world']->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+$sql["world"] = new SQL;
+$sql["world"]->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
 //----Check if a user has login, if Guest mode is enabled, code above will login as Guest
-if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION['realm_id']) && empty($_GET['err']))
+if (isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSION["realm_id"]) && empty($_GET["err"]))
 {
   // check for host php script max memory allowed,
   // setting it higher if it is not enough for CoreManager to run
@@ -173,15 +173,15 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
 
   // resuming logged in user settings
   session_regenerate_id();
-  $user_lvl = $_SESSION['user_lvl'];
-  $user_name = $_SESSION['login'];
-  $user_id = $_SESSION['user_id'];
+  $user_lvl = $_SESSION["user_lvl"];
+  $user_name = $_SESSION["login"];
+  $user_id = $_SESSION["user_id"];
   // for CoreManager security system, getting the users' account group name
-  // switched to use $_SESSION['gmlvl']
-  $user_lvl_name = gmlevel_name($_SESSION['gm_lvl']);
+  // switched to use $_SESSION["gmlvl"]
+  $user_lvl_name = gmlevel_name($_SESSION["gm_lvl"]);
 
   // get the file name that called this header
-  $array = explode ( '/', $_SERVER['PHP_SELF']);
+  $array = explode ( '/', $_SERVER["PHP_SELF"]);
   $lookup_file = $array[sizeof($array)-1];
   unset($array);
 
@@ -189,7 +189,7 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
   $output .= '
             <div id="menuwrapper">
               <ul id="menubar">';
-  //$lang_header = lang_header();
+
   $action_permission = array();
   foreach ($menu_array as $trunk)
   {
@@ -201,17 +201,17 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
       {
         if($branch[0] === $lookup_file)
         {
-          $action_permission['view']   = $branch[2];
-          $action_permission['insert'] = $branch[3];
-          $action_permission['update'] = $branch[4];
-          $action_permission['delete'] = $branch[5];
+          $action_permission["view"]   = $branch[2];
+          $action_permission["insert"] = $branch[3];
+          $action_permission["update"] = $branch[4];
+          $action_permission["delete"] = $branch[5];
         }
       }
     }
     else
     {
       $output .= '
-                <li><a href="'.$trunk[0].'">'.( ( lang('header', $trunk[1]) ) ? lang('header', $trunk[1]) : $trunk[1] ).'</a>';
+                <li><a href="'.$trunk[0].'">'.( ( lang("header", $trunk[1]) ) ? lang("header", $trunk[1]) : $trunk[1] ).'</a>';
       if(isset($trunk[2][0]))
         $output .= '
                   <ul>';
@@ -219,14 +219,14 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
       {
         if($branch[0] === $lookup_file)
         {
-          $action_permission['view']   = $branch[2];
-          $action_permission['insert'] = $branch[3];
-          $action_permission['update'] = $branch[4];
-          $action_permission['delete'] = $branch[5];
+          $action_permission["view"]   = $branch[2];
+          $action_permission["insert"] = $branch[3];
+          $action_permission["update"] = $branch[4];
+          $action_permission["delete"] = $branch[5];
         }
         if ($user_lvl >= $branch[2])
           $output .= '
-                    <li><a href="'.$branch[0].'">'.( ( lang('header', $branch[1]) ) ? lang('header', $branch[1]) : $branch[1] ).'</a></li>';
+                    <li><a href="'.$branch[0].'">'.( ( lang("header", $branch[1]) ) ? lang("header", $branch[1]) : $branch[1] ).'</a></li>';
       }
       if(isset($trunk[2][0]))
         $output .= '
@@ -241,23 +241,23 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
   unset($menu_array);
 
   $output .= '
-                <li><a href="edit.php">'.lang('header', 'my_acc').'</a>
+                <li><a href="edit.php">'.lang("header", "my_acc").'</a>
                   <ul>';
 
-  $result = $sql['mgr']->query('SELECT id, name FROM `realmlist` LIMIT 10');
+  $result = $sql["mgr"]->query('SELECT id, name FROM `realmlist` LIMIT 10');
 
   // we check how many realms are configured, this does not check if config is valid
-  if ( ( 1 < $sql['mgr']->num_rows($result)) && ( 1 < count($server)) && ( 1 < count($characters_db)) )
+  if ( ( 1 < $sql["mgr"]->num_rows($result)) && ( 1 < count($server)) && ( 1 < count($characters_db)) )
   {
     $output .= '
-                    <li><span style="text-align:center"><a href="#">'.lang('header', 'realms').'</a></span></li>';
-    while ($realm = $sql['mgr']->fetch_assoc($result))
+                    <li><span style="text-align:center"><a href="#">'.lang("header", "realms").'</a></span></li>';
+    while ($realm = $sql["mgr"]->fetch_assoc($result))
     {
-      if(isset($server[$realm['id']]))
+      if(isset($server[$realm["id"]]))
       {
-        $set = ($realm_id === $realm['id']) ? '>' : '';
+        $set = ($realm_id === $realm["id"]) ? '>' : '';
         $output .= '
-                    <li><a href="realm.php?action=set_def_realm&amp;id='.$realm['id'].'&amp;url='.$_SERVER['PHP_SELF'].'">'.htmlentities($set.' '.$realm['name']).'</a></li>';
+                    <li><a href="realm.php?action=set_def_realm&amp;id='.$realm["id"].'&amp;url='.$_SERVER["PHP_SELF"].'">'.htmlentities($set.' '.$realm["name"]).'</a></li>';
       }
     }
     unset($set);
@@ -265,44 +265,42 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
   }
 
   // we have a different menu for guest account
-  if($allow_anony && empty($_SESSION['logged_in']))
+  if($allow_anony && empty($_SESSION["logged_in"]))
   {
-    //$lang_login = lang_login();
     $output .= '
-                    <li><span style="text-align:center"><a href="#">'.lang('header', 'account').'</a></span></li>
-                    <li><a href="register.php">'.lang('login', 'not_registrated').'</a></li>
-                    <li><a href="login.php">'.lang('login', 'login').'</a></li>';
-    //unset($lang_login);
+                    <li><span style="text-align:center"><a href="#">'.lang("header", "account").'</a></span></li>
+                    <li><a href="register.php">'.lang("login", "not_registrated").'</a></li>
+                    <li><a href="login.php">'.lang("login", "login").'</a></li>';
   }
   else
   {
     if ( $core == 1 )
-      $result = $sql['char']->query('SELECT guid, name, race, class, level, gender FROM characters WHERE acct = '.$user_id.'');
+      $result = $sql["char"]->query('SELECT guid, name, race, class, level, gender FROM characters WHERE acct = '.$user_id.'');
     else
-      $result = $sql['char']->query('SELECT guid, name, race, class, level, gender FROM characters WHERE account = '.$user_id.'');
+      $result = $sql["char"]->query('SELECT guid, name, race, class, level, gender FROM characters WHERE account = '.$user_id.'');
 
     // this puts links to user characters of active realm in "My Account" menu
-    if($sql['char']->num_rows($result))
+    if($sql["char"]->num_rows($result))
     {
       $output .= '
-                    <li><span style="text-align:center"><a href="#">'.lang('header', 'my_characters').'</a></span></li>';
-      while ($char = $sql['char']->fetch_assoc($result))
+                    <li><span style="text-align:center"><a href="#">'.lang("header", "my_characters").'</a></span></li>';
+      while ($char = $sql["char"]->fetch_assoc($result))
       {
         $output .= '
                     <li>
-                      <a href="char.php?id='.$char['guid'].'">
-                        <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" alt="" /><img src="img/c_icons/'.$char['class'].'.gif" alt="" />'.
-                        ' '.$char['name'].
-                        ' ('.$char['level'].') '.'
+                      <a href="char.php?id='.$char["guid"].'">
+                        <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" alt="" /><img src="img/c_icons/'.$char["class"].'.gif" alt="" />'.
+                        ' '.$char["name"].
+                        ' ('.$char["level"].') '.'
                       </a>
                     </li>';
       }
       unset($char);
     }
     $output .= '
-                    <li><span style="text-align:center"><a href="#">'.lang('header', 'account').'</a></span></li>
-                    <li><a href="edit.php">'.lang('header', 'edit_my_acc').'</a></li>
-                    <li><a href="logout.php">'.lang('header', 'logout').'</a></li>';
+                    <li><span style="text-align:center"><a href="#">'.lang("header", "account").'</a></span></li>
+                    <li><a href="edit.php">'.lang("header", "edit_my_acc").'</a></li>
+                    <li><a href="logout.php">'.lang("header", "logout").'</a></li>';
   }
   unset($result);
   $output .= '
@@ -314,25 +312,24 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['login']) && isset($_SESSION
           </td>
           <td class="table_top_middle">';
   $web_admin_query = "SELECT * FROM config_accounts WHERE Login='".$user_name."'";
-  $web_admin_result = $sql['mgr']->query($web_admin_query);
-  $web_admin = $sql['mgr']->fetch_assoc($web_admin_result);
-  $web_admin = $web_admin['WebAdmin'];
-  //if (!$_SESSION['screenname'])
+  $web_admin_result = $sql["mgr"]->query($web_admin_query);
+  $web_admin = $sql["mgr"]->fetch_assoc($web_admin_result);
+  $web_admin = $web_admin["WebAdmin"];
+  //if (!$_SESSION["screenname"])
   //{
     $output .= '
-            <div id="username">'.( ( isset($_SESSION['screenname']) ) ? $_SESSION['screenname'] : $user_name ).' .:'.( $web_admin ? '<a href="admin.php">' : '' ).$user_lvl_name.'\'s '.lang('header', 'menu').( $web_admin ? '</a>' : '' ).':.</div>';
+            <div id="username">'.( ( isset($_SESSION["screenname"]) ) ? $_SESSION["screenname"] : $user_name ).' .:'.( $web_admin ? '<a href="admin.php">' : '' ).$user_lvl_name.'\'s '.lang("header", "menu").( $web_admin ? '</a>' : '' ).':.</div>';
   //}
   //else
   //{
     //$output .= '
-    //        <div id="username">'..' .:'.( $web_admin ? '<a href="admin.php">' : '' ).$user_lvl_name.'\'s '.lang('header', 'menu').( $web_admin ? '</a>' : '' ).':.</div>';
+    //        <div id="username">'..' .:'.( $web_admin ? '<a href="admin.php">' : '' ).$user_lvl_name.'\'s '.lang("header", "menu").( $web_admin ? '</a>' : '' ).':.</div>';
   //}
   $output .= '
           </td>
           <td class="table_top_right"></td>
         </tr>
       </table>';
-  //unset($lang_header);
 }
 else
 {
@@ -350,7 +347,7 @@ $filename = $_SERVER["SCRIPT_NAME"];
 $filename = Explode('/', $filename);
 $filename = $filename[count($filename) - 1];
 
-if ( ( $allow_anony && empty($_SESSION['logged_in']) ) && ( ( $filename != 'login.php' ) && ( $filename != 'register.php' ) ) )
+if ( ( $allow_anony && empty($_SESSION["logged_in"]) ) && ( ( $filename != 'login.php' ) && ( $filename != 'register.php' ) ) )
 {
   $output .= '
       <center>
@@ -368,7 +365,7 @@ if ( ( $allow_anony && empty($_SESSION['logged_in']) ) && ( ( $filename != 'logi
 
 //---------------------Start of Body-------------------------------------------
 
-if ( ( isset($_SESSION['logged_in']) ) || ( $filename == 'login.php' ) || ( $filename == 'register.php' ) )
+if ( ( isset($_SESSION["logged_in"]) ) || ( $filename == 'login.php' ) || ( $filename == 'register.php' ) )
   $output .= '
       <div id="body_main" class="body_main_shallow">';
 else

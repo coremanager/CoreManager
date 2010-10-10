@@ -19,7 +19,7 @@
 
 
 require_once 'header.php';
-valid_login($action_permission['view']);
+valid_login($action_permission["view"]);
 
 //#############################################################################
 //  BROWSE  TICKETS
@@ -29,13 +29,13 @@ function browse_tickets()
   global $output, $characters_db, $realm_id, $action_permission, $user_lvl, $itemperpage, $sql, $core;
 
   //==========================$_GET and SECURE=================================
-  $start = (isset($_GET['start'])) ? $sql['char']->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET["start"])) ? $sql["char"]->quote_smart($_GET["start"]) : 0;
   if (is_numeric($start)); else $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sql['char']->quote_smart($_GET['order_by']) : 'status';
+  $order_by = (isset($_GET["order_by"])) ? $sql["char"]->quote_smart($_GET["order_by"]) : 'status';
   if (preg_match('/^[_[:lower:]]{1,10}$/', $order_by)); else $order_by = 'status';
 
-  $dir = (isset($_GET['dir'])) ? $sql['char']->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET["dir"])) ? $sql["char"]->quote_smart($_GET["dir"]) : 1;
   if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
 
   $order_dir = ($dir) ? 'ASC' : 'DESC';
@@ -44,16 +44,16 @@ function browse_tickets()
 
   //get total number of items
   if ( $core == 1 )
-    $query_1 = $sql['char']->query('SELECT count(*) FROM gm_tickets WHERE deleted=0');
+    $query_1 = $sql["char"]->query('SELECT count(*) FROM gm_tickets WHERE deleted=0');
   elseif ( $core == 2 )
-    $query_1 = $sql['char']->query('SELECT count(*) FROM character_ticket');
+    $query_1 = $sql["char"]->query('SELECT count(*) FROM character_ticket');
   else
-    $query_1 = $sql['char']->query('SELECT count(*) FROM gm_tickets WHERE closed=0');
-  $all_record = $sql['char']->result($query_1,0);
+    $query_1 = $sql["char"]->query('SELECT count(*) FROM gm_tickets WHERE closed=0');
+  $all_record = $sql["char"]->result($query_1,0);
   unset($query_1);
 
   if ( $core == 1 )
-    $query = $sql['char']->query("SELECT gm_tickets.ticketid AS guid, gm_tickets.playerGuid AS player,
+    $query = $sql["char"]->query("SELECT gm_tickets.ticketid AS guid, gm_tickets.playerGuid AS player,
                         gm_tickets.message AS message,
                         `characters`.name AS opener,
                         gm_tickets.deleted AS status, gm_tickets.timestamp AS timestamp
@@ -61,7 +61,7 @@ function browse_tickets()
                         LEFT JOIN `characters` ON gm_tickets.playerGuid = `characters`.`guid`
                         ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   elseif ( $core == 2 )
-    $query = $sql['char']->query("SELECT character_ticket.ticket_id AS guid, character_ticket.guid AS player,
+    $query = $sql["char"]->query("SELECT character_ticket.ticket_id AS guid, character_ticket.guid AS player,
                         character_ticket.ticket_text AS message,
                         op.name AS opener, 0 AS closer,
                         0 AS status, character_ticket.ticket_lastchange AS timestamp
@@ -69,7 +69,7 @@ function browse_tickets()
                         LEFT JOIN `characters` AS op ON character_ticket.guid = op.`guid`
                         ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   else
-    $query = $sql['char']->query("SELECT gm_tickets.guid AS guid, gm_tickets.playerGuid AS player,
+    $query = $sql["char"]->query("SELECT gm_tickets.guid AS guid, gm_tickets.playerGuid AS player,
                         gm_tickets.message AS message,
                         op.name AS opener, gm.name AS closer,
                         gm_tickets.closed AS status, gm_tickets.timestamp AS timestamp
@@ -95,42 +95,42 @@ function browse_tickets()
             <input type="hidden" name="start" value="$start" />
             <table class="lined">
               <tr>';
-  if($user_lvl >= $action_permission['delete'])
+  if($user_lvl >= $action_permission["delete"])
     $output .= '
                 <th width="7%"><input name="allbox" type="checkbox" value="Check All" onclick="CheckAll(document.form);" /></th>';
-  if($user_lvl >= $action_permission['update'])
+  if($user_lvl >= $action_permission["update"])
     $output .= '
-                <th width="7%">'.lang('global', 'edit').'</th>';
+                <th width="7%">'.lang("global", "edit").'</th>';
   $output .= '
-                <th width="10%"><a href="ticket.php?order_by=guid&amp;start=$start&amp;dir=$dir">'.($order_by=='guid' ? '<img src="img/arr_'.($dir ? "up" : "dw").'.gif" alt="" /> ' : '').''.lang('ticket', 'id').'</a></th>
-                <th width="16%"><a href="ticket.php?order_by=guid&amp;start=$start&amp;dir=$dir\">'.($order_by=='guid' ? '<img src="img/arr_'.($dir ? "up" : "dw").'.gif" alt="" /> ' : '').''.lang('ticket', 'sender').'</a></th>';
+                <th width="10%"><a href="ticket.php?order_by=guid&amp;start=$start&amp;dir=$dir">'.($order_by=='guid' ? '<img src="img/arr_'.($dir ? "up" : "dw").'.gif" alt="" /> ' : '').''.lang("ticket", "id").'</a></th>
+                <th width="16%"><a href="ticket.php?order_by=guid&amp;start=$start&amp;dir=$dir\">'.($order_by=='guid' ? '<img src="img/arr_'.($dir ? "up" : "dw").'.gif" alt="" /> ' : '').''.lang("ticket", "sender").'</a></th>';
   $output .= '
-                <th width=\"40%\">'.lang('ticket', 'message').'</th>
-                <th width=\"10%\">'.lang('ticket', 'date').'</th>';
+                <th width=\"40%\">'.lang("ticket", "message").'</th>
+                <th width=\"10%\">'.lang("ticket", "date").'</th>';
   if ( $core == 1 )
     ;
   else
     $output .= '
-                <th width=\"40%\">'.lang('ticket', 'closedby').'</th>';
+                <th width=\"40%\">'.lang("ticket", "closedby").'</th>';
   $output .= '
               </tr>';
-  while ($ticket = $sql['char']->fetch_assoc($query))
+  while ($ticket = $sql["char"]->fetch_assoc($query))
   {
     $output .= '
               <tr>';
-    if($user_lvl >= $action_permission['delete'])
+    if($user_lvl >= $action_permission["delete"])
       $output .= '
-                <td><input type="checkbox" name="check[]" value="'.$ticket['guid'].'" onclick="CheckCheckAll(document.form);" /></td>';
-    if($user_lvl >= $action_permission['update'])
+                <td><input type="checkbox" name="check[]" value="'.$ticket["guid"].'" onclick="CheckCheckAll(document.form);" /></td>';
+    if($user_lvl >= $action_permission["update"])
       $output .= '
-                <td><a href="ticket.php?action=edit_ticket&amp;error=4&amp;id='.$ticket['guid'].'"><img src="./img/edit.png" alt="'.lang('global', 'edit').'" /></a></td>';
+                <td><a href="ticket.php?action=edit_ticket&amp;error=4&amp;id='.$ticket["guid"].'"><img src="./img/edit.png" alt="'.lang("global", "edit").'" /></a></td>';
     $output .= '
-                <td>'.$ticket['guid'].'</td>
-                <td><a href="char.php?id='.$ticket['player'].'">'.htmlentities($ticket['opener']).'</a></td>
-                <td>'.htmlentities($ticket['message']).'</td>
-                <td>'.date('G:i:s m-d-Y', $ticket['timestamp']).'</td>';
+                <td>'.$ticket["guid"].'</td>
+                <td><a href="char.php?id='.$ticket["player"].'">'.htmlentities($ticket["opener"]).'</a></td>
+                <td>'.htmlentities($ticket["message"]).'</td>
+                <td>'.date('G:i:s m-d-Y', $ticket["timestamp"]).'</td>';
     $output .= '
-                <td><a href="char.php?id='.$ticket['status'].'">'.htmlentities($ticket['closer']).'</a></td>';
+                <td><a href="char.php?id='.$ticket["status"].'">'.htmlentities($ticket["closer"]).'</a></td>';
     $output .= '
               </tr>';
   }
@@ -145,11 +145,11 @@ function browse_tickets()
               </tr>
               <tr>
                 <td colspan="3" align="left" class="hidden">';
-  if($user_lvl >= $action_permission['delete'])
-                  makebutton(lang('ticket', 'del_selected_tickets'), "javascript:do_submit()\" type=\"wrn",230);
+  if($user_lvl >= $action_permission["delete"])
+                  makebutton(lang("ticket", "del_selected_tickets"), "javascript:do_submit()\" type=\"wrn",230);
   $output .= '
                 </td>
-                <td colspan="2" align="right" class="hidden">'.lang('ticket', 'tot_tickets').': '.$all_record.'</td>
+                <td colspan="2" align="right" class="hidden">'.lang("ticket", "tot_tickets").': '.$all_record.'</td>
               </tr>
             </table>
           </form>
@@ -166,11 +166,11 @@ function delete_tickets()
 {
   global $characters_db, $realm_id, $action_permission, $sql, $core;
 
-  valid_login($action_permission['delete']);
+  valid_login($action_permission["delete"]);
 
-  if(!isset($_GET['check'])) redirect("ticket.php?error=1");
+  if(!isset($_GET["check"])) redirect("ticket.php?error=1");
 
-  $check = $sql['char']->quote_smart($_GET['check']);
+  $check = $sql["char"]->quote_smart($_GET["check"]);
 
   $deleted_tickets = 0;
   for ($i=0; $i<count($check); $i++)
@@ -178,9 +178,9 @@ function delete_tickets()
     if ($check[$i] != "" )
     {
       if ( $core == 1 )
-        $query = $sql['char']->query("DELETE FROM gm_tickets WHERE ticketid='".$check[$i]."'");
+        $query = $sql["char"]->query("DELETE FROM gm_tickets WHERE ticketid='".$check[$i]."'");
       else
-        $query = $sql['char']->query("DELETE FROM gm_tickets WHERE guid='".$check[$i]."'");
+        $query = $sql["char"]->query("DELETE FROM gm_tickets WHERE guid='".$check[$i]."'");
       $deleted_tickets++;
     }
   }
@@ -199,15 +199,15 @@ function edit_ticket()
 {
   global  $output, $characters_db, $realm_id, $action_permission, $sql, $core;
 
-  valid_login($action_permission['update']);
+  valid_login($action_permission["update"]);
 
-  if(!isset($_GET['id'])) redirect("Location: ticket.php?error=1");
+  if(!isset($_GET["id"])) redirect("Location: ticket.php?error=1");
 
-  $id = $sql['char']->quote_smart($_GET['id']);
+  $id = $sql["char"]->quote_smart($_GET["id"]);
   if(is_numeric($id)); else redirect("ticket.php?error=1");
 
   if ( $core == 1 )
-    $query = $sql['char']->query("SELECT gm_tickets.ticketid AS guid, gm_tickets.playerGuid AS player,
+    $query = $sql["char"]->query("SELECT gm_tickets.ticketid AS guid, gm_tickets.playerGuid AS player,
                         gm_tickets.message AS message,
                         `characters`.name AS opener,
                         gm_tickets.deleted AS status, gm_tickets.timestamp AS timestamp
@@ -215,7 +215,7 @@ function edit_ticket()
                         LEFT JOIN `characters` ON gm_tickets.playerGuid = `characters`.`guid`
                         WHERE ticketid='".$id."'");
   else
-    $query = $sql['char']->query("SELECT gm_tickets.guid AS guid, gm_tickets.playerGuid AS player,
+    $query = $sql["char"]->query("SELECT gm_tickets.guid AS guid, gm_tickets.playerGuid AS player,
                         gm_tickets.message AS message,
                         op.name AS opener, gm.name AS closer,
                         gm_tickets.closed AS status, gm_tickets.timestamp AS timestamp
@@ -224,38 +224,38 @@ function edit_ticket()
                         LEFT JOIN `characters` AS gm ON gm_tickets.closed = gm.`guid`
                         WHERE gm_tickets.guid='".$id."'");
 
-  if ($ticket = $sql['char']->fetch_assoc($query))
+  if ($ticket = $sql["char"]->fetch_assoc($query))
   {
     $output .= '
         <center>
           <div id="ticket_edit_field" class="fieldset_border">
-            <span class="legend">'.lang('ticket', 'edit_reply').'</span>
+            <span class="legend">'.lang("ticket", "edit_reply").'</span>
             <form method="post" action="ticket.php?action=do_edit_ticket" name="form">
               <input type="hidden" name="id" value="'.$id.'" />
                 <table class="flat">
                   <tr>
-                    <td>'.lang('ticket', 'id').'</td>
+                    <td>'.lang("ticket", "id").'</td>
                     <td>'.$id.'</td>
                   </tr>
                   <tr>
-                    <td>'.lang('ticket', 'submitted_by').':</td>
-                    <td><a href="char.php?id='.$ticket['player'].'">'.htmlentities($ticket['opener']).'</a></td>
+                    <td>'.lang("ticket", "submitted_by").':</td>
+                    <td><a href="char.php?id='.$ticket["player"].'">'.htmlentities($ticket["opener"]).'</a></td>
                   </tr>
                   <tr>
-                    <td>'.lang('ticket', 'date').':</td>
-                    <td>'.date('G:i:s m-d-Y', $ticket['timestamp']).'</td>
+                    <td>'.lang("ticket", "date").':</td>
+                    <td>'.date('G:i:s m-d-Y', $ticket["timestamp"]).'</td>
                   </tr>
                   <tr>
-                    <td valign="top">'.lang('ticket', 'message').'</td>
-                    <td><textarea name="new_text" rows="5" cols="40">'.htmlentities($ticket['message']).'</textarea></td>
+                    <td valign="top">'.lang("ticket", "message").'</td>
+                    <td><textarea name="new_text" rows="5" cols="40">'.htmlentities($ticket["message"]).'</textarea></td>
                   </tr>';
     if ( $core == 1 )
       ;
     else
       $output .= '
                   <tr>
-                    <td>'.lang('ticket', 'closedby').':</td>
-                    <td>'.( ( $ticket['status'] <> 0 ) ? '<a href="char.php?id='.$ticket['status'].'">'.htmlentities($ticket['closer']).'</a>' : '' ).'</td>
+                    <td>'.lang("ticket", "closedby").':</td>
+                    <td>'.( ( $ticket["status"] <> 0 ) ? '<a href="char.php?id='.$ticket["status"].'">'.htmlentities($ticket["closer"]).'</a>' : '' ).'</td>
                   </tr>';
     $output .= '
                   <tr>
@@ -263,12 +263,12 @@ function edit_ticket()
                       <table class="hidden">
                         <tr>
                           <td>';
-                            makebutton(lang('ticket', 'update'), "javascript:do_submit()\" type=\"wrn",140);
+                            makebutton(lang("ticket", "update"), "javascript:do_submit()\" type=\"wrn",140);
     $output .= '          </td>
                         </tr>
                         <tr>
                           <td>';
-                            makebutton(lang('ticket', 'send_ingame_mail'), "mail.php?type=ingame_mail&amp;to=".$ticket['player'],140);
+                            makebutton(lang("ticket", "send_ingame_mail"), "mail.php?type=ingame_mail&amp;to=".$ticket["player"],140);
     $output .= '          </td>
                         </tr>
                       </table>
@@ -278,17 +278,17 @@ function edit_ticket()
                         <tr>
                           <td>';
                           
-    if ( !$ticket['status'] )
-                            makebutton(lang('ticket', 'abandon'.( ( $core == 1) ? 'A' : 'MT' )), 'ticket.php?action=do_mark_ticket&amp;id='.$id.'" type="wrn"', 230);
+    if ( !$ticket["status"] )
+                            makebutton(lang("ticket", "abandon".( ( $core == 1) ? "A" : "MT" )), 'ticket.php?action=do_mark_ticket&amp;id='.$id.'" type="wrn"', 230);
     else
-                            makebutton(lang('ticket', 'abandon'.( ( $core == 1) ? 'A' : 'MT' )), 'ticket.php', 230);
+                            makebutton(lang("ticket", "abandon".( ( $core == 1) ? "A" : "MT" )), 'ticket.php', 230);
 
     $output .= '
                           </td>
                         </tr>
                         <tr>
                           <td>';
-                            makebutton(lang('global', 'back'), "javascript:window.history.back()\" type=\"def",130);
+                            makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def",130);
     $output .= '
                           </td>
                         </tr>
@@ -304,7 +304,7 @@ function edit_ticket()
           </center>';
   }
   else
-    error(lang('global', 'err_no_records_found'));
+    error(lang("global", "err_no_records_found"));
 
 }
 
@@ -316,23 +316,23 @@ function do_edit_ticket()
 {
   global $characters_db, $realm_id, $action_permission, $sql, $core;
 
-  valid_login($action_permission['update']);
+  valid_login($action_permission["update"]);
 
-  if(empty($_POST['new_text']) || empty($_POST['id']) )
+  if(empty($_POST["new_text"]) || empty($_POST["id"]) )
     redirect("ticket.php?error=1");
 
-  $new_text = $sql['char']->quote_smart($_POST['new_text']);
-  $id = $sql['char']->quote_smart($_POST['id']);
+  $new_text = $sql["char"]->quote_smart($_POST["new_text"]);
+  $id = $sql["char"]->quote_smart($_POST["id"]);
   if(is_numeric($id)); else redirect("ticket.php?error=1");
 
   if ( $core == 1 )
-    $query = $sql['char']->query("UPDATE gm_tickets SET message='$new_text' WHERE ticketid='$id'");
+    $query = $sql["char"]->query("UPDATE gm_tickets SET message='$new_text' WHERE ticketid='$id'");
   elseif ( $core == 2 )
-    $query = $sql['char']->query("UPDATE character_ticket SET ticket_text='$new_text' WHERE ticket_id='$id'");
+    $query = $sql["char"]->query("UPDATE character_ticket SET ticket_text='$new_text' WHERE ticket_id='$id'");
   else
-    $query = $sql['char']->query("UPDATE gm_tickets SET message='$new_text' WHERE guid='$id'");
+    $query = $sql["char"]->query("UPDATE gm_tickets SET message='$new_text' WHERE guid='$id'");
 
-  if ($sql['char']->affected_rows())
+  if ($sql["char"]->affected_rows())
   {
     redirect("ticket.php?error=5");
   }
@@ -350,12 +350,12 @@ function do_mark_ticket()
 {
   global $characters_db, $realm_id, $action_permission, $sql, $core, $user_id;
 
-  valid_login($action_permission['update']);
+  valid_login($action_permission["update"]);
 
-  if (empty($_GET['id']))
+  if (empty($_GET["id"]))
     redirect("ticket.php?error=1");
 
-  $id = $sql['char']->quote_smart($_GET['id']);
+  $id = $sql["char"]->quote_smart($_GET["id"]);
   if(!is_numeric($id))
     redirect("ticket.php?error=1");
 
@@ -365,17 +365,17 @@ function do_mark_ticket()
   {
     // get closering gm's oldest character
     $query = "SELECT guid FROM characters WHERE account='".$user_id."' ORDER BY guid LIMIT 1";
-    $result = $sql['char']->query($query);
-    $fields = $sql['char']->fetch_assoc($result);
-    $closer = $fields['guid'];
+    $result = $sql["char"]->query($query);
+    $fields = $sql["char"]->fetch_assoc($result);
+    $closer = $fields["guid"];
   }
 
   if ( $core == 1 )
-    $query = $sql['char']->query("UPDATE gm_tickets SET deleted=1 WHERE ticketid='$id'");
+    $query = $sql["char"]->query("UPDATE gm_tickets SET deleted=1 WHERE ticketid='$id'");
   else
-    $query = $sql['char']->query("UPDATE gm_tickets SET closed=".$closer." WHERE guid='$id'");
+    $query = $sql["char"]->query("UPDATE gm_tickets SET closed=".$closer." WHERE guid='$id'");
 
-  if ($sql['char']->affected_rows())
+  if ($sql["char"]->affected_rows())
   {
     redirect("ticket.php?error=5");
   }
@@ -389,43 +389,41 @@ function do_mark_ticket()
 //########################################################################################################################
 // MAIN
 //########################################################################################################################
-$err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
+$err = (isset($_GET["error"])) ? $_GET["error"] : NULL;
 
 $output .= "
       <div class=\"bubble\">
         <div class=\"top\">";
 
-//$lang_ticket = lang_ticket();
-
 switch ($err)
 {
   case 1:
     $output .= "
-          <h1><font class=\"error\">".lang('global', 'empty_fields')."</font></h1>";
+          <h1><font class=\"error\">".lang("global", "empty_fields")."</font></h1>";
     break;
   case 2:
     $output .= "
-          <h1><font class=\"error\">".lang('ticket', 'ticked_deleted')."</font></h1>";
+          <h1><font class=\"error\">".lang("ticket", "ticked_deleted")."</font></h1>";
     break;
   case 3:
     $output .= "
-          <h1><font class=\"error\">".lang('ticket', 'ticket_not_deleted')."</font></h1>";
+          <h1><font class=\"error\">".lang("ticket", "ticket_not_deleted")."</font></h1>";
     break;
   case 4:
     $output .= "
-          <h1>".lang('ticket', 'edit_ticked')."</h1>";
+          <h1>".lang("ticket", "edit_ticked")."</h1>";
     break;
   case 5:
     $output .= "
-          <h1><font class=\"error\">".lang('ticket', 'ticket_updated')."</font></h1>";
+          <h1><font class=\"error\">".lang("ticket", "ticket_updated")."</font></h1>";
     break;
   case 6:
     $output .= "
-          <h1><font class=\"error\">".lang('ticket', 'ticket_update_err')."</font></h1>";
+          <h1><font class=\"error\">".lang("ticket", "ticket_update_err")."</font></h1>";
     break;
   default: //no error
     $output .= "
-          <h1>".lang('ticket', 'browse_tickets')."</h1>";
+          <h1>".lang("ticket", "browse_tickets")."</h1>";
 }
 
 unset($err);
@@ -433,7 +431,7 @@ unset($err);
 $output .= "
         </div>";
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+$action = (isset($_GET["action"])) ? $_GET["action"] : NULL;
 
 switch ($action)
 {
@@ -458,7 +456,6 @@ switch ($action)
 
 unset($action);
 unset($action_permission);
-//unset($lang_tikcet);
 
 require_once 'footer.php';
 

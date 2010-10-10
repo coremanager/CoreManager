@@ -21,20 +21,20 @@
 if (ini_get('session.auto_start'));
 else session_start();
 
-unset($_SESSION['user_id']);
-unset($_SESSION['login']);
-unset($_SESSION['screenname']);
-unset($_SESSION['user_lvl']);
-unset($_SESSION['gm_lvl']);
-unset($_SESSION['realm_id']);
-unset($_SESSION['client_ip']);
-unset($_SESSION['logged_in']);
+unset($_SESSION["user_id"]);
+unset($_SESSION["login"]);
+unset($_SESSION["screenname"]);
+unset($_SESSION["user_lvl"]);
+unset($_SESSION["gm_lvl"]);
+unset($_SESSION["realm_id"]);
+unset($_SESSION["client_ip"]);
+unset($_SESSION["logged_in"]);
 
 session_destroy();
 
-if (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false)
+if (strpos($_SERVER["SERVER_SOFTWARE"], 'Microsoft-IIS') === false)
 {
-  header('Location: http://'.$_SERVER['HTTP_HOST'].rtrim(dirname($_SERVER['PHP_SELF']), '/\\').'/index.php');
+  header('Location: http://'.$_SERVER["HTTP_HOST"].rtrim(dirname($_SERVER["PHP_SELF"]), '/\\').'/index.php');
   exit();
 }
 else

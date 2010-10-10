@@ -20,7 +20,7 @@
 
 require_once("header.php");
 require_once("./libs/char_lib.php");
-valid_login($action_permission['view']);
+valid_login($action_permission["view"]);
 
 //########################################################################################################################
 // BROWSE ARENA TEAMS
@@ -31,17 +31,17 @@ function browse_teams()
     $action_permission, $user_lvl, $user_id, $sql, $core;
 
   //==========================$_GET and SECURE=================================
-  $start = ( ( isset($_GET['start']) ) ? $sql['char']->quote_smart($_GET['start']) : 0 );
+  $start = ( ( isset($_GET["start"]) ) ? $sql["char"]->quote_smart($_GET["start"]) : 0 );
   if ( is_numeric($start) )
     ;
   else
     $start = 0;
 
-  $order_by = ( ( isset($_GET['order_by']) ) ? $sql['char']->quote_smart($_GET['order_by']) : "atid" );
+  $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["char"]->quote_smart($_GET["order_by"]) : "atid" );
   if ( !preg_match("/^[_[:lower:]]{1,17}$/", $order_by) )
     $order_by = "atid";
 
-  $dir = ( ( isset($_GET['dir']) ) ? $sql['char']->quote_smart($_GET['dir']) : 1 );
+  $dir = ( ( isset($_GET["dir"]) ) ? $sql["char"]->quote_smart($_GET["dir"]) : 1 );
   if ( !preg_match("/^[01]{1}$/", $dir) )
     $dir = 1;
 
@@ -52,10 +52,10 @@ function browse_teams()
   $search_by = '';
   $search_value = '';
 
-  if ( isset($_GET['search_value']) && isset($_GET['search_by']) )
+  if ( isset($_GET["search_value"]) && isset($_GET["search_by"]) )
   {
-    $search_value = $sql['char']->quote_smart($_GET['search_value']);
-    $search_by = $sql['char']->quote_smart($_GET['search_by']);
+    $search_value = $sql["char"]->quote_smart($_GET["search_value"]);
+    $search_by = $sql["char"]->quote_smart($_GET["search_by"]);
     $search_menu = array('atname', 'leadername', 'atid');
     if ( !in_array($search_by, $search_menu) )
       $search_by = 'atid';
@@ -68,7 +68,7 @@ function browse_teams()
         if ( $core == 1 )
         {
           // arenateams.data format: [week games] [week wins] [season games] [season wins]
-          $query = $sql['char']->query("SELECT arenateams.id AS atid, arenateams.name AS atname,
+          $query = $sql["char"]->query("SELECT arenateams.id AS atid, arenateams.name AS atname,
             arenateams.leader AS lguid, arenateams.type AS attype,
             (SELECT name FROM `characters` WHERE guid = lguid) AS lname,
             rating AS atrating, SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', -2), ' ', 1) AS atgames, 
@@ -87,13 +87,13 @@ function browse_teams()
             WHERE arenateams.name LIKE '%".$search_value."%'
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
-          $query_1 = $sql['char']->query("SELECT COUNT(*)
+          $query_1 = $sql["char"]->query("SELECT COUNT(*)
             FROM arenateams
             WHERE arenateams.name LIKE '%".$search_value."%'");
         }
         else
         {
-          $query = $sql['char']->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname,
+          $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname,
             arena_team.captainguid AS lguid, arena_team.type AS attype, 
             (SELECT name FROM `characters` WHERE guid=lguid) AS lname, 
             (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
@@ -102,7 +102,7 @@ function browse_teams()
             WHERE arena_team.arenateamid=arena_team_stats.arenateamid AND arena_team.name LIKE '%".$search_value."%' 
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
-          $query_1 = $sql['char']->query("SELECT COUNT(*)
+          $query_1 = $sql["char"]->query("SELECT COUNT(*)
             FROM arena_team 
             WHERE arena_team.name LIKE '%".$search_value."%'");
         }
@@ -112,7 +112,7 @@ function browse_teams()
       {
         if ( $core == 1 )
         {
-          $query = $sql['char']->query("SELECT arenateams.id AS atid, arenateams.name AS atname, arenateams.leader AS lguid,
+          $query = $sql["char"]->query("SELECT arenateams.id AS atid, arenateams.name AS atname, arenateams.leader AS lguid,
             arenateams.type AS attype,
             (SELECT name FROM `characters` WHERE guid=lguid) AS lname,
             rating AS atrating, SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', -2), ' ', 1) AS atgames, 
@@ -131,13 +131,13 @@ function browse_teams()
             WHERE arenateams.leader IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%')
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
-          $query_1 = $sql['char']->query("SELECT COUNT(*)
+          $query_1 = $sql["char"]->query("SELECT COUNT(*)
             FROM arenateams
             WHERE arenateams.leader IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%')");
         }
         else
         {
-          $query = $sql['char']->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
+          $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
             arena_team.captainguid AS lguid, arena_team.type AS attype, 
             (SELECT name FROM `characters` WHERE guid=lguid) AS lname,
             (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
@@ -146,7 +146,7 @@ function browse_teams()
             WHERE arena_team.arenateamid=arena_team_stats.arenateamid AND arena_team.captainguid IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%') 
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
-          $query_1 = $sql['char']->query("SELECT COUNT(*)
+          $query_1 = $sql["char"]->query("SELECT COUNT(*)
             FROM arena_team 
             WHERE arena_team.captainguid IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%')");
         }
@@ -156,7 +156,7 @@ function browse_teams()
       {
         if ( $core == 1 )
         {
-          $query = $sql['char']->query("SELECT arenateams.id AS atid, arenateams.name AS atname, arenateams.leader AS lguid,
+          $query = $sql["char"]->query("SELECT arenateams.id AS atid, arenateams.name AS atname, arenateams.leader AS lguid,
             arenateams.type AS attype,
             (SELECT name FROM `characters` WHERE guid=lguid) AS lname,
             rating AS atrating, SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', -2), ' ', 1) AS atgames, 
@@ -175,13 +175,13 @@ function browse_teams()
             WHERE arenateams.id='".$search_value."'
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
-          $query_1 = $sql['char']->query("SELECT COUNT(*)
+          $query_1 = $sql["char"]->query("SELECT COUNT(*)
             FROM arenateams
             WHERE arenateams.id='".$search_value."'");
         }
         else
         {
-          $query = $sql['char']->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
+          $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
             arena_team.captainguid AS lguid, arena_team.type AS attype, 
             (SELECT name FROM `characters` WHERE guid=lguid) AS lname,
             (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
@@ -190,7 +190,7 @@ function browse_teams()
             WHERE arena_team.arenateamid=arena_team_stats.arenateamid AND arena_team.arenateamid='".$search_value."' 
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
-          $query_1 = $sql['char']->query("SELECT COUNT(*)
+          $query_1 = $sql["char"]->query("SELECT COUNT(*)
             FROM arena_team 
             WHERE arena_team.arenateamid='".$search_value."'");
         }
@@ -202,7 +202,7 @@ function browse_teams()
   {
     if ( $core == 1)
     {
-      $query = $sql['char']->query("SELECT arenateams.id AS atid, arenateams.name AS atname, arenateams.leader AS lguid,
+      $query = $sql["char"]->query("SELECT arenateams.id AS atid, arenateams.name AS atname, arenateams.leader AS lguid,
         arenateams.type AS attype,
         (SELECT name FROM `characters` WHERE guid=lguid) AS lname,
         rating AS atrating, SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', -2), ' ', 1) AS atgames, 
@@ -220,12 +220,12 @@ function browse_teams()
         FROM arenateams
         ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
-      $query_1 = $sql['char']->query("SELECT COUNT(*)
+      $query_1 = $sql["char"]->query("SELECT COUNT(*)
         FROM arenateams");
     }
     else
     {
-      $query = $sql['char']->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
+      $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
         arena_team.captainguid AS lguid, arena_team.type AS attype, 
         (SELECT name FROM `characters` WHERE guid=lguid) AS lname, 
         (SELECT COUNT(*) FROM arena_team_member WHERE arenateamid=atid) AS tot_chars, 
@@ -235,13 +235,13 @@ function browse_teams()
         WHERE arena_team.arenateamid=arena_team_stats.arenateamid 
         ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
-      $query_1 = $sql['char']->query("SELECT COUNT(*)
+      $query_1 = $sql["char"]->query("SELECT COUNT(*)
         FROM arena_team");
     }
   }
-  $all_record = $sql['char']->result($query_1,0);
+  $all_record = $sql["char"]->result($query_1,0);
   unset($query_1);
-  $this_page = $sql['char']->num_rows($query);
+  $this_page = $sql["char"]->num_rows($query);
 
   $member_count = 0;
   $members_online = 0;
@@ -252,8 +252,8 @@ function browse_teams()
           <table class="top_hidden">
             <tr>
               <td>';
-                makebutton(lang('global', 'back'), "javascript:window.history.back()", 130);
-  ( ( $search_by &&  $search_value ) ? makebutton(lang('arenateam', 'arenateams'), "arenateam.php", 130) : $output .= "" );
+                makebutton(lang("global", "back"), "javascript:window.history.back()", 130);
+  ( ( $search_by &&  $search_value ) ? makebutton(lang("arenateam", "arenateams"), "arenateam.php", 130) : $output .= "" );
   $output .= '
               </td>
             </tr>
@@ -266,14 +266,14 @@ function browse_teams()
                         <input type="hidden" name="error" value="4" />
                         <input type="text" size="24" name="search_value" value="'.$search_value.'" />
                         <select name="search_by">
-                          <option value="atname"'.( ( $search_by == 'atname' ) ? ' selected="selected"' : '' ).'>'.lang('arenateam', 'by_name').'</option>
-                          <option value="leadername"'.( ( $search_by == 'leadername' ) ? ' selected="selected"' : '' ).'>'.lang('arenateam', 'by_team_leader').'</option>
-                          <option value="atid"'.( ( $search_by == 'atid' ) ? ' selected="selected"' : '' ).">".lang('arenateam', 'by_id').'</option>
+                          <option value="atname"'.( ( $search_by == 'atname' ) ? ' selected="selected"' : '' ).'>'.lang("arenateam", "by_name").'</option>
+                          <option value="leadername"'.( ( $search_by == 'leadername' ) ? ' selected="selected"' : '' ).'>'.lang("arenateam", "by_team_leader").'</option>
+                          <option value="atid"'.( ( $search_by == 'atid' ) ? ' selected="selected"' : '' ).">".lang("arenateam", "by_id").'</option>
                         </select>
                       </form>
                     </td>
                     <td>';
-                      makebutton(lang('global', 'search'), "javascript:do_submit()",80);
+                      makebutton(lang("global", "search"), "javascript:do_submit()",80);
   $output .= '
                     </td>
                   </tr>
@@ -290,54 +290,54 @@ function browse_teams()
   $output .= '
           <table class="lined">
             <tr>
-              <th width="1%"><a href="arenateam.php?order_by=atid&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'atid' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" /> ' : '' ).lang('arenateam', 'id').'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=atname&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'atname' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" /> ' : '' ).lang('arenateam', 'arenateam_name').'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=lname&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'lname' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" /> ' : '' ).lang('arenateam', 'captain').'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=attype&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'attype' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" /> ' : '' ).lang('arenateam', 'type').'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=tot_chars&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'tot_chars' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" /> ' : '' ).lang('arenateam', 'members').'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=arenateam_online&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'arenateam_online' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" /> ' : '' ).lang('arenateam', 'arenateam_online').'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=rating&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'rating' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" /> ' : '' ).lang('arenateam', 'rating').'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=games&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'games' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" /> ' : '' ).lang('arenateam', 'games').'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=wins&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'wins' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" /> ' : '' ).lang('arenateam', 'wins').'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=atid&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'atid' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" /> ' : '' ).lang("arenateam", "id").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=atname&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'atname' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" /> ' : '' ).lang("arenateam", "arenateam_name").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=lname&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'lname' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" /> ' : '' ).lang("arenateam", "captain").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=attype&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'attype' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" /> ' : '' ).lang("arenateam", "type").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=tot_chars&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'tot_chars' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" /> ' : '' ).lang("arenateam", "members").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=arenateam_online&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'arenateam_online' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" /> ' : '' ).lang("arenateam", "arenateam_online").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=rating&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'rating' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" /> ' : '' ).lang("arenateam", "rating").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=games&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'games' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" /> ' : '' ).lang("arenateam", "games").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=wins&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'wins' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" /> ' : '' ).lang("arenateam", "wins").'</a></th>
             </tr>';
-  while ( $data = $sql['char']->fetch_assoc($query) )
+  while ( $data = $sql["char"]->fetch_assoc($query) )
   {
     if ( $core == 1 )
     {
       for ( $i = 1; $i < 11; $i++ )
       {
-        if ( $data['p'.$i] )
+        if ( $data["p".$i] )
         {
           $member_count += 1;
 
-          $online = $sql['char']->query("SELECT * FROM characters WHERE online=1 AND guid='".$data['p'.$i]."'");
-          if ( $sql['char']->num_rows($online) )
+          $online = $sql["char"]->query("SELECT * FROM characters WHERE online=1 AND guid='".$data["p".$i]."'");
+          if ( $sql["char"]->num_rows($online) )
             $members_online += 1;
         }
       }
     }
     else
     {
-      $member_count = $data['tot_chars'];
-      $members_online = $data['arenateam_online'];
+      $member_count = $data["tot_chars"];
+      $members_online = $data["arenateam_online"];
     }
 
     $output .= '
             <tr>
-              <td>'.$data['atid'].'</td>
-              <td><a href="arenateam.php?action=view_team&amp;error=3&amp;id='.$data['atid'].'">'.htmlentities($data['atname']).'</a></td>
-              <td><a href="char.php?id='.$data['lguid'].'">'.htmlentities($data['lname']).'</a></td>
-              <td>'.lang('arenateam',$data['attype'].( ( $core == 3 ) ? "T" : "AM" )).'</td>
+              <td>'.$data["atid"].'</td>
+              <td><a href="arenateam.php?action=view_team&amp;error=3&amp;id='.$data["atid"].'">'.htmlentities($data["atname"]).'</a></td>
+              <td><a href="char.php?id='.$data["lguid"].'">'.htmlentities($data["lname"]).'</a></td>
+              <td>'.lang("arenateam", $data["attype"].( ( $core == 3 ) ? "T" : "AM" )).'</td>
               <td>'.$member_count.'</td>
               <td>'.$members_online.'</td>
-              <td>'.$data['atrating'].'</td>
-              <td>'.$data['atgames'].'</td>
-              <td>'.$data['atwins'].'</td>
+              <td>'.$data["atrating"].'</td>
+              <td>'.$data["atgames"].'</td>
+              <td>'.$data["atwins"].'</td>
             </tr>';
   }
   $output .= '
             <tr>
-              <td colspan="9" class="hidden" align="right">'.lang('arenateam', 'tot_teams').' : '.$all_record.'</td>
+              <td colspan="9" class="hidden" align="right">'.lang("arenateam", "tot_teams").' : '.$all_record.'</td>
             </tr>
           </table>
         </center>';
@@ -349,8 +349,8 @@ function count_days( $a, $b )
 {
   $gd_a = getdate( $a );
   $gd_b = getdate( $b );
-  $a_new = mktime( 12, 0, 0, $gd_a['mon'], $gd_a['mday'], $gd_a['year'] );
-  $b_new = mktime( 12, 0, 0, $gd_b['mon'], $gd_b['mday'], $gd_b['year'] );
+  $a_new = mktime( 12, 0, 0, $gd_a["mon"], $gd_a["mday"], $gd_a["year"] );
+  $b_new = mktime( 12, 0, 0, $gd_b["mon"], $gd_b["mday"], $gd_b["year"] );
   return round( abs( $a_new - $b_new ) / 86400 );
 }
 
@@ -362,13 +362,13 @@ function view_team()
   global $output, $characters_db, $realm_id, $corem_db, $logon_db,
     $action_permission, $user_lvl, $user_id, $showcountryflag, $sql, $core;
 
-  if ( !isset($_GET['id']) )
+  if ( !isset($_GET["id"]) )
     redirect("arenateam.php?error=1");
 
-  $arenateam_id = $sql['char']->quote_smart($_GET['id']);
+  $arenateam_id = $sql["char"]->quote_smart($_GET["id"]);
 
   if ( $core == 1 )
-    $query = $sql['char']->query("SELECT id, name, type,
+    $query = $sql["char"]->query("SELECT id, name, type,
     INET_NTOA(backgroundcolour) AS BackgroundColor,
     INET_NTOA(bordercolour) AS BorderColor,
     INET_NTOA(emblemcolour) AS EmblemColor,
@@ -376,14 +376,14 @@ function view_team()
     FROM arenateams
     WHERE id='".$arenateam_id."'");
   else
-    $query = $sql['char']->query("SELECT arenateamid AS id, name, type,
+    $query = $sql["char"]->query("SELECT arenateamid AS id, name, type,
     INET_NTOA(BackgroundColor) AS BackgroundColor,
     INET_NTOA(BorderColor) AS BorderColor,
     INET_NTOA(EmblemColor) AS EmblemColor,
     EmblemStyle, BorderStyle
     FROM arena_team
     WHERE arenateamid='".$arenateam_id."'");
-  $arenateam_data = $sql['char']->fetch_assoc($query);
+  $arenateam_data = $sql["char"]->fetch_assoc($query);
 
   if ( $core == 1 )
   {
@@ -397,7 +397,7 @@ function view_team()
       player_data6, player_data7, player_data8, player_data9, player_data10
       FROM arenateams WHERE id='".$arenateam_id."'";
 
-    $query = $sql['char']->query($query);
+    $query = $sql["char"]->query($query);
   }
   else
   {
@@ -409,27 +409,27 @@ function view_team()
         LEFT JOIN arena_team_member ON arena_team_member.arenateamid=arena_team.arenateamid
       WHERE arena_team.arenateamid='".$arenateam_id."'";
 
-    $query = $sql['char']->query($query);
+    $query = $sql["char"]->query($query);
 
     $m_query = "SELECT * FROM arena_team_member WHERE arenateamid='".$arenateam_id."'";
-    $m_query = $sql['char']->query($m_query);
+    $m_query = $sql["char"]->query($m_query);
   }
-  $arenateamstats_data = $sql['char']->fetch_row($query);
+  $arenateamstats_data = $sql["char"]->fetch_row($query);
 
   $rating_offset = 1550;
 
   if ( $core == 1 )
   {
-    if ( $arenateam_data['type'] == 1 )
+    if ( $arenateam_data["type"] == 1 )
       $rating_offset += 6;
-    elseif ( $arenateam_data['type'] == 2 )
+    elseif ( $arenateam_data["type"] == 2 )
       $rating_offset += 12;
   }
   else
   {
-    if ( $arenateam_data['type'] == 3 )
+    if ( $arenateam_data["type"] == 3 )
       $rating_offset += 6;
-    elseif ( $arenateam_data['type'] == 5 )
+    elseif ( $arenateam_data["type"] == 5 )
       $rating_offset += 12;
   }
 
@@ -466,24 +466,24 @@ function view_team()
     $winperc_season = $arenateamstats_data[4];
 
   // extract banner colors
-  $background_color = explode(".", $arenateam_data['BackgroundColor']);
-  $border_color = explode(".", $arenateam_data['BorderColor']);
-  $emblem_color = explode(".", $arenateam_data['EmblemColor']);
+  $background_color = explode(".", $arenateam_data["BackgroundColor"]);
+  $border_color = explode(".", $arenateam_data["BorderColor"]);
+  $emblem_color = explode(".", $arenateam_data["EmblemColor"]);
 
   // Trinity stores Team type as 2, 3, 5; ArcEmu & MaNGOS use 0, 1, 2
   if ( $core != 3 )
   {
-    if ( $arenateam_data['type'] == 0 )
+    if ( $arenateam_data["type"] == 0 )
     {
       $banner_style = 2;
       $banner_span = 8;
     }
-    elseif ( $arenateam_data['type'] == 1 )
+    elseif ( $arenateam_data["type"] == 1 )
     {
       $banner_style = 3;
       $banner_span = 9;
     }
-    elseif ( $arenateam_data['type'] == 2 )
+    elseif ( $arenateam_data["type"] == 2 )
     {
       $banner_style = 5;
       $banner_span = 11;
@@ -491,17 +491,17 @@ function view_team()
   }
   else
   {
-    if ( $arenateam_data['type'] == 2 )
+    if ( $arenateam_data["type"] == 2 )
     {
       $banner_style = 2;
       $banner_span = 8;
     }
-    elseif ( $arenateam_data['type'] == 3 )
+    elseif ( $arenateam_data["type"] == 3 )
     {
       $banner_style = 3;
       $banner_span = 9;
     }
-    elseif ( $arenateam_data['type'] == 5 )
+    elseif ( $arenateam_data["type"] == 5 )
     {
       $banner_style = 5;
       $banner_span = 11;
@@ -510,62 +510,62 @@ function view_team()
 
   $output .= '
         <script type="text/javascript">
-          answerbox.btn_ok="'.lang('global', 'yes_low').'";
-          answerbox.btn_cancel="'.lang('global', 'no').'";
+          answerbox.btn_ok="'.lang("global", "yes_low").'";
+          answerbox.btn_cancel="'.lang("global", "no").'";
         </script>
         <center>
           <div class="fieldset_border arena_fieldset">
-            <span class="legend">'.lang('arenateam', 'arenateam').' ('.lang('arenateam', $arenateam_data['type'].( ( $core == 3 ) ? "T" : "AM" )).')</span>
+            <span class="legend">'.lang("arenateam", "arenateam").' ('.lang("arenateam", $arenateam_data["type"].( ( $core == 3 ) ? "T" : "AM" )).')</span>
             <table class="lined" id="arena_table_with_banner">
               <tr class="bold">
                 <td rowspan="'.$banner_span.'">
                   <div class="arena_banner">
                     <img src="libs/banner_lib.php?action=banner&f='.$banner_style.'&r='.$background_color[1].'&g='.$background_color[2].'&b='.$background_color[3].'" class="banner_img" />
-                    <img src="libs/banner_lib.php?action=border&f='.$arenateam_data['BorderStyle'].'&f2='.$banner_style.'&r='.$border_color[1].'&g='.$border_color[2].'&b='.$border_color[3].'" class="border_img" />
-                    <img src="libs/banner_lib.php?action=emblem&f='.$arenateam_data['EmblemStyle'].'&r='.$emblem_color[1].'&g='.$emblem_color[2].'&b='.$emblem_color[3].'&s=0.55" class="emblem_img" />
+                    <img src="libs/banner_lib.php?action=border&f='.$arenateam_data["BorderStyle"].'&f2='.$banner_style.'&r='.$border_color[1].'&g='.$border_color[2].'&b='.$border_color[3].'" class="border_img" />
+                    <img src="libs/banner_lib.php?action=emblem&f='.$arenateam_data["EmblemStyle"].'&r='.$emblem_color[1].'&g='.$emblem_color[2].'&b='.$emblem_color[3].'&s=0.55" class="emblem_img" />
                   </div>
                 </td>
-                <td colspan="'.( ( $showcountryflag ) ? 14 : 13 ).'">'.htmlentities($arenateam_data['name']).'</td>
+                <td colspan="'.( ( $showcountryflag ) ? 14 : 13 ).'">'.htmlentities($arenateam_data["name"]).'</td>
               </tr>
               <tr>
-                <td colspan="'.( ( $showcountryflag ) ? 14 : 13 ).'">'.lang('arenateam', 'tot_members').': '.$total_members.'</td>
+                <td colspan="'.( ( $showcountryflag ) ? 14 : 13 ).'">'.lang("arenateam", "tot_members").': '.$total_members.'</td>
               </tr>
               <tr>
-                <td colspan="4">'.lang('arenateam', 'this_week').':</td>
-                <td colspan="2">'.lang('arenateam', 'games_played').': '.$arenateamstats_data[2].'</td>
-                <td colspan="2">'.lang('arenateam', 'games_won').': '.$arenateamstats_data[3].'</td>
-                <td colspan="2">'.lang('arenateam', 'games_lost').': '.$losses_week.'</td>
-                <td colspan="'.( ( $showcountryflag ) ? 4 : 3 ).'">'.lang('arenateam', 'ratio').': '.$winperc_week.' %</td>
+                <td colspan="4">'.lang("arenateam", "this_week").':</td>
+                <td colspan="2">'.lang("arenateam", "games_played").': '.$arenateamstats_data[2].'</td>
+                <td colspan="2">'.lang("arenateam", "games_won").': '.$arenateamstats_data[3].'</td>
+                <td colspan="2">'.lang("arenateam", "games_lost").': '.$losses_week.'</td>
+                <td colspan="'.( ( $showcountryflag ) ? 4 : 3 ).'">'.lang("arenateam", "ratio").': '.$winperc_week.' %</td>
               </tr>
               <tr>
-                <td colspan="4">'.lang('arenateam', 'this_season').':</td>
-                <td colspan="2">'.lang('arenateam', 'games_played').': '.$arenateamstats_data[4].'</td>
-                <td colspan="2">'.lang('arenateam', 'games_won').': '.$arenateamstats_data[5].'</td>
-                <td colspan="2">'.lang('arenateam', 'games_lost').': '.$losses_season.'</td>
-                <td colspan="'.( ( $showcountryflag ) ? 4 : 3 ).'">'.lang('arenateam', 'ratio').': '.$winperc_season.' %</td>
+                <td colspan="4">'.lang("arenateam", "this_season").':</td>
+                <td colspan="2">'.lang("arenateam", "games_played").': '.$arenateamstats_data[4].'</td>
+                <td colspan="2">'.lang("arenateam", "games_won").': '.$arenateamstats_data[5].'</td>
+                <td colspan="2">'.lang("arenateam", "games_lost").': '.$losses_season.'</td>
+                <td colspan="'.( ( $showcountryflag ) ? 4 : 3 ).'">'.lang("arenateam", "ratio").': '.$winperc_season.' %</td>
               </tr>
               <tr>
-                <td colspan="'.( ( $showcountryflag ) ? 14 : 13 ).'">'.lang('arenateam', 'standings').': '.$arenateamstats_data[6].' ('.$arenateamstats_data[1].')</td>
+                <td colspan="'.( ( $showcountryflag ) ? 14 : 13 ).'">'.lang("arenateam", "standings").': '.$arenateamstats_data[6].' ('.$arenateamstats_data[1].')</td>
               </tr>
               <tr>
-                <th width="1%">'.lang('arenateam', 'remove').'</th>
-                <th width="1%">'.lang('arenateam', 'name').'</th>
-                <th width="1%">'.lang('char', 'race').'</th>
-                <th width="1%">'.lang('char', 'class').'</th>
-                <th width="1%">'.lang('arenateam', 'personalrating').'</th>
-                <th width="1%">'.lang('arenateam', 'lastlogin').'</th>
-                <th width="1%">'.lang('char', 'online').'</th>
-                <th width="1%">'.lang('arenateam', 'played_week').'</th>
-                <th width="1%">'.lang('arenateam', 'wons_week').'</th>
-                <th width="5%">'.lang('arenateam', 'win').' %</th>
-                <th width="1%">'.lang('arenateam', 'played_season').'</th>
-                <th width="1%">'.lang('arenateam', 'wons_season').'</th>
-                <th width="5%">'.lang('arenateam', 'win').' %</th>';
+                <th width="1%">'.lang("arenateam", "remove").'</th>
+                <th width="1%">'.lang("arenateam", "name").'</th>
+                <th width="1%">'.lang("char", "race").'</th>
+                <th width="1%">'.lang("char", "class").'</th>
+                <th width="1%">'.lang("arenateam", "personalrating").'</th>
+                <th width="1%">'.lang("arenateam", "lastlogin").'</th>
+                <th width="1%">'.lang("char", "online").'</th>
+                <th width="1%">'.lang("arenateam", "played_week").'</th>
+                <th width="1%">'.lang("arenateam", "wons_week").'</th>
+                <th width="5%">'.lang("arenateam", "win").' %</th>
+                <th width="1%">'.lang("arenateam", "played_season").'</th>
+                <th width="1%">'.lang("arenateam", "wons_season").'</th>
+                <th width="5%">'.lang("arenateam", "win").' %</th>';
 
     if ( $showcountryflag )
     {
       $output .= '
-                <th width="1%">'.lang('global', 'country').'</th>';
+                <th width="1%">'.lang("global", "country").'</th>';
     }
 
     $output .= '
@@ -578,15 +578,15 @@ function view_team()
       {
         $query = "SELECT acct, name, level, race, class, online, timestamp, gender
                   FROM characters WHERE guid='".$member[0]."'";
-        $result = $sql['char']->query($query);
-        $member_char = $sql['char']->fetch_row($result);
+        $result = $sql["char"]->query($query);
+        $member_char = $sql["char"]->fetch_row($result);
 
         $accid = $member_char[0];
         $output .= '
                 <tr>';
-        if ( $user_lvl >= $action_permission['delete'] || $accid == $user_id )
+        if ( $user_lvl >= $action_permission["delete"] || $accid == $user_id )
           $output .= '
-                  <td><img src="img/aff_cross.png" alt="" onclick="answerBox(\''.lang('global', 'delete').'\': <font color=white>'.$member[1].'</font><br />'.lang('global', 'are_you_sure').'\', \'arenateam.php?action=rem_char_from_team&amp;id='.$member[0].'&amp;arenateam_id='.$arenateam_id.'\');" id="arenateam_delete_cursor" /></td>';
+                  <td><img src="img/aff_cross.png" alt="" onclick="answerBox(\''.lang("global", "delete").'\': <font color=white>'.$member[1].'</font><br />'.lang("global", "are_you_sure").'\', \'arenateam.php?action=rem_char_from_team&amp;id='.$member[0].'&amp;arenateam_id='.$arenateam_id.'\');" id="arenateam_delete_cursor" /></td>';
         else
           $output .= '
                   <td>&nbsp;
@@ -622,7 +622,7 @@ function view_team()
 
           $country = misc_get_country_by_account($member_char[0]);
           $output .= '
-                  <td>'.( (  $country['code']) ? '<img src="img/flags/'.$country['code'].'.png" onmousemove="oldtoolTip(\''.($country['country']).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
+                  <td>'.( (  $country["code"]) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
         }
 
         $output .= '
@@ -631,55 +631,55 @@ function view_team()
     }
     else
     {
-      while ( $member = $sql['char']->fetch_assoc($m_query) )
+      while ( $member = $sql["char"]->fetch_assoc($m_query) )
       {
         $query = "SELECT account AS acct, name, level, race, class, online, logout_time AS timestamp, gender
-                  FROM characters WHERE guid='".$member['guid']."'";
-        $result = $sql['char']->query($query);
-        $member_char = $sql['char']->fetch_assoc($result);
+                  FROM characters WHERE guid='".$member["guid"]."'";
+        $result = $sql["char"]->query($query);
+        $member_char = $sql["char"]->fetch_assoc($result);
 
-        $accid = $member_char['acct'];
+        $accid = $member_char["acct"];
         $output .= '
                 <tr>';
-        if ( $user_lvl >= $action_permission['delete'] || $accid == $user_id )
+        if ( $user_lvl >= $action_permission["delete"] || $accid == $user_id )
           $output .= '
-                  <td><img src="img/aff_cross.png" alt="" onclick="answerBox(\''.lang('global', 'delete').'\': <font color=white>'.$member['name'].'</font><br />'.lang('global', 'are_you_sure').'\', \'arenateam.php?action=rem_char_from_team&amp;id='.$member['guid'].'&amp;arenateam_id='.$arenateam_id.'\');" id="arenateam_delete_cursor" /></td>';
+                  <td><img src="img/aff_cross.png" alt="" onclick="answerBox(\''.lang("global", "delete").'\': <font color=white>'.$member["name"].'</font><br />'.lang("global", "are_you_sure").'\', \'arenateam.php?action=rem_char_from_team&amp;id='.$member["guid"].'&amp;arenateam_id='.$arenateam_id.'\');" id="arenateam_delete_cursor" /></td>';
         else
           $output .= '
                   <td>&nbsp;
                   </td>';
 
-        if ( $member['played_week'] )
-          $ww_pct = round((10000 * $member['wons_week']) / $member['played_week']) / 100;
+        if ( $member["played_week"] )
+          $ww_pct = round((10000 * $member["wons_week"]) / $member["played_week"]) / 100;
         else
-          $ww_pct = $member['played_week'];
+          $ww_pct = $member["played_week"];
 
-        if ( $member['played_season'] )
-          $ws_pct = round((10000 * $member['wons_season']) / $member['played_season']) / 100;
+        if ( $member["played_season"] )
+          $ws_pct = round((10000 * $member["wons_season"]) / $member["played_season"]) / 100;
         else
-          $ws_pct = $member['played_season'];
+          $ws_pct = $member["played_season"];
 // arena team player structure [player_id] [week_played] [week_win] [season_played] [season_win] [rating]
         $output .= '
-                  <td><a href="char.php?id='.$member['guid'].'">'.htmlentities($member_char['name']).'</a></td>
-                  <td><img src="img/c_icons/'.$member_char['race'].'-'.$member_char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member_char['race']).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>
-                  <td><img src="img/c_icons/'.$member_char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member_char['class']).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>
-                  <td>'.$member['personal_rating'].'</td>
-                  <td>'.get_days_with_color($member_char['timestamp']).'</td>
-                  <td>'.( ( $member_char['online'] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>
-                  <td>'.$member['played_week'].'</td>
-                  <td>'.$member['wons_week'].'</td>
+                  <td><a href="char.php?id='.$member["guid"].'">'.htmlentities($member_char["name"]).'</a></td>
+                  <td><img src="img/c_icons/'.$member_char["race"].'-'.$member_char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member_char["race"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>
+                  <td><img src="img/c_icons/'.$member_char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member_char["class"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>
+                  <td>'.$member["personal_rating"].'</td>
+                  <td>'.get_days_with_color($member_char["timestamp"]).'</td>
+                  <td>'.( ( $member_char["online"] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>
+                  <td>'.$member["played_week"].'</td>
+                  <td>'.$member["wons_week"].'</td>
                   <td>'.$ww_pct.' %</td>
-                  <td>'.$member['played_season'].'</td>
-                  <td>'.$member['wons_season'].'</td>
+                  <td>'.$member["played_season"].'</td>
+                  <td>'.$member["wons_season"].'</td>
                   <td>'.$ws_pct.' %</td>';
 
         if ( $showcountryflag )
         {
           require_once './libs/misc_lib.php';
 
-          $country = misc_get_country_by_account($member_char['acct']);
+          $country = misc_get_country_by_account($member_char["acct"]);
           $output .= '
-                  <td>'.( (  $country['code']) ? '<img src="img/flags/'.$country['code'].'.png" onmousemove="oldtoolTip(\''.($country['country']).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
+                  <td>'.( (  $country["code"]) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
         }
 
         $output .= '
@@ -693,20 +693,20 @@ function view_team()
             <table class="hidden">
               <tr>
                 <td>';
-    if ( $user_lvl >= $action_permission['delete'] )
+    if ( $user_lvl >= $action_permission["delete"] )
     {
-      makebutton(lang('arenateam', 'del_team'), "arenateam.php?action=del_team&amp;id=".$arenateam_id."\" type=\"wrn", 180);
+      makebutton(lang("arenateam", "del_team"), "arenateam.php?action=del_team&amp;id=".$arenateam_id."\" type=\"wrn", 180);
       $output .= '
                 </td>
                 <td>';
-      makebutton(lang('arenateam', 'arenateams'), "arenateam.php\" type=\"def", 130);
+      makebutton(lang("arenateam", "arenateams"), "arenateam.php\" type=\"def", 130);
       $output .= '
                 </td>
               </tr>';
     }
     else
     {
-      makebutton(lang('arenateam', 'arenateams'), "arenateam.php", 130);
+      makebutton(lang("arenateam", "arenateams"), "arenateam.php", 130);
       $output .= '
                 </td>
               </tr>';
@@ -726,24 +726,24 @@ function del_team()
 {
   global $output;
 
-  if ( isset($_GET['id']) )
-    $id = $_GET['id'];
+  if ( isset($_GET["id"]) )
+    $id = $_GET["id"];
   else
     redirect("arenateam.php?error=1");
 
   $output .= "
         <center>
-          <h1><font class=\"error\">".lang('global', 'are_you_sure')."</font></h1>
+          <h1><font class=\"error\">".lang("global", "are_you_sure")."</font></h1>
           <br />
-          <font class=\"bold\">".lang('arenateam', 'arenateam_id').": $id ".lang('global', 'will_be_erased')."</font><br /><br />
+          <font class=\"bold\">".lang("arenateam", "arenateam_id").": $id ".lang("global", "will_be_erased")."</font><br /><br />
           <form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
             <input type=\"hidden\" name=\"type\" value=\"arenateam\" />
             <input type=\"hidden\" name=\"check\" value=\"-$id\" />
             <table class=\"hidden\">
               <tr>
                 <td>";
-                  makebutton(lang('global', 'yes'), "javascript:do_submit()",130);
-                  makebutton(lang('global', 'no'), "arenateam.php?action=view_team&amp;id=$id",130);
+                  makebutton(lang("global", "yes"), "javascript:do_submit()",130);
+                  makebutton(lang("global", "no"), "arenateam.php?action=view_team&amp;id=$id",130);
   $output .= "
                 </td>
               </tr>
@@ -763,9 +763,9 @@ function rem_char_from_team()
 {
   global $characters_db, $realm_id, $user_lvl, $sql;
 
-  if(isset($_GET['id'])) $guid = $_GET['id'];
+  if(isset($_GET["id"])) $guid = $_GET["id"];
     else redirect("arenateam.php?error=1");
-  if(isset($_GET['arenateam_id'])) $arenateam_id = $_GET['arenateam_id'];
+  if(isset($_GET["arenateam_id"])) $arenateam_id = $_GET["arenateam_id"];
     else redirect("arenateam.php?error=1");
 
     // must be checked that this user can delete it
@@ -777,9 +777,9 @@ function rem_char_from_team()
 //########################################################################################################################
 // MAIN
 //########################################################################################################################
-$err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
+$err = ( ( isset($_GET["error"]) ) ? $_GET["error"] : NULL );
 
-$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
+$action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
 $output .= '
       <div class="bubble" '.( ( $action == 'view_team' ) ? 'id="arenateam_bubble"' : '' ).'>
@@ -789,23 +789,23 @@ switch ( $err )
 {
   case 1:
     $output .= '
-          <h1><font class="error">'.lang('global', 'empty_fields').'</font></h1>';
+          <h1><font class="error">'.lang("global", "empty_fields").'</font></h1>';
     break;
   case 2:
     $output .= '
-          <h1><font class="error">'.lang('global', 'err_no_search_passed').'</font></h1>';
+          <h1><font class="error">'.lang("global", "err_no_search_passed").'</font></h1>';
      break;
  case 3:
     $output .= '
-          <h1><font class="error">'.lang('arenateam', 'arenateam').'</font></h1>';
+          <h1><font class="error">'.lang("arenateam", "arenateam").'</font></h1>';
     break;
   case 4:
     $output .= '
-          <h1>'.lang('arenateam', 'team_search_result').':</h1>';
+          <h1>'.lang("arenateam", "team_search_result").':</h1>';
     break;
   default: //no error
     $output .= '
-          <h1>'.lang('arenateam', 'browse_teams').'</h1>';
+          <h1>'.lang("arenateam", "browse_teams").'</h1>';
 }
 
 $output .= '

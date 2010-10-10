@@ -25,9 +25,9 @@ else session_start();
 require_once("configs/config.php");
 require_once("libs/config_lib.php");
 
-if (isset($_COOKIE['lang']))
+if (isset($_COOKIE["lang"]))
 {
-  $lang = $_COOKIE['lang'];
+  $lang = $_COOKIE["lang"];
   if (file_exists('../lang/'.$lang.'.php'));
   else
     $lang = $language;
@@ -44,7 +44,7 @@ $output = '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>'.lang('admin', 'title').'</title>
+    <title>'.lang("admin", "title").'</title>
     <meta http-equiv="Content-Type" content="text/html; charset='.$site_encoding.'" />
     <meta http-equiv="Content-Type" content="text/javascript; charset='.$site_encoding.'" />
     <link rel="stylesheet" type="text/css" href="admin/admin.css" />
@@ -62,17 +62,17 @@ function dologin()
 {
   global $corem_db, $logon_db, $core;
 
-  $sql['logon'] = new SQL;
-  $sql['logon']->connect($logon_db['addr'], $logon_db['user'], $logon_db['pass'], $logon_db['name']);
+  $sql["logon"] = new SQL;
+  $sql["logon"]->connect($logon_db["addr"], $logon_db["user"], $logon_db["pass"], $logon_db["name"]);
 
-  $sql['mgr'] = new SQL;
-  $sql['mgr']->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sql["mgr"] = new SQL;
+  $sql["mgr"]->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
-  if ( empty($_POST['login']) || empty($_POST['password']) )
+  if ( empty($_POST["login"]) || empty($_POST["password"]) )
     redirect('admin_login.php?error=2');
 
-  $user_name  = $sql['mgr']->quote_smart($_POST['login']);
-  $user_pass  = $sql['mgr']->quote_smart($_POST['password']);
+  $user_name  = $sql["mgr"]->quote_smart($_POST["login"]);
+  $user_pass  = $sql["mgr"]->quote_smart($_POST["password"]);
 
   if ( ( strlen($user_name) > 255 ) || ( strlen($user_pass) > 255 ) )
     redirect('admin_login.php?error=1');
@@ -87,24 +87,24 @@ function dologin()
     $query = "SELECT * FROM account WHERE username='".$user_name."' AND sha_pass_hash='".$pass_hash."'";
   }
 
-  $name_result = $sql['logon']->query($query);
-  if ( !$sql['logon']->num_rows($name_result) )
+  $name_result = $sql["logon"]->query($query);
+  if ( !$sql["logon"]->num_rows($name_result) )
   {
     // if we didn't find one, check for matching screen name
     $query = "SELECT * FROM config_accounts WHERE ScreenName='".$user_name."'";
-    $name_result = $sql['mgr']->query($query);
-    if ( $sql['mgr']->num_rows($name_result) )
+    $name_result = $sql["mgr"]->query($query);
+    if ( $sql["mgr"]->num_rows($name_result) )
     {
-      $name = $sql['mgr']->fetch_assoc($name_result);
-      $user_name = $name['Login'];
+      $name = $sql["mgr"]->fetch_assoc($name_result);
+      $user_name = $name["Login"];
     }
   }
   else
   {
     // we'll still need the screen name if we have one
     $query = "SELECT * FROM config_accounts WHERE Login = '".$user_name."'";
-    $name_result = $sql['mgr']->query($query);
-    $name = $sql['mgr']->fetch_assoc($name_result);
+    $name_result = $sql["mgr"]->query($query);
+    $name = $sql["mgr"]->fetch_assoc($name_result);
   }
   // if we didn't find the name given for either entries, then the name will come up bad below
 
@@ -116,41 +116,41 @@ function dologin()
     $query = "SELECT * FROM account WHERE username='".$user_name."' AND sha_pass_hash='".$pass_hash."'";
   }
 
-  $result = $sql['logon']->query($query);
-  $s_result = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$user_name."'");
-  $temp = $sql['mgr']->fetch_assoc($s_result);
-  $_SESSION['gm_lvl'] = $temp['gm'];
+  $result = $sql["logon"]->query($query);
+  $s_result = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$user_name."'");
+  $temp = $sql["mgr"]->fetch_assoc($s_result);
+  $_SESSION["gm_lvl"] = $temp["gm"];
 
-  if ( $sql['logon']->num_rows($result) == 1 )
+  if ( $sql["logon"]->num_rows($result) == 1 )
   {
     if ( $core == 1 )
-      $acct = $sql['logon']->result($result, 0, 'acct');
+      $acct = $sql["logon"]->result($result, 0, 'acct');
     else
-      $acct = $sql['logon']->result($result, 0, 'id');
+      $acct = $sql["logon"]->result($result, 0, 'id');
 
     if ( $core == 1 )
       $ban_query = "SELECT banned FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
     else
       $ban_query = "SELECT COUNT(*) FROM account_banned WHERE id='".$acct."' AND active=1";
 
-    if ($sql['logon']->result($sql['logon']->query($ban_query), 0))
+    if ($sql["logon"]->result($sql["logon"]->query($ban_query), 0))
     {
       redirect('admin_login.php?error=3');
     }
     else
     {
-      $_SESSION['user_id'] = $acct;
+      $_SESSION["user_id"] = $acct;
       if ( $core == 1 )
-        $_SESSION['login'] = $sql['logon']->result($result, 0, 'login');
+        $_SESSION["login"] = $sql["logon"]->result($result, 0, 'login');
       else
-        $_SESSION['login'] = $sql['logon']->result($result, 0, 'username');
+        $_SESSION["login"] = $sql["logon"]->result($result, 0, 'username');
       // if we got a screen name, we'll want it later.
-      $_SESSION['screenname'] = $name['ScreenName'];
+      $_SESSION["screenname"] = $name["ScreenName"];
       //gets our numerical level based on Security Level.
-      $_SESSION['user_lvl'] = gmlevel($temp['gm']);
-      $_SESSION['realm_id'] = $sql['logon']->quote_smart($_POST['realm']);
-      $_SESSION['client_ip'] = ( ( isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR') );
-      $_SESSION['logged_in'] = true;
+      $_SESSION["user_lvl"] = gmlevel($temp["gm"]);
+      $_SESSION["realm_id"] = $sql["logon"]->quote_smart($_POST["realm"]);
+      $_SESSION["client_ip"] = ( ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv('REMOTE_ADDR') );
+      $_SESSION["logged_in"] = true;
 
       redirect('admin.php');
     }
@@ -182,7 +182,7 @@ function login()
               // ]]>
             </script>
             <fieldset class="half_frame">
-              <legend>'.lang('login', 'login').'</legend>
+              <legend>'.lang("login", "login").'</legend>
               <form method="post" action="admin_login.php?action=dologin" name="form" onsubmit="return dologin()">
                 <input type="hidden" name="password" value="" maxlength="256" />
                 <table class="hidden" id="login_table">
@@ -192,14 +192,14 @@ function login()
                     </td>
                   </tr>
                   <tr>
-                    <td align="right">'.lang('login', 'username').' :</td>
+                    <td align="right">'.lang("login", "username").' :</td>
 										<td>&nbsp;</td>
                     <td align="left">
                       <input type="text" name="login" size="24" maxlength="16" />
                     </td>
                   </tr>
                   <tr>
-                    <td align="right">'.lang('login', 'password').' :</td>
+                    <td align="right">'.lang("login", "password").' :</td>
 										<td>&nbsp;</td>
                     <td align="left">
                       <input type="password" name="login_pass" size="24" maxlength="40" />
@@ -211,7 +211,7 @@ function login()
                       <input type="submit" value="" style="display:none" />';
   $output .= '
                       <div>
-                        <a class="button" style="width:130px;" href="javascript:dologin()" type="def">'.lang('login', 'login').'</a>
+                        <a class="button" style="width:130px;" href="javascript:dologin()" type="def">'.lang("login", "login").'</a>
                       </div>';
   $output .= '
                     </td>
@@ -236,36 +236,36 @@ function login()
 //#################################################################################################
 // MAIN
 //#################################################################################################
-$err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
-$info = ( ( isset($_GET['info']) ) ? $_GET['info'] : NULL );
+$err = ( ( isset($_GET["error"]) ) ? $_GET["error"] : NULL );
+$info = ( ( isset($_GET["info"]) ) ? $_GET["info"] : NULL );
 
 $output .= '
       <div class="bubble">
         <div class="top">';
 $output .= "
           <center>
-            <h1>".lang('admin', 'title')."</h1>
+            <h1>".lang("admin", "title")."</h1>
             <br />";
 
 if ( $err == 1 )
   $output .=  '
-            <h1><font class="error">'.lang('login', 'bad_pass_user').'</font></h1>';
+            <h1><font class="error">'.lang("login", "bad_pass_user").'</font></h1>';
 elseif ( $err == 2 )
   $output .=  '
-            <h1><font class="error">'.lang('login', 'missing_pass_user').'</font></h1>';
+            <h1><font class="error">'.lang("login", "missing_pass_user").'</font></h1>';
 elseif ( $err == 3 )
   $output .=  '
-            <h1><font class="error">'.lang('login', 'banned_acc').'</font></h1>';
+            <h1><font class="error">'.lang("login", "banned_acc").'</font></h1>';
 elseif ( $err == 5 )
 {
   $output .=  '
-            <h1><font class="error">'.lang('login', 'no_permision').'</font></h1>';
+            <h1><font class="error">'.lang("login", "no_permision").'</font></h1>';
   if ( isset($info) )
-    $output .= '<h1><font class="error">'.lang('login', 'req_permision').': '.$info.'</font></h1>';
+    $output .= '<h1><font class="error">'.lang("login", "req_permision").': '.$info.'</font></h1>';
 }
 else
   $output .=  '
-            <h1>'.lang('login', 'enter_valid_logon').'</h1>';
+            <h1>'.lang("login", "enter_valid_logon").'</h1>';
 
 unset($err);
 
@@ -273,7 +273,7 @@ $output .= '
           </center>
         </div>';
 
-$action = ( ( isset($_GET['action']) ) ? $_GET['action'] : NULL );
+$action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
 if ( $action == 'dologin' )
   dologin();

@@ -33,7 +33,7 @@ function generate_language_selectbox()
 
   $searchbox = "
     <select name=\"language\">
-      <option value=\"0\">".lang('global', 'language_0')."</option>";
+      <option value=\"0\">".lang("global", "language_0")."</option>";
   for ($i=1; $i<9;$i++)
   {
     if ( ($locales_search_option & pow(2,$i-1)) != 0 )
@@ -42,7 +42,7 @@ function generate_language_selectbox()
       <option value=\"{$i}\"";
       if ($select_option == $i)
         $searchbox .= "selected=\"selected\"";
-      $searchbox .= ">".lang('global', 'language_'.$i)."</option>";
+      $searchbox .= ">".lang("global", "language_".$i)."</option>";
     }
   }
   $searchbox .= "

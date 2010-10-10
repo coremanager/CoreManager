@@ -25,16 +25,16 @@ function char_char_get_race_names_n_sides_tab()
 {
   return array
     (
-       1 => array(lang('id_tab', 'human'),    0),
-       2 => array(lang('id_tab', 'orc'),      1),
-       3 => array(lang('id_tab', 'dwarf'),    0),
-       4 => array(lang('id_tab', 'nightelf'), 0),
-       5 => array(lang('id_tab', 'undead'),   1),
-       6 => array(lang('id_tab', 'tauren'),   1),
-       7 => array(lang('id_tab', 'gnome'),    0),
-       8 => array(lang('id_tab', 'troll'),    1),
-      10 => array(lang('id_tab', 'bloodelf'), 1),
-      11 => array(lang('id_tab', 'draenei'),  0),
+       1 => array(lang("id_tab", "human"),    0),
+       2 => array(lang("id_tab", "orc"),      1),
+       3 => array(lang("id_tab", "dwarf"),    0),
+       4 => array(lang("id_tab", "nightelf"), 0),
+       5 => array(lang("id_tab", "undead"),   1),
+       6 => array(lang("id_tab", "tauren"),   1),
+       7 => array(lang("id_tab", "gnome"),    0),
+       8 => array(lang("id_tab", "troll"),    1),
+      10 => array(lang("id_tab", "bloodelf"), 1),
+      11 => array(lang("id_tab", "draenei"),  0),
     );
 }
 
@@ -46,8 +46,8 @@ function char_get_side_name($side_id)
 {
   $side_names = array
     (
-      0 => lang('id_tab', 'Alliance'),
-      1 => lang('id_tab', 'Horde'),
+      0 => lang("id_tab", "Alliance"),
+      1 => lang("id_tab", "Horde"),
     );
 
   return $side_names[$side_id];
@@ -83,16 +83,16 @@ function char_get_class_name($class_id)
 {
   $class_names = array
     (
-       1  => lang('id_tab', 'warrior'),
-       2  => lang('id_tab', 'paladin'),
-       3  => lang('id_tab', 'hunter'),
-       4  => lang('id_tab', 'rogue'),
-       5  => lang('id_tab', 'priest'),
-       6  => lang('id_tab', 'death_knight'),
-       7  => lang('id_tab', 'shaman'),
-       8  => lang('id_tab', 'mage'),
-       9  => lang('id_tab', 'warlock'),
-       11 => lang('id_tab', 'druid'),
+       1  => lang("id_tab", "warrior"),
+       2  => lang("id_tab", "paladin"),
+       3  => lang("id_tab", "hunter"),
+       4  => lang("id_tab", "rogue"),
+       5  => lang("id_tab", "priest"),
+       6  => lang("id_tab", "death_knight"),
+       7  => lang("id_tab", "shaman"),
+       8  => lang("id_tab", "mage"),
+       9  => lang("id_tab", "warlock"),
+       11 => lang("id_tab", "druid"),
     );
 
   return $class_names[$class_id];
@@ -108,43 +108,43 @@ function char_get_pvp_rank_name($honor_points=0, $side_id=0)
     (
       0 => array
       (
-        '00' => lang('id_tab', 'None'),
-        '01' => lang('id_tab', 'None'),
-         0   => lang('id_tab', 'None'),
-         1   => lang('id_tab', 'Private'),
-         2   => lang('id_tab', 'Corporal'),
-         3   => lang('id_tab', 'Sergeant'),
-         4   => lang('id_tab', 'Master_Sergeant'),
-         5   => lang('id_tab', 'Sergeant_Major'),
-         6   => lang('id_tab', 'Knight'),
-         7   => lang('id_tab', 'Knight-Lieutenant'),
-         8   => lang('id_tab', 'Knight-Captain'),
-         9   => lang('id_tab', 'Knight-Champion'),
-        10   => lang('id_tab', 'Lieutenant_Commander'),
-        11   => lang('id_tab', 'Commander'),
-        12   => lang('id_tab', 'Marshal'),
-        13   => lang('id_tab', 'Field_Marshal'),
-        14   => lang('id_tab', 'Grand_Marshal'),
+        '00' => lang("id_tab", "None"),
+        '01' => lang("id_tab", "None"),
+         0   => lang("id_tab", "None"),
+         1   => lang("id_tab", "Private"),
+         2   => lang("id_tab", "Corporal"),
+         3   => lang("id_tab", "Sergeant"),
+         4   => lang("id_tab", "Master_Sergeant"),
+         5   => lang("id_tab", "Sergeant_Major"),
+         6   => lang("id_tab", "Knight"),
+         7   => lang("id_tab", "Knight-Lieutenant"),
+         8   => lang("id_tab", "Knight-Captain"),
+         9   => lang("id_tab", "Knight-Champion"),
+        10   => lang("id_tab", "Lieutenant_Commander"),
+        11   => lang("id_tab", "Commander"),
+        12   => lang("id_tab", "Marshal"),
+        13   => lang("id_tab", "Field_Marshal"),
+        14   => lang("id_tab", "Grand_Marshal"),
       ),
       1 => array
       (
-        '00' => lang('id_tab', 'None'),
-        '01' => lang('id_tab', 'None'),
-         0   => lang('id_tab', 'None'),
-         1   => lang('id_tab', 'Scout'),
-         2   => lang('id_tab', 'Grunt'),
-         3   => lang('id_tab', 'Sergeant'),
-         4   => lang('id_tab', 'Senior_Sergeant'),
-         5   => lang('id_tab', 'First_Sergeant'),
-         6   => lang('id_tab', 'Stone_Guard'),
-         7   => lang('id_tab', 'Blood_Guard'),
-         8   => lang('id_tab', 'Legionnare'),
-         9   => lang('id_tab', 'Centurion'),
-        10   => lang('id_tab', 'Champion'),
-        11   => lang('id_tab', 'Lieutenant_General'),
-        12   => lang('id_tab', 'General'),
-        13   => lang('id_tab', 'Warlord'),
-        14   => lang('id_tab', 'High_Warlord'),
+        '00' => lang("id_tab", "None"),
+        '01' => lang("id_tab", "None"),
+         0   => lang("id_tab", "None"),
+         1   => lang("id_tab", "Scout"),
+         2   => lang("id_tab", "Grunt"),
+         3   => lang("id_tab", "Sergeant"),
+         4   => lang("id_tab", "Senior_Sergeant"),
+         5   => lang("id_tab", "First_Sergeant"),
+         6   => lang("id_tab", "Stone_Guard"),
+         7   => lang("id_tab", "Blood_Guard"),
+         8   => lang("id_tab", "Legionnare"),
+         9   => lang("id_tab", "Centurion"),
+        10   => lang("id_tab", "Champion"),
+        11   => lang("id_tab", "Lieutenant_General"),
+        12   => lang("id_tab", "General"),
+        13   => lang("id_tab", "Warlord"),
+        14   => lang("id_tab", "High_Warlord"),
       )
     );
 

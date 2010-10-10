@@ -157,11 +157,11 @@ function wowhead_tt()
 //validates sessions' vars and restricting access to given level
 function valid_login($restrict_lvl, $info)
 {
-  if ( isset($_SESSION['user_lvl']) && isset($_SESSION['user_id']) && isset($_SESSION['realm_id']) && isset($_SESSION['login']) )
+  if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["user_id"]) && isset($_SESSION["realm_id"]) && isset($_SESSION["login"]) )
   {
-    $user_lvl = $_SESSION['user_lvl'];
-    $ip = ( isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
-    if ( $ip === $_SESSION['client_ip'] )
+    $user_lvl = $_SESSION["user_lvl"];
+    $ip = ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv('REMOTE_ADDR');
+    if ( $ip === $_SESSION["client_ip"] )
       ;
     else
       redirect('login.php?error=5'.( ( isset($info) ) ? '&info='.$info : '' ) );
@@ -178,7 +178,7 @@ function valid_login($restrict_lvl, $info)
 // Fix reditection error under MS-IIS fuckedup-servers.
 function redirect($url)
 {
-  if ( strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false )
+  if ( strpos($_SERVER["SERVER_SOFTWARE"], 'Microsoft-IIS') === false )
   {
     header('Location: '.$url);
     exit();
@@ -194,7 +194,7 @@ function error($err)
 {
   //$err = addslashes($err);
   // pass the error via session cookie instead of url
-  $_SESSION['pass_error'] = $err;
+  $_SESSION["pass_error"] = $err;
   redirect('error.php?err=oopsy');
 }
 

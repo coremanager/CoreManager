@@ -22,14 +22,14 @@
   //  so we would have to close these, or we can't have debug output
   if( $debug )
   {
-    if ( isset($sql['logon']) )
-      $sql['logon']->close();
-    if ( isset($sql['char']) )
-      $sql['char']->close();
-    if ( isset($sql['mgr']) )
-      $sql['mgr']->close();
-    if ( isset($sql['world']) )
-      $sql['world']->close();
+    if ( isset($sql["logon"]) )
+      $sql["logon"]->close();
+    if ( isset($sql["char"]) )
+      $sql["char"]->close();
+    if ( isset($sql["mgr"]) )
+      $sql["mgr"]->close();
+    if ( isset($sql["world"]) )
+      $sql["world"]->close();
 
     // level 3 debug lists all global vars, but can't read classes
     // level 4 debug prints all global arrays, but can't print content of classes
@@ -37,10 +37,10 @@
     if( $debug > 2)
     {
       unset($sql);
-      unset($sql['logon']);
-      unset($sql['char']);
-      unset($sql['mgr']);
-      unset($sql['world']);
+      unset($sql["logon"]);
+      unset($sql["char"]);
+      unset($sql["mgr"]);
+      unset($sql["world"]);
     }
   }
 
@@ -64,34 +64,34 @@
       $new_query = "SELECT accounts.acct, Login, MAX(JoinDate) AS joindate
         FROM config_accounts
         LEFT JOIN accounts ON accounts.login=config_accounts.Login";
-      $new_result = $sql['mgr']->query($new_query);
-      $new = $sql['mgr']->fetch_assoc($new_result);
+      $new_result = $sql["mgr"]->query($new_query);
+      $new = $sql["mgr"]->fetch_assoc($new_result);
     }
     else
     {
       $new_query = "SELECT id AS acct, username AS Login, MAX(JoinDate) AS joindate
         FROM account";
-      $new_result = $sql['logon']->query($new_query);
-      $new = $sql['logon']->fetch_assoc($new_result);
+      $new_result = $sql["logon"]->query($new_query);
+      $new = $sql["logon"]->fetch_assoc($new_result);
     }
 
     $output .= 
-                lang('footer', 'newest').': '.( ( $user_lvl >= gmlevel('4') ) ? '<a href="user.php?action=edit_user&error=11&acct='.$new['acct'].'">' : '' ).$new['Login'].( ( $user_lvl >= gmlevel('4') ) ? '</a>' : '' ).'
+                lang("footer", "newest").': '.( ( $user_lvl >= gmlevel('4') ) ? '<a href="user.php?action=edit_user&error=11&acct='.$new["acct"].'">' : '' ).$new["Login"].( ( $user_lvl >= gmlevel('4') ) ? '</a>' : '' ).'
                 <br />';
   }
 
   $output .=
-                lang('footer', 'bugs_to_admin').' <a href="mailto:'.$admin_mail.'">'.lang('footer', 'site_admin').'</a><br />';
+                lang("footer", "bugs_to_admin").' <a href="mailto:'.$admin_mail.'">'.lang("footer", "site_admin").'</a><br />';
 
   unset($admin_mail);
-  $output .= sprintf(lang('footer', 'execute').': %.5f', (microtime(true) - $time_start)).' '.lang('footer', 'seconds').'.';
+  $output .= sprintf(lang("footer", "execute").': %.5f', (microtime(true) - $time_start)).' '.lang("footer", "seconds").'.';
   unset($time_start);
 
   // if any debug mode is activated, show memory usage
   if( $debug )
   {
     $output .= '
-                Queries: '.$tot_queries.' on '.$_SERVER['SERVER_SOFTWARE'];
+                Queries: '.$tot_queries.' on '.$_SERVER["SERVER_SOFTWARE"];
     unset($tot_queries);
     if ( function_exists('memory_get_usage') )
       $output .= sprintf('<br />Mem. Usage: %.0f/%.0fK Peek: %.0f/%.0fK Global: %.0fK Limit: %s', memory_get_usage()/1024, memory_get_usage(true)/1024, memory_get_peak_usage()/1024, memory_get_peak_usage(true)/1024, sizeof($GLOBALS), ini_get('memory_limit'));
@@ -100,28 +100,28 @@
   //---------------------Version Information-------------------------------------
 
   $output .= '
-                <div id="version">'.lang('footer', 'powered').': ';
-  if ( $show_version['show'] && $user_lvl >= $show_version['version_lvl'] )
+                <div id="version">'.lang("footer", "powered").': ';
+  if ( $show_version["show"] && $user_lvl >= $show_version["version_lvl"] )
   {
-    if ( ( 1 < $show_version['show']) && $user_lvl >= $show_version['svnrev_lvl'] )
+    if ( ( 1 < $show_version["show"]) && $user_lvl >= $show_version["svnrev_lvl"] )
     {
-      $show_version['svnrev'] = '';
+      $show_version["svnrev"] = '';
       // if file exists and readable
       if ( is_readable('.svn/entries') )
       {
         $file_obj = new SplFileObject('.svn/entries');
         // line 4 is where svn revision is stored
         $file_obj->seek(3);
-        $show_version['svnrev'] = rtrim($file_obj->current());
+        $show_version["svnrev"] = rtrim($file_obj->current());
         unset($file_obj);
       }
 	  $output .= 
-        $show_version['version'].lang('footer', 'revision').': <a href="http://trac6.assembla.com/coremanager/changeset/'.$show_version['svnrev'].'">'.$show_version['svnrev'].'</a>';
+        $show_version["version"].lang("footer", "revision").': <a href="http://trac6.assembla.com/coremanager/changeset/'.$show_version["svnrev"].'">'.$show_version["svnrev"].'</a>';
     }
     else
     {
       $output .= 
-        lang('footer', 'version').': '.$show_version['version'].lang('footer', 'revision').' '.$show_version['svnrev'];
+        lang("footer", "version").': '.$show_version["version"].lang("footer", "revision").' '.$show_version["svnrev"];
     }
   }
   $output .= '

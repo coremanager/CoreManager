@@ -23,18 +23,18 @@
 session_start();
 
 //---------------------Loading User Theme and Language Settings----------------
-if (isset($_COOKIE['theme']))
+if (isset($_COOKIE["theme"]))
 {
-  if (is_dir('themes/'.$_COOKIE['theme']))
-    if (is_file('themes/'.$_COOKIE['theme'].'/'.$_COOKIE['theme'].'_1024.css'))
-      $theme = $_COOKIE['theme'];
+  if (is_dir('themes/'.$_COOKIE["theme"]))
+    if (is_file('themes/'.$_COOKIE["theme"].'/'.$_COOKIE["theme"].'_1024.css'))
+      $theme = $_COOKIE["theme"];
 }
 else
   $theme = "Sulfur";
 
-if (isset($_COOKIE['lang']))
+if (isset($_COOKIE["lang"]))
 {
-  $lang = $_COOKIE['lang'];
+  $lang = $_COOKIE["lang"];
   if (file_exists('lang/'.$lang.'.php'))
     ;
   else
@@ -83,7 +83,7 @@ $output .= '
 // end of header
 
 // we get the error message which was passed to us
-$err = (isset($_SESSION['pass_error'])) ? ($_SESSION['pass_error']) : 'Oopsy...';
+$err = (isset($_SESSION["pass_error"])) ? ($_SESSION["pass_error"]) : 'Oopsy...';
 
 // we start with a lead of 10 spaces,
 //  because last line of header is an opening tag with 8 spaces
@@ -110,8 +110,8 @@ $output .= '
             <table width="300" class="hidden">
               <tr>
                 <td align="center">';
-                  makebutton(lang('global', 'home'), 'index.php', 130);
-                  makebutton(lang('global', 'back'), 'javascript:window.history.back()', 130);
+                  makebutton(lang("global", "home"), 'index.php', 130);
+                  makebutton(lang("global", "back"), 'javascript:window.history.back()', 130);
 unset($err);
 $output .= '
                 </td>

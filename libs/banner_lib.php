@@ -32,12 +32,12 @@
 //########################################################################################################################
 function banner()
 {
-  $f = '../img/arena_emblems/PVP-Banner-'.$_GET['f'].'.png';
+  $f = '../img/arena_emblems/PVP-Banner-'.$_GET["f"].'.png';
   $img = @imagecreatefrompng($f);
 
-  $color_r = $_GET['r'];
-  $color_g = $_GET['g'];
-  $color_b = $_GET['b'];
+  $color_r = $_GET["r"];
+  $color_g = $_GET["g"];
+  $color_b = $_GET["b"];
 
   $width = imagesx($img);
   $height = imagesy($img);
@@ -88,12 +88,12 @@ function banner()
 //########################################################################################################################
 function border()
 {
-  $f = '../img/arena_emblems/PVP-Banner-'.$_GET['f2'].'-Border-'.$_GET['f'].'.png';
+  $f = '../img/arena_emblems/PVP-Banner-'.$_GET["f2"].'-Border-'.$_GET["f"].'.png';
   $img = @imagecreatefrompng($f);
 
-  $color_r = $_GET['r'];
-  $color_g = $_GET['g'];
-  $color_b = $_GET['b'];
+  $color_r = $_GET["r"];
+  $color_g = $_GET["g"];
+  $color_b = $_GET["b"];
 
   $width = imagesx($img);
   $height = imagesy($img);
@@ -144,14 +144,14 @@ function border()
 //########################################################################################################################
 function emblem()
 {
-  $f = '../img/arena_emblems/PVP-Banner-Emblem-'.$_GET['f'].'.png';
+  $f = '../img/arena_emblems/PVP-Banner-Emblem-'.$_GET["f"].'.png';
   $img = @imagecreatefrompng($f);
 
-  $color_r = $_GET['r'];
-  $color_g = $_GET['g'];
-  $color_b = $_GET['b'];
+  $color_r = $_GET["r"];
+  $color_g = $_GET["g"];
+  $color_b = $_GET["b"];
 
-  $scale = $_GET['s'];
+  $scale = $_GET["s"];
 
   $width = imagesx($img);
   $height = imagesy($img);
@@ -195,7 +195,7 @@ function emblem()
 //########################################################################################################################
 // MAIN
 //########################################################################################################################
-$action = $_GET['action'];
+$action = $_GET["action"];
 
 switch ( $action )
 {

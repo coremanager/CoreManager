@@ -20,7 +20,7 @@
 
 require_once 'header.php';
 require_once 'libs/get_uptime_lib.php';
-valid_login($action_permission['view']);
+valid_login($action_permission["view"]);
 
 function stats($action)
 {
@@ -99,23 +99,23 @@ function stats($action)
     return $uptimeString;
   }
 
-  $total_chars = $sql['char']->result($sql['char']->query('SELECT count(*) FROM characters'.( ($action) ? ' WHERE online= 1' : '' ).''), 0);
+  $total_chars = $sql["char"]->result($sql["char"]->query('SELECT count(*) FROM characters'.( ($action) ? ' WHERE online= 1' : '' ).''), 0);
 
   if ( $core == 1 )
   {
     $stats = get_uptime($server[$realm_id]['stats.xml']);
-    $stat_uptime = explode(' ', $stats['uptime']);
+    $stat_uptime = explode(' ', $stats["uptime"]);
   }
   else
   {
     $up_query = "SELECT * FROM uptime WHERE realmid = '".$realm_id."' ORDER BY starttime DESC LIMIT 1";
-    $up_results = $sql['logon']->query($up_query);
-    $uptime = $sql['logon']->fetch_assoc($up_results);
-    $stats['uptime'] = time() - $uptime['starttime'];
-    $stats['uptime'] = "    <uptime>".format_uptime($stats['uptime'])."</uptime>";
-    $stat_uptime = explode(' ', $stats['uptime']);
+    $up_results = $sql["logon"]->query($up_query);
+    $uptime = $sql["logon"]->fetch_assoc($up_results);
+    $stats["uptime"] = time() - $uptime["starttime"];
+    $stats["uptime"] = "    <uptime>".format_uptime($stats["uptime"])."</uptime>";
+    $stat_uptime = explode(' ', $stats["uptime"]);
     
-    $stats['peak'] = $uptime['maxplayers'];
+    $stats["peak"] = $uptime["maxplayers"];
   }
 
     $output .= '
@@ -124,40 +124,40 @@ function stats($action)
               <ul>
                 <li'.(($action) ? '' : ' id="selected"').'>
                   <a href="stat.php">
-                    '.lang('stat', 'srv_statistics').'
+                    '.lang("stat", "srv_statistics").'
                   </a>
                 </li>
                 <li'.(($action) ? ' id="selected"' : '').'>
                   <a href="stat.php?action=true">
-                    '.lang('stat', 'on_statistics').'
+                    '.lang("stat", "on_statistics").'
                   </a>
                 </li>
               </ul>
             </div>
             <div id="tab_content">
-              <div class="top"><h1>'.(($action) ? lang('stat', 'on_statistics') : lang('stat', 'srv_statistics')).'</h1></div>
+              <div class="top"><h1>'.(($action) ? lang("stat", "on_statistics") : lang("stat", "srv_statistics")).'</h1></div>
               <center>
                 <table class="hidden">
                   <tr>
                     <td align="left">
-                      <h1>'.lang('stat', 'general_info').'</h1>
+                      <h1>'.lang("stat", "general_info").'</h1>
                     </td>
                   </tr>
                   <tr align="left">
                     <td class="large">';
     if($action)
       $output .= '
-                      <font class="bold">'.lang('index', 'tot_users_online').' : '.$total_chars.'</font><br /><br />';
+                      <font class="bold">'.lang("index", "tot_users_online").' : '.$total_chars.'</font><br /><br />';
     else
     {
       if ( $core == 1 )
-        $query = $sql['logon']->query("SELECT COUNT(*) FROM accounts UNION SELECT COUNT(*) FROM accounts WHERE gm <> '0'");
+        $query = $sql["logon"]->query("SELECT COUNT(*) FROM accounts UNION SELECT COUNT(*) FROM accounts WHERE gm <> '0'");
       elseif ( $core == 2 )
-        $query = $sql['logon']->query("SELECT COUNT(*) FROM account UNION SELECT COUNT(*) FROM account WHERE gmlevel <> '0'");
+        $query = $sql["logon"]->query("SELECT COUNT(*) FROM account UNION SELECT COUNT(*) FROM account WHERE gmlevel <> '0'");
       else
-        $query = $sql['logon']->query("SELECT COUNT(*) FROM account UNION SELECT COUNT(*) FROM account_access WHERE gmlevel <> '0'");
-      $total_acc = $sql['logon']->result($query, 0);
-      $total_gms = $sql['logon']->result($query, 1);
+        $query = $sql["logon"]->query("SELECT COUNT(*) FROM account UNION SELECT COUNT(*) FROM account_access WHERE gmlevel <> '0'");
+      $total_acc = $sql["logon"]->result($query, 0);
+      $total_gms = $sql["logon"]->result($query, 1);
       unset($query);
 
       $data = date('Y-m-d H:i:s');
@@ -168,12 +168,12 @@ function stats($action)
         $uni_query = "SELECT DISTINCT COUNT(lastip) FROM accounts WHERE lastlogin > '".$data_1."' AND lastlogin < '".$data."'";
       else
         $uni_query = "SELECT DISTINCT COUNT(last_ip) FROM account WHERE last_login > '".$data_1."' AND last_login < '".$data."'";
-      $uniqueIPs = $sql['logon']->result($sql['logon']->query($uni_query), 0);
+      $uniqueIPs = $sql["logon"]->result($sql["logon"]->query($uni_query), 0);
       unset($data_1);
       unset($data);
 
-      //$max_ever = $sql['mgr']->result($sql['mgr']->query('SELECT peakcount FROM uptime WHERE realmid = '.$realm_id.' ORDER BY peakcount DESC LIMIT 1'), 0);
-      $max_restart = $stats['peak'];
+      //$max_ever = $sql["mgr"]->result($sql["mgr"]->query('SELECT peakcount FROM uptime WHERE realmid = '.$realm_id.' ORDER BY peakcount DESC LIMIT 1'), 0);
+      $max_restart = $stats["peak"];
 
       // Mangos uptime table doesn't have an uptime field. O_o
       //$uptime = $sqlr->fetch_row($sqlr->query('SELECT AVG(uptime)/60, MAX(uptime)/60, ( 100*SUM(uptime)/( UNIX_TIMESTAMP()-MIN(starttime) ) ) FROM uptime WHERE realmid = '.$realm_id.''));
@@ -182,10 +182,10 @@ function stats($action)
                       <table>
                         <tr valign="top">
                           <td align="left">
-                            '.lang('stat', 'max_uptime').':<br />
+                            '.lang("stat", "max_uptime").':<br />
                             <br />
-                            '.lang('stat', 'tot_accounts').':<br />
-                            '.lang('stat', 'tot_chars_on_realm').':<br />
+                            '.lang("stat", "tot_accounts").':<br />
+                            '.lang("stat", "tot_chars_on_realm").':<br />
                           </td>
                           <td align="right">
                             '.$stat_uptime[4].'d '.$stat_uptime[6].'h '.$stat_uptime[8].'m<br />
@@ -196,10 +196,10 @@ function stats($action)
                           <td>&nbsp;&nbsp;
                           </td>
                           <td align="left">
-                            '.lang('stat', 'unique_ip').':<br />
+                            '.lang("stat", "unique_ip").':<br />
                             <br />
-                            '.lang('stat', 'max_players').' &nbsp;<br />
-                            '.lang('stat', 'max_restart').' :<br />
+                            '.lang("stat", "max_players").' &nbsp;<br />
+                            '.lang("stat", "max_restart").' :<br />
                           </td>
                           <td align="right">
                             '.$uniqueIPs.'<br />
@@ -210,8 +210,8 @@ function stats($action)
                         </tr>
                         <tr align="left">
                           <td colspan="2">
-                            '.lang('stat', 'average_of').' '.round($total_chars/$total_acc,1).' '.lang('stat', 'chars_per_acc').'<br />
-                            '.lang('stat', 'total_of').' '.$total_gms.' '.lang('stat', 'gms_one_for').' '.round($total_acc/$total_gms,1).' '.lang('stat', 'players').'
+                            '.lang("stat", "average_of").' '.round($total_chars/$total_acc,1).' '.lang("stat", "chars_per_acc").'<br />
+                            '.lang("stat", "total_of").' '.$total_gms.' '.lang("stat", "gms_one_for").' '.round($total_acc/$total_gms,1).' '.lang("stat", "players").'
                           </td>
                           <td colspan="2">
                           </td>
@@ -227,7 +227,7 @@ function stats($action)
     }
 
     //there is always less hordies
-    $horde_chars  = $sql['char']->result($sql['char']->query('SELECT count(guid) FROM characters WHERE race IN(2,5,6,8,10)'.(($action) ? ' AND online= 1' : '')), 0);
+    $horde_chars  = $sql["char"]->result($sql["char"]->query('SELECT count(guid) FROM characters WHERE race IN(2,5,6,8,10)'.(($action) ? ' AND online= 1' : '')), 0);
     $horde_pros   = round(($horde_chars*100)/$total_chars ,1);
     $allies_chars = $total_chars - $horde_chars;
     $allies_pros  = 100 - $horde_pros;
@@ -235,8 +235,8 @@ function stats($action)
     $output .= '
                       <table class="tot_bar">
                         <tr>
-                          <td width="'.$horde_pros.'%" background="img/bar_horde.gif" height="40"><a href="stat.php?action='.$action.'&amp;side=h">'.lang('stat', 'horde').': '.$horde_chars.' ('.$horde_pros.'%)</a></td>
-                          <td width="'.$allies_pros.'%" background="img/bar_allie.gif" height="40"><a href="stat.php?action='.$action.'&amp;side=a">'.lang('stat', 'alliance').': '.$allies_chars.' ('.$allies_pros.'%)</a></td>
+                          <td width="'.$horde_pros.'%" background="img/bar_horde.gif" height="40"><a href="stat.php?action='.$action.'&amp;side=h">'.lang("stat", "horde").': '.$horde_chars.' ('.$horde_pros.'%)</a></td>
+                          <td width="'.$allies_pros.'%" background="img/bar_allie.gif" height="40"><a href="stat.php?action='.$action.'&amp;side=a">'.lang("stat", "alliance").': '.$allies_chars.' ('.$allies_pros.'%)</a></td>
                         </tr>
                       </table>
                       <hr/>
@@ -247,23 +247,23 @@ function stats($action)
     unset($allies_chars);
     unset($allies_pros);
 
-    $order_race = (isset($_GET['race'])) ? 'AND race ='.$sql['char']->quote_smart($_GET['race']) : '';
-    $order_class = (isset($_GET['class'])) ? 'AND class ='.$sql['char']->quote_smart($_GET['class']) : '';
+    $order_race = (isset($_GET["race"])) ? 'AND race ='.$sql["char"]->quote_smart($_GET["race"]) : '';
+    $order_class = (isset($_GET["class"])) ? 'AND class ='.$sql["char"]->quote_smart($_GET["class"]) : '';
 
-    if(isset($_GET['level']))
+    if(isset($_GET["level"]))
     {
-      $lvl_min = $sql['char']->quote_smart($_GET['level']);
+      $lvl_min = $sql["char"]->quote_smart($_GET["level"]);
       $lvl_max = $lvl_min + 4;
       $order_level = 'AND level >= '.$lvl_min.' AND level <= '.$lvl_max.'';
     }
     else
       $order_level = '';
 
-    if(isset($_GET['side']))
+    if(isset($_GET["side"]))
     {
-      if ('h' == $sql['char']->quote_smart($_GET['side']))
+      if ('h' == $sql["char"]->quote_smart($_GET["side"]))
         $order_side = 'AND race IN(2,5,6,8,10)';
-      elseif ('a' == $sql['char']->quote_smart($_GET['side']))
+      elseif ('a' == $sql["char"]->quote_smart($_GET["side"]))
         $order_side = 'AND race IN (1,3,4,7,11)';
     }
     else
@@ -272,14 +272,14 @@ function stats($action)
     // RACE
     foreach ($race as $id)
     {
-      $race[$id[0]][2] = $sql['char']->result($sql['char']->query('SELECT count(guid) FROM characters
+      $race[$id[0]][2] = $sql["char"]->result($sql["char"]->query('SELECT count(guid) FROM characters
         WHERE race = '.$id[0].' '.$order_class.' '.$order_level.' '.$order_side.(($action) ? ' AND online= 1' : '')), 0);
       $race[$id[0]][3] = round((($race[$id[0]][2])*100)/$total_chars,1);
     }
     $output .= '
                   <tr align="left">
                     <td>
-                      <h1>'.lang('stat', 'chars_by_race').'</h1>
+                      <h1>'.lang("stat", "chars_by_race").'</h1>
                     </td>
                   </tr>
                   <tr>
@@ -313,7 +313,7 @@ function stats($action)
     // CLASS
     foreach ($class as $id)
     {
-      $class[$id[0]][2] = $sql['char']->result($sql['char']->query('SELECT count(guid) FROM characters
+      $class[$id[0]][2] = $sql["char"]->result($sql["char"]->query('SELECT count(guid) FROM characters
         WHERE class = '.$id[0].' '.$order_race.' '.$order_level.' '.$order_side.(($action) ? ' AND online= 1' : '')), 0);
       $class[$id[0]][3] = round((($class[$id[0]][2])*100)/$total_chars,1);
     }
@@ -321,7 +321,7 @@ function stats($action)
     $output .= '
                   <tr align="left">
                     <td>
-                      <h1>'.lang('stat', 'chars_by_class').'</h1>
+                      <h1>'.lang("stat", "chars_by_class").'</h1>
                     </td>
                   </tr>
                   <tr>
@@ -355,7 +355,7 @@ function stats($action)
     // LEVEL
     foreach ($level as $id)
     {
-      $level[$id[0]][3] = $sql['char']->result($sql['char']->query('SELECT count(guid) FROM characters
+      $level[$id[0]][3] = $sql["char"]->result($sql["char"]->query('SELECT count(guid) FROM characters
         WHERE level >= '.$id[1].'
           AND level <= '.$id[2].'
             '.$order_race.' '.$order_class.' '.$order_side.(($action) ? ' AND online= 1' : '').''), 0);
@@ -369,7 +369,7 @@ function stats($action)
     $output .= '
                   <tr align="left">
                     <td>
-                      <h1>'.lang('stat', 'chars_by_level').'</h1>
+                      <h1>'.lang("stat", "chars_by_level").'</h1>
                     </td>
                   </tr>
                   <tr>
@@ -401,7 +401,7 @@ function stats($action)
                   <tr>
                     <td>';
     // LEVEL END
-                      makebutton(lang('stat', 'reset'), 'stat.php', 720);
+                      makebutton(lang("stat", "reset"), 'stat.php', 720);
     $output .= '
                     </td>
                   </tr>
@@ -417,24 +417,19 @@ function stats($action)
 //#############################################################################
 // MAIN
 //#############################################################################
-//$err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
+//$err = (isset($_GET["error"])) ? $_GET["error"] : NULL;
 
 //unset($err);
-
-//$lang_index = lang_index();
-//$lang_stat = lang_stat();
 
 $output .= "
       <div class=\"bubble\">";
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+$action = (isset($_GET["action"])) ? $_GET["action"] : NULL;
 
 stats($action);
 
 unset($action);
 unset($action_permission);
-//unset($lang_index);
-//unset($lang_stat);
 
 require_once 'footer.php';
 

@@ -24,33 +24,33 @@ function get_uptime($statsfile)
   for ($i = 0; $i < 4; $i++)
     $temp = fgets($file_obj);
 
-  $out['platform'] = explode(' ', fgets($file_obj));
-  $out['platform'][4] = str_replace("<platform>","",$out['platform'][4]);
-  $out['uptime'] = fgets($file_obj);
-  $out['uptime'] = str_replace("<uptime>","",$out['uptime']);
-  $out['uptime'] = str_replace("</uptime>","",$out['uptime']);
+  $out["platform"] = explode(' ', fgets($file_obj));
+  $out["platform"][4] = str_replace("<platform>","",$out["platform"][4]);
+  $out["uptime"] = fgets($file_obj);
+  $out["uptime"] = str_replace("<uptime>","",$out["uptime"]);
+  $out["uptime"] = str_replace("</uptime>","",$out["uptime"]);
   for ($i = 0; $i < 1; $i++)
     $temp = fgets($file_obj);
-  $out['cpu'] = fgets($file_obj);
-  $out['cpu'] = str_replace("<cpu>","",$out['cpu']);
-  $out['cpu'] = str_replace("</cpu>","",$out['cpu']);
+  $out["cpu"] = fgets($file_obj);
+  $out["cpu"] = str_replace("<cpu>","",$out["cpu"]);
+  $out["cpu"] = str_replace("</cpu>","",$out["cpu"]);
   for ($i = 0; $i < 1; $i++)
     $temp = fgets($file_obj);
-  $out['ram'] = fgets($file_obj);
-  $out['ram'] = str_replace("<ram>","",$out['ram']);
-  $out['ram'] = str_replace("</ram>","",$out['ram']);
-  $out['avglat'] = fgets($file_obj);
-  $out['avglat'] = str_replace("<avglat>","",$out['avglat']);
-  $out['avglat'] = str_replace("</avglat>","",$out['avglat']);
-  $out['threads'] = fgets($file_obj);
-  $out['threads'] = str_replace("<threads>","",$out['threads']);
-  $out['threads'] = str_replace("</threads>","",$out['threads']);
+  $out["ram"] = fgets($file_obj);
+  $out["ram"] = str_replace("<ram>","",$out["ram"]);
+  $out["ram"] = str_replace("</ram>","",$out["ram"]);
+  $out["avglat"] = fgets($file_obj);
+  $out["avglat"] = str_replace("<avglat>","",$out["avglat"]);
+  $out["avglat"] = str_replace("</avglat>","",$out["avglat"]);
+  $out["threads"] = fgets($file_obj);
+  $out["threads"] = str_replace("<threads>","",$out["threads"]);
+  $out["threads"] = str_replace("</threads>","",$out["threads"]);
   for ($i = 0; $i < 7; $i++)
     $temp = fgets($file_obj);
 
-  $out['peak'] = fgets($file_obj);
-  $out['peak'] = str_replace("<peakcount>","",$out['peak']);
-  $out['peak'] = str_replace("</peakcount>","",$out['peak']);
+  $out["peak"] = fgets($file_obj);
+  $out["peak"] = str_replace("<peakcount>","",$out["peak"]);
+  $out["peak"] = str_replace("</peakcount>","",$out["peak"]);
 
   if (file_exists($statsfile))
   {
@@ -90,7 +90,7 @@ function get_uptime($statsfile)
     }
   }
 
-  $out['plrs_lat'] = $plrs;
+  $out["plrs_lat"] = $plrs;
 
   if (file_exists($statsfile))
   {
@@ -130,7 +130,7 @@ function get_uptime($statsfile)
     }
   }
 
-  $out['plrs_area'] = $plrs;
+  $out["plrs_area"] = $plrs;
 
   return $out;
 }

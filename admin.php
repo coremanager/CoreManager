@@ -41,7 +41,7 @@ function database()
   global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
   $dbc_db = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_dbc_database"));
   $logon_db = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_logon_database"));
@@ -49,7 +49,7 @@ function database()
   $world_dbs = $sqlm->query("SELECT * FROM config_world_databases");
 
   $output .= '
-        <span style="color:red">'.lang('admin','db_warn').'</span>
+        <span style="color:red">'.lang("admin", "db_warn").'</span>
         <form name="form" action="admin.php" method="GET">
           <input type="hidden" name="section" value="databases">
           <input type="hidden" name="action" value="savedbs">
@@ -57,32 +57,32 @@ function database()
             <tr>
               <td>
                 <fieldset id="admin_editdb_field">
-                  <legend>'.lang('admin', 'arcm').'</legend>
+                  <legend>'.lang("admin", "arcm").'</legend>
                   <table>
                     <tr>
-                      <td width=75px>'.lang('admin', 'host').': </td>
+                      <td width=75px>'.lang("admin", "host").': </td>
                       <td>
-                        <input type="text" name="dbc_host" value="'.$dbc_db['Address'].'" size="10%">
+                        <input type="text" name="dbc_host" value="'.$dbc_db["Address"].'" size="10%">
                       </td>
-                      <td width=75px>'.lang('admin', 'port').': </td>
+                      <td width=75px>'.lang("admin", "port").': </td>
                       <td>
-                        <input type="text" name="dbc_port" value="'.$dbc_db['Port'].'" size="10%">
-                      </td>
-                    </tr>
-                    <tr>
-                      <td width=75px>'.lang('admin', 'user').': </td>
-                      <td>
-                        <input type="text" name="dbc_user" value="'.$dbc_db['User'].'" size="10%">
-                      </td>
-                      <td width=75px>'.lang('admin', 'pass').': </td>
-                      <td>
-                        <input type="text" name="dbc_pass" value="'.$dbc_db['Password'].'" size="10%">
+                        <input type="text" name="dbc_port" value="'.$dbc_db["Port"].'" size="10%">
                       </td>
                     </tr>
                     <tr>
-                      <td width=75px>'.lang('admin', 'name').': </td>
+                      <td width=75px>'.lang("admin", "user").': </td>
                       <td>
-                        <input type="text" name="dbc_name" value="'.$dbc_db['Name'].'" size="10%">
+                        <input type="text" name="dbc_user" value="'.$dbc_db["User"].'" size="10%">
+                      </td>
+                      <td width=75px>'.lang("admin", "pass").': </td>
+                      <td>
+                        <input type="text" name="dbc_pass" value="'.$dbc_db["Password"].'" size="10%">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width=75px>'.lang("admin", "name").': </td>
+                      <td>
+                        <input type="text" name="dbc_name" value="'.$dbc_db["Name"].'" size="10%">
                       </td>
                     </tr>
                   </table>
@@ -90,32 +90,32 @@ function database()
               </td>
               <td>
                 <fieldset id="admin_editdb_field">
-                  <legend>'.lang('admin', 'logon').'</legend>
+                  <legend>'.lang("admin", "logon").'</legend>
                   <table>
                     <tr>
-                      <td width=75px>'.lang('admin', 'host').': </td>
+                      <td width=75px>'.lang("admin", "host").': </td>
                       <td>
-                        <input type="text" name="logon_host" value="'.$logon_db['Address'].'" size="10%">
+                        <input type="text" name="logon_host" value="'.$logon_db["Address"].'" size="10%">
                       </td>
-                      <td width=75px>'.lang('admin', 'port').': </td>
+                      <td width=75px>'.lang("admin", "port").': </td>
                       <td>
-                        <input type="text" name="logon_port" value="'.$logon_db['Port'].'" size="10%">
-                      </td>
-                    </tr>
-                    <tr>
-                      <td width=75px>'.lang('admin', 'user').': </td>
-                      <td>
-                        <input type="text" name="logon_user" value="'.$logon_db['User'].'" size="10%">
-                      </td>
-                      <td width=75px>'.lang('admin', 'pass').': </td>
-                      <td>
-                        <input type="text" name="logon_pass" value="'.$logon_db['Password'].'" size="10%">
+                        <input type="text" name="logon_port" value="'.$logon_db["Port"].'" size="10%">
                       </td>
                     </tr>
                     <tr>
-                      <td width=75px>'.lang('admin', 'name').': </td>
+                      <td width=75px>'.lang("admin", "user").': </td>
                       <td>
-                        <input type="text" name="logon_name" value="'.$logon_db['Name'].'" size="10%">
+                        <input type="text" name="logon_user" value="'.$logon_db["User"].'" size="10%">
+                      </td>
+                      <td width=75px>'.lang("admin", "pass").': </td>
+                      <td>
+                        <input type="text" name="logon_pass" value="'.$logon_db["Password"].'" size="10%">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width=75px>'.lang("admin", "name").': </td>
+                      <td>
+                        <input type="text" name="logon_name" value="'.$logon_db["Name"].'" size="10%">
                       </td>
                     </tr>
                   </table>
@@ -132,39 +132,39 @@ function database()
   {
     $output .= '
               <td>
-                <input type="hidden" name="char_realm[]" value="'.$char['Index'].'">
+                <input type="hidden" name="char_realm[]" value="'.$char["Index"].'">
                 <fieldset id="admin_editdb_field">
-                  <legend>'.lang('admin', 'char').' ('.lang('admin', 'realm').' '.$char['Index'].')</legend>
+                  <legend>'.lang("admin", "char").' ('.lang("admin", "realm").' '.$char["Index"].')</legend>
                   <table>
                     <tr>
-                      <td width=75px>'.lang('admin', 'host').': </td>
+                      <td width=75px>'.lang("admin", "host").': </td>
                       <td>
-                        <input type="text" name="char_host[]" value="'.$char['Address'].'" size="10%">
+                        <input type="text" name="char_host[]" value="'.$char["Address"].'" size="10%">
                       </td>
-                      <td width=75px>'.lang('admin', 'port').': </td>
+                      <td width=75px>'.lang("admin", "port").': </td>
                       <td>
-                        <input type="text" name="char_port[]" value="'.$char['Port'].'" size="10%">
-                      </td>
-                    </tr>
-                    <tr>
-                      <td width=75px>'.lang('admin', 'user').': </td>
-                      <td>
-                        <input type="text" name="char_user[]" value="'.$char['User'].'" size="10%">
-                      </td>
-                      <td width=75px>'.lang('admin', 'pass').': </td>
-                      <td>
-                        <input type="text" name="char_pass[]" value="'.$char['Password'].'" size="10%">
+                        <input type="text" name="char_port[]" value="'.$char["Port"].'" size="10%">
                       </td>
                     </tr>
                     <tr>
-                      <td width=75px>'.lang('admin', 'name').': </td>
+                      <td width=75px>'.lang("admin", "user").': </td>
                       <td>
-                        <input type="text" name="char_name[]" value="'.$char['Name'].'" size="10%">
+                        <input type="text" name="char_user[]" value="'.$char["User"].'" size="10%">
+                      </td>
+                      <td width=75px>'.lang("admin", "pass").': </td>
+                      <td>
+                        <input type="text" name="char_pass[]" value="'.$char["Password"].'" size="10%">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width=75px>'.lang("admin", "name").': </td>
+                      <td>
+                        <input type="text" name="char_name[]" value="'.$char["Name"].'" size="10%">
                       </td>
                       <td colspan=2>
                         <center>
-                          <a href="admin.php?section=databases&action=savedbs&remove_char[]='.$char['Index'].'">
-                            <img src="img/aff_cross.png" /> '.lang('admin', 'remove').'
+                          <a href="admin.php?section=databases&action=savedbs&remove_char[]='.$char["Index"].'">
+                            <img src="img/aff_cross.png" /> '.lang("admin", "remove").'
                           </a>
                         </center>
                       <td>
@@ -178,7 +178,7 @@ function database()
             <tr>
               <td>
                 <a href="admin.php?section=databases&action=savedbs&addchar=addchar">
-                  <img src="img/add.png" /> <b>'.lang('admin', 'addchar').'</b>
+                  <img src="img/add.png" /> <b>'.lang("admin", "addchar").'</b>
                 </a>
               </td>
             </tr>';
@@ -188,39 +188,39 @@ function database()
   {
     $output .= '
               <td>
-                <input type="hidden" name="world_realm[]" value="'.$world['Index'].'">
+                <input type="hidden" name="world_realm[]" value="'.$world["Index"].'">
                 <fieldset id="admin_editdb_field">
-                  <legend>'.lang('admin', 'world').' ('.lang('admin', 'realm').' '.$world['Index'].')</legend>
+                  <legend>'.lang("admin", "world").' ('.lang("admin", "realm").' '.$world["Index"].')</legend>
                   <table>
                     <tr>
-                      <td width=75px>'.lang('admin', 'host').': </td>
+                      <td width=75px>'.lang("admin", "host").': </td>
                       <td>
-                        <input type="text" name="world_host[]" value="'.$world['Address'].'" size="10%">
+                        <input type="text" name="world_host[]" value="'.$world["Address"].'" size="10%">
                       </td>
-                      <td width=75px>'.lang('admin', 'port').': </td>
+                      <td width=75px>'.lang("admin", "port").': </td>
                       <td>
-                        <input type="text" name="world_port[]" value="'.$world['Port'].'" size="10%">
-                      </td>
-                    </tr>
-                    <tr>
-                      <td width=75px>'.lang('admin', 'user').': </td>
-                      <td>
-                        <input type="text" name="world_user[]" value="'.$world['User'].'" size="10%">
-                      </td>
-                      <td>'.lang('admin', 'pass').': </td>
-                      <td>
-                        <input type="text" name="world_pass[]" value="'.$world['Password'].'" size="10%">
+                        <input type="text" name="world_port[]" value="'.$world["Port"].'" size="10%">
                       </td>
                     </tr>
                     <tr>
-                      <td width=75px>'.lang('admin', 'name').': </td>
+                      <td width=75px>'.lang("admin", "user").': </td>
                       <td>
-                        <input type="text" name="world_name[]" value="'.$world['Name'].'" size="10%">
+                        <input type="text" name="world_user[]" value="'.$world["User"].'" size="10%">
+                      </td>
+                      <td>'.lang("admin", "pass").': </td>
+                      <td>
+                        <input type="text" name="world_pass[]" value="'.$world["Password"].'" size="10%">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width=75px>'.lang("admin", "name").': </td>
+                      <td>
+                        <input type="text" name="world_name[]" value="'.$world["Name"].'" size="10%">
                       </td>
                       <td colspan=2>
                         <center>
-                          <a href="admin.php?section=databases&action=savedbs&remove_world[]='.$world['Index'].'">
-                            <img src="img/aff_cross.png" /> '.lang('admin', 'remove').'
+                          <a href="admin.php?section=databases&action=savedbs&remove_world[]='.$world["Index"].'">
+                            <img src="img/aff_cross.png" /> '.lang("admin", "remove").'
                           </a>
                         </center>
                       <td>
@@ -234,12 +234,12 @@ function database()
             <tr>
               <td>
                 <a href="admin.php?section=databases&action=savedbs&addworld=addworld">
-                  <img src="img/add.png" /> <b>'.lang('admin', 'addworld').'</b>
+                  <img src="img/add.png" /> <b>'.lang("admin", "addworld").'</b>
                 </a>
               </td>
             </tr>
           </table>
-          <input type="submit" name="save" value="'.lang('admin', 'save').'">
+          <input type="submit" name="save" value="'.lang("admin", "save").'">
         </form>';
 }
 
@@ -248,30 +248,30 @@ function savedbs()
   global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
-  if ( isset($_GET['addchar']) )
+  if ( isset($_GET["addchar"]) )
     $result_addchar = $sqlm->query("INSERT INTO config_character_databases (Encoding) VALUES ('utf8')");
 
-  if ( isset($_GET['addworld']) )
+  if ( isset($_GET["addworld"]) )
     $result_addworld = $sqlm->query("INSERT INTO config_world_databases (Encoding) VALUES ('utf8')");
 
-  if ( isset($_GET['dbc_host']) )
+  if ( isset($_GET["dbc_host"]) )
   {
-    $dbc_host = $sqlm->quote_smart($_GET['dbc_host']);
-    $dbc_port = $sqlm->quote_smart($_GET['dbc_port']);
-    $dbc_user = $sqlm->quote_smart($_GET['dbc_user']);
-    $dbc_pass = $sqlm->quote_smart($_GET['dbc_pass']);
-    $dbc_name = $sqlm->quote_smart($_GET['dbc_name']);
+    $dbc_host = $sqlm->quote_smart($_GET["dbc_host"]);
+    $dbc_port = $sqlm->quote_smart($_GET["dbc_port"]);
+    $dbc_user = $sqlm->quote_smart($_GET["dbc_user"]);
+    $dbc_pass = $sqlm->quote_smart($_GET["dbc_pass"]);
+    $dbc_name = $sqlm->quote_smart($_GET["dbc_name"]);
 
     $dbc_count = $sqlm->fetch_assoc($sqlm->query("SELECT COUNT(*) FROM config_dbc_database"));
 
-    if ($dbc_count['COUNT(*)'] == 1)
+    if ($dbc_count["COUNT(*)"] == 1)
     {
       $dbc_upper = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_dbc_database"));
-      $result = $sqlm->query("UPDATE config_dbc_database SET Address='".$dbc_host."', Port='".$dbc_port."', Name='".$dbc_name."', User='".$dbc_user."', Password='".$dbc_pass."', Encoding='utf8' WHERE `Index`='".$dbc_upper['MAX(`Index`)']."'");
+      $result = $sqlm->query("UPDATE config_dbc_database SET Address='".$dbc_host."', Port='".$dbc_port."', Name='".$dbc_name."', User='".$dbc_user."', Password='".$dbc_pass."', Encoding='utf8' WHERE `Index`='".$dbc_upper["MAX(`Index`)"]."'");
     }
-    elseif ($dbc_count['COUNT(*)'] > 1)
+    elseif ($dbc_count["COUNT(*)"] > 1)
     {
       $result = $sqlm->query("TRUNCATE TABLE config_dbc_database");
       $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbc_host."', '".$dbc_port."', '".$dbc_user."', '".$dbc_name."', '".$dbc_pass."', 'utf8')");
@@ -282,25 +282,25 @@ function savedbs()
     }
   }
 
-  if ( isset($_GET['logon_host']) )
+  if ( isset($_GET["logon_host"]) )
   {
-    $logon_host = $sqlm->quote_smart($_GET['logon_host']);
-    $logon_port = $sqlm->quote_smart($_GET['logon_port']);
-    $logon_user = $sqlm->quote_smart($_GET['logon_user']);
-    $logon_pass = $sqlm->quote_smart($_GET['logon_pass']);
-    $logon_name = $sqlm->quote_smart($_GET['logon_name']);
+    $logon_host = $sqlm->quote_smart($_GET["logon_host"]);
+    $logon_port = $sqlm->quote_smart($_GET["logon_port"]);
+    $logon_user = $sqlm->quote_smart($_GET["logon_user"]);
+    $logon_pass = $sqlm->quote_smart($_GET["logon_pass"]);
+    $logon_name = $sqlm->quote_smart($_GET["logon_name"]);
 
     $result_logon = $sqlm->query("UPDATE config_logon_database SET Address='".$logon_host."', Port='".$logon_port."', User='".$logon_user."', Password='".$logon_pass."', Name='".$logon_name."' WHERE `Index`=1");
   }
 
-  if ( isset($_GET['char_realm']) )
+  if ( isset($_GET["char_realm"]) )
   {
-    $char_realms = ( ( isset($_GET['char_realm']) ) ? $sqlm->quote_smart($_GET['char_realm']) : NULL );
-    $char_hosts = ( ( isset($_GET['char_host']) ) ? $sqlm->quote_smart($_GET['char_host']) : NULL );
-    $char_ports = ( ( isset($_GET['char_port']) ) ? $sqlm->quote_smart($_GET['char_port']) : NULL );
-    $char_users = ( ( isset($_GET['char_user']) ) ? $sqlm->quote_smart($_GET['char_user']) : NULL );
-    $char_passes = ( ( isset($_GET['char_pass']) ) ? $sqlm->quote_smart($_GET['char_pass']) : NULL );
-    $char_names = ( ( isset($_GET['char_name']) ) ? $sqlm->quote_smart($_GET['char_name']) : NULL );
+    $char_realms = ( ( isset($_GET["char_realm"]) ) ? $sqlm->quote_smart($_GET["char_realm"]) : NULL );
+    $char_hosts = ( ( isset($_GET["char_host"]) ) ? $sqlm->quote_smart($_GET["char_host"]) : NULL );
+    $char_ports = ( ( isset($_GET["char_port"]) ) ? $sqlm->quote_smart($_GET["char_port"]) : NULL );
+    $char_users = ( ( isset($_GET["char_user"]) ) ? $sqlm->quote_smart($_GET["char_user"]) : NULL );
+    $char_passes = ( ( isset($_GET["char_pass"]) ) ? $sqlm->quote_smart($_GET["char_pass"]) : NULL );
+    $char_names = ( ( isset($_GET["char_name"]) ) ? $sqlm->quote_smart($_GET["char_name"]) : NULL );
 
     for ( $i=0; $i<count($char_hosts); $i++ )
     {
@@ -308,9 +308,9 @@ function savedbs()
     }
   }
 
-  if ( isset($_GET['remove_char']) )
+  if ( isset($_GET["remove_char"]) )
   {
-    $remove_chars = ( ( isset($_GET['remove_char']) ) ? $sqlm->quote_smart($_GET['remove_char']) : NULL );
+    $remove_chars = ( ( isset($_GET["remove_char"]) ) ? $sqlm->quote_smart($_GET["remove_char"]) : NULL );
 
     for ( $i=0; $i<count($remove_chars); $i++ )
     {
@@ -318,14 +318,14 @@ function savedbs()
     }
   }
 
-  if ( isset($_GET['world_realm']) )
+  if ( isset($_GET["world_realm"]) )
   {
-    $world_realms = ( ( isset($_GET['world_realm']) ) ? $sqlm->quote_smart($_GET['world_realm']) : NULL );
-    $world_hosts = ( ( isset($_GET['world_host']) ) ? $sqlm->quote_smart($_GET['world_host']) : NULL );
-    $world_ports = ( ( isset($_GET['world_port']) ) ? $sqlm->quote_smart($_GET['world_port']) : NULL );
-    $world_users = ( ( isset($_GET['world_user']) ) ? $sqlm->quote_smart($_GET['world_user']) : NULL );
-    $world_passes = ( ( isset($_GET['world_pass']) ) ? $sqlm->quote_smart($_GET['world_pass']) : NULL );
-    $world_names = ( ( isset($_GET['world_name']) ) ? $sqlm->quote_smart($_GET['world_name']) : NULL );
+    $world_realms = ( ( isset($_GET["world_realm"]) ) ? $sqlm->quote_smart($_GET["world_realm"]) : NULL );
+    $world_hosts = ( ( isset($_GET["world_host"]) ) ? $sqlm->quote_smart($_GET["world_host"]) : NULL );
+    $world_ports = ( ( isset($_GET["world_port"]) ) ? $sqlm->quote_smart($_GET["world_port"]) : NULL );
+    $world_users = ( ( isset($_GET["world_user"]) ) ? $sqlm->quote_smart($_GET["world_user"]) : NULL );
+    $world_passes = ( ( isset($_GET["world_pass"]) ) ? $sqlm->quote_smart($_GET["world_pass"]) : NULL );
+    $world_names = ( ( isset($_GET["world_name"]) ) ? $sqlm->quote_smart($_GET["world_name"]) : NULL );
 
     for ( $i=0; $i<count($world_hosts); $i++ )
     {
@@ -333,9 +333,9 @@ function savedbs()
     }
   }
 
-  if ( isset($_GET['remove_world']) )
+  if ( isset($_GET["remove_world"]) )
   {
-    $remove_worlds = ( ( isset($_GET['remove_world']) ) ? $sqlm->quote_smart($_GET['remove_world']) : NULL );
+    $remove_worlds = ( ( isset($_GET["remove_world"]) ) ? $sqlm->quote_smart($_GET["remove_world"]) : NULL );
 
     for ( $i=0; $i<count($remove_worlds); $i++ )
     {
@@ -352,62 +352,62 @@ function general()
   global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
-  if ( isset($_GET['subsection']) )
-    $subsection = $sqlm->quote_smart($_GET['subsection']);
+  if ( isset($_GET["subsection"]) )
+    $subsection = $sqlm->quote_smart($_GET["subsection"]);
   else
     $subsection = 1;
 
   $output .= '
         <table id="sidebar">
           <tr>
-            <td '.($subsection == 'version' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=version">'.lang('admin', 'version').'</a></td>
+            <td '.($subsection == 'version' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=version">'.lang("admin", "version").'</a></td>
           </tr>
           <tr>
-            <td '.($subsection == 'mail' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=mail">'.lang('admin', 'mail').'</a></td>
+            <td '.($subsection == 'mail' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=mail">'.lang("admin", "mail").'</a></td>
           </tr>
           <tr>
-            <td '.($subsection == 'irc' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=irc">'.lang('admin', 'irc').'</a></td>
+            <td '.($subsection == 'irc' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=irc">'.lang("admin", "irc").'</a></td>
           </tr>
           <tr>
-            <td '.($subsection == 'proxy' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=proxy">'.lang('admin', 'proxy').'</a></td>
+            <td '.($subsection == 'proxy' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=proxy">'.lang("admin", "proxy").'</a></td>
           </tr>
           <tr>
-            <td '.($subsection == 'datasite' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=datasite">'.lang('admin', 'datasite').'</a></td>
+            <td '.($subsection == 'datasite' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=datasite">'.lang("admin", "datasite").'</a></td>
           </tr>
           <tr>
-            <td '.($subsection == 'acctcreation' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=acctcreation">'.lang('admin', 'acct_creation').'</a></td>
+            <td '.($subsection == 'acctcreation' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=acctcreation">'.lang("admin", "acct_creation").'</a></td>
           </tr>
           <tr>
-            <td '.($subsection == 'guests' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=guests">'.lang('admin', 'guests').'</a></td>
+            <td '.($subsection == 'guests' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=guests">'.lang("admin", "guests").'</a></td>
           </tr>
           <tr>
-            <td '.($subsection == 'extratools' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=extratools">'.lang('admin', 'extra_tools').'</a></td>
+            <td '.($subsection == 'extratools' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=extratools">'.lang("admin", "extra_tools").'</a></td>
           </tr>
           <tr>
-            <td '.($subsection == 'internalmap' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=internalmap">'.lang('admin', 'internal_map').'</a></td>
+            <td '.($subsection == 'internalmap' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=internalmap">'.lang("admin", "internal_map").'</a></td>
           </tr>
           <tr>
-            <td '.($subsection == 'validip' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=validip">'.lang('admin', 'validip').'</a></td>
+            <td '.($subsection == 'validip' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=validip">'.lang("admin", "validip").'</a></td>
           </tr>
           <tr>
-            <td '.($subsection == 'ads' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=ads">'.lang('admin', 'ads').'</a></td>
+            <td '.($subsection == 'ads' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=ads">'.lang("admin", "ads").'</a></td>
           </tr>
           <tr>
-            <td '.($subsection == 'more' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=more">'.lang('admin', 'more').'</a></td>
+            <td '.($subsection == 'more' ? 'id="current"' : '').'><a href="admin.php?section=general&subsection=more">'.lang("admin", "more").'</a></td>
           </tr>
         </table>';
 
-  if ( isset($_GET['error']) )
+  if ( isset($_GET["error"]) )
     $output .= '
       <div id="misc_error">';
   else
     $output .= '
       <div id="misc">';
 
-  if ( isset($_GET['subaction']) )
-     $sub_action = $_GET['subaction'];
+  if ( isset($_GET["subaction"]) )
+     $sub_action = $_GET["subaction"];
   else
      $sub_action = '';
 
@@ -429,42 +429,42 @@ function general()
           <input type="hidden" name="subsection" value="version">
           <table class="simple">
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'show').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'show').'</a>: </td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "show").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "show").'</a>: </td>
               <td>
                 <select name="showversion" id="admin_showversion_field">
-                  <option value="0" '.(($show_version_show['Value'] == 0) ? 'selected="selected"' : '').'>'.lang('admin', 'dontshow').'</option>
-                  <option value="1" '.(($show_version_show['Value'] == 1) ? 'selected="selected"' : '').'disabled="disabled">'.lang('admin', 'version').'</option>
-                  <option value="2"'.(($show_version_show['Value'] == 2) ? 'selected="selected"' : '').'>'.lang('admin', 'verrev').'</option>
+                  <option value="0" '.(($show_version_show["Value"] == 0) ? 'selected="selected"' : '').'>'.lang("admin", "dontshow").'</option>
+                  <option value="1" '.(($show_version_show["Value"] == 1) ? 'selected="selected"' : '').'disabled="disabled">'.lang("admin", "version").'</option>
+                  <option value="2"'.(($show_version_show["Value"] == 2) ? 'selected="selected"' : '').'>'.lang("admin", "verrev").'</option>
                 </select>
               </td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'version').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'version').'</a>: </td>
-              <td><input type="text" name="version" value="'.$show_version_version['Value'].'" readonly="readonly" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "version").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "version").'</a>: </td>
+              <td><input type="text" name="version" value="'.$show_version_version["Value"].'" readonly="readonly" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'versionlvl').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'versionlvl').'</a>: </td>
-              <td><input type="text" name="versionlvl" value="'.$show_version_version_lvl['Value'].'" readonly="readonly" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "versionlvl").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "versionlvl").'</a>: </td>
+              <td><input type="text" name="versionlvl" value="'.$show_version_version_lvl["Value"].'" readonly="readonly" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'revision').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'revision').'</a>: </td>
-              <td><input type="text" name="revision" value="'.$show_version_revision['Value'].'" readonly="readonly" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "revision").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "revision").'</a>: </td>
+              <td><input type="text" name="revision" value="'.$show_version_revision["Value"].'" readonly="readonly" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'revisionlvl').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'revisionlvl').'</a>: </td>
-              <td><input type="text" name="revisionlvl" value="'.$show_version_revision_lvl['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "revisionlvl").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "revisionlvl").'</a>: </td>
+              <td><input type="text" name="revisionlvl" value="'.$show_version_revision_lvl["Value"].'" /></td>
             </tr>
           </table>
-          <input type="submit" name="save" value="'.lang('admin', 'save').'" />
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
         </form>';
       }
       else
       {
-        $show_version = $sqlm->quote_smart($_GET['showversion']);
-        $version = $sqlm->quote_smart($_GET['version']);
-        $version_lvl = $sqlm->quote_smart($_GET['versionlvl']);
-        $revision = $sqlm->quote_smart($_GET['revision']);
-        $revision_lvl = $sqlm->quote_smart($_GET['revisionlvl']);
+        $show_version = $sqlm->quote_smart($_GET["showversion"]);
+        $version = $sqlm->quote_smart($_GET["version"]);
+        $version_lvl = $sqlm->quote_smart($_GET["versionlvl"]);
+        $revision = $sqlm->quote_smart($_GET["revision"]);
+        $revision_lvl = $sqlm->quote_smart($_GET["revisionlvl"]);
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$show_version."' WHERE `Key`='Show_Version_Show'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$version."' WHERE `Key`='Show_Version_Version'");
@@ -498,87 +498,87 @@ function general()
           <input type="hidden" name="subsection" value="mail">
           <table class="simple">
             <tr>
-              <td colspan=2><b>'.lang('admin', 'email').'</b></td>
+              <td colspan=2><b>'.lang("admin", "email").'</b></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'adminemail').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'adminemail').'</a>: </td>
-              <td><input type="text" name="adminemail" value="'.$mail_admin_email['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "adminemail").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "adminemail").'</a>: </td>
+              <td><input type="text" name="adminemail" value="'.$mail_admin_email["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'mailertype').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'mailertype').'</a>: </td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "mailertype").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "mailertype").'</a>: </td>
               <td>
                 <select name="mailertype" id="admin_mailertype_field">
-                  <option value="mail" '.(($mail_mailer_type['Value'] == 'mail') ? 'selected="selected"' : '').'>'.lang('admin', 'mail').'</option>
-                  <option value="sendmail" '.(($mail_mailer_type['Value'] == 'sendmail') ? 'selected="selected"' : '').'">'.lang('admin', 'sendmail').'</option>
-                  <option value="smtp"'.(($mail_mailer_type['Value'] == 'smtp') ? 'selected="selected"' : '').'>'.lang('admin', 'smtp').'</option>
+                  <option value="mail" '.(($mail_mailer_type["Value"] == 'mail') ? 'selected="selected"' : '').'>'.lang("admin", "mail").'</option>
+                  <option value="sendmail" '.(($mail_mailer_type["Value"] == 'sendmail') ? 'selected="selected"' : '').'">'.lang("admin", "sendmail").'</option>
+                  <option value="smtp"'.(($mail_mailer_type["Value"] == 'smtp') ? 'selected="selected"' : '').'>'.lang("admin", "smtp").'</option>
                 </select>
               </td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'fromemail').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'fromemail').'</a>: </td>
-              <td><input type="text" name="fromemail" value="'.$mail_from_email['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "fromemail").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "fromemail").'</a>: </td>
+              <td><input type="text" name="fromemail" value="'.$mail_from_email["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'usegmail').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'usegmail').'</a>: </td>
-              <td><input type="checkbox" name="gmail" '.($mail_gmailsender['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "usegmail").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "usegmail").'</a>: </td>
+              <td><input type="checkbox" name="gmail" '.($mail_gmailsender["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'formathtml').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'formathtml').'</a>: </td>
-              <td><input type="checkbox" name="usehtml" '.($format_mail_html['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "formathtml").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "formathtml").'</a>: </td>
+              <td><input type="checkbox" name="usehtml" '.($format_mail_html["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td colspan=2><b>'.lang('admin', 'smtp').'</b></td>
+              <td colspan=2><b>'.lang("admin", "smtp").'</b></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'smtphost').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'smtphost').'</a>: </td>
-              <td><input type="text" name="smtphost" value="'.$smtp_host['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "smtphost").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "smtphost").'</a>: </td>
+              <td><input type="text" name="smtphost" value="'.$smtp_host["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'smtpport').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'smtpport').'</a>: </td>
-              <td><input type="text" name="smtpport" value="'.$smtp_port['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "smtpport").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "smtpport").'</a>: </td>
+              <td><input type="text" name="smtpport" value="'.$smtp_port["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'smtpuser').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'smtpuser').'</a>: </td>
-              <td><input type="text" name="smtpuser" value="'.$smtp_user['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "smtpuser").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "smtpuser").'</a>: </td>
+              <td><input type="text" name="smtpuser" value="'.$smtp_user["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'smtppass').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'smtppass').'</a>: </td>
-              <td><input type="text" name="smtppass" value="'.$smtp_pass['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "smtppass").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "smtppass").'</a>: </td>
+              <td><input type="text" name="smtppass" value="'.$smtp_pass["Value"].'" /></td>
             </tr>
             <tr>
-              <td colspan=2><b>'.lang('admin', 'pm').'</b></td>
+              <td colspan=2><b>'.lang("admin", "pm").'</b></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'pmfrom').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'pmfrom').'</a>: </td>
-              <td><input type="text" name="fromchar" value="'.$pm_from_char['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "pmfrom").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "pmfrom").'</a>: </td>
+              <td><input type="text" name="fromchar" value="'.$pm_from_char["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'pmstation').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'pmstation').'</a>: </td>
-              <td><input type="text" name="stationary" value="'.$pm_stationary['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "pmstation").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "pmstation").'</a>: </td>
+              <td><input type="text" name="stationary" value="'.$pm_stationary["Value"].'" /></td>
             </tr>
           </table>
-          <input type="submit" name="save" value="'.lang('admin', 'save').'" />
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
         </form>';
       }
       else
       {
-        $mail_admin_email = $sqlm->quote_smart($_GET['adminemail']);
-        $mail_mailer_type = $sqlm->quote_smart($_GET['mailertype']);
-        $mail_from_email = $sqlm->quote_smart($_GET['fromemail']);
-        if ( isset($_GET['gmail']) )
+        $mail_admin_email = $sqlm->quote_smart($_GET["adminemail"]);
+        $mail_mailer_type = $sqlm->quote_smart($_GET["mailertype"]);
+        $mail_from_email = $sqlm->quote_smart($_GET["fromemail"]);
+        if ( isset($_GET["gmail"]) )
           $mail_gmailsender = 1;
         else
           $mail_gmailsender = 0;
-        if ( isset($_GET['usehtml']) )
+        if ( isset($_GET["usehtml"]) )
           $format_mail_html = 1;
         else
           $format_mail_html = 0;
-        $smtp_host = $sqlm->quote_smart($_GET['smtphost']);
-        $smtp_port = $sqlm->quote_smart($_GET['smtpport']);
-        $smtp_user = $sqlm->quote_smart($_GET['smtpuser']);
-        $smtp_pass = $sqlm->quote_smart($_GET['smtppass']);
-        $pm_from_char = $sqlm->quote_smart($_GET['fromchar']);
-        $pm_stationary = $sqlm->quote_smart($_GET['stationary']);
+        $smtp_host = $sqlm->quote_smart($_GET["smtphost"]);
+        $smtp_port = $sqlm->quote_smart($_GET["smtpport"]);
+        $smtp_user = $sqlm->quote_smart($_GET["smtpuser"]);
+        $smtp_pass = $sqlm->quote_smart($_GET["smtppass"]);
+        $pm_from_char = $sqlm->quote_smart($_GET["fromchar"]);
+        $pm_stationary = $sqlm->quote_smart($_GET["stationary"]);
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$mail_admin_email."' WHERE `Key`='Mail_Admin_Email'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$mail_mailer_type."' WHERE `Key`='Mail_Mailer_Type'");
@@ -611,31 +611,31 @@ function general()
           <input type="hidden" name="subsection" value="irc">
           <table class="simple">
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'irchost').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'irchost').'</a>: </td>
-              <td><input type="text" name="irchost" value="'.$irc_host['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "irchost").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "irchost").'</a>: </td>
+              <td><input type="text" name="irchost" value="'.$irc_host["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'ircport').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'ircport').'</a>: </td>
-              <td><input type="text" name="ircport" value="'.$irc_port['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ircport").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ircport").'</a>: </td>
+              <td><input type="text" name="ircport" value="'.$irc_port["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'ircchannel').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'ircchannel').'</a>: </td>
-              <td><input type="text" name="ircchannel" value="'.$irc_channel['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ircchannel").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ircchannel").'</a>: </td>
+              <td><input type="text" name="ircchannel" value="'.$irc_channel["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'irchelppage').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'irchelppage').'</a>: </td>
-              <td><input type="text" name="irchelppage" value="'.$irc_helppage['Value'].'" readonly="readonly" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "irchelppage").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "irchelppage").'</a>: </td>
+              <td><input type="text" name="irchelppage" value="'.$irc_helppage["Value"].'" readonly="readonly" /></td>
             </tr>
           </table>
-          <input type="submit" name="save" value="'.lang('admin', 'save').'" />
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
         </form>';
       }
       else
       {
-        $irc_host = $sqlm->quote_smart($_GET['irchost']);
-        $irc_port = $sqlm->quote_smart($_GET['ircport']);
-        $irc_channel = $sqlm->quote_smart($_GET['ircchannel']);
-        $irc_helppage = $sqlm->quote_smart($_GET['irchelppage']);
+        $irc_host = $sqlm->quote_smart($_GET["irchost"]);
+        $irc_port = $sqlm->quote_smart($_GET["ircport"]);
+        $irc_channel = $sqlm->quote_smart($_GET["ircchannel"]);
+        $irc_helppage = $sqlm->quote_smart($_GET["irchelppage"]);
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$irc_host."' WHERE `Key`='IRC_Server'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$irc_port."' WHERE `Key`='IRC_Port'");
@@ -661,31 +661,31 @@ function general()
           <input type="hidden" name="subsection" value="proxy">
           <table class="simple">
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'proxyhost').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'proxyhost').'</a>: </td>
-              <td><input type="text" name="proxyhost" value="'.$proxy_host['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "proxyhost").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "proxyhost").'</a>: </td>
+              <td><input type="text" name="proxyhost" value="'.$proxy_host["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'proxyport').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'proxyport').'</a>: </td>
-              <td><input type="text" name="proxyport" value="'.$proxy_port['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "proxyport").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "proxyport").'</a>: </td>
+              <td><input type="text" name="proxyport" value="'.$proxy_port["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'proxyuser').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'proxyuser').'</a>: </td>
-              <td><input type="text" name="proxyuser" value="'.$proxy_user['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "proxyuser").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "proxyuser").'</a>: </td>
+              <td><input type="text" name="proxyuser" value="'.$proxy_user["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'proxypass').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'proxypass').'</a>: </td>
-              <td><input type="text" name="proxypass" value="'.$proxy_pass['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "proxypass").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "proxypass").'</a>: </td>
+              <td><input type="text" name="proxypass" value="'.$proxy_pass["Value"].'" /></td>
             </tr>
           </table>
-          <input type="submit" name="save" value="'.lang('admin', 'save').'" />
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
         </form>';
       }
       else
       {
-        $proxy_host = $sqlm->quote_smart($_GET['proxyhost']);
-        $proxy_port = $sqlm->quote_smart($_GET['proxyport']);
-        $proxy_user = $sqlm->quote_smart($_GET['proxyuser']);
-        $proxy_pass = $sqlm->quote_smart($_GET['proxypass']);
+        $proxy_host = $sqlm->quote_smart($_GET["proxyhost"]);
+        $proxy_port = $sqlm->quote_smart($_GET["proxyport"]);
+        $proxy_user = $sqlm->quote_smart($_GET["proxyuser"]);
+        $proxy_pass = $sqlm->quote_smart($_GET["proxypass"]);
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$proxy_host."' WHERE `Key`='Proxy_Addr'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$proxy_port."' WHERE `Key`='Proxy_Port'");
@@ -714,46 +714,46 @@ function general()
           <input type="hidden" name="subsection" value="datasite">
           <table class="simple" id="admin_datasite">
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'datasiteitem').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'datasiteitem').'</a>: </td>
-              <td><input type="text" name="datasiteitem" value="'.$datasite_item['Value'].'" size="50" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasiteitem").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasiteitem").'</a>: </td>
+              <td><input type="text" name="datasiteitem" value="'.$datasite_item["Value"].'" size="50" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'datasitequest').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'datasitequest').'</a>: </td>
-              <td><input type="text" name="datasitequest" value="'.$datasite_quest['Value'].'" size="50" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasitequest").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitequest").'</a>: </td>
+              <td><input type="text" name="datasitequest" value="'.$datasite_quest["Value"].'" size="50" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'datasitecreature').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'datasitecreature').'</a>: </td>
-              <td><input type="text" name="datasitecreature" value="'.$datasite_creature['Value'].'" size="50" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasitecreature").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitecreature").'</a>: </td>
+              <td><input type="text" name="datasitecreature" value="'.$datasite_creature["Value"].'" size="50" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'datasitespell').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'datasitespell').'</a>: </td>
-              <td><input type="text" name="datasitespell" value="'.$datasite_spell['Value'].'" size="50" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasitespell").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitespell").'</a>: </td>
+              <td><input type="text" name="datasitespell" value="'.$datasite_spell["Value"].'" size="50" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'datasiteskill').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'datasiteskill').'</a>: </td>
-              <td><input type="text" name="datasiteskill" value="'.$datasite_skill['Value'].'" size="50" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasiteskill").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasiteskill").'</a>: </td>
+              <td><input type="text" name="datasiteskill" value="'.$datasite_skill["Value"].'" size="50" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'datasitego').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'datasitego').'</a>: </td>
-              <td><input type="text" name="datasitego" value="'.$datasite_go['Value'].'" size="50" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasitego").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitego").'</a>: </td>
+              <td><input type="text" name="datasitego" value="'.$datasite_go["Value"].'" size="50" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'datasiteachieve').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'datasiteachieve').'</a>: </td>
-              <td><input type="text" name="datasiteachieve" value="'.$datasite_achieve['Value'].'" size="50" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasiteachieve").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasiteachieve").'</a>: </td>
+              <td><input type="text" name="datasiteachieve" value="'.$datasite_achieve["Value"].'" size="50" /></td>
             </tr>
           </table>
-          <input type="submit" name="save" value="'.lang('admin', 'save').'" />
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
         </form>';
       }
       else
       {
-        $datasite_item = $sqlm->quote_smart($_GET['datasiteitem']);
-        $datasite_quest = $sqlm->quote_smart($_GET['datasitequest']);
-        $datasite_creature = $sqlm->quote_smart($_GET['datasitecreature']);
-        $datasite_spell = $sqlm->quote_smart($_GET['datasitespell']);
-        $datasite_skill = $sqlm->quote_smart($_GET['datasiteskill']);
-        $datasite_go = $sqlm->quote_smart($_GET['datasitego']);
-        $datasite_achieve = $sqlm->quote_smart($_GET['datasiteachieve']);
+        $datasite_item = $sqlm->quote_smart($_GET["datasiteitem"]);
+        $datasite_quest = $sqlm->quote_smart($_GET["datasitequest"]);
+        $datasite_creature = $sqlm->quote_smart($_GET["datasitecreature"]);
+        $datasite_spell = $sqlm->quote_smart($_GET["datasitespell"]);
+        $datasite_skill = $sqlm->quote_smart($_GET["datasiteskill"]);
+        $datasite_go = $sqlm->quote_smart($_GET["datasitego"]);
+        $datasite_achieve = $sqlm->quote_smart($_GET["datasiteachieve"]);
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$datasite_item."' WHERE `Key`='Datasite_Item'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$datasite_quest."' WHERE `Key`='Datasite_Quest'");
@@ -789,87 +789,87 @@ function general()
           <input type="hidden" name="subsection" value="acctcreation">
           <table class="simple" id="admin_acct_creation">
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'disableacccreation').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'disableacccreation').'</a>: </td>
-              <td><input type="checkbox" name="disableacccreation" '.($disable_acc_creation['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "disableacccreation").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "disableacccreation").'</a>: </td>
+              <td><input type="checkbox" name="disableacccreation" '.($disable_acc_creation["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'expansionselect').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'expansionselect').'</a>: </td>
-              <td><input type="checkbox" name="expansionselect" '.($expansion_select['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "expansionselect").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "expansionselect").'</a>: </td>
+              <td><input type="checkbox" name="expansionselect" '.($expansion_select["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'defaultexpansion').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'defaultexpansion').'</a>: </td>
-              <td><input type="text" name="defaultexpansion" value="'.$default_expansion['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "defaultexpansion").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "defaultexpansion").'</a>: </td>
+              <td><input type="text" name="defaultexpansion" value="'.$default_expansion["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'enabledcaptcha').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'enabledcaptcha').'</a>: </td>
-              <td><input type="checkbox" name="enabledcaptcha" '.($enabled_captcha['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "enabledcaptcha").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "enabledcaptcha").'</a>: </td>
+              <td><input type="checkbox" name="enabledcaptcha" '.($enabled_captcha["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'userecaptcha').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'userecaptcha').'</a>: </td>
-              <td><input type="checkbox" name="userecaptcha" '.($using_recaptcha['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "userecaptcha").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "userecaptcha").'</a>: </td>
+              <td><input type="checkbox" name="userecaptcha" '.($using_recaptcha["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'publickey').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'publickey').'</a>: </td>
-              <td><input type="text" name="publickey" value="'.$publickey['Value'].'" size="60" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "publickey").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "publickey").'</a>: </td>
+              <td><input type="text" name="publickey" value="'.$publickey["Value"].'" size="60" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'privatekey').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'privatekey').'</a>: </td>
-              <td><input type="text" name="privatekey" value="'.$privatekey['Value'].'" size="60" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "privatekey").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "privatekey").'</a>: </td>
+              <td><input type="text" name="privatekey" value="'.$privatekey["Value"].'" size="60" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'sendmailoncreation').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'sendmailoncreation').'</a>: </td>
-              <td><input type="checkbox" name="sendmailoncreation" '.($send_mail_on_creation['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sendmailoncreation").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sendmailoncreation").'</a>: </td>
+              <td><input type="checkbox" name="sendmailoncreation" '.($send_mail_on_creation["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'sendconfirmmailoncreation').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'sendconfirmmailoncreation').'</a>: </td>
-              <td><input type="checkbox" name="sendconfirmmailoncreation" '.($send_confirmation_mail_on_creation['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sendconfirmmailoncreation").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sendconfirmmailoncreation").'</a>: </td>
+              <td><input type="checkbox" name="sendconfirmmailoncreation" '.($send_confirmation_mail_on_creation["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'validatemailhost').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'validatemailhost').'</a>: </td>
-              <td><input type="checkbox" name="validatemailhost" '.($validate_mail_host['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "validatemailhost").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "validatemailhost").'</a>: </td>
+              <td><input type="checkbox" name="validatemailhost" '.($validate_mail_host["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'limitaccperip').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'limitaccperip').'</a>: </td>
-              <td><input type="checkbox" name="limitaccperip" '.($limit_acc_per_ip['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "limitaccperip").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "limitaccperip").'</a>: </td>
+              <td><input type="checkbox" name="limitaccperip" '.($limit_acc_per_ip["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
           </table>
-          <input type="submit" name="save" value="'.lang('admin', 'save').'" />
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
         </form>';
       }
       else
       {
-        if ( isset($_GET['disableacccreation']) )
+        if ( isset($_GET["disableacccreation"]) )
           $disable_acc_creation = 1;
         else
           $disable_acc_creation = 0;
-        if ( isset($_GET['expansionselect']) )
+        if ( isset($_GET["expansionselect"]) )
           $expansion_select = 1;
         else
           $expansion_select = 0;
-        $default_expansion = $sqlm->quote_smart($_GET['defaultexpansion']);
-        if ( isset($_GET['enabledcaptcha']) )
+        $default_expansion = $sqlm->quote_smart($_GET["defaultexpansion"]);
+        if ( isset($_GET["enabledcaptcha"]) )
           $enabled_captcha = 1;
         else
           $enabled_captcha = 0;
-        if ( isset($_GET['userecaptcha']) )
+        if ( isset($_GET["userecaptcha"]) )
           $using_recaptcha = 1;
         else
           $using_recaptcha = 0;
-        $publickey = $sqlm->quote_smart($_GET['publickey']);
-        $privatekey = $sqlm->quote_smart($_GET['privatekey']);
-        if ( isset($_GET['sendmailoncreation']) )
+        $publickey = $sqlm->quote_smart($_GET["publickey"]);
+        $privatekey = $sqlm->quote_smart($_GET["privatekey"]);
+        if ( isset($_GET["sendmailoncreation"]) )
           $send_mail_on_creation = 1;
         else
           $send_mail_on_creation = 0;
-        if ( isset($_GET['sendconfirmmailoncreation']) )
+        if ( isset($_GET["sendconfirmmailoncreation"]) )
           $send_confirmation_mail_on_creation = 1;
         else
           $send_confirmation_mail_on_creation = 0;
-        if ( isset($_GET['validatemailhost']) )
+        if ( isset($_GET["validatemailhost"]) )
           $validate_mail_host = 1;
         else
           $validate_mail_host = 0;
-        if ( isset($_GET['limitaccperip']) )
+        if ( isset($_GET["limitaccperip"]) )
           $limit_acc_per_ip = 1;
         else
           $limit_acc_per_ip = 0;
@@ -904,27 +904,27 @@ function general()
           <input type="hidden" name="subsection" value="guests">
           <table class="simple">
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'allowanony').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'allowanony').'</a>: </td>
-              <td><input type="checkbox" name="allowanony" '.($acp_allow_anony['Value'] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "allowanony").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "allowanony").'</a>: </td>
+              <td><input type="checkbox" name="allowanony" '.($acp_allow_anony["Value"] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'anonyname').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'anonyname').'</a>: </td>
-              <td><input type="text" name="anonyname" value="'.$acp_anony_name['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "anonyname").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "anonyname").'</a>: </td>
+              <td><input type="text" name="anonyname" value="'.$acp_anony_name["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'anonyrealmid').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'anonyrealmid').'</a>: </td>
-              <td><input type="text" name="anonyrealmid" value="'.$acp_anony_realm_id['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "anonyrealmid").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "anonyrealmid").'</a>: </td>
+              <td><input type="text" name="anonyrealmid" value="'.$acp_anony_realm_id["Value"].'" /></td>
             </tr>
           </table>
-          <input type="submit" name="save" value="'.lang('admin', 'save').'" />
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
         </form>';
       }
       else
       {
         // Allow Anonymous is disabled but must stay checked
         $acp_allow_anony = 1;
-        $acp_anony_name = $sqlm->quote_smart($_GET['anonyname']);
-        $acp_anony_realm_id = $sqlm->quote_smart($_GET['anonyrealmid']);
+        $acp_anony_name = $sqlm->quote_smart($_GET["anonyname"]);
+        $acp_anony_realm_id = $sqlm->quote_smart($_GET["anonyrealmid"]);
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$acp_allow_anony."' WHERE `Key`='Allow_Anony'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$acp_anony_name."' WHERE `Key`='Anony_Name'");
@@ -956,72 +956,72 @@ function general()
           <input type="hidden" name="subsection" value="extratools">
           <table class="simple">
             <tr>
-              <td colspan=2><b>'.lang('admin', 'questitemvendor').'</b></td>
+              <td colspan=2><b>'.lang("admin", "questitemvendor").'</b></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'questitemvendorlevelmul').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'questitemvendorlevelmul').'</a>: </td>
-              <td><input type="text" name="questitemvendorlevelmul" value="'.$quest_item_vendor_level_mul['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "questitemvendorlevelmul").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "questitemvendorlevelmul").'</a>: </td>
+              <td><input type="text" name="questitemvendorlevelmul" value="'.$quest_item_vendor_level_mul["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'questitemvendorrewmul').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'questitemvendorrewmul').'</a>: </td>
-              <td><input type="text" name="questitemvendorrewmul" value="'.$quest_item_vendor_rew_mul['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "questitemvendorrewmul").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "questitemvendorrewmul").'</a>: </td>
+              <td><input type="text" name="questitemvendorrewmul" value="'.$quest_item_vendor_rew_mul["Value"].'" /></td>
             </tr>
             <tr>
-              <td colspan=2><b>'.lang('admin', 'ultravendor').'</b></td>
+              <td colspan=2><b>'.lang("admin", "ultravendor").'</b></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'ultravendormult0').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'ultravendormult0').'</a>: </td>
-              <td><input type="text" name="ultravendormult0" value="'.$ultra_vendor_mult_0['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult0").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult0").'</a>: </td>
+              <td><input type="text" name="ultravendormult0" value="'.$ultra_vendor_mult_0["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'ultravendormult1').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'ultravendormult1').'</a>: </td>
-              <td><input type="text" name="ultravendormult1" value="'.$ultra_vendor_mult_1['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult1").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult1").'</a>: </td>
+              <td><input type="text" name="ultravendormult1" value="'.$ultra_vendor_mult_1["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'ultravendormult2').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'ultravendormult2').'</a>: </td>
-              <td><input type="text" name="ultravendormult2" value="'.$ultra_vendor_mult_2['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult2").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult2").'</a>: </td>
+              <td><input type="text" name="ultravendormult2" value="'.$ultra_vendor_mult_2["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'ultravendormult3').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'ultravendormult3').'</a>: </td>
-              <td><input type="text" name="ultravendormult3" value="'.$ultra_vendor_mult_3['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult3").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult3").'</a>: </td>
+              <td><input type="text" name="ultravendormult3" value="'.$ultra_vendor_mult_3["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'ultravendormult4').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'ultravendormult4').'</a>: </td>
-              <td><input type="text" name="ultravendormult4" value="'.$ultra_vendor_mult_4['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult4").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult4").'</a>: </td>
+              <td><input type="text" name="ultravendormult4" value="'.$ultra_vendor_mult_4["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'ultravendormult5').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'ultravendormult5').'</a>: </td>
-              <td><input type="text" name="ultravendormult5" value="'.$ultra_vendor_mult_5['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult5").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult5").'</a>: </td>
+              <td><input type="text" name="ultravendormult5" value="'.$ultra_vendor_mult_5["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'ultravendormult6').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'ultravendormult6').'</a>: </td>
-              <td><input type="text" name="ultravendormult6" value="'.$ultra_vendor_mult_6['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult6").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult6").'</a>: </td>
+              <td><input type="text" name="ultravendormult6" value="'.$ultra_vendor_mult_6["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'ultravendormult7').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'ultravendormult7').'</a>: </td>
-              <td><input type="text" name="ultravendormult7" value="'.$ultra_vendor_mult_7['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult7").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult7").'</a>: </td>
+              <td><input type="text" name="ultravendormult7" value="'.$ultra_vendor_mult_7["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'ultravendorbase').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'ultravendorbase').'</a>: </td>
-              <td><input type="text" name="ultravendorbase" value="'.$ultra_vendor_base['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendorbase").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendorbase").'</a>: </td>
+              <td><input type="text" name="ultravendorbase" value="'.$ultra_vendor_base["Value"].'" /></td>
             </tr>
           </table>
-          <input type="submit" name="save" value="'.lang('admin', 'save').'" />
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
         </form>';
       }
       else
       {
-        $quest_item_vendor_level_mul = $sqlm->quote_smart($_GET['questitemvendorlevelmul']);
-        $quest_item_vendor_rew_mul = $sqlm->quote_smart($_GET['questitemvendorrewmul']);
-        $ultra_vendor_mult_0 = $sqlm->quote_smart($_GET['ultravendormult0']);
-        $ultra_vendor_mult_1 = $sqlm->quote_smart($_GET['ultravendormult1']);
-        $ultra_vendor_mult_2 = $sqlm->quote_smart($_GET['ultravendormult2']);
-        $ultra_vendor_mult_3 = $sqlm->quote_smart($_GET['ultravendormult3']);
-        $ultra_vendor_mult_4 = $sqlm->quote_smart($_GET['ultravendormult4']);
-        $ultra_vendor_mult_5 = $sqlm->quote_smart($_GET['ultravendormult5']);
-        $ultra_vendor_mult_6 = $sqlm->quote_smart($_GET['ultravendormult6']);
-        $ultra_vendor_mult_7 = $sqlm->quote_smart($_GET['ultravendormult7']);
-        $ultra_vendor_base = $sqlm->quote_smart($_GET['ultravendorbase']);
+        $quest_item_vendor_level_mul = $sqlm->quote_smart($_GET["questitemvendorlevelmul"]);
+        $quest_item_vendor_rew_mul = $sqlm->quote_smart($_GET["questitemvendorrewmul"]);
+        $ultra_vendor_mult_0 = $sqlm->quote_smart($_GET["ultravendormult0"]);
+        $ultra_vendor_mult_1 = $sqlm->quote_smart($_GET["ultravendormult1"]);
+        $ultra_vendor_mult_2 = $sqlm->quote_smart($_GET["ultravendormult2"]);
+        $ultra_vendor_mult_3 = $sqlm->quote_smart($_GET["ultravendormult3"]);
+        $ultra_vendor_mult_4 = $sqlm->quote_smart($_GET["ultravendormult4"]);
+        $ultra_vendor_mult_5 = $sqlm->quote_smart($_GET["ultravendormult5"]);
+        $ultra_vendor_mult_6 = $sqlm->quote_smart($_GET["ultravendormult6"]);
+        $ultra_vendor_mult_7 = $sqlm->quote_smart($_GET["ultravendormult7"]);
+        $ultra_vendor_base = $sqlm->quote_smart($_GET["ultravendorbase"]);
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$quest_item_vendor_level_mul."' WHERE `Key`='Quest_Item_Vendor_Level_Mul'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$quest_item_vendor_rew_mul."' WHERE `Key`='Quest_Item_Vendor_Rew_Mul'");
@@ -1061,87 +1061,87 @@ function general()
           <input type="hidden" name="subsection" value="internalmap">
           <table class="simple">
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'statusgmincludeall').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'statusgmincludeall').'</a>: </td>
-              <td><input type="checkbox" name="statusgmincludeall" '.($map_status_gm_include_all['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "statusgmincludeall").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "statusgmincludeall").'</a>: </td>
+              <td><input type="checkbox" name="statusgmincludeall" '.($map_status_gm_include_all["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <!-- td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'gmshowonlineonlygmoff').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'gmshowonlineonlygmoff').'</a>: </td>
-              <td><input type="checkbox" name="gmshowonlineonlygmoff" '.($map_gm_show_online_only_gmoff['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <!-- td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "gmshowonlineonlygmoff").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmshowonlineonlygmoff").'</a>: </td>
+              <td><input type="checkbox" name="gmshowonlineonlygmoff" '.($map_gm_show_online_only_gmoff["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'gmshowonlineonlygmvisible').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'gmshowonlineonlygmvisible').'</a>: </td>
-              <td><input type="checkbox" name="gmshowonlineonlygmvisible" '.($map_gm_show_online_only_gmvisible['Value'] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "gmshowonlineonlygmvisible").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmshowonlineonlygmvisible").'</a>: </td>
+              <td><input type="checkbox" name="gmshowonlineonlygmvisible" '.($map_gm_show_online_only_gmvisible["Value"] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
             </tr -->
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'gmaddsuffix').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'gmaddsuffix').'</a>: </td>
-              <td><input type="checkbox" name="gmaddsuffix" '.($map_gm_add_suffix['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "gmaddsuffix").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmaddsuffix").'</a>: </td>
+              <td><input type="checkbox" name="gmaddsuffix" '.($map_gm_add_suffix["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <!-- tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'showstatus').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'showstatus').'</a>: </td>
-              <td><input type="checkbox" name="showstatus" '.($map_show_status['Value'] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "showstatus").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showstatus").'</a>: </td>
+              <td><input type="checkbox" name="showstatus" '.($map_show_status["Value"] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'showtimer').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'showtimer').'</a>: </td>
-              <td><input type="checkbox" name="showtimer" '.($map_show_timer['Value'] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "showtimer").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showtimer").'</a>: </td>
+              <td><input type="checkbox" name="showtimer" '.($map_show_timer["Value"] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'timer').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'timer').'</a>: </td>
-              <td><input type="text" name="timer" value="'.$map_timer['Value'].'" readonly="readonly" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "timer").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timer").'</a>: </td>
+              <td><input type="text" name="timer" value="'.$map_timer["Value"].'" readonly="readonly" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'showonline').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'showonline').'</a>: </td>
-              <td><input type="checkbox" name="showonline" '.($map_show_online['Value'] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "showonline").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showonline").'</a>: </td>
+              <td><input type="checkbox" name="showonline" '.($map_show_online["Value"] == 1 ? 'checked="checked"' : '').' disabled="disabled" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'timetoshowuptime').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'timetoshowuptime').'</a>: </td>
-              <td><input type="text" name="timetoshowuptime" value="'.$map_time_to_show_uptime['Value'].'" readonly="readonly" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "timetoshowuptime").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timetoshowuptime").'</a>: </td>
+              <td><input type="text" name="timetoshowuptime" value="'.$map_time_to_show_uptime["Value"].'" readonly="readonly" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'timetoshowmaxonline').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'timetoshowmaxonline').'</a>: </td>
-              <td><input type="text" name="timetoshowmaxonline" value="'.$map_time_to_show_maxonline['Value'].'" readonly="readonly" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "timetoshowmaxonline").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timetoshowmaxonline").'</a>: </td>
+              <td><input type="text" name="timetoshowmaxonline" value="'.$map_time_to_show_maxonline["Value"].'" readonly="readonly" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'timetoshowgmonline').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'timetoshowgmonline').'</a>: </td>
-              <td><input type="text" name="timetoshowgmonline" value="'.$map_time_to_show_gmonline['Value'].'" readonly="readonly" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "timetoshowgmonline").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timetoshowgmonline").'</a>: </td>
+              <td><input type="text" name="timetoshowgmonline" value="'.$map_time_to_show_gmonline["Value"].'" readonly="readonly" /></td>
             </tr -->
           </table>
-          <input type="submit" name="save" value="'.lang('admin', 'save').'" />
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
         </form>';
       }
       else
       {
-        if ( isset($_GET['gmshowonlineonlygmoff']) )
+        if ( isset($_GET["gmshowonlineonlygmoff"]) )
           $map_gm_show_online_only_gmoff = 1;
         else
           $map_gm_show_online_only_gmoff = 0;
-        if ( isset($_GET['gmshowonlineonlygmvisible']) )
+        if ( isset($_GET["gmshowonlineonlygmvisible"]) )
           $map_gm_show_online_only_gmvisible = 1;
         else
           $map_gm_show_online_only_gmvisible = 0;
-        if ( isset($_GET['gmaddsuffix']) )
+        if ( isset($_GET["gmaddsuffix"]) )
           $map_gm_add_suffix = 1;
         else
           $map_gm_add_suffix = 0;
-        if ( isset($_GET['statusgmincludeall']) )
+        if ( isset($_GET["statusgmincludeall"]) )
           $map_status_gm_include_all = 1;
         else
           $map_status_gm_include_all = 0;
-        if ( isset($_GET['showstatus']) )
+        if ( isset($_GET["showstatus"]) )
           $map_show_status = 1;
         else
           $map_show_status = 0;
-        if ( isset($_GET['showtimer']) )
+        if ( isset($_GET["showtimer"]) )
           $map_show_timer = 1;
         else
           $map_show_timer = 0;
-        $map_timer = $sqlm->quote_smart($_GET['timer']);
-        if ( isset($_GET['showonline']) )
+        $map_timer = $sqlm->quote_smart($_GET["timer"]);
+        if ( isset($_GET["showonline"]) )
           $map_show_online = 1;
         else
           $map_show_online = 0;
-        $map_time_to_show_uptime = $sqlm->quote_smart($_GET['timetoshowuptime']);
-        $map_time_to_show_maxonline = $sqlm->quote_smart($_GET['timetoshowmaxonline']);
-        $map_time_to_show_gmonline = $sqlm->quote_smart($_GET['timetoshowgmonline']);
+        $map_time_to_show_uptime = $sqlm->quote_smart($_GET["timetoshowuptime"]);
+        $map_time_to_show_maxonline = $sqlm->quote_smart($_GET["timetoshowmaxonline"]);
+        $map_time_to_show_gmonline = $sqlm->quote_smart($_GET["timetoshowgmonline"]);
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$map_gm_show_online_only_gmoff."' WHERE `Key`='Map_GM_Show_Online_Only_GMOff'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$map_gm_show_online_only_gmvisible."' WHERE `Key`='Map_GM_Show_Online_Only_GMVisible'");
@@ -1172,37 +1172,37 @@ function general()
           <table class="simple">
             <tr>
               <th width="10%">&nbsp;</th>
-              <th width="20%"><center>'.lang('admin', 'index').'</center></th>
-              <th>'.lang('admin', 'validipmask').'</th>
+              <th width="20%"><center>'.lang("admin", "index").'</center></th>
+              <th>'.lang("admin", "validipmask").'</th>
             </tr>';
         while ( $mask = $sqlm->fetch_assoc($masks_query) )
         {
           $output .= '
             <tr>
-              <td><input type="radio" name="index" value="'.$mask['Index'].'" /></td>
-              <td><center>'.$mask['Index'].'</center></td>
-              <td>'.$mask['ValidIPMask'].'</td>
+              <td><input type="radio" name="index" value="'.$mask["Index"].'" /></td>
+              <td><center>'.$mask["Index"].'</center></td>
+              <td>'.$mask["ValidIPMask"].'</td>
             </tr>';
         }
         $output .= '
           </table>
-          <input type="submit" name="edit" value="'.lang('admin', 'editipmask').'" />
-          <input type="submit" name="add" value="'.lang('admin', 'addipmask').'" />
-          <input type="submit" name="delete" value="'.lang('admin', 'deleteipmask').'" />
+          <input type="submit" name="edit" value="'.lang("admin", "editipmask").'" />
+          <input type="submit" name="add" value="'.lang("admin", "addipmask").'" />
+          <input type="submit" name="delete" value="'.lang("admin", "deleteipmask").'" />
         </form>';
       }
       elseif ( $sub_action == "editvalidip" )
       {
-        if ( isset($_GET['add']) )
+        if ( isset($_GET["add"]) )
         {
           $lim = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_valid_ip_mask"));
-          $lim = $lim['MAX(`Index`)'] + 1;
+          $lim = $lim["MAX(`Index`)"] + 1;
           $sqlm->query("INSERT INTO config_valid_ip_mask SET `Index`='".$lim."', ValidIPMask=''");
           redirect("admin.php?section=general&subsection=validip");
         }
-        elseif ( isset($_GET['delete']) )
+        elseif ( isset($_GET["delete"]) )
         {
-          $index = $sqlm->quote_smart($_GET['index']);
+          $index = $sqlm->quote_smart($_GET["index"]);
           if ( !is_numeric($index) )
             redirect("admin.php?section=general&subsection=validip&error=1");
 
@@ -1211,7 +1211,7 @@ function general()
         }
         else
         {
-          $index = $sqlm->quote_smart($_GET['index']);
+          $index = $sqlm->quote_smart($_GET["index"]);
           if ( !is_numeric($index) )
             redirect("admin.php?section=general&subsection=validip&error=1");
 
@@ -1221,25 +1221,25 @@ function general()
           <input type="hidden" name="section" value="general">
           <input type="hidden" name="subaction" value="savevalidip">
           <input type="hidden" name="subsection" value="validip">
-          <input type="hidden" name="index" value="'.$mask['Index'].'">
+          <input type="hidden" name="index" value="'.$mask["Index"].'">
           <table class="simple">
             <tr>
-              <th width="20%"><center>'.lang('admin', 'index').'</center></th>
-              <th id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'validipmask').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'validipmask').'</a></th>
+              <th width="20%"><center>'.lang("admin", "index").'</center></th>
+              <th id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "validipmask").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "validipmask").'</a></th>
             </tr>
             <tr>
-              <td><center>'.$mask['Index'].'</center></td>
-              <td><input type="text" name="mask" value="'.$mask['ValidIPMask'].'" /></td>
+              <td><center>'.$mask["Index"].'</center></td>
+              <td><input type="text" name="mask" value="'.$mask["ValidIPMask"].'" /></td>
             </tr>
           </table>
-          <input type="submit" name="save" value="'.lang('admin', 'save').'" />
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
         </form>';
         }
       }
       else
       {
-        $index = $sqlm->quote_smart($_GET['index']);
-        $mask = $sqlm->quote_smart($_GET['mask']);
+        $index = $sqlm->quote_smart($_GET["index"]);
+        $mask = $sqlm->quote_smart($_GET["mask"]);
         $result = $sqlm->query("UPDATE config_valid_ip_mask SET ValidIPMask='".$mask."' WHERE `Index`='".$index."'");
 
         redirect("admin.php?section=general&subsection=validip");
@@ -1259,24 +1259,24 @@ function general()
           <input type="hidden" name="subsection" value="ads">
           <table class="simple" id="admin_more">
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'enablebottomad').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'enablebottomad').'</a>: </td>
-              <td><input type="checkbox" name="enablebottomad" '.($enable_bottom_ad['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "enablebottomad").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "enablebottomad").'</a>: </td>
+              <td><input type="checkbox" name="enablebottomad" '.($enable_bottom_ad["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'bottomadcontent').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'bottomadcontent').'</a>: </td>
-              <td><textarea name="bottomadcontent" rows="5" cols="40">'.$bottom_ad_content['Value'].'</textarea></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "bottomadcontent").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "bottomadcontent").'</a>: </td>
+              <td><textarea name="bottomadcontent" rows="5" cols="40">'.$bottom_ad_content["Value"].'</textarea></td>
             </tr>
           </table>
-          <input type="submit" name="save" value="'.lang('admin', 'save').'" />
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
         </form>';
       }
       else
       {
-        if ( isset($_GET['enablebottomad']) )
+        if ( isset($_GET["enablebottomad"]) )
           $page_bottom_ad = 1;
         else
           $remember_me_checked = 0;
-        $page_bottom_ad_content = $sqlm->quote_smart($_GET['bottomadcontent']);
+        $page_bottom_ad_content = $sqlm->quote_smart($_GET["bottomadcontent"]);
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$page_bottom_ad."' WHERE `Key`='Enable_Page_Bottom_Ad'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$page_bottom_ad_content."' WHERE `Key`='Page_Bottom_Ad_Content'");
@@ -1320,201 +1320,201 @@ function general()
           <input type="hidden" name="subsection" value="more">
           <table class="simple" id="admin_more">
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'sqlsearchlimit').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'sqlsearchlimit').'</a>: </td>
-              <td><input type="text" name="sqlsearchlimit" value="'.$sql_search_limit['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sqlsearchlimit").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sqlsearchlimit").'</a>: </td>
+              <td><input type="text" name="sqlsearchlimit" value="'.$sql_search_limit["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'itemicons').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'itemicons').'</a>: </td>
-              <td><input type="text" name="itemicons" value="'.$item_icons['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "itemicons").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "itemicons").'</a>: </td>
+              <td><input type="text" name="itemicons" value="'.$item_icons["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'remembermechecked').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'remembermechecked').'</a>: </td>
-              <td><input type="checkbox" name="remembermechecked" '.($remember_me_checked['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "remembermechecked").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "remembermechecked").'</a>: </td>
+              <td><input type="checkbox" name="remembermechecked" '.($remember_me_checked["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'sitetitle').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'sitetitle').'</a>: </td>
-              <td><input type="text" name="sitetitle" value="'.$site_title['Value'].'" size="50"/></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sitetitle").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sitetitle").'</a>: </td>
+              <td><input type="text" name="sitetitle" value="'.$site_title["Value"].'" size="50"/></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'itemperpage').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'itemperpage').'</a>: </td>
-              <td><input type="text" name="itemperpage" value="'.$item_per_page['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "itemperpage").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "itemperpage").'</a>: </td>
+              <td><input type="text" name="itemperpage" value="'.$item_per_page["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'showcountryflags').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'showcountryflags').'</a>: </td>
-              <td><input type="checkbox" name="showcountryflags" '.($show_country_flags['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "showcountryflags").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showcountryflags").'</a>: </td>
+              <td><input type="checkbox" name="showcountryflags" '.($show_country_flags["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'defaulttheme').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'defaulttheme').'</a>: </td>
-              <td><input type="text" name="defaulttheme" value="'.$default_theme['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "defaulttheme").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "defaulttheme").'</a>: </td>
+              <td><input type="text" name="defaulttheme" value="'.$default_theme["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'defaultlanguage').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'defaultlanguage').'</a>: </td>
-              <td><input type="text" name="defaultlanguage" value="'.$default_language['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "defaultlanguage").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "defaultlanguage").'</a>: </td>
+              <td><input type="text" name="defaultlanguage" value="'.$default_language["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'timezone').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'timezone').'</a>: </td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "timezone").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timezone").'</a>: </td>
               <td>
                 <select name="timezone">
-                  <option value="-12.0" '.($timezone['Value'] == "-12.0" ? 'selected="selected"' : '').'>(UTC -12:00) Eniwetok, Kwajalein</option>
-                  <option value="-11.0" '.($timezone['Value'] == "-11.0" ? 'selected="selected"' : '').'>(UTC -11:00) Midway Island, Samoa</option>
-                  <option value="-10.0" '.($timezone['Value'] == "-10.0" ? 'selected="selected"' : '').'>(UTC -10:00) Hawaii</option>
-                  <option value="-9.0" '.($timezone['Value'] == "-9.0" ? 'selected="selected"' : '').'>(UTC -9:00) Alaska</option>
-                  <option value="-8.0" '.($timezone['Value'] == "-8.0" ? 'selected="selected"' : '').'>(UTC -8:00) Pacific Time (US &amp; Canada)</option>
-                  <option value="-7.0" '.($timezone['Value'] == "-7.0" ? 'selected="selected"' : '').'>(UTC -7:00) Mountain Time (US &amp; Canada)</option>
-                  <option value="-6.0" '.($timezone['Value'] == "-6.0" ? 'selected="selected"' : '').'>(UTC -6:00) Central Time (US &amp; Canada), Mexico City</option>
-                  <option value="-5.0" '.($timezone['Value'] == "-5.0" ? 'selected="selected"' : '').'>(UTC -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
-                  <option value="-4.0" '.($timezone['Value'] == "-4.0" ? 'selected="selected"' : '').'>(UTC -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
-                  <option value="-3.5" '.($timezone['Value'] == "-3.5" ? 'selected="selected"' : '').'>(UTC -3:30) Newfoundland</option>
-                  <option value="-3.0" '.($timezone['Value'] == "-3.0" ? 'selected="selected"' : '').'>(UTC -3:00) Brazil, Buenos Aires, Georgetown</option>
-                  <option value="-2.0" '.($timezone['Value'] == "-2.0" ? 'selected="selected"' : '').'>(UTC -2:00) Mid-Atlantic</option>
-                  <option value="-1.0" '.($timezone['Value'] == "-1.0" ? 'selected="selected"' : '').'>(UTC -1:00) Azores, Cape Verde Islands</option>
-                  <option value="0.0" '.($timezone['Value'] == "0.0" ? 'selected="selected"' : '').'>(UTC) Western Europe Time, London, Lisbon, Casablanca</option>
-                  <option value="1.0" '.($timezone['Value'] == "1.0" ? 'selected="selected"' : '').'>(UTC +1:00) Brussels, Copenhagen, Madrid, Paris</option>
-                  <option value="2.0" '.($timezone['Value'] == "2.0" ? 'selected="selected"' : '').'>(UTC +2:00) Kaliningrad, South Africa</option>
-                  <option value="3.0" '.($timezone['Value'] == "3.0" ? 'selected="selected"' : '').'>(UTC +3:00) Baghdad, Riyadh, Moscow, St. Petersburg</option>
-                  <option value="3.5" '.($timezone['Value'] == "3.5" ? 'selected="selected"' : '').'>(UTC +3:30) Tehran</option>
-                  <option value="4.0" '.($timezone['Value'] == "4.0" ? 'selected="selected"' : '').'>(UTC +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
-                  <option value="4.5" '.($timezone['Value'] == "4.5" ? 'selected="selected"' : '').'>(UTC +4:30) Kabul</option>
-                  <option value="5.0" '.($timezone['Value'] == "5.0" ? 'selected="selected"' : '').'>(UTC +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
-                  <option value="5.5" '.($timezone['Value'] == "5.5" ? 'selected="selected"' : '').'>(UTC +5:30) Bombay, Calcutta, Madras, New Delhi</option>
-                  <option value="5.75" '.($timezone['Value'] == "5.75" ? 'selected="selected"' : '').'>(UTC +5:45) Kathmandu</option>
-                  <option value="6.0" '.($timezone['Value'] == "6.0" ? 'selected="selected"' : '').'>(UTC +6:00) Almaty, Dhaka, Colombo</option>
-                  <option value="7.0" '.($timezone['Value'] == "7.0" ? 'selected="selected"' : '').'>(UTC +7:00) Bangkok, Hanoi, Jakarta</option>
-                  <option value="8.0" '.($timezone['Value'] == "8.0" ? 'selected="selected"' : '').'>(UTC +8:00) Beijing, Perth, Singapore, Hong Kong</option>
-                  <option value="9.0" '.($timezone['Value'] == "9.0" ? 'selected="selected"' : '').'>(UTC +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
-                  <option value="9.5" '.($timezone['Value'] == "9.5" ? 'selected="selected"' : '').'>(UTC +9:30) Adelaide, Darwin</option>
-                  <option value="10.0" '.($timezone['Value'] == "10.0" ? 'selected="selected"' : '').'>(UTC +10:00) Eastern Australia, Guam, Vladivostok</option>
-                  <option value="11.0" '.($timezone['Value'] == "11.0" ? 'selected="selected"' : '').'>(UTC +11:00) Magadan, Solomon Islands, New Caledonia</option>
-                  <option value="12.0" '.($timezone['Value'] == "12.0" ? 'selected="selected"' : '').'>(UTC +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
+                  <option value="-12.0" '.($timezone["Value"] == "-12.0" ? 'selected="selected"' : '').'>(UTC -12:00) Eniwetok, Kwajalein</option>
+                  <option value="-11.0" '.($timezone["Value"] == "-11.0" ? 'selected="selected"' : '').'>(UTC -11:00) Midway Island, Samoa</option>
+                  <option value="-10.0" '.($timezone["Value"] == "-10.0" ? 'selected="selected"' : '').'>(UTC -10:00) Hawaii</option>
+                  <option value="-9.0" '.($timezone["Value"] == "-9.0" ? 'selected="selected"' : '').'>(UTC -9:00) Alaska</option>
+                  <option value="-8.0" '.($timezone["Value"] == "-8.0" ? 'selected="selected"' : '').'>(UTC -8:00) Pacific Time (US &amp; Canada)</option>
+                  <option value="-7.0" '.($timezone["Value"] == "-7.0" ? 'selected="selected"' : '').'>(UTC -7:00) Mountain Time (US &amp; Canada)</option>
+                  <option value="-6.0" '.($timezone["Value"] == "-6.0" ? 'selected="selected"' : '').'>(UTC -6:00) Central Time (US &amp; Canada), Mexico City</option>
+                  <option value="-5.0" '.($timezone["Value"] == "-5.0" ? 'selected="selected"' : '').'>(UTC -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
+                  <option value="-4.0" '.($timezone["Value"] == "-4.0" ? 'selected="selected"' : '').'>(UTC -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
+                  <option value="-3.5" '.($timezone["Value"] == "-3.5" ? 'selected="selected"' : '').'>(UTC -3:30) Newfoundland</option>
+                  <option value="-3.0" '.($timezone["Value"] == "-3.0" ? 'selected="selected"' : '').'>(UTC -3:00) Brazil, Buenos Aires, Georgetown</option>
+                  <option value="-2.0" '.($timezone["Value"] == "-2.0" ? 'selected="selected"' : '').'>(UTC -2:00) Mid-Atlantic</option>
+                  <option value="-1.0" '.($timezone["Value"] == "-1.0" ? 'selected="selected"' : '').'>(UTC -1:00) Azores, Cape Verde Islands</option>
+                  <option value="0.0" '.($timezone["Value"] == "0.0" ? 'selected="selected"' : '').'>(UTC) Western Europe Time, London, Lisbon, Casablanca</option>
+                  <option value="1.0" '.($timezone["Value"] == "1.0" ? 'selected="selected"' : '').'>(UTC +1:00) Brussels, Copenhagen, Madrid, Paris</option>
+                  <option value="2.0" '.($timezone["Value"] == "2.0" ? 'selected="selected"' : '').'>(UTC +2:00) Kaliningrad, South Africa</option>
+                  <option value="3.0" '.($timezone["Value"] == "3.0" ? 'selected="selected"' : '').'>(UTC +3:00) Baghdad, Riyadh, Moscow, St. Petersburg</option>
+                  <option value="3.5" '.($timezone["Value"] == "3.5" ? 'selected="selected"' : '').'>(UTC +3:30) Tehran</option>
+                  <option value="4.0" '.($timezone["Value"] == "4.0" ? 'selected="selected"' : '').'>(UTC +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
+                  <option value="4.5" '.($timezone["Value"] == "4.5" ? 'selected="selected"' : '').'>(UTC +4:30) Kabul</option>
+                  <option value="5.0" '.($timezone["Value"] == "5.0" ? 'selected="selected"' : '').'>(UTC +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
+                  <option value="5.5" '.($timezone["Value"] == "5.5" ? 'selected="selected"' : '').'>(UTC +5:30) Bombay, Calcutta, Madras, New Delhi</option>
+                  <option value="5.75" '.($timezone["Value"] == "5.75" ? 'selected="selected"' : '').'>(UTC +5:45) Kathmandu</option>
+                  <option value="6.0" '.($timezone["Value"] == "6.0" ? 'selected="selected"' : '').'>(UTC +6:00) Almaty, Dhaka, Colombo</option>
+                  <option value="7.0" '.($timezone["Value"] == "7.0" ? 'selected="selected"' : '').'>(UTC +7:00) Bangkok, Hanoi, Jakarta</option>
+                  <option value="8.0" '.($timezone["Value"] == "8.0" ? 'selected="selected"' : '').'>(UTC +8:00) Beijing, Perth, Singapore, Hong Kong</option>
+                  <option value="9.0" '.($timezone["Value"] == "9.0" ? 'selected="selected"' : '').'>(UTC +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
+                  <option value="9.5" '.($timezone["Value"] == "9.5" ? 'selected="selected"' : '').'>(UTC +9:30) Adelaide, Darwin</option>
+                  <option value="10.0" '.($timezone["Value"] == "10.0" ? 'selected="selected"' : '').'>(UTC +10:00) Eastern Australia, Guam, Vladivostok</option>
+                  <option value="11.0" '.($timezone["Value"] == "11.0" ? 'selected="selected"' : '').'>(UTC +11:00) Magadan, Solomon Islands, New Caledonia</option>
+                  <option value="12.0" '.($timezone["Value"] == "12.0" ? 'selected="selected"' : '').'>(UTC +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
                 </select>
               </td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'gmonline').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'gmonline').'</a>: </td>
-              <td><input type="checkbox" name="gmonline" '.($gm_online['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "gmonline").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmonline").'</a>: </td>
+              <td><input type="checkbox" name="gmonline" '.($gm_online["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'gmonlinecount').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'gmonlinecount').'</a>: </td>
-              <td><input type="checkbox" name="gmonlinecount" '.($gm_online_count['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "gmonlinecount").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmonlinecount").'</a>: </td>
+              <td><input type="checkbox" name="gmonlinecount" '.($gm_online_count["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'hidemaxplayers').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'hidemaxplayers').'</a>: </td>
-              <td><input type="checkbox" name="hidemaxplayers" '.($hide_max_players['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hidemaxplayers").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hidemaxplayers").'</a>: </td>
+              <td><input type="checkbox" name="hidemaxplayers" '.($hide_max_players["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'hideavglatency').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'hideavglatency').'</a>: </td>
-              <td><input type="checkbox" name="hideavglatency" '.($hide_avg_latency['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hideavglatency").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hideavglatency").'</a>: </td>
+              <td><input type="checkbox" name="hideavglatency" '.($hide_avg_latency["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'hideservermem').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'hideservermem').'</a>: </td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hideservermem").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hideservermem").'</a>: </td>
               <td>
                 <select name="hideservermem">
-                  <option value="0" '.($hide_server_mem['Value'] == 0 ? 'selected="selected"' : '').'>'.lang('admin', 'hide').'</option>
-                  <option value="1" '.($hide_server_mem['Value'] == 1 ? 'selected="selected"' : '').'>'.lang('admin', 'showtogmsonly').'</option>
-                  <option value="2" '.($hide_server_mem['Value'] == 2 ? 'selected="selected"' : '').'>'.lang('admin', 'showall').'</option>
+                  <option value="0" '.($hide_server_mem["Value"] == 0 ? 'selected="selected"' : '').'>'.lang("admin", "hide").'</option>
+                  <option value="1" '.($hide_server_mem["Value"] == 1 ? 'selected="selected"' : '').'>'.lang("admin", "showtogmsonly").'</option>
+                  <option value="2" '.($hide_server_mem["Value"] == 2 ? 'selected="selected"' : '').'>'.lang("admin", "showall").'</option>
                 </select>
               </td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'hideplrlatency').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'hideplrlatency').'</a>: </td>
-              <td><input type="checkbox" name="hideplrlatency" '.($hide_plr_latency['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hideplrlatency").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hideplrlatency").'</a>: </td>
+              <td><input type="checkbox" name="hideplrlatency" '.($hide_plr_latency["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'backupdir').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'backupdir').'</a>: </td>
-              <td><input type="text" name="backupdir" value="'.$backup_dir['Value'].'" readonly="readonly" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "backupdir").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "backupdir").'</a>: </td>
+              <td><input type="text" name="backupdir" value="'.$backup_dir["Value"].'" readonly="readonly" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'debug').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'debug').'</a>: </td>
-              <td><input type="text" name="debug" value="'.$debug['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "debug").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "debug").'</a>: </td>
+              <td><input type="text" name="debug" value="'.$debug["Value"].'" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'testmode').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'testmode').'</a>: </td>
-              <td><input type="text" name="testmode" value="'.$test_mode['Value'].'" readonly="readonly" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "testmode").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "testmode").'</a>: </td>
+              <td><input type="text" name="testmode" value="'.$test_mode["Value"].'" readonly="readonly" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'multirealm').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'multirealm').'</a>: </td>
-              <td><input type="text" name="multirealm" value="'.$multi_realm['Value'].'" readonly="readonly" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "multirealm").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "multirealm").'</a>: </td>
+              <td><input type="text" name="multirealm" value="'.$multi_realm["Value"].'" readonly="readonly" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'showemblem').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'showemblem').'</a>: </td>
-              <td><input type="checkbox" name="showemblem" '.($show_emblem['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "showemblem").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showemblem").'</a>: </td>
+              <td><input type="checkbox" name="showemblem" '.($show_emblem["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'shownewuser').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'shownewuser').'</a>: </td>
-              <td><input type="checkbox" name="shownewuser" '.($show_newest_user['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "shownewuser").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "shownewuser").'</a>: </td>
+              <td><input type="checkbox" name="shownewuser" '.($show_newest_user["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'sendonemail').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'sendonemail').'</a>: </td>
-              <td><input type="checkbox" name="sendonemail" '.($send_on_email['Value'] == 1 ? 'checked="checked"' : '').' /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sendonemail").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sendonemail").'</a>: </td>
+              <td><input type="checkbox" name="sendonemail" '.($send_on_email["Value"] == 1 ? 'checked="checked"' : '').' /></td>
             </tr>
             <tr>
-              <td colspan=2><b>'.lang('admin', 'language').'</b.</td>
+              <td colspan=2><b>'.lang("admin", "language").'</b.</td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'languagelocalessearchoption').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'languagelocalessearchoption').'</a>: </td>
-              <td><input type="text" name="languagelocalessearchoption" value="'.$language_locales_search_option['Value'].'" readonly="readonly" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "languagelocalessearchoption").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "languagelocalessearchoption").'</a>: </td>
+              <td><input type="text" name="languagelocalessearchoption" value="'.$language_locales_search_option["Value"].'" readonly="readonly" /></td>
             </tr>
             <tr>
-              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'languagesiteencoding').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'languagesiteencoding').'</a>: </td>
-              <td><input type="text" name="languagesiteencoding" value="'.$language_site_encoding['Value'].'" /></td>
+              <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "languagesiteencoding").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "languagesiteencoding").'</a>: </td>
+              <td><input type="text" name="languagesiteencoding" value="'.$language_site_encoding["Value"].'" /></td>
             </tr>
           </table>
-          <input type="submit" name="save" value="'.lang('admin', 'save').'" />
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
         </form>';
       }
       else
       {
-        $sql_search_limit = $sqlm->quote_smart($_GET['sqlsearchlimit']);
-        $item_icons = $sqlm->quote_smart($_GET['itemicons']);
-        if ( isset($_GET['remembermechecked']) )
+        $sql_search_limit = $sqlm->quote_smart($_GET["sqlsearchlimit"]);
+        $item_icons = $sqlm->quote_smart($_GET["itemicons"]);
+        if ( isset($_GET["remembermechecked"]) )
           $remember_me_checked = 1;
         else
           $remember_me_checked = 0;
-        $site_title = $sqlm->quote_smart($_GET['sitetitle']);
-        $item_per_page = $sqlm->quote_smart($_GET['itemperpage']);
-        if ( isset($_GET['showcountryflags']) )
+        $site_title = $sqlm->quote_smart($_GET["sitetitle"]);
+        $item_per_page = $sqlm->quote_smart($_GET["itemperpage"]);
+        if ( isset($_GET["showcountryflags"]) )
           $show_country_flags = 1;
         else
           $show_country_flags = 0;
-        $default_theme = $sqlm->quote_smart($_GET['defaulttheme']);
-        $default_language = $sqlm->quote_smart($_GET['defaultlanguage']);
-        $timezone = $sqlm->quote_smart($_GET['timezone']);
-        if ( isset($_GET['gmonline']) )
+        $default_theme = $sqlm->quote_smart($_GET["defaulttheme"]);
+        $default_language = $sqlm->quote_smart($_GET["defaultlanguage"]);
+        $timezone = $sqlm->quote_smart($_GET["timezone"]);
+        if ( isset($_GET["gmonline"]) )
           $gm_online = 1;
         else
           $gm_online = 0;
-        if ( isset($_GET['gmonlinecount']) )
+        if ( isset($_GET["gmonlinecount"]) )
           $gm_online_count = 1;
         else
           $gm_online_count = 0;
-        if ( isset($_GET['hidemaxplayers']) )
+        if ( isset($_GET["hidemaxplayers"]) )
           $hide_max_players = 1;
         else
           $hide_max_players = 0;
-        if ( isset($_GET['hideavglatency']) )
+        if ( isset($_GET["hideavglatency"]) )
           $hide_avg_latency = 1;
         else
           $hide_avg_latency = 0;
-        if ( isset($_GET['hideplrlatency']) )
+        if ( isset($_GET["hideplrlatency"]) )
           $hide_plr_latency = 1;
         else
           $hide_plr_latency = 0;
-        $backup_dir = $sqlm->quote_smart($_GET['backupdir']);
-        $debug = $sqlm->quote_smart($_GET['debug']);
-        $test_mode = $sqlm->quote_smart($_GET['testmode']);
-        $multi_realm = $sqlm->quote_smart($_GET['multirealm']);
-        if ( isset($_GET['showemblem']) )
+        $backup_dir = $sqlm->quote_smart($_GET["backupdir"]);
+        $debug = $sqlm->quote_smart($_GET["debug"]);
+        $test_mode = $sqlm->quote_smart($_GET["testmode"]);
+        $multi_realm = $sqlm->quote_smart($_GET["multirealm"]);
+        if ( isset($_GET["showemblem"]) )
           $show_emblem = 1;
         else
           $show_emblem = 0;
-        $language_locales_search_option = $sqlm->quote_smart($_GET['languagelocalessearchoption']);
-        $language_site_encoding = $sqlm->quote_smart($_GET['languagesiteencoding']);
-        $hide_server_mem = $sqlm->quote_smart($_GET['hideservermem']);
-        if ( isset($_GET['shownewuser']) )
+        $language_locales_search_option = $sqlm->quote_smart($_GET["languagelocalessearchoption"]);
+        $language_site_encoding = $sqlm->quote_smart($_GET["languagesiteencoding"]);
+        $hide_server_mem = $sqlm->quote_smart($_GET["hideservermem"]);
+        if ( isset($_GET["shownewuser"]) )
           $show_newest_user = 1;
         else
           $show_newest_user = 0;
-        if ( isset($_GET['sendonemail']) )
+        if ( isset($_GET["sendonemail"]) )
           $send_on_email = 1;
         else
           $send_on_email = 0;
@@ -1559,11 +1559,11 @@ function gmlevels()
   global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
   $gm_lvls = $sqlm->query("SELECT * FROM config_gm_level_names");
 
-  if ( !isset($_GET['edit_btn']) )
+  if ( !isset($_GET["edit_btn"]) )
   {
     $output .= '
         <center>
@@ -1572,22 +1572,22 @@ function gmlevels()
             <input type="hidden" name="edit_btn" value="edit">
             <table class="simple">
               <tr>
-                <th>'.lang('admin','edit').'</th>
-                <th>'.lang('admin','remove').'</th>
-                <th>'.lang('admin','seclvl').'</th>
-                <th>'.lang('admin','fullname').'</th>
-                <th>'.lang('admin','shortname').'</th>
+                <th>'.lang("admin", "edit").'</th>
+                <th>'.lang("admin", "remove").'</th>
+                <th>'.lang("admin", "seclvl").'</th>
+                <th>'.lang("admin", "fullname").'</th>
+                <th>'.lang("admin", "shortname").'</th>
               </tr>';
     $color = "#EEEEEE";
     while( $gm_lvl = $sqlm->fetch_assoc($gm_lvls) )
     {
       $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&edit='.$gm_lvl['Index'].'&edit_btn=Edit"><img src="img/edit.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&delrow=deleterow&edit='.$gm_lvl['Index'].'&edit_btn=Edit"><img src="img/aff_cross.png" /></a></center></td>
-                <td style="background-color:'.$color.'">'.$gm_lvl['Security_Level'].'</td>
-                <td style="background-color:'.$color.'">'.$gm_lvl['Full_Name'].'</td>
-                <td style="background-color:'.$color.'">'.$gm_lvl['Short_Name'].'</td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&edit='.$gm_lvl["Index"].'&edit_btn=Edit"><img src="img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&delrow=deleterow&edit='.$gm_lvl["Index"].'&edit_btn=Edit"><img src="img/aff_cross.png" /></a></center></td>
+                <td style="background-color:'.$color.'">'.$gm_lvl["Security_Level"].'</td>
+                <td style="background-color:'.$color.'">'.$gm_lvl["Full_Name"].'</td>
+                <td style="background-color:'.$color.'">'.$gm_lvl["Short_Name"].'</td>
               </td>
           ';
       if ( $color == "#EEEEEE" )
@@ -1598,32 +1598,32 @@ function gmlevels()
     $output .= '
               <tr>
                 <td style="background-color:'.$color.'"><center><a href="admin.php?section=gmlevels&edit_btn=Edit&addrow=addrow"><img src="img/add.png" /></a></center></td>
-                <td style="background-color:'.$color.'" colspan="4"><a href="admin.php?section=gmlevels&edit_btn=Edit&addrow=addrow">'.lang('admin', 'addrow').'</a></td>
+                <td style="background-color:'.$color.'" colspan="4"><a href="admin.php?section=gmlevels&edit_btn=Edit&addrow=addrow">'.lang("admin", "addrow").'</a></td>
               </td>
           ';
 
     $output .= '
             </table>
-            <!-- input type="checkbox" name="addrow">'.lang('admin', 'addrow').'
-            <input type="checkbox" name="delrow">'.lang('admin', 'delrow').'
+            <!-- input type="checkbox" name="addrow">'.lang("admin", "addrow").'
+            <input type="checkbox" name="delrow">'.lang("admin", "delrow").'
             <br />
-            <input type="submit" name="addrow" value="'.lang('admin', 'addrow').'" -->
+            <input type="submit" name="addrow" value="'.lang("admin", "addrow").'" -->
           </form>
         </center>';
     }
     else
     {
-      if ( !isset($_GET['edit']) )
-        if ( !isset($_GET['addrow']) )
+      if ( !isset($_GET["edit"]) )
+        if ( !isset($_GET["addrow"]) )
           redirect("admin.php?section=gmlevels");
 
-      if ( isset($_GET['delrow']) )
-        $del_row = $_GET['delrow'];
+      if ( isset($_GET["delrow"]) )
+        $del_row = $_GET["delrow"];
       else
         $del_row = "";
 
-      if ( isset($_GET['addrow']) )
-        $add_row = $_GET['addrow'];
+      if ( isset($_GET["addrow"]) )
+        $add_row = $_GET["addrow"];
       else
         $add_row = "";
 
@@ -1635,34 +1635,34 @@ function gmlevels()
 
       if ( $del_row )
       {
-        $del_result = $sqlm->query("DELETE FROM config_gm_level_names WHERE `Index` = '".$_GET['edit']."'");
+        $del_result = $sqlm->query("DELETE FROM config_gm_level_names WHERE `Index` = '".$_GET["edit"]."'");
         redirect("admin.php?section=gmlevels");
       }
 
-      $gm_level = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_gm_level_names WHERE `Index` = '".$_GET['edit']."'"));
+      $gm_level = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_gm_level_names WHERE `Index` = '".$_GET["edit"]."'"));
       $output .= '
         <center>
           <form name="form" action="admin.php" method="GET">
             <input type="hidden" name="section" value="gmlevels">
             <input type="hidden" name="action" value="savegms">
-            <input type="hidden" name="index" value="'.$gm_level['Index'].'">
+            <input type="hidden" name="index" value="'.$gm_level["Index"].'">
             <fieldset id="admin_gm_level">
             <table>
               <tr>
-                <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'seclvl').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'seclvl').'</a>: </td>
-                <td><input type="text" name="seclvl" value="'.$gm_level['Security_Level'].'"></td>
+                <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "seclvl").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "seclvl").'</a>: </td>
+                <td><input type="text" name="seclvl" value="'.$gm_level["Security_Level"].'"></td>
               </tr>
               <tr>
-                <td>'.lang('admin', 'fullname').': </td>
-                <td><input type="text" name="fullname" value="'.$gm_level['Full_Name'].'"></td>
+                <td>'.lang("admin", "fullname").': </td>
+                <td><input type="text" name="fullname" value="'.$gm_level["Full_Name"].'"></td>
               </tr>
               <tr>
-                <td>'.lang('admin', 'shortname').': </td>
-                <td><input type="text" name="shortname" value="'.$gm_level['Short_Name'].'"></td>
+                <td>'.lang("admin", "shortname").': </td>
+                <td><input type="text" name="shortname" value="'.$gm_level["Short_Name"].'"></td>
               </tr>
             </table>
             </fieldset>
-            <input type="submit" name="save" value="'.lang('admin', 'save').'">
+            <input type="submit" name="save" value="'.lang("admin", "save").'">
           </form>
         </center>';
     }
@@ -1673,12 +1673,12 @@ function savegms()
   global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
-  $index = $sqlm->quote_smart($_GET['index']);
-  $sec_lvl = $sqlm->quote_smart($_GET['seclvl']);
-  $full_name = $sqlm->quote_smart($_GET['fullname']);
-  $short_name = $sqlm->quote_smart($_GET['shortname']);
+  $index = $sqlm->quote_smart($_GET["index"]);
+  $sec_lvl = $sqlm->quote_smart($_GET["seclvl"]);
+  $full_name = $sqlm->quote_smart($_GET["fullname"]);
+  $short_name = $sqlm->quote_smart($_GET["shortname"]);
 
   $result = $sqlm->query("UPDATE config_gm_level_names SET Security_Level = '".$sec_lvl."', Full_Name = '".$full_name."', Short_Name = '".$short_name."' WHERE `Index` = '".$index."'");
   redirect("admin.php?section=gmlevels");
@@ -1686,82 +1686,82 @@ function savegms()
 
 function servers()
 {
-  global $output, $corem_db, $lang_global, $get_icon_type, $get_timezone_type, $core;
+  global $output, $corem_db, $get_icon_type, $get_timezone_type, $core;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
   $result = $sqlm->query("SELECT * FROM config_servers");
 
   $server_action = 0;
-  if ( isset($_GET['editserver']) )
+  if ( isset($_GET["editserver"]) )
     $server_action = 'edit';
-  if ( isset($_GET['delserver']) )
+  if ( isset($_GET["delserver"]) )
     $server_action = 'del';
-  if ( isset($_GET['addserver']) )
+  if ( isset($_GET["addserver"]) )
     $server_action = 'add';
 
   if ( !$server_action )
   {
     $output .= '
         <center>
-          <span style="color:red">'.lang('admin','server_warn').'</span>
+          <span style="color:red">'.lang("admin", "server_warn").'</span>
           <form name="form" action="admin.php" method="GET">
             <input type="hidden" name="section" value="servers">
             <table class="simple" id="admin_servers">
               <tr>
-                <th width="5%">'.lang('admin', 'edit').'</th>
-                <th width="5%">'.lang('admin', 'remove').'</th>
-                <th width="10%">'.lang('admin', 'realm').'</th>
-                <th width="10%">'.lang('admin', 'name').'</th>
-                <th width="20%">'.lang('admin', 'hosti').'</th>
-                <th width="20%">'.lang('admin', 'hostp').'</th>
-                <th width="1%">'.lang('admin', 'port').'</th>';
+                <th width="5%">'.lang("admin", "edit").'</th>
+                <th width="5%">'.lang("admin", "remove").'</th>
+                <th width="10%">'.lang("admin", "realm").'</th>
+                <th width="10%">'.lang("admin", "name").'</th>
+                <th width="20%">'.lang("admin", "hosti").'</th>
+                <th width="20%">'.lang("admin", "hostp").'</th>
+                <th width="1%">'.lang("admin", "port").'</th>';
     /*if ( $core <> 1 )
       $output .= '
-                <th width="10%">'.lang('admin', 'telnetport').'</th>
-                <th width="10%">'.lang('admin', 'telnetuser').'</th>
-                <th width="10%">'.lang('admin', 'telnetpass').'</th>';*/
+                <th width="10%">'.lang("admin", "telnetport").'</th>
+                <th width="10%">'.lang("admin", "telnetuser").'</th>
+                <th width="10%">'.lang("admin", "telnetpass").'</th>';*/
     $output .= '
-                <th width="10%">'.lang('admin', 'icon').'</th>
-                <th width="10%">'.lang('admin', 'timezone').'</th>
-                <th width="10%">'.lang('admin', 'bothfactions').'</th>';
+                <th width="10%">'.lang("admin", "icon").'</th>
+                <th width="10%">'.lang("admin", "timezone").'</th>
+                <th width="10%">'.lang("admin", "bothfactions").'</th>';
     if ( $core == 1 )
       $output .= '
-                <th width="40%">'.lang('admin', 'statsxml').'</th>';
+                <th width="40%">'.lang("admin", "statsxml").'</th>';
     $output .= '
               </tr>';
     $color = "#EEEEEE";
     while ( $server = $sqlm->fetch_assoc($result) )
     {
-      $realm_query = "SELECT * FROM realmlist WHERE id='".$server['Index']."'";
+      $realm_query = "SELECT * FROM realmlist WHERE id='".$server["Index"]."'";
       $realm_result = $sqlm->query($realm_query);
       $realm = $sqlm->fetch_assoc($realm_result);
 
       $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server['Index'].'&editserver=editserver"><img src="img/edit.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server['Index'].'&delserver=deleteserver"><img src="img/aff_cross.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center>'.$server['Index'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$realm['name'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$server['Address'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$realm['address'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$server['Port'].'</center></td>';
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server["Index"].'&editserver=editserver"><img src="img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server["Index"].'&delserver=deleteserver"><img src="img/aff_cross.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center>'.$server["Index"].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$realm["name"].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$server["Address"].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$realm["address"].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$server["Port"].'</center></td>';
       /*if ( $core != 1 )
         $output .= '
-                <td style="background-color:'.$color.'"><center>'.$server['Telnet_Port'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$server['Telnet_User'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$server['Telnet_Pass'].'</center></td>';*/
+                <td style="background-color:'.$color.'"><center>'.$server["Telnet_Port"].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$server["Telnet_User"].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$server["Telnet_Pass"].'</center></td>';*/
 
-      $icon = $get_icon_type[$realm['icon']];
-      $timezone = $get_timezone_type[$realm['timezone']];
+      $icon = $get_icon_type[$realm["icon"]];
+      $timezone = $get_timezone_type[$realm["timezone"]];
       $output .= '
-                <td style="background-color:'.$color.'"><center>'.lang('realm', $icon[1]).'</center></td>
-                <td style="background-color:'.$color.'"><center>'.lang('realm', $timezone[1]).'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$server['Both_Factions'].'</center></td>';
+                <td style="background-color:'.$color.'"><center>'.lang("realm", $icon[1]).'</center></td>
+                <td style="background-color:'.$color.'"><center>'.lang("realm", $timezone[1]).'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$server["Both_Factions"].'</center></td>';
       if ( $core == 1 )
         $output .= '
-                <td style="background-color:'.$color.'"><center>'.$server['Stats_XML'].'</center></td>';
+                <td style="background-color:'.$color.'"><center>'.$server["Stats_XML"].'</center></td>';
       $output .= '
               </tr>';
       if ( $color == "#EEEEEE" )
@@ -1772,14 +1772,14 @@ function servers()
     $output .= '
               <tr>
                 <td style="background-color:'.$color.'"><a href="admin.php?section=servers&addserver=addserver"><img src="img/add.png" /></a></td>
-                <td style="background-color:'.$color.'" colspan="'.( ( $core == 1 ) ? '10' : '9' ).'"><a href="admin.php?section=servers&addserver=addserver">'.lang('admin', 'addserver').'</a></td>
+                <td style="background-color:'.$color.'" colspan="'.( ( $core == 1 ) ? '10' : '9' ).'"><a href="admin.php?section=servers&addserver=addserver">'.lang("admin", "addserver").'</a></td>
               </tr>';
 
     $output .= '
             </table>
-            <!-- input type="submit" name="editserver" value="'.lang('admin', 'editserver').'">
-            <input type="submit" name="addserver" value="'.lang('admin', 'addserver').'">
-            <input type="submit" name="delserver" value="'.lang('admin', 'delserver').'" -->
+            <!-- input type="submit" name="editserver" value="'.lang("admin", "editserver").'">
+            <input type="submit" name="addserver" value="'.lang("admin", "addserver").'">
+            <input type="submit" name="delserver" value="'.lang("admin", "delserver").'" -->
           </form>
         </center>';
   }
@@ -1787,7 +1787,7 @@ function servers()
   {
     if ( $server_action == 'edit' )
     {
-      $server_id = $sqlm->quote_smart($_GET['sel_server']);
+      $server_id = $sqlm->quote_smart($_GET["sel_server"]);
       if ( is_numeric($server_id) )
       {
         $server = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_servers WHERE `Index`='".$server_id."'"));
@@ -1798,83 +1798,83 @@ function servers()
             <fieldset id="admin_edit_server">
               <input type="hidden" name="section" value="servers">
               <input type="hidden" name="action" value="saveserver">
-              <input type="hidden" name="index" value="'.$server['Index'].'">
+              <input type="hidden" name="index" value="'.$server["Index"].'">
               <table>
                 <tr>
-                  <td width="45%">'.lang('admin', 'name').': </td>
-                  <td><input type="text" name="server_name" value="'.$realm['name'].'"></td>
+                  <td width="45%">'.lang("admin", "name").': </td>
+                  <td><input type="text" name="server_name" value="'.$realm["name"].'"></td>
                 </tr>
                 <tr>
-                  <td width="45%" id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'hosti').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'hosti').'</a>: </td>
-                  <td><input type="text" name="server_hosti" value="'.$server['Address'].'"></td>
+                  <td width="45%" id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hosti").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hosti").'</a>: </td>
+                  <td><input type="text" name="server_hosti" value="'.$server["Address"].'"></td>
                 </tr>
                 <tr>
-                  <td width="45%" id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'hostp').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'hostp').'</a>: </td>
-                  <td><input type="text" name="server_hostp" value="'.$realm['address'].'"></td>
+                  <td width="45%" id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hostp").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hostp").'</a>: </td>
+                  <td><input type="text" name="server_hostp" value="'.$realm["address"].'"></td>
                 </tr>
                 <tr>
-                  <td>'.lang('admin', 'port').': </td>
-                  <td><input type="text" name="server_port" value="'.$server['Port'].'"></td>
+                  <td>'.lang("admin", "port").': </td>
+                  <td><input type="text" name="server_port" value="'.$server["Port"].'"></td>
                 </tr>';
         if ( $core != 1 )
           $output .= '
                 <tr>
-                  <td>'.lang('admin_tip', 'telnetport').':</td>
-                  <td><input type="text" name="server_telnet_port" value="'.$server['Telnet_Port'].'"></td>
+                  <td>'.lang("admin_tip", "telnetport").':</td>
+                  <td><input type="text" name="server_telnet_port" value="'.$server["Telnet_Port"].'"></td>
                 </tr>
                 <tr>
-                  <td>'.lang('admin_tip', 'telnetuser').':</td>
-                  <td><input type="text" name="server_telnet_user" value="'.$server['Telnet_User'].'"></td>
+                  <td>'.lang("admin_tip", "telnetuser").':</td>
+                  <td><input type="text" name="server_telnet_user" value="'.$server["Telnet_User"].'"></td>
                 </tr>
                 <tr>
-                  <td>'.lang('admin_tip', 'telnetpass').':</td>
-                  <td><input type="text" name="server_telnet_pass" value="'.$server['Telnet_Pass'].'"></td>
+                  <td>'.lang("admin_tip", "telnetpass").':</td>
+                  <td><input type="text" name="server_telnet_pass" value="'.$server["Telnet_Pass"].'"></td>
                 </tr>';
         $output .= '
                 <tr>
-                  <td>'.lang('admin', 'icon').': </td>
+                  <td>'.lang("admin", "icon").': </td>
                   <td>
                     <select name="server_type">';
         foreach ( $get_icon_type as $type )
         {
           $output .= '
-                      <option value="'.$type[0].'" '.( ( $realm['icon'] == $type[0] ) ? 'selected="selected"' : '' ).'>'.lang('realm', $type[1]).'</option>';
+                      <option value="'.$type[0].'" '.( ( $realm["icon"] == $type[0] ) ? 'selected="selected"' : '' ).'>'.lang("realm", $type[1]).'</option>';
         }
         $output .= '
                     </select>
                   </td>
                 </tr>
                 <tr>
-                  <td>'.lang('admin', 'color').': </td>
-                  <td><input type="text" name="server_color" value="'.$realm['color'].'"></td>
+                  <td>'.lang("admin", "color").': </td>
+                  <td><input type="text" name="server_color" value="'.$realm["color"].'"></td>
                 </tr>
                 <tr>
-                  <td>'.lang('admin', 'timezone').': </td>
+                  <td>'.lang("admin", "timezone").': </td>
                   <td>
                     <select name="server_timezone">';
         foreach ( $get_timezone_type as $zone )
         {
           $output .= '
-                      <option value="'.$zone[0].'" '.( ( $realm['timezone'] == $zone[0] ) ? 'selected="selected"' : '' ).'>'.lang('realm', $zone[1]).'</option>';
+                      <option value="'.$zone[0].'" '.( ( $realm["timezone"] == $zone[0] ) ? 'selected="selected"' : '' ).'>'.lang("realm", $zone[1]).'</option>';
         }
         $output .= '
                     </select>
                   </td>
                 </tr>
                 <tr>
-                  <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'bothfactions').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'bothfactions').'</a>: </td>
-                  <td><input type="text" name="server_both" value="'.$server['Both_Factions'].'"></td>
+                  <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "bothfactions").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "bothfactions").'</a>: </td>
+                  <td><input type="text" name="server_both" value="'.$server["Both_Factions"].'"></td>
                 </tr>';
         if ( $core == 1 )
           $output .= '
                 <tr>
-                  <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'statsxml').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'statsxml').'</a>: </td>
-                  <td><input type="text" name="server_stats" value="'.$server['Stats_XML'].'"></td>
+                  <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "statsxml").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "statsxml").'</a>: </td>
+                  <td><input type="text" name="server_stats" value="'.$server["Stats_XML"].'"></td>
                 </tr>';
         $output .= '
               </table>
             </fieldset>
-            <input type="submit" name="saveserver" value="'.lang('admin', 'save').'">
+            <input type="submit" name="saveserver" value="'.lang("admin", "save").'">
           </form>
         </center>';
       }
@@ -1883,7 +1883,7 @@ function servers()
     }
     elseif ( $server_action == 'del' )
     {
-      $server_id = $sqlm->quote_smart($_GET['sel_server']);
+      $server_id = $sqlm->quote_smart($_GET["sel_server"]);
       if ( is_numeric($server_id) )
       {
         $result = $sqlm->query("DELETE FROM config_servers WHERE `Index`='".$server_id."'");
@@ -1930,21 +1930,21 @@ function saveserver()
   global $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
-  $server_id = $sqlm->quote_smart($_GET['index']);
-  $server_name = $sqlm->quote_smart($_GET['server_name']);
-  $server_hosti = $sqlm->quote_smart($_GET['server_hosti']);
-  $server_hostp = $sqlm->quote_smart($_GET['server_hostp']);
-  $server_port = $sqlm->quote_smart($_GET['server_port']);
-  $server_telnet_port = ( ( isset($_GET['server_telnet_port']) ) ? $sqlm->quote_smart($_GET['server_telnet_port']) : NULL );
-  $server_telnet_user = ( ( isset($_GET['server_telnet_user']) ) ? strtoupper($sqlm->quote_smart($_GET['server_telnet_user'])) : NULL );
-  $server_telnet_pass = ( ( isset($_GET['server_telnet_pass']) ) ? $sqlm->quote_smart($_GET['server_telnet_pass']) : NULL );
-  $server_type = $sqlm->quote_smart($_GET['server_type']);
-  $server_color = $sqlm->quote_smart($_GET['server_color']);
-  $server_timezone = $sqlm->quote_smart($_GET['server_timezone']);
-  $server_factions = $sqlm->quote_smart($_GET['server_both']);
-  $server_stats = ( ( isset($_GET['server_stats']) ) ? $sqlm->quote_smart($_GET['server_stats']) : NULL );
+  $server_id = $sqlm->quote_smart($_GET["index"]);
+  $server_name = $sqlm->quote_smart($_GET["server_name"]);
+  $server_hosti = $sqlm->quote_smart($_GET["server_hosti"]);
+  $server_hostp = $sqlm->quote_smart($_GET["server_hostp"]);
+  $server_port = $sqlm->quote_smart($_GET["server_port"]);
+  $server_telnet_port = ( ( isset($_GET["server_telnet_port"]) ) ? $sqlm->quote_smart($_GET["server_telnet_port"]) : NULL );
+  $server_telnet_user = ( ( isset($_GET["server_telnet_user"]) ) ? strtoupper($sqlm->quote_smart($_GET["server_telnet_user"])) : NULL );
+  $server_telnet_pass = ( ( isset($_GET["server_telnet_pass"]) ) ? $sqlm->quote_smart($_GET["server_telnet_pass"]) : NULL );
+  $server_type = $sqlm->quote_smart($_GET["server_type"]);
+  $server_color = $sqlm->quote_smart($_GET["server_color"]);
+  $server_timezone = $sqlm->quote_smart($_GET["server_timezone"]);
+  $server_factions = $sqlm->quote_smart($_GET["server_both"]);
+  $server_stats = ( ( isset($_GET["server_stats"]) ) ? $sqlm->quote_smart($_GET["server_stats"]) : NULL );
 
   $result = $sqlm->query("UPDATE config_servers SET Address='".$server_hosti."', Port='".$server_port."', Telnet_Port='".$server_telnet_port."', Telnet_User='".$server_telnet_user."', Telnet_Pass='".$server_telnet_pass."', Both_Factions='".$server_factions."', Stats_XML='".$server_stats."' WHERE `Index`='".$server_id."'");
   $result = $sqlm->query("UPDATE realmlist SET name='".$server_name."', address='".$server_hostp."', port='".$server_port."', icon='".$server_type."', color='".$server_color."', timezone='".$server_timezone."' WHERE id='".$server_id."'");
@@ -1953,25 +1953,25 @@ function saveserver()
 
 function menus()
 {
-  global $output, $corem_db, $lang_global;
+  global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
   $menu_action = 'start';
-  if ( isset($_GET['editmenu']) )
+  if ( isset($_GET["editmenu"]) )
     $menu_action = 'edit';
-  if ( isset($_GET['delmenu']) )
+  if ( isset($_GET["delmenu"]) )
     $menu_action = 'delmenu';
-  if ( isset($_GET['addmenu']) )
+  if ( isset($_GET["addmenu"]) )
     $menu_action = 'addmenu';
-  if ( isset($_GET['editmenu_item']) )
+  if ( isset($_GET["editmenu_item"]) )
     $menu_action = 'edititem';
-  if ( isset($_GET['delmenu_item']) )
+  if ( isset($_GET["delmenu_item"]) )
     $menu_action = 'delitem';
-  if ( isset($_GET['addmenu_item']) )
+  if ( isset($_GET["addmenu_item"]) )
     $menu_action = 'additem';
-  if ( isset($_GET['savemenu']) )
+  if ( isset($_GET["savemenu"]) )
     $menu_action = 'savemenu';
 
   switch ( $menu_action )
@@ -1985,20 +1985,20 @@ function menus()
             <input type="hidden" name="section" value="menus">
             <table class="simple" id="admin_top_menus">
               <tr>
-                <th>'.lang('admin', 'edit').'</th>
-                <th>'.lang('admin', 'remove').'</th>
-                <th>'.lang('admin', 'internalname').': </th>
-                <th>'.lang('admin', 'action').': </th>
+                <th>'.lang("admin", "edit").'</th>
+                <th>'.lang("admin", "remove").'</th>
+                <th>'.lang("admin", "internalname").': </th>
+                <th>'.lang("admin", "action").': </th>
               </tr>';
       $color = "#EEEEEE";
       while ( $top_menu = $sqlm->fetch_assoc($top_menus) )
       {
         $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_menu='.$top_menu['Index'].'&editmenu=editmenu"><img src="img/edit.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_menu='.$top_menu['Index'].'&delmenu=delmenu"><img src="img/aff_cross.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center>'.$top_menu['Name'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$top_menu['Action'].'</center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_menu='.$top_menu["Index"].'&editmenu=editmenu"><img src="img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_menu='.$top_menu["Index"].'&delmenu=delmenu"><img src="img/aff_cross.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center>'.$top_menu["Name"].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$top_menu["Action"].'</center></td>
               </tr>';
         if ( $color == "#EEEEEE" )
           $color = "#FFFFFF";
@@ -2008,20 +2008,20 @@ function menus()
       $output .= '
               <tr>
                 <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&addmenu=addmenu"><img src="img/add.png" /></a></center></td>
-                <td style="background-color:'.$color.'" colspan="3"><a href="admin.php?section=menus&addmenu=addmenu">'.lang('admin', 'addmenu').'</a></td>
+                <td style="background-color:'.$color.'" colspan="3"><a href="admin.php?section=menus&addmenu=addmenu">'.lang("admin", "addmenu").'</a></td>
               </tr>';
       $output .= '
             </table>
-            <!-- input type="submit" name="editmenu" value="'.lang('admin', 'editmenu').'">
-            <input type="submit" name="addmenu" value="'.lang('admin', 'addmenu').'">
-            <input type="submit" name="delmenu" value="'.lang('admin', 'delmenu').'" -->
+            <!-- input type="submit" name="editmenu" value="'.lang("admin", "editmenu").'">
+            <input type="submit" name="addmenu" value="'.lang("admin", "addmenu").'">
+            <input type="submit" name="delmenu" value="'.lang("admin", "delmenu").'" -->
           </form>
         </center>';
       break;
     }
     case 'edit':
     {
-      $top_menu = $sqlm->quote_smart($_GET['top_menu']);
+      $top_menu = $sqlm->quote_smart($_GET["top_menu"]);
       $top = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_top_menus WHERE `Index`='".$top_menu."'"));
       $output .= '
         <center>
@@ -2030,29 +2030,29 @@ function menus()
             <input type="hidden" name="top_index" value="'.$top_menu.'">
             <table class="simple" id="admin_edit_top_menu_nameaction">
               <tr>
-                <th colspan=2>'.lang('admin', 'top_menu').'</th>
+                <th colspan=2>'.lang("admin", "top_menu").'</th>
               </tr>
               <tr>
-                <td>'.lang('admin', 'internalname2').': </td>
-                <td><input type="text" name="top_name" value="'.$top['Name'].'" id="admin_edit_top_menu_action"></td>
+                <td>'.lang("admin", "internalname2").': </td>
+                <td><input type="text" name="top_name" value="'.$top["Name"].'" id="admin_edit_top_menu_action"></td>
               </tr>
               <tr>
-                <td>'.lang('admin', 'action').': </td>
-                <td><textarea name="menu_action" id="admin_edit_top_menu_action" rows="2">'.$top['Action'].'</textarea></td>
+                <td>'.lang("admin", "action").': </td>
+                <td><textarea name="menu_action" id="admin_edit_top_menu_action" rows="2">'.$top["Action"].'</textarea></td>
               </tr>
             </table>
             <table class="simple" id="admin_edit_top_menu_submenus">
               <tr>
-                <th>'.lang('admin', 'edit').'</th>
-                <th>'.lang('admin', 'remove').'</th>
-                <th>'.lang('admin', 'order').'</th>
-                <th>'.lang('admin', 'internalname').'</th>
-                <th>'.lang('admin', 'action').'</th>
-                <th>'.lang('admin', 'view').'</th>
-                <th>'.lang('admin', 'insert').'</th>
-                <th>'.lang('admin', 'update').'</th>
-                <th>'.lang('admin', 'delete').'</th>
-                <th>'.lang('admin', 'enabled').'</th>
+                <th>'.lang("admin", "edit").'</th>
+                <th>'.lang("admin", "remove").'</th>
+                <th>'.lang("admin", "order").'</th>
+                <th>'.lang("admin", "internalname").'</th>
+                <th>'.lang("admin", "action").'</th>
+                <th>'.lang("admin", "view").'</th>
+                <th>'.lang("admin", "insert").'</th>
+                <th>'.lang("admin", "update").'</th>
+                <th>'.lang("admin", "delete").'</th>
+                <th>'.lang("admin", "enabled").'</th>
               </tr>';
       $menus = $sqlm->query("SELECT * FROM config_menus WHERE Menu='".$top_menu."'");
       $color = "#EEEEEE";
@@ -2060,16 +2060,16 @@ function menus()
       {
         $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&menu_item='.$menu['Index'].'&editmenu_item=editmenuitem"><img src="img/edit.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&menu_item='.$menu['Index'].'&delmenu_item=delmenuitem"><img src="img/aff_cross.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center>'.$menu['Order'].'</center></td>
-                <td width="15%" style="background-color:'.$color.'"><center>'.$menu['Name'].'</center></td>
-                <td width="25%" style="background-color:'.$color.'"><center>'.$menu['Action'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.sec_level_name($menu['View']).' ('.$menu['View'].')'.'</center></td>
-                <td style="background-color:'.$color.'"><center>'.sec_level_name($menu['Insert']).' ('.$menu['Insert'].')'.'</center></td>
-                <td style="background-color:'.$color.'"><center>'.sec_level_name($menu['Update']).' ('.$menu['Update'].')'.'</center></td>
-                <td style="background-color:'.$color.'"><center>'.sec_level_name($menu['Delete']).' ('.$menu['Delete'].')'.'</center></td>
-                <td style="background-color:'.$color.'"><center>'.($menu['Enabled'] ? '<img src="img/up.gif">' : '<img src="img/down.gif">').'</center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&menu_item='.$menu["Index"].'&editmenu_item=editmenuitem"><img src="img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&menu_item='.$menu["Index"].'&delmenu_item=delmenuitem"><img src="img/aff_cross.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center>'.$menu["Order"].'</center></td>
+                <td width="15%" style="background-color:'.$color.'"><center>'.$menu["Name"].'</center></td>
+                <td width="25%" style="background-color:'.$color.'"><center>'.$menu["Action"].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.sec_level_name($menu["View"]).' ('.$menu["View"].')'.'</center></td>
+                <td style="background-color:'.$color.'"><center>'.sec_level_name($menu["Insert"]).' ('.$menu["Insert"].')'.'</center></td>
+                <td style="background-color:'.$color.'"><center>'.sec_level_name($menu["Update"]).' ('.$menu["Update"].')'.'</center></td>
+                <td style="background-color:'.$color.'"><center>'.sec_level_name($menu["Delete"]).' ('.$menu["Delete"].')'.'</center></td>
+                <td style="background-color:'.$color.'"><center>'.($menu["Enabled"] ? '<img src="img/up.gif">' : '<img src="img/down.gif">').'</center></td>
               </tr>';
         if ( $color == "#EEEEEE" )
           $color = "#FFFFFF";
@@ -2079,21 +2079,21 @@ function menus()
       $output .= '
               <tr>
                 <td style="background-color:'.$color.'"><center><a href="admin.php?section=menus&top_index='.$top_menu.'&addmenu_item=addmenuitem"><img src="img/add.png" /></a></center></td>
-                <td style="background-color:'.$color.'" colspan="8"><a href="admin.php?section=menus&top_index='.$top_menu.'&addmenu_item=addmenuitem">'.lang('admin', 'addmenu_item').'</a></td>
+                <td style="background-color:'.$color.'" colspan="8"><a href="admin.php?section=menus&top_index='.$top_menu.'&addmenu_item=addmenuitem">'.lang("admin", "addmenu_item").'</a></td>
               </tr>';
       $output .= '
             </table>
-            <!-- input type="submit" name="editmenu_item" value="'.lang('admin', 'editmenu_item').'">
-            <input type="submit" name="addmenu_item" value="'.lang('admin', 'addmenu_item').'" -->
-            <input type="submit" name="savemenu" value="'.lang('admin', 'save').'">
-            <!-- input type="submit" name="delmenu_item" value="'.lang('admin', 'delmenu_item').'" -->
+            <!-- input type="submit" name="editmenu_item" value="'.lang("admin", "editmenu_item").'">
+            <input type="submit" name="addmenu_item" value="'.lang("admin", "addmenu_item").'" -->
+            <input type="submit" name="savemenu" value="'.lang("admin", "save").'">
+            <!-- input type="submit" name="delmenu_item" value="'.lang("admin", "delmenu_item").'" -->
           </form>
         </center>';
       break;
     }
     case 'edititem':
     {
-      $menu_item = $sqlm->quote_smart($_GET['menu_item']);
+      $menu_item = $sqlm->quote_smart($_GET["menu_item"]);
       $menu = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_menus WHERE `Index`='".$menu_item."'"));
       $sec_list = sec_level_list();
       $top_menu_query = "SELECT * FROM config_top_menus";
@@ -2108,78 +2108,78 @@ function menus()
             <fieldset id="admin_edit_menu_field">
               <table id="help" id="admin_edit_menu">
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'menu').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'menu').'</a>: </td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "menu").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "menu").'</a>: </td>
                   <td>
                     <select name="menu">';
-                    //<input type="text" name="menu" value="'.$menu['Menu'].'" id="admin_edit_menu_fields">
+                    //<input type="text" name="menu" value="'.$menu["Menu"].'" id="admin_edit_menu_fields">
       while ( $row = $sqlm->fetch_assoc($top_menu_result) )
       {
         $output .= '
-                      <option value="'.$row['Index'].'" '.( ( $row['Index'] == $menu['Menu'] ) ? 'selected="selected"' : '').' id="admin_edit_menu_fields">'.$row['Name'].'</option>';
+                      <option value="'.$row["Index"].'" '.( ( $row["Index"] == $menu["Menu"] ) ? 'selected="selected"' : '').' id="admin_edit_menu_fields">'.$row["Name"].'</option>';
       }
       $output .= '
                     </select>
                   </td>
                 </tr>
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'order').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'order').'</a>: </td>
-                  <td><input type="text" name="order" value="'.$menu['Order'].'" id="admin_edit_menu_fields"></td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "order").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "order").'</a>: </td>
+                  <td><input type="text" name="order" value="'.$menu["Order"].'" id="admin_edit_menu_fields"></td>
                 </tr>
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'menuname').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'internalname2').'</a>: </td>
-                  <td><input type="text" name="name" value="'.$menu['Name'].'" id="admin_edit_menu_fields"></td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "menuname").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "internalname2").'</a>: </td>
+                  <td><input type="text" name="name" value="'.$menu["Name"].'" id="admin_edit_menu_fields"></td>
                 </tr>
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'action').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'action').'</a>: </td>
-                  <td><textarea name="menu_action" style="width:260px" rows="2">'.$menu['Action'].'</textarea></td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "action").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "action").'</a>: </td>
+                  <td><textarea name="menu_action" style="width:260px" rows="2">'.$menu["Action"].'</textarea></td>
                 </tr>
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'view').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'view').'</a>: </td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "view").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "view").'</a>: </td>
                   <td>
                     <select name="view">';
       foreach ($sec_list as $row)
       {
         $output .= '
-                      <option value="'.$row['Sec'].'" '.($row['Sec'] == $menu['View'] ? 'selected="selected"' : '').'>'.$row['Name'].' ('.$row['Sec'].')</option>';
+                      <option value="'.$row["Sec"].'" '.($row["Sec"] == $menu["View"] ? 'selected="selected"' : '').'>'.$row["Name"].' ('.$row["Sec"].')</option>';
       }
       $output .= '
                     </select>
                   </td>
                 </tr>
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'insert').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'insert').'</a>: </td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "insert").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "insert").'</a>: </td>
                   <td>
                     <select name="insert">';
       foreach ($sec_list as $row)
       {
         $output .= '
-                      <option value="'.$row['Sec'].'" '.($row['Sec'] == $menu['Insert'] ? 'selected="selected"' : '').'>'.$row['Name'].' ('.$row['Sec'].')</option>';
+                      <option value="'.$row["Sec"].'" '.($row["Sec"] == $menu["Insert"] ? 'selected="selected"' : '').'>'.$row["Name"].' ('.$row["Sec"].')</option>';
       }
       $output .= '
                     </select>
                   </td>
                 </tr>
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'update').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'update').'</a>: </td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "update").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "update").'</a>: </td>
                   <td>
                     <select name="update">';
       foreach ($sec_list as $row)
       {
         $output .= '
-                      <option value="'.$row['Sec'].'" '.($row['Sec'] == $menu['Update'] ? 'selected="selected"' : '').'>'.$row['Name'].' ('.$row['Sec'].')</option>';
+                      <option value="'.$row["Sec"].'" '.($row["Sec"] == $menu["Update"] ? 'selected="selected"' : '').'>'.$row["Name"].' ('.$row["Sec"].')</option>';
       }
       $output .= '
                     </select>
                   </td>
                 </tr>
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'delete').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'delete').'</a>: </td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "delete").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "delete").'</a>: </td>
                   <td>
                     <select name="delete">';
       foreach ($sec_list as $row)
       {
         $output .= '
-                      <option value="'.$row['Sec'].'" '.($row['Sec'] == $menu['Delete'] ? 'selected="selected"' : '').'>'.$row['Name'].' ('.$row['Sec'].')</option>';
+                      <option value="'.$row["Sec"].'" '.($row["Sec"] == $menu["Delete"] ? 'selected="selected"' : '').'>'.$row["Name"].' ('.$row["Sec"].')</option>';
       }
       $output .= '
                     </select>
@@ -2188,19 +2188,19 @@ function menus()
       if ( $menu_item <> 8 )
         $output .= '
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'enabled').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'enabled').'</a>: </td>
-                  <td><input type="checkbox" name="enabled" '.($menu['Enabled'] ? 'CHECKED' : '').'></td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "enabled").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "enabled").'</a>: </td>
+                  <td><input type="checkbox" name="enabled" '.($menu["Enabled"] ? 'CHECKED' : '').'></td>
                 </tr>';
       else
         $output .= '
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'enabled').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'enabled').'</a>: </td>
-                  <td><input type="checkbox" name="enabled" '.($menu['Enabled'] ? 'CHECKED' : '').' disabled="disabled"></td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "enabled").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "enabled").'</a>: </td>
+                  <td><input type="checkbox" name="enabled" '.($menu["Enabled"] ? 'CHECKED' : '').' disabled="disabled"></td>
                 </tr>';
       $output .= '
               </table>
             </fieldset>
-            <input type="submit" name="save_menu_item" value="'.lang('admin', 'save').'">
+            <input type="submit" name="save_menu_item" value="'.lang("admin", "save").'">
           </form>
         </center>';
       break;
@@ -2208,14 +2208,14 @@ function menus()
     case "addmenu":
     {
       $max = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_top_menus"));
-      $max = $max['MAX(`Index`)'] + 1;
+      $max = $max["MAX(`Index`)"] + 1;
       $result = $sqlm->query("INSERT INTO config_top_menus (`Index`, Action, Name) VALUES ('".$max."', '','')");
       redirect("admin.php?section=menus");
       break;
     }
     case "delmenu":
     {
-      $top_menu = $sqlm->quote_smart($_GET['top_menu']);
+      $top_menu = $sqlm->quote_smart($_GET["top_menu"]);
       if ( is_numeric($top_menu) )
       {
         $result = $sqlm->query("DELETE FROM config_top_menus WHERE `Index`='".$top_menu."'");
@@ -2227,24 +2227,24 @@ function menus()
     }
     case "savemenu":
     {
-      $top_index = $sqlm->quote_smart($_GET['top_index']);
-      $top_name = $sqlm->quote_smart($_GET['top_name']);
-      $top_action = $sqlm->quote_smart($_GET['top_action']);
+      $top_index = $sqlm->quote_smart($_GET["top_index"]);
+      $top_name = $sqlm->quote_smart($_GET["top_name"]);
+      $top_action = $sqlm->quote_smart($_GET["top_action"]);
       $result = $sqlm->query("UPDATE config_top_menus SET Name='".$top_name."', Action='".$top_action."' WHERE `Index`='".$top_index."'");
       redirect("admin.php?section=menus");
       break;
     }
     case "additem":
     {
-      $top_index = $sqlm->quote_smart($_GET['top_index']);
+      $top_index = $sqlm->quote_smart($_GET["top_index"]);
       $result = $sqlm->query("INSERT INTO config_menus (Menu, Action, Name) VALUES ('".$top_index."', '','')");
       redirect("admin.php?section=menus&top_menu=".$top_index."&editmenu=editmenu");
       break;
     }
     case "delitem":
     {
-      $menu_item = $sqlm->quote_smart($_GET['menu_item']);
-      $top_index = $sqlm->quote_smart($_GET['top_index']);
+      $menu_item = $sqlm->quote_smart($_GET["menu_item"]);
+      $top_index = $sqlm->quote_smart($_GET["top_index"]);
       if ( is_numeric($menu_item) )
       {
         $result = $sqlm->query("DELETE FROM config_menus WHERE `Index`='".$menu_item."'");
@@ -2265,18 +2265,18 @@ function savemenu()
   global $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
-  $menu_item = $sqlm->quote_smart($_GET['menu_item']);
-  $menu = $sqlm->quote_smart($_GET['menu']);
-  $order = $sqlm->quote_smart($_GET['order']);
-  $name = $sqlm->quote_smart($_GET['name']);
-  $action = $sqlm->quote_smart($_GET['menu_action']);
-  $view = $sqlm->quote_smart($_GET['view']);
-  $insert = $sqlm->quote_smart($_GET['insert']);
-  $update = $sqlm->quote_smart($_GET['update']);
-  $delete = $sqlm->quote_smart($_GET['delete']);
-  if ( isset($_GET['enabled']) )
+  $menu_item = $sqlm->quote_smart($_GET["menu_item"]);
+  $menu = $sqlm->quote_smart($_GET["menu"]);
+  $order = $sqlm->quote_smart($_GET["order"]);
+  $name = $sqlm->quote_smart($_GET["name"]);
+  $action = $sqlm->quote_smart($_GET["menu_action"]);
+  $view = $sqlm->quote_smart($_GET["view"]);
+  $insert = $sqlm->quote_smart($_GET["insert"]);
+  $update = $sqlm->quote_smart($_GET["update"]);
+  $delete = $sqlm->quote_smart($_GET["delete"]);
+  if ( isset($_GET["enabled"]) )
     $enabled = 1;
   else
     $enabled = 0;
@@ -2292,25 +2292,25 @@ function savemenu()
 
 function forum()
 {
-  global $output, $corem_db, $lang_global;
+  global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
   $forum_action = 'start';
-  if ( isset($_GET['editforum']) )
+  if ( isset($_GET["editforum"]) )
     $forum_action = 'edit';
-  if ( isset($_GET['delforum']) )
+  if ( isset($_GET["delforum"]) )
     $forum_action = 'delforum';
-  if ( isset($_GET['addforum']) )
+  if ( isset($_GET["addforum"]) )
     $forum_action = 'addforum';
-  if ( isset($_GET['editforum_item']) )
+  if ( isset($_GET["editforum_item"]) )
     $forum_action = 'edititem';
-  if ( isset($_GET['delforum_item']) )
+  if ( isset($_GET["delforum_item"]) )
     $forum_action = 'delitem';
-  if ( isset($_GET['addforum_item']) )
+  if ( isset($_GET["addforum_item"]) )
     $forum_action = 'additem';
-  if ( isset($_GET['saveforum']) )
+  if ( isset($_GET["saveforum"]) )
     $forum_action = 'saveforum';
 
   switch ( $forum_action )
@@ -2324,23 +2324,23 @@ function forum()
             <input type="hidden" name="section" value="forum">
             <table class="simple" id="admin_top_menus">
               <tr>
-                <th colspan=2>'.lang('admin', 'cats').'</th>
+                <th colspan=2>'.lang("admin", "cats").'</th>
               </tr>
             </table>
             <table class="simple" id="admin_top_menus">
               <tr>
-                <th width="15%">'.lang('admin', 'edit').'</th>
-                <th width="5%">'.lang('admin', 'remove').'</th>
-                <th>'.lang('admin', 'name').'</th>
+                <th width="15%">'.lang("admin", "edit").'</th>
+                <th width="5%">'.lang("admin", "remove").'</th>
+                <th>'.lang("admin", "name").'</th>
               </tr>';
       $color = "#EEEEEE";
       while ( $cat = $sqlm->fetch_assoc($cats) )
       {
         $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat['Index'].'&editforum=editforum"><img src="img/edit.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat['Index'].'&delforum=delforum"><img src="img/aff_cross.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center>'.$cat['Name'].'</center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat["Index"].'&editforum=editforum"><img src="img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat["Index"].'&delforum=delforum"><img src="img/aff_cross.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center>'.$cat["Name"].'</center></td>
               </tr>';
         if ( $color == "#EEEEEE" )
           $color = "#FFFFFF";
@@ -2350,20 +2350,20 @@ function forum()
       $output .= '
               <tr>
                 <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&addforum=addforum"><img src="img/add.png" /></a></center></td>
-                <td style="background-color:'.$color.'" colspan="2"><a href="admin.php?section=forum&addforum=addforum">'.lang('admin', 'addforum').'</a></td>
+                <td style="background-color:'.$color.'" colspan="2"><a href="admin.php?section=forum&addforum=addforum">'.lang("admin", "addforum").'</a></td>
               </tr>';
       $output .= '
             </table>
-            <!-- input type="submit" name="editforum" value="'.lang('admin', 'editforum').'">
-            <input type="submit" name="addforum" value="'.lang('admin', 'addforum').'">
-            <input type="submit" name="delforum" value="'.lang('admin', 'delforum').'" -->
+            <!-- input type="submit" name="editforum" value="'.lang("admin", "editforum").'">
+            <input type="submit" name="addforum" value="'.lang("admin", "addforum").'">
+            <input type="submit" name="delforum" value="'.lang("admin", "delforum").'" -->
           </form>
         </center>';
       break;
     }
     case 'edit':
     {
-      $cat_id = $sqlm->quote_smart($_GET['category']);
+      $cat_id = $sqlm->quote_smart($_GET["category"]);
       $cat = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_forum_categories WHERE `Index`='".$cat_id."'"));
       $sec_levels = sec_level_list();
       $output .= '
@@ -2373,23 +2373,23 @@ function forum()
             <input type="hidden" name="category" value="'.$cat_id.'">
             <table class="simple" id="admin_edit_top_menu_nameaction">
               <tr>
-                <th colspan=2>'.lang('admin', 'cat').'</th>
+                <th colspan=2>'.lang("admin", "cat").'</th>
               </tr>
               <tr>
-                <td>'.lang('admin', 'name').': </td>
-                <td><input type="text" name="cat_name" value="'.$cat['Name'].'" id="admin_edit_top_menu_action"></td>
+                <td>'.lang("admin", "name").': </td>
+                <td><input type="text" name="cat_name" value="'.$cat["Name"].'" id="admin_edit_top_menu_action"></td>
               </tr>
             </table>
             <table class="simple" id="admin_edit_top_menu_submenus">
               <tr>
-                <th>'.lang('admin', 'edit').'</th>
-                <th>'.lang('admin', 'remove').'</th>
-                <th>'.lang('admin', 'name').'</th>
-                <th>'.lang('admin', 'desc').'</th>
-                <th>'.lang('admin', 'sideaccess').'</th>
-                <th>'.lang('admin', 'secread').'</th>
-                <th>'.lang('admin', 'secpost').'</th>
-                <th>'.lang('admin', 'sectopic').'</th>
+                <th>'.lang("admin", "edit").'</th>
+                <th>'.lang("admin", "remove").'</th>
+                <th>'.lang("admin", "name").'</th>
+                <th>'.lang("admin", "desc").'</th>
+                <th>'.lang("admin", "sideaccess").'</th>
+                <th>'.lang("admin", "secread").'</th>
+                <th>'.lang("admin", "secpost").'</th>
+                <th>'.lang("admin", "sectopic").'</th>
               </tr>';
       $forums = $sqlm->query("SELECT * FROM config_forums WHERE Category='".$cat_id."'");
       $color = "#EEEEEE";
@@ -2397,14 +2397,14 @@ function forum()
       {
         $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&forum_item='.$forum['Index'].'&editforum_item=editforumsection"><img src="img/edit.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&forum_item='.$forum['Index'].'&delforum_item=delforumsection"><img src="img/aff_cross.png" /></a></center></td>
-                <td width="25%" style="background-color:'.$color.'"><center>'.$forum['Name'].'</center></td>
-                <td width="25%" style="background-color:'.$color.'"><center>'.$forum['Desc'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$forum['Side_Access'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.sec_level_name($forum['Min_Security_Level_Read']).'</center></td>
-                <td style="background-color:'.$color.'"><center>'.sec_level_name($forum['Min_Security_Level_Post']).'</center></td>
-                <td style="background-color:'.$color.'"><center>'.sec_level_name($forum['Min_Security_Level_Create_Topic']).'</center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&forum_item='.$forum["Index"].'&editforum_item=editforumsection"><img src="img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&forum_item='.$forum["Index"].'&delforum_item=delforumsection"><img src="img/aff_cross.png" /></a></center></td>
+                <td width="25%" style="background-color:'.$color.'"><center>'.$forum["Name"].'</center></td>
+                <td width="25%" style="background-color:'.$color.'"><center>'.$forum["Desc"].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$forum["Side_Access"].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.sec_level_name($forum["Min_Security_Level_Read"]).'</center></td>
+                <td style="background-color:'.$color.'"><center>'.sec_level_name($forum["Min_Security_Level_Post"]).'</center></td>
+                <td style="background-color:'.$color.'"><center>'.sec_level_name($forum["Min_Security_Level_Create_Topic"]).'</center></td>
               </tr>';
         if ( $color == "#EEEEEE" )
           $color = "#FFFFFF";
@@ -2414,21 +2414,21 @@ function forum()
       $output .= '
               <tr>
                 <td style="background-color:'.$color.'"><center><a href="admin.php?section=forum&category='.$cat_id.'&addforum_item=addforumsection"><img src="img/add.png" /></a></center></td>
-                <td style="background-color:'.$color.'" colspan="7"><a href="admin.php?section=forum&category='.$cat_id.'&addforum_item=addforumsection">'.lang('admin', 'addforum_item').'</a></td>
+                <td style="background-color:'.$color.'" colspan="7"><a href="admin.php?section=forum&category='.$cat_id.'&addforum_item=addforumsection">'.lang("admin", "addforum_item").'</a></td>
               </tr>';
       $output .= '
             </table>
-            <!-- input type="submit" name="editforum_item" value="'.lang('admin', 'editforum_item').'">
-            <input type="submit" name="addforum_item" value="'.lang('admin', 'addforum_item').'" -->
-            <input type="submit" name="saveforum" value="'.lang('admin', 'save').'">
-            <!-- input type="submit" name="delforum_item" value="'.lang('admin', 'delforum_item').'" -->
+            <!-- input type="submit" name="editforum_item" value="'.lang("admin", "editforum_item").'">
+            <input type="submit" name="addforum_item" value="'.lang("admin", "addforum_item").'" -->
+            <input type="submit" name="saveforum" value="'.lang("admin", "save").'">
+            <!-- input type="submit" name="delforum_item" value="'.lang("admin", "delforum_item").'" -->
           </form>
         </center>';
       break;
     }
     case 'edititem':
     {
-      $forum_item = $sqlm->quote_smart($_GET['forum_item']);
+      $forum_item = $sqlm->quote_smart($_GET["forum_item"]);
       $forum = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_forums WHERE `Index`='".$forum_item."'"));
       $sec_list = sec_level_list();
       $cat_list_query = "SELECT * FROM config_forum_categories";
@@ -2443,42 +2443,42 @@ function forum()
             <fieldset id="admin_edit_forum_field">
               <table id="help" id="admin_edit_menu">
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'cat').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'cat').'</a>: </td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "cat").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "cat").'</a>: </td>
                   <td>
                     <select name="menu">';
-                    //<input type="text" name="category" value="'.$forum['Category'].'" id="admin_edit_menu_fields">
+                    //<input type="text" name="category" value="'.$forum["Category"].'" id="admin_edit_menu_fields">
       while ( $row = $sqlm->fetch_assoc($cat_list_result) )
       {
         $output .= '
-                      <option value='.$row['Index'].'" '.( ( $row['Index'] == $forum['Category'] ) ? 'selected="selected"' : '').' id="admin_edit_menu_fields">'.$row['Name'].'</option>';
+                      <option value='.$row["Index"].'" '.( ( $row["Index"] == $forum["Category"] ) ? 'selected="selected"' : '').' id="admin_edit_menu_fields">'.$row["Name"].'</option>';
       }
       $output .= '
                     </select>
                   </td>
                 </tr>
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'forumname').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'name').'</a>: </td>
-                  <td><input type="text" name="name" value="'.$forum['Name'].'" id="admin_edit_menu_fields"></td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "forumname").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "name").'</a>: </td>
+                  <td><input type="text" name="name" value="'.$forum["Name"].'" id="admin_edit_menu_fields"></td>
                 </tr
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'desc').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'desc').'</a>: </td>
-                  <td><input type="text" name="desc" value="'.$forum['Desc'].'" id="admin_edit_menu_fields"></td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "desc").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "desc").'</a>: </td>
+                  <td><input type="text" name="desc" value="'.$forum["Desc"].'" id="admin_edit_menu_fields"></td>
                 </tr>
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'sideaccess').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'sideaccess2').'</a>: </td>
-                  <td><input type="text" name="sideaccess" value="'.$forum['Side_Access'].'" id="admin_edit_menu_fields"></td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sideaccess").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sideaccess2").'</a>: </td>
+                  <td><input type="text" name="sideaccess" value="'.$forum["Side_Access"].'" id="admin_edit_menu_fields"></td>
                 </tr>
                 <tr>
                   <td></td>
                 </tr>
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'secread').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'secread2').'</a>: </td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "secread").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "secread2").'</a>: </td>
                   <td>
                     <select name="min_security_level_read">';
       foreach ($sec_list as $row)
       {
         $output .= '
-                      <option value="'.$row['Sec'].'" '.($row['Sec'] == $forum['Min_Security_Level_Read'] ? 'selected="selected"' : '').'>'.$row['Name'].' ('.$row['Sec'].')</option>';
+                      <option value="'.$row["Sec"].'" '.($row["Sec"] == $forum["Min_Security_Level_Read"] ? 'selected="selected"' : '').'>'.$row["Name"].' ('.$row["Sec"].')</option>';
       }
       $output .= '
                     </select>
@@ -2488,13 +2488,13 @@ function forum()
                   <td></td>
                 </tr>
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'secpost').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'secpost2').'</a>: </td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "secpost").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "secpost2").'</a>: </td>
                   <td>
                     <select name="min_security_level_post">';
       foreach ($sec_list as $row)
       {
         $output .= '
-                      <option value="'.$row['Sec'].'" '.($row['Sec'] == $forum['Min_Security_Level_Post'] ? 'selected="selected"' : '').'>'.$row['Name'].' ('.$row['Sec'].')</option>';
+                      <option value="'.$row["Sec"].'" '.($row["Sec"] == $forum["Min_Security_Level_Post"] ? 'selected="selected"' : '').'>'.$row["Name"].' ('.$row["Sec"].')</option>';
       }
       $output .= '
                     </select>
@@ -2504,13 +2504,13 @@ function forum()
                   <td></td>
                 </tr>
                 <tr>
-                  <td><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'sectopic').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'sectopic2').'</a>: </td>
+                  <td><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sectopic").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sectopic2").'</a>: </td>
                   <td>
                     <select name="min_security_level_create_topic">';
       foreach ($sec_list as $row)
       {
         $output .= '
-                      <option value="'.$row['Sec'].'" '.($row['Sec'] == $forum['Min_Security_Level_Create_Topic'] ? 'selected="selected"' : '').'>'.$row['Name'].' ('.$row['Sec'].')</option>';
+                      <option value="'.$row["Sec"].'" '.($row["Sec"] == $forum["Min_Security_Level_Create_Topic"] ? 'selected="selected"' : '').'>'.$row["Name"].' ('.$row["Sec"].')</option>';
       }
       $output .= '
                     </select>
@@ -2518,7 +2518,7 @@ function forum()
                 </tr>
               </table>
             </fieldset>
-            <input type="submit" name="save_forum_item" value="'.lang('admin', 'save').'">
+            <input type="submit" name="save_forum_item" value="'.lang("admin", "save").'">
           </form>
         </center>';
       break;
@@ -2526,14 +2526,14 @@ function forum()
     case "addforum":
     {
       $max = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_forum_categories"));
-      $max = $max['MAX(`Index`)'] + 1;
+      $max = $max["MAX(`Index`)"] + 1;
       $result = $sqlm->query("INSERT INTO config_forum_categories (`Index`, Name) VALUES ('".$max."', '')");
       redirect("admin.php?section=forum");
       break;
     }
     case "delforum":
     {
-      $category = $sqlm->quote_smart($_GET['category']);
+      $category = $sqlm->quote_smart($_GET["category"]);
       if ( is_numeric($category) )
       {
         $result = $sqlm->query("DELETE FROM config_forum_categories WHERE `Index`='".$category."'");
@@ -2545,23 +2545,23 @@ function forum()
     }
     case "saveforum":
     {
-      $category = $sqlm->quote_smart($_GET['category']);
-      $category_name = $sqlm->quote_smart($_GET['top_name']);
+      $category = $sqlm->quote_smart($_GET["category"]);
+      $category_name = $sqlm->quote_smart($_GET["top_name"]);
       $result = $sqlm->query("UPDATE config_forum_categories SET Name='".$category_name."' WHERE `Index`='".$category."'");
       redirect("admin.php?section=forum");
       break;
     }
     case "additem":
     {
-      $category = $sqlm->quote_smart($_GET['category']);
+      $category = $sqlm->quote_smart($_GET["category"]);
       $result = $sqlm->query("INSERT INTO config_forums (Category, Name, `Desc`, Side_Access) VALUES ('".$category."', '', '', '')");
       redirect("admin.php?section=forum&category=".$category."&editforum=editforum");
       break;
     }
     case "delitem":
     {
-      $category = $sqlm->quote_smart($_GET['category']);
-      $forum_item = $sqlm->quote_smart($_GET['forum_item']);
+      $category = $sqlm->quote_smart($_GET["category"]);
+      $forum_item = $sqlm->quote_smart($_GET["forum_item"]);
       if ( is_numeric($forum_item) )
       {
         $result = $sqlm->query("DELETE FROM config_forums WHERE `Index`='".$forum_item."'");
@@ -2582,16 +2582,16 @@ function saveforum()
   global $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
-  $forum_item = $sqlm->quote_smart($_GET['forum_item']);
-  $forum = $sqlm->quote_smart($_GET['category']);
-  $name = $sqlm->quote_smart($_GET['name']);
-  $desc = $sqlm->quote_smart($_GET['desc']);
-  $sideaccess = $sqlm->quote_smart($_GET['sideaccess']);
-  $min_security_level_read = $sqlm->quote_smart($_GET['min_security_level_read']);
-  $min_security_level_post = $sqlm->quote_smart($_GET['min_security_level_post']);
-  $min_security_level_create_topic = $sqlm->quote_smart($_GET['min_security_level_create_topic']);
+  $forum_item = $sqlm->quote_smart($_GET["forum_item"]);
+  $forum = $sqlm->quote_smart($_GET["category"]);
+  $name = $sqlm->quote_smart($_GET["name"]);
+  $desc = $sqlm->quote_smart($_GET["desc"]);
+  $sideaccess = $sqlm->quote_smart($_GET["sideaccess"]);
+  $min_security_level_read = $sqlm->quote_smart($_GET["min_security_level_read"]);
+  $min_security_level_post = $sqlm->quote_smart($_GET["min_security_level_post"]);
+  $min_security_level_create_topic = $sqlm->quote_smart($_GET["min_security_level_create_topic"]);
 
   $result = $sqlm->query("SELECT * FROM config_forums WHERE `Index`='".$forum_item."'");
   if ( $sqlm->num_rows($result) )
@@ -2604,13 +2604,13 @@ function saveforum()
 
 function accounts()
 {
-  global $output, $corem_db, $logon_db, $lang_global, $core;
+  global $output, $corem_db, $logon_db, $core;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
   $sqll = new SQL;
-  $sqll->connect($logon_db['addr'], $logon_db['user'], $logon_db['pass'], $logon_db['name']);
+  $sqll->connect($logon_db["addr"], $logon_db["user"], $logon_db["pass"], $logon_db["name"]);
 
   if ( $core == 1 )
     $result = $sqll->query("SELECT * FROM accounts");
@@ -2618,7 +2618,7 @@ function accounts()
     $result = $sqll->query("SELECT *, username AS login FROM account");
 
   $accounts_action = 0;
-  if ( isset($_GET['editacct']) )
+  if ( isset($_GET["editacct"]) )
     $accounts_action = 'edit';
 
   if ( !$accounts_action )
@@ -2629,36 +2629,36 @@ function accounts()
             <input type="hidden" name="section" value="accounts">
             <table class="simple" id="admin_accounts">
               <tr>
-                <th width="10%">'.lang('admin', 'edit').'</th>
-                <th>'.lang('admin', 'login').'</th>
-                <th>'.lang('admin', 'screenname').'</th>
-                <th width="20%">'.lang('admin', 'seclvl').'</th>
-                <th width="15%">'.lang('admin', 'acpaccess').'</th>
+                <th width="10%">'.lang("admin", "edit").'</th>
+                <th>'.lang("admin", "login").'</th>
+                <th>'.lang("admin", "screenname").'</th>
+                <th width="20%">'.lang("admin", "seclvl").'</th>
+                <th width="15%">'.lang("admin", "acpaccess").'</th>
               </tr>';
     $color = "#EEEEEE";
     while ( $acct = $sqll->fetch_assoc($result) )
     {
-      $acct_result = $sqlm->query("SELECT * FROM config_accounts WHERE Login='".$acct['login']."'");
+      $acct_result = $sqlm->query("SELECT * FROM config_accounts WHERE Login='".$acct["login"]."'");
       $sn_web = $sqlm->fetch_assoc($acct_result);
 
       if ( $sn_web == NULL )
       {
-        $sn_web['SecurityLevel'] = 0;
-        $sn_web['WebAdmin'] = 0;
-        $sn_web['ScreenName'] = '';
+        $sn_web["SecurityLevel"] = 0;
+        $sn_web["WebAdmin"] = 0;
+        $sn_web["ScreenName"] = '';
       }
 
-      $sl_query = "SELECT * FROM config_gm_level_names WHERE Security_Level='".$sn_web['SecurityLevel']."'";
+      $sl_query = "SELECT * FROM config_gm_level_names WHERE Security_Level='".$sn_web["SecurityLevel"]."'";
       $sl_result = $sqlm->query($sl_query);
       $sl = $sqlm->fetch_assoc($sl_result);
 
       $output .= '
               <tr>
-                <td style="background-color:'.$color.'"><center><a href="admin.php?section=accounts&acct='.$acct['login'].'&editacct=editaccount"><img src="img/edit.png" /></a></center></td>
-                <td style="background-color:'.$color.'"><center>'.ucfirst(strtolower($acct['login'])).'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$sn_web['ScreenName'].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$sl['Full_Name'].' ('.$sn_web['SecurityLevel'].')</center></td>
-                <td style="background-color:'.$color.'"><center>'.( ( $sn_web['WebAdmin'] ) ? '<img src="img/up.gif">' : '<img src="img/down.gif">' ).'</center></td>
+                <td style="background-color:'.$color.'"><center><a href="admin.php?section=accounts&acct='.$acct["login"].'&editacct=editaccount"><img src="img/edit.png" /></a></center></td>
+                <td style="background-color:'.$color.'"><center>'.ucfirst(strtolower($acct["login"])).'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$sn_web["ScreenName"].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$sl["Full_Name"].' ('.$sn_web["SecurityLevel"].')</center></td>
+                <td style="background-color:'.$color.'"><center>'.( ( $sn_web["WebAdmin"] ) ? '<img src="img/up.gif">' : '<img src="img/down.gif">' ).'</center></td>
               </tr>';
       if ( $color == "#EEEEEE" )
         $color = "#FFFFFF";
@@ -2667,14 +2667,14 @@ function accounts()
     }
     $output .= '
             </table>
-            <!-- input type="submit" name="editacct" value="'.lang('admin', 'editacct').'" -->
+            <!-- input type="submit" name="editacct" value="'.lang("admin", "editacct").'" -->
           </form>
         </center>';
   }
   else
   {
-    if ( isset($_GET['acct']) )
-      $acct = $sqlm->quote_smart($_GET['acct']);
+    if ( isset($_GET["acct"]) )
+      $acct = $sqlm->quote_smart($_GET["acct"]);
     else
       redirect("admin.php?section=accounts&error=1");
 
@@ -2695,33 +2695,33 @@ function accounts()
             <fieldset id="admin_edit_account">
               <table>
                 <tr>
-                  <td width="50%">'.lang('admin', 'login').': </td>
-                  <td><input type="text" readonly="readonly" name="login" value="'.$logon_acct['login'].'">
+                  <td width="50%">'.lang("admin", "login").': </td>
+                  <td><input type="text" readonly="readonly" name="login" value="'.$logon_acct["login"].'">
                 </tr>
                 <tr>
-                  <td>'.lang('admin', 'screenname').': </td>
-                  <td><input type="text" name="sn" value="'.$sn_acct['ScreenName'].'">
+                  <td>'.lang("admin", "screenname").': </td>
+                  <td><input type="text" name="sn" value="'.$sn_acct["ScreenName"].'">
                 </tr>
                 <tr>
-                  <td>'.lang('admin', 'seclvl').': </td>
+                  <td>'.lang("admin", "seclvl").': </td>
                   <td>
                     <select name="sec">';
     while ( $row = $sqlm->fetch_assoc($sl_result) )
     {
       $output .= '
-                      <option value="'.$row['Security_Level'].'" '.( ( $sn_acct['SecurityLevel'] == $row['Security_Level'] ) ? 'selected="selected"' : '' ).'>'.$row['Full_Name'].' ('.$row['Security_Level'].')</option>';
+                      <option value="'.$row["Security_Level"].'" '.( ( $sn_acct["SecurityLevel"] == $row["Security_Level"] ) ? 'selected="selected"' : '' ).'>'.$row["Full_Name"].' ('.$row["Security_Level"].')</option>';
     }
     $output .= '
                     </select>
                   </td>
                 </tr>
                 <tr>
-                  <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang('admin_tip', 'acpaccess').'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang('admin', 'acpaccess').'</a>: </td>
-                  <td><input type="checkbox" name="acp" '.($sn_acct['WebAdmin'] ? 'checked' : '').'>
+                  <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "acpaccess").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "acpaccess").'</a>: </td>
+                  <td><input type="checkbox" name="acp" '.($sn_acct["WebAdmin"] ? 'checked' : '').'>
                 </tr>
               </table>
             </fieldset>
-            <input type="submit" name="saveacct" value="'.lang('admin', 'save').'">
+            <input type="submit" name="saveacct" value="'.lang("admin", "save").'">
           </form>
         </center>';
   }
@@ -2732,17 +2732,17 @@ function saveacct()
   global $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db['addr'], $corem_db['user'], $corem_db['pass'], $corem_db['name']);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
 
-  $acct = $sqlm->quote_smart($_GET['login']);
-  $sn = $sqlm->quote_smart($_GET['sn']);
-  $sec = $sqlm->quote_smart($_GET['sec']);
-  if ( isset($_GET['acp']) )
+  $acct = $sqlm->quote_smart($_GET["login"]);
+  $sn = $sqlm->quote_smart($_GET["sn"]);
+  $sec = $sqlm->quote_smart($_GET["sec"]);
+  if ( isset($_GET["acp"]) )
     $acp = 1;
   else
     $acp = 0;
     
-  if ( !isset($_GET['sec']) )
+  if ( !isset($_GET["sec"]) )
     $sec = 0;
 
   $result = $sqlm->query("SELECT * FROM config_accounts WHERE Login='".$acct."'");
@@ -2759,7 +2759,7 @@ function saveacct()
 // Fix reditection error under MS-IIS fuckedup-servers.
 function redirect($url)
 {
-  if ( strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false )
+  if ( strpos($_SERVER["SERVER_SOFTWARE"], 'Microsoft-IIS') === false )
   {
     header('Location: '.$url);
     exit();
@@ -2772,23 +2772,23 @@ function redirect($url)
 //#############################################################################
 // MAIN
 //#############################################################################
-$err = ( ( isset($_GET['error']) ) ? $_GET['error'] : NULL );
+$err = ( ( isset($_GET["error"]) ) ? $_GET["error"] : NULL );
 
 $output .= "
         <div class='top'>";
 $output .= "
           <center>
-            <h1>".lang('admin', 'title')."</h1>";
+            <h1>".lang("admin", "title")."</h1>";
 
 switch ( $err )
 {
   case 1:
     $output .= "
-            <h1><font class=\"error\">".$lang_global['empty_fields']."</font></h1>";
+            <h1><font class=\"error\">".lang("global", "empty_fields")."</font></h1>";
     break;
   case 2:
     $output .= "
-            <h1><font class=\"error\">".lang('admin', 'nocarets')."</font></h1>";
+            <h1><font class=\"error\">".lang("admin", "nocarets")."</font></h1>";
     break;
  default:
     $output .= "
@@ -2803,7 +2803,7 @@ $output .= "
 
 unset($err);
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+$action = (isset($_GET["action"])) ? $_GET["action"] : NULL;
 
 switch ( $action )
 {
@@ -2827,7 +2827,7 @@ switch ( $action )
     break;
 }
 
-$section = (isset($_GET['section'])) ? $_GET['section'] : NULL;
+$section = (isset($_GET["section"])) ? $_GET["section"] : NULL;
 
 switch ( $section )
 {

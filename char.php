@@ -22,7 +22,7 @@ require_once 'libs/char_lib.php';
 require_once 'libs/item_lib.php';
 require_once 'libs/spell_lib.php';
 require_once 'libs/map_zone_lib.php';
-valid_login($action_permission['view']);
+valid_login($action_permission["view"]);
 
 //########################################################################################################################
 // SHOW GENERAL CHARACTERS INFO
@@ -38,60 +38,60 @@ function char_main()
   //wowhead_tt();
 
   // we need at either an id or a name or we would have nothing to show
-  if ( empty($_GET['id']) )
-    if ( empty($_GET['name']) )
-      error(lang('global', 'empty_fields'));
+  if ( empty($_GET["id"]) )
+    if ( empty($_GET["name"]) )
+      error(lang("global", "empty_fields"));
 
   // this is multi realm support, as of writing still under development
   // this page is already implementing it
-  if ( empty($_GET['realm']) )
+  if ( empty($_GET["realm"]) )
     $realmid = $realm_id;
   else
   {
-    $realmid = $sql['logon']->quote_smart($_GET['realm']);
+    $realmid = $sql["logon"]->quote_smart($_GET["realm"]);
     if ( is_numeric($realmid) )
-      $sql['char']->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql["char"]->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
     else
       $realmid = $realm_id;
   }
 
-  if ( empty($_GET['id']) )
+  if ( empty($_GET["id"]) )
   {
-    $name = $sql['char']->quote_smart($_GET['name']);
+    $name = $sql["char"]->quote_smart($_GET["name"]);
     if ( $core == 1 )
-      $result = $sql['char']->query("SELECT guid, acct, race FROM characters WHERE name='".$name."' LIMIT 1");
+      $result = $sql["char"]->query("SELECT guid, acct, race FROM characters WHERE name='".$name."' LIMIT 1");
     else
-      $result = $sql['char']->query("SELECT guid, id AS acct, race FROM characters WHERE name='".$name."' LIMIT 1");
-    $id_result = $sql['char']->fetch_assoc($result);
-    $id = $id_result['guid'];
+      $result = $sql["char"]->query("SELECT guid, id AS acct, race FROM characters WHERE name='".$name."' LIMIT 1");
+    $id_result = $sql["char"]->fetch_assoc($result);
+    $id = $id_result["guid"];
   }
   else
   {
-    $id = $sql['char']->quote_smart($_GET['id']);
+    $id = $sql["char"]->quote_smart($_GET["id"]);
   }
 
   if ( is_numeric($id) )
     ;
   else 
-    error(lang('global', 'empty_fields'));
+    error(lang("global", "empty_fields"));
 
   if ( $core == 1 )
-    $result = $sql['char']->query('SELECT acct, race FROM characters WHERE guid='.$id.' LIMIT 1');
+    $result = $sql["char"]->query('SELECT acct, race FROM characters WHERE guid='.$id.' LIMIT 1');
   else
-    $result = $sql['char']->query('SELECT account AS acct, race FROM characters WHERE guid='.$id.' LIMIT 1');
+    $result = $sql["char"]->query('SELECT account AS acct, race FROM characters WHERE guid='.$id.' LIMIT 1');
 
-  if ( $sql['char']->num_rows($result) )
+  if ( $sql["char"]->num_rows($result) )
   {
     //resrict by owner's gmlvl
-    $owner_acc_id = $sql['char']->result($result, 0, 'acct');
+    $owner_acc_id = $sql["char"]->result($result, 0, 'acct');
     if ( $core == 1 )
-      $query = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$owner_acc_id."'");
+      $query = $sql["logon"]->query("SELECT login FROM accounts WHERE acct='".$owner_acc_id."'");
     else
-      $query = $sql['logon']->query("SELECT username as login FROM account WHERE id='".$owner_acc_id."'");
-    $owner_name = $sql['logon']->result($query, 0, 'login');
+      $query = $sql["logon"]->query("SELECT username as login FROM account WHERE id='".$owner_acc_id."'");
+    $owner_name = $sql["logon"]->result($query, 0, 'login');
 
-    $query = $sql['mgr']->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
-    $owner_gmlvl = $sql['mgr']->result($query, 0, 'gm');
+    $query = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
+    $owner_gmlvl = $sql["mgr"]->result($query, 0, 'gm');
 
     if ( $user_lvl || $server[$realmid]['both_factions'] )
     {
@@ -100,10 +100,10 @@ function char_main()
     }
     else
     {
-      $side_p = ( ( in_array($sql['char']->result($result, 0, 'race'), array(2, 5, 6, 8, 10)) ) ? 1 : 2 );
-      $result_1 = $sql['char']->query('SELECT race FROM characters WHERE acct='.$user_id.' LIMIT 1');
-      if ( $sql['char']->num_rows($result) )
-        $side_v = ( ( in_array($sql['char']->result($result_1, 0, 'race'), array(2, 5, 6, 8, 10)) ) ? 1 : 2 );
+      $side_p = ( ( in_array($sql["char"]->result($result, 0, 'race'), array(2, 5, 6, 8, 10)) ) ? 1 : 2 );
+      $result_1 = $sql["char"]->query('SELECT race FROM characters WHERE acct='.$user_id.' LIMIT 1');
+      if ( $sql["char"]->num_rows($result) )
+        $side_v = ( ( in_array($sql["char"]->result($result_1, 0, 'race'), array(2, 5, 6, 8, 10)) ) ? 1 : 2 );
       else
         $side_v = 0;
       unset($result_1);
@@ -113,14 +113,14 @@ function char_main()
     {
       if ( $core == 1 )
       {
-        $result = $sql['char']->query("SELECT guid, name, race, class, level, zoneid, mapid, online, gender,
+        $result = $sql["char"]->query("SELECT guid, name, race, class, level, zoneid, mapid, online, gender,
           SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1) AS totaltime,
           acct, data, timestamp, xp 
           FROM characters WHERE guid='".$id."'");
       }
       elseif ( $core == 2 )
       {
-        $result = $sql['char']->query("SELECT guid, name, race, class, level, zone AS zoneid, map AS mapid, 
+        $result = $sql["char"]->query("SELECT guid, name, race, class, level, zone AS zoneid, map AS mapid, 
           online, gender, totaltime, account AS acct, logout_time AS timestamp, health, 
 					power1, power2, power3, power4, power5, power6, power7, xp,
           arenaPoints, totalHonorPoints, totalKills
@@ -128,16 +128,16 @@ function char_main()
       }
       else
       {
-        $result = $sql['char']->query("SELECT guid, name, race, class, level, zone AS zoneid, map AS mapid, 
+        $result = $sql["char"]->query("SELECT guid, name, race, class, level, zone AS zoneid, map AS mapid, 
           online, gender, totaltime, account AS acct, logout_time AS timestamp, health, 
 					power1, power2, power3, power4, power5, power6, power7, xp, arenaPoints, totalHonorPoints, totalKills
           FROM characters WHERE guid='".$id."'");
       }
-      $char = $sql['char']->fetch_assoc($result);
+      $char = $sql["char"]->fetch_assoc($result);
       
       if ( $core == 1 )
       {
-        $char_data = $char['data'];
+        $char_data = $char["data"];
         if ( empty($char_data) )
           $char_data = str_repeat('0;', PLAYER_END);
         $char_data = explode(';',$char_data);
@@ -145,48 +145,48 @@ function char_main()
       else
       {
         $query = "SELECT * FROM characters LEFT JOIN character_stats ON characters.guid=character_stats.guid WHERE characters.guid='".$id."'";
-        $char_data_result = $sql['char']->query($query);
-        $char_data_fields = $sql['char']->fetch_assoc($char_data_result);
+        $char_data_result = $sql["char"]->query($query);
+        $char_data_fields = $sql["char"]->fetch_assoc($char_data_result);
 
-        $char_data[PLAYER_BLOCK_PERCENTAGE] = $char_data_fields['blockPct'];
-        $char_data[PLAYER_DODGE_PERCENTAGE] = $char_data_fields['dodgePct'];
-        $char_data[PLAYER_PARRY_PERCENTAGE] = $char_data_fields['parryPct'];
-        $char_data[PLAYER_CRIT_PERCENTAGE] = $char_data_fields['critPct'];
-        $char_data[PLAYER_RANGED_CRIT_PERCENTAGE] = $char_data_fields['rangedCritPct'];
-        $char_data[UNIT_FIELD_MAXDAMAGE] = $char_data_fields['attackPower'];
-        $char_data[UNIT_FIELD_MINDAMAGE] = $char_data_fields['attackPower'];
-        $char_data[UNIT_FIELD_MAXRANGEDDAMAGE] = $char_data_fields['rangedAttackPower'];
-        $char_data[UNIT_FIELD_MINRANGEDDAMAGE] = $char_data_fields['rangedAttackPower'];
-        $char_data[PLAYER_SPELL_CRIT_PERCENTAGE1] = $char_data_fields['spellCritPct'];
-        $char_data[PLAYER_FIELD_MOD_DAMAGE_DONE_POS] = $char_data_fields['spellPower'];
-        $char_data[UNIT_FIELD_STAT0] = $char_data_fields['strength'];
-        $char_data[UNIT_FIELD_STAT1] = $char_data_fields['agility'];
-        $char_data[UNIT_FIELD_STAT2] = $char_data_fields['stamina'];
-        $char_data[UNIT_FIELD_STAT3] = $char_data_fields['intellect'];
-        $char_data[UNIT_FIELD_STAT4] = $char_data_fields['spirit'];
-        $char_data[UNIT_FIELD_RESISTANCES] = $char_data_fields['armor'];
-        $char_data[UNIT_FIELD_RESISTANCES + 1] = $char_data_fields['resHoly'];
-        $char_data[UNIT_FIELD_RESISTANCES + 2] = $char_data_fields['resArcane'];
-        $char_data[UNIT_FIELD_RESISTANCES + 3] = $char_data_fields['resFire'];
-        $char_data[UNIT_FIELD_RESISTANCES + 4] = $char_data_fields['resNature'];
-        $char_data[UNIT_FIELD_RESISTANCES + 5] = $char_data_fields['resFrost'];
-        $char_data[UNIT_FIELD_RESISTANCES + 6] = $char_data_fields['resShadow'];
-        $char_data[UNIT_FIELD_HEALTH] = $char['health'];
-        $char_data[UNIT_FIELD_MAXHEALTH] = $char_data_fields['maxhealth'];
-        $char_data[UNIT_FIELD_POWER1] = $char['power1'];
-        $char_data[UNIT_FIELD_POWER2] = $char['power2'];
-        $char_data[UNIT_FIELD_POWER3] = $char['power3'];
-        $char_data[UNIT_FIELD_POWER4] = $char['power4'];
-        $char_data[UNIT_FIELD_POWER5] = $char['power5'];
-        $char_data[UNIT_FIELD_POWER6] = $char['power6'];
-        $char_data[UNIT_FIELD_POWER7] = $char['power7'];
-        $char_data[UNIT_FIELD_MAXPOWER1] = $char_data_fields['maxpower1'];
-        $char_data[UNIT_FIELD_MAXPOWER2] = $char_data_fields['maxpower2'];
-        $char_data[UNIT_FIELD_MAXPOWER3] = $char_data_fields['maxpower3'];
-        $char_data[UNIT_FIELD_MAXPOWER4] = $char_data_fields['maxpower4'];
-        $char_data[UNIT_FIELD_MAXPOWER5] = $char_data_fields['maxpower5'];
-        $char_data[UNIT_FIELD_MAXPOWER6] = $char_data_fields['maxpower6'];
-        $char_data[UNIT_FIELD_MAXPOWER7] = $char_data_fields['maxpower7'];
+        $char_data[PLAYER_BLOCK_PERCENTAGE] = $char_data_fields["blockPct"];
+        $char_data[PLAYER_DODGE_PERCENTAGE] = $char_data_fields["dodgePct"];
+        $char_data[PLAYER_PARRY_PERCENTAGE] = $char_data_fields["parryPct"];
+        $char_data[PLAYER_CRIT_PERCENTAGE] = $char_data_fields["critPct"];
+        $char_data[PLAYER_RANGED_CRIT_PERCENTAGE] = $char_data_fields["rangedCritPct"];
+        $char_data[UNIT_FIELD_MAXDAMAGE] = $char_data_fields["attackPower"];
+        $char_data[UNIT_FIELD_MINDAMAGE] = $char_data_fields["attackPower"];
+        $char_data[UNIT_FIELD_MAXRANGEDDAMAGE] = $char_data_fields["rangedAttackPower"];
+        $char_data[UNIT_FIELD_MINRANGEDDAMAGE] = $char_data_fields["rangedAttackPower"];
+        $char_data[PLAYER_SPELL_CRIT_PERCENTAGE1] = $char_data_fields["spellCritPct"];
+        $char_data[PLAYER_FIELD_MOD_DAMAGE_DONE_POS] = $char_data_fields["spellPower"];
+        $char_data[UNIT_FIELD_STAT0] = $char_data_fields["strength"];
+        $char_data[UNIT_FIELD_STAT1] = $char_data_fields["agility"];
+        $char_data[UNIT_FIELD_STAT2] = $char_data_fields["stamina"];
+        $char_data[UNIT_FIELD_STAT3] = $char_data_fields["intellect"];
+        $char_data[UNIT_FIELD_STAT4] = $char_data_fields["spirit"];
+        $char_data[UNIT_FIELD_RESISTANCES] = $char_data_fields["armor"];
+        $char_data[UNIT_FIELD_RESISTANCES + 1] = $char_data_fields["resHoly"];
+        $char_data[UNIT_FIELD_RESISTANCES + 2] = $char_data_fields["resArcane"];
+        $char_data[UNIT_FIELD_RESISTANCES + 3] = $char_data_fields["resFire"];
+        $char_data[UNIT_FIELD_RESISTANCES + 4] = $char_data_fields["resNature"];
+        $char_data[UNIT_FIELD_RESISTANCES + 5] = $char_data_fields["resFrost"];
+        $char_data[UNIT_FIELD_RESISTANCES + 6] = $char_data_fields["resShadow"];
+        $char_data[UNIT_FIELD_HEALTH] = $char["health"];
+        $char_data[UNIT_FIELD_MAXHEALTH] = $char_data_fields["maxhealth"];
+        $char_data[UNIT_FIELD_POWER1] = $char["power1"];
+        $char_data[UNIT_FIELD_POWER2] = $char["power2"];
+        $char_data[UNIT_FIELD_POWER3] = $char["power3"];
+        $char_data[UNIT_FIELD_POWER4] = $char["power4"];
+        $char_data[UNIT_FIELD_POWER5] = $char["power5"];
+        $char_data[UNIT_FIELD_POWER6] = $char["power6"];
+        $char_data[UNIT_FIELD_POWER7] = $char["power7"];
+        $char_data[UNIT_FIELD_MAXPOWER1] = $char_data_fields["maxpower1"];
+        $char_data[UNIT_FIELD_MAXPOWER2] = $char_data_fields["maxpower2"];
+        $char_data[UNIT_FIELD_MAXPOWER3] = $char_data_fields["maxpower3"];
+        $char_data[UNIT_FIELD_MAXPOWER4] = $char_data_fields["maxpower4"];
+        $char_data[UNIT_FIELD_MAXPOWER5] = $char_data_fields["maxpower5"];
+        $char_data[UNIT_FIELD_MAXPOWER6] = $char_data_fields["maxpower6"];
+        $char_data[UNIT_FIELD_MAXPOWER7] = $char_data_fields["maxpower7"];
         $char_data[PLAYER_FIELD_MOD_HEALING_DONE_POS] = "ERR";
         $char_data[PLAYER_FIELD_COMBAT_RATING_1+5] = "ERR";
         $char_data[PLAYER_FIELD_COMBAT_RATING_1+17] = "ERR";
@@ -194,40 +194,40 @@ function char_main()
         $char_data[PLAYER_FIELD_COMBAT_RATING_1+7] = "ERR";
         $char_data[PLAYER_EXPERTISE] = "ERR";
         $char_data[PLAYER_OFFHAND_EXPERTISE] = "ERR";
-        $char_data[PLAYER_FIELD_HONOR_CURRENCY] = $char['totalHonorPoints'];
-        $char_data[PLAYER_FIELD_ARENA_CURRENCY] = $char['arenaPoints'];
-        $char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS] = $char['totalKills'];
+        $char_data[PLAYER_FIELD_HONOR_CURRENCY] = $char["totalHonorPoints"];
+        $char_data[PLAYER_FIELD_ARENA_CURRENCY] = $char["arenaPoints"];
+        $char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS] = $char["totalKills"];
       }
 
       if ( $core == 1 )
       {
-        $guild_id = $sql['char']->result($sql['char']->query("SELECT guildid FROM guild_data WHERE playerid='".$char['guid']."'"), 0);
-        $guild_rank = $sql['char']->result($sql['char']->query("SELECT guildRank FROM guild_data WHERE playerid='".$char['guid']."'"), 0);
-        $guild_name = $sql['char']->result($sql['char']->query("SELECT guildName FROM guilds WHERE guildid='".$guild_id."'"));
+        $guild_id = $sql["char"]->result($sql["char"]->query("SELECT guildid FROM guild_data WHERE playerid='".$char["guid"]."'"), 0);
+        $guild_rank = $sql["char"]->result($sql["char"]->query("SELECT guildRank FROM guild_data WHERE playerid='".$char["guid"]."'"), 0);
+        $guild_name = $sql["char"]->result($sql["char"]->query("SELECT guildName FROM guilds WHERE guildid='".$guild_id."'"));
       }
       else
       {
-        $guild_id = $sql['char']->result($sql['char']->query("SELECT guildid FROM guild_member WHERE guid='".$char['guid']."'"), 0);
-        $guild_rank = $sql['char']->result($sql['char']->query("SELECT rank AS guildRank FROM guild_member WHERE guid='".$char['guid']."'"), 0);
-        $guild_name = $sql['char']->result($sql['char']->query("SELECT name AS guildName FROM guild WHERE guildid='".$guild_id."'"));
+        $guild_id = $sql["char"]->result($sql["char"]->query("SELECT guildid FROM guild_member WHERE guid='".$char["guid"]."'"), 0);
+        $guild_rank = $sql["char"]->result($sql["char"]->query("SELECT rank AS guildRank FROM guild_member WHERE guid='".$char["guid"]."'"), 0);
+        $guild_name = $sql["char"]->result($sql["char"]->query("SELECT name AS guildName FROM guild WHERE guildid='".$guild_id."'"));
       }
 
-      $online = ( ( $char['online'] ) ? lang('char', 'online') : lang('char', 'offline') );
+      $online = ( ( $char["online"] ) ? lang("char", "online") : lang("char", "offline") );
 
       if ( $guild_id )
       {
-        //$guild_name = $sql['char']->result($sql['char']->query('SELECT name FROM guild WHERE guildid ='.$char_data[CHAR_DATA_OFFSET_GUILD_ID].''), 0, 'name');
+        //$guild_name = $sql["char"]->result($sql["char"]->query('SELECT name FROM guild WHERE guildid ='.$char_data[CHAR_DATA_OFFSET_GUILD_ID].''), 0, 'name');
         $guild_name = '<a href="guild.php?action=view_guild&amp;realm='.$realmid.'&amp;error=3&amp;id='.$guild_id.'" >'.$guild_name.'</a>';
         $mrank = $guild_rank;
         if ( $core == 1 )
-          $guild_rank = $sql['char']->result($sql['char']->query('SELECT rankname FROM guild_ranks WHERE guildid='.$guild_id.' AND rankId='.$mrank.''), 0, 'rankname');
+          $guild_rank = $sql["char"]->result($sql["char"]->query('SELECT rankname FROM guild_ranks WHERE guildid='.$guild_id.' AND rankId='.$mrank.''), 0, 'rankname');
         else
-          $guild_rank = $sql['char']->result($sql['char']->query('SELECT rname AS rankname FROM guild_rank WHERE guildid='.$guild_id.' AND rid='.$mrank.''), 0, 'rankname');
+          $guild_rank = $sql["char"]->result($sql["char"]->query('SELECT rname AS rankname FROM guild_rank WHERE guildid='.$guild_id.' AND rid='.$mrank.''), 0, 'rankname');
       }
       else
       {
-        $guild_name = lang('global', 'none');
-        $guild_rank = lang('global', 'none');
+        $guild_name = lang("global", "none");
+        $guild_rank = lang("global", "none");
       }
 
       if ( $core == 1 )
@@ -378,123 +378,123 @@ function char_main()
           WHERE character_inventory.guid='".$id."' AND character_inventory.bag=0";
       }
 
-      $char_equip_result = $sql['char']->query($char_equip_query);
+      $char_equip_result = $sql["char"]->query($char_equip_query);
 
-      while ( $equip_row = $sql['char']->fetch_assoc($char_equip_result) )
+      while ( $equip_row = $sql["char"]->fetch_assoc($char_equip_result) )
       {
-        switch ( $equip_row['slot'] )
+        switch ( $equip_row["slot"] )
         {
           case 0:
           {
-            $EQU_HEAD = $equip_row['item_template'];
+            $EQU_HEAD = $equip_row["item_template"];
             $EQU_HEAD_ROW = $equip_row;
             break;
           }
           case 1:
           {
-            $EQU_NECK = $equip_row['item_template'];
+            $EQU_NECK = $equip_row["item_template"];
             $EQU_NECK_ROW = $equip_row;
             break;
           }
           case 2:
           {
-            $EQU_SHOULDER = $equip_row['item_template'];
+            $EQU_SHOULDER = $equip_row["item_template"];
             $EQU_SHOULDER_ROW = $equip_row;
             break;
           }
           case 3:
           {
-            $EQU_SHIRT = $equip_row['item_template'];
+            $EQU_SHIRT = $equip_row["item_template"];
             $EQU_SHIRT_ROW = $equip_row;
             break;
           }
           case 4:
           {
-            $EQU_CHEST = $equip_row['item_template'];
+            $EQU_CHEST = $equip_row["item_template"];
             $EQU_CHEST_ROW = $equip_row;
             break;
           }
           case 5:
           {
-            $EQU_BELT = $equip_row['item_template'];
+            $EQU_BELT = $equip_row["item_template"];
             $EQU_BELT_ROW = $equip_row;
             break;
           }
           case 6:
           {
-            $EQU_LEGS = $equip_row['item_template'];
+            $EQU_LEGS = $equip_row["item_template"];
             $EQU_LEGS_ROW = $equip_row;
             break;
           }
           case 7:
           {
-            $EQU_FEET = $equip_row['item_template'];
+            $EQU_FEET = $equip_row["item_template"];
             $EQU_FEET_ROW = $equip_row;
             break;
           }
           case 8:
           {
-            $EQU_WRIST = $equip_row['item_template'];
+            $EQU_WRIST = $equip_row["item_template"];
             $EQU_WRIST_ROW = $equip_row;
             break;
           }
           case 9:
           {
-            $EQU_GLOVES = $equip_row['item_template'];
+            $EQU_GLOVES = $equip_row["item_template"];
             $EQU_GLOVES_ROW = $equip_row;
             break;
           }
           case 10:
           {
-            $EQU_FINGER1 = $equip_row['item_template'];
+            $EQU_FINGER1 = $equip_row["item_template"];
             $EQU_FINGER1_ROW = $equip_row;
             break;
           }
           case 11:
           {
-            $EQU_FINGER2 = $equip_row['item_template'];
+            $EQU_FINGER2 = $equip_row["item_template"];
             $EQU_FINGER2_ROW = $equip_row;
             break;
           }
           case 12:
           {
-            $EQU_TRINKET1 = $equip_row['item_template'];
+            $EQU_TRINKET1 = $equip_row["item_template"];
             $EQU_TRINKET1_ROW = $equip_row;
             break;
           }
           case 13:
           {
-            $EQU_TRINKET2 = $equip_row['item_template'];
+            $EQU_TRINKET2 = $equip_row["item_template"];
             $EQU_TRINKET2_ROW = $equip_row;
             break;
           }
           case 14:
           {
-            $EQU_BACK = $equip_row['item_template'];
+            $EQU_BACK = $equip_row["item_template"];
             $EQU_BACK_ROW = $equip_row;
             break;
           }
           case 15:
           {
-            $EQU_MAIN_HAND = $equip_row['item_template'];
+            $EQU_MAIN_HAND = $equip_row["item_template"];
             $EQU_MAIN_HAND_ROW = $equip_row;
             break;
           }
           case 16:
           {
-            $EQU_OFF_HAND = $equip_row['item_template'];
+            $EQU_OFF_HAND = $equip_row["item_template"];
             $EQU_OFF_HAND_ROW = $equip_row;
             break;
           }
           case 17:
           {
-            $EQU_RANGED = $equip_row['item_template'];
+            $EQU_RANGED = $equip_row["item_template"];
             $EQU_RANGED_ROW = $equip_row;
             break;
           }
           case 18:
           {
-            $EQU_TABARD = $equip_row['item_template'];
+            $EQU_TABARD = $equip_row["item_template"];
             $EQU_TABARD_ROW = $equip_row;
             break;
           }
@@ -530,32 +530,32 @@ function char_main()
           <center>
             <div id="tab">
               <ul>
-                <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>';
+                <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
 
       if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
       {
         $output .= '
-                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'inventory').'</a></li>
-                '.( ( $char['level'] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>' ).'
-                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'achievements').'</a></li>
-                <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'quests').'</a></li>
-                <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'friends').'</a></li>
-                <li><a href="char_view.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'view').'</a></li>
+                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "inventory").'</a></li>
+                '.( ( $char["level"] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "talents").'</a></li>' ).'
+                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "achievements").'</a></li>
+                <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "quests").'</a></li>
+                <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "friends").'</a></li>
+                <li><a href="char_view.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "view").'</a></li>
               </ul>
             </div>
             <div id="tab_content">
               <div id="tab">
                 <ul>
-                  <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>';
-        if ( char_get_class_name($char['class']) === 'Hunter' )
+                  <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
+        if ( char_get_class_name($char["class"]) === 'Hunter' )
           $output .= '
-                  <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'pets').'</a></li>';
+                  <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pets").'</a></li>';
         $output .= '
-                  <li><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'reputation').'</a></li>
-                  <li><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'skills').'</a></li>';
+                  <li><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "reputation").'</a></li>
+                  <li><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>';
         if ( $owner_name == $user_name )
           $output .= '
-                  <li><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'mail').'</a></li>';
+                  <li><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "mail").'</a></li>';
       }
       else
         $output .= '
@@ -573,7 +573,7 @@ function char_main()
                   <tr>
                     <td colspan="2">
                       <div>
-                        <img src="'.char_get_avatar_img($char['level'], $char['gender'], $char['race'], $char['class'], 0).'" alt="avatar" />
+                        <img src="'.char_get_avatar_img($char["level"], $char["gender"], $char["race"], $char["class"], 0).'" alt="avatar" />
                       </div>
                       <div>';
       // this_is_junk: auras are stored in a string in the characters table.
@@ -581,15 +581,15 @@ function char_main()
       if ( $core == 1 )
         ;
       else
-        $a_results = $sql['char']->query("SELECT DISTINCT spell FROM character_aura WHERE guid='".$id."'");
+        $a_results = $sql["char"]->query("SELECT DISTINCT spell FROM character_aura WHERE guid='".$id."'");
 
-      if ( $sql['char']->num_rows($a_results) )
+      if ( $sql["char"]->num_rows($a_results) )
       {
-        while ( $aura = $sql['char']->fetch_assoc($a_results) )
+        while ( $aura = $sql["char"]->fetch_assoc($a_results) )
         {
                  $output .= '
-                        <a id="char_icon_padding" href="'.$spell_datasite.$aura['spell'].'" target="_blank">
-                          <img src="'.spell_get_icon($aura['spell']).'" alt="'.$aura['spell'].'" width="24" height="24" />
+                        <a id="char_icon_padding" href="'.$spell_datasite.$aura["spell"].'" target="_blank">
+                          <img src="'.spell_get_icon($aura["spell"]).'" alt="'.$aura["spell"].'" width="24" height="24" />
                         </a>';
         }
       }
@@ -598,20 +598,20 @@ function char_main()
                     </td>
                     <td colspan="4">
                       <font class="bold">
-                        '.htmlentities($char['name']).' -
-                        <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
-                        <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
-                       - '.lang('char', 'level_short').char_get_level_color($char['level']).'
+                        '.htmlentities($char["name"]).' -
+                        <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                        <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                       - '.lang("char", "level_short").char_get_level_color($char["level"]).'
                       </font>
-                      <br />'.lang('char', 'location').': '.get_map_name($char['mapid']).' - '.get_zone_name($char['zoneid']).'
-                      <br />'.lang('char', 'honor_points').': '.$char_data[PLAYER_FIELD_HONOR_CURRENCY].' | '.lang('char', 'arena_points').': '.$char_data[PLAYER_FIELD_ARENA_CURRENCY].' | '.lang('char', 'honor_kills').': '.$char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS].'
-                      <br />'.lang('char', 'guild').': '.$guild_name.' | '.lang('char', 'rank').': '.htmlentities($guild_rank).'
-                      <br />'.lang('char', 'online').': '.( ( $char['online'] ) ? '<img src="img/up.gif" onmousemove="oldtoolTip(\'Online\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="online" />' : '<img src="img/down.gif" onmousemove="oldtoolTip(\'Offline\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="offline" />' );
+                      <br />'.lang("char", "location").': '.get_map_name($char["mapid"]).' - '.get_zone_name($char["zoneid"]).'
+                      <br />'.lang("char", "honor_points").': '.$char_data[PLAYER_FIELD_HONOR_CURRENCY].' | '.lang("char", "arena_points").': '.$char_data[PLAYER_FIELD_ARENA_CURRENCY].' | '.lang("char", "honor_kills").': '.$char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS].'
+                      <br />'.lang("char", "guild").': '.$guild_name.' | '.lang("char", "rank").': '.htmlentities($guild_rank).'
+                      <br />'.lang("char", "online").': '.( ( $char["online"] ) ? '<img src="img/up.gif" onmousemove="oldtoolTip(\'Online\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="online" />' : '<img src="img/down.gif" onmousemove="oldtoolTip(\'Offline\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="offline" />' );
       if ( $showcountryflag )
       {
         require_once 'libs/misc_lib.php';
-        $country = misc_get_country_by_account($char['acct']);
-        $output .= ' | '.lang('global', 'country').': '.( ( $country['code'] ) ? '<img src="img/flags/'.$country['code'].'.png" onmousemove="oldtoolTip(\''.($country['country']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-' );
+        $country = misc_get_country_by_account($char["acct"]);
+        $output .= ' | '.lang("global", "country").': '.( ( $country["code"] ) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-' );
         unset($country);
       }
       $output .= '
@@ -638,8 +638,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[1][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'HEAD'.'">
@@ -656,52 +656,52 @@ function char_main()
       $output .= '
                     </td>
                     <td class="half_line" colspan="2" align="center" width="50%">
-                      <div class="gradient_p" id="char_hp_name">'.lang('item', 'health').':</div>
+                      <div class="gradient_p" id="char_hp_name">'.lang("item", "health").':</div>
                       <div class="gradient_pp" id="char_hp_value">'.$char_data[UNIT_FIELD_HEALTH].'/'.$char_data[UNIT_FIELD_MAXHEALTH].'</li></ul></div>';
-      if ( $char['class'] == 11 ) //druid
+      if ( $char["class"] == 11 ) //druid
         $output .= '
                       </br>
-                      <div class="gradient_p" id="char_energy_name">'.lang('item', 'mana').':</div>
+                      <div class="gradient_p" id="char_energy_name">'.lang("item", "mana").':</div>
                       <div class="gradient_pp" id="char_energy_value">'.$char_data[UNIT_FIELD_POWER1].'/'.$char_data[UNIT_FIELD_MAXPOWER1].'</div>';
       $output .= '
                     </td>
                     <td class="half_line" colspan="2" align="center" width="50%">';
-      if ( $char['class'] == 1 ) // warrior
+      if ( $char["class"] == 1 ) // warrior
       {
         $output .= '
-                      <div class="gradient_p" id="char_energy_name">'.lang('item', 'rage').':</div>
+                      <div class="gradient_p" id="char_energy_name">'.lang("item", "rage").':</div>
                       <div class="gradient_pp" id="char_energy_value">'.($char_data[UNIT_FIELD_POWER2]/10).'/'.($char_data[UNIT_FIELD_MAXPOWER2]/10).'</div>';
       }
-      elseif ( $char['class'] == 4 ) // rogue
+      elseif ( $char["class"] == 4 ) // rogue
       {
         $output .= '
-                      <div class="gradient_p" id="char_energy_name">'.lang('item', 'energy').':</div>
+                      <div class="gradient_p" id="char_energy_name">'.lang("item", "energy").':</div>
                       <div class="gradient_pp" id="char_energy_value">'.$char_data[UNIT_FIELD_POWER4].'/'.$char_data[UNIT_FIELD_MAXPOWER4].'</div>';
       }
-      elseif ( $char['class'] == 6 ) // death knight
+      elseif ( $char["class"] == 6 ) // death knight
       {
         $output .= '
-                      <div class="gradient_p" id="char_energy_name">'.lang('item', 'runic').':</div>
+                      <div class="gradient_p" id="char_energy_name">'.lang("item", "runic").':</div>
                       <div class="gradient_pp" id="char_energy_value">'.($char_data[UNIT_FIELD_POWER7]/10).'/'.($char_data[UNIT_FIELD_MAXPOWER7]/10).'</div>';
       }
-      elseif ( $char['class'] == 11 ) // druid
+      elseif ( $char["class"] == 11 ) // druid
       {
         $output .= '
-                      <div class="gradient_p" id="char_energy_name"">'.lang('item', 'mana').':</div>
+                      <div class="gradient_p" id="char_energy_name"">'.lang("item", "mana").':</div>
                       <div class="gradient_pp" id="char_energy_value">'.$char_data[UNIT_FIELD_POWER1].'/'.$char_data[UNIT_FIELD_MAXPOWER1].'</div>
                       </br>
-                      <div class="gradient_p" id="char_energy_name"">'.lang('item', 'rage').':</div>
+                      <div class="gradient_p" id="char_energy_name"">'.lang("item", "rage").':</div>
                       <div class="gradient_pp" id="char_energy_value">'.($char_data[UNIT_FIELD_POWER2]/10).'/'.($char_data[UNIT_FIELD_MAXPOWER2]/10).'</div>';
       }
-      elseif ( ( $char['class'] == 2 ) || // paladin
-               ( $char['class'] == 3 ) || // hunter
-               ( $char['class'] == 5 ) || // priest
-               ( $char['class'] == 7 ) || // shaman
-               ( $char['class'] == 8 ) || // mage
-               ( $char['class'] == 9 ) )  // warlock
+      elseif ( ( $char["class"] == 2 ) || // paladin
+               ( $char["class"] == 3 ) || // hunter
+               ( $char["class"] == 5 ) || // priest
+               ( $char["class"] == 7 ) || // shaman
+               ( $char["class"] == 8 ) || // mage
+               ( $char["class"] == 9 ) )  // warlock
       {
         $output .= '
-                      <div class="gradient_p" id="char_energy_name"">'.lang('item', 'mana').':</div>
+                      <div class="gradient_p" id="char_energy_name"">'.lang("item", "mana").':</div>
                       <div class="gradient_pp" id="char_energy_value">'.$char_data[UNIT_FIELD_POWER1].'/'.$char_data[UNIT_FIELD_MAXPOWER1].'</div>';
       }
       $output .= '
@@ -726,8 +726,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[10][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'GLOVES'.'">
@@ -764,8 +764,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[2][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'NECK'.'">
@@ -783,12 +783,12 @@ function char_main()
                     </td>
                     <td class="half_line" colspan="2" rowspan="3" align="center" width="50%">
                       <div class="gradient_p">
-                        '.lang('item', 'strength').':<br />
-                        '.lang('item', 'agility').':<br />
-                        '.lang('item', 'stamina').':<br />
-                        '.lang('item', 'intellect').':<br />
-                        '.lang('item', 'spirit').':<br />
-                        '.lang('item', 'armor').':
+                        '.lang("item", "strength").':<br />
+                        '.lang("item", "agility").':<br />
+                        '.lang("item", "stamina").':<br />
+                        '.lang("item", "intellect").':<br />
+                        '.lang("item", "spirit").':<br />
+                        '.lang("item", "armor").':
                       </div>
                       <div class="gradient_pp">
                         '.$char_data[UNIT_FIELD_STAT0].'<br />
@@ -801,12 +801,12 @@ function char_main()
                     </td>
                     <td class="half_line" colspan="2" rowspan="3" align="center" width="50%">
                       <div class="gradient_p">
-                        '.lang('item', 'res_holy').':<br />
-                        '.lang('item', 'res_arcane').':<br />
-                        '.lang('item', 'res_fire').':<br />
-                        '.lang('item', 'res_nature').':<br />
-                        '.lang('item', 'res_frost').':<br />
-                        '.lang('item', 'res_shadow').':
+                        '.lang("item", "res_holy").':<br />
+                        '.lang("item", "res_arcane").':<br />
+                        '.lang("item", "res_fire").':<br />
+                        '.lang("item", "res_nature").':<br />
+                        '.lang("item", "res_frost").':<br />
+                        '.lang("item", "res_shadow").':
                       </div>
                       <div class="gradient_pp">
                         '.$char_data[UNIT_FIELD_RESISTANCES + 1].'<br />
@@ -836,8 +836,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[6][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'BELT'.'">
@@ -874,8 +874,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[3][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'SHOULDER'.'">
@@ -910,8 +910,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[7][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'LEGS'.'">
@@ -948,8 +948,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[15][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'BACK'.'">
@@ -984,8 +984,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[8][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'FEET'.'">
@@ -1022,8 +1022,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[5][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'CHEST'.'">
@@ -1041,11 +1041,11 @@ function char_main()
                     </td>
                     <td class="half_line" colspan="2" rowspan="2" align="center" width="50%">
                       <div class="gradient_p" id="char_melee_name">
-                        '.lang('char', 'melee_d').':<br />
-                        '.lang('char', 'melee_ap').':<br />
-                        '.lang('char', 'melee_hit').':<br />
-                        '.lang('char', 'melee_crit').':<br />
-                        '.lang('char', 'expertise').':<br />
+                        '.lang("char", "melee_d").':<br />
+                        '.lang("char", "melee_ap").':<br />
+                        '.lang("char", "melee_hit").':<br />
+                        '.lang("char", "melee_crit").':<br />
+                        '.lang("char", "expertise").':<br />
                       </div>
                       <div class="gradient_pp" id="char_melee_value">
                         '.$mindamage.'-'.$maxdamage.'<br />
@@ -1057,11 +1057,11 @@ function char_main()
                     </td>
                     <td class="half_line" colspan="2" rowspan="2" align="center" width="50%">
                       <div class="gradient_p">
-                        '.lang('char', 'spell_d').':<br />
-                        '.lang('char', 'spell_heal').':<br />
-                        '.lang('char', 'spell_hit').':<br />
-                        '.lang('char', 'spell_crit').':<br />
-                        '.lang('char', 'spell_haste').'
+                        '.lang("char", "spell_d").':<br />
+                        '.lang("char", "spell_heal").':<br />
+                        '.lang("char", "spell_hit").':<br />
+                        '.lang("char", "spell_crit").':<br />
+                        '.lang("char", "spell_haste").'
                       </div>
                       <div class="gradient_pp">
                         '.$spell_damage.'<br />
@@ -1090,8 +1090,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[11][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'FINGER1'.'">
@@ -1128,8 +1128,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[4][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'SHIRT'.'">
@@ -1164,8 +1164,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[12][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'FINGER2'.'">
@@ -1201,8 +1201,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[19][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'TABARD'.'">
@@ -1219,9 +1219,9 @@ function char_main()
                     </td>
                     <td class="half_line" colspan="2" rowspan="2" align="center" width="50%">
                       <div class="gradient_p">
-                        '.lang('char', 'dodge').':<br />
-                        '.lang('char', 'parry').':<br />
-                        '.lang('char', 'block').':
+                        '.lang("char", "dodge").':<br />
+                        '.lang("char", "parry").':<br />
+                        '.lang("char", "block").':
                       </div>
                       <div class="gradient_pp">
                         '.$dodge.'%<br />
@@ -1231,10 +1231,10 @@ function char_main()
                     </td>
                     <td class="half_line" colspan="2" rowspan="2" align="center" width="50%">
                       <div class="gradient_p" id="char_ranged_name">
-                        '.lang('char', 'ranged_d').':<br />
-                        '.lang('char', 'ranged_ap').':<br />
-                        '.lang('char', 'ranged_hit').':<br />
-                        '.lang('char', 'ranged_crit').':<br />
+                        '.lang("char", "ranged_d").':<br />
+                        '.lang("char", "ranged_ap").':<br />
+                        '.lang("char", "ranged_hit").':<br />
+                        '.lang("char", "ranged_crit").':<br />
                       </div>
                       <div class="gradient_pp" id="char_ranged_value">
                         '.$minrangeddamage.'-'.$maxrangeddamage.'<br />
@@ -1262,8 +1262,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[13][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'TRINKET1'.'">
@@ -1300,8 +1300,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[9][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'WRIST'.'">
@@ -1336,8 +1336,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[14][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'TRINKET2'.'">
@@ -1375,8 +1375,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[16][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'MAIN_HAND'.'">
@@ -1411,8 +1411,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[17][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'OFF_HAND'.'">
@@ -1447,8 +1447,8 @@ function char_main()
         else
           $i_query = "SELECT * FROM item_template WHERE entry='".$equiped_items[18][3]['item_template']."'";
 
-        $i_result = $sql['world']->query($i_query);
-        $i_fields = $sql['world']->fetch_assoc($i_result);
+        $i_result = $sql["world"]->query($i_query);
+        $i_fields = $sql["world"]->fetch_assoc($i_result);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'RANGED'.'">
@@ -1470,23 +1470,23 @@ function char_main()
       if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
       {
         // if the character is still leveling, show an experience bar
-        if ( $char['level'] < 80 )
+        if ( $char["level"] < 80 )
         {
-          $xp_query = "SELECT * FROM xp_to_level WHERE level='".$char['level']."'";
-          $xp_result = $sql['mgr']->query($xp_query);
-          $xp_fields = $sql['mgr']->fetch_assoc($xp_result);
-          $xp_to_level = $xp_fields['xp_for_next_level'];
+          $xp_query = "SELECT * FROM xp_to_level WHERE level='".$char["level"]."'";
+          $xp_result = $sql["mgr"]->query($xp_query);
+          $xp_fields = $sql["mgr"]->fetch_assoc($xp_result);
+          $xp_to_level = $xp_fields["xp_for_next_level"];
           
           $output .= '
                     <tr>
-                      <td colspan="6" valign="center" class="bar xp_bar" style="background-position: '.(round(580*$char['xp']/$xp_to_level)-580).'px;">
-                        '.lang('char', 'exp').": ".$char['xp']." / ".$xp_to_level.'
+                      <td colspan="6" valign="center" class="bar xp_bar" style="background-position: '.(round(580*$char["xp"]/$xp_to_level)-580).'px;">
+                        '.lang("char", "exp").": ".$char["xp"]." / ".$xp_to_level.'
                       </td>
                     </tr>';
         }
 
         //total time played
-        $tot_time = $char['totaltime'];
+        $tot_time = $char["totaltime"];
         $tot_days = (int)($tot_time/86400);
         $tot_time = $tot_time - ($tot_days*86400);
         $total_hours = (int)($tot_time/3600);
@@ -1495,22 +1495,22 @@ function char_main()
       
         $time_offset = $timezone * 3600;
       
-        if ( $char['timestamp'] <> 0 )
-          $lastseen = date("F j, Y @ Hi", $char['timestamp'] + $time_offset);
+        if ( $char["timestamp"] <> 0 )
+          $lastseen = date("F j, Y @ Hi", $char["timestamp"] + $time_offset);
         else
           $lastseen = '-';
 
         $output .= '
                   <tr>
                     <td colspan="6">
-                      '.lang('char', 'tot_play_time').': '.$tot_days.' '.lang('char', 'days').' '.$total_hours.' '.lang('char', 'hours').' '.$total_min.' '.lang('char', 'min').'
+                      '.lang("char", "tot_play_time").': '.$tot_days.' '.lang("char", "days").' '.$total_hours.' '.lang("char", "hours").' '.$total_min.' '.lang("char", "min").'
                     </td>
                   </tr>';
 
         $output .= '
                   <tr>
                     <td colspan="6">
-                      '.lang('char', 'lastseen').': '.$lastseen.'
+                      '.lang("char", "lastseen").': '.$lastseen.'
                     </td>
                   </tr>';
       }
@@ -1524,37 +1524,37 @@ function char_main()
               <tr>
                 <td>';
       // button to user account page, user account page has own security
-      makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;acct='.$owner_acc_id.'', 130);
+      makebutton(lang("char", "chars_acc"), 'user.php?action=edit_user&amp;acct='.$owner_acc_id.'', 130);
       $output .= '
                 </td>
                 <td>';
 
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
-      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) )
+      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission["delete"] ) )
       {
-                  //makebutton($lang_char['edit_button'], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
+                  //makebutton($lang_char["edit_button"], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only higher level GM with delete access, or character owner can delete character
-      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) ) || ( $owner_name === $user_name ) )
+      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission["delete"] ) ) || ( $owner_name === $user_name ) )
       {
-        makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
+        makebutton(lang("char", "del_char"), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only GM with update permission can send mail, mail can send items, so update permission is needed
-      if ( $user_lvl >= $action_permission['update'] )
+      if ( $user_lvl >= $action_permission["update"] )
       {
-        makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
+        makebutton(lang("char", "send_mail"), 'mail.php?type=ingame_mail&amp;to='.$char["name"].'', 130);
         $output .= '
                 </td>
                 <td>';
       }
-      makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+      makebutton(lang("global", "back"), 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>
               </tr>
@@ -1564,10 +1564,10 @@ function char_main()
           <!-- end of char.php -->';
     }
     else
-      ;//error($lang_char['no_permission']);
+      ;//error($lang_char["no_permission"]);
   }
   else
-    error(lang('char', 'no_char_found'));
+    error(lang("char", "no_char_found"));
 
 }
 
@@ -1576,7 +1576,7 @@ function char_main()
 // MAIN
 //########################################################################################################################
 
-//$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+//$action = (isset($_GET["action"])) ? $_GET["action"] : NULL;
 
 $output .= '
       <div class="bubble">';

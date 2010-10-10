@@ -159,7 +159,7 @@ class telnet_lib
       $r .= fread($this->fp, 1000);
       $s = socket_get_status($this->fp);
     }
-    while ( $s['unread_bytes'] )
+    while ( $s["unread_bytes"] )
       ;
   }
 

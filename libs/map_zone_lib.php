@@ -26,9 +26,9 @@ function get_map_name($id)
 
   $query = "SELECT name FROM map WHERE id='".$id."' LIMIT 1";
 
-  $map_name = $sql['dbc']->fetch_assoc($sql['dbc']->query($query));
+  $map_name = $sql["dbc"]->fetch_assoc($sql["dbc"]->query($query));
 
-  return $map_name['name'];
+  return $map_name["name"];
 }
 
 
@@ -40,9 +40,9 @@ function get_zone_name($id)
 
   $query = "SELECT name FROM areatable WHERE id='".$id."' LIMIT 1";
 
-  $zone_name = $sql['dbc']->fetch_assoc($sql['dbc']->query($query));
+  $zone_name = $sql["dbc"]->fetch_assoc($sql["dbc"]->query($query));
 
-  return $zone_name['name'];
+  return $zone_name["name"];
 }
 
 

@@ -26,7 +26,7 @@
 require_once 'header.php';
 require_once("libs/data_lib.php");
 require_once 'libs/char_lib.php';
-valid_login($action_permission['view']);
+valid_login($action_permission["view"]);
 
 function char_racegender($race, $gender)
 {
@@ -54,13 +54,13 @@ function wowhead_did($item)
   global $sql, $core;
 
   if ( $core == 1)
-    $query = $sql['world']->query("SELECT `displayid` FROM items WHERE `entry`='".$item."' LIMIT 1");
+    $query = $sql["world"]->query("SELECT `displayid` FROM items WHERE `entry`='".$item."' LIMIT 1");
   else
-    $query = $sql['world']->query("SELECT `displayid` FROM item_template WHERE `entry`='".$item."' LIMIT 1");
+    $query = $sql["world"]->query("SELECT `displayid` FROM item_template WHERE `entry`='".$item."' LIMIT 1");
 
-  $result = $sql['world']->fetch_assoc($query);
+  $result = $sql["world"]->fetch_assoc($query);
 
-  $displayid = $result['displayid'];
+  $displayid = $result["displayid"];
 
   return $displayid;
 }
@@ -73,35 +73,35 @@ function char_view()
 {
   global $output, $action_permission, $user_lvl, $user_name, $sql, $core;
 
-  if ( empty($_GET['id']) )
-    error(lang('global', 'empty_fields'));
+  if ( empty($_GET["id"]) )
+    error(lang("global", "empty_fields"));
   else
-    $id = $_GET['id'];
+    $id = $_GET["id"];
 
   if ( $core == 1 )
-    $query = $sql['char']->query("SELECT * FROM characters WHERE `guid`='".$id."'");
+    $query = $sql["char"]->query("SELECT * FROM characters WHERE `guid`='".$id."'");
   else
-    $query = $sql['char']->query("SELECT *, account AS acct FROM characters WHERE `guid`='".$id."'");
-  $char = $sql['char']->fetch_assoc($query);
+    $query = $sql["char"]->query("SELECT *, account AS acct FROM characters WHERE `guid`='".$id."'");
+  $char = $sql["char"]->fetch_assoc($query);
 
   // we get owner permissions first
-  $owner_acc_id = $char['acct'];
+  $owner_acc_id = $char["acct"];
   if ( $core == 1 )
-    $aresult = $sql['logon']->query("SELECT login FROM accounts WHERE acct='".$owner_acc_id."'");
+    $aresult = $sql["logon"]->query("SELECT login FROM accounts WHERE acct='".$owner_acc_id."'");
   else
-    $aresult = $sql['logon']->query("SELECT username AS login FROM account WHERE id='".$owner_acc_id."'");
-  $owner = $sql['logon']->fetch_assoc($aresult);
-  $owner_name = $owner['login'];
+    $aresult = $sql["logon"]->query("SELECT username AS login FROM account WHERE id='".$owner_acc_id."'");
+  $owner = $sql["logon"]->fetch_assoc($aresult);
+  $owner_name = $owner["login"];
   $s_query = "SELECT SecurityLevel FROM config_accounts WHERE Login='".$owner_name."'";
-  $s_result = $sql['mgr']->query($s_query);
-  $s_fields = $sql['mgr']->fetch_assoc($s_result);
-  $owner_gmlvl = $s_fields['gm'];
+  $s_result = $sql["mgr"]->query($s_query);
+  $s_fields = $sql["mgr"]->fetch_assoc($s_result);
+  $owner_gmlvl = $s_fields["gm"];
   
   if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
   {
     if ( $core == 1 )
     {
-      $data = explode(';',$char['data']);
+      $data = explode(';',$char["data"]);
 
       $item_head = $data[PLAYER_VISIBLE_ITEM_1_ENTRYID];
       $item_neck = $data[PLAYER_VISIBLE_ITEM_2_ENTRYID];
@@ -136,117 +136,117 @@ function char_view()
     else
     {
       $inv_query = "SELECT * FROM character_inventory WHERE guid='".$id."'";
-      $inv_result = $sql['char']->query($inv_query);
+      $inv_result = $sql["char"]->query($inv_query);
 
-      while ( $inv_row = $sql['char']->fetch_assoc($inv_result) )
+      while ( $inv_row = $sql["char"]->fetch_assoc($inv_result) )
       {
-        if ( $inv_row['bag'] == 0 )
+        if ( $inv_row["bag"] == 0 )
         {
-          switch ( $inv_row['slot'] )
+          switch ( $inv_row["slot"] )
           {
             case 0:
             {
-              $item_head = $inv_row['item_template'];
+              $item_head = $inv_row["item_template"];
               break;
             }
             case 1:
             {
-              $item_neck = $inv_row['item_template'];
+              $item_neck = $inv_row["item_template"];
               break;
             }
             case 2:
             {
-              $item_shoulder = $inv_row['item_template'];
+              $item_shoulder = $inv_row["item_template"];
               break;
             }
             case 3:
             {
-              $item_shirt = $inv_row['item_template'];
+              $item_shirt = $inv_row["item_template"];
               break;
             }
             case 4:
             {
-              $item_chest = $inv_row['item_template'];
+              $item_chest = $inv_row["item_template"];
               break;
             }
             case 5:
             {
-              $item_belt = $inv_row['item_template'];
+              $item_belt = $inv_row["item_template"];
               break;
             }
             case 6:
             {
-              $item_legs = $inv_row['item_template'];
+              $item_legs = $inv_row["item_template"];
               break;
             }
             case 7:
             {
-              $item_feet = $inv_row['item_template'];
+              $item_feet = $inv_row["item_template"];
               break;
             }
             case 8:
             {
-              $item_wrist = $inv_row['item_template'];
+              $item_wrist = $inv_row["item_template"];
               break;
             }
             case 9:
             {
-              $item_gloves = $inv_row['item_template'];
+              $item_gloves = $inv_row["item_template"];
               break;
             }
             case 10:
             {
-              $item_finger1 = $inv_row['item_template'];
+              $item_finger1 = $inv_row["item_template"];
               break;
             }
             case 11:
             {
-              $item_finger2 = $inv_row['item_template'];
+              $item_finger2 = $inv_row["item_template"];
               break;
             }
             case 12:
             {
-              $item_trinket1 = $inv_row['item_template'];
+              $item_trinket1 = $inv_row["item_template"];
               break;
             }
             case 13:
             {
-              $item_trinket2 = $inv_row['item_template'];
+              $item_trinket2 = $inv_row["item_template"];
               break;
             }
             case 14:
             {
-              $item_back = $inv_row['item_template'];
+              $item_back = $inv_row["item_template"];
               break;
             }
             case 15:
             {
-              $item_main_hand = $inv_row['item_template'];
+              $item_main_hand = $inv_row["item_template"];
               break;
             }
             case 16:
             {
-              $item_off_hand = $inv_row['item_template'];
+              $item_off_hand = $inv_row["item_template"];
               break;
             }
             case 17:
             {
-              $item_ranged_slot = $inv_row['item_template'];
+              $item_ranged_slot = $inv_row["item_template"];
               break;
             }
             case 18:
             {
               // don't bother showing guild tabards
-              if ( $inv_row['item_template'] <> 5976 )
-                $item_tabard = $inv_row['item_template'];
+              if ( $inv_row["item_template"] <> 5976 )
+                $item_tabard = $inv_row["item_template"];
               break;
             }
           }
         }
       }
 
-      $b = $char['playerBytes'];
-      $b2 = $char['playerBytes2'];
+      $b = $char["playerBytes"];
+      $b2 = $char["playerBytes2"];
       $ha = ($b>>16)%256;
       $hc = ($b>>24)%256;
       $fa = ($b>>8)%256;
@@ -273,20 +273,20 @@ function char_view()
             </script>
             <div id="tab">
               <ul>
-                <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'char_sheet').'</a></li>
-                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'inventory').'</a></li>
-                '.( ( $char['level'] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'talents').'</a></li>' ).'
-                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'achievements').'</a></li>
-                <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'quests').'</a></li>
-                <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'friends').'</a></li>
-                <li id="selected"><a href="char_view.php?id='.$id.'&amp;realm='.$realmid.'">'.lang('char', 'view').'</a></li>
+                <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>
+                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "inventory").'</a></li>
+                '.( ( $char["level"] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "talents").'</a></li>' ).'
+                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "achievements").'</a></li>
+                <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "quests").'</a></li>
+                <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "friends").'</a></li>
+                <li id="selected"><a href="char_view.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "view").'</a></li>
               </ul>
             </div>
             <div id="tab_content">
               <font class="bold">
-                '.htmlentities($char['name']).' -
-                <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
-                <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang('char', 'level_short').char_get_level_color($char['level']).'
+                '.htmlentities($char["name"]).' -
+                <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
               </font>
               <div id="model_scene" align="center">
                 <object id="wowhead" type="application/x-shockwave-flash"
@@ -296,7 +296,7 @@ function char_view()
                   <param name="allowscriptaccess" value="always">
                   <param name="menu" value="false">
                   <param value="transparent" name="wmode">
-                  <param name="flashvars" value="model='.char_racegender($char['race'], $char['gender']).'
+                  <param name="flashvars" value="model='.char_racegender($char["race"], $char["gender"]).'
                     &modelType=16&ha='.$ha.'&hc='.$hc.'&fa='.$fa.'&sk='.$sk.'&fh='.$fh.'&fc=0
                     &contentPath=http://static.wowhead.com/modelviewer/&blur=1&equipList=';
     if ( $item_head )
@@ -353,37 +353,37 @@ function char_view()
               <tr>
                 <td>';
       // button to user account page, user account page has own security
-      makebutton(lang('char', 'chars_acc'), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
+      makebutton(lang("char", "chars_acc"), 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
       $output .= '
                 </td>
                 <td>';
 
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
-      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) )
+      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission["delete"] ) )
       {
-                  //makebutton($lang_char['edit_button'], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
+                  //makebutton($lang_char["edit_button"], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only higher level GM with delete access, or character owner can delete character
-      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission['delete'] ) ) || ( $owner_name === $user_name ) )
+      if ( ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission["delete"] ) ) || ( $owner_name === $user_name ) )
       {
-        makebutton(lang('char', 'del_char'), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
+        makebutton(lang("char", "del_char"), 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
         $output .= '
                 </td>
                 <td>';
       }
       // only GM with update permission can send mail, mail can send items, so update permission is needed
-      if ( $user_lvl >= $action_permission['update'] )
+      if ( $user_lvl >= $action_permission["update"] )
       {
-        makebutton(lang('char', 'send_mail'), 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
+        makebutton(lang("char", "send_mail"), 'mail.php?type=ingame_mail&amp;to='.$char["name"].'', 130);
         $output .= '
                 </td>
                 <td>';
       }
-      makebutton(lang('global', 'back'), 'javascript:window.history.back()" type="def', 130);
+      makebutton(lang("global", "back"), 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>
               </tr>
@@ -392,7 +392,7 @@ function char_view()
           </center>';
   }
   else
-    error(lang('char', 'no_permission'));
+    error(lang("char", "no_permission"));
 }
 
 

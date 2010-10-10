@@ -25,8 +25,8 @@ function get_realm_name($realm_id)
 {
   global $corem_db, $sql;
 
-  $result = $sql['mgr']->query("SELECT name FROM `realmlist` WHERE id = '$realm_id'");
-  $realm_name = $sql['mgr']->result($result, 0);
+  $result = $sql["mgr"]->query("SELECT name FROM `realmlist` WHERE id = '$realm_id'");
+  $realm_name = $sql["mgr"]->result($result, 0);
 
   return $realm_name;
 }
@@ -67,8 +67,6 @@ function id_get_exp_lvl()
 
 function id_get_gm_level($id)
 {
-  global $lang_id_tab;
-
   return gmlevel_name($id);
 }
 
