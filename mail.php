@@ -246,7 +246,12 @@ function send_mail()
         switch ( $group_send )
         {
           case "gm_level":
-            $result = $sql["logon"]->query("SELECT email FROM accounts WHERE gm ".$group_sign." '".$group_value."'");
+            if ( $core == 1 )
+              $result = $sql["logon"]->query("SELECT email FROM accounts WHERE gm ".$group_sign." '".$group_value."'");
+            else
+              $result = $sql["logon"]->query("SELECT email FROM account
+                  LEFT JOIN account_access ON account_access.id=account.id
+                WHERE IFNULL(gmlevel, 0) ".$group_sign." '".$group_value."'");
             while ( $user = $sql->fetch_row($result) )
             {
               if ( $user[0] != "" )
@@ -254,8 +259,11 @@ function send_mail()
             }
             break;
           case "locked":
-            //this_is_junk: I'm going to pretend that locked is muted.
-            $result = $sql["logon"]->query("SELECT email FROM accounts WHERE muted ".$group_sign." '".$group_value."'");
+            //this_is_junk: I'm going to pretend that locked is muted
+            if ( $core == 1 )
+              $result = $sql["logon"]->query("SELECT email FROM accounts WHERE muted ".$group_sign." '".$group_value."'");
+            else
+              $result = $sql["logon"]->query("SELECT email FROM accounts WHERE locked ".$group_sign." '".$group_value."'");
             while ( $user = $sql["logon"]->fetch_row($result) )
             {
               if ( $user[0] != "" )
@@ -348,10 +356,18 @@ function send_mail()
         switch ( $group_send )
         {
           case "gm_level":
-            $result = $sql["logon"]->query("SELECT acct FROM accounts WHERE gm ".$group_sign." '".$group_value."'");
+            if ( $core == 1 )
+              $result = $sql["logon"]->query("SELECT acct FROM accounts WHERE gm ".$group_sign." '".$group_value."'");
+            else
+              $result = $sql["logon"]->query("SELECT account.id AS acct FROM account
+                  LEFT JOIN account_access ON account_access.id=account.id
+                WHERE IFNULL(gmlevel, 0) ".$group_sign." '".$group_value."'");
             while ( $acc = $sql["char"]->fetch_row($result) )
             {
-              $result_2 = $sql["char"]->query("SELECT name FROM `characters` WHERE acct = '".$acc[0]."'");
+              if ( $core == 1 )
+                $result_2 = $sql["char"]->query("SELECT name FROM `characters` WHERE acct = '".$acc[0]."'");
+              else
+                $result_2 = $sql["char"]->query("SELECT name FROM `characters` WHERE account = '".$acc[0]."'");
               while ( $char = $sql["char"]->fetch_row($result_2) )
                 array_push($char_array, $char[0]);
             }
@@ -413,6 +429,7 @@ function send_ingame_mail_A($realm_id, $massmails)
   //$mess_str = '';
   $mess = 0;
   $result = '';
+  $receivers = array();
   foreach ( $massmails as $mails )
   {
     $sql["char"]->query("INSERT INTO mailbox_insert_queue (sender_guid, receiver_guid, subject, body, stationary, money, item_id, item_stack)
@@ -422,6 +439,7 @@ function send_ingame_mail_A($realm_id, $massmails)
       //$mess_str .= "Successfully sent message sent to ". $mails["receiver_name"]."<br />";
       $mess = 0; // success
       $result = "RESULT";
+      array_push($receivers, $mails["receiver_name"]);
     }
     else
     {
@@ -431,9 +449,16 @@ function send_ingame_mail_A($realm_id, $massmails)
     }
   }
 
+  $receiver_list = '';
+  foreach ( $receivers as $receiver )
+  {
+    $receiver_list .= ', '.$receiver;
+  }
+  $reveiver_list = substr($receiver_list, 2, strlen($receiver_list)-2);
+
   if ( !isset($_GET["redirect"]) )
     //redirect("mail.php?action=result&error=6&mess=$mess_str");
-    redirect("mail.php?action=result&error=6&mess=".$mess."&recipient=".$mails["receiver_name"]);
+    redirect("mail.php?action=result&error=6&mess=".$mess."&recipient=".$receiver_list);
   else
   {
     $redirect = $sql["char"]->quote_smart($_GET["redirect"]);
@@ -460,6 +485,7 @@ function send_ingame_mail_MT($realm_id, $massmails)
   {
     $mess_str = '';
     $result = '';
+    $receivers = array();
     foreach($massmails as $mails)
     {
       if ( $mails["att_gold"] && $mails["att_item"] )
@@ -500,6 +526,7 @@ function send_ingame_mail_MT($realm_id, $massmails)
         $mess_str .= $mess_str1."<br >";
         $result .= $result1."";
       }
+      array_push($receivers, $mails["receiver_name"]);
     }
     if ( $core == 2 )
       $core_prompt = "mangos";
@@ -509,6 +536,13 @@ function send_ingame_mail_MT($realm_id, $massmails)
     $result = str_replace(array("\r\n", "\n", "\r"), '<br />', $result);
     $mess_str .= "<br /><br />".$result;
     $telnet->Disconnect();
+
+    $receiver_list = '';
+    foreach ( $receivers as $receiver )
+    {
+      $receiver_list .= ', '.$receiver;
+    }
+    $reveiver_list = substr($receiver_list, 2, strlen($receiver_list)-2);
   }
   elseif ( $result == 1 )
     $mess_str = lang("telnet", "unable");
@@ -519,7 +553,10 @@ function send_ingame_mail_MT($realm_id, $massmails)
   elseif ( $result == 4 )
     $mess_str = lang("telnet", "not_supported");
 
-  redirect("mail.php?action=result&error=6&mess=".$mess_str."&recipient=".$mails["receiver_name"]);
+  if ( count($massmails) == 1 )
+    redirect("mail.php?action=result&error=6&mess=".$mess_str."&recipient=".$reveiver_list);
+  else
+    redirect("mail.php?action=result&error=6&mess=&recipient=".$reveiver_list);
 
 }
 
