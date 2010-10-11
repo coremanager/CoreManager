@@ -188,7 +188,7 @@ function top100($realmid)
             <table class="top_hidden" id="top100_realms">';
   if($developer_test_mode && $multi_realm_mode)
   {
-    $realms = $sql["mgr"]->query('SELECT count(*) FROM realmlist');
+    $realms = $sql["mgr"]->query('SELECT COUNT(*) FROM config_servers');
     $tot_realms = $sql["mgr"]->result($realms, 0);
     if (1 < $tot_realms && 1 < count($server))
     {
@@ -572,7 +572,7 @@ if ('realms' == $action)
   {
     $n_realms = $_POST["n_realms"];
 
-    $realms = $sql["mgr"]->query('SELECT id, name FROM realmlist LIMIT 10');
+    $realms = $sql["mgr"]->query('SELECT `Index` AS id, Name AS name FROM config_servers LIMIT 10');
 
     if (1 < $sql["mgr"]->num_rows($realms) && 1 < (count($server)))
     {

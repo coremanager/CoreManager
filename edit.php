@@ -197,7 +197,7 @@ function edit_user()
                     <td>'.$c_count.'</td>
                   </tr>';
                   
-    $realms = $sql["mgr"]->query("SELECT id, name FROM realmlist");
+    $realms = $sql["mgr"]->query("SELECT `Index` AS id, Name AS name FROM config_servers");
     if ( ( 1 < $sql["mgr"]->num_rows($realms) ) && ( 1 < count($server) ) && ( 1 < count($characters_db) ) )
     {
       while ( $realm = $sql["mgr"]->fetch_assoc($realms) )

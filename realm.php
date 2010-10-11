@@ -50,8 +50,8 @@ function show_realm()
   $sum = $sql["char"]->fetch_row($result);
   $sum = $sum[0];
 
-  $result = $sql["mgr"]->query('SELECT realmlist.id AS rid, name, address, port, icon, color, timezone
-            FROM realmlist ORDER BY '.$order_by.' '.$order_dir.'');
+  $result = $sql["mgr"]->query('SELECT `Index` AS rid, Name AS name, External_Address AS address, Port AS port, Icon AS icon, Color AS color, Timezone AS timezone
+            FROM config_servers ORDER BY '.$order_by.' '.$order_dir.'');
   $total_realms = $sql["mgr"]->num_rows($result);
 
   $output .= '
@@ -170,8 +170,8 @@ function edit_realm()
   else
     redirect('realm.php?error=1');
 
-  if ( $realm = $sql["mgr"]->fetch_assoc($sql["mgr"]->query('SELECT realmlist.id AS rid, name, address, port, icon, color, timezone
-         FROM realmlist WHERE id ='.$id.'')) )
+  if ( $realm = $sql["mgr"]->fetch_assoc($sql["mgr"]->query('SELECT `Index` AS rid, Name AS name, External_Address AS address, Port AS port, Icon AS icon, Color AS color, Timezone AS timezone
+         FROM config_servers WHERE `Index`='.$id.'')) )
   {
     $output .= '
           <center>
@@ -305,7 +305,7 @@ function doedit_realm()
   $new_color    = $sql["mgr"]->quote_smart($_GET["new_color"]);
   $new_timezone = $sql["mgr"]->quote_smart($_GET["new_timezone"]);
 
-  $query = $sql["mgr"]->query("UPDATE realmlist SET name='".$new_name."', address='".$new_address."' , port='".$new_port."', icon='".$new_icon."', color='".$new_color."', timezone='".$new_timezone."' WHERE id='".$id."'");
+  $query = $sql["mgr"]->query("UPDATE config_servers SET Name='".$new_name."', External_Address='".$new_address."' , Port='".$new_port."', Icon='".$new_icon."', Color='".$new_color."', Timezone='".$new_timezone."' WHERE `Index`='".$id."'");
 
   unset($new_name);
   unset($new_address);
@@ -377,7 +377,7 @@ function dodel_realm()
   else
     redirect('realm.php?error=1');
 
-  $sql["mgr"]->query('DELETE FROM realmlist WHERE id = '.$id.'');
+  $sql["mgr"]->query('DELETE FROM config_servers WHERE `Index`='.$id.'');
   unset($id);
 
   if ( $sql["mgr"]->affected_rows() )
@@ -418,7 +418,7 @@ function add_realm()
     }
   }
 
-  $result = $sql["mgr"]->query('INSERT INTO realmlist (id, name, address, port, icon, color, timezone) VALUES (NULL,"'.$name.'", "127.0.0.1", '.$port.' ,0 ,0 ,1)');
+  $result = $sql["mgr"]->query('INSERT INTO config_servers (`Index`, Name, External_Address, Port, Icon, Color, Timezone) VALUES (NULL,"'.$name.'", "127.0.0.1", '.$port.' ,0 ,0 ,1)');
 
   if ( $result )
     redirect('realm.php');
@@ -442,7 +442,7 @@ function set_def_realm()
   else
     $id = 1;
 
-  if ( $sql["mgr"]->num_rows($sql["mgr"]->query('SELECT id FROM realmlist WHERE id = '.$id.'')) )
+  if ( $sql["mgr"]->num_rows($sql["mgr"]->query('SELECT `Index` AS id FROM config_servers WHERE `Index` = '.$id.'')) )
     $_SESSION["realm_id"] = $id;
   unset($id);
 

@@ -183,7 +183,7 @@ function login()
                     </td>
                   </tr>';
 
-  $result = $sql["mgr"]->query('SELECT id, name FROM realmlist LIMIT 10');
+  $result = $sql["mgr"]->query('SELECT `Index` AS id, Name AS name FROM config_servers LIMIT 10');
 
   if ( ( $sql["mgr"]->num_rows($result) > 1 ) && ( count($server) > 1 ) && ( count($characters_db) > 1 ) )
   {

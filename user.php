@@ -1580,7 +1580,7 @@ function edit_user()
                 <td>'.lang("user", "tot_chars").':</td>
                 <td>'.$tot_chars.'</td>
               </tr>';
-    $realms = $sql["mgr"]->query("SELECT id, name FROM realmlist");
+    $realms = $sql["mgr"]->query("SELECT `Index` AS id, Name AS name FROM config_servers");
     if ( ( $sql["mgr"]->num_rows($realms) > 1 ) && ( count($server) > 1 ) && ( count($characters_db) > 1 ) )
     {
       require_once("libs/get_lib.php");

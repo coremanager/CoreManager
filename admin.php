@@ -1734,18 +1734,14 @@ function servers()
     $color = "#EEEEEE";
     while ( $server = $sqlm->fetch_assoc($result) )
     {
-      $realm_query = "SELECT * FROM realmlist WHERE id='".$server["Index"]."'";
-      $realm_result = $sqlm->query($realm_query);
-      $realm = $sqlm->fetch_assoc($realm_result);
-
       $output .= '
               <tr>
                 <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server["Index"].'&editserver=editserver"><img src="img/edit.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center><a href="admin.php?section=servers&sel_server='.$server["Index"].'&delserver=deleteserver"><img src="img/aff_cross.png" /></a></center></td>
                 <td style="background-color:'.$color.'"><center>'.$server["Index"].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$realm["name"].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$server["Name"].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server["Address"].'</center></td>
-                <td style="background-color:'.$color.'"><center>'.$realm["address"].'</center></td>
+                <td style="background-color:'.$color.'"><center>'.$server["External_Address"].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server["Port"].'</center></td>';
       /*if ( $core != 1 )
         $output .= '
@@ -1753,8 +1749,8 @@ function servers()
                 <td style="background-color:'.$color.'"><center>'.$server["Telnet_User"].'</center></td>
                 <td style="background-color:'.$color.'"><center>'.$server["Telnet_Pass"].'</center></td>';*/
 
-      $icon = $get_icon_type[$realm["icon"]];
-      $timezone = $get_timezone_type[$realm["timezone"]];
+      $icon = $get_icon_type[$server["Icon"]];
+      $timezone = $get_timezone_type[$server["Timezone"]];
       $output .= '
                 <td style="background-color:'.$color.'"><center>'.lang("realm", $icon[1]).'</center></td>
                 <td style="background-color:'.$color.'"><center>'.lang("realm", $timezone[1]).'</center></td>
@@ -1791,7 +1787,6 @@ function servers()
       if ( is_numeric($server_id) )
       {
         $server = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_servers WHERE `Index`='".$server_id."'"));
-        $realm = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM realmlist WHERE id='".$server_id."'"));
         $output .= '
         <center>
           <form name="form" action="admin.php" method="GET">
@@ -1802,7 +1797,7 @@ function servers()
               <table>
                 <tr>
                   <td width="45%">'.lang("admin", "name").': </td>
-                  <td><input type="text" name="server_name" value="'.$realm["name"].'"></td>
+                  <td><input type="text" name="server_name" value="'.$server["Name"].'"></td>
                 </tr>
                 <tr>
                   <td width="45%" id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hosti").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hosti").'</a>: </td>
@@ -1810,7 +1805,7 @@ function servers()
                 </tr>
                 <tr>
                   <td width="45%" id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hostp").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hostp").'</a>: </td>
-                  <td><input type="text" name="server_hostp" value="'.$realm["address"].'"></td>
+                  <td><input type="text" name="server_hostp" value="'.$server["External_Address"].'"></td>
                 </tr>
                 <tr>
                   <td>'.lang("admin", "port").': </td>
@@ -1838,7 +1833,7 @@ function servers()
         foreach ( $get_icon_type as $type )
         {
           $output .= '
-                      <option value="'.$type[0].'" '.( ( $realm["icon"] == $type[0] ) ? 'selected="selected"' : '' ).'>'.lang("realm", $type[1]).'</option>';
+                      <option value="'.$type[0].'" '.( ( $server["Icon"] == $type[0] ) ? 'selected="selected"' : '' ).'>'.lang("realm", $type[1]).'</option>';
         }
         $output .= '
                     </select>
@@ -1846,7 +1841,7 @@ function servers()
                 </tr>
                 <tr>
                   <td>'.lang("admin", "color").': </td>
-                  <td><input type="text" name="server_color" value="'.$realm["color"].'"></td>
+                  <td><input type="text" name="server_color" value="'.$server["Color"].'"></td>
                 </tr>
                 <tr>
                   <td>'.lang("admin", "timezone").': </td>
@@ -1855,7 +1850,7 @@ function servers()
         foreach ( $get_timezone_type as $zone )
         {
           $output .= '
-                      <option value="'.$zone[0].'" '.( ( $realm["timezone"] == $zone[0] ) ? 'selected="selected"' : '' ).'>'.lang("realm", $zone[1]).'</option>';
+                      <option value="'.$zone[0].'" '.( ( $server["Timezone"] == $zone[0] ) ? 'selected="selected"' : '' ).'>'.lang("realm", $zone[1]).'</option>';
         }
         $output .= '
                     </select>
@@ -1887,7 +1882,6 @@ function servers()
       if ( is_numeric($server_id) )
       {
         $result = $sqlm->query("DELETE FROM config_servers WHERE `Index`='".$server_id."'");
-        $result = $sqlm->query("DELETE FROM realmlist WHERE id='".$server_id."'");
         redirect("admin.php?section=servers");
       }
       else
@@ -1917,8 +1911,7 @@ function servers()
         }
       }
 
-      $result = $sqlm->query("INSERT INTO config_servers (Port, Both_Factions, Telnet_Port, Address) VALUES ('".$port."', 1, 0, '127.0.0.1')");
-      $result = $sqlm->query("INSERT INTO realmlist (port, name) VALUES ('".$port."', '".$name."')");
+      $result = $sqlm->query("INSERT INTO config_servers (Port, Name, Both_Factions, Telnet_Port, Address) VALUES ('".$port."', '".$name."', 1, 0, '127.0.0.1')");
 
       redirect("admin.php?section=servers");
     }
@@ -1946,8 +1939,7 @@ function saveserver()
   $server_factions = $sqlm->quote_smart($_GET["server_both"]);
   $server_stats = ( ( isset($_GET["server_stats"]) ) ? $sqlm->quote_smart($_GET["server_stats"]) : NULL );
 
-  $result = $sqlm->query("UPDATE config_servers SET Address='".$server_hosti."', Port='".$server_port."', Telnet_Port='".$server_telnet_port."', Telnet_User='".$server_telnet_user."', Telnet_Pass='".$server_telnet_pass."', Both_Factions='".$server_factions."', Stats_XML='".$server_stats."' WHERE `Index`='".$server_id."'");
-  $result = $sqlm->query("UPDATE realmlist SET name='".$server_name."', address='".$server_hostp."', port='".$server_port."', icon='".$server_type."', color='".$server_color."', timezone='".$server_timezone."' WHERE id='".$server_id."'");
+  $result = $sqlm->query("UPDATE config_servers SET Address='".$server_hosti."', Port='".$server_port."', Telnet_Port='".$server_telnet_port."', Telnet_User='".$server_telnet_user."', Telnet_Pass='".$server_telnet_pass."', Both_Factions='".$server_factions."', Stats_XML='".$server_stats."', Name='".$server_name."', External_Address='".$server_hostp."', Port='".$server_port."', Icon='".$server_type."', Color='".$server_color."', Timezone='".$server_timezone."' WHERE `Index`='".$server_id."'");
   redirect("admin.php?section=servers");
 }
 

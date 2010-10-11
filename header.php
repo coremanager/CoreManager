@@ -244,7 +244,7 @@ if (isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSION
                 <li><a href="edit.php">'.lang("header", "my_acc").'</a>
                   <ul>';
 
-  $result = $sql["mgr"]->query('SELECT id, name FROM `realmlist` LIMIT 10');
+  $result = $sql["mgr"]->query('SELECT `Index` AS id, Name AS name FROM `config_servers` LIMIT 10');
 
   // we check how many realms are configured, this does not check if config is valid
   if ( ( 1 < $sql["mgr"]->num_rows($result)) && ( 1 < count($server)) && ( 1 < count($characters_db)) )
