@@ -1899,7 +1899,7 @@ $GLOBALS['lang_admin_tip'] = array
   'verrev' => 'Version & Revision',
   'versionlvl' => "DISABLED: We don\'t have official versions, just revisions.",
   'revision' => "DISABLED: We get revision numbers from the .svn directory.",
-  'revisionlvl' => 'Minimum account level to show SVN Revision to.<br />-1 is everyone.',
+  'revisionlvl' => 'Minimum Security Level to show SVN Revision to.<br />-1 is everyone.',
 
   'mail' => 'Mail',
   'email' => 'Email',
@@ -1916,7 +1916,7 @@ $GLOBALS['lang_admin_tip'] = array
   'smtppass' => 'SMTP Password.',
   'pm' => 'In-Game Mail',
   'pmfrom' => 'Character to use as sender for In-Game mail.',
-  'pmstation' => 'Stationary to use as sender for In-Game mail.',
+  'pmstation' => 'Stationary to use for In-Game mail.',
 
   'irc' => 'IRC',
   'irchost' => 'IRC Host.',
@@ -1936,12 +1936,12 @@ $GLOBALS['lang_admin_tip'] = array
   'datasitecreature' => 'URL for Creature tooltips.',
   'datasitespell' => 'URL for Spell tooltips.',
   'datasiteskill' => 'URL for Skill tooltips.',
-  'datasitego' => 'URL for GO tooltips.',
+  'datasitego' => 'URL for Game Object tooltips.',
   'datasiteachieve' => 'URL for Achievement tooltips.',
 
   'acct_creation' => 'Account Creation',
   'disableacccreation' => 'Prevent new users from creating accounts.',
-  'expansionselect' => 'Prevent new users from choosing Client Expansion, if not set, we will use the Default Expansion.',
+  'expansionselect' => 'Allow users to choose Client Expansion, if disabled, we will use the Default Expansion.',
   'defaultexpansion' => 'Default Expansion.',
   'enabledcaptcha' => "Display a security image to prevent \'bot\' registrations.",
   'userecaptcha' => 'Use the captcha tool from reCAPTCHA.<br>Requires an account (free) at recaptcha.net.<br>If you have selected Use Captcha above but do not use reCAPTCHA, you will need php GD & FreeType Library.',
@@ -1997,7 +1997,7 @@ $GLOBALS['lang_admin_tip'] = array
   'bottomadcontent' => 'Page Bottom Ad Content.',
 
   'more' => 'More',
-  'sqlsearchlimit' => 'Limit number of maximum search results.',
+  'sqlsearchlimit' => 'Maximum number of search results.',
   'itemicons' => 'Path for item icons.',
   'remembermechecked' => 'Remember Me box will be checked by default.',
   'sitetitle' => 'Site Name, will display in browser title bar and in emails.',

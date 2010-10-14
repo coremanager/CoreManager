@@ -1899,7 +1899,7 @@ $GLOBALS['lang_admin_tip'] = array
   'verrev' => 'Version & Revision',
   'versionlvl' => "Deaktiviert: Wir haben keine offiziellen Versionen nur Revisionen.",
   'revision' => "Deaktiviert: Wir bekommen die Revisionsnummer aus dem .svn Ordner.",
-  'revisionlvl' => 'Minimum Account Level um die SVN Revision angezeigt zu bekommen.<br />-1 ist jeder.',
+  'revisionlvl' => 'Minimum Security Level um die SVN Revision angezeigt zu bekommen.<br />-1 ist jeder.',
 
   'mail' => 'Mail',
   'email' => 'E-Mail',
@@ -1936,12 +1936,12 @@ $GLOBALS['lang_admin_tip'] = array
   'datasitecreature' => 'URL f&uuml;r Creature tooltips.',
   'datasitespell' => 'URL f&uuml;r Spell tooltips.',
   'datasiteskill' => 'URL f&uuml;r Skill tooltips.',
-  'datasitego' => 'URL f&uuml;r GO tooltips.',
+  'datasitego' => 'URL f&uuml;r Game Object tooltips.',
   'datasiteachieve' => 'URL f&uuml;r Erungenschaft tooltips.',
 
   'acct_creation' => 'Accounterstellung',
   'disableacccreation' => 'Hindere neue Benutzer einen Account zu erstellen.',
-  'expansionselect' => 'Hindere neue Benutzer vom w&auml;hlen der Account Erweiterung, wenn nicht angegeben. Wird die Standart Erweiterung benutzt.',
+  'expansionselect' => 'Allow users to choose Client Expansion, if disabled, we will use the Default Expansion.',
   'defaultexpansion' => 'Standart Erweiterung.',
   'enabledcaptcha' => "Zeige Sicherheitsbild zum verhindern von \'bot\' Registrierungen.",
   'userecaptcha' => 'Use the captcha tool from reCAPTCHA.<br>Requires an account (free) at recaptcha.net.<br>If you have selected Use Captcha above but do not use reCAPTCHA, brauchst du php GD & FreeType Library.',

@@ -349,7 +349,7 @@ function savedbs()
 
 function general()
 {
-  global $output, $corem_db;
+  global $output, $corem_db, $core;
 
   $sqlm = new SQL;
   $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
@@ -798,7 +798,22 @@ function general()
             </tr>
             <tr>
               <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "defaultexpansion").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "defaultexpansion").'</a>: </td>
-              <td><input type="text" name="defaultexpansion" value="'.$default_expansion["Value"].'" /></td>
+              <td>
+                <select name="defaultexpansion">';
+        if ( $core == 1 )
+          $output .= '
+                  <option value="0" '.( ( $default_expansion["Value"] == 0 ) ? 'selected="selected"' : '' ).'>Classic</option>
+                  <option value="8" '.( ( $default_expansion["Value"] == 8 ) ? 'selected="selected"' : '' ).'>BC</option>
+                  <option value="16" '.( ( $default_expansion["Value"] == 16 ) ? 'selected="selected"' : '' ).'>WotLK</option>
+                  <option value="24" '.( ( $default_expansion["Value"] == 24 ) ? 'selected="selected"' : '' ).'>WotLK+BC</option>';
+        else
+          $output .= '
+                  <option value="0" '.( ( $default_expansion["Value"] == 0 ) ? 'selected="selected"' : '' ).'>Classic</option>
+                  <option value="1" '.( ( $default_expansion["Value"] == 1 ) ? 'selected="selected"' : '' ).'>BC</option>
+                  <option value="2" '.( ( $default_expansion["Value"] == 2 ) ? 'selected="selected"' : '' ).'>WotLK+BC</option>';
+        $output .= '
+                </select>
+              </td>
             </tr>
             <tr>
               <td id="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "enabledcaptcha").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "enabledcaptcha").'</a>: </td>
