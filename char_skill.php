@@ -133,8 +133,9 @@ function char_skill()
                   <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pets").'</a></li>';
       $output .= '
                   <li><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "reputation").'</a></li>
-                  <li id="selected"><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>';
-      if ( $owner_name == $user_name )
+                  <li id="selected"><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>
+                  <li><a href="char_pvp.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pvp").'</a></li>';
+      if ( ( $owner_name == $user_name ) || ( $user_lvl >= $action_permission["insert"] ) )
         $output .= '
                   <li><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "mail").'</a></li>';
       $output .= '
@@ -146,7 +147,8 @@ function char_skill()
                   <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
                   <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
                 </font>
-                <br /><br />
+                <br />
+                <br />
                 <table class="lined" id="ch_ski_main">
                   <tr>
                     <th class="title" colspan="'.( ( $user_lvl ) ? '3' : '2' ).'" align="left">'.lang("char", "skills").'</th>

@@ -1842,3 +1842,21 @@ tr td.rep0
   width: 813px;
   left: -7px;
 }
+
+/* CHAR_PVP.PHP */
+#ch_pvp_main
+{
+	width: 550px;
+}
+#ch_pvp_highlight
+{
+  color: #f6b620;
+}
+#ch_pvp_dim
+{
+  color: #909090;
+}
+#ch_pvp_banner_space
+{
+  width: 140px;
+}

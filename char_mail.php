@@ -59,9 +59,10 @@ function char_mail()
   if ( $sql["char"]->num_rows($result) )
   {
     $char = $sql["char"]->fetch_assoc($result);
-    
-    if ( $user_id <> $char["acct"] )
-      error(lang("char", "no_permission"));
+
+    if ( $user_lvl < $action_permission["insert"] )
+      if ( $user_id <> $char["acct"] )
+        error(lang("char", "no_permission"));
 
     $owner_acc_id = $sql["char"]->result($result, 0, 'acct');
     if ( $core == 1 )
@@ -96,8 +97,9 @@ function char_mail()
                   <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pets").'</a></li>';
         $output .= '
                   <li><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "reputation").'</a></li>
-                  <li><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>';
-        if ( $owner_name == $user_name )
+                  <li><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>
+                  <li><a href="char_pvp.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pvp").'</a></li>';
+        if ( ( $owner_name == $user_name ) || ( $user_lvl >= $action_permission["insert"] ) )
           $output .= '
                   <li id="selected"><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "mail").'</a></li>';
         $output .= '
@@ -109,7 +111,8 @@ function char_mail()
                   <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
                   <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
                 </font>
-                <br /><br />';
+                <br />
+                <br />';
 
       if ( $core == 1 )
         $result = $sql["char"]->query("SELECT * FROM mailbox WHERE player_guid='".$id."' AND deleted_flag=0");

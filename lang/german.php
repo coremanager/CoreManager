@@ -480,6 +480,22 @@ $GLOBALS['lang_char'] = array
   'deletemode' => 'Delete Mode',
   'viewmode' => 'View Mode',
   'thisitem' => 'This Item',
+  // ---- char_pvp.php ----
+  'pvp' => 'PvP',
+  'honor' => 'Honor',
+  'kills' => 'Kills',
+  'today' => 'Today',
+  'yesterday' => 'Yesterday',
+  'lifetime' => 'Lifetime',
+  'arena' => 'Arena',
+  'teamrating' => 'Team Rating',
+  'team' => 'Team',
+  'rating' => 'Rating',
+  'games' => 'Games',
+  'winloss' => 'Win - Loss',
+  'played' => 'Played',
+  'thisweek' => 'This Week',
+  'thisseason' => 'This Season',
 );
 
 

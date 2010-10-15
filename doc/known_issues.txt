@@ -17,6 +17,7 @@ The Arena Team Banner for 5 vs 5 is one row lower than it should be.
 
 
 THINGS COREMANAGER CAN DO THAT SERVERS DON'T SUPPORT:
+(we'd REALLY like to be able to have these things)
 ================================================================================
 Online Player List on Main Page can show the Zone, Map AND Area of players.
 MaNGOS and Trinity do not save Area.
@@ -27,3 +28,6 @@ do not save these.
 
 MaNGOS doesn't store Player Latency so Average Latency & Player Latency are
 unavailable.
+
+ArcEmu's method of storing Arena Team Members is a nightmare.  So, ArcEmu
+can't show everything in the Character PvP Tab.
