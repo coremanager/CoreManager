@@ -224,8 +224,8 @@ function char_pvp()
                       </td>
                     </tr>
                     <tr>
-                      <td colspan="2"><span id="ch_pvp_highlight">'.$arenateam_data2["name"].'</span></td>
-                      <td colspan="2">'.lang("char", "team").' '.lang("char", "rating").' <span id="ch_pvp_highlight">'.$arena_team2["rating"].'</span></td>
+                      <td colspan="2"><a href="arenateam.php?action=view_team&error=3&id='.$arenateam_data2["id"].'">'.$arenateam_data2["name"].'</a></td>
+                      <td colspan="2">'.lang("char", "team").' '.lang("char", "rating").': <span id="ch_pvp_highlight">'.$arena_team2["rating"].'</span></td>
                     </tr>
                     </tr>
                       <td><span id="ch_pvp_dim">'.lang("char", "team").'</span></td>
@@ -303,8 +303,8 @@ function char_pvp()
                       </td>
                     </tr>
                     <tr>
-                      <td colspan="2"><span id="ch_pvp_highlight">'.$arenateam_data3["name"].'</span></td>
-                      <td colspan="2">'.lang("char", "team").' '.lang("char", "rating").' <span id="ch_pvp_highlight">'.$arena_team3["rating"].'</span></td>
+                      <td colspan="2"><a href="arenateam.php?action=view_team&error=3&id='.$arenateam_data3["id"].'">'.$arenateam_data3["name"].'</a></td>
+                      <td colspan="2">'.lang("char", "team").' '.lang("char", "rating").': <span id="ch_pvp_highlight">'.$arena_team3["rating"].'</span></td>
                     </tr>
                     </tr>
                       <td><span id="ch_pvp_dim">'.lang("char", "team").'</span></td>
@@ -382,8 +382,8 @@ function char_pvp()
                       </td>
                     </tr>
                     <tr>
-                      <td colspan="2"><span id="ch_pvp_highlight">'.$arenateam_data5["name"].'</span></td>
-                      <td colspan="2">'.lang("char", "team").' '.lang("char", "rating").' <span id="ch_pvp_highlight">'.$arena_team5["rating"].'</span></td>
+                      <td colspan="2"><a href="arenateam.php?action=view_team&error=3&id='.$arenateam_data5["id"].'">'.$arenateam_data5["name"].'</a></td>
+                      <td colspan="2">'.lang("char", "team").' '.lang("char", "rating").': <span id="ch_pvp_highlight">'.$arena_team5["rating"].'</span></td>
                     </tr>
                     </tr>
                       <td><span id="ch_pvp_dim">'.lang("char", "team").'</span></td>
