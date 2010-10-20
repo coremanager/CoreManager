@@ -28,13 +28,17 @@ Inherits RunnerClass
 		      map = b.ReadInt32
 		      previous = b.ReadInt32
 		      
+		      // Localization skip
+		      b.Position = b.Position + (Localization * 4)
 		      offset = b.Position
 		      stringPos = b.ReadUInt32
-		      name = MySQLPrepare(GetString(stringStart + stringPos, b))
-		      //skip useless data
-		      offset = offset + (17 * 4)
+		      Name = MySQLPrepare(GetString(stringStart + stringPos, b))
+		      //skip
+		      offset = offset + ((17 - Localization) * 4)
 		      b.Position = offset
 		      
+		      // Localization skip
+		      b.Position = b.Position + (Localization * 4)
 		      offset = b.Position
 		      stringPos = b.ReadUInt32
 		      if stringPos <> 0 then
@@ -43,7 +47,7 @@ Inherits RunnerClass
 		        description = ""
 		      end if
 		      //skip useless data
-		      offset = offset + (17 * 4)
+		      offset = offset + ((17 - Localization) * 4)
 		      b.Position = offset
 		      
 		      category = b.ReadInt32
@@ -52,6 +56,8 @@ Inherits RunnerClass
 		      flags = b.ReadInt32
 		      spellIcon = b.ReadInt32
 		      
+		      // Localization skip
+		      b.Position = b.Position + (Localization * 4)
 		      offset = b.Position
 		      stringPos = b.ReadUInt32
 		      if stringPos <> 0 then
@@ -60,7 +66,7 @@ Inherits RunnerClass
 		        reward = ""
 		      end if
 		      //skip useless data
-		      offset = offset + (17 * 4)
+		      offset = offset + ((17 - Localization) * 4)
 		      b.Position = offset
 		      
 		      demands = b.ReadInt32

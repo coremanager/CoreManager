@@ -16,11 +16,13 @@ Inherits RunnerClass
 		      id = b.ReadInt32
 		      parentID = b.ReadInt32
 		      
+		      // Localization skip
+		      b.Position = b.Position + (Localization * 4)
 		      offset = b.Position
 		      stringPos = b.ReadUInt32
-		      name = MySQLPrepare(GetString(stringStart + stringPos, b))
-		      //skip useless data
-		      offset = offset + (17 * 4)
+		      Name = MySQLPrepare(GetString(stringStart + stringPos, b))
+		      //skip
+		      offset = offset + ((17 - Localization) * 4)
 		      b.Position = offset
 		      
 		      groupID = b.ReadInt32

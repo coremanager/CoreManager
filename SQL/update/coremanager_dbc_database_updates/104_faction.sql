@@ -1,0 +1,1 @@
+ALTER TABLE `faction` MODIFY COLUMN `Description` VARCHAR(512);

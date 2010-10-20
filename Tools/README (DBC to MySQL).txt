@@ -16,7 +16,8 @@ From Source: (only compiling for Windows is currently supported)
 
 2. Configure config.text to match your CoreManager DBC database.
 3. Launch "DBC to MySQL.exe"
-4. Click "Select Directory"
-5. Navigate to the directory containing your DBC files.
-6. Click "Select"
-7. Wait.  This'll take a while.
+4. Select the Localization Language of the DBC files.
+5. Click "Select Directory"
+6. Navigate to the directory containing your DBC files.
+7. Click "Select"
+8. Wait.  This'll take a while.

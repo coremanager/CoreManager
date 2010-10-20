@@ -1698,6 +1698,69 @@ Begin Window Window1
       Visible         =   True
       Width           =   120
    End
+   Begin StaticText StaticText3
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   132
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Multiline       =   ""
+      Scope           =   0
+      TabIndex        =   53
+      TabPanelIndex   =   0
+      Text            =   "Language:"
+      TextAlign       =   0
+      TextColor       =   &h000000
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   15
+      Underline       =   ""
+      Visible         =   True
+      Width           =   51
+   End
+   Begin PopupMenu PopupMenu1
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      InitialValue    =   "English\r\nKorean\r\nFrench\r\nGerman\r\nChinese (China)\r\nChinese (Taiwan)\r\nSpanish\r\nRussian"
+      Italic          =   ""
+      Left            =   195
+      ListIndex       =   0
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   54
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   15
+      Underline       =   ""
+      Visible         =   True
+      Width           =   101
+   End
 End
 #tag EndWindow
 
@@ -1868,6 +1931,11 @@ End
 		  db.UserName = User
 		  db.Password = pass
 		  db.DatabaseName = name
+		  
+		  Localization = PopupMenu1.ListIndex
+		  if Localization = 7 then
+		    Localization = 8
+		  end if
 		  
 		  Dim dlg as New SelectFolderDialog
 		  dlg.ActionButtonCaption="Select"

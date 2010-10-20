@@ -33,11 +33,13 @@ Inherits RunnerClass
 		      SpellItemEnchantment_4 = b.ReadInt32
 		      SpellItemEnchantment_5 = b.ReadInt32
 		      
+		      // Localization skip
+		      b.Position = b.Position + (Localization * 4)
 		      offset = b.Position
 		      stringPos = b.ReadUInt32
 		      Suffix = MySQLPrepare(GetString(stringStart + stringPos, b))
-		      //skip useless data
-		      offset = offset + (16 * 4)
+		      //skip
+		      offset = offset + ((16 - Localization) * 4)
 		      b.Position = offset
 		      
 		      SuffixFlags = b.ReadInt32

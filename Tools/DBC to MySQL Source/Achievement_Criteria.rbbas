@@ -34,6 +34,8 @@ Inherits RunnerClass
 		      Requirement_3 = b.ReadInt32
 		      Value_3 = b.ReadInt32
 		      
+		      // Localization skip
+		      b.Position = b.Position + (Localization * 4)
 		      offset = b.Position
 		      stringPos = b.ReadUInt32
 		      if stringPos <> 0 then
@@ -42,7 +44,7 @@ Inherits RunnerClass
 		        description = ""
 		      end if
 		      //skip useless data
-		      offset = offset + (17 * 4)
+		      offset = offset + ((17 - Localization) * 4)
 		      b.Position = offset
 		      
 		      CompletionFlag = b.ReadInt32

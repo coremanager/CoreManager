@@ -1,0 +1,1 @@
+ALTER TABLE `skillline` MODIFY COLUMN `Description` VARCHAR(512);

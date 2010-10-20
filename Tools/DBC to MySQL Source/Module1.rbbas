@@ -82,6 +82,10 @@ Protected Module Module1
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
+		Localization As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
 		offset As Uint64 = 0
 	#tag EndProperty
 

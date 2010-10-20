@@ -21,27 +21,33 @@ Inherits RunnerClass
 		      SkillLineCategory = b.ReadInt32
 		      SkillCostID = b.ReadInt32
 		      
+		      // Localization skip
+		      b.Position = b.Position + (Localization * 4)
 		      offset = b.Position
 		      stringPos = b.ReadUInt32
 		      Name = MySQLPrepare(GetString(stringStart + stringPos, b))
-		      //skip useless data
-		      offset = offset + (17 * 4)
+		      //skip
+		      offset = offset + ((17 - Localization) * 4)
 		      b.Position = offset
 		      
+		      // Localization skip
+		      b.Position = b.Position + (Localization * 4)
 		      offset = b.Position
 		      stringPos = b.ReadUInt32
 		      Description = MySQLPrepare(GetString(stringStart + stringPos, b))
-		      //skip useless data
-		      offset = offset + (17 * 4)
+		      //skip
+		      offset = offset + ((17 - Localization) * 4)
 		      b.Position = offset
 		      
 		      SpellIcon = b.ReadInt32
 		      
+		      // Localization skip
+		      b.Position = b.Position + (Localization * 4)
 		      offset = b.Position
 		      stringPos = b.ReadUInt32
 		      Verb = MySQLPrepare(GetString(stringStart + stringPos, b))
-		      //skip useless data
-		      offset = offset + (17 * 4)
+		      //skip
+		      offset = offset + ((17 - Localization) * 4)
 		      b.Position = offset
 		      
 		      CanLink = b.ReadInt32

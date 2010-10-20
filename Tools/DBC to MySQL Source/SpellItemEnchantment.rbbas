@@ -19,12 +19,13 @@ Inherits RunnerClass
 		      offset = offset + (13 * 4)
 		      b.Position = offset
 		      
+		      // Localization skip
+		      b.Position = b.Position + (Localization * 4)
 		      offset = b.Position
 		      stringPos = b.ReadUInt32
 		      EnchantmentName = MySQLPrepare(GetString(stringStart + stringPos, b))
-		      
 		      //skip
-		      offset = offset + (24 * 4)
+		      offset = offset + ((24 - Localization) * 4)
 		      b.Position = offset
 		      
 		      dim query as string
