@@ -84,6 +84,10 @@ function database()
                       <td>
                         <input type="text" name="dbc_name" value="'.$dbc_db["Name"].'" size="10%">
                       </td>
+                      <td width=75px>'.lang("admin", "db_enc").': </td>
+                      <td>
+                        <input type="text" name="dbc_encoding" value="'.$dbc_db["Encoding"].'" size="10%">
+                      </td>
                     </tr>
                   </table>
                 </fieldset>
@@ -116,6 +120,10 @@ function database()
                       <td width=75px>'.lang("admin", "name").': </td>
                       <td>
                         <input type="text" name="logon_name" value="'.$logon_db["Name"].'" size="10%">
+                      </td>
+                      <td width=75px>'.lang("admin", "db_enc").': </td>
+                      <td>
+                        <input type="text" name="logon_encoding" value="'.$logon_db["Encoding"].'" size="10%">
                       </td>
                     </tr>
                   </table>
@@ -161,13 +169,18 @@ function database()
                       <td>
                         <input type="text" name="char_name[]" value="'.$char["Name"].'" size="10%">
                       </td>
-                      <td colspan=2>
-                        <center>
-                          <a href="admin.php?section=databases&action=savedbs&remove_char[]='.$char["Index"].'">
-                            <img src="img/aff_cross.png" /> '.lang("admin", "remove").'
-                          </a>
-                        </center>
+                      <td width=75px>'.lang("admin", "db_enc").': </td>
                       <td>
+                        <input type="text" name="char_encoding[]" value="'.$char["Encoding"].'" size="10%">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan=2>
+                        <a href="admin.php?section=databases&action=savedbs&remove_char[]='.$char["Index"].'">
+                          <img src="img/aff_cross.png" /> '.lang("admin", "remove").'
+                        </a>
+                      <td>
+                      <td colspan=2></td>
                     </tr>
                   </table>
                 </fieldset>
@@ -217,13 +230,18 @@ function database()
                       <td>
                         <input type="text" name="world_name[]" value="'.$world["Name"].'" size="10%">
                       </td>
-                      <td colspan=2>
-                        <center>
-                          <a href="admin.php?section=databases&action=savedbs&remove_world[]='.$world["Index"].'">
-                            <img src="img/aff_cross.png" /> '.lang("admin", "remove").'
-                          </a>
-                        </center>
+                      <td width=75px>'.lang("admin", "db_enc").': </td>
                       <td>
+                        <input type="text" name="world_encoding[]" value="'.$world["Encoding"].'" size="10%">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan=2>
+                        <a href="admin.php?section=databases&action=savedbs&remove_world[]='.$world["Index"].'">
+                          <img src="img/aff_cross.png" /> '.lang("admin", "remove").'
+                        </a>
+                      <td>
+                      <td colspan=2></td>
                     </tr>
                   </table>
                 </fieldset>
@@ -263,22 +281,23 @@ function savedbs()
     $dbc_user = $sqlm->quote_smart($_GET["dbc_user"]);
     $dbc_pass = $sqlm->quote_smart($_GET["dbc_pass"]);
     $dbc_name = $sqlm->quote_smart($_GET["dbc_name"]);
+    $dbc_encoding = $sqlm->quote_smart($_GET["dbc_encoding"]);
 
     $dbc_count = $sqlm->fetch_assoc($sqlm->query("SELECT COUNT(*) FROM config_dbc_database"));
 
     if ($dbc_count["COUNT(*)"] == 1)
     {
       $dbc_upper = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_dbc_database"));
-      $result = $sqlm->query("UPDATE config_dbc_database SET Address='".$dbc_host."', Port='".$dbc_port."', Name='".$dbc_name."', User='".$dbc_user."', Password='".$dbc_pass."', Encoding='utf8' WHERE `Index`='".$dbc_upper["MAX(`Index`)"]."'");
+      $result = $sqlm->query("UPDATE config_dbc_database SET Address='".$dbc_host."', Port='".$dbc_port."', Name='".$dbc_name."', User='".$dbc_user."', Password='".$dbc_pass."', Encoding='".$dbc_encoding."' WHERE `Index`='".$dbc_upper["MAX(`Index`)"]."'");
     }
     elseif ($dbc_count["COUNT(*)"] > 1)
     {
       $result = $sqlm->query("TRUNCATE TABLE config_dbc_database");
-      $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbc_host."', '".$dbc_port."', '".$dbc_user."', '".$dbc_name."', '".$dbc_pass."', 'utf8')");
+      $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbc_host."', '".$dbc_port."', '".$dbc_user."', '".$dbc_name."', '".$dbc_pass."', '".$dbc_encoding."')");
     }
     else
     {
-      $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbc_host."', '".$dbc_port."', '".$dbc_user."', '".$dbc_name."', '".$dbc_pass."', 'utf8')");
+      $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbc_host."', '".$dbc_port."', '".$dbc_user."', '".$dbc_name."', '".$dbc_pass."', '".$dbc_encoding."')");
     }
   }
 
@@ -289,8 +308,9 @@ function savedbs()
     $logon_user = $sqlm->quote_smart($_GET["logon_user"]);
     $logon_pass = $sqlm->quote_smart($_GET["logon_pass"]);
     $logon_name = $sqlm->quote_smart($_GET["logon_name"]);
+    $logon_encoding = $sqlm->quote_smart($_GET["logon_encoding"]);
 
-    $result_logon = $sqlm->query("UPDATE config_logon_database SET Address='".$logon_host."', Port='".$logon_port."', User='".$logon_user."', Password='".$logon_pass."', Name='".$logon_name."' WHERE `Index`=1");
+    $result_logon = $sqlm->query("UPDATE config_logon_database SET Address='".$logon_host."', Port='".$logon_port."', User='".$logon_user."', Password='".$logon_pass."', Name='".$logon_name."', Encoding='".$logon_encoding."' WHERE `Index`=1");
   }
 
   if ( isset($_GET["char_realm"]) )
@@ -301,10 +321,11 @@ function savedbs()
     $char_users = ( ( isset($_GET["char_user"]) ) ? $sqlm->quote_smart($_GET["char_user"]) : NULL );
     $char_passes = ( ( isset($_GET["char_pass"]) ) ? $sqlm->quote_smart($_GET["char_pass"]) : NULL );
     $char_names = ( ( isset($_GET["char_name"]) ) ? $sqlm->quote_smart($_GET["char_name"]) : NULL );
+    $char_encodings = ( ( isset($_GET["char_encoding"]) ) ? $sqlm->quote_smart($_GET["char_encoding"]) : NULL );
 
     for ( $i=0; $i<count($char_hosts); $i++ )
     {
-      $result_char = $sqlm->query("UPDATE config_character_databases SET Address='".$char_hosts[$i]."', Port='".$char_ports[$i]."', User='".$char_users[$i]."', Password='".$char_passes[$i]."', Name='".$char_names[$i]."' WHERE `Index`='".$char_realms[$i]."'");
+      $result_char = $sqlm->query("UPDATE config_character_databases SET Address='".$char_hosts[$i]."', Port='".$char_ports[$i]."', User='".$char_users[$i]."', Password='".$char_passes[$i]."', Name='".$char_names[$i]."', Encoding='".$char_encodings[$i]."' WHERE `Index`='".$char_realms[$i]."'");
     }
   }
 
@@ -326,10 +347,11 @@ function savedbs()
     $world_users = ( ( isset($_GET["world_user"]) ) ? $sqlm->quote_smart($_GET["world_user"]) : NULL );
     $world_passes = ( ( isset($_GET["world_pass"]) ) ? $sqlm->quote_smart($_GET["world_pass"]) : NULL );
     $world_names = ( ( isset($_GET["world_name"]) ) ? $sqlm->quote_smart($_GET["world_name"]) : NULL );
+    $world_encodings = ( ( isset($_GET["world_encoding"]) ) ? $sqlm->quote_smart($_GET["world_encoding"]) : NULL );
 
     for ( $i=0; $i<count($world_hosts); $i++ )
     {
-      $result_world = $sqlm->query("UPDATE config_world_databases SET Address='".$world_hosts[$i]."', Port='".$world_ports[$i]."', User='".$world_users[$i]."', Password='".$world_passes[$i]."', Name='".$world_names[$i]."' WHERE `Index`='".$world_realms[$i]."'");
+      $result_world = $sqlm->query("UPDATE config_world_databases SET Address='".$world_hosts[$i]."', Port='".$world_ports[$i]."', User='".$world_users[$i]."', Password='".$world_passes[$i]."', Name='".$world_names[$i]."', Encoding='".$world_encodings[$i]."' WHERE `Index`='".$world_realms[$i]."'");
     }
   }
 

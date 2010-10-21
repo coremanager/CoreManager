@@ -1605,6 +1605,7 @@ $GLOBALS['lang_admin'] = array
   'user' => 'User',
   'pass' => 'Password',
   'name' => 'Name',
+  'db_enc' => 'Encoding',
   'arcm' => 'DBC',
   'logon' => 'Logon',
   'char' => 'Character',
