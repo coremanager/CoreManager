@@ -40,12 +40,12 @@ class SQL //MySQL
     {
       if ( $db_name )
       {
+        if ( !empty($use_names) )
+          $this->query("SET NAMES '".$use_names."'");
         if ( @mysql_select_db($db_name, $this->link_id) )
           return $this->link_id;
         else
           die(error($db_name."<br />".mysql_error()."<br />".$lang_global['err_sql_open_db']." ('".$db_name."')"));
-        if ( !empty($use_names) )
-          $this->query("SET NAMES '".$use_names."'");
       }
     }
     else

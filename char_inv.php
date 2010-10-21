@@ -350,9 +350,9 @@ function char_inv()
               <font class="bold">
                 '.htmlentities($char["name"]).' -
                 <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif"
-                  onmousemove="toolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
+                  onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
                 <img src="img/c_icons/'.$char["class"].'.gif"
-                  onmousemove="toolTip(\''.char_get_class_name($char["class"]).'\',\'item_tooltip\')" onmouseout="toolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
+                  onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
               </font>
               <br /><br />
               <table class="lined" id="ch_inv_bags">
