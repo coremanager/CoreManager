@@ -1138,10 +1138,20 @@ function edit_user()
   $acct = $sql["logon"]->quote_smart($_GET["acct"]);
 
   if ( $core == 1 )
-    $result = $sql["logon"]->query("SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) AS lastlogin, flags FROM accounts WHERE acct='".$acct."'");
+    $a_query = "SELECT acct, login, gm, email, lastip, muted, UNIX_TIMESTAMP(lastlogin) AS lastlogin, flags
+      FROM accounts
+      WHERE acct='".$acct."'";
+  elseif ( $core == 2 )
+    $a_query = "SELECT account.id AS acct, username AS login, gmlevel AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags
+      FROM account
+      WHERE account.id='".$acct."'";
   else
-    $result = $sql["logon"]->query("SELECT account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE account.id='".$acct."'");
-    
+    $a_query = "SELECT account.id AS acct, username AS login, IFNULL(account_access.gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags
+      FROM account
+        LEFT JOIN account_access ON account.id=account_access.id
+      WHERE account.id='".$acct."'";
+
+  $result = $sql["logon"]->query($a_query);
   $data = $sql["logon"]->fetch_assoc($result);
   
   $o_temp = 0;

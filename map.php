@@ -197,25 +197,63 @@ function show_map()
   {
     if ( $showmap == -1 )
     {
-      $query = "SELECT *, gm FROM characters LEFT JOIN `".$logon_db["name"]."`.accounts ON characters.acct = accounts.acct WHERE ".( ($online <> -1) ? "online='".$online."' AND " : "" )."mapid IN (0,1,571) AND zoneid<>876";
+      $query = "SELECT *, gm
+        FROM characters
+          LEFT JOIN `".$logon_db["name"]."`.accounts ON characters.acct=accounts.acct
+        WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."mapid IN (0,1,571) AND zoneid<>876";
     }
     else
-      $query = "SELECT *, gm FROM characters LEFT JOIN `".$logon_db["name"]."`.accounts ON characters.acct = accounts.acct WHERE ".( ($online <> -1) ? "online='".$online."' AND " : "" )."mapid='".$showmap."'".( ( $showmap == 1 ) ? " AND zoneid<>876" : "" ).( ( $showmap == 530 )  ? "  AND positionY>0"  : "" );
+      $query = "SELECT *, gm
+        FROM characters
+          LEFT JOIN `".$logon_db["name"]."`.accounts ON characters.acct=accounts.acct
+        WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."mapid='".$showmap."'".( ( $showmap == 1 ) ? " AND zoneid<>876" : "" ).( ( $showmap == 530 )  ? "  AND positionY>0"  : "" );
 
     // don't want this query at all if we're viewing Outland or Northrend
     if ( ( $showmap <> 530 ) && ( $showmap <> 571 ) )
-      $out_query = "SELECT *, gm FROM characters LEFT JOIN `".$logon_db["name"]."`.accounts ON characters.acct = accounts.acct WHERE ".( ($online <> -1) ? "online='".$online."' AND " : "" )."mapid='530' AND positionY<-5000".( ($showmap == 0) ? " AND positionX>0" : "" ).( ($showmap == 1) ? " AND positionX<0" : "" );
+      $out_query = "SELECT *, gm
+        FROM characters
+          LEFT JOIN `".$logon_db["name"]."`.accounts ON characters.acct=accounts.acct
+        WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."mapid='530' AND positionY<-5000".( ($showmap == 0) ? " AND positionX>0" : "" ).( ( $showmap == 1 ) ? " AND positionX<0" : "" );
+  }
+  elseif ( $core == 2 )
+  {
+    if ( $showmap == -1 )
+      $query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm
+      FROM characters
+        LEFT JOIN `".$logon_db["name"]."`.account ON characters.account=account.id
+      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map IN (0,1,571) AND zone<>876";
+    else
+      $query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm
+      FROM characters
+        LEFT JOIN `".$logon_db["name"]."`.account ON characters.account=account.id
+      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map='".$showmap."'".( ( $showmap == 1 ) ? " AND zone<>876" : "" ).( ( $showmap == 530 )  ? "  AND position_y>0"  : "" );
+
+    // don't want this query at all if we're viewing Outland or Northrend
+    if ( ( $showmap <> 530 ) && ( $showmap <> 571 ) )
+      $out_query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm
+      FROM characters
+        LEFT JOIN `".$logon_db["name"]."`.account ON characters.account=account.id
+      WHERE ".( ($online <> -1) ? "online='".$online."' AND " : "" )."map='530' AND position_y<-5000".( ( $showmap == 0 ) ? " AND position_x>0" : "" ).( ( $showmap == 1 ) ? " AND position_x<0" : "" );
   }
   else
   {
     if ( $showmap == -1 )
-      $query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm FROM characters LEFT JOIN `".$logon_db["name"]."`.account_access ON characters.account = account_access.id WHERE ".( ($online <> -1) ? "online='".$online."' AND " : "" )."map IN (0,1,571) AND zone<>876";
+      $query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm
+      FROM characters
+        LEFT JOIN `".$logon_db["name"]."`.account_access ON characters.account=account_access.id
+      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map IN (0,1,571) AND zone<>876";
     else
-      $query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm FROM characters LEFT JOIN `".$logon_db["name"]."`.account_access ON characters.account = account_access.id WHERE ".( ($online <> -1) ? "online='".$online."' AND " : "" )."map='".$showmap."'".( ( $showmap == 1 ) ? " AND zone<>876" : "" ).( ( $showmap == 530 )  ? "  AND position_y>0"  : "" );
+      $query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm
+      FROM characters
+        LEFT JOIN `".$logon_db["name"]."`.account_access ON characters.account=account_access.id
+      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map='".$showmap."'".( ( $showmap == 1 ) ? " AND zone<>876" : "" ).( ( $showmap == 530 )  ? "  AND position_y>0"  : "" );
 
     // don't want this query at all if we're viewing Outland or Northrend
     if ( ( $showmap <> 530 ) && ( $showmap <> 571 ) )
-      $out_query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm FROM characters LEFT JOIN `".$logon_db["name"]."`.account_access ON characters.account = account_access.id WHERE ".( ($online <> -1) ? "online='".$online."' AND " : "" )."map='530' AND position_y<-5000".( ($showmap == 0) ? " AND position_x>0" : "" ).( ($showmap == 1) ? " AND position_x<0" : "" );
+      $out_query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm
+      FROM characters
+        LEFT JOIN `".$logon_db["name"]."`.account_access ON characters.account=account_access.id
+      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map='530' AND position_y<-5000".( ( $showmap == 0 ) ? " AND position_x>0" : "" ).( ( $showmap == 1 ) ? " AND position_x<0" : "" );
   }
 
   // normal map characters
