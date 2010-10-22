@@ -148,45 +148,45 @@ function char_main()
         $char_data_result = $sql["char"]->query($query);
         $char_data_fields = $sql["char"]->fetch_assoc($char_data_result);
 
-        $char_data[PLAYER_BLOCK_PERCENTAGE] = $char_data_fields["blockPct"];
-        $char_data[PLAYER_DODGE_PERCENTAGE] = $char_data_fields["dodgePct"];
-        $char_data[PLAYER_PARRY_PERCENTAGE] = $char_data_fields["parryPct"];
-        $char_data[PLAYER_CRIT_PERCENTAGE] = $char_data_fields["critPct"];
-        $char_data[PLAYER_RANGED_CRIT_PERCENTAGE] = $char_data_fields["rangedCritPct"];
-        $char_data[UNIT_FIELD_MAXDAMAGE] = $char_data_fields["attackPower"];
-        $char_data[UNIT_FIELD_MINDAMAGE] = $char_data_fields["attackPower"];
-        $char_data[UNIT_FIELD_MAXRANGEDDAMAGE] = $char_data_fields["rangedAttackPower"];
-        $char_data[UNIT_FIELD_MINRANGEDDAMAGE] = $char_data_fields["rangedAttackPower"];
-        $char_data[PLAYER_SPELL_CRIT_PERCENTAGE1] = $char_data_fields["spellCritPct"];
-        $char_data[PLAYER_FIELD_MOD_DAMAGE_DONE_POS] = $char_data_fields["spellPower"];
-        $char_data[UNIT_FIELD_STAT0] = $char_data_fields["strength"];
-        $char_data[UNIT_FIELD_STAT1] = $char_data_fields["agility"];
-        $char_data[UNIT_FIELD_STAT2] = $char_data_fields["stamina"];
-        $char_data[UNIT_FIELD_STAT3] = $char_data_fields["intellect"];
-        $char_data[UNIT_FIELD_STAT4] = $char_data_fields["spirit"];
-        $char_data[UNIT_FIELD_RESISTANCES] = $char_data_fields["armor"];
-        $char_data[UNIT_FIELD_RESISTANCES + 1] = $char_data_fields["resHoly"];
-        $char_data[UNIT_FIELD_RESISTANCES + 2] = $char_data_fields["resArcane"];
-        $char_data[UNIT_FIELD_RESISTANCES + 3] = $char_data_fields["resFire"];
-        $char_data[UNIT_FIELD_RESISTANCES + 4] = $char_data_fields["resNature"];
-        $char_data[UNIT_FIELD_RESISTANCES + 5] = $char_data_fields["resFrost"];
-        $char_data[UNIT_FIELD_RESISTANCES + 6] = $char_data_fields["resShadow"];
-        $char_data[UNIT_FIELD_HEALTH] = $char["health"];
-        $char_data[UNIT_FIELD_MAXHEALTH] = $char_data_fields["maxhealth"];
-        $char_data[UNIT_FIELD_POWER1] = $char["power1"];
-        $char_data[UNIT_FIELD_POWER2] = $char["power2"];
-        $char_data[UNIT_FIELD_POWER3] = $char["power3"];
-        $char_data[UNIT_FIELD_POWER4] = $char["power4"];
-        $char_data[UNIT_FIELD_POWER5] = $char["power5"];
-        $char_data[UNIT_FIELD_POWER6] = $char["power6"];
-        $char_data[UNIT_FIELD_POWER7] = $char["power7"];
-        $char_data[UNIT_FIELD_MAXPOWER1] = $char_data_fields["maxpower1"];
-        $char_data[UNIT_FIELD_MAXPOWER2] = $char_data_fields["maxpower2"];
-        $char_data[UNIT_FIELD_MAXPOWER3] = $char_data_fields["maxpower3"];
-        $char_data[UNIT_FIELD_MAXPOWER4] = $char_data_fields["maxpower4"];
-        $char_data[UNIT_FIELD_MAXPOWER5] = $char_data_fields["maxpower5"];
-        $char_data[UNIT_FIELD_MAXPOWER6] = $char_data_fields["maxpower6"];
-        $char_data[UNIT_FIELD_MAXPOWER7] = $char_data_fields["maxpower7"];
+        $char_data[PLAYER_BLOCK_PERCENTAGE] = ( ( $char_data_fields["blockPct"] ) ? $char_data_fields["blockPct"] : '&nbsp;' );
+        $char_data[PLAYER_DODGE_PERCENTAGE] = ( ( $char_data_fields["dodgePct"] ) ? $char_data_fields["dodgePct"] : '&nbsp;' );
+        $char_data[PLAYER_PARRY_PERCENTAGE] = ( ( $char_data_fields["parryPct"] ) ? $char_data_fields["parryPct"] : '&nbsp;' );
+        $char_data[PLAYER_CRIT_PERCENTAGE] = ( ( $char_data_fields["critPct"] ) ? $char_data_fields["critPct"] : '&nbsp;' );
+        $char_data[PLAYER_RANGED_CRIT_PERCENTAGE] = ( ( $char_data_fields["rangedCritPct"] ) ? $char_data_fields["rangedCritPct"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXDAMAGE] = ( ( $char_data_fields["attackPower"] ) ? $char_data_fields["attackPower"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MINDAMAGE] = ( ( $char_data_fields["attackPower"] ) ? $char_data_fields["attackPower"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXRANGEDDAMAGE] = ( ( $char_data_fields["rangedAttackPower"] ) ? $char_data_fields["rangedAttackPower"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MINRANGEDDAMAGE] = ( ( $char_data_fields["rangedAttackPower"] ) ? $char_data_fields["rangedAttackPower"] : '&nbsp;' );
+        $char_data[PLAYER_SPELL_CRIT_PERCENTAGE1] = ( ( $char_data_fields["spellCritPct"] ) ? $char_data_fields["spellCritPct"] : '&nbsp;' );
+        $char_data[PLAYER_FIELD_MOD_DAMAGE_DONE_POS] = ( ( $char_data_fields["spellPower"] ) ? $char_data_fields["spellPower"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_STAT0] = ( ( $char_data_fields["strength"] ) ? $char_data_fields["strength"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_STAT1] = ( ( $char_data_fields["agility"] ) ? $char_data_fields["agility"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_STAT2] = ( ( $char_data_fields["stamina"] ) ? $char_data_fields["stamina"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_STAT3] = ( ( $char_data_fields["intellect"] ) ? $char_data_fields["intellect"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_STAT4] = ( ( $char_data_fields["spirit"] ) ? $char_data_fields["spirit"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES] = ( ( $char_data_fields["armor"] ) ? $char_data_fields["armor"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES + 1] = ( ( $char_data_fields["resHoly"] ) ? $char_data_fields["resHoly"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES + 2] = ( ( $char_data_fields["resArcane"] ) ? $char_data_fields["resArcane"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES + 3] = ( ( $char_data_fields["resFire"] ) ? $char_data_fields["resFire"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES + 4] = ( ( $char_data_fields["resNature"] ) ? $char_data_fields["resNature"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES + 5] = ( ( $char_data_fields["resFrost"] ) ? $char_data_fields["resFrost"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES + 6] = ( ( $char_data_fields["resShadow"] ) ? $char_data_fields["resShadow"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_HEALTH] = ( ( $char["health"] ) ? $char["health"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXHEALTH] = ( ( $char_data_fields["maxhealth"] ) ? $char_data_fields["maxhealth"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER1] = ( ( $char["power1"] ) ? $char["power1"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER2] = ( ( $char["power2"] ) ? $char["power2"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER3] = ( ( $char["power3"] ) ? $char["power3"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER4] = ( ( $char["power4"] ) ? $char["power4"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER5] = ( ( $char["power5"] ) ? $char["power5"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER6] = ( ( $char["power6"] ) ? $char["power6"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER7] = ( ( $char["power7"] ) ? $char["power7"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER1] = ( ( $char_data_fields["maxpower1"] ) ? $char_data_fields["maxpower1"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER2] = ( ( $char_data_fields["maxpower2"] ) ? $char_data_fields["maxpower2"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER3] = ( ( $char_data_fields["maxpower3"] ) ? $char_data_fields["maxpower3"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER4] = ( ( $char_data_fields["maxpower4"] ) ? $char_data_fields["maxpower4"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER5] = ( ( $char_data_fields["maxpower5"] ) ? $char_data_fields["maxpower5"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER6] = ( ( $char_data_fields["maxpower6"] ) ? $char_data_fields["maxpower6"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER7] = ( ( $char_data_fields["maxpower7"] ) ? $char_data_fields["maxpower7"] : '&nbsp;' );
         $char_data[PLAYER_FIELD_MOD_HEALING_DONE_POS] = "ERR";
         $char_data[PLAYER_FIELD_COMBAT_RATING_1+5] = "ERR";
         $char_data[PLAYER_FIELD_COMBAT_RATING_1+17] = "ERR";
@@ -194,9 +194,9 @@ function char_main()
         $char_data[PLAYER_FIELD_COMBAT_RATING_1+7] = "ERR";
         $char_data[PLAYER_EXPERTISE] = "ERR";
         $char_data[PLAYER_OFFHAND_EXPERTISE] = "ERR";
-        $char_data[PLAYER_FIELD_HONOR_CURRENCY] = $char["totalHonorPoints"];
-        $char_data[PLAYER_FIELD_ARENA_CURRENCY] = $char["arenaPoints"];
-        $char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS] = $char["totalKills"];
+        $char_data[PLAYER_FIELD_HONOR_CURRENCY] = ( ( $char["totalHonorPoints"] ) ? $char["totalHonorPoints"] : '&nbsp;' );
+        $char_data[PLAYER_FIELD_ARENA_CURRENCY] = ( ( $char["arenaPoints"] ) ? $char["arenaPoints"] : '&nbsp;' );
+        $char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS] = ( ( $char["totalKills"] ) ? $char["totalKills"] : '&nbsp;' );
       }
 
       if ( $core == 1 )
@@ -661,7 +661,7 @@ function char_main()
                       <div class="gradient_pp" id="char_hp_value">'.$char_data[UNIT_FIELD_HEALTH].'/'.$char_data[UNIT_FIELD_MAXHEALTH].'</li></ul></div>';
       if ( $char["class"] == 11 ) //druid
         $output .= '
-                      </br>
+                      <br />
                       <div class="gradient_p" id="char_energy_name">'.lang("item", "mana").':</div>
                       <div class="gradient_pp" id="char_energy_value">'.$char_data[UNIT_FIELD_POWER1].'/'.$char_data[UNIT_FIELD_MAXPOWER1].'</div>';
       $output .= '
@@ -690,7 +690,7 @@ function char_main()
         $output .= '
                       <div class="gradient_p" id="char_energy_name"">'.lang("item", "mana").':</div>
                       <div class="gradient_pp" id="char_energy_value">'.$char_data[UNIT_FIELD_POWER1].'/'.$char_data[UNIT_FIELD_MAXPOWER1].'</div>
-                      </br>
+                      <br />
                       <div class="gradient_p" id="char_energy_name"">'.lang("item", "rage").':</div>
                       <div class="gradient_pp" id="char_energy_value">'.($char_data[UNIT_FIELD_POWER2]/10).'/'.($char_data[UNIT_FIELD_MAXPOWER2]/10).'</div>';
       }
