@@ -85,7 +85,7 @@ function char_skill()
     $result = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
     $owner_gmlvl = $sql["mgr"]->result($result, 0, 'gm');
 
-    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
+    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
     {
       if ( $core == 1 )
       {

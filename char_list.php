@@ -435,7 +435,7 @@ function browse_chars()
     $sn_result = $sql["mgr"]->query($sn_query);
     $sn = $sql["mgr"]->fetch_assoc($sn_result);    
 
-    if ( ( $user_lvl >= $owner_gmlvl ) || ( $owner_acc_name == $user_name ) || ( $user_lvl == gmlevel('4') ) )
+    if ( ( $user_lvl >= $owner_gmlvl ) || ( $owner_acc_name == $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
     {
       $output .= '
               <tr>

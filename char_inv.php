@@ -101,7 +101,7 @@ function char_inv()
       $mode = 0;
 
     // check user permission
-    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
+    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
     {
       // main data that we need for this page, character inventory
       if ( $core == 1 )

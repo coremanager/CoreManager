@@ -81,7 +81,7 @@ function char_talent()
       $query = $sql["logon"]->query("SELECT username as login FROM account WHERE id='".$owner_acc_id."'");
     $owner_name = $sql["logon"]->result($query, 0, 'login');
 
-    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
+    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
     {
       if ( strlen($_GET["curspec"]) == 0 )
       {

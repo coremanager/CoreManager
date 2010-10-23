@@ -78,7 +78,7 @@ else
                   <br />';
       if ( $hide_server_mem <> 0 )
       {
-        if ( ( $hide_server_mem == 2 ) || ( $user_lvl == gmlevel('4') ) )
+        if ( ( $hide_server_mem == 2 ) || ( $user_lvl == $action_permission["delete"] ) )
         {
           $output .= 
                   lang("index", "cpu").
@@ -341,7 +341,7 @@ else
           $gm_result = $sql["mgr"]->query("SELECT SecurityLevel FROM config_accounts WHERE Login='".$login["login"]."'");
           $gm = $sql["mgr"]->fetch_assoc($gm_result);
           $gm = $gm["SecurityLevel"];
-          if ( ( $user_lvl > 0 ) && ( ( $user_lvl >= gmlevel($gm) ) || ( $user_lvl == gmlevel('4') ) ) )
+          if ( ( $user_lvl > 0 ) && ( ( $user_lvl >= gmlevel($gm) ) || ( $user_lvl == $action_permission["delete"] ) ) )
             $output .= '<tr>
                   <td align="left">
                     <a href="char.php?id='.$post["playerGuid"].'">
@@ -639,7 +639,7 @@ else
       $output .= '
               <tr>
                 <td>';
-      if ( ( $user_lvl > 0 ) && ( ( $user_lvl >= gmlevel($gm) ) || ( $user_lvl == gmlevel('4') ) ) )
+      if ( ( $user_lvl > 0 ) && ( ( $user_lvl >= gmlevel($gm) ) || ( $user_lvl == $action_permission["delete"] ) ) )
         $output .= '
                   <a href="char.php?id='.$char["guid"].'">
                     <span onmousemove="oldtoolTip(\''.$char_acct["name"].' ('.id_get_gm_level($gm).')'.'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($char["name"]).'</span>
@@ -710,7 +710,7 @@ else
       {
         $country = misc_get_country_by_account($char["acct"]);
         $output .='
-                <td>'.( ( $country["code"] ) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).( ( ( $user_lvl >= $action_permission["update"] ) || ( $user_lvl == gmlevel('4') ) ) ? '<br />'.$country["actualip"] : '' ).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-' ).'</td>';
+                <td>'.( ( $country["code"] ) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).( ( $user_lvl >= $action_permission["update"] ) ? '<br />'.$country["actualip"] : '' ).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-' ).'</td>';
       }
       $output .='
               </tr>';

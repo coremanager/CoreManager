@@ -487,7 +487,7 @@ function browse_users()
       else
         $output .= '
                   <td>*</td>';
-      if ( ( $user_lvl >= gmlevel('4') ) || ( $user_name == $data["login"] ) )
+      if ( ( $user_lvl >= $action_permission["insert"] ) || ( $user_name == $data["login"] ) )
         $output .= '
                   <td>'.$data["acct"].'</td>
                   <td>
@@ -501,7 +501,7 @@ function browse_users()
       if ( ( $temp_screenname == '' ) || ( $temp_screenname == NULL ) )
         $temp_screenname = "-";
 
-      if ( ( $user_lvl >= gmlevel('0') ) || ( $user_name == $data["login"] ) )
+      if ( ( $user_lvl >= $action_permission["player"] ) || ( $user_name == $data["login"] ) )
         $output .= '
                   <td>
                     <a href="user.php?action=edit_user&amp;error=11&amp;acct='.$data["acct"].'">'.$temp_screenname.'</a>
@@ -1747,7 +1747,7 @@ function doedit_user()
   }
 
   //restricting access to lower security level
-  if ( ( $seclevel > $user_lvl ) || ( $user_lvl <> gmlevel('4') ) )
+  if ( ( $seclevel > $user_lvl ) || ( $user_lvl <> $action_permission["delete"] ) )
     redirect("user.php?action=edit_user&acct=".$_POST["acct"]."&error=16");
   require_once("libs/valid_lib.php");
   if ( !valid_alphabetic($login) )

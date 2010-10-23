@@ -96,7 +96,7 @@ function char_achievements()
     $owner_gmlvl = $sql["mgr"]->result($sec_res, 0, 'gm');
 
     // check user permission
-    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
+    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
     {
       //------------------------Character Tabs---------------------------------
       // we start with a lead of 10 spaces,

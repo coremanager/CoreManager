@@ -102,7 +102,7 @@ function char_friends()
     $sec_res = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
     $owner_gmlvl = $sql["mgr"]->result($sec_res, 0, 'gm');
 
-    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
+    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
     {
       //------------------------Character Tabs---------------------------------
       // we start with a lead of 10 spaces,

@@ -97,7 +97,7 @@ function char_view()
   $s_fields = $sql["mgr"]->fetch_assoc($s_result);
   $owner_gmlvl = $s_fields["gm"];
   
-  if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == gmlevel('4') ) )
+  if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
   {
     if ( $core == 1 )
     {
