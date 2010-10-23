@@ -158,8 +158,8 @@ function char_talent()
             </div>
             <div id="tab_content">
               <font class="bold">'.htmlentities($char["name"]).' -
-              <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
-              <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'</font>
+              <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
+              <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'</font>
               <br /><br />';
       if ( $cur_spec == 1 )
         $output .= '<font class="bold">'.lang("char", "talentspec").': '.$cur_spec.'&nbsp;<a href="char_talent.php?id='.$id.'&realm='.$realm_id.'&curspec='.$opp_spec.'">'.$opp_spec.'</a></font><br />';

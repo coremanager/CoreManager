@@ -133,8 +133,8 @@ function char_friends()
             <div id="tab_content">
               <font class="bold">
                 '.htmlentities($char["name"]).' -
-                <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
-                <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
+                <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
+                <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
               </font>
               <br /><br />
               <table class="hidden"  id="ch_fri_unk_1">
@@ -184,11 +184,11 @@ function char_friends()
             $output .= $data["name"];
           $output .= '
                         </td>
-                        <td><img src="img/c_icons/'.$data["race"].'-'.$data["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($data["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
-                        <td><img src="img/c_icons/'.$data["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($data["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
+                        <td><img src="img/c_icons/'.$data["race"].'-'.$data["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($data["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
+                        <td><img src="img/c_icons/'.$data["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($data["class"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
                         <td>'.char_get_level_color($data["level"]).'</td>
-                        <td class="small"><span onmousemove="oldtoolTip(\'MapID:'.$data["mapid"].'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.get_map_name($data["mapid"]).'</span></td>
-                        <td class="small"><span onmousemove="oldtoolTip(\'ZoneID:'.$data["zoneid"].'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.get_zone_name($data["zoneid"]).'</span></td>
+                        <td class="small"><span onmousemove="oldtoolTip(\'MapID:'.$data["mapid"].'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_map_name($data["mapid"]).'</span></td>
+                        <td class="small"><span onmousemove="oldtoolTip(\'ZoneID:'.$data["zoneid"].'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_zone_name($data["zoneid"]).'</span></td>
                         <td>'.( ( $data["online"] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>
                       </tr>';
         }
@@ -236,11 +236,11 @@ function char_friends()
             $output .= $data["name"];
           $output .='
                         </td>
-                        <td><img src="img/c_icons/'.$data["race"].'-'.$data["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($data["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
-                        <td><img src="img/c_icons/'.$data["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($data["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
+                        <td><img src="img/c_icons/'.$data["race"].'-'.$data["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($data["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
+                        <td><img src="img/c_icons/'.$data["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($data["class"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
                         <td>'.char_get_level_color($data["level"]).'</td>
-                        <td class="small"><span onmousemove="oldtoolTip(\'MapID:'.$data["mapid"].'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.get_map_name($data["mapid"]).'</span></td>
-                        <td class="small"><span onmousemove="oldtoolTip(\'ZoneID:'.$data["zoneid"].'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.get_zone_name($data["zoneid"]).'</span></td>
+                        <td class="small"><span onmousemove="oldtoolTip(\'MapID:'.$data["mapid"].'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_map_name($data["mapid"]).'</span></td>
+                        <td class="small"><span onmousemove="oldtoolTip(\'ZoneID:'.$data["zoneid"].'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_zone_name($data["zoneid"]).'</span></td>
                         <td>'.( ( $data["online"] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>
                       </tr>';
         }
@@ -295,11 +295,11 @@ function char_friends()
             $output .= $data["name"];
           $output .= '
                         </td>
-                        <td><img src="img/c_icons/'.$data["race"].'-'.$data["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($data["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
-                        <td><img src="img/c_icons/'.$data["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($data["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
+                        <td><img src="img/c_icons/'.$data["race"].'-'.$data["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($data["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
+                        <td><img src="img/c_icons/'.$data["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($data["class"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
                         <td>'.char_get_level_color($data["level"]).'</td>
-                        <td class="small"><span onmousemove="oldtoolTip(\'MapID:'.$data["mapid"].'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.get_map_name($data["mapid"]).'</span></td>
-                        <td class="small"><span onmousemove="oldtoolTip(\'ZoneID:'.$data["zoneid"].'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.get_zone_name($data["zoneid"]).'</span></td>
+                        <td class="small"><span onmousemove="oldtoolTip(\'MapID:'.$data["mapid"].'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_map_name($data["mapid"]).'</span></td>
+                        <td class="small"><span onmousemove="oldtoolTip(\'ZoneID:'.$data["zoneid"].'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_zone_name($data["zoneid"]).'</span></td>
                         <td>'.( ( $data["online"] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>
                       </tr>';
         }
@@ -347,11 +347,11 @@ function char_friends()
             $output .= $data["name"];
           $output .= '
                         </td>
-                        <td><img src="img/c_icons/'.$data["race"].'-'.$data["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($data["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
-                        <td><img src="img/c_icons/'.$data["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($data["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
+                        <td><img src="img/c_icons/'.$data["race"].'-'.$data["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($data["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
+                        <td><img src="img/c_icons/'.$data["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($data["class"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
                         <td>'.char_get_level_color($data["level"]).'</td>
-                        <td class="small"><span onmousemove="oldtoolTip(\'MapID:'.$data["mapid"].'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.get_map_name($data["mapid"]).'</span></td>
-                        <td class="small"><span onmousemove="oldtoolTip(\'ZoneID:'.$data["zoneid"].'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.get_zone_name($data["zoneid"]).'</span></td>
+                        <td class="small"><span onmousemove="oldtoolTip(\'MapID:'.$data["mapid"].'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_map_name($data["mapid"]).'</span></td>
+                        <td class="small"><span onmousemove="oldtoolTip(\'ZoneID:'.$data["zoneid"].'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_zone_name($data["zoneid"]).'</span></td>
                         <td>'.( ( $data["online"] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>
                       </tr>';
         }

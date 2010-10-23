@@ -113,7 +113,7 @@ function browse_guilds()
               <tr>
                 <td>'.$data["gid"].'</td>
                 <td><a href="guild.php?action=view_guild&amp;error=3&amp;id='.$data["gid"].'">'.$data["gname"].'</a></td>';
-      $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '<td><a href="char.php?id='.$data["lguid"].'" onmousemove="oldtoolTip(\''.lang("char", "level_short").$data["llevel"].' '.char_get_race_name($data["lrace"]).' '.char_get_class_name($data["lclass"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($data["lname"]).'</td>' : '<td><spanonmousemove="oldtoolTip(\''.lang("char", "level_short").$data["llevel"].' '.char_get_race_name($data["lrace"]).' '.char_get_class_name($data["lclass"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($data["lname"]) ).'</span></td>';
+      $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '<td><a href="char.php?id='.$data["lguid"].'" onmousemove="oldtoolTip(\''.lang("char", "level_short").$data["llevel"].' '.char_get_race_name($data["lrace"]).' '.char_get_class_name($data["lclass"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($data["lname"]).'</td>' : '<td><spanonmousemove="oldtoolTip(\''.lang("char", "level_short").$data["llevel"].' '.char_get_race_name($data["lrace"]).' '.char_get_class_name($data["lclass"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($data["lname"]) ).'</span></td>';
       $output .= '
                 <td><img src="img/'.( ( $data["faction"]==0 ) ? "alliance" : "horde" ).'_small.gif" alt="" /></td>
                 <td>'.$data["gonline"].'/'.$data["mcount"].'</td>
@@ -341,7 +341,7 @@ function browse_guilds()
                 <tr>
                   <td>'.$data["gid"].'</td>';
     $output .= ( ( $user_lvl >= $action_permission["update"] ) ? '<td><a href="guild.php?action=view_guild&amp;error=3&amp;id='.$data["gid"].'">'.htmlentities($data["guildname"]).'</a></td>' : '<td>'.htmlentities($data["guildname"]).'</td>' );
-    $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '<td><a href="char.php?id='.$data["lguid"].'" onmousemove="oldtoolTip(\''.lang("char", "level_short").$data["llevel"].' '.char_get_race_name($data["lrace"]).' '.char_get_class_name($data["lclass"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($data["lname"]).'</a></td>' : '<td><span onmousemove="oldtoolTip(\''.lang("char", "level_short").$data["llevel"].' '.char_get_race_name($data["lrace"]).' '.char_get_class_name($data["lclass"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($data["lname"]).'</span></td>' );
+    $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '<td><a href="char.php?id='.$data["lguid"].'" onmousemove="oldtoolTip(\''.lang("char", "level_short").$data["llevel"].' '.char_get_race_name($data["lrace"]).' '.char_get_class_name($data["lclass"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($data["lname"]).'</a></td>' : '<td><span onmousemove="oldtoolTip(\''.lang("char", "level_short").$data["llevel"].' '.char_get_race_name($data["lrace"]).' '.char_get_class_name($data["lclass"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($data["lname"]).'</span></td>' );
     $output .= '
                   <td><img src="img/'.( ( $data["lfaction"] == 0 ) ? "alliance" : "horde" ).'_small.gif" alt="" /></td>
                   <td>'.$data["tot_chars"].'</td>
@@ -559,8 +559,8 @@ function view_guild()
     $output .= ( ( $user_lvl >= $action_permission["delete"] || $amIguildleader || $member["acct"] == $user_id ) ? '<td><img src="img/aff_cross.png" alt="" onclick="answerBox(\''.lang("global", "delete").': &lt;font color=white&gt;'.$member["cname"].'&lt;/font&gt;&lt;br /&gt;'.lang("global", "are_you_sure").'\', \'guild.php?action=rem_char_from_guild&amp;realm='.$realmid.'&amp;id='.$member["cguid"].'&amp;guld_id='.$guild_id.'\');" id="guild_edit_delete_cursor" /></td>' : '<td></td>' );
     $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '<td><a href="char.php?id='.$member["cguid"].'">'.htmlentities($member["cname"]).'</a></td>' : '<td>'.htmlentities($member["cname"]).'</td>' );
     $output .= '
-                <td><img src="img/c_icons/'.$member["crace"].'-'.$member["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member["crace"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
-                <td><img src="img/c_icons/'.$member["cclass"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member["cclass"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
+                <td><img src="img/c_icons/'.$member["crace"].'-'.$member["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member["crace"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
+                <td><img src="img/c_icons/'.$member["cclass"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member["cclass"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
                 <td>'.char_get_level_color($member["clevel"]).'</td>
                 <td>'.htmlentities($member["rname"]).' ('.$member["mrank"].')</td>
                 <td>'.htmlentities($member["pnote"]).'</td>
@@ -579,7 +579,7 @@ function view_guild()
           $country = 0;
 
         $output .= '
-                <td>'.( ($country["code"] ) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.$country["country"].'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-' ).'</td>';
+                <td>'.( ($country["code"] ) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.$country["country"].'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />' : '-' ).'</td>';
     }
 
               $output .= '

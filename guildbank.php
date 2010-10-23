@@ -116,9 +116,9 @@ function guild_bank()
                     <img src="img/INV/INV_blank_32.gif" class="icon_border_0"';
         }
         if ( $tabs[$i]['TabName'] == '' )
-          $output .= ' onmousemove="oldtoolTip(\''.lang("guildbank", "tab").($i+1).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />';
+          $output .= ' onmousemove="oldtoolTip(\''.lang("guildbank", "tab").($i+1).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />';
         else
-          $output .= ' onmousemove="oldtoolTip(\''.$tabs[$i]['TabName'].'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />';
+          $output .= ' onmousemove="oldtoolTip(\''.$tabs[$i]['TabName'].'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />';
         $output .= '
                   </a>
                 </li>';

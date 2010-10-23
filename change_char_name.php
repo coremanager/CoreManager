@@ -66,10 +66,10 @@ function sel_char()
                     <td>'.$char["name"].'</td>
                     <td>'.char_get_level_color($char["level"]).'</td>
                     <td>
-                      <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                      <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                     </td>
                     <td>
-                      <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                      <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                     </td>
                   </tr>';
   }

@@ -1016,7 +1016,7 @@ tr td.rep0
 }
 
 /*** item tooltips***/
-.item_tooltipx  td
+.old_item_tooltip  td
 {
 	float: none;
 	font-size: 11px;

@@ -345,7 +345,7 @@ else
             $output .= '<tr>
                   <td align="left">
                     <a href="char.php?id='.$post["playerGuid"].'">
-                        <span onmousemove="oldtoolTip(\''.$login["username"].' ('.id_get_gm_level($gm).')'.'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($post["name"]).'</span>
+                        <span onmousemove="oldtoolTip(\''.$login["username"].' ('.id_get_gm_level($gm).')'.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($post["name"]).'</span>
                     </a>
                  </td>
               </tr>
@@ -642,7 +642,7 @@ else
       if ( ( $user_lvl > 0 ) && ( ( $user_lvl >= gmlevel($gm) ) || ( $user_lvl == $action_permission["delete"] ) ) )
         $output .= '
                   <a href="char.php?id='.$char["guid"].'">
-                    <span onmousemove="oldtoolTip(\''.$char_acct["name"].' ('.id_get_gm_level($gm).')'.'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.htmlentities($char["name"]).'</span>
+                    <span onmousemove="oldtoolTip(\''.$char_acct["name"].' ('.id_get_gm_level($gm).')'.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($char["name"]).'</span>
                   </a>';
       else
         $output .='
@@ -650,20 +650,20 @@ else
       $output .= '
                   </td>
                   <td>
-                    <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                    <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                   </td>
                   <td>
-                    <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
+                    <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                   </td>
                   <td>'.char_get_level_color($char["level"]).'</td>
                   <td>
-                    <span onmouseover="oldtoolTip(\''.char_get_pvp_rank_name($char["highest_rank"], char_get_side_id($char["race"])).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" id="index_delete_cursor"><img src="img/ranks/rank'.char_get_pvp_rank_id($char["highest_rank"], char_get_side_id($char["race"])).'.gif" alt="" /></span>
+                    <span onmouseover="oldtoolTip(\''.char_get_pvp_rank_name($char["highest_rank"], char_get_side_id($char["race"])).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" id="index_delete_cursor"><img src="img/ranks/rank'.char_get_pvp_rank_id($char["highest_rank"], char_get_side_id($char["race"])).'.gif" alt="" /></span>
                   </td>
                   <td>
                     <a href="guild.php?action=view_guild&amp;error=3&amp;id='.$guild_id.'">'.htmlentities($guild_name).'</a>
                   </td>
-                  <td><span onmousemove="oldtoolTip(\'MapID:'.$char["mapid"].'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.get_map_name($char["mapid"]).'</span></td>
-                  <td><span onmousemove="oldtoolTip(\'ZoneID:'.$char["zoneid"].'\', \'item_tooltipx\')" onmouseout="oldtoolTip()">'.get_zone_name($char["zoneid"]).'</span></td>';
+                  <td><span onmousemove="oldtoolTip(\'MapID:'.$char["mapid"].'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_map_name($char["mapid"]).'</span></td>
+                  <td><span onmousemove="oldtoolTip(\'ZoneID:'.$char["zoneid"].'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_zone_name($char["zoneid"]).'</span></td>';
       // display player area, if available
       if ( $core == 1 )
       {
@@ -710,7 +710,7 @@ else
       {
         $country = misc_get_country_by_account($char["acct"]);
         $output .='
-                <td>'.( ( $country["code"] ) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).( ( $user_lvl >= $action_permission["update"] ) ? '<br />'.$country["actualip"] : '' ).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-' ).'</td>';
+                <td>'.( ( $country["code"] ) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).( ( $user_lvl >= $action_permission["update"] ) ? '<br />'.$country["actualip"] : '' ).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />' : '-' ).'</td>';
       }
       $output .='
               </tr>';

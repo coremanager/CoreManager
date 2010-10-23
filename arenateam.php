@@ -604,8 +604,8 @@ function view_team()
 
         $output .= '
                   <td><a href="char.php?id='.$member[0].'">'.htmlentities($member_char[1]).'</a></td>
-                  <td><img src="img/c_icons/'.$member_char[3].'-'.$member_char[7].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member_char[3]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>
-                  <td><img src="img/c_icons/'.$member_char[4].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member_char[4]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>
+                  <td><img src="img/c_icons/'.$member_char[3].'-'.$member_char[7].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member_char[3]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>
+                  <td><img src="img/c_icons/'.$member_char[4].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member_char[4]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>
                   <td>'.$member[5].'</td>
                   <td>'.get_days_with_color($member_char[6]).'</td>
                   <td>'.( ( $member_char[5] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>
@@ -622,7 +622,7 @@ function view_team()
 
           $country = misc_get_country_by_account($member_char[0]);
           $output .= '
-                  <td>'.( (  $country["code"]) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
+                  <td>'.( (  $country["code"]) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
         }
 
         $output .= '
@@ -661,8 +661,8 @@ function view_team()
 // arena team player structure [player_id] [week_played] [week_win] [season_played] [season_win] [rating]
         $output .= '
                   <td><a href="char.php?id='.$member["guid"].'">'.htmlentities($member_char["name"]).'</a></td>
-                  <td><img src="img/c_icons/'.$member_char["race"].'-'.$member_char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member_char["race"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>
-                  <td><img src="img/c_icons/'.$member_char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member_char["class"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>
+                  <td><img src="img/c_icons/'.$member_char["race"].'-'.$member_char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member_char["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>
+                  <td><img src="img/c_icons/'.$member_char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member_char["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>
                   <td>'.$member["personal_rating"].'</td>
                   <td>'.get_days_with_color($member_char["timestamp"]).'</td>
                   <td>'.( ( $member_char["online"] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>
@@ -679,7 +679,7 @@ function view_team()
 
           $country = misc_get_country_by_account($member_char["acct"]);
           $output .= '
-                  <td>'.( (  $country["code"]) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
+                  <td>'.( (  $country["code"]) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
         }
 
         $output .= '

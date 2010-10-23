@@ -383,7 +383,7 @@ function browse_chars()
   if ( $user_lvl >= $action_permission["update"] )
   {
     $output .= '
-                <th width="1%"><img src="img/arrow_switch.png" onmousemove="oldtoolTip(\''.lang("char_list", "transfer").'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" /></th>';
+                <th width="1%"><img src="img/arrow_switch.png" onmousemove="oldtoolTip(\''.lang("char_list", "transfer").'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></th>';
   }
 
   $output .= '
@@ -454,11 +454,11 @@ function browse_chars()
         $output .= '
                 <td><a href="user.php?action=edit_user&amp;error=11&amp;acct='.$char["acct"].'">'.htmlentities($owner_acc_name).'</a></td>';
       $output .= '
-                <td><img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
-                <td><img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /></td>
+                <td><img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
+                <td><img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
                 <td>'.char_get_level_color($char["level"]).'</td>
-                <td class="small"><span onmousemove="oldtoolTip(\'MapID:'.$char["mapid"].'\',\'item_tooltipx\')" onmouseout="oldtoolTip()">'.get_map_name($char["mapid"]).'</span></td>
-                <td class="small"><span onmousemove="oldtoolTip(\'ZoneID:'.$char["zoneid"].'\',\'item_tooltipx\')" onmouseout="oldtoolTip()">'.get_zone_name($char["zoneid"]).'</span></td>
+                <td class="small"><span onmousemove="oldtoolTip(\'MapID:'.$char["mapid"].'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_map_name($char["mapid"]).'</span></td>
+                <td class="small"><span onmousemove="oldtoolTip(\'ZoneID:'.$char["zoneid"].'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_zone_name($char["zoneid"]).'</span></td>
                 <td>'.$char["highest_rank"].'</td>
                 <td class="small"><a href="guild.php?action=view_guild&amp;error=3&amp;id='.$guild_id.'">'.htmlentities($guild_name).'</a></td>
                 <td class="small">'.$lastseen.'</td>
@@ -467,7 +467,7 @@ function browse_chars()
       {
         $country = misc_get_country_by_account($char["acct"]);
         $output .= '
-                <td>'.( ( $country["code"] ) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
+                <td>'.( ( $country["code"] ) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
       }
       if ( $user_lvl >= $action_permission["update"] )
         $output .= '

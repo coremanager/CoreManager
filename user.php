@@ -501,7 +501,7 @@ function browse_users()
       if ( ( $temp_screenname == '' ) || ( $temp_screenname == NULL ) )
         $temp_screenname = "-";
 
-      if ( ( $user_lvl >= $action_permission["player"] ) || ( $user_name == $data["login"] ) )
+      if ( ( $user_lvl >= $action_permission["view"] ) || ( $user_name == $data["login"] ) )
         $output .= '
                   <td>
                     <a href="user.php?action=edit_user&amp;error=11&amp;acct='.$data["acct"].'">'.$temp_screenname.'</a>
@@ -565,16 +565,16 @@ function browse_users()
       {
         $country = misc_get_country_by_ip($data["lastip"]);
         $output .= '
-                  <td>'.( ( $country["code"] ) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />' : '-' ).'</td>';
+                  <td>'.( ( $country["code"] ) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />' : '-' ).'</td>';
       }
       if ( $core == 1 )
       {
         if ( time() < $data["banned"] )
           $output .= '
-                  <td><img src="img/flag_red.png" onmousemove="oldtoolTip(\''.lang("user", "ban_active").'\',  \'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>';
+                  <td><img src="img/flag_red.png" onmousemove="oldtoolTip(\''.lang("user", "ban_active").'\',  \'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>';
         elseif ( ( time() > $data["banned"] ) && ( $data["banned"] != 0 ) )
           $output .= '
-                  <td><img src="img/flag_green.png" onmousemove="oldtoolTip(\''.lang("user", "ban_expired").'\',  \'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>';
+                  <td><img src="img/flag_green.png" onmousemove="oldtoolTip(\''.lang("user", "ban_expired").'\',  \'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>';
         else
           $output .= '
                   <td>-</td>';
@@ -584,14 +584,14 @@ function browse_users()
         if ( $data["active"] )
           if ( time() < $data["banned"] )
             $output .= '
-                  <td><img src="img/flag_red.png" onmousemove="oldtoolTip(\''.lang("user", "ban_active").'\',  \'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>';
+                  <td><img src="img/flag_red.png" onmousemove="oldtoolTip(\''.lang("user", "ban_active").'\',  \'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>';
           else
             $output .= '
-                  <td><img src="img/flag_blue.png" onmousemove="oldtoolTip(\''.lang("user", "ban_active_expired").'\',  \'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>';
+                  <td><img src="img/flag_blue.png" onmousemove="oldtoolTip(\''.lang("user", "ban_active_expired").'\',  \'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>';
         else
           if ( time() < $data["banned"] )
             $output .= '
-                  <td><img src="img/flag_green.png" onmousemove="oldtoolTip(\''.lang("user", "ban_inactive").'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" /></td>';
+                  <td><img src="img/flag_green.png" onmousemove="oldtoolTip(\''.lang("user", "ban_inactive").'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>';
           else
             $output .= '
                   <td>-</td>';
@@ -1323,7 +1323,7 @@ function edit_user()
         $output .= '
                     <td>
                       <a href="user.php?action=cancel_email_change&username='.$data["login"].'&acct='.$data["acct"].'" >
-                        <img src="img/aff_warn.gif" onmousemove="oldtoolTip(\''.lang("edit", "email_changed").'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" />
+                        <img src="img/aff_warn.gif" onmousemove="oldtoolTip(\''.lang("edit", "email_changed").'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" />
                       </a>
                       <input type="text" name="mail" size="39" maxlength="225" value="'.$data["email"].'" />
                     </td>';
@@ -1622,8 +1622,8 @@ function edit_user()
               <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\'---></td>
                 <td>
-                      <a href="char.php?id='.$char[0].'&amp;realm='.$realm[0].'">'.$char[1].'</a> - <img src="img/c_icons/'.$char[2].'-'.$char[5].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char[2]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
-                      <img src="img/c_icons/'.$char[3].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char[3]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt=""/> - '.lang("char", "level_short").char_get_level_color($char[4]).'
+                      <a href="char.php?id='.$char[0].'&amp;realm='.$realm[0].'">'.$char[1].'</a> - <img src="img/c_icons/'.$char[2].'-'.$char[5].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char[2]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
+                      <img src="img/c_icons/'.$char[3].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char[3]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt=""/> - '.lang("char", "level_short").char_get_level_color($char[4]).'
                 </td>
               </tr>';
           }
@@ -1655,8 +1655,8 @@ function edit_user()
                 <tr>
                   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\'---></td>
                   <td>
-                    <a href="char.php?id='.$char[0].'">'.$char[1].'</a> - <img src="img/c_icons/'.$char[2].'-'.$char[5].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char[2]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
-                    <img src="img/c_icons/'.$char[3].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char[3]).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()" alt=""/> - '.lang("char", "level_short").char_get_level_color($char[4]).'
+                    <a href="char.php?id='.$char[0].'">'.$char[1].'</a> - <img src="img/c_icons/'.$char[2].'-'.$char[5].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char[2]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
+                    <img src="img/c_icons/'.$char[3].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char[3]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt=""/> - '.lang("char", "level_short").char_get_level_color($char[4]).'
                   </td>
                 </tr>';
         }

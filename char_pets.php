@@ -109,8 +109,8 @@ function char_pets()
               <div id="tab_content2">
               <font class="bold">
                 '.htmlentities($char["name"]).' -
-                <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" />
-                <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'item_tooltipx\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
+                <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
+                <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
               </font>
               <br />
               <br />';
@@ -160,7 +160,7 @@ function char_pets()
           // this_is_junk: style left hardcoded because it's calculated.
           $output .= '
                 <font class="bold">'.$pet["name"].' - lvl '.char_get_level_color($pet["level"]).'
-                  <a id="ch_pet_padding" onmouseover="oldtoolTip(\''.$hap_text.'\', \'item_tooltipx\')" onmouseout="oldtoolTip()"><img src="img/pet/happiness_'.$hap_val.'.jpg" alt="" /></a>
+                  <a id="ch_pet_padding" onmouseover="oldtoolTip(\''.$hap_text.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()"><img src="img/pet/happiness_'.$hap_val.'.jpg" alt="" /></a>
                   <br /><br />
                 </font>
                 <table class="lined" id="ch_pet_xp">

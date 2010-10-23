@@ -76,7 +76,7 @@ function bbcode_callbacks_wow($item)
   require_once("scripts/id_tab.php");
   require_once("scripts/get_lib.php");
   return '
-    <a href="'.$item_datasite.$item[1].'" target="_blank" onmouseover="oldtoolTip(\''.addslashes(get_item_tooltip($item[1])).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()">
+    <a href="'.$item_datasite.$item[1].'" target="_blank" onmouseover="oldtoolTip(\''.addslashes(get_item_tooltip($item[1])).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()">
       <img src="'.get_item_icon($item[1]).'" class="icon_border" alt="" />
     </a>';
 }
@@ -238,10 +238,10 @@ function gen_avatar_panel($level, $sex, $race, $class, $info = 1, $gm = 0)
   {
     $return .= '
                 <div style="margin-top:2px;">
-                  <a href="#" onmouseover="oldtoolTip(\''.char_get_race_name($race).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()">
+                  <a href="#" onmouseover="oldtoolTip(\''.char_get_race_name($race).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()">
                     <img src="img/c_icons/'.$race.'-'.$sex.'.gif" border="0" alt="" />
                   </a>
-                  <a href="#" onmouseover="oldtoolTip(\''.char_get_class_name($class).'\',\'item_tooltipx\')" onmouseout="oldtoolTip()">
+                  <a href="#" onmouseover="oldtoolTip(\''.char_get_class_name($class).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()">
                     <img src="img/c_icons/'.$class.'.gif" border="0" alt="" />
                   </a>
                 </div>';
