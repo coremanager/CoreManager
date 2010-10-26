@@ -10,8 +10,13 @@ Inherits RunnerClass
 		    dim Unknown2 As integer
 		    dim gemColor As Uint32
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgGemProperties.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgGemProperties.TextColor = RGB(red, 0, blue)
 		      Window1.ProgGemProperties.Refresh
 		      
 		      ID = b.ReadInt32
@@ -33,6 +38,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgGemProperties.text = "COMPLETE"
+		      Window1.ProgGemProperties.TextColor = &c0000FF
 		      Window1.ProgGemProperties.Refresh
 		      exit do
 		    end if

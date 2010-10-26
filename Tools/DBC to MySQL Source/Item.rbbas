@@ -13,8 +13,13 @@ Inherits RunnerClass
 		    dim InventorySlotID As integer
 		    dim SheathID As  Integer
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgItem.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgItem.TextColor = RGB(red, 0, blue)
 		      Window1.ProgItem.Refresh
 		      
 		      ItemID = b.ReadInt32
@@ -39,6 +44,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgItem.text = "COMPLETE"
+		      Window1.ProgItem.TextColor = &c0000FF
 		      Window1.ProgItem.Refresh
 		      exit do
 		    end if

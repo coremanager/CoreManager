@@ -13,8 +13,13 @@ Inherits RunnerClass
 		    dim TabNumber As Integer
 		    dim InternalName As String
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgTalentTab.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgTalentTab.TextColor = RGB(red, 0, blue)
 		      Window1.ProgTalentTab.Refresh
 		      
 		      ID = b.ReadInt32
@@ -54,6 +59,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgTalentTab.text = "COMPLETE"
+		      Window1.ProgTalentTab.TextColor = &c0000FF
 		      Window1.ProgTalentTab.Refresh
 		      exit do
 		    end if

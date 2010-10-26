@@ -28,8 +28,13 @@ Inherits RunnerClass
 		    dim AllowForPetFlags1 as integer
 		    dim AllowForPetFlags2 as integer
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgTalent.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgTalent.TextColor = RGB(red, 0, blue)
 		      Window1.ProgTalent.Refresh
 		      
 		      ID = b.ReadInt32
@@ -71,6 +76,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgTalent.text = "COMPLETE"
+		      Window1.ProgTalent.TextColor = &c0000FF
 		      Window1.ProgTalent.Refresh
 		      exit do
 		    end if

@@ -22,8 +22,13 @@ Inherits RunnerClass
 		    dim ResetTimeOverride As integer
 		    dim NumberOfPlayers As integer
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgMap.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgMap.TextColor = RGB(red, 0, blue)
 		      Window1.ProgMap.Refresh
 		      
 		      ID = b.ReadInt32
@@ -95,6 +100,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgMap.text = "COMPLETE"
+		      Window1.ProgMap.TextColor = &c0000FF
 		      Window1.ProgMap.Refresh
 		      exit do
 		    end if

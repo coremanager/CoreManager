@@ -9,8 +9,13 @@ Inherits RunnerClass
 		    dim name As string
 		    dim groupID As integer
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgAchievement_Category.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgAchievement_Category.TextColor = RGB(red, 0, blue)
 		      Window1.ProgAchievement_Category.Refresh
 		      
 		      id = b.ReadInt32
@@ -38,6 +43,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgAchievement_Category.text = "COMPLETE"
+		      Window1.ProgAchievement_Category.TextColor = &c0000FF
 		      Window1.ProgAchievement_Category.Refresh
 		      exit do
 		    end if

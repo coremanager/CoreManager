@@ -8,8 +8,13 @@ Inherits RunnerClass
 		    dim ID As integer
 		    dim EnchantmentName As string
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgSpellItemEnchantment.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgSpellItemEnchantment.TextColor = RGB(red, 0, blue)
 		      Window1.ProgSpellItemEnchantment.Refresh
 		      
 		      ID = b.ReadInt32
@@ -40,6 +45,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgSpellItemEnchantment.text = "COMPLETE"
+		      Window1.ProgSpellItemEnchantment.TextColor = &c0000FF
 		      Window1.ProgSpellItemEnchantment.Refresh
 		      exit do
 		    end if

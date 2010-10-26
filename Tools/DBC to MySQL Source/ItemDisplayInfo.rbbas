@@ -8,8 +8,13 @@ Inherits RunnerClass
 		    dim ID As integer
 		    dim IconName As string
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgItemDisplayInfo.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgItemDisplayInfo.TextColor = RGB(red, 0, blue)
 		      Window1.ProgItemDisplayInfo.Refresh
 		      
 		      ID = b.ReadInt32
@@ -39,6 +44,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgItemDisplayInfo.text = "COMPLETE"
+		      Window1.ProgItemDisplayInfo.TextColor = &c0000FF
 		      Window1.ProgItemDisplayInfo.Refresh
 		      exit do
 		    end if

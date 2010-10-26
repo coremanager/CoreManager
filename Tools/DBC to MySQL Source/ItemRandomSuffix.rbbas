@@ -18,8 +18,13 @@ Inherits RunnerClass
 		    dim SpellItemEnchantment_4_Value As integer
 		    dim SpellItemEnchantment_5_Value As integer
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgItemRandomSuffix.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgItemRandomSuffix.TextColor = RGB(red, 0, blue)
 		      Window1.ProgItemRandomSuffix.Refresh
 		      
 		      ID = b.ReadInt32
@@ -77,6 +82,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgItemRandomSuffix.text = "COMPLETE"
+		      Window1.ProgItemRandomSuffix.TextColor = &c0000FF
 		      Window1.ProgItemRandomSuffix.Refresh
 		      exit do
 		    end if

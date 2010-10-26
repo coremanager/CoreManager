@@ -19,8 +19,13 @@ Inherits RunnerClass
 		    dim Friend3 As UInt32
 		    dim Friend4 As UInt32
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgFactionTemplate.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgFactionTemplate.TextColor = RGB(red, 0, blue)
 		      Window1.ProgFactionTemplate.Refresh
 		      
 		      ID = b.ReadInt32
@@ -52,6 +57,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgFactionTemplate.text = "COMPLETE"
+		      Window1.ProgFactionTemplate.TextColor = &c0000FF
 		      Window1.ProgFactionTemplate.Refresh
 		      exit do
 		    end if

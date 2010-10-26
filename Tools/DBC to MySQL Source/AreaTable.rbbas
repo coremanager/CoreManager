@@ -25,8 +25,13 @@ Inherits RunnerClass
 		    dim Unk7 As single
 		    dim Unk8 As integer
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgAreaTable.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgAreaTable.TextColor = RGB(red, 0, blue)
 		      Window1.ProgAreaTable.Refresh
 		      
 		      ID = b.ReadInt32
@@ -73,6 +78,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgAreaTable.text = "COMPLETE"
+		      Window1.ProgAreaTable.TextColor = &c0000FF
 		      Window1.ProgAreaTable.Refresh
 		      exit do
 		    end if

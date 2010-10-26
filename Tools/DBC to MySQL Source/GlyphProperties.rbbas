@@ -9,8 +9,13 @@ Inherits RunnerClass
 		    dim TypeFlags As UInt32
 		    dim GlyphIconId As UInt32
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgGlyphProperties.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgGlyphProperties.TextColor = RGB(red, 0, blue)
 		      Window1.ProgGlyphProperties.Refresh
 		      
 		      ID = b.ReadInt32
@@ -30,6 +35,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgGlyphProperties.text = "COMPLETE"
+		      Window1.ProgGlyphProperties.TextColor = &c0000FF
 		      Window1.ProgGlyphProperties.Refresh
 		      exit do
 		    end if

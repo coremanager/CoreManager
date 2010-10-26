@@ -3,14 +3,26 @@ Protected Module Module1
 	#tag Method, Flags = &h0
 		Function GetString(position As UInt32, b As BinaryStream) As string
 		  dim temp As string
-		  dim c As integer
+		  dim c,c1 As integer
+		  
+		  if Localization = 1 or Localization = 4 or Localization = 5 then
+		    temp = DefineEncoding(temp, Encodings.UTF16)
+		  else
+		    temp = DefineEncoding(temp, Encodings.UTF8)
+		  end if
 		  
 		  b.Position = position
 		  
 		  do
 		    c = b.ReadUInt8
 		    if c <> 0 then
-		      temp = temp + chr(c)
+		      if c < 128 then
+		        temp = temp + temp.Encoding.Chr(c)
+		      else
+		        c1 = b.ReadUInt8
+		        c = (c * 256) + c1
+		        temp = temp + temp.Encoding.Chr(c)
+		      end if
 		    else
 		      exit do
 		    end if
@@ -128,6 +140,11 @@ Protected Module Module1
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Localization"
+			Group="Behavior"
+			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"

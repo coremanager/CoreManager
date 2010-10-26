@@ -35,8 +35,13 @@ Inherits RunnerClass
 		    dim SkillLine As integer
 		    dim ReqSkillLevel as integer
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgItemSet.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgItemSet.TextColor = RGB(red, 0, blue)
 		      Window1.ProgItemSet.Refresh
 		      
 		      ID = b.ReadInt32
@@ -100,6 +105,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgItemSet.text = "COMPLETE"
+		      Window1.ProgItemSet.TextColor = &c0000FF
 		      Window1.ProgItemSet.Refresh
 		      exit do
 		    end if

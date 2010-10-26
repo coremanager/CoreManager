@@ -7,7 +7,7 @@ Begin Window Window1
    Frame           =   0
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   4.72e+2
+   Height          =   4.9e+2
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
@@ -36,7 +36,7 @@ Begin Window Window1
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   20
+      Left            =   196
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -49,7 +49,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   14
+      Top             =   13
       Underline       =   ""
       Visible         =   True
       Width           =   100
@@ -125,7 +125,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   48
+      Top             =   74
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -153,11 +153,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   64
+      Top             =   90
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -221,7 +221,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   64
+      Top             =   90
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -253,7 +253,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   80
+      Top             =   106
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -285,7 +285,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   96
+      Top             =   122
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -317,7 +317,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   112
+      Top             =   138
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -349,7 +349,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   128
+      Top             =   154
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -381,7 +381,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   144
+      Top             =   170
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -413,7 +413,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   160
+      Top             =   186
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -445,7 +445,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   176
+      Top             =   202
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -477,7 +477,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   192
+      Top             =   218
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -509,7 +509,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   208
+      Top             =   234
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -541,7 +541,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   224
+      Top             =   250
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -573,7 +573,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   240
+      Top             =   266
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -605,7 +605,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   256
+      Top             =   282
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -637,7 +637,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   272
+      Top             =   298
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -669,7 +669,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   288
+      Top             =   314
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -701,7 +701,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   304
+      Top             =   330
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -733,7 +733,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   320
+      Top             =   346
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -765,7 +765,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   336
+      Top             =   362
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -797,7 +797,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   352
+      Top             =   378
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -829,7 +829,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   368
+      Top             =   394
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -861,7 +861,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   384
+      Top             =   410
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -893,7 +893,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   400
+      Top             =   426
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -921,11 +921,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   80
+      Top             =   106
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -953,11 +953,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   96
+      Top             =   122
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -985,11 +985,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   112
+      Top             =   138
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1017,11 +1017,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   128
+      Top             =   154
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1049,11 +1049,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   144
+      Top             =   170
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1081,11 +1081,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   160
+      Top             =   186
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1113,11 +1113,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   176
+      Top             =   202
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1145,11 +1145,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   192
+      Top             =   218
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1177,11 +1177,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   208
+      Top             =   234
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1209,11 +1209,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   224
+      Top             =   250
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1241,11 +1241,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   240
+      Top             =   266
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1273,11 +1273,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   256
+      Top             =   282
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1305,11 +1305,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   272
+      Top             =   298
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1337,11 +1337,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   288
+      Top             =   314
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1369,11 +1369,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   304
+      Top             =   330
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1401,11 +1401,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   320
+      Top             =   346
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1433,11 +1433,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   336
+      Top             =   362
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1465,11 +1465,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   352
+      Top             =   378
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1497,11 +1497,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   368
+      Top             =   394
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1529,11 +1529,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   384
+      Top             =   410
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1561,11 +1561,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   400
+      Top             =   426
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1593,11 +1593,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   416
+      Top             =   442
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1629,7 +1629,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   416
+      Top             =   442
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -1657,11 +1657,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       Text            =   "0/0"
       TextAlign       =   0
-      TextColor       =   0
+      TextColor       =   "&cFF0000"
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   432
+      Top             =   458
       Underline       =   ""
       Visible         =   True
       Width           =   169
@@ -1693,7 +1693,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   432
+      Top             =   458
       Underline       =   ""
       Visible         =   True
       Width           =   120
@@ -1709,7 +1709,7 @@ Begin Window Window1
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   132
+      Left            =   20
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -1725,7 +1725,7 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   15
+      Top             =   14
       Underline       =   ""
       Visible         =   True
       Width           =   51
@@ -1742,7 +1742,7 @@ Begin Window Window1
       InitialParent   =   ""
       InitialValue    =   "English\r\nKorean\r\nFrench\r\nGerman\r\nChinese (China)\r\nChinese (Taiwan)\r\nSpanish\r\nRussian"
       Italic          =   ""
-      Left            =   195
+      Left            =   83
       ListIndex       =   0
       LockBottom      =   ""
       LockedInPosition=   False
@@ -1756,10 +1756,70 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   15
+      Top             =   14
       Underline       =   ""
       Visible         =   True
       Width           =   101
+   End
+   Begin PushButton PushButton2
+      AutoDeactivate  =   True
+      Bold            =   ""
+      Cancel          =   ""
+      Caption         =   "Start"
+      Default         =   ""
+      Enabled         =   False
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   196
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   55
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   45
+      Underline       =   ""
+      Visible         =   True
+      Width           =   100
+   End
+   Begin PushButton PushButton3
+      AutoDeactivate  =   True
+      Bold            =   ""
+      Cancel          =   ""
+      Caption         =   "Pause"
+      Default         =   ""
+      Enabled         =   False
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   20
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   56
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   45
+      Underline       =   ""
+      Visible         =   True
+      Width           =   100
    End
 End
 #tag EndWindow
@@ -1937,6 +1997,14 @@ End
 		    Localization = 8
 		  end if
 		  
+		  if db.Connect then
+		    if Localization = 1 or Localization = 4 or Localization = 5 then
+		      db.SQLExecute("SET NAMES 'utf16'")
+		    else
+		      db.SQLExecute("SET NAMES 'utf8'")
+		    end if
+		  end if
+		  
 		  Dim dlg as New SelectFolderDialog
 		  dlg.ActionButtonCaption="Select"
 		  
@@ -1997,7 +2065,7 @@ End
 		        
 		        // 20 is bytes in header
 		        AchievementRunner.stringStart = (AchievementRunner.recordCount * AchievementRunner.recordSize) + 20
-		        AchievementRunner.Run
+		        'AchievementRunner.Run
 		      case "Achievement_Category.dbc"
 		        Achievement_CategoryRunner = new Achievement_Category
 		        Achievement_CategoryRunner.b = f.OpenAsBinaryFile
@@ -2014,7 +2082,7 @@ End
 		        
 		        // 20 is bytes in header
 		        Achievement_CategoryRunner.stringStart = (Achievement_CategoryRunner.recordCount * Achievement_CategoryRunner.recordSize) + 20
-		        Achievement_CategoryRunner.Run
+		        'Achievement_CategoryRunner.Run
 		      case "Achievement_Criteria.dbc"
 		        Achievement_CriteriaRunner = new Achievement_Criteria
 		        Achievement_CriteriaRunner.b = f.OpenAsBinaryFile
@@ -2031,7 +2099,7 @@ End
 		        
 		        // 20 is bytes in header
 		        Achievement_CriteriaRunner.stringStart = (Achievement_CriteriaRunner.recordCount * Achievement_CriteriaRunner.recordSize) + 20
-		        Achievement_CriteriaRunner.Run
+		        'Achievement_CriteriaRunner.Run
 		      case "Faction.dbc"
 		        FactionRunner = new Faction
 		        FactionRunner.b = f.OpenAsBinaryFile
@@ -2048,7 +2116,7 @@ End
 		        
 		        // 20 is bytes in header
 		        FactionRunner.stringStart = (FactionRunner.recordCount * FactionRunner.recordSize) + 20
-		        FactionRunner.Run
+		        'FactionRunner.Run
 		      case "FactionTemplate.dbc"
 		        FactionTemplateRunner = new FactionTemplate
 		        FactionTemplateRunner.b = f.OpenAsBinaryFile
@@ -2065,7 +2133,7 @@ End
 		        
 		        // 20 is bytes in header
 		        FactionTemplateRunner.stringStart = (FactionTemplateRunner.recordCount * FactionTemplateRunner.recordSize) + 20
-		        FactionTemplateRunner.Run
+		        'FactionTemplateRunner.Run
 		      case "GemProperties.dbc"
 		        GemPropertiesRunner = new GemProperties
 		        GemPropertiesRunner.b = f.OpenAsBinaryFile
@@ -2082,7 +2150,7 @@ End
 		        
 		        // 20 is bytes in header
 		        GemPropertiesRunner.stringStart = (GemPropertiesRunner.recordCount * GemPropertiesRunner.recordSize) + 20
-		        GemPropertiesRunner.Run
+		        'GemPropertiesRunner.Run
 		      case "GlyphProperties.dbc"
 		        GlyphPropertiesRunner = new GlyphProperties
 		        GlyphPropertiesRunner.b = f.OpenAsBinaryFile
@@ -2099,7 +2167,7 @@ End
 		        
 		        // 20 is bytes in header
 		        GlyphPropertiesRunner.stringStart = (GlyphPropertiesRunner.recordCount * GlyphPropertiesRunner.recordSize) + 20
-		        GlyphPropertiesRunner.Run
+		        'GlyphPropertiesRunner.Run
 		      case "Item.dbc"
 		        ItemRunner = new Item
 		        ItemRunner.b = f.OpenAsBinaryFile
@@ -2116,7 +2184,7 @@ End
 		        
 		        // 20 is bytes in header
 		        ItemRunner.stringStart = (ItemRunner.recordCount * ItemRunner.recordSize) + 20
-		        ItemRunner.Run
+		        'ItemRunner.Run
 		      case "ItemDisplayInfo.dbc"
 		        ItemDisplayInfoRunner = new ItemDisplayInfo
 		        ItemDisplayInfoRunner.b = f.OpenAsBinaryFile
@@ -2133,7 +2201,7 @@ End
 		        
 		        // 20 is bytes in header
 		        ItemDisplayInfoRunner.stringStart = (ItemDisplayInfoRunner.recordCount * ItemDisplayInfoRunner.recordSize) + 20
-		        ItemDisplayInfoRunner.Run
+		        'ItemDisplayInfoRunner.Run
 		      case "SpellItemEnchantment.dbc"
 		        SpellItemEnchantmentRunner = new SpellItemEnchantment
 		        SpellItemEnchantmentRunner.b = f.OpenAsBinaryFile
@@ -2150,7 +2218,7 @@ End
 		        
 		        // 20 is bytes in header
 		        SpellItemEnchantmentRunner.stringStart = (SpellItemEnchantmentRunner.recordCount * SpellItemEnchantmentRunner.recordSize) + 20
-		        SpellItemEnchantmentRunner.Run
+		        'SpellItemEnchantmentRunner.Run
 		      case "ItemExtendedCost.dbc"
 		        ItemExtendedCostRunner = new ItemExtendedCost
 		        ItemExtendedCostRunner.b = f.OpenAsBinaryFile
@@ -2167,7 +2235,7 @@ End
 		        
 		        // 20 is bytes in header
 		        ItemExtendedCostRunner.stringStart = (ItemExtendedCostRunner.recordCount * ItemExtendedCostRunner.recordSize) + 20
-		        ItemExtendedCostRunner.Run
+		        'ItemExtendedCostRunner.Run
 		      case "ItemSet.dbc"
 		        ItemSetRunner = new ItemSet
 		        ItemSetRunner.b = f.OpenAsBinaryFile
@@ -2184,7 +2252,7 @@ End
 		        
 		        // 20 is bytes in header
 		        ItemSetRunner.stringStart = (ItemSetRunner.recordCount * ItemSetRunner.recordSize) + 20
-		        ItemSetRunner.Run
+		        'ItemSetRunner.Run
 		      case "Map.dbc"
 		        MapRunner = new Map
 		        MapRunner.b = f.OpenAsBinaryFile
@@ -2201,7 +2269,7 @@ End
 		        
 		        // 20 is bytes in header
 		        MapRunner.stringStart = (MapRunner.recordCount * MapRunner.recordSize) + 20
-		        MapRunner.Run
+		        'MapRunner.Run
 		      case "SkillLine.dbc"
 		        SkillLineRunner = new SkillLine
 		        SkillLineRunner.b = f.OpenAsBinaryFile
@@ -2218,7 +2286,7 @@ End
 		        
 		        // 20 is bytes in header
 		        SkillLineRunner.stringStart = (SkillLineRunner.recordCount * SkillLineRunner.recordSize) + 20
-		        SkillLineRunner.Run
+		        'SkillLineRunner.Run
 		      case "SkillLineAbility.dbc"
 		        SkillLineAbilityRunner = new SkillLineAbility
 		        SkillLineAbilityRunner.b = f.OpenAsBinaryFile
@@ -2235,7 +2303,7 @@ End
 		        
 		        // 20 is bytes in header
 		        SkillLineAbilityRunner.stringStart = (SkillLineAbilityRunner.recordCount * SkillLineAbilityRunner.recordSize) + 20
-		        SkillLineAbilityRunner.Run
+		        'SkillLineAbilityRunner.Run
 		      case "SkillRaceClassInfo.dbc"
 		        SkillRaceClassInfoRunner = new SkillRaceClassInfo
 		        SkillRaceClassInfoRunner.b = f.OpenAsBinaryFile
@@ -2252,7 +2320,7 @@ End
 		        
 		        // 20 is bytes in header
 		        SkillRaceClassInfoRunner.stringStart = (SkillRaceClassInfoRunner.recordCount * SkillRaceClassInfoRunner.recordSize) + 20
-		        SkillRaceClassInfoRunner.Run
+		        'SkillRaceClassInfoRunner.Run
 		      case "Spell.dbc"
 		        SpellRunner = new Spell
 		        SpellRunner.b = f.OpenAsBinaryFile
@@ -2269,7 +2337,7 @@ End
 		        
 		        // 20 is bytes in header
 		        SpellRunner.stringStart = (SpellRunner.recordCount * SpellRunner.recordSize) + 20
-		        SpellRunner.Run
+		        'SpellRunner.Run
 		      case "SpellIcon.dbc"
 		        SpellIconRunner = new SpellIcon
 		        SpellIconRunner.b = f.OpenAsBinaryFile
@@ -2286,7 +2354,7 @@ End
 		        
 		        // 20 is bytes in header
 		        SpellIconRunner.stringStart = (SpellIconRunner.recordCount * SpellIconRunner.recordSize) + 20
-		        SpellIconRunner.run
+		        'SpellIconRunner.run
 		      case "Talent.dbc"
 		        TalentRunner = new Talent
 		        TalentRunner.b = f.OpenAsBinaryFile
@@ -2303,7 +2371,7 @@ End
 		        
 		        // 20 is bytes in header
 		        TalentRunner.stringStart = (TalentRunner.recordCount * TalentRunner.recordSize) + 20
-		        TalentRunner.Run
+		        'TalentRunner.Run
 		      case "TalentTab.dbc"
 		        TalentTabRunner = new TalentTab
 		        TalentTabRunner.b = f.OpenAsBinaryFile
@@ -2320,7 +2388,7 @@ End
 		        
 		        // 20 is bytes in header
 		        TalentTabRunner.stringStart = (TalentTabRunner.recordCount * TalentTabRunner.recordSize) + 20
-		        TalentTabRunner.Run
+		        'TalentTabRunner.Run
 		      case "WorldMapArea.dbc"
 		        WorldMapAreaRunner = new WorldMapArea
 		        WorldMapAreaRunner.b = f.OpenAsBinaryFile
@@ -2337,7 +2405,7 @@ End
 		        
 		        // 20 is bytes in header
 		        WorldMapAreaRunner.stringStart = (WorldMapAreaRunner.recordCount * WorldMapAreaRunner.recordSize) + 20
-		        WorldMapAreaRunner.Run
+		        'WorldMapAreaRunner.Run
 		      case "AreaTable.dbc"
 		        AreaTableRunner = new AreaTable
 		        AreaTableRunner.b = f.OpenAsBinaryFile
@@ -2354,7 +2422,7 @@ End
 		        
 		        // 20 is bytes in header
 		        AreaTableRunner.stringStart = (AreaTableRunner.recordCount * AreaTableRunner.recordSize) + 20
-		        AreaTableRunner.Run
+		        'AreaTableRunner.Run
 		      case "ItemRandomProperties.dbc"
 		        ItemRandomPropertiesRunner = new ItemRandomProperties
 		        ItemRandomPropertiesRunner.b = f.OpenAsBinaryFile
@@ -2371,7 +2439,7 @@ End
 		        
 		        // 20 is bytes in header
 		        ItemRandomPropertiesRunner.stringStart = (ItemRandomPropertiesRunner.recordCount * ItemRandomPropertiesRunner.recordSize) + 20
-		        ItemRandomPropertiesRunner.Run
+		        'ItemRandomPropertiesRunner.Run
 		      case "ItemRandomSuffix.dbc"
 		        ItemRandomSuffixRunner = new ItemRandomSuffix
 		        ItemRandomSuffixRunner.b = f.OpenAsBinaryFile
@@ -2388,7 +2456,7 @@ End
 		        
 		        // 20 is bytes in header
 		        ItemRandomSuffixRunner.stringStart = (ItemRandomSuffixRunner.recordCount * ItemRandomSuffixRunner.recordSize) + 20
-		        ItemRandomSuffixRunner.Run
+		        'ItemRandomSuffixRunner.Run
 		      else
 		        TextArea1.text = f.name + " not handled"
 		      end select
@@ -2397,9 +2465,100 @@ End
 		    end if
 		  next
 		  
+		  PushButton2.Enabled = true
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton2
+	#tag Event
+		Sub Action()
+		  AchievementRunner.Run
+		  Achievement_CategoryRunner.Run
+		  Achievement_CriteriaRunner.Run
+		  FactionRunner.Run
+		  FactionTemplateRunner.Run
+		  GemPropertiesRunner.Run
+		  GlyphPropertiesRunner.Run
+		  ItemRunner.Run
+		  ItemDisplayInfoRunner.Run
+		  SpellItemEnchantmentRunner.Run
+		  ItemExtendedCostRunner.Run
+		  ItemSetRunner.Run
+		  MapRunner.Run
+		  SkillLineRunner.Run
+		  SkillLineAbilityRunner.Run
+		  SkillRaceClassInfoRunner.Run
+		  SpellRunner.Run
+		  SpellIconRunner.Run
+		  TalentRunner.Run
+		  TalentTabRunner.Run
+		  WorldMapAreaRunner.Run
+		  AreaTableRunner.Run
+		  ItemRandomPropertiesRunner.Run
+		  ItemRandomSuffixRunner.Run
 		  
-		  
-		  
+		  PushButton3.Enabled = true
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton3
+	#tag Event
+		Sub Action()
+		  if PushButton3.Caption = "Pause" then
+		    AchievementRunner.Suspend
+		    Achievement_CategoryRunner.Suspend
+		    Achievement_CriteriaRunner.Suspend
+		    FactionRunner.Suspend
+		    FactionTemplateRunner.Suspend
+		    GemPropertiesRunner.Suspend
+		    GlyphPropertiesRunner.Suspend
+		    ItemRunner.Suspend
+		    ItemDisplayInfoRunner.Suspend
+		    SpellItemEnchantmentRunner.Suspend
+		    ItemExtendedCostRunner.Suspend
+		    ItemSetRunner.Suspend
+		    MapRunner.Suspend
+		    SkillLineRunner.Suspend
+		    SkillLineAbilityRunner.Suspend
+		    SkillRaceClassInfoRunner.Suspend
+		    SpellRunner.Suspend
+		    SpellIconRunner.Suspend
+		    TalentRunner.Suspend
+		    TalentTabRunner.Suspend
+		    WorldMapAreaRunner.Suspend
+		    AreaTableRunner.Suspend
+		    ItemRandomPropertiesRunner.Suspend
+		    ItemRandomSuffixRunner.Suspend
+		    
+		    PushButton3.Caption = "Resume"
+		  else
+		    AchievementRunner.Resume
+		    Achievement_CategoryRunner.Resume
+		    Achievement_CriteriaRunner.Resume
+		    FactionRunner.Resume
+		    FactionTemplateRunner.Resume
+		    GemPropertiesRunner.Resume
+		    GlyphPropertiesRunner.Resume
+		    ItemRunner.Resume
+		    ItemDisplayInfoRunner.Resume
+		    SpellItemEnchantmentRunner.Resume
+		    ItemExtendedCostRunner.Resume
+		    ItemSetRunner.Resume
+		    MapRunner.Resume
+		    SkillLineRunner.Resume
+		    SkillLineAbilityRunner.Resume
+		    SkillRaceClassInfoRunner.Resume
+		    SpellRunner.Resume
+		    SpellIconRunner.Resume
+		    TalentRunner.Resume
+		    TalentTabRunner.Resume
+		    WorldMapAreaRunner.Resume
+		    AreaTableRunner.Resume
+		    ItemRandomPropertiesRunner.Resume
+		    ItemRandomSuffixRunner.Resume
+		    
+		    PushButton3.Caption = "Pause"
+		  end if
 		End Sub
 	#tag EndEvent
 #tag EndEvents

@@ -19,8 +19,13 @@ Inherits RunnerClass
 		    dim demands as integer
 		    dim referencedAchievement as integer
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgAchievement.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgAchievement.TextColor = RGB(red, 0, blue)
 		      Window1.ProgAchievement.Refresh
 		      
 		      id = b.ReadInt32
@@ -86,6 +91,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgAchievement.text = "COMPLETE"
+		      Window1.ProgAchievement.TextColor = &c0000FF
 		      Window1.ProgAchievement.Refresh
 		      exit do
 		    end if

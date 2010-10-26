@@ -16,8 +16,13 @@ Inherits RunnerClass
 		    dim DungeonMap As integer
 		    dim Unknown As integer
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgWorldMapArea.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgWorldMapArea.TextColor = RGB(red, 0, blue)
 		      Window1.ProgWorldMapArea.Refresh
 		      
 		      ID = b.ReadInt32
@@ -52,6 +57,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgWorldMapArea.text = "COMPLETE"
+		      Window1.ProgWorldMapArea.TextColor = &c0000FF
 		      Window1.ProgWorldMapArea.Refresh
 		      exit do
 		    end if

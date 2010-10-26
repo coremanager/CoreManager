@@ -180,8 +180,13 @@ Inherits RunnerClass
 		    dim unk9 as UInt32
 		    dim unk10 as UInt32
 		    
+		    dim red, blue As integer
+		    
 		    if record < recordCount then
 		      Window1.ProgSpell.text = str(Record) + "/" + str(recordCount - 1)
+		      blue = floor((Record / recordCount) * 255)
+		      red = 255 - blue
+		      Window1.ProgSpell.TextColor = RGB(red, 0, blue)
 		      Window1.ProgSpell.Refresh
 		      
 		      Id = b.ReadInt32
@@ -444,6 +449,7 @@ Inherits RunnerClass
 		      Record = Record + 1
 		    else
 		      Window1.ProgSpell.text = "COMPLETE"
+		      Window1.ProgSpell.TextColor = &c0000FF
 		      Window1.ProgSpell.Refresh
 		      exit do
 		    end if
