@@ -1998,11 +1998,7 @@ End
 		  end if
 		  
 		  if db.Connect then
-		    if Localization = 1 or Localization = 4 or Localization = 5 then
-		      db.SQLExecute("SET NAMES 'utf16'")
-		    else
-		      db.SQLExecute("SET NAMES 'utf8'")
-		    end if
+		    db.SQLExecute("SET NAMES 'utf8'")
 		  end if
 		  
 		  Dim dlg as New SelectFolderDialog
@@ -2472,6 +2468,33 @@ End
 #tag Events PushButton2
 	#tag Event
 		Sub Action()
+		  if db.Connect then
+		    db.SQLExecute("TRUNCATE TABLE `achievement`")
+		    db.SQLExecute("TRUNCATE TABLE `achievement_category`")
+		    db.SQLExecute("TRUNCATE TABLE `achievement_criteria`")
+		    db.SQLExecute("TRUNCATE TABLE `areatable`")
+		    db.SQLExecute("TRUNCATE TABLE `faction`")
+		    db.SQLExecute("TRUNCATE TABLE `factiontemplate`")
+		    db.SQLExecute("TRUNCATE TABLE `gemproperties`")
+		    db.SQLExecute("TRUNCATE TABLE `glyphproperties`")
+		    db.SQLExecute("TRUNCATE TABLE `item`")
+		    db.SQLExecute("TRUNCATE TABLE `itemdisplayinfo`")
+		    db.SQLExecute("TRUNCATE TABLE `itemextendedcost`")
+		    db.SQLExecute("TRUNCATE TABLE `itemrandomproperties`")
+		    db.SQLExecute("TRUNCATE TABLE `itemrandomsuffix`")
+		    db.SQLExecute("TRUNCATE TABLE `itemset`")
+		    db.SQLExecute("TRUNCATE TABLE `map`")
+		    db.SQLExecute("TRUNCATE TABLE `skillline`")
+		    db.SQLExecute("TRUNCATE TABLE `skilllineability`")
+		    db.SQLExecute("TRUNCATE TABLE `skillraceclassinfo`")
+		    db.SQLExecute("TRUNCATE TABLE `spell`")
+		    db.SQLExecute("TRUNCATE TABLE `spellicon`")
+		    db.SQLExecute("TRUNCATE TABLE `spellitemenchantment`")
+		    db.SQLExecute("TRUNCATE TABLE `talent`")
+		    db.SQLExecute("TRUNCATE TABLE `talenttab`")
+		    db.SQLExecute("TRUNCATE TABLE `worldmaparea`")
+		  end if
+		  
 		  AchievementRunner.Run
 		  Achievement_CategoryRunner.Run
 		  Achievement_CriteriaRunner.Run

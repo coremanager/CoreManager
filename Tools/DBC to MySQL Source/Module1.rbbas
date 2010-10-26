@@ -3,13 +3,7 @@ Protected Module Module1
 	#tag Method, Flags = &h0
 		Function GetString(position As UInt32, b As BinaryStream) As string
 		  dim temp As string
-		  dim c,c1 As integer
-		  
-		  if Localization = 1 or Localization = 4 or Localization = 5 then
-		    temp = DefineEncoding(temp, Encodings.UTF16)
-		  else
-		    temp = DefineEncoding(temp, Encodings.UTF8)
-		  end if
+		  dim c,c1,c2 As integer
 		  
 		  b.Position = position
 		  
@@ -19,9 +13,16 @@ Protected Module Module1
 		      if c < 128 then
 		        temp = temp + temp.Encoding.Chr(c)
 		      else
-		        c1 = b.ReadUInt8
-		        c = (c * 256) + c1
-		        temp = temp + temp.Encoding.Chr(c)
+		        if Localization = 1 or Localization = 4 or Localization = 5 then
+		          c1 = b.ReadUInt8
+		          c2 = b.ReadUInt8
+		          c = (((c * 256) + c1) * 256) + c2
+		          temp = temp + temp.Encoding.Chr(c)
+		        else
+		          c1 = b.ReadUInt8
+		          c = (c * 256) + c1
+		          temp = temp + temp.Encoding.Chr(c)
+		        end if
 		      end if
 		    else
 		      exit do
