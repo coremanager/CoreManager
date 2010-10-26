@@ -448,6 +448,7 @@ table.lined td
 }
 tr td div.gradient_p, div.gradient_pp
 {
+  /*position: relative;*/
 	float: left;
 	clear: right;
 	display: table-cell;
@@ -1393,7 +1394,7 @@ tr td.rep0
 /* CHAR.PHP */
 #char_character_sheet
 {
-	width: 580px;
+	width: 600px;
 }
 #char_icon_padding
 {
@@ -1624,7 +1625,7 @@ tr td.rep0
 }
 
 /* FOOTER.PHP */
-#footer_register_login
+.footer_register_login
 {
 	width: 130px;
 }

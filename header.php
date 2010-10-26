@@ -20,13 +20,15 @@
 
 $time_start = microtime(true);
 // resuming login session if available, or start new one
-if (ini_get('session.auto_start'));
-else session_start();
+if ( ini_get('session.auto_start') )
+  ;
+else
+  session_start();
 
 //---------------------Load Default and User Configuration---------------------
-if (file_exists('configs/config.php'))
+if ( file_exists('configs/config.php') )
 {
-  if (!file_exists('configs/config.dist.php'))
+  if ( !file_exists('configs/config.dist.php') )
     exit('<center><br><code>\'configs/config.dist.php\'</code> not found,<br>
           please restore <code>\'configs/config.dist.php\'</code></center>');
   require_once 'configs/config.php';
@@ -44,24 +46,26 @@ if ( ( $core < 1 ) || ( $core > 3 ) )
   die("Invalid Core selected.");
 
 //---------------------Error reports for Debugging-----------------------------
-if ($debug) $tot_queries = 0;
-if (1 < $debug)
+if ( $debug )
+  $tot_queries = 0;
+if ( $debug > 1 )
   error_reporting (E_ALL);
 else
   error_reporting (E_COMPILE_ERROR);
 
 //---------------------Loading User Theme and Language Settings----------------
-if (isset($_COOKIE["theme"]))
+if ( isset($_COOKIE["theme"]) )
 {
-  if (is_dir('themes/'.$_COOKIE["theme"]))
-    if (is_file('themes/'.$_COOKIE["theme"].'/'.$_COOKIE["theme"].'_1024.css'))
+  if ( is_dir('themes/'.$_COOKIE["theme"]) )
+    if ( is_file('themes/'.$_COOKIE["theme"].'/'.$_COOKIE["theme"].'_1024.css') )
       $theme = $_COOKIE["theme"];
 }
 
-if (isset($_COOKIE["lang"]))
+if ( isset($_COOKIE["lang"]) )
 {
   $lang = $_COOKIE["lang"];
-  if (file_exists('lang/'.$lang.'.php'));
+  if ( file_exists('lang/'.$lang.'.php') )
+    ;
   else
     $lang = $language;
 }
@@ -69,7 +73,7 @@ else
   $lang = $language;
 
 //---------------------Current Filename----------------------------------------
-$cur_filename = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1);
+$cur_filename = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], "/")+1);
 
 //---------------------Loading Libraries---------------------------------------
 require_once 'libs/db_lib.php';
@@ -125,25 +129,26 @@ $output .= '
 
 // check for host php script execution time limit,
 //  warn user if it is not high enough for CoreManager to run
-if (ini_get('max_execution_time') < 1800)
+if ( ini_get('max_execution_time') < 1800 )
 {
-  if (ini_set('max_execution_time',0));
+  if ( ini_set('max_execution_time',0) )
+    ;
   else
     error('Error - max_execution_time not set.<br /> Please set it manually to 0, in php.ini for full functionality.');
 }
 
 //---------------------Guest login Predefines----------------------------------
-if ($allow_anony && empty($_SESSION["logged_in"]))
+if ( $allow_anony && empty($_SESSION["logged_in"]) )
 {
   $_SESSION["user_lvl"] = -1;
   $_SESSION["gm_lvl"] = '-1';
   $_SESSION["login"] = $anony_uname;
   $_SESSION["user_id"] = -1;
   $_SESSION["realm_id"] = $anony_realm_id;
-  $_SESSION["client_ip"] = ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv('REMOTE_ADDR');
+  $_SESSION["client_ip"] = ( ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv('REMOTE_ADDR') );
 }
 
-$realm_id = ( isset($_GET["realm_id"]) ) ? (int)$_GET["realm_id"] : $_SESSION["realm_id"];
+$realm_id = ( ( isset($_GET["realm_id"]) ) ? (int)$_GET["realm_id"] : $_SESSION["realm_id"] );
 
 // set up databse global
 $sql = array();
@@ -164,11 +169,11 @@ $sql["world"] = new SQL;
 $sql["world"]->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name'], $world_db[$realm_id]["encoding"]);
 
 //----Check if a user has login, if Guest mode is enabled, code above will login as Guest
-if (isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSION["realm_id"]) && empty($_GET["err"]))
+if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSION["realm_id"]) && empty($_GET["err"]) )
 {
   // check for host php script max memory allowed,
   // setting it higher if it is not enough for CoreManager to run
-  if (ini_get('memory_limit') < 16)
+  if ( ini_get('memory_limit') < 16 )
     @ini_set('memory_limit', '16M');
 
   // resuming logged in user settings
@@ -191,15 +196,15 @@ if (isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSION
               <ul id="menubar">';
 
   $action_permission = array();
-  foreach ($menu_array as $trunk)
+  foreach ( $menu_array as $trunk )
   {
     // ignore "invisible array" this is for setting security read/write values
     // for not accessible elements not in the navbar!
     if ('invisible' == $trunk[1])
     {
-      foreach ($trunk[2] as $branch)
+      foreach ( $trunk[2] as $branch )
       {
-        if($branch[0] === $lookup_file)
+        if ( $branch[0] === $lookup_file )
         {
           $action_permission["view"]   = $branch[2];
           $action_permission["insert"] = $branch[3];
@@ -212,23 +217,23 @@ if (isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSION
     {
       $output .= '
                 <li><a href="'.$trunk[0].'">'.( ( lang("header", $trunk[1]) ) ? lang("header", $trunk[1]) : $trunk[1] ).'</a>';
-      if(isset($trunk[2][0]))
+      if ( isset($trunk[2][0]) )
         $output .= '
                   <ul>';
-      foreach ($trunk[2] as $branch)
+      foreach ( $trunk[2] as $branch )
       {
-        if($branch[0] === $lookup_file)
+        if ( $branch[0] === $lookup_file )
         {
           $action_permission["view"]   = $branch[2];
           $action_permission["insert"] = $branch[3];
           $action_permission["update"] = $branch[4];
           $action_permission["delete"] = $branch[5];
         }
-        if ($user_lvl >= $branch[2])
+        if ( $user_lvl >= $branch[2] )
           $output .= '
                     <li><a href="'.$branch[0].'">'.( ( lang("header", $branch[1]) ) ? lang("header", $branch[1]) : $branch[1] ).'</a></li>';
       }
-      if(isset($trunk[2][0]))
+      if ( isset($trunk[2][0]) )
         $output .= '
                   </ul>';
       $output .= '
@@ -251,11 +256,11 @@ if (isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSION
   {
     $output .= '
                     <li><span style="text-align:center"><a href="#">'.lang("header", "realms").'</a></span></li>';
-    while ($realm = $sql["mgr"]->fetch_assoc($result))
+    while ( $realm = $sql["mgr"]->fetch_assoc($result) )
     {
-      if(isset($server[$realm["id"]]))
+      if ( isset($server[$realm["id"]]) )
       {
-        $set = ($realm_id === $realm["id"]) ? '>' : '';
+        $set = ( ( $realm_id === $realm["id"] ) ? '>' : '' );
         $output .= '
                     <li><a href="realm.php?action=set_def_realm&amp;id='.$realm["id"].'&amp;url='.$_SERVER["PHP_SELF"].'">'.htmlentities($set.' '.$realm["name"]).'</a></li>';
       }
@@ -265,7 +270,7 @@ if (isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSION
   }
 
   // we have a different menu for guest account
-  if($allow_anony && empty($_SESSION["logged_in"]))
+  if ( $allow_anony && empty($_SESSION["logged_in"]) )
   {
     $output .= '
                     <li><span style="text-align:center"><a href="#">'.lang("header", "account").'</a></span></li>
@@ -280,11 +285,11 @@ if (isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSION
       $result = $sql["char"]->query('SELECT guid, name, race, class, level, gender FROM characters WHERE account = '.$user_id.'');
 
     // this puts links to user characters of active realm in "My Account" menu
-    if($sql["char"]->num_rows($result))
+    if ( $sql["char"]->num_rows($result) )
     {
       $output .= '
                     <li><span style="text-align:center"><a href="#">'.lang("header", "my_characters").'</a></span></li>';
-      while ($char = $sql["char"]->fetch_assoc($result))
+      while ( $char = $sql["char"]->fetch_assoc($result) )
       {
         $output .= '
                     <li>
@@ -354,8 +359,8 @@ if ( ( $allow_anony && empty($_SESSION["logged_in"]) ) && ( ( $filename != 'logi
         <table>
           <tr>
             <td>
-              <a class="button" id="footer_register_login" href="register.php">Register</a>
-              <a class="button" id="footer_register_login" href="login.php">Login</a>
+              <a class="button footer_register_login" href="register.php">Register</a>
+              <a class="button footer_register_login" href="login.php">Login</a>
             </td>
           </tr>
         </table>

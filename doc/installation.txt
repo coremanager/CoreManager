@@ -1,22 +1,15 @@
 REQUIREMENTS: 
 
   WebServer with PHP support.
-  MySQL 5.0.61 and above.     ( http://dev.mysql.com/downloads/mysql/5.0.html#downloads )
-  PHP 5.1.0 and above.        ( http://www.php.net/downloads.php)
-  GD Libraries Enabled.
+  MySQL 5.5.6 and above.       http://dev.mysql.com/downloads/mysql/5.5.html
+  PHP 5.1.0 and above.         http://www.php.net/downloads.php
+  PHP GD Libraries Enabled.
 
   For Windows users:
-    If you are using Apache2,  ( http://httpd.apache.org/ )
+    If you are using Apache2,  http://httpd.apache.org/
       We recommend PHP VC6 TS.
     If you are not using Apache2,
       We recommend PHP VC9 NTS.
-
-  Firefox Web Browser.
-  Opera Web Browser 10.
-  Java SE 5.0.
-
-  For ArcEmu users:
-    ArcEmu r3026 or higher.
 
 
 NOTICE:

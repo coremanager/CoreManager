@@ -6,7 +6,7 @@ CREATE TABLE `achievement` (
   `map` int(11) NOT NULL DEFAULT '0',
   `previous` int(11) unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
-  `description` varchar(255) DEFAULT '',
+  `description` longtext,
   `category` int(11) unsigned NOT NULL DEFAULT '0',
   `points` int(11) unsigned NOT NULL DEFAULT '0',
   `orderInGroup` int(11) unsigned NOT NULL DEFAULT '0',
@@ -16,7 +16,7 @@ CREATE TABLE `achievement` (
   `demands` int(11) unsigned NOT NULL DEFAULT '0',
   `referencedAchievement` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -26,7 +26,7 @@ CREATE TABLE `achievement_category` (
   `Name` varchar(255) DEFAULT NULL,
   `GroupID` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -40,14 +40,14 @@ CREATE TABLE `achievement_criteria` (
   `Value_2` int(11) DEFAULT NULL,
   `Requirement_3` int(11) DEFAULT NULL,
   `Value_3` int(11) DEFAULT NULL,
-  `Description` varchar(255) DEFAULT NULL,
+  `Description` longtext DEFAULT NULL,
   `CompletionFlag` int(11) DEFAULT NULL,
   `GroupFlag` int(11) DEFAULT NULL,
   `Unknown` int(11) DEFAULT NULL,
   `Timelimit` int(11) DEFAULT NULL,
   `Order` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -73,7 +73,7 @@ CREATE TABLE `areatable` (
   `Unk7` float DEFAULT NULL,
   `Unk8` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -98,9 +98,9 @@ CREATE TABLE `faction` (
   `Condition4` int(11) DEFAULT NULL,
   `ParentFaction` int(11) DEFAULT NULL,
   `Name` varchar(255) DEFAULT NULL,
-  `Description` varchar(255) DEFAULT NULL,
+  `Description` longtext DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -120,7 +120,7 @@ CREATE TABLE `factiontemplate` (
   `Friend3` int(11) DEFAULT NULL,
   `Friend4` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -131,7 +131,7 @@ CREATE TABLE `gemproperties` (
   `Unknown2` int(11) DEFAULT NULL,
   `Color` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -141,7 +141,7 @@ CREATE TABLE `glyphproperties` (
   `TypeFlags` int(11) DEFAULT NULL,
   `GlyphIconId` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -155,7 +155,7 @@ CREATE TABLE `item` (
   `InventorySlotID` int(11) DEFAULT NULL,
   `SheathID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ItemID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -163,7 +163,7 @@ CREATE TABLE `itemdisplayinfo` (
   `ID` int(11) NOT NULL,
   `IconName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -185,7 +185,7 @@ CREATE TABLE `itemextendedcost` (
   `RequiredPersonalArenaRating` int(11) DEFAULT NULL,
   `PurchaseGroup` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -200,7 +200,7 @@ CREATE TABLE `itemrandomproperties` (
   `Suffix` varchar(255) DEFAULT NULL,
   `SuffixFlags` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -219,7 +219,7 @@ CREATE TABLE `itemrandomsuffix` (
   `SpellItemEnchantment_4_Value` int(11) DEFAULT NULL,
   `SpellItemEnchantment_5_Value` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -255,7 +255,7 @@ CREATE TABLE `itemset` (
   `SkillLine` int(11) DEFAULT NULL,
   `ReqSkillLevel` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -278,7 +278,7 @@ CREATE TABLE `map` (
   `ResetTimeOverride` int(11) DEFAULT NULL,
   `NumberOfPlayers` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -287,12 +287,12 @@ CREATE TABLE `skillline` (
   `SkillLineCategory` int(11) DEFAULT NULL,
   `SkillCostID` int(11) DEFAULT NULL,
   `Name` varchar(255) DEFAULT NULL,
-  `Description` varchar(255) DEFAULT NULL,
+  `Description` longtext DEFAULT NULL,
   `SpellIcon` int(11) DEFAULT NULL,
   `Verb` varchar(255) DEFAULT NULL,
   `CanLink` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -312,7 +312,7 @@ CREATE TABLE `skilllineability` (
   `CharacterPoints1` int(11) DEFAULT NULL,
   `CharacterPoints2` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -326,7 +326,7 @@ CREATE TABLE `skillraceclassinfo` (
   `SkillTierID` int(11) unsigned DEFAULT NULL,
   `SkillCostID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -507,7 +507,7 @@ CREATE TABLE `spell` (
   `unk9` int(11) unsigned DEFAULT NULL,
   `unk10` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -515,7 +515,7 @@ CREATE TABLE `spellicon` (
   `ID` int(11) NOT NULL,
   `Name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -523,7 +523,7 @@ CREATE TABLE `spellitemenchantment` (
   `ID` int(11) NOT NULL,
   `EnchantmentName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -552,7 +552,7 @@ CREATE TABLE `talent` (
   `AllowForPetFlags1` int(11) DEFAULT NULL,
   `AllowForPetFlags2` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -566,7 +566,7 @@ CREATE TABLE `talenttab` (
   `TabNumber` int(11) DEFAULT NULL,
   `InternalName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -583,5 +583,5 @@ CREATE TABLE `worldmaparea` (
   `DungeonMap` int(11) DEFAULT NULL,
   `Unknown` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET='utf8';
 /*!40101 SET character_set_client = @saved_cs_client */;

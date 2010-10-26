@@ -155,7 +155,7 @@
   $output .= '
                   <a href="http://www.php.net/" target="_blank"><img src="img/logo-php.png" class="logo_border" alt="php" /></a>
                   <a href="http://www.mysql.com/" target="_blank"><img src="img/logo-mysql.png" class="logo_border" alt="mysql" /></a>
-                  <a href="http://validator.w3.org/check?uri=referer" target="_blank"><img src="img/logo-css.png" class="logo_border" alt="w3" /></a>
+                  <!-- a href="http://validator.w3.org/check?uri=referer" target="_blank"><img src="img/logo-css.png" class="logo_border" alt="w3" /></a -->
                   <br />
                   <a href="http://www.mozilla.com/" target="_blank"><img src="img/logo-firefox.png" class="logo_border" alt="firefox" /></a>
                   <a href="http://www.google.com/chrome?hl=en&brand=CHMI" target="_blank"><img src="img/logo-chrome.png" class="logo_border" alt="firefox" /></a>
