@@ -139,7 +139,7 @@ function dologin()
 //#################################################################################################
 function login()
 {
-  global $output, $characters_db, $server, $remember_me_checked, $sql, $core;
+  global $output, $characters_db, $server, $remember_me_checked, $sql, $core, $site_encoding;
   
   $override_remember_me = $_COOKIE["override_remember_me"];
   // if the cookie doesn't exist, we default to showing
@@ -196,7 +196,7 @@ function login()
     while ( $realm = $sql["mgr"]->fetch_assoc($result) )
       if ( isset($server[$realm["id"]]) )
         $output .= '
-                        <option value="'.$realm["id"].'" '.( $_SESSION["realm_id"] == $realm["id"] ? 'selected="selected"' : '' ).'>'.htmlentities($realm["name"]).'</option>';
+                        <option value="'.$realm["id"].'" '.( $_SESSION["realm_id"] == $realm["id"] ? 'selected="selected"' : '' ).'>'.htmlentities($realm["name"], ENT_COMPAT, $site_encoding).'</option>';
     $output .= '
                       </select>
                     </td>

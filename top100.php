@@ -25,7 +25,7 @@ valid_login($action_permission["view"]);
 function top100($realmid)
 {
   global $output, $logon_db, $characters_db, $server, $itemperpage, $developer_test_mode,
-    $multi_realm_mode, $sql, $core;
+    $multi_realm_mode, $sql, $core, $site_encoding;
 
   $realm_id = $realmid;
 
@@ -203,7 +203,7 @@ function top100($realmid)
                     <select name="n_realms">';
       for($i=1;$i<=$tot_realms;++$i)
         $output .= '
-                      <option value="'.$i.'">'.htmlentities($i).'</option>';
+                      <option value="'.$i.'">'.htmlentities($i, ENT_COMPAT, $site_encoding).'</option>';
       $output .= '
                     </select>
                   </form>
@@ -311,7 +311,7 @@ function top100($realmid)
     $output .= '
               <tr valign="top">
                 <td>'.(++$i+$start).'</td>
-                <td><a href="char.php?id='.$char["guid"].'&amp;realm='.$realm_id.'">'.htmlentities($char["name"]).'</a></td>
+                <td><a href="char.php?id='.$char["guid"].'&amp;realm='.$realm_id.'">'.htmlentities($char["name"], ENT_COMPAT, $site_encoding).'</a></td>
                 <td>
                   <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" alt="'.char_get_race_name($char["race"]).'" onmousemove="toolTip(\''.char_get_race_name($char["race"]).'\', \'item_tooltip\')" onmouseout="toolTip()" />
                   <img src="img/c_icons/'.$char["class"].'.gif" alt="'.char_get_class_name($char["class"]).'" onmousemove="toolTip(\''.char_get_class_name($char["class"]).'\', \'item_tooltip\')" onmouseout="toolTip()" />
@@ -338,7 +338,7 @@ function top100($realmid)
         $time .= $hours.' hours';
 
       $output .= '
-                <td><a href="guild.php?action=view_guild&amp;realm='.$realm_id.'&amp;error=3&amp;id='.$guild_name.'">'.htmlentities($guild_name).'</a></td>
+                <td><a href="guild.php?action=view_guild&amp;realm='.$realm_id.'&amp;error=3&amp;id='.$guild_name.'">'.htmlentities($guild_name, ENT_COMPAT, $site_encoding).'</a></td>
                 <td align="right">
                   '.substr($char["gold"],  0, -4).'<img src="img/gold.gif" alt="" align="middle" />
                   '.substr($char["gold"], -4,  2).'<img src="img/silver.gif" alt="" align="middle" />

@@ -30,7 +30,7 @@ valid_login($action_permission["view"]);
 function char_main()
 {
   global $output,
-    $realm_id, $logon_db, $characters_db, $world_db, $server, $corem_db,
+    $realm_id, $logon_db, $characters_db, $world_db, $server, $corem_db, $site_encoding,
     $action_permission, $user_lvl, $user_name, $user_id,
     $item_datasite, $spell_datasite, $showcountryflag, $timezone, $sql, $core;
 
@@ -599,14 +599,14 @@ function char_main()
                     </td>
                     <td colspan="4">
                       <font class="bold">
-                        '.htmlentities($char["name"]).' -
+                        '.htmlentities($char["name"], ENT_COMPAT, $site_encoding).' -
                         <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                         <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                        - '.lang("char", "level_short").char_get_level_color($char["level"]).'
                       </font>
                       <br />'.lang("char", "location").': '.get_map_name($char["mapid"]).' - '.get_zone_name($char["zoneid"]).'
                       <br />'.lang("char", "honor_points").': '.$char_data[PLAYER_FIELD_HONOR_CURRENCY].' | '.lang("char", "arena_points").': '.$char_data[PLAYER_FIELD_ARENA_CURRENCY].' | '.lang("char", "honor_kills").': '.$char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS].'
-                      <br />'.lang("char", "guild").': '.$guild_name.' | '.lang("char", "rank").': '.htmlentities($guild_rank).'
+                      <br />'.lang("char", "guild").': '.$guild_name.' | '.lang("char", "rank").': '.htmlentities($guild_rank, ENT_COMPAT, $site_encoding).'
                       <br />'.lang("char", "online").': '.( ( $char["online"] ) ? '<img src="img/up.gif" onmousemove="oldtoolTip(\'Online\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="online" />' : '<img src="img/down.gif" onmousemove="oldtoolTip(\'Offline\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="offline" />' );
       if ( $showcountryflag )
       {

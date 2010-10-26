@@ -22,7 +22,7 @@ require_once("header.php");
 require_once("libs/char_lib.php");
 valid_login($action_permission["view"]);
 
-global $output, $characters_db, $realm_id, $itemperpage, $core;
+global $output, $characters_db, $realm_id, $itemperpage, $core, $site_encoding;
 
 $output .= '
       <div class="bubble">';
@@ -102,7 +102,7 @@ while ( $char = $sql["char"]->fetch_assoc($query) )
   $output .= '
               <tr>
                 <td>
-                  <a href="char.php?id='.$char["guid"].'">'.htmlentities($char["name"]).'</a>
+                  <a href="char.php?id='.$char["guid"].'">'.htmlentities($char["name"], ENT_COMPAT, $site_encoding).'</a>
                 </td>
                 <td>
                   <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" />
@@ -120,7 +120,7 @@ while ( $char = $sql["char"]->fetch_assoc($query) )
                 <td>'.$char["kills"].'</td>
                 <td>'.$char["arena"].'</td>
                 <td>
-                  <a href="guild.php?action=view_guild&amp;error=3&amp;id='.$char["GNAME"].'">'.htmlentities($guild_name).'</a>
+                  <a href="guild.php?action=view_guild&amp;error=3&amp;id='.$char["GNAME"].'">'.htmlentities($guild_name, ENT_COMPAT, $site_encoding).'</a>
                 </td>
               </tr>';
 }
@@ -201,7 +201,7 @@ while ( $char = $sql["char"]->fetch_assoc($query) )
   $output .= '
               <tr>
                 <td>
-                  <a href="char.php?id='.$char["guid"].'">'.htmlentities($char["name"]).'</a>
+                  <a href="char.php?id='.$char["guid"].'">'.htmlentities($char["name"], ENT_COMPAT, $site_encoding).'</a>
                 </td>
                 <td>
                   <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" />
@@ -219,7 +219,7 @@ while ( $char = $sql["char"]->fetch_assoc($query) )
                 <td>'.$char["kills"].'</td>
                 <td>'.$char["arena"].'</td>
                 <td>
-                  <a href="guild.php?action=view_guild&amp;error=3&amp;id='.$char["GNAME"].'">'.htmlentities($guild_name).'</a>
+                  <a href="guild.php?action=view_guild&amp;error=3&amp;id='.$char["GNAME"].'">'.htmlentities($guild_name, ENT_COMPAT, $site_encoding).'</a>
                 </td>
               </tr>';
 }

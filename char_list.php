@@ -27,7 +27,7 @@ valid_login($action_permission["view"]);
 //########################################################################################################################
 function browse_chars()
 {
-  global $output, $logon_db, $corem_db, $corem_db, $characters_db, $realm_id,
+  global $output, $logon_db, $corem_db, $corem_db, $characters_db, $realm_id, $site_encoding,
     $action_permission, $user_lvl, $user_name, $showcountryflag, $itemperpage, $timezone, $sql, $core;
 
   //==========================$_GET and SECURE========================
@@ -446,13 +446,13 @@ function browse_chars()
       $output .= '
                 </td>
                 <td>'.$char["guid"].'</td>
-                <td><a href="char.php?id='.$char["guid"].'">'.htmlentities($char["name"]).'</a></td>';
+                <td><a href="char.php?id='.$char["guid"].'">'.htmlentities($char["name"], ENT_COMPAT, $site_encoding).'</a></td>';
       if ( $sn["ScreenName"] )
         $output .= '
-                <td><a href="user.php?action=edit_user&amp;error=11&amp;acct='.$char["acct"].'">'.htmlentities($sn["ScreenName"]).'</a></td>';
+                <td><a href="user.php?action=edit_user&amp;error=11&amp;acct='.$char["acct"].'">'.htmlentities($sn["ScreenName"], ENT_COMPAT, $site_encoding).'</a></td>';
       else
         $output .= '
-                <td><a href="user.php?action=edit_user&amp;error=11&amp;acct='.$char["acct"].'">'.htmlentities($owner_acc_name).'</a></td>';
+                <td><a href="user.php?action=edit_user&amp;error=11&amp;acct='.$char["acct"].'">'.htmlentities($owner_acc_name, ENT_COMPAT, $site_encoding).'</a></td>';
       $output .= '
                 <td><img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
                 <td><img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
@@ -460,7 +460,7 @@ function browse_chars()
                 <td class="small"><span onmousemove="oldtoolTip(\'MapID:'.$char["mapid"].'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_map_name($char["mapid"]).'</span></td>
                 <td class="small"><span onmousemove="oldtoolTip(\'ZoneID:'.$char["zoneid"].'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_zone_name($char["zoneid"]).'</span></td>
                 <td>'.$char["highest_rank"].'</td>
-                <td class="small"><a href="guild.php?action=view_guild&amp;error=3&amp;id='.$guild_id.'">'.htmlentities($guild_name).'</a></td>
+                <td class="small"><a href="guild.php?action=view_guild&amp;error=3&amp;id='.$guild_id.'">'.htmlentities($guild_name, ENT_COMPAT, $site_encoding).'</a></td>
                 <td class="small">'.$lastseen.'</td>
                 <td>'.( ( $char["online"] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>';
       if ( $showcountryflag )

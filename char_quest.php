@@ -28,7 +28,7 @@ valid_login($action_permission["view"]);
 function char_quest()
 {
   global $output, $realm_id, $world_db, $logon_db, $characters_db, $action_permission,
-    $user_lvl, $user_name, $quest_datasite, $itemperpage, $sql, $core;
+    $site_encoding, $user_lvl, $user_name, $quest_datasite, $itemperpage, $sql, $core;
 
   if ( empty($_GET["id"]) )
     error(lang("global", "empty_fields"));
@@ -114,7 +114,7 @@ function char_quest()
             </div>
             <div id="tab_content">
               <font class="bold">
-                '.htmlentities($char["name"]).' -
+                '.htmlentities($char["name"], ENT_COMPAT, $site_encoding).' -
                 <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                 <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
               </font>
@@ -168,7 +168,7 @@ function char_quest()
                 <tr>
                   <td>'.$data[0].'</td>
                   <td>('.$data[1].')</td>
-                  <td align="left"><a href="'.$quest_datasite.$data[0].'" target="_blank">'.htmlentities($data[2]).'</a></td>
+                  <td align="left"><a href="'.$quest_datasite.$data[0].'" target="_blank">'.htmlentities($data[2], ENT_COMPAT, $site_encoding).'</a></td>
                   <td><img src="img/aff_qst.png" width="14" height="14" alt="" /></td>
                 </tr>';
         }
@@ -202,7 +202,7 @@ function char_quest()
                 <tr>
                   <td>'.$data[0].'</td>
                   <td>('.$data[1].')</td>
-                  <td align="left"><a href="'.$quest_datasite.$data[0].'" target="_blank">'.htmlentities($data[2]).'</a></td>
+                  <td align="left"><a href="'.$quest_datasite.$data[0].'" target="_blank">'.htmlentities($data[2], ENT_COMPAT, $site_encoding).'</a></td>
                   <td><img src="img/aff_'.( ( $data[3] ) ? 'tick' : 'qst' ).'.png" width="14" height="14" alt="" /></td>
                   <td><img src="img/aff_tick.png" width="14" height="14" alt="" /></td>
                 </tr>';

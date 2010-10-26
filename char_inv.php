@@ -30,7 +30,7 @@ valid_login($action_permission["view"]);
 //#############################################################################
 function char_inv()
 {
-  global $output, $realm_id, $characters_db, $world_db, $corem_db,
+  global $output, $realm_id, $characters_db, $world_db, $corem_db, $site_encoding,
     $action_permission, $user_lvl, $user_name,
     $item_datasite, $sql, $core;
 
@@ -348,7 +348,7 @@ function char_inv()
             </div>
             <div id="tab_content">
               <font class="bold">
-                '.htmlentities($char["name"]).' -
+                '.htmlentities($char["name"], ENT_COMPAT, $site_encoding).' -
                 <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif"
                   onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                 <img src="img/c_icons/'.$char["class"].'.gif"

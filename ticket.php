@@ -26,7 +26,8 @@ valid_login($action_permission["view"]);
 //#############################################################################
 function browse_tickets()
 {
-  global $output, $characters_db, $realm_id, $action_permission, $user_lvl, $itemperpage, $sql, $core;
+  global $output, $characters_db, $realm_id, $action_permission, $user_lvl, $itemperpage, $sql, $core,
+    $site_encoding;
 
   //==========================$_GET and SECURE=================================
   $start = (isset($_GET["start"])) ? $sql["char"]->quote_smart($_GET["start"]) : 0;
@@ -126,11 +127,11 @@ function browse_tickets()
                 <td><a href="ticket.php?action=edit_ticket&amp;error=4&amp;id='.$ticket["guid"].'"><img src="./img/edit.png" alt="'.lang("global", "edit").'" /></a></td>';
     $output .= '
                 <td>'.$ticket["guid"].'</td>
-                <td><a href="char.php?id='.$ticket["player"].'">'.htmlentities($ticket["opener"]).'</a></td>
-                <td>'.htmlentities($ticket["message"]).'</td>
+                <td><a href="char.php?id='.$ticket["player"].'">'.htmlentities($ticket["opener"], ENT_COMPAT, $site_encoding).'</a></td>
+                <td>'.htmlentities($ticket["message"], ENT_COMPAT, $site_encoding).'</td>
                 <td>'.date('G:i:s m-d-Y', $ticket["timestamp"]).'</td>';
     $output .= '
-                <td><a href="char.php?id='.$ticket["status"].'">'.htmlentities($ticket["closer"]).'</a></td>';
+                <td><a href="char.php?id='.$ticket["status"].'">'.htmlentities($ticket["closer"], ENT_COMPAT, $site_encoding).'</a></td>';
     $output .= '
               </tr>';
   }
@@ -239,7 +240,7 @@ function edit_ticket()
                   </tr>
                   <tr>
                     <td>'.lang("ticket", "submitted_by").':</td>
-                    <td><a href="char.php?id='.$ticket["player"].'">'.htmlentities($ticket["opener"]).'</a></td>
+                    <td><a href="char.php?id='.$ticket["player"].'">'.htmlentities($ticket["opener"], ENT_COMPAT, $site_encoding).'</a></td>
                   </tr>
                   <tr>
                     <td>'.lang("ticket", "date").':</td>
@@ -247,7 +248,7 @@ function edit_ticket()
                   </tr>
                   <tr>
                     <td valign="top">'.lang("ticket", "message").'</td>
-                    <td><textarea name="new_text" rows="5" cols="40">'.htmlentities($ticket["message"]).'</textarea></td>
+                    <td><textarea name="new_text" rows="5" cols="40">'.htmlentities($ticket["message"], ENT_COMPAT, $site_encoding).'</textarea></td>
                   </tr>';
     if ( $core == 1 )
       ;
@@ -255,7 +256,7 @@ function edit_ticket()
       $output .= '
                   <tr>
                     <td>'.lang("ticket", "closedby").':</td>
-                    <td>'.( ( $ticket["status"] <> 0 ) ? '<a href="char.php?id='.$ticket["status"].'">'.htmlentities($ticket["closer"]).'</a>' : '' ).'</td>
+                    <td>'.( ( $ticket["status"] <> 0 ) ? '<a href="char.php?id='.$ticket["status"].'">'.htmlentities($ticket["closer"], ENT_COMPAT, $site_encoding).'</a>' : '' ).'</td>
                   </tr>';
     $output .= '
                   <tr>

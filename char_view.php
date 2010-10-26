@@ -71,7 +71,7 @@ function wowhead_did($item)
 
 function char_view()
 {
-  global $output, $action_permission, $user_lvl, $user_name, $sql, $core;
+  global $output, $action_permission, $user_lvl, $user_name, $site_encoding, $sql, $core;
 
   if ( empty($_GET["id"]) )
     error(lang("global", "empty_fields"));
@@ -284,7 +284,7 @@ function char_view()
             </div>
             <div id="tab_content">
               <font class="bold">
-                '.htmlentities($char["name"]).' -
+                '.htmlentities($char["name"], ENT_COMPAT, $site_encoding).' -
                 <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                 <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
               </font>

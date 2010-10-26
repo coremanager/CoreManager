@@ -27,7 +27,7 @@ valid_login($action_permission["view"]);
 //########################################################################################################################
 function browse_teams()
 {
-  global $output, $characters_db, $realm_id, $itemperpage,
+  global $output, $characters_db, $realm_id, $itemperpage, $site_encoding,
     $action_permission, $user_lvl, $user_id, $sql, $core;
 
   //==========================$_GET and SECURE=================================
@@ -325,8 +325,8 @@ function browse_teams()
     $output .= '
             <tr>
               <td>'.$data["atid"].'</td>
-              <td><a href="arenateam.php?action=view_team&amp;error=3&amp;id='.$data["atid"].'">'.htmlentities($data["atname"]).'</a></td>
-              <td><a href="char.php?id='.$data["lguid"].'">'.htmlentities($data["lname"]).'</a></td>
+              <td><a href="arenateam.php?action=view_team&amp;error=3&amp;id='.$data["atid"].'">'.htmlentities($data["atname"], ENT_COMPAT, $site_encoding).'</a></td>
+              <td><a href="char.php?id='.$data["lguid"].'">'.htmlentities($data["lname"], ENT_COMPAT, $site_encoding).'</a></td>
               <td>'.lang("arenateam", $data["attype"].( ( $core == 3 ) ? "T" : "AM" )).'</td>
               <td>'.$member_count.'</td>
               <td>'.$members_online.'</td>
@@ -359,7 +359,7 @@ function count_days( $a, $b )
 //########################################################################################################################
 function view_team()
 {
-  global $output, $characters_db, $realm_id, $corem_db, $logon_db,
+  global $output, $characters_db, $realm_id, $corem_db, $logon_db, $site_encoding,
     $action_permission, $user_lvl, $user_id, $showcountryflag, $sql, $core;
 
   if ( !isset($_GET["id"]) )
@@ -525,7 +525,7 @@ function view_team()
                     <img src="libs/banner_lib.php?action=emblem&f='.$arenateam_data["EmblemStyle"].'&r='.$emblem_color[1].'&g='.$emblem_color[2].'&b='.$emblem_color[3].'&s=0.55" class="emblem_img" />
                   </div>
                 </td>
-                <td colspan="'.( ( $showcountryflag ) ? 14 : 13 ).'">'.htmlentities($arenateam_data["name"]).'</td>
+                <td colspan="'.( ( $showcountryflag ) ? 14 : 13 ).'">'.htmlentities($arenateam_data["name"], ENT_COMPAT, $site_encoding).'</td>
               </tr>
               <tr>
                 <td colspan="'.( ( $showcountryflag ) ? 14 : 13 ).'">'.lang("arenateam", "tot_members").': '.$total_members.'</td>
@@ -603,7 +603,7 @@ function view_team()
           $ws_pct = $member[3];
 
         $output .= '
-                  <td><a href="char.php?id='.$member[0].'">'.htmlentities($member_char[1]).'</a></td>
+                  <td><a href="char.php?id='.$member[0].'">'.htmlentities($member_char[1], ENT_COMPAT, $site_encoding).'</a></td>
                   <td><img src="img/c_icons/'.$member_char[3].'-'.$member_char[7].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member_char[3]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>
                   <td><img src="img/c_icons/'.$member_char[4].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member_char[4]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>
                   <td>'.$member[5].'</td>
@@ -660,7 +660,7 @@ function view_team()
           $ws_pct = $member["played_season"];
 // arena team player structure [player_id] [week_played] [week_win] [season_played] [season_win] [rating]
         $output .= '
-                  <td><a href="char.php?id='.$member["guid"].'">'.htmlentities($member_char["name"]).'</a></td>
+                  <td><a href="char.php?id='.$member["guid"].'">'.htmlentities($member_char["name"], ENT_COMPAT, $site_encoding).'</a></td>
                   <td><img src="img/c_icons/'.$member_char["race"].'-'.$member_char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member_char["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>
                   <td><img src="img/c_icons/'.$member_char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member_char["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>
                   <td>'.$member["personal_rating"].'</td>

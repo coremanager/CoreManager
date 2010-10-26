@@ -33,7 +33,7 @@ valid_login($action_permission["view"]);
 function front()
 {
   global $output, $realm_id, $world_db, $logon_db, $corem_db, $server,
-    $action_permission, $user_lvl, $user_id,
+    $action_permission, $user_lvl, $user_id, $site_encoding,
     $showcountryflag, $gm_online_count, $gm_online, $itemperpage,
     $hide_max_players, $hide_avg_latency, $hide_plr_latency, $hide_server_mem, $sql, $core;
 
@@ -55,7 +55,7 @@ else
     {
       $stats = get_uptime($server[$realm_id]['stats.xml']);
       
-      $staticUptime = ' <em>'.htmlentities(get_realm_name($realm_id)).'</em> <br />'.$stats["platform"][4].' '.$stats["platform"][5].' '.$stats["platform"][6].'<br />'.lang("index", "online").' for '.$stats["uptime"];
+      $staticUptime = ' <em>'.htmlentities(get_realm_name($realm_id), ENT_COMPAT, $site_encoding).'</em> <br />'.$stats["platform"][4].' '.$stats["platform"][5].' '.$stats["platform"][6].'<br />'.lang("index", "online").' for '.$stats["uptime"];
       $output .= '
             <div id="uptime">'.$msie.'
               <h1>
@@ -157,7 +157,7 @@ else
         return $uptimeString;
       }
 
-      $staticUptime = ' <em>'.htmlentities(get_realm_name($realm_id)).'</em> ';
+      $staticUptime = ' <em>'.htmlentities(get_realm_name($realm_id), ENT_COMPAT, $site_encoding).'</em> ';
 
       if ( $stats["starttime"] <> 0 )
         $staticUptime .= '<br />'.lang("index", "online").' for '.format_uptime($uptimetime);
@@ -209,7 +209,7 @@ else
   else
   {
     $output .= '
-            <h1><font class="error">'.lang("index", "realm").' <em>'.htmlentities(get_realm_name($realm_id)).'</em> '.lang("index", "offline_or_let_high").'</font></h1>';
+            <h1><font class="error">'.lang("index", "realm").' <em>'.htmlentities(get_realm_name($realm_id), ENT_COMPAT, $site_encoding).'</em> '.lang("index", "offline_or_let_high").'</font></h1>';
     $online = false;
   }
 
@@ -345,7 +345,7 @@ else
             $output .= '<tr>
                   <td align="left">
                     <a href="char.php?id='.$post["playerGuid"].'">
-                        <span onmousemove="oldtoolTip(\''.$login["username"].' ('.id_get_gm_level($gm).')'.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($post["name"]).'</span>
+                        <span onmousemove="oldtoolTip(\''.$login["username"].' ('.id_get_gm_level($gm).')'.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($post["name"], ENT_COMPAT, $site_encoding).'</span>
                     </a>
                  </td>
               </tr>
@@ -642,11 +642,11 @@ else
       if ( ( $user_lvl > 0 ) && ( ( $user_lvl >= gmlevel($gm) ) || ( $user_lvl == $action_permission["delete"] ) ) )
         $output .= '
                   <a href="char.php?id='.$char["guid"].'">
-                    <span onmousemove="oldtoolTip(\''.$char_acct["name"].' ('.id_get_gm_level($gm).')'.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($char["name"]).'</span>
+                    <span onmousemove="oldtoolTip(\''.$char_acct["name"].' ('.id_get_gm_level($gm).')'.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($char["name"], ENT_COMPAT, $site_encoding).'</span>
                   </a>';
       else
         $output .='
-                  <span>'.htmlentities($char["name"]).'</span>';
+                  <span>'.htmlentities($char["name"], ENT_COMPAT, $site_encoding).'</span>';
       $output .= '
                   </td>
                   <td>
@@ -660,7 +660,7 @@ else
                     <span onmouseover="oldtoolTip(\''.char_get_pvp_rank_name($char["highest_rank"], char_get_side_id($char["race"])).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" id="index_delete_cursor"><img src="img/ranks/rank'.char_get_pvp_rank_id($char["highest_rank"], char_get_side_id($char["race"])).'.gif" alt="" /></span>
                   </td>
                   <td>
-                    <a href="guild.php?action=view_guild&amp;error=3&amp;id='.$guild_id.'">'.htmlentities($guild_name).'</a>
+                    <a href="guild.php?action=view_guild&amp;error=3&amp;id='.$guild_id.'">'.htmlentities($guild_name, ENT_COMPAT, $site_encoding).'</a>
                   </td>
                   <td><span onmousemove="oldtoolTip(\'MapID:'.$char["mapid"].'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_map_name($char["mapid"]).'</span></td>
                   <td><span onmousemove="oldtoolTip(\'ZoneID:'.$char["zoneid"].'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.get_zone_name($char["zoneid"]).'</span></td>';

@@ -1,0 +1,23 @@
+ALTER TABLE `char_changes` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_accounts` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_character_databases` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_dbc_database` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_forum_categories` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_forums` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_gm_level_names` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_lang_forum` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_logon_database` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_menus` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_misc` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_servers` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_top_menus` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_valid_ip_mask` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `config_world_databases` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `forum_posts` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `ip2nation` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `ip2nationcountries` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `motd` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `point_system_invites` CONVERT TO CHARACTER SET 'utf8';
+ALTER TABLE `xp_to_level` CONVERT TO CHARACTER SET 'utf8';
+
+DROP TABLE `realmlist`;
