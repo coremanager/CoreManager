@@ -50,7 +50,7 @@ function char_main()
   {
     $realmid = $sql["logon"]->quote_smart($_GET["realm"]);
     if ( is_numeric($realmid) )
-      $sql["char"]->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+      $sql["char"]->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name'], $characters_db[$realmid]["encoding"]);
     else
       $realmid = $realm_id;
   }
@@ -134,7 +134,7 @@ function char_main()
           FROM characters WHERE guid='".$id."'");
       }
       $char = $sql["char"]->fetch_assoc($result);
-      
+
       if ( $core == 1 )
       {
         $char_data = $char["data"];
