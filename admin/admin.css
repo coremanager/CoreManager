@@ -62,7 +62,7 @@ a:link, a:visited
 {
 	border: 2px solid #000000;	
 }
-#header #current a
+#header .current a
 {
 	background-color: #FFFFFF;
 	border: 2px solid #000000;
@@ -139,7 +139,7 @@ a:link, a:visited
 {
 	border: 2px solid #000000;	
 }
-#sidebar #current a
+#sidebar .current a
 {
 	background-color: #FFFFFF;
 	border: 2px solid #000000;
@@ -201,7 +201,7 @@ a:link, a:visited
 /* End Simple Table Errors (for General) */
 
 /* Tooltips */
-#help a
+.help a
 {
 	text-decoration: none;
 	color: #A52A2A;
@@ -218,7 +218,7 @@ a:link, a:visited
 	text-align: left;
 }
 /* Misc */
-#admin_editdb_field
+.admin_editdb_field
 {
 	width: 350px;
 }
@@ -254,7 +254,7 @@ a:link, a:visited
 {
 	width: 325px;
 }
-#admin_top_menus
+.admin_top_menus
 {
 	width: 300px;
 }
@@ -266,7 +266,7 @@ a:link, a:visited
 {
 	width: 260px;
 }
-#admin_edit_top_menu_action
+.admin_edit_top_menu_action
 {
 	width: 260px;
 }
@@ -280,15 +280,19 @@ a:link, a:visited
 }
 #admin_edit_forum_field
 {
-	width: 400px;
+	width: 480px;
 }
 #admin_edit_menu
 {
 	width: 300px;
 }
-#admin_edit_menu_fields
+.admin_edit_menu_fields
 {
 	width: 260px;
+}
+#admin_edit_forum_item
+{
+	width: 450px;
 }
 #admin_forum_lang
 {

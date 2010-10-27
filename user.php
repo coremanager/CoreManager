@@ -466,7 +466,7 @@ function browse_users()
     foreach ( $characters_db as $db )
     {
         $sqlt = new SQL;
-        $sqlt->connect($db["addr"], $db["user"], $db["pass"], $db["name"]);
+        $sqlt->connect($db["addr"], $db["user"], $db["pass"], $db["name"], $db["encoding"]);
 
         if ( $core == 1 )
           $char_query = "SELECT COUNT(*) FROM characters WHERE acct='".$data["acct"]."'";
@@ -539,7 +539,7 @@ function browse_users()
       foreach ( $characters_db as $db )
       {
         $sqlt = new SQL;
-        $sqlt->connect($db["addr"], $db["user"], $db["pass"], $db["name"]);
+        $sqlt->connect($db["addr"], $db["user"], $db["pass"], $db["name"], $db["encoding"]);
         
         if ( $core == 1 )
           $sql_c_query = "SELECT SUM(online) FROM characters WHERE acct = '".$data["acct"]."'";
@@ -796,7 +796,7 @@ function backup_user()
   valid_login($action_permission["insert"]);
 
   $sql = new SQL;
-  $sql->connect($logon_db["addr"], $logon_db["user"], $logon_db["pass"], $logon_db["name"]);
+  $sql->connect($logon_db["addr"], $logon_db["user"], $logon_db["pass"], $logon_db["name"], $logon_db["encoding"]);
 
   if(isset($_GET["check"])) $check = $sql->quote_smart($_GET["check"]);
     else redirect("user.php?error=1");
@@ -810,7 +810,7 @@ function backup_user()
     {
     if ($check[$t] != "" )
     {
-      $sql->connect($logon_db["addr"], $logon_db["user"], $logon_db["pass"], $logon_db["name"]);
+      $sql->connect($logon_db["addr"], $logon_db["user"], $logon_db["pass"], $logon_db["name"], $logon_db["encoding"]);
       $query = $sql->query("SELECT acct FROM accounts WHERE acct = $check[$t]");
       $acc = $sql->fetch_array($query);
       $file_name_new = $acc[0]."_{$logon_db["name"]}.sql";
@@ -872,7 +872,7 @@ function backup_user()
         fwrite($fp, "CREATE DATABASE /*!32312 IF NOT EXISTS*/ {$db["name"]};\n")or die (error(lang("backup", "file_write_err")));
         fwrite($fp, "USE {$db["name"]};\n\n")or die (error(lang("backup", "file_write_err")));
 
-        $sql->connect($db["addr"], $db["user"], $db["pass"], $db["name"]);
+        $sql->connect($db["addr"], $db["user"], $db["pass"], $db["name"], $db["encoding"]);
         $all_char_query = $sql->query("SELECT guid,name FROM `characters` WHERE account = $acc[0]");
 
         while ($char = $sql->fetch_array($all_char_query))
@@ -1158,7 +1158,7 @@ function edit_user()
   foreach ( $characters_db as $db )
   {
     $sqlt = new SQL;
-    $sqlt->connect($db["addr"], $db["user"], $db["pass"], $db["name"]);
+    $sqlt->connect($db["addr"], $db["user"], $db["pass"], $db["name"], $db["encoding"]);
     
     if ( $core == 1 )
       $online_res = $sqlt->query("SELECT SUM(online) FROM characters WHERE acct='".$data["acct"]."'");
@@ -1568,7 +1568,7 @@ function edit_user()
     foreach ( $characters_db as $db )
     {
       $sqlt = new SQL;
-      $sqlt->connect($db["addr"], $db["user"], $db["pass"], $db["name"]);
+      $sqlt->connect($db["addr"], $db["user"], $db["pass"], $db["name"], $db["encoding"]);
       
       if ( $core == 1 )
         $query = "SELECT COUNT(*) FROM characters WHERE acct='".$acct."'";
@@ -1596,7 +1596,7 @@ function edit_user()
       require_once("libs/get_lib.php");
       while ( $realm = $sql["mgr"]->fetch_array($realms) )
       {
-        $sql["char"]->connect($characters_db[$realm[0]]['addr'], $characters_db[$realm[0]]['user'], $characters_db[$realm[0]]['pass'], $characters_db[$realm[0]]['name']);
+        $sql["char"]->connect($characters_db[$realm[0]]['addr'], $characters_db[$realm[0]]['user'], $characters_db[$realm[0]]['pass'], $characters_db[$realm[0]]['name'], $characters_db[$realm[0]]['encoding']);
         if ( $core == 1 )
           $query = $sql["char"]->query("SELECT COUNT(*) FROM `characters` WHERE acct=".$acct);
         else

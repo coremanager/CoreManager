@@ -29,7 +29,7 @@ function top100($realmid)
 
   $realm_id = $realmid;
 
-  $sql["char"]->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sql["char"]->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name'], $characters_db[$realm_id]['encoding']);
 
   //==========================$_GET and SECURE========================
   $type = (isset($_GET["type"])) ? $sql["char"]->quote_smart($_GET["type"]) : 'level';

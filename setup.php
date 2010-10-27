@@ -93,7 +93,7 @@ function show()
   global $output, $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
 
   // first we check that we even have a config_misc table...
   $check_for_table = $sqlm->fetch_assoc($sqlm->query("SHOW TABLES FROM ".$corem_db["name"]." LIKE 'config_misc'"));
@@ -235,7 +235,7 @@ function save()
   global $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
 
 
   // then we get the config data
@@ -359,7 +359,7 @@ function import_db($dbchost, $dbcport, $dbcuser, $dbcpass, $dbcname)
   global $corem_db;
 
   $sqlm = new SQL;
-  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
 
   $sqld = new SQL;
   $sqld->connect($dbchost.":".$dbcport, $dbcuser, $dbcpass, $dbcname);

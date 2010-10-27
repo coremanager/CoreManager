@@ -63,10 +63,10 @@ function dologin()
   global $corem_db, $logon_db, $core;
 
   $sql["logon"] = new SQL;
-  $sql["logon"]->connect($logon_db["addr"], $logon_db["user"], $logon_db["pass"], $logon_db["name"]);
+  $sql["logon"]->connect($logon_db["addr"], $logon_db["user"], $logon_db["pass"], $logon_db["name"], $logon_db["encoding"]);
 
   $sql["mgr"] = new SQL;
-  $sql["mgr"]->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"]);
+  $sql["mgr"]->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
 
   if ( empty($_POST["login"]) || empty($_POST["password"]) )
     redirect('admin_login.php?error=2');

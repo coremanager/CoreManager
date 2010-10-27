@@ -179,7 +179,7 @@ function edit_user()
     foreach ( $characters_db as $db )
     {
       $sqlt = new SQL;
-      $sqlt->connect($db["addr"], $db["user"], $db["pass"], $db["name"]);
+      $sqlt->connect($db["addr"], $db["user"], $db["pass"], $db["name"], $db["encoding"]);
       
       if ( $core == 1 )
         $query = "SELECT COUNT(*) FROM characters WHERE acct='".$user_id."'";
@@ -202,7 +202,7 @@ function edit_user()
     {
       while ( $realm = $sql["mgr"]->fetch_assoc($realms) )
       {
-        $sql["char"]->connect($characters_db[$realm["id"]]['addr'], $characters_db[$realm["id"]]['user'], $characters_db[$realm["id"]]['pass'], $characters_db[$realm["id"]]['name']);
+        $sql["char"]->connect($characters_db[$realm["id"]]['addr'], $characters_db[$realm["id"]]['user'], $characters_db[$realm["id"]]['pass'], $characters_db[$realm["id"]]['name'], $characters_db[$realm["id"]]['encoding']);
         if ( $core == 1 )
           $result = $sql["char"]->query("SELECT guid, name, race, class, level, gender
             FROM characters WHERE acct='".$user_id."'");

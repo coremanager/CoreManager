@@ -131,7 +131,7 @@ function del_acc($acc_id)
       foreach ( $characters_db as $db )
       {
         $sqlx = new SQL;
-        $sqlx->connect($db["addr"], $db["user"], $db["pass"], $db["name"]);
+        $sqlx->connect($db["addr"], $db["user"], $db["pass"], $db["name"], $db["encoding"]);
 
         if ( $core == 1 )
           $result = $sqlx->query("SELECT guid FROM characters WHERE acct='".$acc_id."'");
