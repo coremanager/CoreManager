@@ -19,13 +19,14 @@
 
 
 require_once("header.php");
-valid_login($action_permission["update"]);
 
 //###########################################################################
 // print mail form
 function print_mail_form()
 {
-  global $output;
+  global $output, $action_permission;
+  
+  valid_login($action_permission["update"]);
 
   $to = ( ( isset($_GET["to"]) ) ? $_GET["to"] : NULL );
   $type = ( ( isset($_GET["type"]) ) ? $_GET["type"] : "email" );
@@ -141,8 +142,18 @@ function print_mail_form()
 // Send the actual mail(s)
 function send_mail()
 {
-  global $output, $logon_db, $characters_db, $realm_id,
+  global $output, $logon_db, $characters_db, $realm_id, $action_permission,
          $user_name, $from_mail, $mailer_type, $smtp_cfg, $GMailSender, $sql, $core;
+
+  // if we came here from Quest Item Vendor or Ultra Vendor,
+  // we need to bypass the normal permissions
+  if ( $_SESSION['vendor_permission'] )
+  {
+    valid_login($action_permission["view"]);
+    unset($_SESSION['vendor_permission']);
+  }
+  else
+    valid_login($action_permission["update"]);
 
   if ( empty($_GET["body"]) || empty($_GET["subject"]) || empty($_GET["type"]) || empty($_GET["group_sign"]) || empty($_GET["group_send"]) )
     redirect("mail.php?error=1");
@@ -461,8 +472,9 @@ function send_ingame_mail_A($realm_id, $massmails)
     redirect("mail.php?action=result&error=6&mess=".$mess."&recipient=".$receiver_list);
   else
   {
-    $redirect = $sql["char"]->quote_smart($_GET["redirect"]);
-    redirect($redirect);
+    $money_result = $sql["char"]->quote_smart($_GET["moneyresult"]);
+
+    redirect($redirect."?moneyresult=".$money_result."&mailresult=1");
   }
 
 }
@@ -476,7 +488,7 @@ function send_ingame_mail_A($realm_id, $massmails)
 function send_ingame_mail_MT($realm_id, $massmails)
 {
   require_once 'libs/telnet_lib.php';
-  global $server;
+  global $server, $sql;
   $telnet = new telnet_lib();
 
   $result = $telnet->Connect($server[$realm_id]['addr'], $server[$realm_id]['telnet_port'], $server[$realm_id]['telnet_user'], $server[$realm_id]['telnet_pass']);
@@ -553,10 +565,20 @@ function send_ingame_mail_MT($realm_id, $massmails)
   elseif ( $result == 4 )
     $mess_str = lang("telnet", "not_supported");
 
-  if ( count($massmails) == 1 )
-    redirect("mail.php?action=result&error=6&mess=".$mess_str."&recipient=".$reveiver_list);
+  if ( !isset($_GET["redirect"]) )
+  {
+    if ( count($massmails) == 1 )
+      redirect("mail.php?action=result&error=6&mess=".$mess_str."&recipient=".$reveiver_list);
+    else
+      redirect("mail.php?action=result&error=6&mess=&recipient=".$reveiver_list);
+  }
   else
-    redirect("mail.php?action=result&error=6&mess=&recipient=".$reveiver_list);
+  {
+    $money_result = $sql["char"]->quote_smart($_GET["moneyresult"]);
+    $redirect = $sql["char"]->quote_smart($_GET["redirect"]);
+
+    redirect($redirect."?moneyresult=".$money_result."&mailresult=1");
+  }
 
 }
 

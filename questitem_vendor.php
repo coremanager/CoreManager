@@ -651,17 +651,31 @@ function purchase()
   $char_money = $char_money - $_GET["total"];
 
   if ( $core == 1 )
-    $mail_query = "INSERT INTO mailbox_insert_queue VALUES ('".$from_char."', '".$char["guid"]."', '".lang("questitem", "questitems")."', ".chr(34).$_GET["want"]."x ".$item["name1"].chr(34).", '".$stationary."', '0', '".$_GET["item"]."', '".$_GET["want"]."')";
-  else
-    redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char["name"]."&subject=".lang("questitem", "questitems")."&body=".chr(34).$_GET["want"]."x ".$item["name1"].chr(34)."&group_sign==&group_send=gm_level&money=0&att_item=".$_GET["item"]."&att_stack=".$_GET["want"]."&redirect=questitem_vendor.php");
-
-  if ( $core == 1 )
     $money_query = "UPDATE characters SET gold='".$char_money."' WHERE guid='".$char["guid"]."'";
   else
     $money_query = "UPDATE characters SET money='".$char_money."' WHERE guid='".$char["guid"]."'";
 
-  $mail_result = $sql["char"]->query($mail_query);
   $money_result = $sql["char"]->query($money_query);
+
+  if ( $core == 1 )
+  {
+    $mail_query = "INSERT INTO mailbox_insert_queue VALUES ('".$from_char."', '".$char["guid"]."', '".lang("questitem", "questitems")."', ".chr(34).$_GET["want"]."x ".$item["name1"].chr(34).", '".$stationary."', '0', '".$_GET["item"]."', '".$_GET["want"]."')";
+    redirect("questitem_vendor.php&moneyresult=".$money_result);
+  }
+  else
+  {
+    // we need to be able to bypass mail.php's normal permissions to send mail
+    $_SESSION['vendor_permission'] = 1;
+    redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char["name"]."&subject=".lang("questitem", "questitems")."&body=".$_GET["want"]."x ".$item["name"]."&group_sign==&group_send=gm_level&money=0&att_item=".$_GET["item"]."&att_stack=".$_GET["want"]."&redirect=questitem_vendor.php&moneyresult=".$money_result);
+  }
+}
+
+function showresults()
+{
+  global $sql, $core;
+
+  $mail_result = $sql["char"]->quote_smart($_GET["mailresult"]);
+  $money_result = $sql["char"]->quote_smart($_GET["moneyresult"]);
 
   if ( $mail_result && $money_result )
     redirect("questitem_vendor.php?error=3");
@@ -701,6 +715,10 @@ unset($err);
 
 $output .= "
         </div>";
+
+// this is a pre-filter because mail from outside mail.php is priority
+if ( $_GET['moneyresult'] )
+  showresults();
 
 $action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 

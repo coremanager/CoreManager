@@ -1265,6 +1265,7 @@ $GLOBALS['lang_ultra'] = array
   'wanted' => 'Quanity desired',
   'purchase' => 'Kaufen',
   'submit' => 'Absenden',
+  'questitems' => 'Special Order items',
   'done' => 'Transaktion erfolgreich',
   'failed' => 'Transaktion fehlgeschlagen',
   'select' => 'Ausw&auml;hlen'

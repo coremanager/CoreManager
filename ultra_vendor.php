@@ -114,7 +114,7 @@ function select_item()
   valid_login($action_permission["view"]);
 
   if ( empty($_GET["charname"]) )
-    redirect("questitem_vendor.php?error=1");
+    redirect("ultra_vendor.php?error=1");
 
   $output .= '
           <table class="top_hidden">
@@ -171,7 +171,7 @@ function select_quantity()
   valid_login($action_permission["view"]);
 
   if ( empty($_GET["myItem"]) )
-    redirect("questitem_vendor.php?error=1");
+    redirect("ultra_vendor.php?error=1");
 
   if ( $core == 1 )
     $iquery = "SELECT * FROM items WHERE entry='".$_GET["myItem"]."'";
@@ -308,11 +308,11 @@ function approve()
   valid_login($action_permission["view"]);
 
   if ( !( is_numeric($_GET["item"]) ) )
-    redirect("questitem_vendor.php?error=1");
+    redirect("ultra_vendor.php?error=1");
   if ( !( is_numeric($_GET["gold"]) ) )
-    redirect("questitem_vendor.php?error=1");
+    redirect("ultra_vendor.php?error=1");
   if ( !( is_numeric($_GET["want"]) ) )
-    redirect("questitem_vendor.php?error=1");
+    redirect("ultra_vendor.php?error=1");
 
   if ( $core == 1 )
     $query = "SELECT * FROM items WHERE entry='".$_GET["item"]."'";
@@ -357,7 +357,7 @@ function approve()
     else
     {
       $output .= '
-                    <form method="get" action="questitem_vendor.php" name="form">
+                    <form method="get" action="ultra_vendor.php" name="form">
                       <input type="hidden" name="action" value="purchase" />
                       <input type="hidden" name="char" value="'.$char["name"].'" />
                       <input type="hidden" name="item" value="'.$item["entry"].'" />
@@ -405,14 +405,14 @@ function purchase()
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
     $from_char, $stationary, $sql, $core;
 
-  valid_login($action_permission["insert"]);
+  valid_login($action_permission["view"]);
 
   if ( empty($_GET["item"]) )
-    redirect("questitem_vendor.php?error=1");
+    redirect("ultra_vendor.php?error=1");
   if ( empty($_GET["total"]) )
-    redirect("questitem_vendor.php?error=1");
+    redirect("ultra_vendor.php?error=1");
   if ( empty($_GET["want"]) )
-    redirect("questitem_vendor.php?error=1");
+    redirect("ultra_vendor.php?error=1");
 
   if ( $core == 1 )
     $iquery = "SELECT * FROM items WHERE entry='".$_GET["item"]."'";
@@ -436,14 +436,26 @@ function purchase()
   $money_result = $sql["char"]->query($money_query);
   
   if ( $core == 1 )
+  {
     $mail_query = "INSERT INTO mailbox_insert_queue VALUES ('".$from_char."', '".$char["guid"]."', '".lang("ultra", "questitems")."', ".chr(34).$_GET["want"]."x ".$item["name1"].chr(34).", '".$stationary."', '0', '".$_GET["item"]."', '".$_GET["want"]."')";
+    redirect("ultra_vendor.php&moneyresult=".$money_result);
+  }
   else
-    redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char["name"]."&subject=".lang("ultra", "questitems")."&body=".chr(34).$_GET["want"]."x ".$item["name1"].chr(34)."&group_sign==&group_send=gm_level&money=0&att_item=".$_GET["item"]."&att_stack=".$_GET["want"]."&redirect=ultra_vendor.php?error=3");
+  {
+    // we need to be able to bypass mail.php's normal permissions to send mail
+    $_SESSION['vendor_permission'] = 1;
+    redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char["name"]."&subject=".lang("ultra", "questitems")."&body=".$_GET["want"]."x ".$item["name"]."&group_sign==&group_send=gm_level&money=0&att_item=".$_GET["item"]."&att_stack=".$_GET["want"]."&redirect=ultra_vendor.php&moneyresult=".$money_result);
+  }
+}
 
-  // this part is only for ArcEmu.  MaNGOS & Trinity use a different redirect
-  $mail_result = $sql["char"]->query($mail_query);
+function showresults()
+{
+  global $sql, $core;
 
-  if ( $mail_result & $money_result )
+  $mail_result = $sql["char"]->quote_smart($_GET["mailresult"]);
+  $money_result = $sql["char"]->quote_smart($_GET["moneyresult"]);
+
+  if ( $mail_result && $money_result )
     redirect("ultra_vendor.php?error=3");
   else
     redirect("ultra_vendor.php?error=2");
@@ -512,6 +524,10 @@ unset($err);
 
 $output .= '
         </div>';
+
+// this is a pre-filter because mail from outside mail.php is priority
+if ( $_GET['moneyresult'] )
+  showresults();
 
 $action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
