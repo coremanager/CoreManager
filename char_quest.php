@@ -27,7 +27,7 @@ valid_login($action_permission["view"]);
 //########################################################################################################################
 function char_quest()
 {
-  global $output, $realm_id, $world_db, $logon_db, $characters_db, $action_permission,
+  global $output, $realm_id, $world_db, $logon_db, $characters_db, $action_permission, $locales_search_option,
     $site_encoding, $user_lvl, $user_name, $quest_datasite, $itemperpage, $sql, $core;
 
   if ( empty($_GET["id"]) )
@@ -142,11 +142,26 @@ function char_quest()
           $deplang = get_lang_id();
 
           if ( $core == 1 )
-            $query1 = $sql["char"]->query("SELECT questlevel, title FROM `".$world_db[$realmid]['name']."`.quests WHERE entry='".$quest["quest_id"]."'");
+            $query1 = $sql["char"]->query("SELECT *, questlevel, Title AS Title1 FROM `".$world_db[$realmid]['name']."`.quests "
+                  .( ( $locales_search_option != 0 ) ? "LEFT JOIN `".$world_db[$realmid]['name']."`.quests_localized ON (quests_localized.entry=quests.entry AND language_code='".$locales_search_option."' ) " : " " ).
+                "WHERE quests.entry='".$quest["quest_id"]."'");
           else
-            $query1 = $sql["char"]->query("SELECT QuestLevel AS questlevel, Title AS title FROM `".$world_db[$realmid]['name']."`.quest_template WHERE entry='".$quest["quest_id"]."'");
+            $query1 = $sql["char"]->query("SELECT *, QuestLevel AS questlevel, Title AS Title1 FROM `".$world_db[$realmid]['name']."`.quest_template "
+                  .( ( $locales_search_option != 0 ) ? "LEFT JOIN `".$world_db[$realmid]['name']."`.locales_quest ON locales_quest.entry=quest_template.entry " : " " ).
+                "WHERE quest_template.entry='".$quest["quest_id"]."'");
 
           $quest_info = $sql["char"]->fetch_assoc($query1);
+
+          // Localization
+          if ( $locales_search_option == 0 )
+            $quest_info["title"] = $quest_info["Title1"];
+          else
+          {
+            if ( $core == 1 )
+              $quest_info["title"] = $quest_info["Title"];
+            else
+              $quest_info["title"] = $quest_info["Title_loc".$locales_search_option];
+          }
 
           if ( $quest["completed"] == 1 )
             array_push($quests_1, array($quest["quest_id"], $quest_info["questlevel"], $quest_info["title"], $quest["rewarded"]));

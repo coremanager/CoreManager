@@ -1489,7 +1489,19 @@ function general()
             </tr>
             <tr>
               <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "languagelocalessearchoption").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "languagelocalessearchoption").'</a>: </td>
-              <td><input type="text" name="languagelocalessearchoption" value="'.$language_locales_search_option["Value"].'" readonly="readonly" /></td>
+              <td>
+                <select name="languagelocalessearchoption">
+                  <option value="0" '.( ( $language_locales_search_option["Value"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("global", "language_0").'</option>
+                  <option value="1" '.( ( $language_locales_search_option["Value"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("global", "language_1").'</option>
+                  <option value="2" '.( ( $language_locales_search_option["Value"] == 2 ) ? 'selected="selected" ' : '' ).'>'.lang("global", "language_2").'</option>
+                  <option value="3" '.( ( $language_locales_search_option["Value"] == 3 ) ? 'selected="selected" ' : '' ).'>'.lang("global", "language_3").'</option>
+                  <option value="4" '.( ( $language_locales_search_option["Value"] == 4 ) ? 'selected="selected" ' : '' ).'>'.lang("global", "language_4").'</option>
+                  <option value="5" '.( ( $language_locales_search_option["Value"] == 5 ) ? 'selected="selected" ' : '' ).'>'.lang("global", "language_5").'</option>
+                  <option value="6" '.( ( $language_locales_search_option["Value"] == 6 ) ? 'selected="selected" ' : '' ).'>'.lang("global", "language_6").'</option>
+                  <option value="7" '.( ( $language_locales_search_option["Value"] == 7 ) ? 'selected="selected" ' : '' ).'>'.lang("global", "language_7").'</option>
+                  <option value="8" '.( ( $language_locales_search_option["Value"] == 8 ) ? 'selected="selected" ' : '' ).'>'.lang("global", "language_8").'</option>
+                </select>
+              </td>
             </tr>
             <tr>
               <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "languagesiteencoding").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "languagesiteencoding").'</a>: </td>

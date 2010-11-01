@@ -31,7 +31,7 @@ valid_login($action_permission["view"]);
 function char_inv()
 {
   global $output, $realm_id, $characters_db, $world_db, $corem_db, $site_encoding,
-    $action_permission, $user_lvl, $user_name,
+    $action_permission, $user_lvl, $user_name, $locales_search_option,
     $item_datasite, $sql, $core;
 
   // this page uses wowhead tooltops
@@ -186,7 +186,9 @@ function char_inv()
                 socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
                 requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
                 sellprice AS SellPrice, itemlevel AS ItemLevel
-                FROM items WHERE entry='".$slot["entry"]."'";
+                FROM items "
+                  .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+                "WHERE items.entry='".$slot["entry"]."'";
 
               $i_result = $sql["world"]->query($i_query);
               $i = $sql["world"]->fetch_assoc($i_result);
@@ -203,7 +205,9 @@ function char_inv()
                 socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
                 requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
                 sellprice AS SellPrice, itemlevel AS ItemLevel
-                FROM items WHERE entry='".$slot["entry"]."'";
+                FROM items "
+                  .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+                "WHERE items.entry='".$slot["entry"]."'";
 
               $i_result = $sql["world"]->query($i_query);
               $i = $sql["world"]->fetch_assoc($i_result);
@@ -228,7 +232,9 @@ function char_inv()
                 socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
                 requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
                 sellprice AS SellPrice, itemlevel AS ItemLevel
-                FROM items WHERE entry='".$slot["entry"]."'";
+                FROM items "
+                  .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+                "WHERE items.entry='".$slot["entry"]."'";
 
               $i_result = $sql["world"]->query($i_query);
               $i = $sql["world"]->fetch_assoc($i_result);
@@ -246,7 +252,9 @@ function char_inv()
                 socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
                 requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
                 sellprice AS SellPrice, itemlevel AS ItemLevel
-                FROM items WHERE entry='".$slot["entry"]."'";
+                FROM items "
+                  .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+                "WHERE items.entry='".$slot["entry"]."'";
 
               $i_result = $sql["world"]->query($i_query);
               $i = $sql["world"]->fetch_assoc($i_result);
@@ -268,7 +276,9 @@ function char_inv()
             }
             elseif ( $slot["slot"] < 39 ) // SLOT 23 TO 38 (BackPack)
             {
-              $i_query = "SELECT * FROM item_template WHERE entry='".$slot["entry"]."'";
+              $i_query = "SELECT * FROM item_template "
+                  .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+                "WHERE item_template.entry='".$slot["entry"]."'";
 
               $i_result = $sql["world"]->query($i_query);
               $i = $sql["world"]->fetch_assoc($i_result);
@@ -280,7 +290,9 @@ function char_inv()
             }
             elseif ( $slot["slot"] < 67 ) // SLOT 39 TO 66 (Bank)
             {
-              $i_query = "SELECT * FROM item_template WHERE entry='".$slot["entry"]."'";
+              $i_query = "SELECT * FROM item_template "
+                  .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+                "WHERE item_template.entry='".$slot["entry"]."'";
 
               $i_result = $sql["world"]->query($i_query);
               $i = $sql["world"]->fetch_assoc($i_result);
@@ -300,7 +312,9 @@ function char_inv()
             // Bags
             if ( isset($bag_id[$slot["bag"]]) )
             {
-              $i_query = "SELECT * FROM item_template WHERE entry='".$slot["entry"]."'";
+              $i_query = "SELECT * FROM item_template "
+                  .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+                "WHERE item_template.entry='".$slot["entry"]."'";
 
               $i_result = $sql["world"]->query($i_query);
               $i = $sql["world"]->fetch_assoc($i_result);
@@ -313,7 +327,9 @@ function char_inv()
             // Bank Bags
             elseif ( isset($bank_bag_id[$slot["bag"]]) )
             {
-              $i_query = "SELECT * FROM item_template WHERE entry='".$slot["entry"]."'";
+              $i_query = "SELECT * FROM item_template "
+                  .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+                "WHERE item_template.entry='".$slot["entry"]."'";
 
               $i_result = $sql["world"]->query($i_query);
               $i = $sql["world"]->fetch_assoc($i_result);

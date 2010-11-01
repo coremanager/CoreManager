@@ -166,7 +166,7 @@ function select_item()
 function select_quantity()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
-    $ultra_mult, $ultra_base, $sql, $core;
+    $locales_search_option, $ultra_mult, $ultra_base, $sql, $core;
 
   valid_login($action_permission["view"]);
 
@@ -174,13 +174,28 @@ function select_quantity()
     redirect("ultra_vendor.php?error=1");
 
   if ( $core == 1 )
-    $iquery = "SELECT * FROM items WHERE entry='".$_GET["myItem"]."'";
+    $iquery = "SELECT * FROM items "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+              "WHERE items.entry='".$_GET["myItem"]."'";
   else
     $iquery = "SELECT *,
-      name AS name1, Quality AS quality, SellPrice AS sellprice, BuyPrice AS buyprice
-      FROM item_template WHERE entry='".$_GET["myItem"]."'";
+              name AS name1, Quality AS quality, SellPrice AS sellprice, BuyPrice AS buyprice
+              FROM item_template "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+              "WHERE item_template.entry='".$_GET["myItem"]."'";
   $iresult = $sql["world"]->query($iquery);
   $item = $sql["world"]->fetch_assoc($iresult);
+
+  // Localization
+  if ( $locales_search_option != 0 )
+  {
+    if ( $core == 1 )
+      $item["name1"] = $item["name"];
+    else
+      $item["name1"] = $item["name_loc".$locales_search_option];
+  }
+  else
+    $item["name1"] = $item["name1"];
 
   if ( $core == 1 )
     $cquery = "SELECT guid, level, gold FROM characters WHERE name='".$_GET["charname"]."'";
@@ -303,7 +318,7 @@ function select_quantity()
 function approve()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
-    $quest_item, $sql, $core;
+    $locales_search_option, $quest_item, $sql, $core;
 
   valid_login($action_permission["view"]);
 
@@ -315,11 +330,26 @@ function approve()
     redirect("ultra_vendor.php?error=1");
 
   if ( $core == 1 )
-    $query = "SELECT * FROM items WHERE entry='".$_GET["item"]."'";
+    $query = "SELECT * FROM items "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+              "WHERE items.entry='".$_GET["item"]."'";
   else
-    $query = "SELECT * FROM item_template WHERE entry='".$_GET["item"]."'";
+    $query = "SELECT * FROM item_template "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+              "WHERE item_template.entry='".$_GET["item"]."'";
   $result = $sql["world"]->query($query);
   $item = $sql["world"]->fetch_assoc($result);
+
+  // Localization
+  if ( $locales_search_option != 0 )
+  {
+    if ( $core == 1 )
+      $item["name1"] = $item["name"];
+    else
+      $item["name1"] = $item["name_loc".$locales_search_option];
+  }
+  else
+    $item["name1"] = $item["name1"];
 
   $cquery = "SELECT *, money AS gold FROM characters WHERE name='".$_GET["charname"]."'";
   $cresult = $sql["char"]->query($cquery);
@@ -415,11 +445,26 @@ function purchase()
     redirect("ultra_vendor.php?error=1");
 
   if ( $core == 1 )
-    $iquery = "SELECT * FROM items WHERE entry='".$_GET["item"]."'";
+    $iquery = "SELECT * FROM items "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+              "WHERE items.entry='".$_GET["item"]."'";
   else
-    $iquery = "SELECT * FROM item_template WHERE entry='".$_GET["item"]."'";
+    $iquery = "SELECT * FROM item_template "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+              "WHERE item_template.entry='".$_GET["item"]."'";
   $iresult = $sql["world"]->query($iquery);
   $item = $sql["world"]->fetch_assoc($iresult);
+
+  // Localization
+  if ( $locales_search_option != 0 )
+  {
+    if ( $core == 1 )
+      $item["name1"] = $item["name"];
+    else
+      $item["name1"] = $item["name_loc".$locales_search_option];
+  }
+  else
+    $item["name1"] = $item["name1"];
 
   $cquery = "SELECT *, money AS gold FROM characters WHERE name='".$_GET["char"]."'";
   $cresult = $sql["char"]->query($cquery);

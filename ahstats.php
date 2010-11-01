@@ -28,7 +28,7 @@ valid_login($action_permission["view"]);
 //#############################################################################
 function browse_auctions()
 {
-  global $output, $characters_db, $world_db, $realm_id,
+  global $output, $characters_db, $world_db, $realm_id, $locales_search_option
     $itemperpage, $item_datasite, $server, $user_lvl, $user_id, $sql, $core;
 
   wowhead_tt();
@@ -339,12 +339,27 @@ function browse_auctions()
             socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
             requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
             sellprice AS SellPrice, itemlevel AS ItemLevel
-            FROM items WHERE entry=".$rows["item_entry"];
+            FROM items "
+              .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+            "WHERE items.entry=".$rows["item_entry"];
     else
-      $i_query = "SELECT *, name AS name1, Quality AS quality FROM item_template WHERE entry=".$rows["item_entry"];
+      $i_query = "SELECT *, name AS name1, Quality AS quality FROM item_template "
+                  .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+                "WHERE item_template.entry=".$rows["item_entry"];
 
     $i_result = $sql["world"]->query($i_query);
     $item_result = $sql["world"]->fetch_assoc($i_result);
+
+    // Localization
+    if ( $locales_search_option != 0 )
+    {
+      if ( $core == 1 )
+        $item_result["name1"] = $item_result["name"];
+      else
+        $item_result["name1"] = $item["name_loc".$locales_search_option];
+    }
+    else
+      $item_result["name1"] = $item_result["name1"];
 
     // calculate the buyout value
     $value = $rows["buyout"];

@@ -111,7 +111,8 @@ function show_list()
 //########################################################################################################################
 function select_quest()
 {
-  global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl, $sql, $core;
+  global $world_db, $characters_db, $realm_id, $user_name, $output, $locales_search_option,
+    $action_permission, $user_lvl, $sql, $core;
 
   valid_login($action_permission["view"]);
 
@@ -163,11 +164,26 @@ function select_quest()
       while ( $field = $sql["char"]->fetch_assoc($result) )
       {
         if ( $core == 1 )
-          $qquery = "SELECT * FROM quests WHERE entry='".$field["quest_id"]."'";
+          $qquery = "SELECT *, Title AS Title1 FROM quests "
+                      .( ( $locales_search_option != 0 ) ? "LEFT JOIN quests_localized ON (quests_localized.entry=quests.entry AND language_code='".$locales_search_option."' ) " : " " ).
+                    "WHERE quests.entry='".$field["quest_id"]."'";
         else
-          $qquery = "SELECT * FROM quest_template WHERE entry='".$field["quest_id"]."'";
+          $qquery = "SELECT *, Title AS Title1 FROM quest_template "
+                      .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_quest ON locales_quest.entry=quest_template.entry " : " " ).
+                    "WHERE quest_template.entry='".$field["quest_id"]."'";
         $qresult = $sql["world"]->query($qquery);
         $quest = $sql["world"]->fetch_assoc($qresult);
+
+        // Localization
+        if ( $locales_search_option == 0 )
+          $quest["Title"] = $quest["Title1"];
+        else
+        {
+          if ( $core == 1 )
+            $quest["Title"] = $quest["Title"];
+          else
+            $quest["Title"] = $quest["Title_loc".$locales_search_option];
+        }
 
         $output .= '
                         <tr>
@@ -181,11 +197,26 @@ function select_quest()
     {
       $field = $sql["char"]->fetch_assoc($result);
       if ( $core == 1 )
-        $qquery = "SELECT * FROM quests WHERE entry='".$field["quest_id"]."'";
+        $qquery = "SELECT * FROM quests WHERE "
+                    .( ( $locales_search_option != 0 ) ? "LEFT JOIN quests_localized ON (quests_localized.entry=quests.entry AND language_code='".$locales_search_option."' ) " : " " ).
+                  "WHERE quests.entry='".$field["quest_id"]."'";
       else
-        $qquery = "SELECT * FROM quest_template WHERE entry='".$field["quest_id"]."'";
+        $qquery = "SELECT * FROM quest_template "
+                    .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_quest ON locales_quest.entry=quest_template.entry " : " " ).
+                  "WHERE quest_template.entry='".$field["quest_id"]."'";
       $qresult = $sql["world"]->query($qquery);
       $quest = $sql["char"]->fetch_assoc($qresult);
+
+      // Localization
+      if ( $locales_search_option == 0 )
+        $quest["Title"] = $quest["Title1"];
+      else
+      {
+        if ( $core == 1 )
+          $quest["Title"] = $quest["Title"];
+        else
+          $quest["Title"] = $quest["Title_loc".$locales_search_option];
+      }
 
       $output .= '
                         <tr>
@@ -223,7 +254,8 @@ function select_quest()
 //########################################################################################################################
 function select_item()
 {
-  global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl, $sql, $core;
+  global $world_db, $characters_db, $realm_id, $user_name, $output, $locales_search_option,
+    $action_permission, $user_lvl, $sql, $core;
 
   valid_login($action_permission["view"]);
 
@@ -261,11 +293,27 @@ function select_item()
     if ( $quest["ReqItemId1"] )
     {
       if ( $core == 1 )
-        $iquery = "SELECT * FROM items WHERE entry='".$quest["ReqItemId1"]."'";
+        $iquery = "SELECT * FROM items "
+                    .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+                  "WHERE items.entry='".$quest["ReqItemId1"]."'";
       else
-        $iquery = "SELECT *, name AS name1 FROM item_template WHERE entry='".$quest["ReqItemId1"]."'";
+        $iquery = "SELECT *, name AS name1 FROM item_template "
+          .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+        "WHERE item_template.entry='".$quest["ReqItemId1"]."'";
       $iresult = $sql["world"]->query($iquery);
       $item = $sql["world"]->fetch_assoc($iresult);
+
+      // Localization
+      if ( $locales_search_option != 0 )
+      {
+        if ( $core == 1 )
+          $item["name1"] = $item["name"];
+        else
+          $item["name1"] = $item["name_loc".$locales_search_option];
+      }
+      else
+        $item["name1"] = $item["name1"];
+
       $output .= '
                         <tr>
                           <td>
@@ -276,11 +324,27 @@ function select_item()
     if ( $quest["ReqItemId2"] <> 0 )
     {
       if ( $core == 1 )
-        $iquery = "SELECT * FROM items WHERE entry='".$quest["ReqItemId2"]."'";
+        $iquery = "SELECT * FROM items "
+                    .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+                  "WHERE items.entry='".$quest["ReqItemId2"]."'";
       else
-        $iquery = "SELECT *, name AS name1 FROM item_template WHERE entry='".$quest["ReqItemId2"]."'";
+        $iquery = "SELECT *, name AS name1 FROM item_template "
+          .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+        "WHERE item_template.entry='".$quest["ReqItemId2"]."'";
       $iresult = $sql["world"]->query($iquery);
       $item = $sql["world"]->fetch_assoc($iresult);
+
+      // Localization
+      if ( $locales_search_option != 0 )
+      {
+        if ( $core == 1 )
+          $item["name1"] = $item["name"];
+        else
+          $item["name1"] = $item["name_loc".$locales_search_option];
+      }
+      else
+        $item["name1"] = $item["name1"];
+
       $output .= '
                         <tr>
                           <td>
@@ -291,11 +355,27 @@ function select_item()
     if ( $quest["ReqItemId3"] <> 0 )
     {
       if ( $core == 1 )
-        $iquery = "SELECT * FROM items WHERE entry='".$quest["ReqItemId3"]."'";
+        $iquery = "SELECT * FROM items "
+                    .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+                  "WHERE items.entry='".$quest["ReqItemId3"]."'";
       else
-        $iquery = "SELECT *, name AS name1 FROM item_template WHERE entry='".$quest["ReqItemId3"]."'";
+        $iquery = "SELECT *, name AS name1 FROM item_template "
+          .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+        "WHERE item_template.entry='".$quest["ReqItemId3"]."'";
       $iresult = $sql["world"]->query($iquery);
       $item = $sql["world"]->fetch_assoc($iresult);
+
+      // Localization
+      if ( $locales_search_option != 0 )
+      {
+        if ( $core == 1 )
+          $item["name1"] = $item["name"];
+        else
+          $item["name1"] = $item["name_loc".$locales_search_option];
+      }
+      else
+        $item["name1"] = $item["name1"];
+
       $output .= '
                         <tr>
                           <td>
@@ -306,11 +386,27 @@ function select_item()
     if ( $quest["ReqItemId4"] <> 0 )
     {
       if ( $core == 1 )
-        $iquery = "SELECT * FROM items WHERE entry='".$quest["ReqItemId4"]."'";
+        $iquery = "SELECT * FROM items "
+                    .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+                  "WHERE items.entry='".$quest["ReqItemId4"]."'";
       else
-        $iquery = "SELECT *, name AS name1 FROM item_template WHERE entry='".$quest["ReqItemId4"]."'";
+        $iquery = "SELECT *, name AS name1 FROM item_template "
+          .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+        "WHERE item_template.entry='".$quest["ReqItemId4"]."'";
       $iresult = $sql["world"]->query($iquery);
       $item = $sql["world"]->fetch_assoc($iresult);
+
+      // Localization
+      if ( $locales_search_option != 0 )
+      {
+        if ( $core == 1 )
+          $item["name1"] = $item["name"];
+        else
+          $item["name1"] = $item["name_loc".$locales_search_option];
+      }
+      else
+        $item["name1"] = $item["name1"];
+
       $output .= '
                         <tr>
                           <td>
@@ -329,8 +425,7 @@ function select_item()
     $output .= '
                           </td>
                         </tr>
-                      </table>';
-    $output .= '
+                      </table>
                     </form>';
   }
   $output .= '
@@ -348,7 +443,7 @@ function select_item()
 function select_quantity()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
-    $quest_item, $sql, $core;
+    $locales_search_option, $quest_item, $sql, $core;
 
   valid_login($action_permission["view"]);
 
@@ -356,11 +451,26 @@ function select_quantity()
     redirect("questitem_vendor.php?error=1");
 
   if ( $core == 1 )
-    $query = "SELECT * FROM quests WHERE entry='".$_GET["charquest"]."'";
+    $query = "SELECT *, Title AS Title1 FROM quests "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN quests_localized ON (quests_localized.entry=quests.entry AND language_code='".$locales_search_option."' ) " : " " ).
+              "WHERE quests.entry='".$_GET["charquest"]."'";
   else
-    $query = "SELECT *, RewOrReqMoney AS RewMoney FROM quest_template WHERE entry='".$_GET["charquest"]."'";
+    $query = "SELECT *, Title AS Title1, RewOrReqMoney AS RewMoney FROM quest_template "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_quest ON locales_quest.entry=quest_template.entry " : " " ).
+              "WHERE quest_template.entry='".$_GET["charquest"]."'";
   $result = $sql["world"]->query($query);
   $quest = $sql["world"]->fetch_assoc($result);
+
+  // Localization
+  if ( $locales_search_option == 0 )
+    $quest["Title"] = $quest["Title1"];
+  else
+  {
+    if ( $core == 1 )
+      $quest["Title"] = $quest["Title"];
+    else
+      $quest["Title"] = $quest["Title_loc".$locales_search_option];
+  }
 
   // this_is_junk: We have to pass the required count with the item id or we'll get the required counts
   //               for every other item the quest requires.
@@ -369,11 +479,26 @@ function select_quantity()
   $questitem = $questitem[0];
 
   if ( $core == 1 )
-    $iquery = "SELECT * FROM items WHERE entry='".$questitem."'";
+    $iquery = "SELECT * FROM items "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+              "WHERE items.entry='".$questitem."'";
   else
-    $iquery = "SELECT *, name AS name1 FROM item_template WHERE entry='".$questitem."'";
+    $iquery = "SELECT *, name AS name1 FROM item_template "
+          .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+        "WHERE item_template.entry='".$questitem."'";
   $iresult = $sql["world"]->query($iquery);
   $item = $sql["world"]->fetch_assoc($iresult);
+
+  // Localization
+  if ( $locales_search_option != 0 )
+  {
+    if ( $core == 1 )
+      $item["name1"] = $item["name"];
+    else
+      $item["name1"] = $item["name_loc".$locales_search_option];
+  }
+  else
+    $item["name1"] = $item["name1"];
 
   if ( $core == 1 )
     $cquery = "SELECT guid, level, gold FROM characters WHERE name='".$_GET["charname"]."'";
@@ -525,7 +650,7 @@ function select_quantity()
 function approve()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
-    $quest_item, $sql, $core;
+    $locales_search_option, $quest_item, $sql, $core;
 
   valid_login($action_permission["view"]);
 
@@ -537,11 +662,26 @@ function approve()
     redirect("questitem_vendor.php?error=1");
 
   if ( $core == 1 )
-    $query = "SELECT * FROM items WHERE entry='".$_GET["item"]."'";
+    $query = "SELECT * FROM items "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+              "WHERE items.entry='".$_GET["item"]."'";
   else
-    $query = "SELECT *, name AS name1 FROM item_template WHERE entry='".$_GET["item"]."'";
+    $query = "SELECT *, name AS name1 FROM item_template "
+          .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+        "WHERE item_template.entry='".$_GET["item"]."'";
   $result = $sql["world"]->query($query);
   $item = $sql["world"]->fetch_assoc($result);
+
+  // Localization
+  if ( $locales_search_option != 0 )
+  {
+    if ( $core == 1 )
+      $item["name1"] = $item["name"];
+    else
+      $item["name1"] = $item["name_loc".$locales_search_option];
+  }
+  else
+    $item["name1"] = $item["name1"];
 
   $cquery = "SELECT *, money AS gold FROM characters WHERE name='".$_GET["charname"]."'";
   $cresult = $sql["char"]->query($cquery);
@@ -622,7 +762,7 @@ function approve()
 function purchase()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
-    $from_char, $stationary, $sql, $core;
+    $locales_search_option, $from_char, $stationary, $sql, $core;
 
   valid_login($action_permission["view"]);
 
@@ -634,11 +774,26 @@ function purchase()
     redirect("questitem_vendor.php?error=1");
 
   if ( $core == 1 )
-    $iquery = "SELECT * FROM items WHERE entry='".$_GET["item"]."'";
+    $iquery = "SELECT * FROM items "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+              "WHERE items.entry='".$_GET["item"]."'";
   else
-    $iquery = "SELECT * FROM item_template WHERE entry='".$_GET["item"]."'";
+    $iquery = "SELECT * FROM item_template "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+              "WHERE item_template.entry='".$_GET["item"]."'";
   $iresult = $sql["world"]->query($iquery);
   $item = $sql["world"]->fetch_assoc($iresult);
+
+  // Localization
+  if ( $locales_search_option != 0 )
+  {
+    if ( $core == 1 )
+      $item["name1"] = $item["name"];
+    else
+      $item["name1"] = $item["name_loc".$locales_search_option];
+  }
+  else
+    $item["name1"] = $item["name1"];
 
   if ( $core == 1 )
     $cquery = "SELECT * FROM characters WHERE name='".$_GET["char"]."'";
