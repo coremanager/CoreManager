@@ -46,11 +46,24 @@ function show_list()
                   <span class="legend">'.lang("ultra", "selectchar").'</span>';
   if ( $num_rows == 0 )
   {
+    // Localization
+    $nochars = lang("ultra", "nochars");
+    $nochars = str_replace("%1", $_SESSION["login"], $nochars);
+
     $output .= '
-                  <b>'.$_SESSION["login"].', '.lang("ultra", "nochars").'</b>
-                  <br />
-                  <br />';
-    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def",130);
+                  <table>
+                    <tr>
+                      <td>
+                        <b>'.$nochars.'</b>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>';
+    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def", 130);
+    $output .= '
+                      </td>
+                    </tr>
+                  </table>';
   }
   else
   {
@@ -136,17 +149,17 @@ function select_item()
                       </small>
                       <br />
                       <br />
-                      <input name="myItem" type="text">
+                      <input name="myItem" type="text" />
                       <br />
                       <br />
                       <table>
                         <tr>
                           <td>';
-  makebutton(lang("ultra", "select"), "javascript:do_submit()\" type=\"def",180);
+  makebutton(lang("ultra", "select"), "javascript:do_submit()\" type=\"def", 180);
   $output .= '
                           </td>
                           <td>';
-  makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def",130);
+  makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def", 130);
   $output .= '
                           </td>
                         </tr>
@@ -262,24 +275,49 @@ function select_quantity()
   if ( ( $bc == '' ) || ( $bc == '00' ) )
     $bc = 0;
 
+  // Localization
+  $isranked = lang("ultra", "isranked");
+  $isranked = str_replace("%1", '<b>'.$item["name1"].'</b>', $isranked);
+  $isranked = str_replace("%2", '<b>"'.$qual.'"</b>', $isranked);
+
+  $output .= $isranked;
   $output .= '
-                    <b>'.$item["name1"].'</b> '.lang("ultra", "isranked").' <b>"'.$qual.'"</b>,
-                    <br />'
-                    .lang("ultra", "willcost").' <span id="uv_mul">'.$mul.'</span>x '.lang("ultra", "normalprice").' '
-                    .$bg.'<img src="img/gold.gif" alt="" align="middle" />'
+                    <br />';
+
+  // Localization
+  $willcost = lang("ultra", "willcost");
+  $willcost = str_replace("%1", '<span id="uv_mul">'.$mul.'</span>', $willcost);
+  $cost_display = $bg.'<img src="img/gold.gif" alt="" align="middle" />'
                     .$bs.'<img src="img/silver.gif" alt="" align="middle" />'
-                    .$bc.'<img src="img/copper.gif" alt="" align="middle" /><br />'
-                    .lang("ultra", "or").' '
-                    .$cg.'<img src="img/gold.gif" alt="" align="middle" />'
-                    .$cs.'<img src="img/silver.gif" alt="" align="middle" />'
-                    .$cc.'<img src="img/copper.gif" alt="" align="middle" /> '
-                    .lang("ultra", "each").'.
+                    .$bc.'<img src="img/copper.gif" alt="" align="middle" />';
+  $willcost = str_replace("%2", $cost_display, $willcost);
+
+  $output .= $willcost;
+  $output .= '
+                    <br />';
+
+  // Localization
+  $orcost = lang("ultra", "or");
+  $or_display = $cg.'<img src="img/gold.gif" alt="" align="middle" />'
+                .$cs.'<img src="img/silver.gif" alt="" align="middle" />'
+                .$cc.'<img src="img/copper.gif" alt="" align="middle" />';
+  $orcost = str_replace("%1", $or_display, $orcost);
+
+  $output .= $orcost;
+  $output .= '
                     <br />
-                    <br />
-                    <b>'.$_GET["charname"].'</b> '.lang("ultra", "has").' '
-                    .$pg.'<img src="img/gold.gif" alt="" align="middle" />'
-                    .$ps.'<img src="img/silver.gif" alt="" align="middle" />'
-                    .$pc.'<img src="img/copper.gif" alt="" align="middle" />
+                    <br />';
+
+  // Localization
+  $charhas = lang("ultra", "has");
+  $charhas = str_replace("%1", '<b>'.$_GET["charname"].'</b>', $charhas);
+  $money_display = $pg.'<img src="img/gold.gif" alt="" align="middle" />'
+                  .$ps.'<img src="img/silver.gif" alt="" align="middle" />'
+                  .$pc.'<img src="img/copper.gif" alt="" align="middle" />';
+  $charhas = str_replace("%2", $money_display, $charhas);
+
+  $output .= $charhas;
+  $output .= '
                     <br />
                     <br />
                     <form method="get" action="ultra_vendor.php" name="form">
@@ -334,7 +372,7 @@ function approve()
                 .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
               "WHERE items.entry='".$_GET["item"]."'";
   else
-    $query = "SELECT * FROM item_template "
+    $query = "SELECT *, name AS name1 FROM item_template "
                 .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
               "WHERE item_template.entry='".$_GET["item"]."'";
   $result = $sql["world"]->query($query);
@@ -378,27 +416,53 @@ function approve()
   {
     if ( $total > $char["gold"] )
     {
+      // Localization
+      $poor = lang("ultra", "insufficientfunds");
+      $poor = str_replace("%1", '<b>'.$char["name"].'</b>', $poor);
+      $poor = str_replace("%2", '<span id="uv_insufficient_funds">'.$_GET["want"].'</span>',$poor);
+      $poor = str_replace("%3", '<b>'.$item["name1"].'</b>', $poor);
+
       $output .= '
-                    <b>'.$char["name"].'</b> '.lang("ultra", "insufficientfunds").' <span id="uv_insufficient_funds">'.$_GET["want"].'</span>x <b>'.$item["name1"].'</b>.
-                    <br />
-                    <br />';
-      makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def",130);
+                    <table>
+                      <tr>
+                        <td>';
+      $output .= $poor;
+      $output .= '
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>';
+      makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def", 130);
+      $output .= '
+                        </td>
+                      </tr>
+                    </table>';
     }
     else
     {
+      // Localization
+      $purchase = lang("ultra", "purchase");
+      $purchase = str_replace("%1", '<span id="uv_approve_quantity">'.$_GET["want"].'</span>', $purchase);
+      $purchase = str_replace("%2", '<b>'.$item["name1"].'</b>', $purchase);
+      $cost_display = $cg.'<img src="img/gold.gif" alt="" align="middle" /> '
+                      .$cs.'<img src="img/silver.gif" alt="" align="middle" /> '
+                      .$cc.'<img src="img/copper.gif" alt="" align="middle" />';
+      $purchase = str_replace("%3", $cost_display, $purchase);
+
       $output .= '
                     <form method="get" action="ultra_vendor.php" name="form">
                       <input type="hidden" name="action" value="purchase" />
                       <input type="hidden" name="char" value="'.$char["name"].'" />
                       <input type="hidden" name="item" value="'.$item["entry"].'" />
                       <input type="hidden" name="want" value="'.$_GET["want"].'" />
-                      <input type="hidden" name="total" value="'.$total.'" />'
-                      .lang("ultra", "purchase").' <span id="uv_approve_quantity">'.$_GET["want"].'</span>x <b>'
-                      .$item["name1"].'</b> '.lang("ultra", "for").' '.$cg.'<img src="img/gold.gif" alt="" align="middle" /> '
-                      .$cs.'<img src="img/silver.gif" alt="" align="middle" /> '
-                      .$cc.'<img src="img/copper.gif" alt="" align="middle" />?<br />
-                      <br />
+                      <input type="hidden" name="total" value="'.$total.'" />
                       <table>
+                        <tr>
+                          <td colspan="2">';
+      $output .= $purchase;
+      $output .= '
+                          </td>
+                        </tr>
                         <tr>
                           <td>';
       makebutton(lang("ultra", "submit"), "javascript:do_submit()\" type=\"def",180);
@@ -416,7 +480,7 @@ function approve()
   else
   {
     $output .= lang("ultra", "insufficientquantity").'.<br /><br />';
-    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def",130);
+    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def", 130);
   }
   $output .= '
                   </div>

@@ -824,9 +824,9 @@ $GLOBALS['lang_mail'] = array
   'send_mail' => 'فرستادن پیام',
   'result' => 'In-Game Mail Result',
   // translation note: Message should read as 'Successfully sent message to: [user]'
-  'result_success' => 'Successfully sent message to',
+  'result_success' => 'Successfully sent message to: %1',
   // translation note: Message should read as 'Failed to send message to: [user]'
-  'result_failed' => 'Failed to send message to',
+  'result_failed' => 'Failed to send message to: %1',
 );
 
 
@@ -900,7 +900,7 @@ $GLOBALS['lang_realm'] = array
   'test_server' => 'Test Server',
   'qa_server' => 'QA Server',
   'others' => 'Others',
-  'conf_from_file' => '** This realm appear not to have proper configuration.<br />Make sure to properly configure it in the Servers tab of the ACP before using it. **',
+  'conf_from_file' => '** This realm appears not to have proper configuration.<br />Make sure to properly configure it in the Servers tab of the ACP before using it. **',
   'offline' => 'آفلاین',
   'status' => 'وضعیت',
   'notconfigured' => 'Not Configured yet',
@@ -1220,24 +1220,31 @@ $GLOBALS['lang_questitem'] = array
   'selectitem' => 'Select Item',
   'selectquantity' => 'Select quantity',
   'approvecost' => 'Approve Cost',
-  'peritem1' => 'So, each',
-  'peritem2' => 'will cost',
-  'noquests' => 'doesn\'t have any quests!',
-  'nochars' => 'you don\'t have any characters!',
-  'noitems' => 'doesn\'t require any items!',
-  'insufficientfunds' => 'doesn\'t have enough money for',
-  'has' => 'has',
-  'and' => 'and',
-  'for' => 'for',
   'wanted' => 'Quanity desired',
-  'purchase' => 'Purchase',
-  'willreward' => 'will reward',
-  'requires' => 'requires',
   'submit' => 'Submit',
   'questitems' => 'Quest items',
-  'done' => 'Transaction successful',
-  'failed' => 'Transaction failed',
-  'select' => 'Select'
+  'done' => 'Transaction successful.',
+  'failed' => 'Transaction failed!',
+  'select' => 'Select',
+  // translation note: %1 = [item name], %2 = [money]
+  'peritem' => 'So, each %1 will cost %2',
+  // translation note: %1 = [account name]
+  'nochars' => "%1, you don't have any characters!",
+  // translation note: %1 = [char]
+  'noquests' => "%1 doesn't have any quests!",
+  // translation note: %1 = [quest name]
+  'noitems' => "%1 doesn't require any items!",
+  // translation note: %1 = [char], %2 = [quantity], %3 = [item name]
+  'insufficientfunds' => "%1 doesn't have enough money for %2x %3",
+  // translation note: %1 = [char], %2 = [money]
+  'has' => '%1 has %2',
+  // translation note: %1 = [quantity], %2 = [item name], %3 = [money]
+  'purchase' => 'Purchase %1x %2 for %3?',
+  // translation note: %1 = [quest name], %2 = [reward amount]
+  'willreward' => '%1 will reward %2',
+  // translation note: %1 = [quest name], %2 = [required quantity], %3 = [item name]
+  //                   %4 = optional line break, %5 = [char], %6 = [char's quantity]
+  'requires' => '%1 requires %2x %3%4and %5 has %6',
 );
   
 // ----- ULTRA_VENDOR.PHP -----
@@ -1251,26 +1258,29 @@ $GLOBALS['lang_ultra'] = array
   'itemline2' => 'To get the id number, find the item on',
   'itemline3' => 'In the URL will be ?item=#. That # is the id',
   'approvecost' => 'Approve Cost',
-  'isranked' => 'is ranked as',
-  'willcost' => 'so each one will cost',
-  'normalprice' => 'the normal price of',
-  'or' => 'or',
-  'each' => 'each',
-  'nochars' => 'you don\'t have any characters!',
-  'insufficientfunds' => 'doesn\'t have enough money for',
-  'insufficientquantity' => 'You need to specify a quantity greater than zero',
-  'has' => 'has',
-  'and' => 'and',
-  'for' => 'for',
   'wanted' => 'Quanity desired',
-  'purchase' => 'Purchase',
   'submit' => 'Submit',
   'questitems' => 'Special Order items',
-  'done' => 'Transaction successful',
-  'failed' => 'Transaction failed',
-  'select' => 'Select'
+  'done' => 'Transaction successful.',
+  'failed' => 'Transaction failed!',
+  'select' => 'Select',
+  'insufficientquantity' => 'You need to specify a quantity greater than zero.',
+  // translation note: %1 = [item name], %2 = [rarity]
+  'isranked' => '%1 is ranked as %2,',
+  // translation note: %1 = [multiplier], %2 = [money]
+  'willcost' => 'so each one will cost %1x the normal price of %2',
+  // translation note: %1 = [money]
+  'or' => 'or %1 each.',
+  // translation note: %1 = [account name]
+  'nochars' => "%1, you don't have any characters!",
+  // translation note: %1 = [char], %2 = [quantity], %3 = [item name]
+  'insufficientfunds' => "%1 doesn't have enough money for %2x %3",
+  // translation note: %1 = [char], $2 = [money]
+  'has' => '%1 has %2',
+  // translation note: %1 = [quantity], %2 = [item name], %3 = [money]
+  'purchase' => 'Purchase %1x %2 for %3?',
 );
-  
+
 // ----- ULTRA_VENDOR.PHP -----
 $GLOBALS['lang_ultra_quality'] = array
 (
@@ -1487,11 +1497,8 @@ $GLOBALS['lang_xname'] = array
   'confirmname' => 'Confirm New Name',
   'save' => 'Save Changes',
   // The following is the message that asks GMs permission to change the character's name
-  // To help with grammar it will look like this:
-  // Player [account] has requested to change the race of [character] to [new name].
-  'player' => 'Player',
-  'hasreq' => 'has requested to change the <b>name</b> of',
-  'to' => 'to',
+  // tranlation note: %1 = [account name], %2 = [char], %3 = [new name]
+  'player' => 'Player %1 has requested to change the <b>name</b> of %2 zu %3',
   // end message
   'nomatch' => 'The character names do not match!',
   'already' => 'A Name Change, Race Change, or Transfer request is already on file for that character.',
@@ -1501,11 +1508,9 @@ $GLOBALS['lang_xname'] = array
   // The following is for the ingame mail message about name change denial.
   // It MUST be URL compatible! (e.g. ü = %FC)
   // spaces MUST be replaced, use + or %20
-  // To help with grammar, the body portion will look like this:
-  // Sorry, [name], your Name Change request has been denied.
+  // translation note: %1 = [char]
   'subject' => 'Name+Change+denied',
-  'body1' => 'Sorry,+',
-  'body2' => ',+your+Name+Change+request+has+been+denied.',
+  'body' => 'Sorry,+%1,+your+Name+Change+request+has+been+denied.',
   // end message
 );
 
@@ -1526,11 +1531,8 @@ $GLOBALS['lang_xrace'] = array
   'confirmname' => 'Confirm New Name',
   'save' => 'Save Changes',
   // The following is the message that asks GMs permission to change the character's race
-  // To help with grammar it will look like this:
-  // Player [account] has requested to change the race of [character] to [new race].
-  'player' => 'Player',
-  'hasreq' => 'has requested to change the <b>Race</b> of',
-  'to' => 'to',
+  // tranlation note: %1 = [account name], %2 = [char], %3 = [new name]
+  'playerhasreq' => 'Player %1 has requested to change the <b>Race</b> of %2 zu %3',
   // end message
   'nomatch' => 'The selected race is not compatible with the character\'s class!',
   'already' => 'A Name Change, Race Change, or Transfer request is already on file for that character.',
@@ -1540,11 +1542,9 @@ $GLOBALS['lang_xrace'] = array
   // The following is for the ingame mail message about race change denial.
   // It MUST be URL compatible! (e.g. ü = %FC)
   // spaces MUST be replaced, use + or %20
-  // To help with grammar, the body portion will look like this:
-  // Sorry, [name], your Race Change request has been denied.
+  // translation note: %1 = [char]
   'subject' => 'Race+Change+denied',
-  'body1' => 'Sorry,+',
-  'body2' => ',+your+Race+Change+request+has+been+denied.',
+  'body' => 'Sorry,+%1,+your+Race+Change+request+has+been+denied.',
   // end message
 );
 
@@ -1564,11 +1564,8 @@ $GLOBALS['lang_xacct'] = array
   'newacct' => 'New Account',
   'save' => 'Save Changes',
   // The following is the message that asks GMs permission to change the character's account
-  // To help with grammar it will look like this:
-  // Player [account] has requested to transfer [character] to [new acct].
-  'player' => 'Player',
-  'hasreq' => 'has requested to <b>transfer</b>',
-  'to' => 'to',
+  // tranlation note: %1 = [account name], %2 = [char], %3 = [new name]
+  'playerhasreq' => 'Player %1 has requested to <b>transfer</b> %2 to %3',
   // end message
   'nomatch' => 'The character names do not match!',
   'already' => 'A Name Change, Race Change, or Transfer request is already on file for that character.',
@@ -1577,11 +1574,9 @@ $GLOBALS['lang_xacct'] = array
   // The following is for the ingame mail message about transfer denial.
   // It MUST be URL compatible! (e.g. ü = %FC)
   // spaces MUST be replaced, use + or %20
-  // To help with grammar, the body portion will look like this:
-  // Sorry, [name], your Transfer request has been denied.
+  // translation note: %1 = [char]
   'subject' => 'Transfer+denied',
-  'body1' => 'Sorry,+',
-  'body2' => ',+your+Transfer+request+has+been+denied.',
+  'body' => 'Sorry,+%1,+your+Transfer+request+has+been+denied.',
   // end message
 );
 

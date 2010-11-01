@@ -415,16 +415,32 @@ else
 
         $change_acct = $sql["logon"]->fetch_assoc($sql["logon"]->query($change_acct_query));
         if ( isset($change["new_name"]) )
+        {
+          // Localization
+          $namechange = lang("xname", "playerhasreq");
+          $namechange = str_replace("%1", $change_acct["login"], $namechange);
+          $namechange = str_replace("%2", $change_char["name"], $namechange);
+          $namechange = str_replace("%3", $change["new_name"], $namechange);
+
           $output .= '
               <tr>
                 <td align="left" class="large">
-                  <span>'.lang("xname", "player").' '.$change_acct["login"].' '.lang("xname", "hasreq").' '.$change_char["name"].' '.lang("xname", "to").' '.$change["new_name"].'</span>';
+                  <span>'.$namechange.'</span>';
+        }
 
         if ( isset($change["new_race"]) )
+        {
+          // Localization
+          $racechange = lang("xrace", "playerhasreq");
+          $racechange = str_replace("%1", $change_acct["login"], $racechange);
+          $racechange = str_replace("%2", $change_char["name"], $racechange);
+          $racechange = str_replace("%3", char_get_race_name($change["new_race"]), $racechange);
+
           $output .= '
               <tr>
                 <td align="left" class="large">
-                  <span>'.lang("xrace", "player").' '.$change_acct["login"].' '.lang("xrace", "hasreq").' '.$change_char["name"].' '.lang("xrace", "to").' '.char_get_race_name($change["new_race"]).'</span>';
+                  <span>'.$racechange.'</span>';
+        }
 
         if ( isset($change["new_acct"]) )
         {
@@ -436,10 +452,16 @@ else
           $new_acct_result = $sql["logon"]->fetch_assoc($new_acct_result);
           $new_acct_name = $new_acct_result["login"];
 
+          // Localization
+          $acctchange = lang("xacct", "playerhasreq");
+          $acctchange = str_replace("%1", $change_acct["login"], $acctchange);
+          $acctchange = str_replace("%2", $change_char["name"], $acctchange);
+          $acctchange = str_replace("%3", $new_acct_name, $acctchange);
+
           $output .= '
               <tr>
                 <td align="left" class="large">
-                  <span>'.lang("xacct", "player").' '.$change_acct["login"].' '.lang("xacct", "hasreq").' '.$change_char["name"].' '.lang("xname", "to").' '.$new_acct_name.'</span>';
+                  <span>'.$acctchange.'</span>';
         }
 
         if ( $change_char["online"] )

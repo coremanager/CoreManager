@@ -45,10 +45,14 @@ function show_list()
   $output .= '
                   <div class="half_frame fieldset_border">
                     <span class="legend">'.lang("questitem", "selectchar").'</span>';
-  if( $num_rows == 0 )
+  if ( $num_rows == 0 )
   {
+    // Localization
+    $nochars = lang("questitem", "nochars");
+    $nochars = str_replace("%1", $_SESSION["login"], $nochars);
+
     $output .= '
-                    <b>'.$_SESSION["login"].', '.lang("questitem", "nochars").'</b>
+                    <b>'.$nochars.'</b>
                     <br />
                     <br />';
     makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def",130);
@@ -144,11 +148,24 @@ function select_quest()
 
   if ( $num_rows == 0 )
   {
+    // Localization
+    $noquests = lang("questitem", "noquests");
+    $noquests = str_replace("%1", $_GET["charname"], $noquests);
+
     $output .= '
-                    <b>'.$_GET["charname"].' '.lang("questitem", "noquests").'</b>
-                    <br />
-                    <br />';
-    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def",130);
+                    <table>
+                      <tr>
+                        <td>
+                          <b>'.$noquests.'</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>';
+    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def", 130);
+    $output .= '
+                        </td>
+                      </tr>
+                    </table>';
   }
   else
   {
@@ -197,11 +214,11 @@ function select_quest()
     {
       $field = $sql["char"]->fetch_assoc($result);
       if ( $core == 1 )
-        $qquery = "SELECT * FROM quests WHERE "
+        $qquery = "SELECT *, Title AS Title1 FROM quests WHERE "
                     .( ( $locales_search_option != 0 ) ? "LEFT JOIN quests_localized ON (quests_localized.entry=quests.entry AND language_code='".$locales_search_option."' ) " : " " ).
                   "WHERE quests.entry='".$field["quest_id"]."'";
       else
-        $qquery = "SELECT * FROM quest_template "
+        $qquery = "SELECT *, Title AS Title1 FROM quest_template "
                     .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_quest ON locales_quest.entry=quest_template.entry " : " " ).
                   "WHERE quest_template.entry='".$field["quest_id"]."'";
       $qresult = $sql["world"]->query($qquery);
@@ -279,8 +296,24 @@ function select_item()
 
   if ( $quest["ReqItemId1"] == 0 )
   {
-    $output .= '<b>'.$quest["Title"].' '.lang("questitem", "noitems").'</b><br /><br />';
-    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def",130);
+    // Localization
+    $noitems = lang("questitem", "noitems");
+    $noitems = str_replace("%1", $quest["Title"], $noitems);
+
+    $output .= '
+                    <table>
+                      <tr>
+                        <td>
+                          <b>'.$noitems.'</b>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>';
+    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def", 130);
+    $output .= '
+                        </td>
+                      </tr>
+                    </table>';
   }
   else
   {
@@ -555,6 +588,21 @@ function select_quantity()
   if ( ( $rc == '' ) || ( $rc == '00' ) )
     $rc = 0;
 
+  // Localization
+  $char_has_money = lang("questitem", "has");
+  $char_has_money = str_replace("%1", '<b>'.$_GET["charname"].'</b>', $char_has_money);
+  $char_money_display = $pg.'<img src="img/gold.gif" alt="" align="middle" />'
+                      .$ps.'<img src="img/silver.gif" alt="" align="middle" />'
+                      .$pc.'<img src="img/copper.gif" alt="" align="middle" />';
+  $char_has_money = str_replace("%2", $char_money_display, $char_has_money);
+  
+  $quest_will_reward = lang("questitem", "willreward");
+  $quest_will_reward = str_replace("%1", '<b>'.$quest["Title"].'</b>', $quest_will_reward);
+  $quest_reward_display = $rg.'<img src="img/gold.gif" alt="" align="middle" />'
+                        .$rs.'<img src="img/silver.gif" alt="" align="middle" />'
+                        .$rc.'<img src="img/copper.gif" alt="" align="middle" />';
+  $quest_will_reward = str_replace("%2", $quest_reward_display, $quest_will_reward);
+
   $output .= '
           <table class="top_hidden">
             <tr>
@@ -562,18 +610,12 @@ function select_quantity()
                 <center>
                   <div class="half_frame fieldset_border">
                     <span class="legend">'.lang("questitem", "selectquantity").'</span>';
+  $output .= $char_has_money;
   $output .= '
-                    <b>'.$_GET["charname"].'</b> '.lang("questitem", "has").' '
-                    .$pg.'<img src="img/gold.gif" alt="" align="middle" />'
-                    .$ps.'<img src="img/silver.gif" alt="" align="middle" />'
-                    .$pc.'<img src="img/copper.gif" alt="" align="middle" />
                     <br />
                     <br />';
+  $output .= $quest_will_reward;
   $output .= '
-                    <b>'.$quest["Title"].'</b> '.lang("questitem", "willreward").' '
-                    .$rg.'<img src="img/gold.gif" alt="" align="middle" />'
-                    .$rs.'<img src="img/silver.gif" alt="" align="middle" />'
-                    .$rc.'<img src="img/copper.gif" alt="" align="middle" />
                     <br />
                     <br />';
 
@@ -592,18 +634,30 @@ function select_quantity()
   if ( ( $cc == '' ) || ( $cc == '00' ) )
     $cc = 0;
 
-  $output .= '
-                    '.lang("questitem", "peritem1").' <b>'.$item["name1"].'</b> '.lang("questitem", "peritem2").' '
-                    .$cg.'<img src="img/gold.gif" alt="" align="middle" />'
+  // Localization
+  $per_item = lang("questitem", "peritem");
+  $per_item = str_replace("%1", '<b>'.$item["name1"].'</b>', $per_item);
+  $item_cost_display = $cg.'<img src="img/gold.gif" alt="" align="middle" />'
                     .$cs.'<img src="img/silver.gif" alt="" align="middle" />'
-                    .$cc.'<img src="img/copper.gif" alt="" align="middle" />
+                    .$cc.'<img src="img/copper.gif" alt="" align="middle" />';
+  $per_item = str_replace("%2", $item_cost_display, $per_item);
+
+  $output .= $per_item;
+  $output .= '
                     <br />
                     <br />';
 
+  // Localization
+  $requires = lang("questitem", "requires");
+  $requires = str_replace("%1", '<b>'.$quest["Title"].'</b>', $requires);
+  $requires = str_replace("%2", '<span id="qiv_quest_requires">'.$count.'</span>', $requires);
+  $requires = str_replace("%3", '<b>'.$item["name1"].'</b>', $requires);
+  $requires = str_replace("%4", '<br />', $requires);
+  $requires = str_replace("%5", '<b>'.$_GET["charname"].'</b>', $requires);
+  $requires = str_replace("%6", '<span id="qiv_player_has">'.$have.'</span>', $requires);
+
+  $output .= $requires;
   $output .= '
-                    <b>'.$quest["Title"].'</b> '.lang("questitem", "requires").' <span id="qiv_quest_requires">'.$count.'</span>x <b>'.$item["name1"].'</b>;
-                    <br />'.lang("questitem", "and").' <b>'.$_GET["charname"].'</b> '.
-                    lang("questitem", "has").' <span id="qiv_player_has">'.$have.'</span>.
                     <br />
                     <br />';
 
@@ -708,14 +762,39 @@ function approve()
                     <span class="legend">'.lang("questitem", "approvecost").'</span>';
   if ( $total > $char["gold"] )
   {
+    // Localization
+    $poor = lang("questitem", "insufficientfunds");
+    $poor = str_replace("%1", '<b>'.$char["name"].'</b>', $poor);
+    $poor = str_replace("%2", '<span id="qiv_insuffiecient_funds">'.$_GET["want"].'</span>', $poor);
+    $poor = str_replace("%3", '<b>'.$item["name1"].'</b>', $poor);
+
     $output .= '
-                    <b>'.$char["name"].'</b> '.lang("questitem", "insufficientfunds").' <span id="qiv_insuffiecient_funds">'.$_GET["want"].'</span>x <b>'.$item["name1"].'</b>.
-                    <br />
-                    <br />';
-    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def",130);
+                    <table>
+                      <tr>
+                        <td>';
+    $output .= $poor;
+    $output .= '
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="left">';
+    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def", 130);
+    $output .= '
+                        </td>
+                      </tr>
+                    </table>';
   }
   else
   {
+    // Localization
+    $purchase = lang("questitem", "purchase");
+    $purchase = str_replace("%1", '<span id="qiv_approve_quantity">'.$_GET["want"].'</span>', $purchase);
+    $purchase = str_replace("%2", '<b>'.$item["name1"].'</b>', $purchase);
+    $gold_display = $cg.'<img src="img/gold.gif" alt="" align="middle" /> '
+                    .$cs.'<img src="img/silver.gif" alt="" align="middle" /> '
+                    .$cc.'<img src="img/copper.gif" alt="" align="middle" />';
+    $purchase = str_replace("%3", $gold_display, $purchase);
+
     $output .= '
                     <form method="get" action="questitem_vendor.php" name="form">
                       <input type="hidden" name="action" value="purchase" />
@@ -726,17 +805,15 @@ function approve()
                       <table>
                         <tr>
                           <td colspan="2">
-                            <center>'
-                              .lang("questitem", "purchase").' <span id="qiv_approve_quantity">'.$_GET["want"].'</span>x <b>'.$item["name1"].'</b> '.lang("questitem", "for").' '
-                              .$cg.'<img src="img/gold.gif" alt="" align="middle" /> '
-                              .$cs.'<img src="img/silver.gif" alt="" align="middle" /> '
-                              .$cc.'<img src="img/copper.gif" alt="" align="middle" />?
+                            <center>';
+    $output .= $purchase;
+    $output .= '
                             </center>
                           </td>
                         </tr>
                         <tr>
                           <td>';
-    makebutton(lang("questitem", "submit"), "javascript:do_submit()\" type=\"def",180);
+    makebutton(lang("questitem", "submit"), "javascript:do_submit()\" type=\"def", 180);
     $output .= '
                           </td>
                           <td>';

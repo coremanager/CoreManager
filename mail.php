@@ -600,15 +600,16 @@ function result()
     case 0: // success
     {
       $mess = lang("mail", "result_success");
+      $mess = str_replace("%1", $recipient, $mess);
       break;
     }
     case -1: //failure
     {
       $mess = lang("mail", "result_failed");
+      $mess = str_replace("%1", $recipient, $mess);
       break;
     }
   }
-  $mess .= ': '.$recipient.'<br>';
   $output .= '
         <center>
           <br />

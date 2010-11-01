@@ -235,7 +235,11 @@ function denied()
 
   $char = $sql["char"]->fetch_assoc($sql["char"]->query("SELECT * FROM characters WHERE guid='".$guid."'"));
 
-  redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char["name"]."&subject=".lang("xacct", "subject")."&body=".lang("xacct", "body1").$char["name"].lang("xacct", "body2")."&group_sign==&group_send=gm_level&money=0&att_item=0&att_stack=0&redirect=index.php");
+  // Localization
+  $body = lang("xacct", "body");
+  $body = str_replace("%1", $char["name"], $body);
+
+  redirect("mail.php?action=send_mail&type=ingame_mail&to=".$char["name"]."&subject=".lang("xacct", "subject")."&body=".$body."&group_sign==&group_send=gm_level&money=0&att_item=0&att_stack=0&redirect=index.php");
 }
 
 
