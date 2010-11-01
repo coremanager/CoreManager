@@ -182,7 +182,7 @@ function char_inv()
             elseif ( $slot["slot"] < 39 ) // SLOT 23 TO 38 (BackPack)
             {
               $i_query = "SELECT 
-                *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+                *, description AS description1, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
                 socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
                 requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
                 sellprice AS SellPrice, itemlevel AS ItemLevel
@@ -201,7 +201,7 @@ function char_inv()
             elseif ( $slot["slot"] < 67 ) // SLOT 39 TO 66 (Bank)
             {
               $i_query = "SELECT
-                *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+                *, description AS description1, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
                 socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
                 requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
                 sellprice AS SellPrice, itemlevel AS ItemLevel
@@ -228,7 +228,7 @@ function char_inv()
             if ( isset($bag_id[$slot["containerslot"]]) )
             {
               $i_query = "SELECT
-                *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+                *, description AS description1, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
                 socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
                 requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
                 sellprice AS SellPrice, itemlevel AS ItemLevel
@@ -248,7 +248,7 @@ function char_inv()
             elseif ( isset($bank_bag_id[$slot["containerslot"]]) )
             {
               $i_query = "SELECT
-                *, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+                *, description AS description1, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
                 socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
                 requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
                 sellprice AS SellPrice, itemlevel AS ItemLevel
@@ -276,7 +276,7 @@ function char_inv()
             }
             elseif ( $slot["slot"] < 39 ) // SLOT 23 TO 38 (BackPack)
             {
-              $i_query = "SELECT * FROM item_template "
+              $i_query = "SELECT *, description AS description1 FROM item_template "
                   .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
                 "WHERE item_template.entry='".$slot["entry"]."'";
 
@@ -290,7 +290,7 @@ function char_inv()
             }
             elseif ( $slot["slot"] < 67 ) // SLOT 39 TO 66 (Bank)
             {
-              $i_query = "SELECT * FROM item_template "
+              $i_query = "SELECT *, description AS description1 FROM item_template "
                   .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
                 "WHERE item_template.entry='".$slot["entry"]."'";
 
@@ -312,7 +312,7 @@ function char_inv()
             // Bags
             if ( isset($bag_id[$slot["bag"]]) )
             {
-              $i_query = "SELECT * FROM item_template "
+              $i_query = "SELECT *, description AS description1 FROM item_template "
                   .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
                 "WHERE item_template.entry='".$slot["entry"]."'";
 
@@ -327,7 +327,7 @@ function char_inv()
             // Bank Bags
             elseif ( isset($bank_bag_id[$slot["bag"]]) )
             {
-              $i_query = "SELECT * FROM item_template "
+              $i_query = "SELECT *, description AS description1 FROM item_template "
                   .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
                 "WHERE item_template.entry='".$slot["entry"]."'";
 

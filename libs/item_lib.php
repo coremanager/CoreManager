@@ -1072,8 +1072,19 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
       include_once("id_tab.php");
       $tooltip .= "<font color='orange'>".lang("item", "item_set")." : ".get_itemset_name($item["itemset"])." (".$item["itemset"].")</font><br />";
     }
-    if ( $item["description"] )
-      $tooltip .= "<font color='orange'>''".str_replace("\"", " '", $item["description"])."'</font><br />";
+    if ( $item["description1"] )
+    {
+      // Localization
+      if ( $locales_search_option != 0 )
+        if ( $core == 1 )
+          $item["description"] = $item["description"];
+        else
+          $item["description"] = $item["description_loc".$locales_search_option];
+      else
+        $item["description"] = $item["description1"];
+
+      $tooltip .= "<font color='orange'>'".str_replace("\"", " '", $item["description"])."'</font><br />";
+    }
       
     if ( $creator )
     {
