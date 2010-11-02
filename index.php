@@ -329,19 +329,20 @@ else
           timestamp, gm_tickets.playerGuid, acct
           FROM gm_tickets
             LEFT JOIN characters ON characters.guid=gm_tickets.playerGuid
-          ORDER BY ticketid DESC LIMIT '".$start_m."', 3");
+          ORDER BY ticketid DESC LIMIT ".$start_m.", 3");
       elseif ( $core == 2 )
-        $result = $sql["char"]->query("SELECT character_tickets.guid AS ticketid, characters.level, message,
-          character_tickets.name, closed AS deleted, timestamp, character_tickets.playerGuid, account AS acct
-          FROM character_tickets
-            LEFT JOIN characters ON characters.guid=character_tickets.playerGuid
-          ORDER BY ticketid DESC LIMIT '".$start_m."', 3");
+        $result = $sql["char"]->query("SELECT character_ticket.ticket_id AS ticketid, characters.level,
+          ticket_text AS message, characters.name, UNIX_TIMESTAMP(ticket_lastchange) AS timestamp,
+          character_ticket.guid, account AS acct
+          FROM character_ticket
+            LEFT JOIN characters ON characters.guid=character_ticket.guid
+          ORDER BY ticketid DESC LIMIT ".$start_m.", 3");
       else
         $result = $sql["char"]->query("SELECT gm_tickets.guid AS ticketid, characters.level, message,
           gm_tickets.name, closed AS deleted, timestamp, gm_tickets.playerGuid, account AS acct
           FROM gm_tickets
             LEFT JOIN characters ON characters.guid=gm_tickets.playerGuid
-          ORDER BY ticketid DESC LIMIT '".$start_m."', 3");
+          ORDER BY ticketid DESC LIMIT ".$start_m.", 3");
 
       while ( $post = $sql["char"]->fetch_assoc($result) )
       {
