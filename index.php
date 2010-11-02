@@ -330,7 +330,7 @@ else
           FROM gm_tickets
             LEFT JOIN characters ON characters.guid=gm_tickets.playerGuid
           ORDER BY ticketid DESC LIMIT '".$start_m."', 3");
-      else
+      elseif ( $core == 2 )
         $result = $sql["char"]->query("SELECT character_tickets.guid AS ticketid, characters.level, message,
           character_tickets.name, closed AS deleted, timestamp, character_tickets.playerGuid, account AS acct
           FROM character_tickets
