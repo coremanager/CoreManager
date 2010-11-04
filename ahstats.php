@@ -28,7 +28,7 @@ valid_login($action_permission["view"]);
 //#############################################################################
 function browse_auctions()
 {
-  global $output, $characters_db, $world_db, $realm_id, $locales_search_option
+  global $output, $characters_db, $world_db, $realm_id, $locales_search_option,
     $itemperpage, $item_datasite, $server, $user_lvl, $user_id, $sql, $core;
 
   wowhead_tt();
