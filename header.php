@@ -64,13 +64,15 @@ if ( isset($_COOKIE["theme"]) )
 if ( isset($_COOKIE["lang"]) )
 {
   $lang = $_COOKIE["lang"];
-  if ( file_exists('lang/'.$lang.'.php') )
-    ;
-  else
+  if ( !file_exists('lang/'.$lang.'.php') )
     $lang = $language;
 }
 else
+{
   $lang = $language;
+  // if we didn't get a cookie for language, create one (english is default)
+  setcookie('lang', 'english', time()+60*60*24*30);
+}
 
 //---------------------Current Filename----------------------------------------
 $cur_filename = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], "/")+1);
