@@ -388,7 +388,7 @@ function browse_auctions()
     $s = floor($value/100);
     $value -= $s*100;
     $c = $value;
-    $bid = $g.'<img src="./img/gold.gif\" alt="" /> '.$s.'<img src="./img/silver.gif" alt="" /> '.$c.'<img src="./img/copper.gif" alt="" /> ';
+    $bid = $g.'<img src="./img/gold.gif" alt="" /> '.$s.'<img src="./img/silver.gif" alt="" /> '.$c.'<img src="./img/copper.gif" alt="" /> ';
 
 
     $output .= '
