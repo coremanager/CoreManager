@@ -217,7 +217,7 @@ function delete_tickets()
 //########################################################################################################################
 function edit_ticket()
 {
-  global  $output, $characters_db, $realm_id, $action_permission, $sql, $core;
+  global  $output, $characters_db, $realm_id, $action_permission, $site_encoding, $sql, $core;
 
   valid_login($action_permission["update"]);
 
