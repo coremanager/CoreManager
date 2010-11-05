@@ -356,7 +356,7 @@ function browse_auctions()
       if ( $core == 1 )
         $item_result["name1"] = $item_result["name"];
       else
-        $item_result["name1"] = $item["name_loc".$locales_search_option];
+        $item_result["name1"] = $item_result["name_loc".$locales_search_option];
     }
     else
       $item_result["name1"] = $item_result["name1"];
