@@ -633,9 +633,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'HEAD'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[1][3]['enchantment'], $equiped_items[1][3]['property'], $equiped_items[1][3]['creator'], $equiped_items[1][3]['durability'], $equiped_items[1][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[1][3]['enchantment'], $equiped_items[1][3]['property'], $equiped_items[1][3]['creator'], $equiped_items[1][3]['durability'], $equiped_items[1][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -709,9 +711,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'GLOVES'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[10][3]['enchantment'], $equiped_items[10][3]['property'], $equiped_items[10][3]['creator'], $equiped_items[10][3]['durability'], $equiped_items[10][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[10][3]['enchantment'], $equiped_items[10][3]['property'], $equiped_items[10][3]['creator'], $equiped_items[10][3]['durability'], $equiped_items[10][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -736,9 +740,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'NECK'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[2][3]['enchantment'], $equiped_items[2][3]['property'], $equiped_items[2][3]['creator'], $equiped_items[2][3]['durability'], $equiped_items[2][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[2][3]['enchantment'], $equiped_items[2][3]['property'], $equiped_items[2][3]['creator'], $equiped_items[2][3]['durability'], $equiped_items[2][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -797,9 +803,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'BELT'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[6][3]['enchantment'], $equiped_items[6][3]['property'], $equiped_items[6][3]['creator'], $equiped_items[6][3]['durability'], $equiped_items[6][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[6][3]['enchantment'], $equiped_items[6][3]['property'], $equiped_items[6][3]['creator'], $equiped_items[6][3]['durability'], $equiped_items[6][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -824,9 +832,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'SHOULDER'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[3][3]['enchantment'], $equiped_items[3][3]['property'], $equiped_items[3][3]['creator'], $equiped_items[3][3]['durability'], $equiped_items[3][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[3][3]['enchantment'], $equiped_items[3][3]['property'], $equiped_items[3][3]['creator'], $equiped_items[3][3]['durability'], $equiped_items[3][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -849,9 +859,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'LEGS'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[7][3]['enchantment'], $equiped_items[7][3]['property'], $equiped_items[7][3]['creator'], $equiped_items[7][3]['durability'], $equiped_items[7][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[7][3]['enchantment'], $equiped_items[7][3]['property'], $equiped_items[7][3]['creator'], $equiped_items[7][3]['durability'], $equiped_items[7][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -876,9 +888,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'BACK'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[15][3]['enchantment'], $equiped_items[15][3]['property'], $equiped_items[15][3]['creator'], $equiped_items[15][3]['durability'], $equiped_items[15][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[15][3]['enchantment'], $equiped_items[15][3]['property'], $equiped_items[15][3]['creator'], $equiped_items[15][3]['durability'], $equiped_items[15][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -901,9 +915,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'FEET'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[8][3]['enchantment'], $equiped_items[8][3]['property'], $equiped_items[8][3]['creator'], $equiped_items[8][3]['durability'], $equiped_items[8][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[8][3]['enchantment'], $equiped_items[8][3]['property'], $equiped_items[8][3]['creator'], $equiped_items[8][3]['durability'], $equiped_items[8][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -928,9 +944,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'CHEST'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[5][3]['enchantment'], $equiped_items[5][3]['property'], $equiped_items[5][3]['creator'], $equiped_items[5][3]['durability'], $equiped_items[5][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[5][3]['enchantment'], $equiped_items[5][3]['property'], $equiped_items[5][3]['creator'], $equiped_items[5][3]['durability'], $equiped_items[5][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -985,9 +1003,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'FINGER1'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[11][3]['enchantment'], $equiped_items[11][3]['property'], $equiped_items[11][3]['creator'], $equiped_items[11][3]['durability'], $equiped_items[11][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[11][3]['enchantment'], $equiped_items[11][3]['property'], $equiped_items[11][3]['creator'], $equiped_items[11][3]['durability'], $equiped_items[11][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -1012,9 +1032,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'SHIRT'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[4][3]['enchantment'], $equiped_items[4][3]['property'], $equiped_items[4][3]['creator'], $equiped_items[4][3]['durability'], $equiped_items[4][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[4][3]['enchantment'], $equiped_items[4][3]['property'], $equiped_items[4][3]['creator'], $equiped_items[4][3]['durability'], $equiped_items[4][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -1037,9 +1059,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'FINGER2'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[12][3]['enchantment'], $equiped_items[12][3]['property'], $equiped_items[12][3]['creator'], $equiped_items[12][3]['durability'], $equiped_items[12][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[12][3]['enchantment'], $equiped_items[12][3]['property'], $equiped_items[12][3]['creator'], $equiped_items[12][3]['durability'], $equiped_items[12][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -1063,9 +1087,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'TABARD'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[19][3]['enchantment'], $equiped_items[19][3]['property'], $equiped_items[19][3]['creator'], $equiped_items[19][3]['durability'], $equiped_items[19][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[19][3]['enchantment'], $equiped_items[19][3]['property'], $equiped_items[19][3]['creator'], $equiped_items[19][3]['durability'], $equiped_items[19][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -1113,9 +1139,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'TRINKET1'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[13][3]['enchantment'], $equiped_items[13][3]['property'], $equiped_items[13][3]['creator'], $equiped_items[13][3]['durability'], $equiped_items[13][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[13][3]['enchantment'], $equiped_items[13][3]['property'], $equiped_items[13][3]['creator'], $equiped_items[13][3]['durability'], $equiped_items[13][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -1140,9 +1168,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'WRIST'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[9][3]['enchantment'], $equiped_items[9][3]['property'], $equiped_items[9][3]['creator'], $equiped_items[9][3]['durability'], $equiped_items[9][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[9][3]['enchantment'], $equiped_items[9][3]['property'], $equiped_items[9][3]['creator'], $equiped_items[9][3]['durability'], $equiped_items[9][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -1165,9 +1195,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'TRINKET2'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[14][3]['enchantment'], $equiped_items[14][3]['property'], $equiped_items[14][3]['creator'], $equiped_items[14][3]['durability'], $equiped_items[14][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[14][3]['enchantment'], $equiped_items[14][3]['property'], $equiped_items[14][3]['creator'], $equiped_items[14][3]['durability'], $equiped_items[14][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -1193,9 +1225,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'MAIN_HAND'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[16][3]['enchantment'], $equiped_items[16][3]['property'], $equiped_items[16][3]['creator'], $equiped_items[16][3]['durability'], $equiped_items[16][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[16][3]['enchantment'], $equiped_items[16][3]['property'], $equiped_items[16][3]['creator'], $equiped_items[16][3]['durability'], $equiped_items[16][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -1218,9 +1252,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'OFF_HAND'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[17][3]['enchantment'], $equiped_items[17][3]['property'], $equiped_items[17][3]['creator'], $equiped_items[17][3]['durability'], $equiped_items[17][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[17][3]['enchantment'], $equiped_items[17][3]['property'], $equiped_items[17][3]['creator'], $equiped_items[17][3]['durability'], $equiped_items[17][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -1243,9 +1279,11 @@ function char_main()
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'RANGED'.'">
                         <table>
-                          <td>
-                            '.get_item_tooltip($i_fields, $equiped_items[18][3]['enchantment'], $equiped_items[18][3]['property'], $equiped_items[18][3]['creator'], $equiped_items[18][3]['durability'], $equiped_items[18][3]['flags']).'
-                          </td>
+                          <tr>
+                            <td>
+                              '.get_item_tooltip($i_fields, $equiped_items[18][3]['enchantment'], $equiped_items[18][3]['property'], $equiped_items[18][3]['creator'], $equiped_items[18][3]['durability'], $equiped_items[18][3]['flags']).'
+                            </td>
+                          </tr>
                         </table>
                       </div>';
       }
