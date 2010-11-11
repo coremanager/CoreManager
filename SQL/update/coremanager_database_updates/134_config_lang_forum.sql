@@ -1,0 +1,16 @@
+﻿INSERT INTO `config_lang_forum` VALUES ('admin', 'chinese_simplified', '管理员专属论坛');
+INSERT INTO `config_lang_forum` VALUES ('admindesc', 'chinese_simplified', '仅管理员可以查看');
+INSERT INTO `config_lang_forum` VALUES ('alliance', 'chinese_simplified', '为了联盟');
+INSERT INTO `config_lang_forum` VALUES ('alliancedesc', 'chinese_simplified', '仅联盟玩家可以查看');
+INSERT INTO `config_lang_forum` VALUES ('both', 'chinese_simplified', '部落和联盟');
+INSERT INTO `config_lang_forum` VALUES ('bothdesc', 'chinese_simplified', '畅聊和游戏相关的一切');
+INSERT INTO `config_lang_forum` VALUES ('bugs', 'chinese_simplified', '错误和问题');
+INSERT INTO `config_lang_forum` VALUES ('bugsdesc', 'chinese_simplified', '向 GM 或 管理员 请求帮助，不能索要金币、物品或经验值，谢谢。');
+INSERT INTO `config_lang_forum` VALUES ('gamecat', 'chinese_simplified', '游戏版块');
+INSERT INTO `config_lang_forum` VALUES ('general', 'chinese_simplified', '主讨论区');
+INSERT INTO `config_lang_forum` VALUES ('generaldesc', 'chinese_simplified', '讨论有关服务器的所有问题');
+INSERT INTO `config_lang_forum` VALUES ('horde', 'chinese_simplified', '为了部落');
+INSERT INTO `config_lang_forum` VALUES ('hordedesc', 'chinese_simplified', '仅部落玩家可以查看');
+INSERT INTO `config_lang_forum` VALUES ('news', 'chinese_simplified', '新闻');
+INSERT INTO `config_lang_forum` VALUES ('newsdesc', 'chinese_simplified', '关于服务器的新闻和信息');
+INSERT INTO `config_lang_forum` VALUES ('servcat', 'chinese_simplified', '服务器版块');
