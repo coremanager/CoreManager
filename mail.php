@@ -66,9 +66,7 @@ function print_mail_form()
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="3">'
-                    .lang("mail", "dont_use_both_groupsend_and_to").'
-                  </td>
+                  <td colspan="3">'.lang("mail", "dont_use_both_groupsend_and_to").'</td>
                 </tr>
                 <tr>
                   <td colspan="3">'.lang("mail", "group_send").':
@@ -100,9 +98,7 @@ function print_mail_form()
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="3" align="left">'
-                    .lang("mail", "attachments").':
-                  </td>
+                  <td colspan="3" align="left">'.lang("mail", "attachments").':</td>
                 </tr>
                 <tr>
                   <td colspan="3" align="right">'
@@ -126,7 +122,7 @@ function print_mail_form()
               <table>
                 <tr>
                   <td>';
-                   makebutton(lang("mail", "send"), "javascript:do_submit()",130);
+  makebutton(lang("mail", "send"), "javascript:do_submit()",130);
   $output .= '
                   </td>
                 </tr>
@@ -205,7 +201,7 @@ function send_mail()
       }
 
       $value = NULL;
-      for ($i=0; $i<(count($body)); $i++ )
+      for ( $i = 0; $i < count($body); $i++ )
         $value .= $body[$i]."\r\n";
       $body=$value;
 
@@ -326,7 +322,7 @@ function send_mail()
       break;
     case "ingame_mail":
       $value = NULL;
-      for ( $i=0; $i<(count($body)); $i++ )
+      for ( $i = 0; $i < count($body); $i++ )
         $value .= $body[$i]." ";
       $body = $value;
       $body = str_replace("\r", " ", $body);
@@ -335,7 +331,7 @@ function send_mail()
       if ( $to )
       {
         //single Recipient
-        $result = $sql["char"]->query("SELECT guid FROM characters WHERE name = '$to'");
+        $result = $sql["char"]->query("SELECT guid FROM characters WHERE name='".$to."'");
         if ( $sql["char"]->num_rows($result) == 1 )
         {
           $receiver = $sql["char"]->result($result, 0, 'guid');
@@ -368,7 +364,7 @@ function send_mail()
         {
           case "gm_level":
             if ( $core == 1 )
-              $result = $sql["logon"]->query("SELECT acct FROM accounts WHERE gm ".$group_sign." '".$group_value."'");
+              $result = $sql["logon"]->query("SELECT acct FROM accounts WHERE gm".$group_sign."'".$group_value."'");
             else
               $result = $sql["logon"]->query("SELECT account.id AS acct FROM account
                   LEFT JOIN account_access ON account_access.id=account.id
@@ -376,20 +372,20 @@ function send_mail()
             while ( $acc = $sql["char"]->fetch_row($result) )
             {
               if ( $core == 1 )
-                $result_2 = $sql["char"]->query("SELECT name FROM `characters` WHERE acct = '".$acc[0]."'");
+                $result_2 = $sql["char"]->query("SELECT name FROM `characters` WHERE acct='".$acc[0]."'");
               else
-                $result_2 = $sql["char"]->query("SELECT name FROM `characters` WHERE account = '".$acc[0]."'");
+                $result_2 = $sql["char"]->query("SELECT name FROM `characters` WHERE account='".$acc[0]."'");
               while ( $char = $sql["char"]->fetch_row($result_2) )
                 array_push($char_array, $char[0]);
             }
             break;
           case "online":
-            $result = $sql["char"]->query("SELECT name FROM `characters` WHERE online ".$group_sign." '".$group_value."'");
+            $result = $sql["char"]->query("SELECT name FROM `characters` WHERE online".$group_sign."'".$group_value."'");
             while ( $user = $sql["char"]->fetch_row($result) )
               array_push($char_array, $user[0]);
             break;
           case "char_level":
-            $result = $sql["char"]->query("SELECT name FROM `characters` WHERE level ".$group_sign." '".$group_value."'");
+            $result = $sql["char"]->query("SELECT name FROM `characters` WHERE level".$group_sign."'".$group_value."'");
             while ( $user = $sql["char"]->fetch_row($result) )
               array_push($char_array, $user[0]);
             break;
@@ -401,7 +397,7 @@ function send_mail()
         {
           foreach ( $char_array as $receiver )
           {
-            $result = $sql["char"]->query("SELECT guid FROM characters WHERE name = '".$receiver."'");
+            $result = $sql["char"]->query("SELECT guid FROM characters WHERE name='".$receiver."'");
             $char_guid = $sql["char"]->fetch_row($result);
             $mail = array();
             $mail["receiver"] = $char_guid[0];
@@ -498,7 +494,7 @@ function send_ingame_mail_MT($realm_id, $massmails)
     $mess_str = '';
     $result = '';
     $receivers = array();
-    foreach($massmails as $mails)
+    foreach( $massmails as $mails )
     {
       if ( $mails["att_gold"] && $mails["att_item"] )
       {
@@ -508,7 +504,7 @@ function send_ingame_mail_MT($realm_id, $massmails)
         $mess_str .= $mess_str1."<br >";
         $result .= $result1."";
 
-        $mess_str1 = "send item ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\" ".$mails["att_item"].( ( $mails["att_stack"] > 1 ) ? "[:count".$mails["att_stack"]."]" : " " );
+        $mess_str1 = "send item ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\" ".$mails["att_item"].( ( $mails["att_stack"] > 1 ) ? ":count".$mails["att_stack"] : " " );
         $telnet->DoCommand($mess_str1, $result1);
 
         $mess_str .= $mess_str1."<br >";
@@ -524,7 +520,7 @@ function send_ingame_mail_MT($realm_id, $massmails)
       }
       elseif ( $mails["att_item"] )
       {
-        $mess_str1 = "send item ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\" ".$mails["att_item"].( ( $mails["att_stack"] > 1 ) ? "[:count".$mails["att_stack"]."]" : " " );
+        $mess_str1 = "send item ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\" ".$mails["att_item"].( ( $mails["att_stack"] > 1 ) ? ":count".$mails["att_stack"] : " " );
         $telnet->DoCommand($mess_str1, $result1);
 
         $mess_str .= $mess_str1."<br >";
@@ -626,7 +622,7 @@ function result()
           <table width="400" class="hidden">
             <tr>
               <td align="center">';
-                makebutton(lang("global", "back"), 'mail.php', 130);
+  makebutton(lang("global", "back"), 'mail.php', 130);
   $output .= '
               </td>
             </tr>
