@@ -790,6 +790,17 @@ $GLOBALS['lang_edit'] = array
   'email_changed' => 'An Email Change has been requested.<br />(Click to <b>cancel</b> the request)',
   'email_change_failed' => 'Unable to change Email Address!',
   'pass_warning' => 'There may be some delay before the new password will work for game access.',
+  // translation note: do note translate
+  'english' => 'English',
+  'german' => 'German',
+  'persian' => 'Persian',
+  'chinese_simplified' => 'Chinese (Simplified)',
+  'chinese_traditional' => 'Chinese (Traditional)',
+  'french' => 'French',
+  'spanish_spain' => 'Spanish (Spain)',
+  'spanish_mexico' => 'Spanish (Mexico)',
+  'russian' => 'Russian',
+  'korean' => 'Korean',
 );
 
 
@@ -2092,6 +2103,13 @@ $GLOBALS['lang_map'] = array
   'online' => 'Online Only',
   'offline' => 'Offline Only',
   'both' => 'Both',
+);
+
+// ----- ERROR.PHP -----
+$GLOBALS['lang_error'] = array
+(
+  'error' => 'ERROR',
+  'generic_error' => 'Oopsy',
 );
 
 

@@ -22,30 +22,54 @@
 // we make our own page header, and get any additional required libraries
 session_start();
 
+$time_start = microtime(true);
+
 //---------------------Loading User Theme and Language Settings----------------
-if (isset($_COOKIE["theme"]))
+if ( isset($_COOKIE["theme"]) )
 {
-  if (is_dir('themes/'.$_COOKIE["theme"]))
-    if (is_file('themes/'.$_COOKIE["theme"].'/'.$_COOKIE["theme"].'_1024.css'))
+  if ( is_dir('themes/'.$_COOKIE["theme"]) )
+    if ( is_file('themes/'.$_COOKIE["theme"].'/'.$_COOKIE["theme"].'_1024.css') )
       $theme = $_COOKIE["theme"];
 }
 else
   $theme = "Sulfur";
 
-if (isset($_COOKIE["lang"]))
+if ( isset($_COOKIE["lang"]) )
 {
   $lang = $_COOKIE["lang"];
-  if (file_exists('lang/'.$lang.'.php'))
-    ;
-  else
+  if ( !file_exists('lang/'.$lang.'.php') )
     $lang = 'english';
 }
 else
   $lang = 'english';
 
-require_once 'libs/global_lib.php';
-require_once 'lang/'.$lang.'.php';
-require_once 'libs/lang_lib.php';
+//---------------------Load Default and User Configuration---------------------
+if ( file_exists('configs/config.php') )
+{
+  if ( !file_exists('configs/config.dist.php') )
+    exit('<center><br><code>\'configs/config.dist.php\'</code> not found,<br>
+          please restore <code>\'configs/config.dist.php\'</code></center>');
+  require_once 'configs/config.php';
+}
+else
+  exit('<center><br><code>\'configs/config.php\'</code> not found,<br>
+        please copy <code>\'configs/config.dist.php\'</code> to
+        <code>\'configs/config.php\'</code> and make appropriate changes.');
+
+require_once("libs/config_lib.php");
+require_once("libs/global_lib.php");
+require_once("lang/".$lang.".php");
+require_once("libs/lang_lib.php");
+
+// generate minimum info to prevent php errors
+if ( $allow_anony && empty($_SESSION["logged_in"]) )
+{
+  $_SESSION["user_lvl"] = -1;
+}
+if ( isset($_SESSION["user_lvl"]) )
+{
+  $user_lvl = $_SESSION["user_lvl"];
+}
 
 // sets encoding defined in config for language support
 header('Content-Type: text/html; charset='.$site_encoding);
@@ -83,7 +107,7 @@ $output .= '
 // end of header
 
 // we get the error message which was passed to us
-$err = (isset($_SESSION["pass_error"])) ? ($_SESSION["pass_error"]) : 'Oopsy...';
+$err = ( ( isset($_SESSION["pass_error"]) ) ? $_SESSION["pass_error"] : lang("error", "generic_error").'...' );
 
 // we start with a lead of 10 spaces,
 //  because last line of header is an opening tag with 8 spaces
@@ -99,7 +123,7 @@ $output .= '
                   <h1>
                     <font class="error">
                       <img src="img/warn_red.gif" width="48" height="48" alt="error" />
-                      <br />ERROR!
+                      <br />'.lang("error", "error").'!
                     </font>
                   </h1>
                   <br />'.$err.'<br />
@@ -110,8 +134,8 @@ $output .= '
             <table width="300" class="hidden">
               <tr>
                 <td align="center">';
-                  makebutton(lang("global", "home"), 'index.php', 130);
-                  makebutton(lang("global", "back"), 'javascript:window.history.back()', 130);
+makebutton(lang("global", "home"), 'index.php', 130);
+makebutton(lang("global", "back"), 'javascript:window.history.back()', 130);
 unset($err);
 $output .= '
                 </td>

@@ -501,7 +501,7 @@ function edit_user()
           if ( isset($lang[1]) && ( $lang[1] == 'php' ) )
           {
             $output .= '
-                        <option value="'.$lang[0].'"'.( ( isset($_COOKIE["lang"]) && ( $_COOKIE["lang"] == $lang[0] ) ) ? ' selected="selected" ' : '' ).'>'.$lang[0].'</option>';
+                        <option value="'.$lang[0].'"'.( ( isset($_COOKIE["lang"]) && ( $_COOKIE["lang"] == $lang[0] ) ) ? ' selected="selected" ' : '' ).'>'.lang("edit", $lang[0]).'</option>';
           }
         }
         closedir($dh);

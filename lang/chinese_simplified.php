@@ -790,6 +790,17 @@ $GLOBALS['lang_edit'] = array
   'email_changed' => 'An Email Change has been requested.<br />(Click to <b>cancel</b> the request)',
   'email_change_failed' => '无法变更Email地址！',
   'pass_warning' => '新密码起效前可能会有些许延迟。',
+  // translation note: do note translate
+  'english' => 'English',
+  'german' => 'German',
+  'persian' => 'Persian',
+  'chinese_simplified' => 'Chinese (Simplified)',
+  'chinese_traditional' => 'Chinese (Traditional)',
+  'french' => 'French',
+  'spanish_spain' => 'Spanish (Spain)',
+  'spanish_mexico' => 'Spanish (Mexico)',
+  'russian' => 'Russian',
+  'korean' => 'Korean',
 );
 
 
@@ -2092,6 +2103,13 @@ $GLOBALS['lang_map'] = array
   'online' => '仅在线玩家',
   'offline' => '仅离线玩家',
   'both' => '所有玩家',
+);
+
+// ----- ERROR.PHP -----
+$GLOBALS['lang_error'] = array
+(
+  'error' => 'ERROR',
+  'generic_error' => 'Oopsy',
 );
 
 
