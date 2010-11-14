@@ -1,7 +1,7 @@
 Subject: Welcome to <title>
-Thank you for registering for our <core> Server at <a href="http://<base_url>"><base_url></a>.
+Thank you for registering for our <core> Server at <base_url>.
 
-<b>Your account details are</b>:
+Your account details are:
 Username: <username>
 Screen Name: <screenname>
 Password: <password>
