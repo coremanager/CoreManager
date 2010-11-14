@@ -566,7 +566,7 @@ function edit_user()
 //#############################################################################################################
 function doedit_user()
 {
-  global $output, $user_name, $logon_db, $corem_db, $send_mail_on_email_change,
+  global $output, $user_name, $logon_db, $corem_db, $send_mail_on_email_change, $lang,
     $format_mail_html, $GMailSender, $smtp_cfg, $title, $sql, $core;
 
   if ( ( empty($_POST["pass"]) || ( $_POST["pass"] == '' ) )
@@ -650,13 +650,9 @@ function doedit_user()
 
       // prepare our confirmation message
       if ( $format_mail_html )
-      {
-        $file_name = "mail_templates/change_email.tpl";
-      }
+        $file_name = "mail_templates/".$lang."/change_email.tpl";
       else
-      {
-        $file_name = "mail_templates/change_email_nohtml.tpl";
-      }
+        $file_name = "mail_templates/".$lang."/change_email_nohtml.tpl";
       $fh = fopen($file_name, 'r');
       $subject = fgets($fh, 4096);
       $body = fread($fh, filesize($file_name));

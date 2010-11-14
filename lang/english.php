@@ -148,7 +148,7 @@ $GLOBALS['lang_register'] = array
   'confirm_password' => 'Confirm Password',
   'min_pass_len' => 'Minimum Length 4 | Maximum Length 25.',
   'email' => 'E-mail',
-  'use_valid_mail' => 'Please make sure to use valid email address.',
+  'use_valid_mail' => 'Please make sure to use a valid email address.',
   'create_acc_button' => 'Create Account',
   'diff_pass_entered' => 'The Passwords must be identical.',
   'already_exist' => 'Already Exist',
@@ -187,6 +187,8 @@ $GLOBALS['lang_register'] = array
   'invited_info' => 'Please write the account name of the player who invited you to register here.',
   'email_address_used' => 'This email has an account already.<br/>No more accounts can be created for this email address.',
   'referrer_not_found' => 'Unfortunately the specified account was not found in our database.<br/>Please ensure you have entered a valid account name or leave the &quot;Invited by&quot;-field blank.',
+  'lang' => 'Language',
+  'not_client' => 'Does not affect In-Game Language',
 );
 
 

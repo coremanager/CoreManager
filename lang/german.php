@@ -187,6 +187,8 @@ $GLOBALS['lang_register'] = array
   'invited_info' => 'Wenn dich ein anderer Spieler geworben hat, gib hier seinen Accountnamen an.',
   'email_address_used' => 'Diese Mailadresse hat schon einen Account.',
   'referrer_not_found' => 'Der Account des Spielers, der dich geworben hat, wurde nicht gefunden.<br/>Stelle bitte sicher, dass du einen g&uuml;ltigen Accountnamen eingegeben hast.',
+  'lang' => 'Language',
+  'not_client' => 'Does not affect In-Game Language',
 );
 
 
@@ -1236,7 +1238,7 @@ $GLOBALS['lang_questitem'] = array
   'questitems' => 'Questitems',
   'done' => 'Transaktion erfolgreich.',
   'failed' => 'Transaktion fehlgeschlagen!',
-  'select' => 'Ausw&auml;hlen'
+  'select' => 'Ausw&auml;hlen',
   // translation note: %1 = [item name], %2 = [money]
   'peritem' => 'Also, jedes %1 wird kosten %2',
   // translation note: %1 = [account name]
@@ -1274,7 +1276,7 @@ $GLOBALS['lang_ultra'] = array
   'questitems' => 'Special Order items',
   'done' => 'Transaktion erfolgreich.',
   'failed' => 'Transaktion fehlgeschlagen!',
-  'select' => 'Ausw&auml;hlen'
+  'select' => 'Ausw&auml;hlen',
   'insufficientquantity' => 'Du musst eine Anzahl gr&ouml;ßer als null eingeben',
   // translation note: %1 = [item name], %2 = [rarity]
   'isranked' => '%1 ist plaziert als %2',

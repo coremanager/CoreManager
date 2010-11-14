@@ -187,6 +187,8 @@ $GLOBALS['lang_register'] = array
   'invited_info' => '请填写邀请您前来注册的玩家的帐号名称。',
   'email_address_used' => '这个email已经注册了帐号。<br/>不能再创建更多帐号了。',
   'referrer_not_found' => '很不幸，我们的数据库中没有查找到指定的帐号。<br/>请确认您输入了有效的帐号名称或者将&quot;邀请人&quot;栏位留空。',
+  'lang' => 'Language',
+  'not_client' => 'Does not affect In-Game Language',
 );
 
 

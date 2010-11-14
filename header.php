@@ -70,8 +70,8 @@ if ( isset($_COOKIE["lang"]) )
 else
 {
   $lang = $language;
-  // if we didn't get a cookie for language, create one (english is default)
-  setcookie('lang', 'english', time()+60*60*24*30);
+  // if we didn't get a cookie for language, create one
+  setcookie('lang', $language, time()+60*60*24*30*6); // six months
 }
 
 //---------------------Current Filename----------------------------------------

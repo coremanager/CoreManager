@@ -1386,7 +1386,27 @@ function general()
             </tr>
             <tr>
               <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "defaultlanguage").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "defaultlanguage").'</a>: </td>
-              <td><input type="text" name="defaultlanguage" value="'.$default_language["Value"].'" /></td>
+              <td>
+                <select name="defaultlanguage">';
+    if ( is_dir('./lang') )
+    {
+      if ( $dh = opendir('./lang') )
+      {
+        while ( ( $file = readdir($dh) ) == true )
+        {
+          $lang_temp = explode('.', $file);
+          if ( isset($lang_temp[1]) && ( $lang_temp[1] == 'php' ) )
+          {
+            $output .= '
+                  <option value="'.$lang_temp[0].'"'.( ( $default_language["Value"] == $lang_temp[0] ) ? ' selected="selected" ' : '' ).'>'.lang("edit", $lang_temp[0]).'</option>';
+          }
+        }
+        closedir($dh);
+      }
+    }
+    $output .= '
+                </select>
+              </td>
             </tr>
             <tr>
               <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "timezone").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timezone").'</a>: </td>

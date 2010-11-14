@@ -25,7 +25,7 @@ require_once("header.php");
 //#####################################################################################################
 function doregister()
 {
-  global $characters_db, $logon_db, $corem_db, $realm_id, $disable_acc_creation,
+  global $characters_db, $logon_db, $corem_db, $realm_id, $disable_acc_creation, $lang,
     $limit_acc_per_ip, $valid_ip_mask, $send_mail_on_creation, $create_acc_locked, $from_mail,
     $mailer_type, $smtp_cfg, $title, $expansion_select, $defaultoption, $GMailSender, $format_mail_html,
     $enable_captcha, $use_recaptcha, $recaptcha_private_key, $send_confirmation_mail_on_creation, $sql, $core;
@@ -274,18 +274,27 @@ function doregister()
 
     setcookie ("terms", "", time() - 3600);
 
+    // set $lang global
+    if ( empty($_POST["lang"]) )
+      redirect("register.php?error=1");
+    else
+      $lang = addslashes($_POST["lang"]);
+
+    // create lang cookie
+    if ( $lang )
+      setcookie("lang", $lang, time()+60*60*24*30*6); //six month
+    else
+      redirect("register.php?error=1");
+
+    // registration emails
     if ( $send_confirmation_mail_on_creation )
     {
       // we send our confirmation message
       // prepare message
       if ( $format_mail_html )
-      {
-        $file_name = "mail_templates/mail_activate.tpl";
-      }
+        $file_name = "mail_templates/".$lang."/mail_activate.tpl";
       else
-      {
-        $file_name = "mail_templates/mail_activate_nohtml.tpl";
-      }
+        $file_name = "mail_templates/".$lang."/mail_activate_nohtml.tpl";
       $fh = fopen($file_name, 'r');
       $subject = fgets($fh, 4096);
       $body = fread($fh, filesize($file_name));
@@ -352,13 +361,9 @@ function doregister()
       {
         // prepare message
         if ( $format_mail_html )
-        {
-          $file_name = "mail_templates/mail_welcome.tpl";
-        }
+          $file_name = "mail_templates/".$lang."/mail_welcome.tpl";
         else
-        {
-          $file_name = "mail_templates/mail_welcome_nohtml.tpl";
-        }
+          $file_name = "mail_templates/".$lang."/mail_welcome_nohtml.tpl";
         $fh = fopen($file_name, 'r');
         $subject = fgets($fh, 4096);
         $subject = str_replace("Subject: ", "", $subject);
@@ -433,7 +438,7 @@ function doregister()
 //#####################################################################################################
 function register()
 {
-  global $output, $expansion_select, $enable_captcha, $use_recaptcha, $recaptcha_public_key, $core;
+  global $output, $expansion_select, $enable_captcha, $use_recaptcha, $lang, $recaptcha_public_key, $core;
 
   $output .= '
     <center>
@@ -520,6 +525,34 @@ function register()
                 <br />
                 '.lang("register", "use_valid_mail").'
               </td>
+            </tr>
+            <tr>
+              <td valign="top">'.lang("register", "lang").':</td>
+              <td>
+                <select name="lang">
+                  <optgroup label="'.lang("edit", "language").'">';
+  if ( is_dir('./lang') )
+  {
+    if ( $dh = opendir('./lang') )
+    {
+      while ( ( $file = readdir($dh) ) == true )
+      {
+        $lang_temp = explode('.', $file);
+        if ( isset($lang_temp[1]) && ( $lang_temp[1] == 'php' ) )
+        {
+          $output .= '
+                    <option value="'.$lang_temp[0].'"'.( ( isset($_COOKIE["lang"]) && ( $_COOKIE["lang"] == $lang_temp[0] ) ) ? ' selected="selected"' : '' ).'>'.lang("edit", $lang_temp[0]).'</option>';
+        }
+      }
+      closedir($dh);
+    }
+  }
+  $output .= '
+                  </optgroup>
+                </select>
+                <br />
+                '.lang("register", "not_client").'
+              </td>
             </tr>';
   if ( $expansion_select )
   {
@@ -605,7 +638,7 @@ function register()
               <td>';
 
   $terms = "<textarea rows=\'18\' cols=\'80\' readonly=\'readonly\'>";
-  $fp = fopen("mail_templates/terms.tpl", 'r') or die (error("Couldn't Open terms.tpl File!"));
+  $fp = fopen("mail_templates/".$lang."/terms.tpl", 'r') or die (error("Couldn't Open terms.tpl File!"));
   while ( !feof($fp) )
     $terms .= fgets($fp, 1024);
   fclose($fp);
@@ -723,16 +756,16 @@ function do_pass_recovery()
     if ( $core == 1 )
     {
       if ( $format_mail_html )
-        $file_name = "mail_templates/recover_password.tpl";
+        $file_name = "mail_templates/".$lang."/recover_password.tpl";
       else
-        $file_name = "mail_templates/recover_password_nohtml.tpl";
+        $file_name = "mail_templates/".$lang."/recover_password_nohtml.tpl";
     }
     else
     {
       if ( $format_mail_html )
-        $file_name = "mail_templates/reset_password.tpl";
+        $file_name = "mail_templates/".$lang."/reset_password.tpl";
       else
-        $file_name = "mail_templates/reset_password_nohtml.tpl";
+        $file_name = "mail_templates/".$lang."/reset_password_nohtml.tpl";
     }
 
     $fh = fopen($file_name, 'r');
