@@ -292,9 +292,9 @@ function doregister()
       // we send our confirmation message
       // prepare message
       if ( $format_mail_html )
-        $file_name = "mail_templates/".$lang."/mail_activate.tpl";
+        $file_name = "lang/mail_templates/".$lang."/mail_activate.tpl";
       else
-        $file_name = "mail_templates/".$lang."/mail_activate_nohtml.tpl";
+        $file_name = "lang/mail_templates/".$lang."/mail_activate_nohtml.tpl";
       $fh = fopen($file_name, 'r');
       $subject = fgets($fh, 4096);
       $body = fread($fh, filesize($file_name));
@@ -361,9 +361,9 @@ function doregister()
       {
         // prepare message
         if ( $format_mail_html )
-          $file_name = "mail_templates/".$lang."/mail_welcome.tpl";
+          $file_name = "lang/mail_templates/".$lang."/mail_welcome.tpl";
         else
-          $file_name = "mail_templates/".$lang."/mail_welcome_nohtml.tpl";
+          $file_name = "lang/mail_templates/".$lang."/mail_welcome_nohtml.tpl";
         $fh = fopen($file_name, 'r');
         $subject = fgets($fh, 4096);
         $subject = str_replace("Subject: ", "", $subject);
@@ -638,7 +638,7 @@ function register()
               <td>';
 
   $terms = "<textarea rows=\'18\' cols=\'80\' readonly=\'readonly\'>";
-  $fp = fopen("mail_templates/".$lang."/terms.tpl", 'r') or die (error("Couldn't Open terms.tpl File!"));
+  $fp = fopen("lang/mail_templates/".$lang."/terms.tpl", 'r') or die (error("Couldn't Open terms.tpl File!"));
   while ( !feof($fp) )
     $terms .= fgets($fp, 1024);
   fclose($fp);
@@ -756,16 +756,16 @@ function do_pass_recovery()
     if ( $core == 1 )
     {
       if ( $format_mail_html )
-        $file_name = "mail_templates/".$lang."/recover_password.tpl";
+        $file_name = "lang/mail_templates/".$lang."/recover_password.tpl";
       else
-        $file_name = "mail_templates/".$lang."/recover_password_nohtml.tpl";
+        $file_name = "lang/mail_templates/".$lang."/recover_password_nohtml.tpl";
     }
     else
     {
       if ( $format_mail_html )
-        $file_name = "mail_templates/".$lang."/reset_password.tpl";
+        $file_name = "lang/mail_templates/".$lang."/reset_password.tpl";
       else
-        $file_name = "mail_templates/".$lang."/reset_password_nohtml.tpl";
+        $file_name = "lang/mail_templates/".$lang."/reset_password_nohtml.tpl";
     }
 
     $fh = fopen($file_name, 'r');

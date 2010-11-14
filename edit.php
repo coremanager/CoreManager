@@ -650,9 +650,9 @@ function doedit_user()
 
       // prepare our confirmation message
       if ( $format_mail_html )
-        $file_name = "mail_templates/".$lang."/change_email.tpl";
+        $file_name = "lang/mail_templates/".$lang."/change_email.tpl";
       else
-        $file_name = "mail_templates/".$lang."/change_email_nohtml.tpl";
+        $file_name = "lang/mail_templates/".$lang."/change_email_nohtml.tpl";
       $fh = fopen($file_name, 'r');
       $subject = fgets($fh, 4096);
       $body = fread($fh, filesize($file_name));
