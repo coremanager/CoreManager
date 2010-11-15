@@ -1,13 +1,13 @@
-Subject: Email address change requested
-Hello <username>,
+主题: Email 地址变更请求
+您好 <username>,
 
-A change of email request has been made for your account at <title>.
+您在<title>递交了一个变更 email 地址的请求。
 
-The new email is: <email>
+新的 email 地址为: <email>
 
-Use this URL to confirm this change:
+请使用此链接以确认变更:
 http://<base_url>/edit.php?action=confirm_email&key=<key>
 
-For more information please visit our website.
-------------------------------
-(Do not reply to this message)
+请访问我们的网站获取更多信息。
+-------------------------------
+(不必回复此邮件)

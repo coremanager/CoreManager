@@ -1,17 +1,17 @@
-Subject: Welcome to <title>.
+主题: 欢迎 <title>
 
-Thank you for registering for our <core> Server at <base_url>.
+感谢您在<base_url>注册成为我们的 <core> 服务器中的一员。
 
-We require that all new accounts confirm their email for activation.
+我们要求所有的新用户通过确认邮件来激活帐号。
 
-Use this URL to activate your account:
+请使用此地址激活您的帐号:
 http://<base_url>/register.php?action=do_activate&key=<key>
 
-Your account details are:
-Username: <username>
-Screen Name: <screenname>
-Password: <password>
+您的账号细节如下:
+用户名称: <username>
+显示名称: <screenname>
+用户密码: <password>
 
-For more information please visit our website.
+请访问我们的网站获取更多信息。
 -------------------------------
-(Do not reply to this message)
+(不必回复此邮件)

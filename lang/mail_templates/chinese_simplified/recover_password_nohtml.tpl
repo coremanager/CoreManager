@@ -1,11 +1,11 @@
-Subject: Password recovery requested
-Hello <username>,
+主题: 密码恢复请求
+您好 <username>,
 
-You have requested to recieve your password at <title>.
-If you didn't this request you can just ignore this message.
+您在<title>递交了获取密码的请求。
+如果您并没有递交此请求，可以忽略此消息。
 
-Your password is: <password>
+您的密码为: <password>
 
-For more information please visit our website. 
-------------------------------
-(Do not reply to this message)
+请访问我们的网站获取更多信息。
+-------------------------------
+(不必回复此邮件)

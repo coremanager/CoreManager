@@ -1,17 +1,17 @@
-Please take a moment to review these rules detailed below. If you agree with them, then you may proceed with entering the website.\n\n
-No one from Blizzard, associated with Blizzard or any such affiliated company or anyone directed by Blizzard or its Related companies is permitted to enter these web sites or view any content contained within these sites at any time what so ever due to controversial reasons.\n\n
-1. Acceptance of Terms of Use and Amendments\n
+请花费一点时间查看以下条款的细节。如果认可这些条款，您将可以继续进入网站。\n\n
+由于一些有争议的原因，来自暴雪、与暴雪有关或是任何与其联营的公司、任何受控于暴雪及其相关部门的公司都不允许在任何时间登陆该网站或者查看该网站所包含的任何内容。\n\n
+1. 接受用户条款及修正议案\n
 *********************************\n
-Each time you use or cause access to this web site or services, you agree to be bound by these Terms of Use, and as amended from time to time with or without notice to you. In addition, if you are using a particular service on or through this web site, you will be subject to any rules or guidelines applicable to those services and they shall be incorporated by reference into these Terms of Use.\n\n
-2. Our Service\n
+每当您使用或是登陆此网站及其服务时，您必须服从这些服务条款，并且这些条款有可能在没有做出提醒的情况下经常被修正。此外，如果正使用通过本网站引用的其它服务，您将服从于那些服务的规则和指南，并且它们将和这些用户条款自动合并。\n\n
+2. 我们的服务\n
 *********************************\n
-Our web site and services provided to you on and through our web site on an AS IS basis. You agree that the owners of this web site exclusively reserve the right and may, at any time and without notice and any liability to you, modify or discontinue this web site and its services or delete the data you provide, whether temporarily or permanently. We shall have no responsibilty or liability for the timeliness, deletion, failure to store, inaccuracy, or improper delivery of any data or informatiom.\n\n
-3. Your Responsibilities and Registration Obligations\n
+我们的网站以及我们在网站上或是通过基于原样引用所提供的服务。您认可仅本站所有人拥有保留权，我们将有可能在任何时间，临时或永久关闭网站、删除您提供的数据或是修改网站及其服务，恕不另行通知。我们对任何的时效性、存储失败、数据被删除、数据或信息的不当交付等状况不负有解释或赔偿责任。\n\n
+3. 您的责任和义务\n
 *********************************\n
-In order to use this web site, you must register on our site, and agree to provide truthful information when requested. When registering, you explicitly agree to our Terms of Use and as may be modified by us from time to time and available here.\n\n
-4. Registration and Password\n
+为了使用此网站，您必须在我们网站注册，并且同意提供真实的信息。注册时，您需要明确认可我们的服务条款，这些条款将有可能经常被更改。\n\n
+4. 注册和密码\n
 *********************************\n
-You are responsible to maintain the confidentiality of your password and shall be responsible for all uses via your registration and/or login, whether authorized or unauthorized by you. You agree to immediately notify us of any unauthorized use or your registration, user account or password.\n\n
+您有责任保持您的密码的保密性，应当对所有通过您的注册信息进行登陆的用户负责，不管其得到您的许可与否。您有义务立即通知我们任何没有被许可的擅用您的注册信息、帐号名称或帐号密码的行为。\n\n
 
 
-For the rest of the rules we advise you to look @ the forum or use your brain !!!\n\n
+余下的条款，我们建议您参看论坛或是使用您的头脑！！！\n\n

@@ -1,11 +1,11 @@
-Subject: Welcome to <title>
-Thank you for registering for our <core> Server at <a href="http://<base_url>"><base_url></a>.
+主题: 欢迎 <title>
+感谢您在<a href="http://<base_url>"><base_url></a>注册成为我们的 <core> 服务器中的一员。
 
-<b>Your account details are</b>:
-Username: <username>
-Screen Name: <screenname>
-Password: <password>
+<b>您的账号细节如下</b>:
+用户名称: <username>
+显示名称: <screenname>
+用户密码: <password>
 
-For more information please visit our website.
+请访问我们的网站获取更多信息。
 -------------------------------
-(Do not reply to this message)
+(不必回复此邮件)
