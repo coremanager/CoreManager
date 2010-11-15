@@ -332,7 +332,7 @@ function do_add_motd()
   if ( $name == "" )
     $name = $user_name;
 
-  $by = 'Posted by: '.$name.' ('.date('m/d/Y H:i:s').')';
+  $by = lang("motd", "posted_by").': '.$name.' ('.date('m/d/Y H:i:s').')';
   $sql["mgr"]->query("INSERT INTO motd (Message, Priority, Enabled, `By`, Target) VALUES ('".$msg."', '".$priority."', '".$enabled."', '".$by."', '".$target."')");
 
   unset($by);
@@ -401,7 +401,7 @@ function do_edit_motd()
   {
     $by = $sql["mgr"]->result($sql["mgr"]->query("SELECT `By` FROM motd WHERE ID='".$id."'"), 0);
     $by = split('<br />', $by, 2);
-    $by = $by[0].'<br />'.'Edited by: '.$name.' ('.date('m/d/Y H:i:s').')';
+    $by = $by[0].'<br />'.lang("motd", "edited_by").': '.$name.' ('.date('m/d/Y H:i:s').')';
     $sql["mgr"]->query("UPDATE motd SET Message='".$msg."', Priority='".$priority."', Enabled='".$enabled."', `By`='".$by."', Target='".$target."' WHERE ID='".$id."'");
   }
   else

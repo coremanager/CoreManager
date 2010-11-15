@@ -28,30 +28,30 @@ function stats($action)
 
   $race = Array
   (
-    1  => array(1, 'Human','',''),
-    2  => array(2, 'Orc','',''),
-    3  => array(3, 'Dwarf','',''),
-    4  => array(4, 'Nightelf','',''),
-    5  => array(5, 'Undead','',''),
-    6  => array(6, 'Tauren','',''),
-    7  => array(7, 'Gnome','',''),
-    8  => array(8, 'Troll','',''),
-    10 => array(10,'Bloodelf','',''),
-    11 => array(11,'Draenei','','')
+    1  => array(1, 'human','',''),
+    2  => array(2, 'orc','',''),
+    3  => array(3, 'dwarf','',''),
+    4  => array(4, 'nightelf','',''),
+    5  => array(5, 'undead','',''),
+    6  => array(6, 'tauren','',''),
+    7  => array(7, 'gnome','',''),
+    8  => array(8, 'troll','',''),
+    10 => array(10,'bloodelf','',''),
+    11 => array(11,'draenei','','')
   );
 
   $class = Array
   (
-    1  => array(1, 'Warrior','',''),
-    2  => array(2, 'Paladin','',''),
-    3  => array(3, 'Hunter','',''),
-    4  => array(4, 'Rogue','',''),
-    5  => array(5, 'Priest','',''),
-    6  => array(6, 'Death Knight','',''),
-    7  => array(7, 'Shaman','',''),
-    8  => array(8, 'Mage','',''),
-    9  => array(9, 'Warlock','',''),
-    11 => array(11,'Druid','','')
+    1  => array(1, 'warrior','',''),
+    2  => array(2, 'paladin','',''),
+    3  => array(3, 'hunter','',''),
+    4  => array(4, 'rogue','',''),
+    5  => array(5, 'priest','',''),
+    6  => array(6, 'death_knight','',''),
+    7  => array(7, 'shaman','',''),
+    8  => array(8, 'mage','',''),
+    9  => array(9, 'warlock','',''),
+    11 => array(11,'druid','','')
   );
 
   $level = Array
@@ -76,30 +76,30 @@ function stats($action)
 
     $uptimeString='';
 
-    if ($days)
+    if ( $days )
     {
       $uptimeString .= $days;
-      $uptimeString .= ((1 === $days) ? ' day' : ' days');
+      $uptimeString .= ( ( $days === 1 ) ? ' day' : ' days' );
     }
-    if ($hours)
+    if ( $hours )
     {
-      $uptimeString .= ((0 < $days) ? ', ' : '').$hours;
-      $uptimeString .= ((1 === $hours) ? ' hour' : ' hours');
+      $uptimeString .= ( ( $days > 0 ) ? ', ' : '' ).$hours;
+      $uptimeString .= ( ( $hours === 1 ) ? ' hour' : ' hours');
     }
-    if ($mins)
+    if ( $mins )
     {
-      $uptimeString .= ((0 < $days || 0 < $hours) ? ', ' : '').$mins;
-      $uptimeString .= ((1 === $mins) ? ' minute' : ' minutes');
+      $uptimeString .= ( ( ( $days > 0 ) || ( $hours > 0 ) ) ? ', ' : '' ).$mins;
+      $uptimeString .= ( ( $mins === 1 ) ? ' minute' : ' minutes' );
     }
-    if ($secs)
+    if ( $secs )
     {
-      $uptimeString .= ((0 < $days || 0 < $hours || 0 < $mins) ? ', ' : '').$secs;
-      $uptimeString .= ((1 === $secs) ? ' second' : ' seconds');
+      $uptimeString .= ( ( ( $days > 0 ) || ( $hours > 0 ) || ( $mins > 0 ) ) ? ', ' : '' ).$secs;
+      $uptimeString .= ( ( $secs === 1 ) ? ' second' : ' seconds' );
     }
     return $uptimeString;
   }
 
-  $total_chars = $sql["char"]->result($sql["char"]->query('SELECT count(*) FROM characters'.( ($action) ? ' WHERE online= 1' : '' ).''), 0);
+  $total_chars = $sql["char"]->result($sql["char"]->query("SELECT COUNT(*) FROM characters".( ( $action ) ? " WHERE online=1" : "" )), 0);
 
   if ( $core == 1 )
   {
@@ -108,7 +108,7 @@ function stats($action)
   }
   else
   {
-    $up_query = "SELECT * FROM uptime WHERE realmid = '".$realm_id."' ORDER BY starttime DESC LIMIT 1";
+    $up_query = "SELECT * FROM uptime WHERE realmid='".$realm_id."' ORDER BY starttime DESC LIMIT 1";
     $up_results = $sql["logon"]->query($up_query);
     $uptime = $sql["logon"]->fetch_assoc($up_results);
     $stats["uptime"] = time() - $uptime["starttime"];
@@ -122,20 +122,16 @@ function stats($action)
           <center>
             <div id="tab">
               <ul>
-                <li'.(($action) ? '' : ' id="selected"').'>
-                  <a href="stat.php">
-                    '.lang("stat", "srv_statistics").'
-                  </a>
+                <li'.( ( $action ) ? '' : ' id="selected"' ).'>
+                  <a href="stat.php">'.lang("stat", "srv_statistics").'</a>
                 </li>
-                <li'.(($action) ? ' id="selected"' : '').'>
-                  <a href="stat.php?action=true">
-                    '.lang("stat", "on_statistics").'
-                  </a>
+                <li'.( ( $action ) ? ' id="selected"' : '' ).'>
+                  <a href="stat.php?action=true">'.lang("stat", "on_statistics").'</a>
                 </li>
               </ul>
             </div>
             <div id="tab_content">
-              <div class="top"><h1>'.(($action) ? lang("stat", "on_statistics") : lang("stat", "srv_statistics")).'</h1></div>
+              <div class="top"><h1>'.( ( $action ) ? lang("stat", "on_statistics") : lang("stat", "srv_statistics") ).'</h1></div>
               <center>
                 <table class="hidden">
                   <tr>
@@ -145,17 +141,17 @@ function stats($action)
                   </tr>
                   <tr align="left">
                     <td class="large">';
-    if($action)
+    if ( $action )
       $output .= '
                       <font class="bold">'.lang("index", "tot_users_online").' : '.$total_chars.'</font><br /><br />';
     else
     {
       if ( $core == 1 )
-        $query = $sql["logon"]->query("SELECT COUNT(*) FROM accounts UNION SELECT COUNT(*) FROM accounts WHERE gm <> '0'");
+        $query = $sql["logon"]->query("SELECT COUNT(*) FROM accounts UNION SELECT COUNT(*) FROM accounts WHERE gm<>'0'");
       elseif ( $core == 2 )
-        $query = $sql["logon"]->query("SELECT COUNT(*) FROM account UNION SELECT COUNT(*) FROM account WHERE gmlevel <> '0'");
+        $query = $sql["logon"]->query("SELECT COUNT(*) FROM account UNION SELECT COUNT(*) FROM account WHERE gmlevel<>'0'");
       else
-        $query = $sql["logon"]->query("SELECT COUNT(*) FROM account UNION SELECT COUNT(*) FROM account_access WHERE gmlevel <> '0'");
+        $query = $sql["logon"]->query("SELECT COUNT(*) FROM account UNION SELECT COUNT(*) FROM account_access WHERE gmlevel<>'0'");
       $total_acc = $sql["logon"]->result($query, 0);
       $total_gms = $sql["logon"]->result($query, 1);
       unset($query);
@@ -165,9 +161,9 @@ function stats($action)
       $data_1 = date('Y-m-d H:i:s', $data_1);
 
       if ( $core == 1 )
-        $uni_query = "SELECT DISTINCT COUNT(lastip) FROM accounts WHERE lastlogin > '".$data_1."' AND lastlogin < '".$data."'";
+        $uni_query = "SELECT DISTINCT COUNT(lastip) FROM accounts WHERE lastlogin>'".$data_1."' AND lastlogin<'".$data."'";
       else
-        $uni_query = "SELECT DISTINCT COUNT(last_ip) FROM account WHERE last_login > '".$data_1."' AND last_login < '".$data."'";
+        $uni_query = "SELECT DISTINCT COUNT(last_ip) FROM account WHERE last_login>'".$data_1."' AND last_login<'".$data."'";
       $uniqueIPs = $sql["logon"]->result($sql["logon"]->query($uni_query), 0);
       unset($data_1);
       unset($data);
@@ -210,8 +206,8 @@ function stats($action)
                         </tr>
                         <tr align="left">
                           <td colspan="2">
-                            '.lang("stat", "average_of").' '.round($total_chars/$total_acc,1).' '.lang("stat", "chars_per_acc").'<br />
-                            '.lang("stat", "total_of").' '.$total_gms.' '.lang("stat", "gms_one_for").' '.round($total_acc/$total_gms,1).' '.lang("stat", "players").'
+                            '.lang("stat", "average_of").' '.round($total_chars/$total_acc, 1).' '.lang("stat", "chars_per_acc").'<br />
+                            '.lang("stat", "total_of").' '.$total_gms.' '.lang("stat", "gms_one_for").' '.round($total_acc/$total_gms, 1).' '.lang("stat", "players").'
                           </td>
                           <td colspan="2">
                           </td>
@@ -227,8 +223,8 @@ function stats($action)
     }
 
     //there is always less hordies
-    $horde_chars  = $sql["char"]->result($sql["char"]->query('SELECT count(guid) FROM characters WHERE race IN(2,5,6,8,10)'.(($action) ? ' AND online= 1' : '')), 0);
-    $horde_pros   = round(($horde_chars*100)/$total_chars ,1);
+    $horde_chars  = $sql["char"]->result($sql["char"]->query("SELECT COUNT(guid) FROM characters WHERE race IN(2, 5, 6, 8, 10)".( ( $action ) ? " AND online=1" : "" )), 0);
+    $horde_pros   = round(($horde_chars*100)/$total_chars, 1);
     $allies_chars = $total_chars - $horde_chars;
     $allies_pros  = 100 - $horde_pros;
 
@@ -247,34 +243,34 @@ function stats($action)
     unset($allies_chars);
     unset($allies_pros);
 
-    $order_race = (isset($_GET["race"])) ? 'AND race ='.$sql["char"]->quote_smart($_GET["race"]) : '';
-    $order_class = (isset($_GET["class"])) ? 'AND class ='.$sql["char"]->quote_smart($_GET["class"]) : '';
+    $order_race = ( ( isset($_GET["race"]) ) ? 'AND race='.$sql["char"]->quote_smart($_GET["race"]) : '' );
+    $order_class = ( ( isset($_GET["class"]) ) ? 'AND class='.$sql["char"]->quote_smart($_GET["class"]) : '' );
 
-    if(isset($_GET["level"]))
+    if ( isset($_GET["level"]) )
     {
       $lvl_min = $sql["char"]->quote_smart($_GET["level"]);
       $lvl_max = $lvl_min + 4;
-      $order_level = 'AND level >= '.$lvl_min.' AND level <= '.$lvl_max.'';
+      $order_level = 'AND level>='.$lvl_min.' AND level<='.$lvl_max.'';
     }
     else
       $order_level = '';
 
-    if(isset($_GET["side"]))
+    if ( isset($_GET["side"]) )
     {
-      if ('h' == $sql["char"]->quote_smart($_GET["side"]))
-        $order_side = 'AND race IN(2,5,6,8,10)';
-      elseif ('a' == $sql["char"]->quote_smart($_GET["side"]))
-        $order_side = 'AND race IN (1,3,4,7,11)';
+      if ( $sql["char"]->quote_smart($_GET["side"]) == 'h' )
+        $order_side = 'AND race IN(2, 5, 6, 8, 10)';
+      elseif ( $sql["char"]->quote_smart($_GET["side"]) == 'a' )
+        $order_side = 'AND race IN (1, 3, 4, 7, 11)';
     }
     else
       $order_side = '';
 
     // RACE
-    foreach ($race as $id)
+    foreach ( $race as $id )
     {
-      $race[$id[0]][2] = $sql["char"]->result($sql["char"]->query('SELECT count(guid) FROM characters
-        WHERE race = '.$id[0].' '.$order_class.' '.$order_level.' '.$order_side.(($action) ? ' AND online= 1' : '')), 0);
-      $race[$id[0]][3] = round((($race[$id[0]][2])*100)/$total_chars,1);
+      $race[$id[0]][2] = $sql["char"]->result($sql["char"]->query("SELECT COUNT(guid) FROM characters
+        WHERE race=".$id[0]." ".$order_class." ".$order_level." ".$order_side.( ( $action ) ? " AND online=1" : "" )), 0);
+      $race[$id[0]][3] = round((($race[$id[0]][2])*100)/$total_chars, 1);
     }
     $output .= '
                   <tr align="left">
@@ -286,7 +282,7 @@ function stats($action)
                     <td>
                       <table class="bargraph">
                         <tr>';
-    foreach ($race as $id)
+    foreach ( $race as $id )
     {
       $height = ($race[$id[0]][3])*4;
       $output .= '
@@ -297,10 +293,10 @@ function stats($action)
     $output .= '
                         </tr>
                         <tr>';
-    foreach ($race as $id)
+    foreach ( $race as $id )
     {
       $output .= '
-                          <th>'.$race[$id[0]][1].'<br />'.$race[$id[0]][2].'</th>';
+                          <th>'.lang("id_tab", $race[$id[0]][1]).'<br />'.$race[$id[0]][2].'</th>';
     }
     unset($race);
     $output .= '
@@ -311,10 +307,10 @@ function stats($action)
                   </tr>';
     // RACE END
     // CLASS
-    foreach ($class as $id)
+    foreach ( $class as $id )
     {
-      $class[$id[0]][2] = $sql["char"]->result($sql["char"]->query('SELECT count(guid) FROM characters
-        WHERE class = '.$id[0].' '.$order_race.' '.$order_level.' '.$order_side.(($action) ? ' AND online= 1' : '')), 0);
+      $class[$id[0]][2] = $sql["char"]->result($sql["char"]->query("SELECT COUNT(guid) FROM characters
+        WHERE class=".$id[0]." ".$order_race." ".$order_level." ".$order_side.( ( $action ) ? " AND online=1" : "" )), 0);
       $class[$id[0]][3] = round((($class[$id[0]][2])*100)/$total_chars,1);
     }
     unset($order_level);
@@ -328,7 +324,7 @@ function stats($action)
                     <td>
                       <table class="bargraph">
                         <tr>';
-    foreach ($class as $id)
+    foreach ( $class as $id )
     {
       $height = ($class[$id[0]][3])*4;
       $output .= '
@@ -339,10 +335,10 @@ function stats($action)
     $output .= '
                         </tr>
                         <tr>';
-    foreach ($class as $id)
+    foreach ( $class as $id )
     {
       $output .= '
-                          <th>'.$class[$id[0]][1].'<br />'.$class[$id[0]][2].'</th>';
+                          <th>'.lang("id_tab", $class[$id[0]][1]).'<br />'.$class[$id[0]][2].'</th>';
     }
     unset($class);
     $output .= '
@@ -353,12 +349,11 @@ function stats($action)
                   </tr>';
     // CLASS END
     // LEVEL
-    foreach ($level as $id)
+    foreach ( $level as $id )
     {
-      $level[$id[0]][3] = $sql["char"]->result($sql["char"]->query('SELECT count(guid) FROM characters
-        WHERE level >= '.$id[1].'
-          AND level <= '.$id[2].'
-            '.$order_race.' '.$order_class.' '.$order_side.(($action) ? ' AND online= 1' : '').''), 0);
+      $level[$id[0]][3] = $sql["char"]->result($sql["char"]->query("SELECT COUNT(guid) FROM characters
+        WHERE level>=".$id[1]." AND level<=".$id[2]."
+        ".$order_race." ".$order_class." ".$order_side.( ( $action ) ? " AND online=1" : "" )), 0);
       $level[$id[0]][4] = round((($level[$id[0]][3])*100)/$total_chars,1);
     }
     unset($order_level);
@@ -376,7 +371,7 @@ function stats($action)
                     <td>
                       <table class="bargraph">
                         <tr>';
-    foreach ($level as $id)
+    foreach ( $level as $id )
     {
       $height = ($level[$id[0]][4])*4;
       $output .= '
@@ -386,7 +381,7 @@ function stats($action)
     $output .= '
                         </tr>
                         <tr>';
-    foreach ($level as $id)
+    foreach ( $level as $id )
       $output .= '
                           <th>'.$level[$id[0]][1].'-'.$level[$id[0]][2].'<br />'.$level[$id[0]][3].'</th>';
     unset($id);
@@ -401,7 +396,7 @@ function stats($action)
                   <tr>
                     <td>';
     // LEVEL END
-                      makebutton(lang("stat", "reset"), 'stat.php', 720);
+    makebutton(lang("stat", "reset"), 'stat.php', 720);
     $output .= '
                     </td>
                   </tr>
@@ -421,10 +416,10 @@ function stats($action)
 
 //unset($err);
 
-$output .= "
-      <div class=\"bubble\">";
+$output .= '
+      <div class="bubble">';
 
-$action = (isset($_GET["action"])) ? $_GET["action"] : NULL;
+$action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
 stats($action);
 

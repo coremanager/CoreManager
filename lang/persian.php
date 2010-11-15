@@ -252,25 +252,10 @@ $GLOBALS['lang_header'] = array
   'mail' => 'نامه',
   'tickets' => 'GM Tickets',
   'banned_list' => 'فهرست محروم ها',
-  //'cleanup' => 'Cleanup',
-
-  //'events' => 'رویدادها/Events',
-  //'instances' => 'Instances',
-  //'world broadcasts' => 'World Broadcasts',
-  //'vendors' => 'Vendors/فروشنده ها',
-  //'items' => 'Items',
-  //'creatures' => 'Creatures',
-  //'game_object' => 'Game Objects',
-  //'teleports' => 'Recalls',
-  //'backup' => 'Backup',
-  //'run_patch' => 'Run SQL Patch',
-  //'repair' => 'تعمیر کردن/بهینه ساختن',
 
   'realm' => 'ریلم',
   'add_motd' => 'پیام سرور',
   'spelld' => 'Spell(s) Disabled',
-  //'message' => 'فرستادن پیام',
-  //'ssh_line' => 'SSH line',
 
   'forums' => 'Forums',
   'irc' => 'IRC Applet',
@@ -288,6 +273,8 @@ $GLOBALS['lang_header'] = array
   'account' => 'اکانت',
   'edit_my_acc' => 'اصلاح اکانت من',
   'logout' => 'خروج از سیستم',
+  'register' => 'Register',
+  'login' => 'Login',
 );
 
 
@@ -865,6 +852,8 @@ $GLOBALS['lang_motd'] = array
   'target' => 'Target',
   'targetname' => 'Target User',
   'private' => 'Private Message',
+  'posted_by' => 'Posted by',
+  'edited_by' => 'Edited by',
 );
 
 
@@ -1033,6 +1022,7 @@ $GLOBALS['lang_user'] = array
   'ban_active_expired' => 'The Ban is Active, but has Expired',
   'ban_expired' => 'The Ban has Expired',
   'charname' => 'Character Name',
+  'expansion_short' => 'EXP',
 );
 
 
@@ -1219,9 +1209,11 @@ $GLOBALS['lang_honor'] = array
   'race' => 'Race',
   'class' => 'Class',
   'level' => 'Level',
-  'honor points' => 'Honor Points',
+  'honor_points' => 'Honor Points',
   'honor' => 'Rank',
-  'guild' => 'Guild'
+  'guild' => 'Guild',
+  'kills' => 'Kills',
+  'arena_points_short' => 'AP',
 );
   
 // ----- QUESTITEM_VENDOR.PHP -----

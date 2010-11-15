@@ -361,8 +361,8 @@ if ( ( $allow_anony && empty($_SESSION["logged_in"]) ) && ( ( $filename != 'logi
         <table>
           <tr>
             <td>
-              <a class="button footer_register_login" href="register.php">Register</a>
-              <a class="button footer_register_login" href="login.php">Login</a>
+              <a class="button footer_register_login" href="register.php">'.lang("header", "register").'</a>
+              <a class="button footer_register_login" href="login.php">'.lang("header", "login").'</a>
             </td>
           </tr>
         </table>

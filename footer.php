@@ -61,16 +61,17 @@
   {
     if ( $core == 1 )
     {
-      $new_query = "SELECT accounts.acct, Login, MAX(JoinDate) AS joindate
+      $new_query = "SELECT accounts.acct, Login, JoinDate AS joindate
         FROM config_accounts
-        LEFT JOIN accounts ON accounts.login=config_accounts.Login";
+          LEFT JOIN accounts ON accounts.login=config_accounts.Login
+        ORDER BY joindate DESC LIMIT 1";
       $new_result = $sql["mgr"]->query($new_query);
       $new = $sql["mgr"]->fetch_assoc($new_result);
     }
     else
     {
-      $new_query = "SELECT id AS acct, username AS Login, MAX(JoinDate) AS joindate
-        FROM account";
+      $new_query = "SELECT id AS acct, username AS Login, joindate
+        FROM account ORDER BY joindate DESC LIMIT 1";
       $new_result = $sql["logon"]->query($new_query);
       $new = $sql["logon"]->fetch_assoc($new_result);
     }

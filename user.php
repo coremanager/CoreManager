@@ -422,7 +422,7 @@ function browse_users()
                   <th width="1%">'.lang("user", "sec_level").'</th>';
   if ( $expansion_select )
     $output .='
-                  <th width="1%"><a href="user.php?order_by=flags&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.( ( $order_by=='flags' ) ? ' class="'.$order_dir.'"' : '' ).'>EXP</a></th>';
+                  <th width="1%"><a href="user.php?order_by=flags&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.( ( $order_by=='flags' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("user", "expansion_short").'</a></th>';
   $output .='
                   <th width="1%"><a href="user.php?order_by=email&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.( ( $order_by=='email' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("user", "email").'</a></th>
                   <!-- <th width="1%"><a href="user.php?order_by=joindate&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.( ( $order_by=='joindate' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("user", "join_date").'</a></th> -->

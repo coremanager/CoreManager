@@ -252,25 +252,10 @@ $GLOBALS['lang_header'] = array
   'mail' => 'Nachrichten',
   'tickets' => 'GM Tickets',
   'banned_list' => 'Bannliste',
-  //'cleanup' => 'Aufr&auml;umen',
-
-  //'events' => 'Ereignisse',
-  //'instances' => 'Instanz-Informationen',
-  //'world broadcasts' => 'World Broadcasts',
-  //'vendors' => 'Verk&auml;ufer',
-  //'items' => 'Gegenst&auml;nde',
-  //'creatures' => 'Kreaturen',
-  //'game_object' => 'Spielobjekte',
-  //'teleports' => 'Teleport-Punkte',
-  //'backup' => 'Backup',
-  //'run_patch' => 'SQL Patch einspielen',
-  //'repair' => 'Reparieren/Optimieren',
 
   'realm' => 'Realm',
   'add_motd' => 'Server Nachrichten',
   'spelld' => 'Zauber deaktivieren',
-  //'message' => 'Nachricht Senden',
-  //'ssh_line' => 'SSH Zeile',
 
   'forums' => 'Forum',
   'irc' => 'IRC Applet',
@@ -288,6 +273,8 @@ $GLOBALS['lang_header'] = array
   'account' => 'Benutzerkonto',
   'edit_my_acc' => 'Meine Daten &auml;ndern',
   'logout' => 'Abmelden',
+  'register' => 'Register',
+  'login' => 'Login',
 );
 
 
@@ -865,6 +852,8 @@ $GLOBALS['lang_motd'] = array
   'target' => 'Target',
   'targetname' => 'Target User',
   'private' => 'Private Message',
+  'posted_by' => 'Posted by',
+  'edited_by' => 'Edited by',
 );
 
 
@@ -1033,6 +1022,7 @@ $GLOBALS['lang_user'] = array
   'ban_active_expired' => 'The Ban is Active, but has Expired',
   'ban_expired' => 'The Ban has Expired',
   'charname' => 'Character Name',
+  'expansion_short' => 'EXP',
 );
 
 
@@ -1219,9 +1209,11 @@ $GLOBALS['lang_honor'] = array
   'race' => 'Rasse',
   'class' => 'Klasse',
   'level' => 'Level',
-  'honor points' => 'Ehre',
+  'honor_points' => 'Ehre',
   'honor' => 'Rang',
-  'guild' => 'Gilde'
+  'guild' => 'Gilde',
+  'kills' => 'Kills',
+  'arena_points_short' => 'AP',
 );
   
 // ----- QUESTITEM_VENDOR.PHP -----  

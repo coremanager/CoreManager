@@ -74,13 +74,13 @@ $output .= '
                   <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class=DESC' : '' ).'>'.lang("honor", "honor").'</a>
                 </th>
                 <th width="5%">
-                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class=DESC' : '' ).'>'.lang("honor", "honor points").'</a>
+                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class=DESC' : '' ).'>'.lang("honor", "honor_points").'</a>
                 </th>
                 <th width="5%">
-                  <a href="honor.php?order_by=kills"'.( ( $order_by == 'kills' ) ? ' class=DESC' : '' ).'>Kills</a>
+                  <a href="honor.php?order_by=kills"'.( ( $order_by == 'kills' ) ? ' class=DESC' : '' ).'>'.lang("honor", "kills").'</a>
                 </th>
                 <th width="5%">
-                  <a href="honor.php?order_by=arena"'.( ( $order_by == 'arena' ) ? ' class=DESC' : '' ).'>AP</a>
+                  <a href="honor.php?order_by=arena"'.( ( $order_by == 'arena' ) ? ' class=DESC' : '' ).'>'.lang("honor", "arena_points_short").'</a>
                 </th>
                 <th width="30%">'.lang("honor", "guild")."</th>
               </tr>";

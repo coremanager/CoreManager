@@ -252,25 +252,10 @@ $GLOBALS['lang_header'] = array
   'mail' => '邮件',
   'tickets' => 'GM 回报单',
   'banned_list' => '被禁帐号列表',
-  //'cleanup' => 'Cleanup',
-
-  //'events' => 'Events',
-  //'instances' => 'Instances',
-  //'world broadcasts' => 'World Broadcasts',
-  //'vendors' => 'Vendors',
-  //'items' => 'Items',
-  //'creatures' => 'Creatures',
-  //'game_object' => 'Game Objects',
-  //'teleports' => 'Recalls',
-  //'backup' => 'Backup',
-  //'run_patch' => 'Run SQL Patch',
-  //'repair' => 'Repair/Optimize',
 
   'realm' => '服务器',
   'add_motd' => '服务器消息',
   'spelld' => '被禁技能',
-  //'message' => 'Send Message',
-  //'ssh_line' => 'SSH line',
 
   'forums' => '论坛',
   'irc' => 'IRC Applet',
@@ -288,6 +273,8 @@ $GLOBALS['lang_header'] = array
   'account' => '帐号',
   'edit_my_acc' => '编辑我的帐号',
   'logout' => '注销',
+  'register' => 'Register',
+  'login' => 'Login',
 );
 
 
@@ -865,6 +852,8 @@ $GLOBALS['lang_motd'] = array
   'target' => '目标',
   'targetname' => '目标用户',
   'private' => '私人消息',
+  'posted_by' => 'Posted by',
+  'edited_by' => 'Edited by',
 );
 
 
@@ -1033,6 +1022,7 @@ $GLOBALS['lang_user'] = array
   'ban_active_expired' => 'The Ban is Active, but has Expired',
   'ban_expired' => 'The Ban has Expired',
   'charname' => '角色名称',
+  'expansion_short' => 'EXP',
 );
 
 
@@ -1219,9 +1209,11 @@ $GLOBALS['lang_honor'] = array
   'race' => '种族',
   'class' => '职业',
   'level' => '等级',
-  'honor points' => '荣誉点数',
+  'honor_points' => '荣誉点数',
   'honor' => '军衔',
-  'guild' => '公会'
+  'guild' => '公会',
+  'kills' => 'Kills',
+  'arena_points_short' => 'AP',
 );
   
 // ----- QUESTITEM_VENDOR.PHP -----
