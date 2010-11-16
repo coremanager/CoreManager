@@ -40,14 +40,14 @@ if ( $core == 1 )
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ';', ".(PLAYER_GUILDID+1)."), ';', -1) AS UNSIGNED) AS GNAME,
         gender
         FROM `characters`
-        WHERE race IN (1,3,4,7,11)
+        WHERE race IN (1, 3, 4, 7, 11)
         ORDER BY ".$order_by." DESC LIMIT 25;");
 else
   $query = $sql["char"]->query("SELECT characters.guid, characters.name, race, class, 
         totalHonorPoints AS honor, totalKills AS kills, level, arenaPoints AS arena, 
         guildid AS GNAME, gender 
         FROM `characters`, guild_member 
-        WHERE race IN (1,3,4,7,11) AND guild_member.guid = characters.guid 
+        WHERE race IN (1, 3, 4, 7, 11) AND guild_member.guid=characters.guid 
         ORDER BY ".$order_by." DESC LIMIT 25;");
   
 
@@ -66,23 +66,23 @@ $output .= '
                 <td colspan="11" class="hidden">'.lang("honor", "allied").' '.lang("honor", "browse_honor").'</td>
               </tr>
               <tr>
-                <th width="30%">'.lang("honor", "guid").'</th>
+                <th width="20%">'.lang("honor", "guid").'</th>
                 <th width="7%">'.lang("honor", "race").'</th>
                 <th width="7%">'.lang("honor", "class").'</th>
                 <th width="7%">'.lang("honor", "level").'</th>
-                <th width="5%">
-                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class=DESC' : '' ).'>'.lang("honor", "honor").'</a>
+                <th width="7%">
+                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "honor").'</a>
                 </th>
-                <th width="5%">
-                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class=DESC' : '' ).'>'.lang("honor", "honor_points").'</a>
+                <th width="11%">
+                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "honor_points").'</a>
                 </th>
-                <th width="5%">
-                  <a href="honor.php?order_by=kills"'.( ( $order_by == 'kills' ) ? ' class=DESC' : '' ).'>'.lang("honor", "kills").'</a>
+                <th width="7%">
+                  <a href="honor.php?order_by=kills"'.( ( $order_by == 'kills' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "kills").'</a>
                 </th>
-                <th width="5%">
-                  <a href="honor.php?order_by=arena"'.( ( $order_by == 'arena' ) ? ' class=DESC' : '' ).'>'.lang("honor", "arena_points_short").'</a>
+                <th width="11%">
+                  <a href="honor.php?order_by=arena"'.( ( $order_by == 'arena' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "arena_points_short").'</a>
                 </th>
-                <th width="30%">'.lang("honor", "guild")."</th>
+                <th width="24%">'.lang("honor", "guild")."</th>
               </tr>";
 
 while ( $char = $sql["char"]->fetch_assoc($query) ) 
@@ -134,20 +134,23 @@ $output .= '
 
 if ( $core == 1 )
   $query = $sql["char"]->query("SELECT
-        guid,name,race,class,
+        guid, name, race, class,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(PLAYER_FIELD_HONOR_CURRENCY+1)."), ' ', -1) AS UNSIGNED) AS honor ,
-        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(PLAYER_FIELD_LIFETIME_HONORBALE_KILLS+1)."), ' ', -1) AS UNSIGNED) AS kills, level,
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(PLAYER_FIELD_LIFETIME_HONORBALE_KILLS+1)."), ' ', -1) AS UNSIGNED) AS kills,
+        level,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(PLAYER_FIELD_ARENA_CURRENCY+1)."), ' ', -1) AS UNSIGNED) AS arena,
-        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(PLAYER_GUILDID+1)."), ' ', -1) AS UNSIGNED) AS GNAME, gender
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(PLAYER_GUILDID+1)."), ' ', -1) AS UNSIGNED) AS GNAME,
+        gender
         FROM `characters`
-        WHERE race NOT IN (1,3,4,7,11)
+        WHERE race NOT IN (1, 3, 4, 7, 11)
         ORDER BY ".$order_by." DESC
         LIMIT 25;");
 else
-  $query = $sql["char"]->query("SELECT characters.guid, characters.name, race,class, 
-        totalHonorPoints AS honor , totalKills AS kills, 
+  $query = $sql["char"]->query("SELECT characters.guid, characters.name, race, class, 
+        totalHonorPoints AS honor, totalKills AS kills, 
         level, arenaPoints AS arena, guildid AS GNAME, gender 
-        FROM `characters`,guild_member WHERE race NOT IN (1,3,4,7,11) AND guild_member.guid = characters.guid 
+        FROM `characters`, guild_member
+        WHERE race NOT IN (1, 3, 4, 7, 11) AND guild_member.guid=characters.guid 
         ORDER BY ".$order_by." DESC LIMIT 25;");
 
 
@@ -166,31 +169,31 @@ $output .= '
                 <td colspan="11" class="hidden">'.lang("honor", "horde")." ".lang("honor", "browse_honor").'</td>
               </tr>
               <tr>
-                <th width="30%">'.lang("honor", "guid").'</th>
+                <th width="20%">'.lang("honor", "guid").'</th>
                 <th width="7%">'.lang("honor", "race").'</th>
                 <th width="7%">'.lang("honor", "class").'</th>
                 <th width="7%">'.lang("honor", "level").'</th>
-                <th width="5%">
-                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class=DESC' : '' ).'>'.lang("honor", "honor").'</a>
+                <th width="7%">
+                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "honor").'</a>
                 </th>
-                <th width="5%">
-                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class=DESC' : '' ).'>'.lang("honor", "honor points").'</a>
+                <th width="11%">
+                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "honor_points").'</a>
                 </th>
-                <th width="5%">
-                  <a href="honor.php?order_by=kills"'.( ( $order_by == 'kills' ) ? ' class=DESC' : '' ).'>Kills</a>
+                <th width="7%">
+                  <a href="honor.php?order_by=kills"'.( ( $order_by == 'kills' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "kills").'</a>
                 </th>
-                <th width="5%">
-                  <a href="honor.php?order_by=arena"'.( ( $order_by == 'arena' ) ? ' class=DESC' : '' ).'>AP</a>
+                <th width="11%">
+                  <a href="honor.php?order_by=arena"'.( ( $order_by == 'arena' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "arena_points_short").'</a>
                 </th>
-                <th width="30%">'.lang("honor", "guild").'</th>
+                <th width="24%">'.lang("honor", "guild").'</th>
               </tr>';
 
 while ( $char = $sql["char"]->fetch_assoc($query) ) 
 {
   if ( $core == 1 )
   {
-    $guild_id = $sql["char"]->result($sql["char"]->query("SELECT guildid FROM guild_data WHERE playerid = '".$char["guid"]."'"), 0);
-    $guild_name = $sql["char"]->result($sql["char"]->query("SELECT guildname FROM guilds WHERE guildid = '".$guild_id."'"), 0);
+    $guild_id = $sql["char"]->result($sql["char"]->query("SELECT guildid FROM guild_data WHERE playerid='".$char["guid"]."'"), 0);
+    $guild_name = $sql["char"]->result($sql["char"]->query("SELECT guildname FROM guilds WHERE guildid='".$guild_id."'"), 0);
   }
   else
   {

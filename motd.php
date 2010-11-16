@@ -118,7 +118,7 @@ function add_motd()
               <table class="top_hidden">
                 <tr>
                   <td colspan="3">';
-                    bbcode_add_editor();
+  bbcode_add_editor();
   $output .= '
                   </td>
                 </tr>
@@ -169,7 +169,6 @@ function add_motd()
             </form>
             <br />
           </center>';
-
 }
 
 
@@ -185,22 +184,20 @@ function edit_motd()
   if ( empty($_GET["id"]) )
     redirect('motd.php?error=1');
   $id = $sql["mgr"]->quote_smart($_GET["id"]);
-  if ( is_numeric($id) )
-    ;
-  else
+  if ( !is_numeric($id) )
     redirect('motd.php?error=1');
 
   if ( !isset($_GET["msg"]) )
-    $msg = $sql["mgr"]->result($sql["mgr"]->query('SELECT Message FROM motd WHERE ID='.$id.''), 0);
+    $msg = $sql["mgr"]->result($sql["mgr"]->query("SELECT Message FROM motd WHERE ID='".$id."'"), 0);
   else
     $msg = $_GET["msg"];
 
-  $priority = $sql["mgr"]->result($sql["mgr"]->query('SELECT Priority FROM motd WHERE ID='.$id.''), 0);
-  $enabled = $sql["mgr"]->result($sql["mgr"]->query('SELECT Enabled FROM motd WHERE ID='.$id.''), 0);
+  $priority = $sql["mgr"]->result($sql["mgr"]->query("SELECT Priority FROM motd WHERE ID='".$id."'"), 0);
+  $enabled = $sql["mgr"]->result($sql["mgr"]->query("SELECT Enabled FROM motd WHERE ID='".$id."'"), 0);
 
   $redirect = ( ( isset($_GET["redirect"]) ) ? $sql["mgr"]->quote_smart($_GET["redirect"]) : NULL );
 
-  $target = $sql["mgr"]->result($sql["mgr"]->query('SELECT Target FROM motd WHERE ID='.$id.''), 0);
+  $target = $sql["mgr"]->result($sql["mgr"]->query("SELECT Target FROM motd WHERE ID='".$id."'"), 0);
   if ( $target != 0 )
   {
     if ( $core == 1 )
@@ -230,7 +227,7 @@ function edit_motd()
                 <tr>
                   <td colspan="3">';
   unset($id);
-                    bbcode_add_editor();
+  bbcode_add_editor();
   $output .= '
                   </td>
                 </tr>
@@ -291,7 +288,7 @@ function edit_motd()
 //#####################################################################################################
 function do_add_motd()
 {
-  global $action_permission, $user_name, $sql;
+  global $action_permission, $user_id, $sql;
 
   valid_login($action_permission["insert"]);
 
@@ -328,12 +325,7 @@ function do_add_motd()
   if ( strlen($msg) > 4096 )
     redirect('motd.php?error=2');
 
-  $name = $sql["mgr"]->result($sql["mgr"]->query("SELECT ScreenName FROM config_accounts WHERE Login='".$user_name."'"), 0);
-  if ( $name == "" )
-    $name = $user_name;
-
-  $by = lang("motd", "posted_by").': '.$name.' ('.date('m/d/Y H:i:s').')';
-  $sql["mgr"]->query("INSERT INTO motd (Message, Priority, Enabled, `By`, Target) VALUES ('".$msg."', '".$priority."', '".$enabled."', '".$by."', '".$target."')");
+  $sql["mgr"]->query("INSERT INTO motd (Message, Priority, Enabled, Created_By, Created, Target) VALUES ('".$msg."', '".$priority."', '".$enabled."', '".$user_id."', NOW(), '".$target."')");
 
   unset($by);
   unset($msg);
@@ -341,7 +333,6 @@ function do_add_motd()
     redirect('motd.php');
   else
     redirect('index.php');
-
 }
 
 
@@ -350,7 +341,7 @@ function do_add_motd()
 //#####################################################################################################
 function do_edit_motd()
 {
-  global $action_permission, $user_name, $sql;
+  global $action_permission, $user_id, $sql;
 
   valid_login($action_permission["update"]);
 
@@ -383,9 +374,7 @@ function do_edit_motd()
   }
 
   $id = $sql["mgr"]->quote_smart($_GET["id"]);
-  if( is_numeric($id) )
-    ;
-  else
+  if( !is_numeric($id) )
     redirect('motd.php?error=1');
 
   $msg = $sql["mgr"]->quote_smart($_GET["msg"]);
@@ -393,21 +382,10 @@ function do_edit_motd()
   if ( strlen($msg) > 4096 )
     redirect('motd.php?error=2');
 
-  $name = $sql["mgr"]->result($sql["mgr"]->query("SELECT ScreenName FROM config_accounts WHERE Login='".$user_name."'"), 0);
-  if ( $name == "" )
-    $name = $user_name;
-
   if ( $oldmsg <> $msg )
-  {
-    $by = $sql["mgr"]->result($sql["mgr"]->query("SELECT `By` FROM motd WHERE ID='".$id."'"), 0);
-    $by = split('<br />', $by, 2);
-    $by = $by[0].'<br />'.lang("motd", "edited_by").': '.$name.' ('.date('m/d/Y H:i:s').')';
-    $sql["mgr"]->query("UPDATE motd SET Message='".$msg."', Priority='".$priority."', Enabled='".$enabled."', `By`='".$by."', Target='".$target."' WHERE ID='".$id."'");
-  }
-  else
-  {
-    $sql["mgr"]->query("UPDATE motd SET Message='".$msg."', Priority='".$priority."', Enabled='".$enabled."', Target='".$target."' WHERE ID='".$id."'");
-  }
+    $sql["mgr"]->query("UPDATE motd SET Message='".$msg."', Priority='".$priority."', Enabled='".$enabled."', Last_Edited_By='".$user_id."', Target='".$target."' WHERE ID='".$id."'");
+  //else
+    //$sql["mgr"]->query("UPDATE motd SET Message='".$msg."', Priority='".$priority."', Enabled='".$enabled."', Target='".$target."' WHERE ID='".$id."'");
 
   unset($by);
   unset($msg);
@@ -416,7 +394,6 @@ function do_edit_motd()
     redirect('motd.php');
   else
     redirect('index.php');
-
 }
 
 
