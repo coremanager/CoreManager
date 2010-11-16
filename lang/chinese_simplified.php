@@ -273,8 +273,8 @@ $GLOBALS['lang_header'] = array
   'account' => '帐号',
   'edit_my_acc' => '编辑我的帐号',
   'logout' => '注销',
-  'register' => 'Register',
-  'login' => 'Login',
+  'register' => '注册',
+  'login' => '登陆',
 );
 
 
@@ -852,8 +852,8 @@ $GLOBALS['lang_motd'] = array
   'target' => '目标',
   'targetname' => '目标用户',
   'private' => '私人消息',
-  'posted_by' => 'Posted by',
-  'edited_by' => 'Edited by',
+  'posted_by' => '发布者',
+  'edited_by' => '编辑者',
 );
 
 
@@ -1022,7 +1022,7 @@ $GLOBALS['lang_user'] = array
   'ban_active_expired' => 'The Ban is Active, but has Expired',
   'ban_expired' => 'The Ban has Expired',
   'charname' => '角色名称',
-  'expansion_short' => 'EXP',
+  'expansion_short' => '客户端',
 );
 
 
@@ -1212,8 +1212,8 @@ $GLOBALS['lang_honor'] = array
   'honor_points' => '荣誉点数',
   'honor' => '军衔',
   'guild' => '公会',
-  'kills' => 'Kills',
-  'arena_points_short' => 'AP',
+  'kills' => '击杀',
+  'arena_points_short' => '竞技点数',
 );
   
 // ----- QUESTITEM_VENDOR.PHP -----
