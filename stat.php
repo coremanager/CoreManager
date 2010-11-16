@@ -222,11 +222,18 @@ function stats($action)
       unset($total_acc);
     }
 
-    //there is always less hordies
+    // get counts and percentages for alliance and horde characters
     $horde_chars  = $sql["char"]->result($sql["char"]->query("SELECT COUNT(guid) FROM characters WHERE race IN(2, 5, 6, 8, 10)".( ( $action ) ? " AND online=1" : "" )), 0);
     $horde_pros   = round(($horde_chars*100)/$total_chars, 1);
     $allies_chars = $total_chars - $horde_chars;
     $allies_pros  = 100 - $horde_pros;
+
+    // if we have zero of both, we'll show half red, half blue
+    if ( ( $horde_chars == 0 ) && ( $allies_chars == 0 ) )
+    {
+      $horde_pros = 50;
+      $allies_pros = 50;
+    }
 
     $output .= '
                       <table class="tot_bar">
