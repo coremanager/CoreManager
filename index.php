@@ -312,7 +312,7 @@ else
       if ( $edited_screenname["ScreenName"] != NULL )
         $edited_name = $edited_screenname["ScreenName"];
 
-      if ( $temp["Last_Edited_By"] != NULL )
+      if ( $temp["Last_Edited_By"] != 0 )
       {
         $output .= '
                   <br />';
