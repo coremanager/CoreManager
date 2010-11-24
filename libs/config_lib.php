@@ -240,6 +240,16 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $proxy_cfg["pass"] = $misc_row["Value"];
       break;
     }
+    case "Datasite_Base":
+    {
+      $base_datasite = $misc_row["Value"];
+      break;
+    }
+    case "Datasite_Name":
+    {
+      $name_datasite = $misc_row["Value"];
+      break;
+    }
     case "Datasite_Item":
     {
       $item_datasite = $misc_row["Value"];

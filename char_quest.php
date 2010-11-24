@@ -28,7 +28,7 @@ valid_login($action_permission["view"]);
 function char_quest()
 {
   global $output, $realm_id, $world_db, $logon_db, $characters_db, $action_permission, $locales_search_option,
-    $site_encoding, $user_lvl, $user_name, $quest_datasite, $itemperpage, $sql, $core;
+    $site_encoding, $user_lvl, $user_name, $base_datasite, $quest_datasite, $itemperpage, $sql, $core;
 
   if ( empty($_GET["id"]) )
     error(lang("global", "empty_fields"));
@@ -183,7 +183,7 @@ function char_quest()
                 <tr>
                   <td>'.$data[0].'</td>
                   <td>('.$data[1].')</td>
-                  <td align="left"><a href="'.$quest_datasite.$data[0].'" target="_blank">'.htmlentities($data[2], ENT_COMPAT, $site_encoding).'</a></td>
+                  <td align="left"><a href="'.$base_datasite.$quest_datasite.$data[0].'" target="_blank">'.htmlentities($data[2], ENT_COMPAT, $site_encoding).'</a></td>
                   <td><img src="img/aff_qst.png" width="14" height="14" alt="" /></td>
                 </tr>';
         }
@@ -217,7 +217,7 @@ function char_quest()
                 <tr>
                   <td>'.$data[0].'</td>
                   <td>('.$data[1].')</td>
-                  <td align="left"><a href="'.$quest_datasite.$data[0].'" target="_blank">'.htmlentities($data[2], ENT_COMPAT, $site_encoding).'</a></td>
+                  <td align="left"><a href="'.$base_datasite.$quest_datasite.$data[0].'" target="_blank">'.htmlentities($data[2], ENT_COMPAT, $site_encoding).'</a></td>
                   <td><img src="img/aff_'.( ( $data[3] ) ? 'tick' : 'qst' ).'.png" width="14" height="14" alt="" /></td>
                   <td><img src="img/aff_tick.png" width="14" height="14" alt="" /></td>
                 </tr>';

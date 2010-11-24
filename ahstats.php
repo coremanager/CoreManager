@@ -29,7 +29,7 @@ valid_login($action_permission["view"]);
 function browse_auctions()
 {
   global $output, $characters_db, $world_db, $realm_id, $locales_search_option,
-    $itemperpage, $item_datasite, $server, $user_lvl, $user_id, $sql, $core;
+    $itemperpage, $base_datasite, $item_datasite, $server, $user_lvl, $user_id, $sql, $core;
 
   //wowhead_tt();
 
@@ -425,7 +425,7 @@ function browse_auctions()
     $item_icon = get_item_icon($rows["item_entry"]);
     $item_border = get_item_border($rows["item_entry"]);
     $output .= '
-                <a href="'.$item_datasite.$rows["item_entry"].'" target="_blank" onmouseover="ShowTooltip(this,\'_'.$rows["item"].'\');" onmouseout="HideTooltip(\'_'.$rows["item"].'\');">
+                <a href="'.$base_datasite.$item_datasite.$rows["item_entry"].'" target="_blank" onmouseover="ShowTooltip(this,\'_'.$rows["item"].'\');" onmouseout="HideTooltip(\'_'.$rows["item"].'\');">
                   <img src="'.$item_icon.'" class="'.$item_border.'" alt="" />
                 </a>';
 
@@ -444,7 +444,7 @@ function browse_auctions()
               </td>
               <td>
                 <center>
-                  <a href="'.$item_datasite.$rows["item_entry"].'" target="_blank" onmouseover="ShowTooltip(this,\'_'.$rows["item"].'\');" onmouseout="HideTooltip(\'_'.$rows["item"].'\');" style="color:'.get_item_quality_color($item_result["Quality"]).'">'.$item_result["name"].'</a>
+                  <a href="'.$base_datasite.$item_datasite.$rows["item_entry"].'" target="_blank" onmouseover="ShowTooltip(this,\'_'.$rows["item"].'\');" onmouseout="HideTooltip(\'_'.$rows["item"].'\');" style="color:'.get_item_quality_color($item_result["Quality"]).'">'.$item_result["name"].'</a>
                 </center>
               </td>
               <td>

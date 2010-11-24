@@ -31,7 +31,7 @@ valid_login($action_permission["view"]);
 function char_talent()
 {
   global $output, $realm_id, $characters_db, $corem_db, $server, $action_permission,
-    $site_encoding, $user_lvl, $user_name, $spell_datasite, $sql, $core;
+    $site_encoding, $user_lvl, $user_name, $base_datasite, $spell_datasite, $sql, $core;
 
   // this page uses wowhead tooltops
   wowhead_tt();
@@ -268,7 +268,7 @@ function char_talent()
                 // this_is_junk: style left hardcoded because it's calculated.
                 $output .= '
                         <td valign="bottom" align="center" style="border-top-width: 0px;border-bottom-width: 0px;background-attachment:fixed;background:url(./img/TALENTFRAME/'.$class_name.$talent_name.'.png) '.($j*(-50)).'px '.($i*(-50)).'px">
-                          <a href="'.$spell_datasite.$data[$i][$j][0].'" target="_blank">
+                          <a href="'.$base_datasite.$spell_datasite.$data[$i][$j][0].'" target="_blank">
                             <img src="'.spell_get_icon($data[$i][$j][0]).'" width="36" height="36" class="icon_border_'.$data[$i][$j][2].'" alt="" />
                           </a>
                           <div id="ch_tal_level_shadow">'.$data[$i][$j][1].'</div>
@@ -364,7 +364,7 @@ function char_talent()
             $glyph = $sql["dbc"]->result($sql["dbc"]->query("SELECT spellid FROM glyphproperties WHERE id = '".$glyphs[$i]."'"), 0);
 
             $output .='
-                    <a href="'.$spell_datasite.$glyph.'" target="_blank">
+                    <a href="'.$base_datasite.$spell_datasite.$glyph.'" target="_blank">
                       <img src="'.spell_get_icon($glyph).'" width="36" height="36" class="icon_border_0" alt="" />
                     </a>';
           }

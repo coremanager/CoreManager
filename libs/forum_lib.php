@@ -70,13 +70,13 @@ function bbcode_editor_js()
 
 function bbcode_callbacks_wow($item)
 {
-  global $item_datasite;
+  global $base_datasite, $item_datasite;
 
   wowhead_tt();
   require_once("scripts/id_tab.php");
   require_once("scripts/get_lib.php");
   return '
-    <a href="'.$item_datasite.$item[1].'" target="_blank" onmouseover="oldtoolTip(\''.addslashes(get_item_tooltip($item[1])).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()">
+    <a href="'.$base_datasite.$item_datasite.$item[1].'" target="_blank" onmouseover="oldtoolTip(\''.addslashes(get_item_tooltip($item[1])).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()">
       <img src="'.get_item_icon($item[1]).'" class="icon_border" alt="" />
     </a>';
 }

@@ -29,7 +29,7 @@ valid_login($action_permission["view"]);
 function char_skill()
 {
   global $output, $realm_id, $characters_db, $corem_db, $action_permission, $user_lvl,
-    $site_encoding, $user_name, $skill_datasite, $sql, $core;
+    $site_encoding, $user_name, $base_datasite, $skill_datasite, $sql, $core;
 
   //wowhead_tt();
 
@@ -247,7 +247,7 @@ function char_skill()
         $output .= '
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '' ).'
-                    <td align="right"><a href="'.$skill_datasite.'7.'.$char["class"].'.'.$data[0].'" target="_blank">'.$data[1].'</td>
+                    <td align="right"><a href="'.$base_datasite.$skill_datasite.'7.'.$char["class"].'.'.$data[0].'" target="_blank">'.$data[1].'</td>
                     <td valign="center" class="bar skill_bar" id="ch_ski_bg_pos0">
                     </td>
                   </tr>';
@@ -263,7 +263,7 @@ function char_skill()
         $output .= '
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '').'
-                    <td align="right"><a href="'.$skill_datasite.'11.'.$data[0].'" target="_blank">'.$data[1].'</a></td>
+                    <td align="right"><a href="'.$base_datasite.$skill_datasite.'11.'.$data[0].'" target="_blank">'.$data[1].'</a></td>
                     <td valign="center" class="bar skill_bar" style="background-position: '.(round(450*$data[2]/$max)-450).'px;">
                       <span>'.$data[2].'/'.$max.' ('.$skill_rank_array[$max].')</span>
                     </td>
@@ -280,7 +280,7 @@ function char_skill()
         $output .= '
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '' ).'
-                    <td align="right"><a href="'.$skill_datasite.'9.'.$data[0].'" target="_blank">'.$data[1].'</a></td>
+                    <td align="right"><a href="'.$base_datasite.$skill_datasite.'9.'.$data[0].'" target="_blank">'.$data[1].'</a></td>
                     <td valign="center" class="bar skill_bar" style="background-position: '.(round(450*$data[2]/$max)-450).'px;">
                       <span>'.$data[2].'/'.$max.' ('.$skill_rank_array[$max].')</span>
                     </td>

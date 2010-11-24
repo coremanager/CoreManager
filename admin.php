@@ -722,6 +722,8 @@ function general()
     {
       if ( !$sub_action )
       {
+        $datasite_base = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Datasite_Base'"));
+        $datasite_name = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Datasite_Name'"));
         $datasite_item = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Datasite_Item'"));
         $datasite_quest = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Datasite_Quest'"));
         $datasite_creature = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Datasite_Creature'"));
@@ -735,6 +737,14 @@ function general()
           <input type="hidden" name="subaction" value="savedatasite" />
           <input type="hidden" name="subsection" value="datasite" />
           <table class="simple" id="admin_datasite">
+            <tr>
+              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasitebase").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitebase").'</a>: </td>
+              <td><input type="text" name="datasitebase" value="'.$datasite_base["Value"].'" size="50" /></td>
+            </tr>
+            <tr>
+              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasitename").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitename").'</a>: </td>
+              <td><input type="text" name="datasitename" value="'.$datasite_name["Value"].'" size="50" /></td>
+            </tr>
             <tr>
               <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasiteitem").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasiteitem").'</a>: </td>
               <td><input type="text" name="datasiteitem" value="'.$datasite_item["Value"].'" size="50" /></td>
@@ -769,6 +779,8 @@ function general()
       }
       else
       {
+        $datasite_base = $sqlm->quote_smart($_GET["datasitebase"]);
+        $datasite_name = $sqlm->quote_smart($_GET["datasitename"]);
         $datasite_item = $sqlm->quote_smart($_GET["datasiteitem"]);
         $datasite_quest = $sqlm->quote_smart($_GET["datasitequest"]);
         $datasite_creature = $sqlm->quote_smart($_GET["datasitecreature"]);
@@ -777,6 +789,8 @@ function general()
         $datasite_go = $sqlm->quote_smart($_GET["datasitego"]);
         $datasite_achieve = $sqlm->quote_smart($_GET["datasiteachieve"]);
 
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$datasite_base."' WHERE `Key`='Datasite_Base'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$datasite_name."' WHERE `Key`='Datasite_Name'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$datasite_item."' WHERE `Key`='Datasite_Item'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$datasite_quest."' WHERE `Key`='Datasite_Quest'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$datasite_creature."' WHERE `Key`='Datasite_Creature'");

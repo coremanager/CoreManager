@@ -31,7 +31,7 @@ valid_login($action_permission["view"]);
 function char_inv()
 {
   global $output, $realm_id, $characters_db, $world_db, $corem_db, $site_encoding,
-    $action_permission, $user_lvl, $user_name, $locales_search_option,
+    $action_permission, $user_lvl, $user_name, $locales_search_option, $base_datasite,
     $item_datasite, $sql, $core;
 
   // this page uses wowhead tooltops
@@ -384,7 +384,7 @@ function char_inv()
         if($equiped_bag_id[$i])
         {
           $output .= '
-                    <a id="ch_inv_padding" href="'.$item_datasite.$equiped_bag_id[$i][0].'" target="_blank">
+                    <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$equiped_bag_id[$i][0].'" target="_blank">
                       <img class="bag_icon" src="'.get_item_icon($equiped_bag_id[$i][0]).'" alt="" />
                     </a>
                     '.lang("item", "bag").' '.$i.'<br />
@@ -416,7 +416,7 @@ function char_inv()
           $item[2] = ( ( $item[2] == 1 ) ? '' : $item[2] );
           $output .= '
                       <div style="left:'.(($pos+$dsp)%4*42).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">
-                        <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');">
+                        <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');">
                           <img src="'.get_item_icon($item[0]).'" alt="" />
                         </a>';
           if ( $mode )
@@ -470,7 +470,7 @@ function char_inv()
         $item[2] = $item[2] == 1 ? '' : $item[2];
         $output .= '
                       <div style="left:'.($pos%4*42).'px;top:'.(floor($pos/4)*41).'px;">
-                        <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');">
+                        <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');">
                           <img src="'.get_item_icon($item[0]).'" alt="" />
                         </a>';
           if ( $mode )
@@ -517,7 +517,7 @@ function char_inv()
         $item[2] = ( ( $item[2] == 1 ) ? '' : $item[2] );
         $output .= '
                       <div style="left:'.($pos%7*43).'px;top:'.(floor($pos/7)*41).'px;">
-                        <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');" onmouseout="HideTooltip(\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');">
+                        <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');" onmouseout="HideTooltip(\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');">
                           <img src="'.get_item_icon($item[0]).'" class="inv_icon" alt="" />
                         </a>';
           if ( $mode )
@@ -557,7 +557,7 @@ function char_inv()
         if ( $equip_bnk_bag_id[$i] )
         {
           $output .= '
-                    <a id="ch_inv_padding" href="'.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
+                    <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
                       <img class="bag_icon" src="'.get_item_icon($equip_bnk_bag_id[$i][0]).'" alt="" />
                     </a>
                     '.lang("item", "bag").' '.$i.'<br />
@@ -586,7 +586,7 @@ function char_inv()
             if ( $equip_bnk_bag_id[$i] )
             {
               $output .= '
-                    <a id="ch_inv_padding" href="'.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
+                    <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
                       <img class="bag_icon" src="'.get_item_icon($equip_bnk_bag_id[$i][0]).'" alt="" />
                     </a>
                     '.lang("item", "bag").' '.$i.'<br />
@@ -615,7 +615,7 @@ function char_inv()
           $item[2] = ( ( $item[2] == 1 ) ? '' : $item[2] );
           $output .= '
                       <div style="left:'.(($pos+$dsp)%4*43).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">
-                        <a id="ch_inv_padding" href="'.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');">
+                        <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');">
                           <img src="'.get_item_icon($item[0]).'" alt="" />
                         </a>';
           if ( $mode )

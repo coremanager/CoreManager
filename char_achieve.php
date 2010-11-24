@@ -30,10 +30,8 @@ valid_login($action_permission["view"]);
 //#############################################################################
 function char_achievements()
 {
-  global $output, $logon_db, $site_encoding,
-    $realm_id, $characters_db, $corem_db,
-    $action_permission, $user_lvl, $user_name,
-    $achievement_datasite, $sql, $core;
+  global $output, $logon_db, $site_encoding, $realm_id, $characters_db, $corem_db,
+    $action_permission, $user_lvl, $user_name, $base_datasite, $achievement_datasite, $sql, $core;
 
   // this page uses wowhead tooltops
   wowhead_tt();
@@ -328,12 +326,12 @@ function char_achievements()
                   $output_achieve_main_cat[$cat_id] .= '
                       <tr>
                         <td width="1%" align="left">
-                          <a href="'.$achievement_datasite.$cid["id"].'" target="_blank">
+                          <a href="'.$base_datasite.$achievement_datasite.$cid["id"].'" target="_blank">
                             <img src="'.achieve_get_icon($cid["id"]).'" width="36" height="36" class="icon_border_0" alt="" />
                           </a>
                         </td>
                         <td colspan="2" align="left">
-                          <a href="'.$achievement_datasite.$cid["id"].'" target="_blank">'.$cid["name"].'</a><br />
+                          <a href="'.$base_datasite.$achievement_datasite.$cid["id"].'" target="_blank">'.$cid["name"].'</a><br />
                           '.$cid["description"].'<br />
                           '.$cid["reward"].'
                         </td>
@@ -352,14 +350,14 @@ function char_achievements()
                 $output_u_achieve_main_cat[$cat_id] .= '
                       <tr>
                         <td width="1%" align="left">
-                          <a href="'.$achievement_datasite.$cid["id"].'" target="_blank">
+                          <a href="'.$base_datasite.$achievement_datasite.$cid["id"].'" target="_blank">
                             <span id="ch_ach_opacity">
                               <img src="'.achieve_get_icon($cid["id"]).'" width="36" height="36" class="icon_border_0" alt="" />
                             </span>
                           </a>
                         </td>
                         <td colspan="2" align="left">
-                          <a href="'.$achievement_datasite.$cid["id"].'" target="_blank">'.$cid["name"].'</a><br />
+                          <a href="'.$base_datasite.$achievement_datasite.$cid["id"].'" target="_blank">'.$cid["name"].'</a><br />
                           '.$cid["description"].'<br />
                           '.$cid["reward"].'
                         </td>
@@ -411,12 +409,12 @@ function char_achievements()
                         $output_achieve_sub_cat[$sub_cat_id] .= '
                             <tr>
                               <td width="1%" align="left">
-                                <a href="'.$achievement_datasite.$cid["id"].'" target="_blank">
+                                <a href="'.$base_datasite.$achievement_datasite.$cid["id"].'" target="_blank">
                                   <img src="'.achieve_get_icon($cid["id"]).'" width="36" height="36" class="icon_border_0" alt="" />
                                 </a>
                               </td>
                               <td colspan="2" align="left">
-                                <a href="'.$achievement_datasite.$cid["id"].'" target="_blank">'.$cid["name"].'</a><br />
+                                <a href="'.$base_datasite.$achievement_datasite.$cid["id"].'" target="_blank">'.$cid["name"].'</a><br />
                                 '.$cid["description"].'<br />
                                 '.$cid["rewarddesc"].'
                               </td>
@@ -435,14 +433,14 @@ function char_achievements()
                       $output_u_achieve_sub_cat[$sub_cat_id] .= '
                             <tr>
                               <td width="1%" align="left">
-                                <a href="'.$achievement_datasite.$cid["id"].'" target="_blank">
+                                <a href="'.$base_datasite.$achievement_datasite.$cid["id"].'" target="_blank">
                                   <span id="ch_ach_opacity">
                                     <img src="'.achieve_get_icon($cid["id"]).'" width="36" height="36" class="icon_border_0" alt="" />
                                   </span>
                                 </a>
                               </td>
                               <td colspan="2" align="left">
-                                <a href="'.$achievement_datasite.$cid["id"].'" target="_blank">'.$cid["name"].'</a><br />
+                                <a href="'.$base_datasite.$achievement_datasite.$cid["id"].'" target="_blank">'.$cid["name"].'</a><br />
                                 '.$cid["description"].'<br />
                                 '.$cid["reward"].'
                               </td>
@@ -555,12 +553,12 @@ function char_achievements()
         $output .= '
                       <tr>
                         <td width="1%" align="left">
-                          <a href="'.$achievement_datasite.$cid["id"].'" target="_blank">
+                          <a href="'.$base_datasite.$achievement_datasite.$cid["id"].'" target="_blank">
                             <img src="'.achieve_get_icon($cid["id"]).'" width="36" height="36" class="icon_border_0" alt="" />
                           </a>
                         </td>
                         <td colspan="2" align="left">
-                          <a href="'.$achievement_datasite.$cid["id"].'" target="_blank">'.$cid["name"].'</a><br />
+                          <a href="'.$base_datasite.$achievement_datasite.$cid["id"].'" target="_blank">'.$cid["name"].'</a><br />
                           '.$cid["description"].'<br />
                           '.$cid["reward"].'
                         </td>

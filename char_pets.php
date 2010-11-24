@@ -30,7 +30,7 @@ valid_login($action_permission["view"]);
 function char_pets()
 {
   global $output, $realm_id, $characters_db, $arcm_db, $action_permission, $user_lvl, $user_name, 
-    $site_encoding, $spell_datasite, $pet_ability, $sql, $core;
+    $site_encoding, $base_datasite, $spell_datasite, $pet_ability, $sql, $core;
 
   //wowhead_tt();
 
@@ -183,7 +183,7 @@ function char_pets()
             while ( $ability = $sql["char"]->fetch_assoc($ability_results) )
             {
               $output .= '
-                      <a id="ch_pet_padding" href="'.$spell_datasite.$ability["spellid"].'" target="_blank">
+                      <a id="ch_pet_padding" href="'.$base_datasite.$spell_datasite.$ability["spellid"].'" target="_blank">
                         <img src="'.spell_get_icon($ability["spellid"]).'" alt="'.$ability["spellid"].'" class="icon_border_0" />
                       </a>';
             }

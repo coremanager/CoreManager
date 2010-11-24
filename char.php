@@ -32,7 +32,7 @@ function char_main()
   global $output,
     $realm_id, $logon_db, $characters_db, $world_db, $server, $corem_db, $site_encoding,
     $action_permission, $user_lvl, $user_name, $user_id, $locales_search_option,
-    $item_datasite, $spell_datasite, $showcountryflag, $timezone, $sql, $core;
+    $base_datasite, $item_datasite, $spell_datasite, $showcountryflag, $timezone, $sql, $core;
 
   // this page uses wowhead tooltops
   //wowhead_tt();
@@ -589,7 +589,7 @@ function char_main()
         while ( $aura = $sql["char"]->fetch_assoc($a_results) )
         {
                  $output .= '
-                        <a id="char_icon_padding" href="'.$spell_datasite.$aura["spell"].'" target="_blank">
+                        <a id="char_icon_padding" href="'.$base_datasite.$spell_datasite.$aura["spell"].'" target="_blank">
                           <img src="'.spell_get_icon($aura["spell"]).'" alt="'.$aura["spell"].'" width="24" height="24" />
                         </a>';
         }
@@ -623,7 +623,7 @@ function char_main()
       if ( $equiped_items[1][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_HEAD.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'HEAD'.'\');" onmouseout="HideTooltip(\'_b'.'HEAD'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_HEAD.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'HEAD'.'\');" onmouseout="HideTooltip(\'_b'.'HEAD'.'\');">
                         <img src="'.$equiped_items[1][1].'" class="'.$equiped_items[1][2].'" alt="Head" />
                       </a>';
 
@@ -701,7 +701,7 @@ function char_main()
       if ( $equiped_items[10][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_GLOVES.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'GLOVES'.'\');" onmouseout="HideTooltip(\'_b'.'GLOVES'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_GLOVES.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'GLOVES'.'\');" onmouseout="HideTooltip(\'_b'.'GLOVES'.'\');">
                         <img src="'.$equiped_items[10][1].'" class="'.$equiped_items[10][2].'" alt="Gloves" />
                       </a>';
 
@@ -730,7 +730,7 @@ function char_main()
       if ( $equiped_items[2][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_NECK.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'NECK'.'\');" onmouseout="HideTooltip(\'_b'.'NECK'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_NECK.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'NECK'.'\');" onmouseout="HideTooltip(\'_b'.'NECK'.'\');">
                         <img src="'.$equiped_items[2][1].'" class="'.$equiped_items[2][2].'" alt="Neck" />
                       </a>';
 
@@ -793,7 +793,7 @@ function char_main()
       if ( $equiped_items[6][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_BELT.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'BELT'.'\');" onmouseout="HideTooltip(\'_b'.'BELT'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_BELT.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'BELT'.'\');" onmouseout="HideTooltip(\'_b'.'BELT'.'\');">
                         <img src="'.$equiped_items[6][1].'" class="'.$equiped_items[6][2].'" alt="Belt" />
                       </a>';
 
@@ -822,7 +822,7 @@ function char_main()
       if ( $equiped_items[3][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_SHOULDER.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'SHOULDER'.'\');" onmouseout="HideTooltip(\'_b'.'SHOULDER'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_SHOULDER.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'SHOULDER'.'\');" onmouseout="HideTooltip(\'_b'.'SHOULDER'.'\');">
                         <img src="'.$equiped_items[3][1].'" class="'.$equiped_items[3][2].'" alt="Shoulder" />
                       </a>';
 
@@ -849,7 +849,7 @@ function char_main()
       if ( $equiped_items[7][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_LEGS.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'LEGS'.'\');" onmouseout="HideTooltip(\'_b'.'LEGS'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_LEGS.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'LEGS'.'\');" onmouseout="HideTooltip(\'_b'.'LEGS'.'\');">
                         <img src="'.$equiped_items[7][1].'" class="'.$equiped_items[7][2].'" alt="Legs" />
                       </a>';
 
@@ -878,7 +878,7 @@ function char_main()
       if ( $equiped_items[15][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_BACK.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'BACK'.'\');" onmouseout="HideTooltip(\'_b'.'BACK'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_BACK.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'BACK'.'\');" onmouseout="HideTooltip(\'_b'.'BACK'.'\');">
                         <img src="'.$equiped_items[15][1].'" class="'.$equiped_items[15][2].'" alt="Back" />
                       </a>';
 
@@ -905,7 +905,7 @@ function char_main()
       if ( $equiped_items[8][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_FEET.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FEET'.'\');" onmouseout="HideTooltip(\'_b'.'FEET'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_FEET.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FEET'.'\');" onmouseout="HideTooltip(\'_b'.'FEET'.'\');">
                         <img src="'.$equiped_items[8][1].'" class="'.$equiped_items[8][2].'" alt="Feet" />
                       </a>';
 
@@ -934,7 +934,7 @@ function char_main()
       if ( $equiped_items[5][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_CHEST.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'CHEST'.'\');" onmouseout="HideTooltip(\'_b'.'CHEST'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_CHEST.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'CHEST'.'\');" onmouseout="HideTooltip(\'_b'.'CHEST'.'\');">
                         <img src="'.$equiped_items[5][1].'" class="'.$equiped_items[5][2].'" alt="Chest" />
                       </a>';
 
@@ -993,7 +993,7 @@ function char_main()
       if ( $equiped_items[11][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_FINGER1.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FINGER1'.'\');" onmouseout="HideTooltip(\'_b'.'FINGER1'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_FINGER1.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FINGER1'.'\');" onmouseout="HideTooltip(\'_b'.'FINGER1'.'\');">
                         <img src="'.$equiped_items[11][1].'" class="'.$equiped_items[11][2].'" alt="Finger1" />
                       </a>';
 
@@ -1022,7 +1022,7 @@ function char_main()
       if ( $equiped_items[4][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_SHIRT.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'SHIRT'.'\');" onmouseout="HideTooltip(\'_b'.'SHIRT'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_SHIRT.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'SHIRT'.'\');" onmouseout="HideTooltip(\'_b'.'SHIRT'.'\');">
                         <img src="'.$equiped_items[4][1].'" class="'.$equiped_items[4][2].'" alt="Shirt" />
                       </a>';
 
@@ -1049,7 +1049,7 @@ function char_main()
       if ( $equiped_items[12][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_FINGER2.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FINGER2'.'\');" onmouseout="HideTooltip(\'_b'.'FINGER2'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_FINGER2.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FINGER2'.'\');" onmouseout="HideTooltip(\'_b'.'FINGER2'.'\');">
                         <img src="'.$equiped_items[12][1].'" class="'.$equiped_items[12][2].'" alt="Finger2" />
                       </a>';
 
@@ -1077,7 +1077,7 @@ function char_main()
       if ( $equiped_items[19][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_TABARD.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TABARD'.'\');" onmouseout="HideTooltip(\'_b'.'TABARD'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_TABARD.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TABARD'.'\');" onmouseout="HideTooltip(\'_b'.'TABARD'.'\');">
                         <img src="'.$equiped_items[19][1].'" class="'.$equiped_items[19][2].'" alt="Tabard" />
                       </a>';
 
@@ -1129,7 +1129,7 @@ function char_main()
       if ( $equiped_items[13][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_TRINKET1.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TRINKET1'.'\');" onmouseout="HideTooltip(\'_b'.'TRINKET1'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_TRINKET1.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TRINKET1'.'\');" onmouseout="HideTooltip(\'_b'.'TRINKET1'.'\');">
                         <img src="'.$equiped_items[13][1].'" class="'.$equiped_items[13][2].'" alt="Trinket1" />
                       </a>';
 
@@ -1158,7 +1158,7 @@ function char_main()
       if ( $equiped_items[9][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_WRIST.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'WRIST'.'\');" onmouseout="HideTooltip(\'_b'.'WRIST'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_WRIST.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'WRIST'.'\');" onmouseout="HideTooltip(\'_b'.'WRIST'.'\');">
                         <img src="'.$equiped_items[9][1].'" class="'.$equiped_items[9][2].'" alt="Wrist" />
                       </a>';
 
@@ -1185,7 +1185,7 @@ function char_main()
       if ( $equiped_items[14][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_TRINKET2.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TRINKET2'.'\');" onmouseout="HideTooltip(\'_b'.'TRINKET2'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_TRINKET2.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TRINKET2'.'\');" onmouseout="HideTooltip(\'_b'.'TRINKET2'.'\');">
                         <img src="'.$equiped_items[14][1].'" class="'.$equiped_items[14][2].'" alt="Trinket2" />
                       </a>';
 
@@ -1215,7 +1215,7 @@ function char_main()
       if ( $equiped_items[16][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_MAIN_HAND.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'MAIN_HAND'.'\');" onmouseout="HideTooltip(\'_b'.'MAIN_HAND'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_MAIN_HAND.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'MAIN_HAND'.'\');" onmouseout="HideTooltip(\'_b'.'MAIN_HAND'.'\');">
                         <img src="'.$equiped_items[16][1].'" class="'.$equiped_items[16][2].'" alt="MainHand" />
                       </a>';
 
@@ -1242,7 +1242,7 @@ function char_main()
       if ( $equiped_items[17][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_OFF_HAND.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'OFF_HAND'.'\');" onmouseout="HideTooltip(\'_b'.'OFF_HAND'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_OFF_HAND.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'OFF_HAND'.'\');" onmouseout="HideTooltip(\'_b'.'OFF_HAND'.'\');">
                         <img src="'.$equiped_items[17][1].'" class="'.$equiped_items[17][2].'" alt="OffHand" />
                       </a>';
 
@@ -1269,7 +1269,7 @@ function char_main()
       if ( $equiped_items[18][1] )
       {
         $output .= '
-                      <a id="char_icon_padding" href="'.$item_datasite.$EQU_RANGED.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'RANGED'.'\');" onmouseout="HideTooltip(\'_b'.'RANGED'.'\');">
+                      <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_RANGED.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'RANGED'.'\');" onmouseout="HideTooltip(\'_b'.'RANGED'.'\');">
                         <img src="'.$equiped_items[18][1].'" class="'.$equiped_items[18][2].'" alt="Ranged" />
                       </a>';
 

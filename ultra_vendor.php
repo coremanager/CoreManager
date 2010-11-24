@@ -122,7 +122,8 @@ function show_list()
 //########################################################################################################################
 function select_item()
 {
-  global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl, $sql;
+  global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission,
+    $base_datasite, $name_datasite, $user_lvl, $sql;
 
   valid_login($action_permission["view"]);
 
@@ -143,7 +144,7 @@ function select_item()
                       <br />
                       <br />
                       <small>
-                        ('.lang("ultra", "itemline2").' <a href="http://www.wowhead.com/">wowhead.com</a>.
+                        ('.lang("ultra", "itemline2").' <a href="'.$base_datasite.'">'.$name_datasite.'</a>.
                         <br />'
                         .lang("ultra", "itemline3").'.)
                       </small>

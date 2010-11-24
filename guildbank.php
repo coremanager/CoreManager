@@ -27,7 +27,8 @@ valid_login($action_permission["view"]);
 //########################################################################################################################
 function guild_bank()
 {
-  global  $output, $realm_id, $characters_db, $arcm_db, $world_db, $item_datasite, $item_icons, $sql;
+  global  $output, $realm_id, $characters_db, $arcm_db, $world_db, $item_datasite, $base_datasite,
+    $item_icons, $sql;
 
   wowhead_tt();
 
@@ -170,7 +171,7 @@ function guild_bank()
           // this_is_junk: style left hardcoded because it's calculated.
           $output .= '
                       <div style="left:'.($j*43).'px;top:'.($i*41).'px;">
-                        <a id="guildbank_padding" href="'.$item_datasite.$gb_item_id.'">
+                        <a id="guildbank_padding" href="'.$base_datasite.$item_datasite.$gb_item_id.'">
                           <img src="'.get_item_icon($gb_item_id).'" alt="" />
                         </a>
                         <div id="guildbank_quanity_shadow">'.$stack.'</div>

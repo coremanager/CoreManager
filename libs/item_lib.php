@@ -216,14 +216,19 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
     if ( $locales_search_option != 0 )
     {
       if ( $core == 1 )
-        $itemname = $item["name"];
+        $itemname = htmlspecialchars($item["name"], ENT_COMPAT, $site_encoding);
       else
-        $itemname = $item["name_loc".$locales_search_option];
+        $itemname = htmlspecialchars($item["name_loc".$locales_search_option], ENT_COMPAT, $site_encoding);
+
+      // if for some reason there is no localized item name, we'll use the English
+      // (hopefully there will be one to show)
+      if ( $itemname == '' )
+        $itemname = htmlspecialchars($item["name"], ENT_COMPAT, $site_encoding);
     }
     else
       $itemname = htmlspecialchars($item["name"], ENT_COMPAT, $site_encoding);
 
-    switch ($item["Quality"])
+    switch ( $item["Quality"] )
     {
       case 0: //Grey Poor
         $tooltip .= "<font color='#b2c2b9' class='large'>".$itemname." ".$i_prop["Name"]."</font><br />";
