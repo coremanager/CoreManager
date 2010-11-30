@@ -32,21 +32,15 @@ function browse_chars()
 
   //==========================$_GET and SECURE========================
   $start = ( ( isset($_GET["start"]) ) ? $sql["logon"]->quote_smart($_GET["start"]) : 0 );
-  if ( is_numeric($start) )
-    ;
-  else
+  if ( !is_numeric($start) )
     $start = 0;
 
   $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["logon"]->quote_smart($_GET["order_by"]) : 'guid' );
-  if ( preg_match('/^[_[:lower:]]{1,12}$/', $order_by) )
-    ;
-  else
+  if ( !preg_match('/^[_[:lower:]]{1,12}$/', $order_by) )
     $order_by = 'guid';
 
   $dir = ( ( isset($_GET["dir"]) ) ? $sql["logon"]->quote_smart($_GET["dir"]) : 1 );
-  if ( preg_match('/^[01]{1}$/', $dir) )
-    ;
-  else
+  if ( !preg_match('/^[01]{1}$/', $dir) )
     $dir = 1;
 
   $order_dir = ( ( $dir ) ? 'ASC' : 'DESC' );
@@ -99,10 +93,10 @@ function browse_chars()
     $search_value = $sql["logon"]->quote_smart($_GET["search_value"]);
     $search_by = ( ( isset($_GET["search_by"]) ) ? $sql["logon"]->quote_smart($_GET["search_by"]) : 'name' );
     $search_menu = array('name', 'guid', 'account', 'level', 'greater_level', 'guild', 'race', 'class', 'mapid', 'highest_rank', 'greater_rank', 'online', 'gold', 'item');
-    if ( in_array($search_by, $search_menu) )
-      ;
-    else
+
+    if ( !in_array($search_by, $search_menu) )
       $search_by = 'name';
+
     unset($search_menu);
 
     switch ( $search_by )
@@ -134,9 +128,7 @@ function browse_chars()
         break;
 
       case "level":
-        if ( is_numeric($search_value) )
-          ;
-        else
+        if ( !is_numeric($search_value) )
           $search_value = 1;
 
         $where_out = "level".$symbol.$search_value;
@@ -144,9 +136,7 @@ function browse_chars()
       break;
 
       case "gold":
-        if ( is_numeric($search_value) )
-          ;
-        else
+        if ( !is_numeric($search_value) )
           $search_value = 1;
 
         if ( $core == 1 )
@@ -193,9 +183,7 @@ function browse_chars()
       break;
 
       case "item":
-        if ( is_numeric($search_value) )
-          ;
-        else
+        if ( !is_numeric($search_value) )
           $search_value = 0;
 
         if ( $core == 1 )
@@ -224,9 +212,7 @@ function browse_chars()
       break;
 
       case "highest_rank":
-        if ( is_numeric($search_value) )
-          ;
-        else
+        if ( !is_numeric($search_value) )
           $search_value = 0;
 
         if ( $core == 1 )
@@ -302,12 +288,12 @@ function browse_chars()
   // cleanup unknown working condition
   //if($user_lvl >= $action_permission["delete"])
   //              makebutton($lang_char_list["cleanup"], 'cleanup.php', 130);
-                makebutton(lang("global", "back"), 'javascript:window.history.back()', 130);
+  makebutton(lang("global", "back"), 'javascript:window.history.back()', 130);
   ( ( $search_by && $search_value ) ? makebutton(lang("char_list", "characters"), 'char_list.php" type="def', 130) : $output .= '' );
   $output .= '
               </td>
               <td align="right" width="25%" rowspan="2">';
-  $output .= generate_pagination('char_list.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ), $all_record, $itemperpage, $start);
+  $output .= generate_pagination('char_list.php?order_by='.$order_by.'&amp;dir='.( ($dir) ? 0 : 1 ).( ( $search_value && $search_by ) ? '&amp;symbol='.$_GET["symbol"].'&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ), $all_record, $itemperpage, $start);
   $output .= '
               </td>
             </tr>
@@ -344,7 +330,7 @@ function browse_chars()
                       </form>
                     </td>
                     <td>';
-                      makebutton(lang("global", "search"), 'javascript:do_submit()', 80);
+  makebutton(lang("global", "search"), 'javascript:do_submit()', 80);
   $output .= '
                     </td>
                   </tr>
@@ -391,7 +377,7 @@ function browse_chars()
 
   $looping = ( ( $this_page < $itemperpage ) ? $this_page : $itemperpage );
 
-  for ( $i=1; $i<=$looping; $i++ )
+  for ( $i = 1; $i <= $looping; $i++ )
   {
     // switched to fetch_assoc because using record indexes is for morons
     $char = $sql["char"]->fetch_assoc($query, 0) or die(error(lang("global", "err_no_user")));
@@ -492,14 +478,14 @@ function browse_chars()
   $output .= '
               <tr>
                 <td colspan="13" align="right" class="hidden" width="25%">';
-  $output .= generate_pagination('char_list.php?order_by='.$order_by.'&amp;dir='.( ( $dir ) ? 0 : 1 ).( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ), $all_record, $itemperpage, $start);
+  $output .= generate_pagination('char_list.php?order_by='.$order_by.'&amp;dir='.( ( $dir ) ? 0 : 1 ).( ( $search_value && $search_by ) ? '&amp;symbol='.$_GET["symbol"].'&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ), $all_record, $itemperpage, $start);
   $output .= '
                 </td>
               </tr>
               <tr>
                 <td colspan="6" align="left" class="hidden">';
   if ( ( $user_lvl >= $action_permission["delete"] ) || ( $owner_acc_name == $user_name ) )
-                  makebutton(lang("char_list", "del_selected_chars"), 'javascript:do_submit(\'form1\',0)" type="wrn', 220);
+    makebutton(lang("char_list", "del_selected_chars"), 'javascript:do_submit(\'form1\',0)" type="wrn', 220);
   $output .= '
                 </td>
                 <td colspan="7" align="right" class="hidden">'.lang("char_list", "tot_chars").' : '.$all_record.'</td>
@@ -507,7 +493,6 @@ function browse_chars()
             </table>
           </form>
         </center>';
-
 }
 
 
