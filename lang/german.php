@@ -1567,6 +1567,7 @@ $GLOBALS['lang_xacct'] = array
   'chooseacct' => 'Select New Account',
   'enteracct' => 'Select your desired target account',
   'newacct' => 'New Account',
+  'newacct1' => 'New Account (Name or ID)',
   'save' => 'Save Changes',
   // The following is the message that asks GMs permission to change the character's account
   // tranlation note: %1 = [account name], %2 = [char], %3 = [new name]

@@ -129,7 +129,7 @@ function chooseacct()
           <center>
             <div id="xname_choose" class="fieldset_border">
               <span class="legend">'.lang("xacct", "chooseacct").'</span>
-              <form method="GET" action="change_char_account.php" name="form">
+              <form method="get" action="change_char_account.php" name="form">
                 <input type="hidden" name="action" value="'.( ( $priority != 1 ) ? 'getapproval' : 'direct' ).'" />
                 <input type="hidden" name="guid" value="'.$char["guid"].'" />
                 <table id="xname_char_table">
@@ -155,7 +155,7 @@ function chooseacct()
                   <tr>
                     <td>'.lang("xacct", "newacct").':</td>
                     <td>
-                      <select name="new" />';
+                      <select name="new">';
   while ( $row = $sql["logon"]->fetch_assoc($accts) )
   {
     $output .= '
@@ -178,6 +178,10 @@ function chooseacct()
   $output .= '
                       </select>
                     </td>
+                  </tr>
+                  <tr>
+                    <td>'.lang("xacct", "newacct1").':</td>
+                    <td><input type="text" name="new1" value="" /></td>
                   </tr>
                   <tr>
                     <td>&nbsp;</td>
@@ -208,6 +212,29 @@ function getapproval()
 
   $guid = $sql["mgr"]->quote_smart($_GET["guid"]);
   $new = $sql["mgr"]->quote_smart($_GET["new"]);
+
+  if ( $_GET["new1"] != "" )
+  {
+    $new = $sql["mgr"]->quote_smart($_GET["new1"]);
+
+    if ( !is_numeric($new) )
+    {
+      if ( $core == 1 )
+        $acct_query = "SELECT acct, login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
+        FROM accounts
+          LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=accounts.login
+        WHERE accounts.login='".$new."' OR config_accounts.Login='".$new."'";
+      else
+        $acct_query = "SELECT id AS acct, username AS login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
+        FROM account
+          LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=account.username
+        WHERE account.username='".$new."' OR config_accounts.ScreenName='".$new."'";
+
+      $acct_result = $sql["logon"]->query($acct_query);
+      $acct_result = $sql["logon"]->fetch_assoc($acct_result);
+      $new = $acct_result["acct"];
+    }
+  }
 
   $count = $sql["mgr"]->num_rows($sql["mgr"]->query("SELECT * FROM char_changes WHERE guid='".$guid."'"));
   if ( $count )
@@ -282,6 +309,29 @@ function savename_direct()
 
   $guid = $sql["mgr"]->quote_smart($_GET["guid"]);
   $new = $sql["mgr"]->quote_smart($_GET["new"]);
+
+  if ( $_GET["new1"] != "" )
+  {
+    $new = $sql["mgr"]->quote_smart($_GET["new1"]);
+
+    if ( !is_numeric($new) )
+    {
+      if ( $core == 1 )
+        $acct_query = "SELECT acct, login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
+        FROM accounts
+          LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=accounts.login
+        WHERE accounts.login='".$new."' OR config_accounts.Login='".$new."'";
+      else
+        $acct_query = "SELECT id AS acct, username AS login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
+        FROM account
+          LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=account.username
+        WHERE account.username='".$new."' OR config_accounts.ScreenName='".$new."'";
+
+      $acct_result = $sql["logon"]->query($acct_query);
+      $acct_result = $sql["logon"]->fetch_assoc($acct_result);
+      $new = $acct_result["acct"];
+    }
+  }
 
   if ( $core == 1 )
     $result = $sql["char"]->query("UPDATE characters SET acct='".$new."' WHERE guid='".$guid."'");

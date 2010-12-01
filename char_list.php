@@ -222,6 +222,17 @@ function browse_chars()
 
       break;
 
+      case "mapid":
+        if ( !is_numeric($search_value) )
+          $search_value = 0;
+
+        if ( $core == 1 )
+          $where_out = "mapid".$symbol.$search_value;
+        else
+          $where_out = "map".$symbol.$search_value;
+
+      break;
+
       case "online":
         if ( $search_value != 0 )
           $search_value = 1;
@@ -346,18 +357,18 @@ function browse_chars()
             <table class="lined">
               <tr>
                 <th width="1%"><input name="allbox" type="checkbox" value="Check All" onclick="CheckAll(document.form1);" /></th>
-                <th width="1%"><a href="char_list.php?order_by=guid&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by=$search_by&amp;search_value=$search_value' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'guid' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "id").'</a></th>
-                <th width="1%"><a href="char_list.php?order_by=name&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by=$search_by&amp;search_value=$search_value' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'name' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "char_name").'</a></th>
-                <th width="1%"><a href="char_list.php?order_by=acct&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by=$search_by&amp;search_value=$search_value' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'account' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "account").'</a></th>
-                <th width="1%"><a href="char_list.php?order_by=race&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by=$search_by&amp;search_value=$search_value' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'race' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "race").'</a></th>
-                <th width="1%"><a href="char_list.php?order_by=class&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by=$search_by&amp;search_value=$search_value' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'class' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "class").'</a></th>
-                <th width="1%"><a href="char_list.php?order_by=level&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by=$search_by&amp;search_value=$search_value' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'level' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "level").'</a></th>
-                <th width="10%"><a href="char_list.php?order_by=mapid&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by=$search_by&amp;search_value=$search_value' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'map '.$order_dir.', zoneid' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "map").'</a></th>
-                <th width="10%"><a href="char_list.php?order_by=zoneid&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by=$search_by&amp;search_value=$search_value' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'zone '.$order_dir.', mapid' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "zone").'</a></th>
-                <th width="1%"><a href="char_list.php?order_by=highest_rank&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by=$search_by&amp;search_value=$search_value' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'highest_rank' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "honor_kills").'</a></th>
-                <th width="10%"><a href="char_list.php?order_by=gname&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by=$search_by&amp;search_value=$search_value' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'gname' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "guild").'</a></th>
-                <th width="1%"><a href="char_list.php?order_by=timestamp&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by=$search_by&amp;search_value=$search_value' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'logout_time' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "lastseen").'</a></th>
-                <th width="1%"><a href="char_list.php?order_by=online&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by=$search_by&amp;search_value=$search_value' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'online' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "online").'</a></th>';
+                <th width="1%"><a href="char_list.php?order_by=guid&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'guid' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "id").'</a></th>
+                <th width="1%"><a href="char_list.php?order_by=name&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'name' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "char_name").'</a></th>
+                <th width="1%"><a href="char_list.php?order_by=acct&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'acct' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "account").'</a></th>
+                <th width="1%"><a href="char_list.php?order_by=race&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'race' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "race").'</a></th>
+                <th width="1%"><a href="char_list.php?order_by=class&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'class' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "class").'</a></th>
+                <th width="1%"><a href="char_list.php?order_by=level&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'level' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "level").'</a></th>
+                <th width="10%"><a href="char_list.php?order_by=mapid&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'mapid '.$order_dir.', zoneid' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "map").'</a></th>
+                <th width="10%"><a href="char_list.php?order_by=zoneid&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'zoneid '.$order_dir.', mapid' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "zone").'</a></th>
+                <th width="1%"><a href="char_list.php?order_by=highest_rank&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'highest_rank' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "honor_kills").'</a></th>
+                <th width="10%"><!-- a href="char_list.php?order_by=guild&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'" -->'.( ( $order_by == 'guild' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "guild").'<!-- /a --></th>
+                <th width="1%"><a href="char_list.php?order_by=timestamp&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'logout_time' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "lastseen").'</a></th>
+                <th width="1%"><a href="char_list.php?order_by=online&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'online' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).lang("char_list", "online").'</a></th>';
 
   if ( $showcountryflag )
   {

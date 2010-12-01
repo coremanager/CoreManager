@@ -30,6 +30,13 @@ $output .= '
 $start = ( ( isset($_GET["start"]) ) ? $sql["char"]->quote_smart($_GET["start"]) : 0 );
 $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["char"]->quote_smart($_GET["order_by"]) :"honor" );
 
+$dir = ( ( isset($_GET["dir"]) ) ? $sql["logon"]->quote_smart($_GET["dir"]) : 1 );
+if ( !preg_match('/^[01]{1}$/', $dir) )
+  $dir = 1;
+
+$order_dir = ( ( $dir ) ? 'ASC' : 'DESC' );
+$dir = ( ( $dir ) ? 0 : 1 ) ;
+
 if ( $core == 1 )
   $query = $sql["char"]->query("SELECT
         guid, name, race, class,
@@ -41,14 +48,14 @@ if ( $core == 1 )
         gender
         FROM `characters`
         WHERE race IN (1, 3, 4, 7, 11)
-        ORDER BY ".$order_by." DESC LIMIT 25;");
+        ORDER BY ".$order_by." ".$order_dir." LIMIT 25;");
 else
   $query = $sql["char"]->query("SELECT characters.guid, characters.name, race, class, 
         totalHonorPoints AS honor, totalKills AS kills, level, arenaPoints AS arena, 
         guildid AS GNAME, gender 
         FROM `characters`, guild_member 
         WHERE race IN (1, 3, 4, 7, 11) AND guild_member.guid=characters.guid 
-        ORDER BY ".$order_by." DESC LIMIT 25;");
+        ORDER BY ".$order_by." ".$order_dir." LIMIT 25;");
   
 
 $this_page = $sql["char"]->num_rows($query);
@@ -69,18 +76,20 @@ $output .= '
                 <th width="20%">'.lang("honor", "guid").'</th>
                 <th width="7%">'.lang("honor", "race").'</th>
                 <th width="7%">'.lang("honor", "class").'</th>
-                <th width="7%">'.lang("honor", "level").'</th>
                 <th width="7%">
-                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "honor").'</a>
-                </th>
-                <th width="11%">
-                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "honor_points").'</a>
+                  <a href="honor.php?order_by=level&amp;dir='.$dir.'"'.( ( $order_by == 'level' ) ? ( ( $dir ) ? ' class="DESC"' : ' class="ASC"' ) : '' ).'>'.lang("honor", "level").'</a>
                 </th>
                 <th width="7%">
-                  <a href="honor.php?order_by=kills"'.( ( $order_by == 'kills' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "kills").'</a>
+                  <a href="honor.php?order_by=honor&amp;dir='.$dir.'"'.( ( $order_by == 'honor' ) ? ( ( $dir ) ? ' class="DESC"' : ' class="ASC"' ) : '' ).'>'.lang("honor", "honor").'</a>
                 </th>
                 <th width="11%">
-                  <a href="honor.php?order_by=arena"'.( ( $order_by == 'arena' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "arena_points_short").'</a>
+                  <a href="honor.php?order_by=honor&amp;dir='.$dir.'"'.( ( $order_by == 'honor' ) ? ( ( $dir ) ? ' class="DESC"' : ' class="ASC"' ) : '' ).'>'.lang("honor", "honor_points").'</a>
+                </th>
+                <th width="7%">
+                  <a href="honor.php?order_by=kills&amp;dir='.$dir.'"'.( ( $order_by == 'kills' ) ? ( ( $dir ) ? ' class="DESC"' : ' class="ASC"' ) : '' ).'>'.lang("honor", "kills").'</a>
+                </th>
+                <th width="11%">
+                  <a href="honor.php?order_by=arena&amp;dir='.$dir.'"'.( ( $order_by == 'arena' ) ? ( ( $dir ) ? ' class="DESC"' : ' class="ASC"' ) : '' ).'>'.lang("honor", "arena_points_short").'</a>
                 </th>
                 <th width="24%">'.lang("honor", "guild")."</th>
               </tr>";
@@ -143,15 +152,14 @@ if ( $core == 1 )
         gender
         FROM `characters`
         WHERE race NOT IN (1, 3, 4, 7, 11)
-        ORDER BY ".$order_by." DESC
-        LIMIT 25;");
+        ORDER BY ".$order_by." ".$order_dir." LIMIT 25;");
 else
   $query = $sql["char"]->query("SELECT characters.guid, characters.name, race, class, 
         totalHonorPoints AS honor, totalKills AS kills, 
         level, arenaPoints AS arena, guildid AS GNAME, gender 
         FROM `characters`, guild_member
         WHERE race NOT IN (1, 3, 4, 7, 11) AND guild_member.guid=characters.guid 
-        ORDER BY ".$order_by." DESC LIMIT 25;");
+        ORDER BY ".$order_by." ".$order_dir." LIMIT 25;");
 
 
 $this_page = $sql["char"]->num_rows($query);
@@ -172,18 +180,20 @@ $output .= '
                 <th width="20%">'.lang("honor", "guid").'</th>
                 <th width="7%">'.lang("honor", "race").'</th>
                 <th width="7%">'.lang("honor", "class").'</th>
-                <th width="7%">'.lang("honor", "level").'</th>
                 <th width="7%">
-                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "honor").'</a>
-                </th>
-                <th width="11%">
-                  <a href="honor.php?order_by=honor"'.( ( $order_by == 'honor' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "honor_points").'</a>
+                  <a href="honor.php?order_by=level&amp;dir='.$dir.'"'.( ( $order_by == 'level' ) ? ( ( $dir ) ? ' class="DESC"' : ' class="ASC"' ) : '' ).'>'.lang("honor", "level").'</a>
                 </th>
                 <th width="7%">
-                  <a href="honor.php?order_by=kills"'.( ( $order_by == 'kills' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "kills").'</a>
+                  <a href="honor.php?order_by=honor&amp;dir='.$dir.'"'.( ( $order_by == 'honor' ) ? ( ( $dir ) ? ' class="DESC"' : ' class="ASC"' ) : '' ).'>'.lang("honor", "honor").'</a>
                 </th>
                 <th width="11%">
-                  <a href="honor.php?order_by=arena"'.( ( $order_by == 'arena' ) ? ' class="DESC"' : '' ).'>'.lang("honor", "arena_points_short").'</a>
+                  <a href="honor.php?order_by=honor&amp;dir='.$dir.'"'.( ( $order_by == 'honor' ) ? ( ( $dir ) ? ' class="DESC"' : ' class="ASC"' ) : '' ).'>'.lang("honor", "honor_points").'</a>
+                </th>
+                <th width="7%">
+                  <a href="honor.php?order_by=kills&amp;dir='.$dir.'"'.( ( $order_by == 'kills' ) ? ( ( $dir ) ? ' class="DESC"' : ' class="ASC"' ) : '' ).'>'.lang("honor", "kills").'</a>
+                </th>
+                <th width="11%">
+                  <a href="honor.php?order_by=arena&amp;dir='.$dir.'"'.( ( $order_by == 'arena' ) ? ( ( $dir ) ? ' class="DESC"' : ' class="ASC"' ) : '' ).'>'.lang("honor", "arena_points_short").'</a>
                 </th>
                 <th width="24%">'.lang("honor", "guild").'</th>
               </tr>';

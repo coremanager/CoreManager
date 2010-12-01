@@ -1567,6 +1567,7 @@ $GLOBALS['lang_xacct'] = array
   'chooseacct' => '选择新的所属帐号',
   'enteracct' => '选择您所要的目标帐号',
   'newacct' => '新的帐号',
+  'newacct1' => '新的帐号 (Name or ID)',
   'save' => '保存修改',
   // The following is the message that asks GMs permission to change the character's account
   // tranlation note: %1 = [account name], %2 = [char], %3 = [new name]
