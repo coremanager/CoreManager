@@ -76,8 +76,8 @@ $GLOBALS['lang_login'] = array
   'missing_pass_user' => '缺少用户名称或密码！',
   'banned_acc' => '帐号被禁，请联系服务器管理员',
   'locked_acc' => '帐号暂停，请联系服务器管理员',
-  'no_permision' => '您没有该请求数据的查阅权限',
-  'req_permision' => 'This action requires',
+  'no_permision' => '您没有该数据的查询权限',
+  'req_permision' => '此操作要求',
   'enter_valid_logon' => '请输入有效的用户名称及密码：',
   'select_realm' => '选择服务器',
   'remember_me' => '请记住我',
@@ -171,7 +171,7 @@ $GLOBALS['lang_register'] = array
   'recover_acc_passwordA' => "恢复帐号密码",
   'recover_acc_passwordMT' => "重置帐号密码",
   'user_pass_rec_desc' => '请输入您注册的用户名称。',
-  'mail_pass_rec_desc' => '请确认填写注册时填写的email地址。',
+  'mail_pass_rec_desc' => '请确认填写注册时使用的email地址。',
   'recover_passA' => '恢复密码',
   'recover_passMT' => '生成密码',
   'user_mail_not_found' => '没有查找到您所提供的用户名称/email邮件地址的组合信息。',
@@ -187,8 +187,8 @@ $GLOBALS['lang_register'] = array
   'invited_info' => '请填写邀请您前来注册的玩家的帐号名称。',
   'email_address_used' => '这个email已经注册了帐号。<br/>不能再创建更多帐号了。',
   'referrer_not_found' => '很不幸，我们的数据库中没有查找到指定的帐号。<br/>请确认您输入了有效的帐号名称或者将&quot;邀请人&quot;栏位留空。',
-  'lang' => 'Language',
-  'not_client' => 'Does not affect In-Game Language',
+  'lang' => '语言',
+  'not_client' => '网站语言，不影响游戏中的语言设置。',
 );
 
 
@@ -538,7 +538,7 @@ $GLOBALS['lang_item'] = array
   'fishing_pole' => '钓鱼竿',
   'rod' => '附魔棒',
   'robe' => '法袍',
-  'tome' => '巨著',
+  'tome' => '圣物',
   'two_hand' => '双手',
   'off_misc' => 'Off (Misc)',
   'thrown' => '投掷武器',
@@ -1567,7 +1567,7 @@ $GLOBALS['lang_xacct'] = array
   'chooseacct' => '选择新的所属帐号',
   'enteracct' => '选择您所要的目标帐号',
   'newacct' => '新的帐号',
-  'newacct1' => '新的帐号 (Name or ID)',
+  'newacct1' => '新的帐号 (名称 或 ID)',
   'save' => '保存修改',
   // The following is the message that asks GMs permission to change the character's account
   // tranlation note: %1 = [account name], %2 = [char], %3 = [new name]
@@ -1722,8 +1722,8 @@ $GLOBALS['lang_admin'] = array
   'proxypass' => 'Proxy 用户密码',
 
   'datasite' => '数据库网站',
-  'datasitebase' => 'Datasite Base',
-  'datasitename' => 'Datasite Name',
+  'datasitebase' => '数据库网站 地址',
+  'datasitename' => '数据库网站 名称',
   'datasiteitem' => '数据库网站 物品',
   'datasitequest' => '数据库网站 任务',
   'datasitecreature' => '数据库网站 怪物',
