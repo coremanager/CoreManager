@@ -159,7 +159,7 @@ function browse_users()
           FROM account
             LEFT JOIN account_banned ON account_banned.id=account.id
           WHERE gmlevel='".$search_value."' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
-        $query_1 = $sql["logon"]->query("SELECT COUNT(*) FROM account WHERE gm='".$search_value."'");
+        $query_1 = $sql["logon"]->query("SELECT COUNT(*) FROM account WHERE gmlevel='".$search_value."'");
       }
       else
       {

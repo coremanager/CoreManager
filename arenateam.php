@@ -32,9 +32,7 @@ function browse_teams()
 
   //==========================$_GET and SECURE=================================
   $start = ( ( isset($_GET["start"]) ) ? $sql["char"]->quote_smart($_GET["start"]) : 0 );
-  if ( is_numeric($start) )
-    ;
-  else
+  if ( !is_numeric($start) )
     $start = 0;
 
   $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["char"]->quote_smart($_GET["order_by"]) : "atid" );
@@ -91,6 +89,22 @@ function browse_teams()
             FROM arenateams
             WHERE arenateams.name LIKE '%".$search_value."%'");
         }
+        elseif ( $core == 2 )
+        {
+          $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname,
+            arena_team.captainguid AS lguid, arena_team.type AS attype, 
+            (SELECT name FROM `characters` WHERE guid=lguid) AS lname, 
+            (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
+            rating AS atrating, games_week AS atgames, wins_week AS atwins
+            FROM arena_team
+              LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
+            WHERE arena_team.name LIKE '%".$search_value."%' 
+            ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
+
+          $query_1 = $sql["char"]->query("SELECT COUNT(*)
+            FROM arena_team 
+            WHERE arena_team.name LIKE '%".$search_value."%'");
+        }
         else
         {
           $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname,
@@ -98,8 +112,9 @@ function browse_teams()
             (SELECT name FROM `characters` WHERE guid=lguid) AS lname, 
             (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
             rating AS atrating, games AS atgames, wins AS atwins
-            FROM arena_team, arena_team_stats 
-            WHERE arena_team.arenateamid=arena_team_stats.arenateamid AND arena_team.name LIKE '%".$search_value."%' 
+            FROM arena_team
+              LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
+            WHERE arena_team.name LIKE '%".$search_value."%' 
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
           $query_1 = $sql["char"]->query("SELECT COUNT(*)
@@ -135,6 +150,22 @@ function browse_teams()
             FROM arenateams
             WHERE arenateams.leader IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%')");
         }
+        elseif ( $core == 2 )
+        {
+          $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
+            arena_team.captainguid AS lguid, arena_team.type AS attype, 
+            (SELECT name FROM `characters` WHERE guid=lguid) AS lname,
+            (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
+            rating AS atrating, games_week AS atgames, wins_week AS atwins 
+            FROM arena_team
+              LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
+            WHERE arena_team.captainguid IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%') 
+            ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
+
+          $query_1 = $sql["char"]->query("SELECT COUNT(*)
+            FROM arena_team 
+            WHERE arena_team.captainguid IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%')");
+        }
         else
         {
           $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
@@ -142,8 +173,9 @@ function browse_teams()
             (SELECT name FROM `characters` WHERE guid=lguid) AS lname,
             (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
             rating AS atrating, games AS atgames, wins AS atwins 
-            FROM arena_team, arena_team_stats 
-            WHERE arena_team.arenateamid=arena_team_stats.arenateamid AND arena_team.captainguid IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%') 
+            FROM arena_team
+              LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
+            WHERE arena_team.captainguid IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%') 
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
           $query_1 = $sql["char"]->query("SELECT COUNT(*)
@@ -179,6 +211,22 @@ function browse_teams()
             FROM arenateams
             WHERE arenateams.id='".$search_value."'");
         }
+        elseif ( $core == 2 )
+        {
+          $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
+            arena_team.captainguid AS lguid, arena_team.type AS attype, 
+            (SELECT name FROM `characters` WHERE guid=lguid) AS lname,
+            (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
+            rating AS atrating, games_week AS atgames, wins_week AS atwins 
+            FROM arena_team
+              LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
+            WHERE AND arena_team.arenateamid='".$search_value."' 
+            ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
+
+          $query_1 = $sql["char"]->query("SELECT COUNT(*)
+            FROM arena_team 
+            WHERE arena_team.arenateamid='".$search_value."'");
+        }
         else
         {
           $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
@@ -186,8 +234,9 @@ function browse_teams()
             (SELECT name FROM `characters` WHERE guid=lguid) AS lname,
             (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
             rating AS atrating, games AS atgames, wins AS atwins 
-            FROM arena_team, arena_team_stats 
-            WHERE arena_team.arenateamid=arena_team_stats.arenateamid AND arena_team.arenateamid='".$search_value."' 
+            FROM arena_team
+              LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
+            WHERE arena_team.arenateamid='".$search_value."' 
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
           $query_1 = $sql["char"]->query("SELECT COUNT(*)
@@ -223,6 +272,21 @@ function browse_teams()
       $query_1 = $sql["char"]->query("SELECT COUNT(*)
         FROM arenateams");
     }
+    elseif ( $core == 2 )
+    {
+      $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
+        arena_team.captainguid AS lguid, arena_team.type AS attype, 
+        (SELECT name FROM `characters` WHERE guid=lguid) AS lname, 
+        (SELECT COUNT(*) FROM arena_team_member WHERE arenateamid=atid) AS tot_chars, 
+        rating AS atrating, games_week AS atgames, wins_week AS atwins, 
+        (SELECT COUNT(*) AS GCNT FROM `arena_team_member`, `characters`, `arena_team` WHERE arena_team.arenateamid=atid AND arena_team_member.arenateamid=arena_team.arenateamid AND arena_team_member.guid=characters.guid AND characters.online=1) AS arenateam_online
+        FROM arena_team
+          LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
+        ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
+
+      $query_1 = $sql["char"]->query("SELECT COUNT(*)
+        FROM arena_team");
+    }
     else
     {
       $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
@@ -231,8 +295,8 @@ function browse_teams()
         (SELECT COUNT(*) FROM arena_team_member WHERE arenateamid=atid) AS tot_chars, 
         rating AS atrating, games AS atgames, wins AS atwins, 
         (SELECT COUNT(*) AS GCNT FROM `arena_team_member`, `characters`, `arena_team` WHERE arena_team.arenateamid=atid AND arena_team_member.arenateamid=arena_team.arenateamid AND arena_team_member.guid=characters.guid AND characters.online=1) AS arenateam_online
-        FROM arena_team, arena_team_stats
-        WHERE arena_team.arenateamid=arena_team_stats.arenateamid 
+        FROM arena_team
+          LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
         ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
       $query_1 = $sql["char"]->query("SELECT COUNT(*)
@@ -252,7 +316,7 @@ function browse_teams()
           <table class="top_hidden">
             <tr>
               <td>';
-                makebutton(lang("global", "back"), "javascript:window.history.back()", 130);
+  makebutton(lang("global", "back"), "javascript:window.history.back()", 130);
   ( ( $search_by &&  $search_value ) ? makebutton(lang("arenateam", "arenateams"), "arenateam.php", 130) : $output .= "" );
   $output .= '
               </td>
@@ -273,7 +337,7 @@ function browse_teams()
                       </form>
                     </td>
                     <td>';
-                      makebutton(lang("global", "search"), "javascript:do_submit()",80);
+  makebutton(lang("global", "search"), "javascript:do_submit()", 80);
   $output .= '
                     </td>
                   </tr>
