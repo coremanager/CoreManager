@@ -32,18 +32,14 @@ function show_realm()
 
   //==========================$_GET and SECURE=================================
   $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["mgr"]->quote_smart($_GET["order_by"]) : 'rid' );
-  if ( preg_match('/^[_[:lower:]]{1,8}$/', $order_by) )
-    ;
-  else
+  if ( !preg_match('/^[_[:lower:]]{1,8}$/', $order_by) )
     $order_by = 'rid';
 
   $dir = ( ( isset($_GET["dir"]) ) ? $sql["mgr"]->quote_smart($_GET["dir"]) : 1 );
-  if ( preg_match('/^[01]{1}$/', $dir) )
-    ;
-  else
+  if ( !preg_match('/^[01]{1}$/', $dir) )
     $dir = 1;
 
-  $order_dir = ( ( $dir ) ? 'ASC' : 'DESC' );
+  $order_dir = ( ( $dir ) ? "ASC" : "DESC" );
   $dir = ( ( $dir ) ? 0 : 1 );
   //==========================$_GET and SECURE end=============================
   $result = $sql["char"]->query("SELECT COUNT(*) FROM characters");

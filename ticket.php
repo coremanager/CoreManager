@@ -42,7 +42,7 @@ function browse_tickets()
   if ( !preg_match('/^[01]{1}$/', $dir) )
     $dir = 1;
 
-  $order_dir = ( ( $dir ) ? 'ASC' : 'DESC' );
+  $order_dir = ( ( $dir ) ? "ASC" : "DESC" );
   $dir = ( ( $dir ) ? 0 : 1 );
   //==========================$_GET and SECURE end=============================
 
@@ -109,10 +109,10 @@ function browse_tickets()
                 <th width="7%">'.lang("global", "edit").'</th>';
   $output .= '
                 <th width="10%">
-                  <a href="ticket.php?order_by=guid&amp;start='.$start.'&amp;dir='.$dir.'">'.( ( $order_by == 'guid' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '' ).''.lang("ticket", "id").'</a>
+                  <a href="ticket.php?order_by=guid&amp;start='.$start.'&amp;dir='.$dir.'">'.( ( $order_by == 'guid' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '' ).''.lang("ticket", "id").'</a>
                 </th>
                 <th width="16%">
-                  <a href="ticket.php?order_by=guid&amp;start='.$start.'&amp;dir='.$dir.'">'.( ( $order_by == 'guid' ) ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw").'.gif" alt="" /> ' : '').''.lang("ticket", "sender").'</a>
+                  <a href="ticket.php?order_by=opener&amp;start='.$start.'&amp;dir='.$dir.'">'.( ( $order_by == 'opener' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '').''.lang("ticket", "sender").'</a>
                 </th>';
   $output .= '
                 <th width=\"40%\">'.lang("ticket", "message").'</th>

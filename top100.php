@@ -48,7 +48,7 @@ function top100($realmid)
   if ( !preg_match('/^[01]{1}$/', $dir) )
     $dir = 1;
 
-  $order_dir = ( ( $dir ) ? 'ASC' : 'DESC' );
+  $order_dir = ( ( $dir ) ? "ASC" : "DESC" );
   $dir = ( ( $dir ) ? 0 : 1 );
   //==========================$_GET and SECURE end========================
 

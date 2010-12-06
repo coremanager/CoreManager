@@ -32,24 +32,18 @@ function browse_guilds()
 
   //==========================$_GET and SECURE=================================
   $start = ( ( isset($_GET["start"]) ) ? $sql["char"]->quote_smart($_GET["start"]) : 0 );
-  if ( is_numeric($start) )
-    ;
-  else
+  if ( !is_numeric($start) )
     $start = 0;
 
   $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["char"]->quote_smart($_GET["order_by"]) : 'gid' );
-  if ( preg_match('/^[_[:lower:]]{1,10}$/', $order_by) )
-    ;
-  else
+  if ( !preg_match('/^[_[:lower:]]{1,10}$/', $order_by) )
     $order_by = 'gid';
 
   $dir = ( ( isset($_GET["dir"]) ) ? $sql["char"]->quote_smart($_GET["dir"]) : 1 );
-  if ( preg_match('/^[01]{1}$/', $dir) )
-    ;
-  else
+  if ( !preg_match('/^[01]{1}$/', $dir) )
     $dir = 1;
 
-  $order_dir = ( ( $dir ) ? 'ASC' : 'DESC' );
+  $order_dir = ( ( $dir ) ? "ASC" : "DESC" );
   $dir = ( ( $dir ) ? 0 : 1 );
   //==========================$_GET and SECURE end=============================
   //==========================MyGuild==========================================
@@ -140,9 +134,7 @@ function browse_guilds()
     $search_value = $sql["char"]->quote_smart($_GET["search_value"]);
 
     $search_menu = array('name', 'leadername', 'guildid');
-    if ( in_array($search_by, $search_menu) )
-      ;
-    else
+    if ( !in_array($search_by, $search_menu) )
       $search_by = 'name';
 
     switch ( $search_by )
@@ -209,9 +201,7 @@ function browse_guilds()
       }
       case "guildid":
       {
-        if ( is_numeric($search_value) )
-          ;
-        else
+        if ( !is_numeric($search_value) )
           redirect("guild.php?error=5");
         if ( $core == 1 )
         {
@@ -293,7 +283,7 @@ function browse_guilds()
                       </form>
                     </td>
                     <td width="300">';
-              makebutton(lang("global", "search"), "javascript:do_submit()",80);
+  makebutton(lang("global", "search"), "javascript:do_submit()",80);
   ( ( $search_by &&  $search_value ) ? makebutton(lang("guild", "show_guilds"), "guild.php\" type=\"def", 130) : $output .= "" );
   $output .= '
                     </td>
@@ -316,13 +306,13 @@ function browse_guilds()
                   </td>
                 </tr>
                 <tr>
-                  <th width="5%"><a href="guild.php?order_by=gid&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='gid' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang("guild", "id").'</a></th>
-                  <th width="30%"><a href="guild.php?order_by=guildname&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='guildname' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang("guild", "guild_name").'</a></th>
-                  <th width="20%"><a href="guild.php?order_by=lname&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='lname' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang("guild", "guild_leader").'</a></th>
-                  <th width="10%"><a href="guild.php?order_by=lfaction&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='lfaction' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang("guild", "guild_faction").'</a></th>
-                  <th width="15%"><a href="guild.php?order_by=tot_chars&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='tot_chars' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang("guild", "tot_members").'</a></th>
+                  <th width="5%"><a href="guild.php?order_by=gid&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='gid' ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "id").'</a></th>
+                  <th width="30%"><a href="guild.php?order_by=guildname&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='guildname' ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "guild_name").'</a></th>
+                  <th width="20%"><a href="guild.php?order_by=lname&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='lname' ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "guild_leader").'</a></th>
+                  <th width="10%"><a href="guild.php?order_by=lfaction&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='lfaction' ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "guild_faction").'</a></th>
+                  <th width="15%"><a href="guild.php?order_by=tot_chars&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='tot_chars' ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "tot_members").'</a></th>
                   <th width="20%">'.lang("guild", "info").'</th>
-                  <th width="20%"><a href="guild.php?order_by=createdate&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='createdate' ? '<img src="img/arr_'.( ( $dir ) ? "up" : "dw" ).'.gif" alt="" /> ' : "" ).lang("guild", "create_date").'</a></th>
+                  <th width="20%"><a href="guild.php?order_by=createdate&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='createdate' ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "create_date").'</a></th>
                 </tr>';
   while ( $data = $sql["char"]->fetch_assoc($query) )
   {

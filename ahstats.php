@@ -204,14 +204,76 @@ function browse_auctions()
     $search_filter
     $order_side ORDER BY `auctionhouse`.`$order_by` $order_dir LIMIT $start, $itemperpage");*/
 
+  // Sorting special cases, everything else works as is...
+  if ( $core == 1 )
+  {
+    switch ( $order_by )
+    {
+      case "owner":
+        $post_order_by = "characters.name";
+        break;
+      case "item":
+        $post_order_by = "playeritems.entry";
+        break;
+      default:
+        $post_order_by = $order_by;
+    }
+  }
+  elseif ( $core == 2 )
+  {
+    switch ( $order_by )
+    {
+      case "owner":
+        $post_order_by = "characters.name";
+        break;
+      case "item":
+        $post_order_by = "auction.item_template";
+        break;
+      case "buyout":
+        $post_order_by = "auction.buyoutprice";
+        break;
+      case "bidder":
+        $post_order_by = "auction.buyguid";
+        break;
+      case "bid":
+        $post_order_by = "auction.lastbid";
+        break;
+      default:
+        $post_order_by = $order_by;
+    }
+  }
+  else
+  {
+    switch ( $order_by )
+    {
+      case "owner":
+        $post_order_by = "characters.name";
+        break;
+      case "item":
+        $post_order_by = "auctionhouse.item_template";
+        break;
+      case "buyout":
+        $post_order_by = "auctionhouse.buyoutprice";
+        break;
+      case "bidder":
+        $post_order_by = "auctionhouse.buyguid";
+        break;
+      case "bid":
+        $post_order_by = "auctionhouse.lastbid";
+        break;
+      default:
+        $post_order_by = $order_by;
+    }
+  }
+
   if ( $core == 1 )
     // this_is_junk: the guid in auction is stored raw, so we have to subtract 4611686018427387904 to get the matching guid stored in playeritems :/
     $query = "SELECT characters.name AS owner_name, owner, playeritems.entry AS item_entry,
       item-4611686018427387904 AS item, buyout, time-UNIX_TIMESTAMP() AS time, bidder, bid
       FROM auctions
-      LEFT JOIN characters ON auctions.owner=characters.guid
-      LEFT JOIN playeritems ON auctions.item-4611686018427387904=playeritems.guid
-      ".$seach_filter." ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
+        LEFT JOIN characters ON auctions.owner=characters.guid
+        LEFT JOIN playeritems ON auctions.item-4611686018427387904=playeritems.guid
+      ".$seach_filter." ".$order_side." ORDER BY ".$post_order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
   elseif ( $core == 2 )
     $query = "SELECT characters.name AS owner_name, auction.item_template AS item_entry,
       auction.itemowner AS owner, item_template.name AS itemname, itemguid AS item,
@@ -220,11 +282,11 @@ function browse_auctions()
       SUBSTRING_INDEX(SUBSTRING_INDEX(item_instance.data, ' ',15), ' ',-1) AS qty,
       characters.race AS seller_race, c2.race AS buyer_race
       FROM characters, item_instance, ".$world_db[$realm_id]['name'].".item_template, auction
-      LEFT JOIN characters c2 ON c2.guid=auction.buyguid
+        LEFT JOIN characters c2 ON c2.guid=auction.buyguid
       WHERE auction.itemowner=characters.guid
         AND auction.item_template=item_template.entry
         AND auction.itemguid=item_instance.guid
-      ".$search_filter." ".$order_side." ORDER BY auction.".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
+      ".$search_filter." ".$order_side." ORDER BY ".$post_order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
   else
     $query = "SELECT characters.name AS owner_name, auctionhouse.item_template AS item_entry,
       auctionhouse.itemowner AS owner, item_template.name AS itemname, itemguid AS item,
@@ -233,11 +295,11 @@ function browse_auctions()
       item_instance.count AS qty,
       characters.race AS seller_race, c2.race AS buyer_race
       FROM characters, item_instance, ".$world_db[$realm_id]['name'].".item_template, auctionhouse
-      LEFT JOIN characters c2 ON c2.guid=auctionhouse.buyguid
+        LEFT JOIN characters c2 ON c2.guid=auctionhouse.buyguid
       WHERE auctionhouse.itemowner=characters.guid
         AND auctionhouse.item_template=item_template.entry
         AND auctionhouse.itemguid=item_instance.guid
-      ".$search_filter." ".$order_side." ORDER BY auctionhouse.".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
+      ".$search_filter." ".$order_side." ORDER BY ".$post_order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
 
   $result = $sql["char"]->query($query);
 
@@ -292,7 +354,7 @@ function browse_auctions()
                         </select>
                       </td>
                       <td>';
-                        makebutton(lang("global", "search"), "javascript:do_submit()",80);
+  makebutton(lang("global", "search"), "javascript:do_submit()",80);
   $output .= '
                       </td>
                       <td>';
@@ -309,26 +371,14 @@ function browse_auctions()
               </td>
             </tr>
           </table>
-          <table class="lined">';
-  if ( $core == 1 )
-    $output .= '
+          <table class="lined">
             <tr>
-              <th width="10%"><a href="ahstats.php?order_by=characters.name&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='owner' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "seller").'</a></th>
-              <th width="20%" colspan="2"><a href="ahstats.php?order_by=playeritems.entry&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='item_entry' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "item").'</a></th>
-              <th width="15%"><a href="ahstats.php?order_by=buyout&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='buyout' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "buyoutprice").'</a></th>
-              <th width="15%"><a href="ahstats.php?order_by=time-unix_timestamp()&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='time' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "timeleft").'</a></th>
-              <th width="10%"><a href="ahstats.php?order_by=bidder&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='bidder' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "buyer").'</a></th>
-              <th width="15%"><a href="ahstats.php?order_by=bid&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='bid' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "lastbid").'</a></th>
-            </tr>';
-  else
-    $output .= '
-            <tr>
-              <th width="10%"><a href="ahstats.php?order_by=characters.name&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='owner' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "seller").'</a></th>
-              <th width="20%" colspan="2"><a href="ahstats.php?order_by=auctionhouse.item_template&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='item_entry' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "item").'</a></th>
-              <th width="15%"><a href="ahstats.php?order_by=auctionhouse.buyoutprice&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='buyout' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "buyoutprice").'</a></th>
-              <th width="15%"><a href="ahstats.php?order_by=time-unix_timestamp()&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='time' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "timeleft").'</a></th>
-              <th width="10%"><a href="ahstats.php?order_by=auctionhouse.buyguid&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='bidder' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "buyer").'</a></th>
-              <th width="15%"><a href="ahstats.php?order_by=auctionhouse.lastbid&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by=='bid' ) ? '<img src="img/arr_'.( ( $dir ) ? 'up' : 'dw' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "lastbid").'</a></th>
+              <th width="10%"><a href="ahstats.php?order_by=owner&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'owner' ) ? '<img src="img/arr_'.( ( $dir ) ? 'dw' : 'up' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "seller").'</a></th>
+              <th width="20%" colspan="2"><a href="ahstats.php?order_by=item&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'item' ) ? '<img src="img/arr_'.( ( $dir ) ? 'dw' : 'up' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "item").'</a></th>
+              <th width="15%"><a href="ahstats.php?order_by=buyout&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'buyout' ) ? '<img src="img/arr_'.( ( $dir ) ? 'dw' : 'up' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "buyoutprice").'</a></th>
+              <th width="15%"><a href="ahstats.php?order_by=time-unix_timestamp()&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'time' ) ? '<img src="img/arr_'.( ( $dir ) ? 'dw' : 'up' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "timeleft").'</a></th>
+              <th width="10%"><a href="ahstats.php?order_by=bidder&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'bidder' ) ? '<img src="img/arr_'.( ( $dir ) ? 'dw' : 'up' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "buyer").'</a></th>
+              <th width="15%"><a href="ahstats.php?order_by=bid&amp;start='.$start.( ( ( $search_by && $search_value ) || ( $search_class != -1 ) || ( $search_quality != -1 ) ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'&amp;search_quality='.$search_quality.'&amp;search_class='.$search_class.'&amp;error=2' : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'bid' ) ? '<img src="img/arr_'.( ( $dir ) ? 'dw' : 'up' ).'.gif" alt="" /> ' : '' ).lang("auctionhouse", "lastbid").'</a></th>
             </tr>';
   
   while ( $rows = $sql["char"]->fetch_assoc($result) )

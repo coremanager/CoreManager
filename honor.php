@@ -34,7 +34,7 @@ $dir = ( ( isset($_GET["dir"]) ) ? $sql["logon"]->quote_smart($_GET["dir"]) : 1 
 if ( !preg_match('/^[01]{1}$/', $dir) )
   $dir = 1;
 
-$order_dir = ( ( $dir ) ? 'ASC' : 'DESC' );
+$order_dir = ( ( $dir ) ? "ASC" : "DESC" );
 $dir = ( ( $dir ) ? 0 : 1 ) ;
 
 if ( $core == 1 )
