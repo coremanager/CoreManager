@@ -111,7 +111,7 @@ elseif ( $core == 2 )
 {
   $tab_del_user_characters = Array
   (
-    Array('auctionhouse','itemowner'),
+    Array('auction','itemowner'),
     Array('character_account_data','guid'),
     Array('character_achievement','guid'),
     Array('character_achievement_progress','guid'),

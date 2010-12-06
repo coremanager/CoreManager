@@ -463,6 +463,21 @@ function view_team()
 
     $query = $sql["char"]->query($query);
   }
+  elseif ( $core == 2 )
+  {
+    $query = "SELECT arena_team.arenateamid AS id, rating,
+      games_week AS games, wins_week AS wins, games_season AS played, wins_season AS wins2, rank AS ranking,
+      (SELECT COUNT(*) FROM arena_team_member WHERE arenateamid=id) AS tot_chars
+      FROM arena_team
+        LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
+        LEFT JOIN arena_team_member ON arena_team_member.arenateamid=arena_team.arenateamid
+      WHERE arena_team.arenateamid='".$arenateam_id."'";
+
+    $query = $sql["char"]->query($query);
+
+    $m_query = "SELECT * FROM arena_team_member WHERE arenateamid='".$arenateam_id."'";
+    $m_query = $sql["char"]->query($m_query);
+  }
   else
   {
     $query = "SELECT arena_team.arenateamid AS id, rating,
