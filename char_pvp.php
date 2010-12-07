@@ -85,6 +85,18 @@ function char_pvp()
 
     $arena_team_query = $sql["char"]->query($query);
   }
+  elseif ( $core == 2 )
+  {
+    $query = "SELECT *,arena_team.arenateamid AS id, rating, type,
+      games_week AS games, wins_week AS wins, games_season AS played, wins_season AS wins2, rank AS ranking,
+      (SELECT COUNT(*) FROM arena_team_member WHERE arenateamid=id) AS tot_chars
+      FROM arena_team
+        LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
+        LEFT JOIN arena_team_member ON arena_team_member.arenateamid=arena_team.arenateamid
+      WHERE arena_team_member.guid='".$id."'";
+
+    $arena_team_query = $sql["char"]->query($query);
+  }
   else
   {
     $query = "SELECT *,arena_team.arenateamid AS id, rating, type,

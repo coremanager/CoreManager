@@ -40,9 +40,7 @@ function browse_auctions()
 
   //==========================$_GET and SECURE=================================
   $start = ( ( isset($_GET["start"]) ) ? $sql["char"]->quote_smart($_GET["start"]) : 0 );
-  if ( is_numeric($start) )
-    ;
-  else
+  if ( !is_numeric($start) )
     $start = 0;
 
   $order_by = (isset($_GET["order_by"])) ? $sql["char"]->quote_smart($_GET["order_by"]) : "time";
@@ -64,7 +62,7 @@ function browse_auctions()
       LIMIT 1");
     if ( $sql["char"]->num_rows($result) )
     {
-      $order_side = ( ( in_array($sql["char"]->result($result, 0, 'race'),array(2,5,6,8,10)) ) ?
+      $order_side = ( ( in_array($sql["char"]->result($result, 0, 'race'), array(2, 5, 6, 8, 10)) ) ?
       " AND characters.race IN (2,5,6,8,10) " : " AND characters.race IN (1,3,4,7,11) " );
     }
     else
@@ -93,47 +91,93 @@ function browse_auctions()
         if ( ( ( $search_class >= 0 ) || ( $search_quality >= 0 ) ) && ( !isset($search_value) ) )
         {
           if ( $search_class >= 0 )
-            $search_filter = "AND item_template.class = '".$search_class."'";
+            if ( $core == 1 )
+              $search_filter = "AND items.class='".$search_class."'";
+            else
+              $search_filter = "AND item_template.class='".$search_class."'";
           if ( $search_quality >= 0 )
-            $search_filter = "AND item_template.Quality = '".$search_quality."'";
+            if ( $core == 1 )
+              $search_filter = "AND items.quality='".$search_quality."'";
+            else
+              $search_filter = "AND item_template.Quality='".$search_quality."'";
         }
         else
         {
           $item_prefix = "";
           if ( $search_class >= 0 )
-            $item_prefix .= "AND item_template.class = '".$search_class."' ";
+            if ( $core == 1 )
+              $item_prefix .= "AND items.class='".$search_class."' ";
+            else
+              $item_prefix .= "AND item_template.class='".$search_class."' ";
           if ( $search_quality >= 0 )
-            $item_prefix .= "AND item_template.Quality = '".$search_quality."' ";
+            if ( $core == 1 )
+              $item_prefix .= "AND items.quality='".$search_quality."' ";
+            else
+              $item_prefix .= "AND item_template.Quality='".$search_quality."' ";
 
-          $result = $sql["char"]->query("SELECT entry FROM ".$world_db[$realm_id]['name'].".item_template WHERE name LIKE '%".$search_value."%' ".$item_prefix);
-          $search_filter = "AND auctionhouse.item_template IN(0";
+          if ( $core == 1 )
+            $result = $sql["char"]->query("SELECT entry FROM ".$world_db[$realm_id]['name'].".items WHERE name LIKE '%".$search_value."%' ".$item_prefix);
+          else
+            $result = $sql["char"]->query("SELECT entry FROM ".$world_db[$realm_id]['name'].".item_template WHERE name LIKE '%".$search_value."%' ".$item_prefix);
+
+          if ( $core == 1 )
+            $search_filter = "AND auctions.item IN(0";
+          elseif ( $core == 2 )
+            $search_filter = "AND auction.item_template IN(0";
+          else
+            $search_filter = "AND auctionhouse.item_template IN(0";
+
           while ( $item = $sql["char"]->fetch_row($result) )
             $search_filter .= ", ".$item[0];
             $search_filter .= ")";
         }
         break;
       case "item_id":
-        $search_filter = "AND auctionhouse.item_template = '".$search_value."'";
+        if ( $core == 1 )
+          $search_filter = "AND auctions.item='".$search_value."'";
+        elseif ( $core == 2 )
+          $search_filter = "AND auction.item_template='".$search_value."'";
+        else
+          $search_filter = "AND auctionhouse.item_template='".$search_value."'";
         break;
       case "seller_name":
         if ( ( ( $search_class >= 0 ) || ( $search_quality >= 0 ) ) && ( !isset($search_value) ) )
         {
           if ( $search_class >= 0 )
-            $search_filter = "AND item_template.class = '".$search_class."'";
+            if ( $core == 1 )
+              $search_filter = "AND items.class='".$search_class."'";
+            else
+              $search_filter = "AND item_template.class='".$search_class."'";
           if ( $search_quality >= 0 )
-            $search_filter = "AND item_template.Quality = '".$search_quality."'";
+            if ( $core == 1 )
+              $search_filter = "AND items.quality='".$search_quality."'";
+            else
+              $search_filter = "AND item_template.Quality='".$search_quality."'";
         }
         else
         {
           $item_prefix = "";
           if ( $search_class >= 0 )
-            $item_prefix .= "AND item_template.class = '".$search_class."' ";
+            if ( $core == 1 )
+              $item_prefix .= "AND items.class='".$search_class."' ";
+            else
+              $item_prefix .= "AND item_template.class='".$search_class."' ";
           if ( $search_quality >= 0 )
-            $item_prefix .= "AND item_template.Quality = '".$search_quality."' ";
+            if ( $core == 1 )
+              $item_prefix .= "AND items.quality='".$search_quality."' ";
+            else
+              $item_prefix .= "AND item_template.Quality='".$search_quality."' ";
 
           $result = $sql["char"]->query("SELECT guid FROM characters WHERE name LIKE '%".$search_value."%'");
           $search_filter = $item_prefix;
-          $search_filter .= "AND auctionhouse.itemowner IN(0";
+
+          if ( $core == 1 )
+            $search_filter .= "AND auctions.owner IN(0";
+          elseif ( $core == 2 )
+            $search_filter .= "AND auction.itemowner IN(0";
+          else
+            $search_filter .= "AND auctionhouse.itemowner IN(0";
+
           while ( $char = $sql["char"]->fetch_row($result) )
             $search_filter .= ", ".$char[0];
           $search_filter .= ")";
@@ -144,21 +188,40 @@ function browse_auctions()
         if ( ( ( $search_class >= 0 ) || ( $search_quality >= 0 ) ) && ( !isset($search_value) ) )
         {
           if ( $search_class >= 0 )
-            $search_filter = "AND item_template.class = '".$search_class."'";
+            if ( $core == 1 )
+              $search_filter = "AND items.class='".$search_class."'";
+            else
+              $search_filter = "AND item_template.class='".$search_class."'";
           if ( $search_quality >= 0 )
-            $search_filter = "AND item_template.Quality = '".$search_quality."'";
+            if ( $core == 1 )
+              $search_filter = "AND items.quality='".$search_quality."'";
+            else
+              $search_filter = "AND item_template.Quality='".$search_quality."'";
         }
         else
         {
           $item_prefix = "";
           if ( $search_class >= 0 )
-            $item_prefix .= "AND item_template.class = '".$search_class."' ";
+            if ( $core == 1 )
+              $item_prefix .= "AND items.class='".$search_class."' ";
+            else
+              $item_prefix .= "AND item_template.class='".$search_class."' ";
           if ( $search_quality >= 0 )
-            $item_prefix .= "AND item_template.Quality = '".$search_quality."' ";
+            if ( $core == 1 )
+              $item_prefix .= "AND items.quality='".$search_quality."' ";
+            else
+              $item_prefix .= "AND item_template.Quality='".$search_quality."' ";
 
           $result = $sql["char"]->query("SELECT guid FROM characters WHERE name LIKE '%".$search_value."%'");
           $search_filter = $item_prefix;
-          $search_filter .= "AND auctionhouse.buyguid IN(-1";
+
+          if ( $core == 1 )
+            $search_filter .= "AND auctions.bidder IN(-1";
+          elseif ( $core == 2 )
+            $search_filter .= "AND auction.buyguid IN(-1";
+          else
+            $search_filter .= "AND auctionhouse.buyguid IN(-1";
+
           while ( $char = $sql["char"]->fetch_row($result) )
             $search_filter .= ", ".$char[0];
           $search_filter .= ")";
@@ -270,7 +333,7 @@ function browse_auctions()
     // this_is_junk: the guid in auction is stored raw, so we have to subtract 4611686018427387904 to get the matching guid stored in playeritems :/
     $query = "SELECT characters.name AS owner_name, owner, playeritems.entry AS item_entry,
       item-4611686018427387904 AS item, buyout, time-UNIX_TIMESTAMP() AS time, bidder, bid
-      FROM auctions
+      FROM auctions, ".$world_db[$realm_id]['name'].".items
         LEFT JOIN characters ON auctions.owner=characters.guid
         LEFT JOIN playeritems ON auctions.item-4611686018427387904=playeritems.guid
       ".$seach_filter." ".$order_side." ORDER BY ".$post_order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
