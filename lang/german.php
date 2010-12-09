@@ -18,7 +18,7 @@
 */
 
 /*
-    Trantslated by: Marcus <Knight>
+    Translated by: Marcus <Knight>
 */
 
 // ----- GENERAL ERROR CODES -----

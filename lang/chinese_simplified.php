@@ -18,7 +18,7 @@
 */
 
 /*
-    Trantslated by: Original
+    Translated by: Original
 */
 
 // ----- GENERAL ERROR CODES -----
