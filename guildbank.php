@@ -28,7 +28,7 @@ valid_login($action_permission["view"]);
 function guild_bank()
 {
   global  $output, $realm_id, $characters_db, $arcm_db, $world_db, $item_datasite, $base_datasite,
-    $item_icons, $sql;
+    $item_icons, $sql, $core;
 
   wowhead_tt();
 
@@ -43,40 +43,36 @@ function guild_bank()
   {
     $realmid = $sql["logon"]->quote_smart($_GET["realm"]);
     if ( is_numeric($realmid) )
-      $sql["char"]->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name'], $characters_db[$realmid]['encoding']);
+      $sql["char"]->connect($characters_db[$realmid]["addr"], $characters_db[$realmid]["user"], $characters_db[$realmid]["pass"], $characters_db[$realmid]["name"], $characters_db[$realmid]["encoding"]);
     else
       $realmid = $realm_id;
   }
 
   $guild_id = $sql["char"]->quote_smart($_GET["id"]);
-  if ( is_numeric($guild_id) )
-    ;
-  else
+  if ( !is_numeric($guild_id) )
     $guild_id = 0;
 
   if ( empty($_GET["tab"]) )
     $current_tab = 0;
   else
     $current_tab = $sql["char"]->quote_smart($_GET["tab"]);
-  if ( is_numeric($current_tab) || ($current_tab > 6) )
-    ;
-  else
+  if ( !is_numeric($current_tab) || ( $current_tab > 6 ) )
     $current_tab = 0;
 
   if ( $core == 1 )
-    $result = $sql["char"]->query('SELECT guildName, bankBalance FROM guilds WHERE guildid = '.$guild_id.' LIMIT 1');
+    $result = $sql["char"]->query("SELECT guildName, bankBalance FROM guilds WHERE guildid='".$guild_id."' LIMIT 1");
   else
-    $result = $sql["char"]->query('SELECT name AS guildName, BankMoney AS bankBalance FROM guild WHERE guildid = '.$guild_id.' LIMIT 1');
+    $result = $sql["char"]->query("SELECT name AS guildName, BankMoney AS bankBalance FROM guild WHERE guildid='".$guild_id."' LIMIT 1");
 
-  if( $sql["char"]->num_rows($result) )
+  if ( $sql["char"]->num_rows($result) )
   {
-    $guild_name  = $sql["char"]->result($result, 0, 'guildName');
-    $bank_gold   = $sql["char"]->result($result, 0, 'bankBalance');
+    $guild_name  = $sql["char"]->result($result, 0, "guildName");
+    $bank_gold   = $sql["char"]->result($result, 0, "bankBalance");
 
     if ( $core == 1 )
-      $result = $sql["char"]->query('SELECT TabId, TabName, TabIcon FROM guild_banktabs WHERE guildid = '.$guild_id.' LIMIT 6');
+      $result = $sql["char"]->query("SELECT TabId, TabName, TabIcon FROM guild_banktabs WHERE guildid='".$guild_id."' LIMIT 6");
     else
-      $result = $sql["char"]->query('SELECT TabId, TabName, TabIcon FROM guild_bank_tab WHERE guildid = '.$guild_id.' LIMIT 6');
+      $result = $sql["char"]->query("SELECT TabId, TabName, TabIcon FROM guild_bank_tab WHERE guildid='".$guild_id."' LIMIT 6");
     $tabs = array();
     while ( $tab = $sql["char"]->fetch_assoc($result) )
     {
@@ -89,12 +85,12 @@ function guild_bank()
           <center>
             <div id="tab">
               <ul>';
-    for( $i=0; $i<6; ++$i )
+    for( $i = 0; $i < 6; ++$i )
     {
       if ( isset($tabs[$i]) )
       {
         $output .= '
-                <li'.(($current_tab == $i) ? ' id="selected"' : '').'>
+                <li'.( ( $current_tab == $i ) ? ' id="selected"' : '' ).'>
                   <a href="guildbank.php?id='.$guild_id.'&amp;tab='.$i.'&amp;realm='.$realmid.'">';
         if ( $tabs[$i]['TabIcon'] == '' )
         {
@@ -104,14 +100,14 @@ function guild_bank()
         else
         {
           // make sure we're looking for the file name with the correct capitalization
-          $ii_query = "SELECT * FROM itemdisplayinfo WHERE LCASE(IconName)='".strtolower($tabs[$i]['TabIcon'])."' LIMIT 1";
+          $ii_query = "SELECT * FROM itemdisplayinfo WHERE LCASE(IconName)='".strtolower($tabs[$i]["TabIcon"])."' LIMIT 1";
           $ii_result = $sql["dbc"]->query($ii_query);
           $ii_fields = $sql["dbc"]->fetch_assoc($ii_result);
-          $tabs[$i]['TabIcon'] = $ii_fields["IconName"];
+          $tabs[$i]["TabIcon"] = $ii_fields["IconName"];
 
-          if ( file_exists(''.$item_icons.'/'.$tabs[$i]['TabIcon'].'.png') )
+          if ( file_exists($item_icons."/".$tabs[$i]["TabIcon"].".png") )
             $output .= '
-                    <img src="'.$item_icons.'/'.$tabs[$i]['TabIcon'].'.png" class="icon_border_0"';
+                    <img src="'.$item_icons."/".$tabs[$i]["TabIcon"].'.png" class="icon_border_0"';
           else
             $output .= '
                     <img src="img/INV/INV_blank_32.gif" class="icon_border_0"';
@@ -131,20 +127,20 @@ function guild_bank()
             <div id="tab_content">';
 
     if ( $core == 1 )
-      $result = $sql["char"]->query('SELECT gbi.SlotId, gbi.itemGuid, ii.entry,
+      $result = $sql["char"]->query("SELECT gbi.SlotId, gbi.itemGuid, ii.entry,
         ii.count AS stack_count,
-        FROM guild_bankitems gbi INNER JOIN playeritems ii on ii.guid = gbi.itemGuid
-        WHERE gbi.guildid = '.$guild_id.' AND TabID = '.$current_tab.'');
+        FROM guild_bankitems gbi INNER JOIN playeritems ii on ii.guid=gbi.itemGuid
+        WHERE gbi.guildid='".$guild_id."' AND TabID='".$current_tab."'");
     elseif ( $core == 2 )
-      $result = $sql["char"]->query('SELECT gbi.SlotId, gbi.item_guid AS itemGuid, gbi.item_entry AS entry, 
-        SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", 15), " ", -1) as stack_count 
-        FROM guild_bank_item gbi INNER JOIN item_instance ii on ii.guid = gbi.item_guid 
-        WHERE gbi.guildid = '.$guild_id.' AND TabID = '.$current_tab.'');
+      $result = $sql["char"]->query("SELECT gbi.SlotId, gbi.item_guid AS itemGuid, gbi.item_entry AS entry, 
+        SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 15), ' ', -1) as stack_count 
+        FROM guild_bank_item gbi INNER JOIN item_instance ii on ii.guid=gbi.item_guid 
+        WHERE gbi.guildid='".$guild_id."' AND TabID='".$current_tab."'");
     else
-      $result = $sql["char"]->query('SELECT gbi.SlotId, gbi.item_guid AS itemGuid, gbi.item_entry AS entry, 
+      $result = $sql["char"]->query("SELECT gbi.SlotId, gbi.item_guid AS itemGuid, gbi.item_entry AS entry, 
         ii.count as stack_count 
-        FROM guild_bank_item gbi INNER JOIN item_instance ii on ii.guid = gbi.item_guid 
-        WHERE gbi.guildid = '.$guild_id.' AND TabID = '.$current_tab.'');
+        FROM guild_bank_item gbi INNER JOIN item_instance ii on ii.guid=gbi.item_guid 
+        WHERE gbi.guildid='".$guild_id."' AND TabID='".$current_tab."'");
         
     $gb_slots = array();
     while ( $tab = $sql["char"]->fetch_assoc($result) )
@@ -156,21 +152,21 @@ function guild_bank()
               <table id="guildbank_tabs">
                 <tr>
                   <td class="bag" align="center">
-                    <div style="width:'.((14*43)+2).'px;height:'.(7*41).'px;">';
+                    <div style="width:'.((14*43)+2).'px; height:'.(7*41).'px;">';
 
     $item_position = 0;
-    for ( $i=0; $i<7; ++$i )
+    for ( $i = 0; $i < 7; ++$i )
     {
-      for ( $j=0; $j<14; ++$j )
+      for ( $j = 0; $j < 14; ++$j )
       {
         $item_position = $j*7+$i;
         if ( isset($gb_slots[$item_position]) )
         {
-          $gb_item_id = $gb_slots[$item_position]['entry'];
-          $stack = ( $gb_slots[$item_position]['stack_count'] == 1 ? '' : $gb_slots[$item_position]['stack_count'] );
+          $gb_item_id = $gb_slots[$item_position]["entry"];
+          $stack = ( $gb_slots[$item_position]["stack_count"] == 1 ? '' : $gb_slots[$item_position]["stack_count"] );
           // this_is_junk: style left hardcoded because it's calculated.
           $output .= '
-                      <div style="left:'.($j*43).'px;top:'.($i*41).'px;">
+                      <div style="left:'.($j*43).'px; top:'.($i*41).'px;">
                         <a id="guildbank_padding" href="'.$base_datasite.$item_datasite.$gb_item_id.'">
                           <img src="'.get_item_icon($gb_item_id).'" alt="" />
                         </a>
@@ -197,7 +193,7 @@ function guild_bank()
             <table class="hidden">
               <tr>
                 <td>';
-                    makebutton(lang("guildbank", "guild"), 'guild.php?action=view_guild&amp;realm='.$realmid.'&amp;error=3&amp;id='.$guild_id.'', 130);
+    makebutton(lang("guildbank", "guild"), 'guild.php?action=view_guild&amp;realm='.$realmid.'&amp;error=3&amp;id='.$guild_id.'', 130);
     $output .= '
                 </td>
               </tr>
@@ -208,7 +204,6 @@ function guild_bank()
   }
   else
     redirect('error.php?err='.lang("guildbank", "notfound"));
-
 }
 
 
@@ -221,8 +216,8 @@ function guild_bank()
 
 //$action = (isset($_GET["action"])) ? $_GET["action"] : NULL;
 
-$output .= "
-      <div class=\"bubble\">";
+$output .= '
+      <div class="bubble">';
 
 guild_bank();
 

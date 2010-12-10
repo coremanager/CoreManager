@@ -36,24 +36,18 @@ function browse_users()
 
   //-------------------SQL Injection Prevention--------------------------------
   $start = ( ( isset($_GET["start"]) ) ? $sql["logon"]->quote_smart($_GET["start"]) : 0 );
-  if ( is_numeric($start) )
-    ;
-  else
+  if ( !is_numeric($start) )
     $start = 0;
 
   $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["logon"]->quote_smart($_GET["order_by"]) : 'acct' );
-  if ( preg_match('/^[_[:lower:]]{1,15}$/', $order_by) )
-    ;
-  else
+  if ( !preg_match('/^[_[:lower:]]{1,15}$/', $order_by) )
     $order_by = 'acct';
 
   $dir = ( ( isset($_GET["dir"]) ) ? $sql["logon"]->quote_smart($_GET["dir"]) : 1 );
-  if ( preg_match('/^[01]{1}$/', $dir) )
-    ;
-  else
+  if ( !preg_match('/^[01]{1}$/', $dir) )
     $dir = 1;
 
-  $order_dir = ( ( $dir ) ? 'ASC' : 'DESC' );
+  $order_dir = ( ( $dir ) ? "ASC" : "DESC" );
   $dir = ( ( $dir ) ? 0 : 1 );
 
   //-------------------Search--------------------------------------------------
@@ -1474,7 +1468,7 @@ function edit_user()
         if ( $core == 1 )
         {
           $output .= '
-                    <option value="0">'.lang("user", "classic").'</option>
+                    <option value="0" '.( ( $data["flags"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("user", "classic").'</option>
                     <option value="8" '.( ( $data["flags"] == 8 ) ? 'selected="selected" ' : '' ).'>'.lang("user", "tbc").'</option>
                     <option value="16" '.( ( $data["flags"] == 16 ) ? 'selected="selected" ' : '' ).'>'.lang("user", "wotlk").'</option>
                     <option value="24" '.( ( $data["flags"] == 24 ) ? 'selected="selected" ' : '' ).'>'.lang("user", "wotlktbc").'</option>';
@@ -1482,7 +1476,7 @@ function edit_user()
         else
         {
           $output .= '
-                    <option value="0">'.lang("user", "classic").'</option>
+                    <option value="0" '.( ( $data["flags"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("user", "classic").'</option>
                     <option value="1" '.( ( $data["flags"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("user", "tbc").'</option>
                     <option value="2" '.( ( $data["flags"] == 2 ) ? 'selected="selected" ' : '' ).'>'.lang("user", "wotlktbc").'</option>';
         }
@@ -1685,7 +1679,6 @@ function edit_user()
   }
   else
     error(lang("global", "err_no_user"));
-
 }
 
 
@@ -1694,7 +1687,8 @@ function edit_user()
 //############################################################################################################
 function doedit_user()
 {
-  global $logon_db, $corem_db, $corem_db, $user_id, $user_lvl, $user_name, $action_permission, $sql;
+  global $logon_db, $corem_db, $corem_db, $user_id, $user_lvl, $defaultoption, $user_name,
+    $action_permission, $sql, $core;
 
   valid_login($action_permission["update"]);
 
@@ -1715,7 +1709,7 @@ function doedit_user()
   $failed = ( ( isset($_POST["failed"]) ) ? $sql["logon"]->quote_smart($_POST["failed"]) : 0 );
   $gmlevel = ( ( isset($_POST["gm"]) ) ? $sql["logon"]->quote_smart($_POST["gm"]) : 0 );
   $seclevel = ( ( isset($_POST["seclvl"]) ) ? $sql["logon"]->quote_smart($_POST["seclvl"]) : 0 );
-  $expansion = ( ( isset($_POST["expansion"]) ) ? $sql["logon"]->quote_smart($_POST["expansion"]) : 1 );
+  $expansion = ( ( isset($_POST["expansion"]) ) ? $sql["logon"]->quote_smart($_POST["expansion"]) : $defaultoption );
   $banned = ( ( isset($_POST["banned"]) ) ? $sql["logon"]->quote_smart($_POST["banned"]) : 0 );
   $locked = ( ( isset($_POST["locked"]) ) ? $sql["logon"]->quote_smart($_POST["locked"]) : 0 );
   $referredby = $sql["logon"]->quote_smart(trim($_POST["referredby"]));
