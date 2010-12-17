@@ -51,21 +51,15 @@ function char_friends()
   }
 
   //==========================$_GET and SECURE========================
-  if ( is_numeric($id) )
-    ;
-  else
+  if ( !is_numeric($id) )
     $id = 0;
 
   $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["char"]->quote_smart($_GET["order_by"]) : 'name' );
-  if ( preg_match('/^[[:lower:]]{1,6}$/', $order_by) )
-    ;
-  else
+  if ( !preg_match('/^[[:lower:]]{1,6}$/', $order_by) )
     $order_by = 'name';
 
   $dir = ( ( isset($_GET["dir"]) ) ? $sql["char"]->quote_smart($_GET["dir"]) : 1 );
-  if ( preg_match('/^[01]{1}$/', $dir) )
-    ;
-  else
+  if ( !preg_match('/^[01]{1}$/', $dir) )
     $dir = 1;
 
   $order_dir = ( ( $dir ) ? 'ASC' : 'DESC' );
@@ -79,11 +73,11 @@ function char_friends()
 
   // getting character data from database
   if ( $core == 1 )
-    $result = $sql["char"]->query('SELECT acct, name, race, class, level, gender
-      FROM characters WHERE guid='.$id.' LIMIT 1');
+    $result = $sql["char"]->query("SELECT acct, name, race, class, level, gender
+      FROM characters WHERE guid='".$id."' LIMIT 1");
   else
-    $result = $sql["char"]->query('SELECT account AS acct, name, race, class, level, gender
-      FROM characters WHERE guid='.$id.' LIMIT 1');
+    $result = $sql["char"]->query("SELECT account AS acct, name, race, class, level, gender
+      FROM characters WHERE guid='".$id."' LIMIT 1");
 
   if ( $sql["char"]->num_rows($result) )
   {
@@ -197,10 +191,10 @@ function char_friends()
       // get is friend of
       if ( $core == 1 )
         $result = $sql["char"]->query("SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
-          FROM characters WHERE guid IN (SELECT character_guid FROM social_friends WHERE friend_guid = '".$id."') ORDER BY '".$order_by."' '".$order_dir."'");
+          FROM characters WHERE guid IN (SELECT character_guid FROM social_friends WHERE friend_guid='".$id."') ORDER BY '".$order_by."' '".$order_dir."'");
       else
         $result = $sql["char"]->query("SELECT name, race, class, map AS mapid, zone AS zoneid, level, gender, online, account AS acct, guid
-          FROM characters WHERE guid IN (SELECT friend FROM character_social WHERE guid = '".$id."' AND flags=1) ORDER BY '".$order_by."' '".$order_dir."'");
+          FROM characters WHERE guid IN (SELECT guid FROM character_social WHERE friend='".$id."' AND flags=1) ORDER BY '".$order_by."' '".$order_dir."'");
 
       if ( $sql["char"]->num_rows($result) )
       {
@@ -256,10 +250,10 @@ function char_friends()
       // get ignores
       if ( $core == 1 )
         $result = $sql["char"]->query("SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
-          FROM characters WHERE guid IN (SELECT ignore_guid FROM social_ignores WHERE character_guid = '".$id."') ORDER BY '".$order_by."' '".$order_dir."'");
+          FROM characters WHERE guid IN (SELECT ignore_guid FROM social_ignores WHERE character_guid='".$id."') ORDER BY '".$order_by."' '".$order_dir."'");
       else
         $result = $sql["char"]->query("SELECT name, race, class, map AS mapid, zone AS zoneid, level, gender, online, account AS acct, guid
-          FROM characters WHERE guid IN (SELECT friend FROM character_social WHERE guid = '".$id."' AND flags=2) ORDER BY '".$order_by."' '".$order_dir."'");
+          FROM characters WHERE guid IN (SELECT friend FROM character_social WHERE guid='".$id."' AND flags=2) ORDER BY '".$order_by."' '".$order_dir."'");
 
       if ( $sql["char"]->num_rows($result) )
       {
@@ -308,10 +302,10 @@ function char_friends()
       // get ignored by
       if ( $core == 1 )
         $result = $sql["char"]->query("SELECT name, race, class, mapid, zoneid, level, gender, online, acct, guid
-          FROM characters WHERE guid IN (SELECT ignore_guid FROM social_ignores WHERE character_guid = '".$id."') ORDER BY '".$order_by."' '".$order_dir."'");
+          FROM characters WHERE guid IN (SELECT ignore_guid FROM social_ignores WHERE character_guid='".$id."') ORDER BY '".$order_by."' '".$order_dir."'");
       else
         $result = $sql["char"]->query("SELECT name, race, class, map AS mapid, zone AS zoneid, level, gender, online, account AS acct, guid
-          FROM characters WHERE guid IN (SELECT friend FROM character_social WHERE guid = '".$id."' AND flags=2) ORDER BY '".$order_by."' '".$order_dir."'");
+          FROM characters WHERE guid IN (SELECT guid FROM character_social WHERE friend='".$id."' AND flags=2) ORDER BY '".$order_by."' '".$order_dir."'");
 
       if ( $sql["char"]->num_rows($result) )
       {

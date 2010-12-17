@@ -396,4 +396,80 @@ function core_name($core_id)
 }
 
 
+//#############################################################################
+// get specific permission of specific page
+function get_page_permission($restrict_lvl, $page)
+{
+  global $sql;
+
+  $menu_array = array();
+  $temp = $sql["mgr"]->query("SELECT * FROM config_top_menus");
+  while ( $tmenus = $sql["mgr"]->fetch_assoc($temp) )
+  {
+    $top = array();
+    $top[0] = $tmenus["Action"];
+    $top[1] = $tmenus["Name"];
+
+    $m = array();
+    $temp_menus = $sql["mgr"]->query("SELECT * FROM config_menus WHERE Menu='".$tmenus["Index"]."' ORDER BY `Order`");
+    while ( $menus = $sql["mgr"]->fetch_assoc($temp_menus) )
+    {
+      if ( $menus["Enabled"] )
+      {
+        $menu = array();
+        array_push($menu,$menus["Action"]);
+        array_push($menu,$menus["Name"]);
+        array_push($menu,$menus["View"]);
+        array_push($menu,$menus["Insert"]);
+        array_push($menu,$menus["Update"]);
+        array_push($menu,$menus["Delete"]);
+        array_push($m, $menu);
+      }
+    }
+
+    $top[2] = $m;
+
+    array_push($menu_array, $top);
+  }
+
+  $action_permission = array();
+  foreach ( $menu_array as $trunk )
+  {
+    // ignore "invisible array" this is for setting security read/write values
+    // for not accessible elements not in the navbar!
+    if ( $trunk[1] == "invisible")
+    {
+      foreach ( $trunk[2] as $branch )
+      {
+        if ( $branch[0] === $page )
+        {
+          $action_permission["view"]   = $branch[2];
+          $action_permission["insert"] = $branch[3];
+          $action_permission["update"] = $branch[4];
+          $action_permission["delete"] = $branch[5];
+        }
+      }
+    }
+    else
+    {
+      foreach ( $trunk[2] as $branch )
+      {
+        if ( $branch[0] === $page )
+        {
+          $action_permission["view"]   = $branch[2];
+          $action_permission["insert"] = $branch[3];
+          $action_permission["update"] = $branch[4];
+          $action_permission["delete"] = $branch[5];
+        }
+      }
+    }
+  }
+  unset($branch);
+  unset($trunk);
+  unset($menu_array);
+
+  return $action_permission[$restrict_lvl];
+}
+
+
 ?>

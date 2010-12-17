@@ -45,9 +45,7 @@ function char_mail()
   }
 
   $id = $sql["char"]->quote_smart($_GET["id"]);
-  if ( is_numeric($id) )
-    ;
-  else
+  if ( !is_numeric($id) )
     $id = 0;
 
   if ( $core == 1 )
@@ -100,7 +98,7 @@ function char_mail()
                   <li><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "reputation").'</a></li>
                   <li><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>
                   <li><a href="char_pvp.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pvp").'</a></li>';
-        if ( ( $owner_name == $user_name ) || ( $user_lvl >= $action_permission["insert"] ) )
+        if ( ( $owner_name == $user_name ) || ( $user_lvl >= get_page_permission("insert", "char_mail.php") ) )
           $output .= '
                   <li id="selected"><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "mail").'</a></li>';
         $output .= '
@@ -246,15 +244,11 @@ function read_mail()
   }
 
   $id = $sql["char"]->quote_smart($_GET["id"]);
-  if ( is_numeric($id) )
-    ;
-  else
+  if ( !is_numeric($id) )
     $id = 0;
 
   $message = $sql["char"]->quote_smart($_GET["message"]);
-  if ( is_numeric($message) )
-    ;
-  else
+  if ( !is_numeric($message) )
     $message = 0;
 
   if ( $core == 1 )
@@ -267,8 +261,8 @@ function read_mail()
   if ( $sql["char"]->num_rows($result) )
   {
     $char = $sql["char"]->fetch_assoc($result);
-    
-    if ( $user_id <> $char["acct"] )
+
+    if ( ( $user_id <> $char["acct"] ) && ( $user_lvl < $action_permission["insert"] ) )
       error(lang("char", "no_permission"));
 
     $owner_acc_id = $sql["char"]->result($result, 0, 'acct');
@@ -304,7 +298,7 @@ function read_mail()
         $output .= '
                   <li><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "reputation").'</a></li>
                   <li><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>';
-        if ( $owner_name == $user_name )
+        if ( ( $owner_name == $user_name ) || ( $user_lvl >= get_page_permission("insert", "char_mail.php") ) )
           $output .= '
                   <li id="selected"><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "mail").'</a></li>';
         $output .= '

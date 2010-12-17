@@ -50,17 +50,13 @@ function char_skill()
   }
 
   $id = $sql["char"]->quote_smart($_GET["id"]);
-  if ( is_numeric($id) )
-    ;
-  else
+  if ( !is_numeric($id) )
     $id = 0;
 
   $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["char"]->quote_smart($_GET["order_by"]) : 1 );
 
   $dir = ( ( isset($_GET["dir"]) ) ? $sql["char"]->quote_smart($_GET["dir"]) : 1 );
-  if ( preg_match('/^[01]{1}$/', $dir) )
-    ;
-  else
+  if ( !preg_match('/^[01]{1}$/', $dir) )
     $dir = 1;
 
   $order_dir = ( ( $dir ) ? 'ASC' : 'DESC' );
@@ -135,7 +131,7 @@ function char_skill()
                   <li><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "reputation").'</a></li>
                   <li id="selected"><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>
                   <li><a href="char_pvp.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pvp").'</a></li>';
-      if ( ( $owner_name == $user_name ) || ( $user_lvl >= $action_permission["insert"] ) )
+      if ( ( $owner_name == $user_name ) || ( $user_lvl >= get_page_permission("insert", "char_mail.php") ) )
         $output .= '
                   <li><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "mail").'</a></li>';
       $output .= '
