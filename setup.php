@@ -27,9 +27,7 @@ require_once("configs/config.php");
 if ( isset($_COOKIE["lang"]) )
 {
   $lang = $_COOKIE["lang"];
-  if ( file_exists('../lang/'.$lang.'.php') )
-    ;
-  else
+  if ( !file_exists('../lang/'.$lang.'.php') )
     $lang = 'english';
 }
 else
@@ -366,7 +364,7 @@ function import_db($dbchost, $dbcport, $dbcuser, $dbcpass, $dbcname)
 
 
   // revision of current structure
-  $base_rev = '72';
+  $base_rev = '162';
 
 
   //#############################################################################
@@ -456,7 +454,7 @@ function import_db($dbchost, $dbcport, $dbcuser, $dbcpass, $dbcname)
       $line = fgets($file);
       $check = explode(' ', $line);
 
-      if ( ( $check[0] != 'INSERT' ) && ( $check[0] != 'UPDATE' ) && ( $check[0] != 'ALTER' ) )
+      if ( ( $check[0] != 'INSERT' ) && ( $check[0] != 'UPDATE' ) && ( $check[0] != 'ALTER' ) && ( $check[0] != 'DROP' ) )
       {
         if ( $check[0] == 'CREATE' )
         {
