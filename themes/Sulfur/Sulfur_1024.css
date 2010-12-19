@@ -1432,6 +1432,14 @@ tr td.rep0
 {
 	width: 70px;
 }
+#ch_item_delete
+{
+  position: absolute;
+	width: 16px;
+  height: 16px;
+  top: -20px;
+  left: 32px;
+}
 
 /* CHAR_ACHIEVE.PHP */
 #ch_ach_info

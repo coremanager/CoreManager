@@ -133,6 +133,19 @@ function char_main()
       }
       $char = $sql["char"]->fetch_assoc($result);
 
+      // find out what mode we're in View or Delete (0 = View, 1 = Delete)
+      $mode = ( ( isset($_GET["mode"]) ) ? $_GET["mode"] : 0 );
+      // only the character's owner or a GM with Delete privs can enter Delete Mode
+      if ( $owner_name != $user_name )
+        if ( $user_lvl < $action_permission["delete"] )
+          $mode = 0;
+      else
+        $mode = $mode;
+
+      // View Mode is only availble on characters that are offline
+      if ( $char["online"] != 0 )
+        $mode = 0;
+
       if ( $core == 1 )
       {
         $char_data = $char["data"];
@@ -625,6 +638,14 @@ function char_main()
                         <img src="'.$equiped_items[1][1].'" class="'.$equiped_items[1][2].'" alt="Head" />
                       </a>';
 
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[1][3]["bag"].'&slot='.$equiped_items[1][3]["slot"].'&item='.$equiped_items[1][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
+
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[1][3]['item_template']);
 
@@ -703,6 +724,14 @@ function char_main()
                         <img src="'.$equiped_items[10][1].'" class="'.$equiped_items[10][2].'" alt="Gloves" />
                       </a>';
 
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[10][3]["bag"].'&slot='.$equiped_items[10][3]["slot"].'&item='.$equiped_items[10][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
+
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[10][3]['item_template']);
 
@@ -731,6 +760,14 @@ function char_main()
                       <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_NECK.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'NECK'.'\');" onmouseout="HideTooltip(\'_b'.'NECK'.'\');">
                         <img src="'.$equiped_items[2][1].'" class="'.$equiped_items[2][2].'" alt="Neck" />
                       </a>';
+
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[2][3]["bag"].'&slot='.$equiped_items[2][3]["slot"].'&item='.$equiped_items[2][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
 
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[2][3]['item_template']);
@@ -795,6 +832,14 @@ function char_main()
                         <img src="'.$equiped_items[6][1].'" class="'.$equiped_items[6][2].'" alt="Belt" />
                       </a>';
 
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[6][3]["bag"].'&slot='.$equiped_items[6][3]["slot"].'&item='.$equiped_items[6][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
+
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[6][3]['item_template']);
 
@@ -824,6 +869,14 @@ function char_main()
                         <img src="'.$equiped_items[3][1].'" class="'.$equiped_items[3][2].'" alt="Shoulder" />
                       </a>';
 
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[3][3]["bag"].'&slot='.$equiped_items[3][3]["slot"].'&item='.$equiped_items[3][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
+
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[3][3]['item_template']);
 
@@ -850,6 +903,14 @@ function char_main()
                       <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_LEGS.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'LEGS'.'\');" onmouseout="HideTooltip(\'_b'.'LEGS'.'\');">
                         <img src="'.$equiped_items[7][1].'" class="'.$equiped_items[7][2].'" alt="Legs" />
                       </a>';
+
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[7][3]["bag"].'&slot='.$equiped_items[7][3]["slot"].'&item='.$equiped_items[7][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
 
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[7][3]['item_template']);
@@ -880,6 +941,14 @@ function char_main()
                         <img src="'.$equiped_items[15][1].'" class="'.$equiped_items[15][2].'" alt="Back" />
                       </a>';
 
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[15][3]["bag"].'&slot='.$equiped_items[15][3]["slot"].'&item='.$equiped_items[15][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
+
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[15][3]['item_template']);
 
@@ -906,6 +975,14 @@ function char_main()
                       <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_FEET.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FEET'.'\');" onmouseout="HideTooltip(\'_b'.'FEET'.'\');">
                         <img src="'.$equiped_items[8][1].'" class="'.$equiped_items[8][2].'" alt="Feet" />
                       </a>';
+
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[8][3]["bag"].'&slot='.$equiped_items[8][3]["slot"].'&item='.$equiped_items[8][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
 
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[8][3]['item_template']);
@@ -935,6 +1012,14 @@ function char_main()
                       <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_CHEST.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'CHEST'.'\');" onmouseout="HideTooltip(\'_b'.'CHEST'.'\');">
                         <img src="'.$equiped_items[5][1].'" class="'.$equiped_items[5][2].'" alt="Chest" />
                       </a>';
+
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[5][3]["bag"].'&slot='.$equiped_items[5][3]["slot"].'&item='.$equiped_items[5][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
 
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[5][3]['item_template']);
@@ -995,6 +1080,14 @@ function char_main()
                         <img src="'.$equiped_items[11][1].'" class="'.$equiped_items[11][2].'" alt="Finger1" />
                       </a>';
 
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[11][3]["bag"].'&slot='.$equiped_items[11][3]["slot"].'&item='.$equiped_items[11][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
+
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[11][3]['item_template']);
 
@@ -1024,6 +1117,14 @@ function char_main()
                         <img src="'.$equiped_items[4][1].'" class="'.$equiped_items[4][2].'" alt="Shirt" />
                       </a>';
 
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[4][3]["bag"].'&slot='.$equiped_items[4][3]["slot"].'&item='.$equiped_items[4][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
+
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[4][3]['item_template']);
 
@@ -1050,6 +1151,14 @@ function char_main()
                       <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_FINGER2.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'FINGER2'.'\');" onmouseout="HideTooltip(\'_b'.'FINGER2'.'\');">
                         <img src="'.$equiped_items[12][1].'" class="'.$equiped_items[12][2].'" alt="Finger2" />
                       </a>';
+
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[12][3]["bag"].'&slot='.$equiped_items[12][3]["slot"].'&item='.$equiped_items[12][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
 
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[12][3]['item_template']);
@@ -1078,6 +1187,14 @@ function char_main()
                       <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_TABARD.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TABARD'.'\');" onmouseout="HideTooltip(\'_b'.'TABARD'.'\');">
                         <img src="'.$equiped_items[19][1].'" class="'.$equiped_items[19][2].'" alt="Tabard" />
                       </a>';
+
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[19][3]["bag"].'&slot='.$equiped_items[19][3]["slot"].'&item='.$equiped_items[19][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
 
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[19][3]['item_template']);
@@ -1131,6 +1248,14 @@ function char_main()
                         <img src="'.$equiped_items[13][1].'" class="'.$equiped_items[13][2].'" alt="Trinket1" />
                       </a>';
 
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[13][3]["bag"].'&slot='.$equiped_items[13][3]["slot"].'&item='.$equiped_items[13][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
+
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[13][3]['item_template']);
 
@@ -1160,6 +1285,14 @@ function char_main()
                         <img src="'.$equiped_items[9][1].'" class="'.$equiped_items[9][2].'" alt="Wrist" />
                       </a>';
 
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[9][3]["bag"].'&slot='.$equiped_items[9][3]["slot"].'&item='.$equiped_items[9][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
+
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[9][3]['item_template']);
 
@@ -1186,6 +1319,14 @@ function char_main()
                       <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_TRINKET2.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'TRINKET2'.'\');" onmouseout="HideTooltip(\'_b'.'TRINKET2'.'\');">
                         <img src="'.$equiped_items[14][1].'" class="'.$equiped_items[14][2].'" alt="Trinket2" />
                       </a>';
+
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[14][3]["bag"].'&slot='.$equiped_items[14][3]["slot"].'&item='.$equiped_items[14][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
 
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[14][3]['item_template']);
@@ -1217,6 +1358,14 @@ function char_main()
                         <img src="'.$equiped_items[16][1].'" class="'.$equiped_items[16][2].'" alt="MainHand" />
                       </a>';
 
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[16][3]["bag"].'&slot='.$equiped_items[16][3]["slot"].'&item='.$equiped_items[16][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
+
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[16][3]['item_template']);
 
@@ -1244,6 +1393,14 @@ function char_main()
                         <img src="'.$equiped_items[17][1].'" class="'.$equiped_items[17][2].'" alt="OffHand" />
                       </a>';
 
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[17][3]["bag"].'&slot='.$equiped_items[17][3]["slot"].'&item='.$equiped_items[17][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
+
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[17][3]['item_template']);
 
@@ -1270,6 +1427,14 @@ function char_main()
                       <a id="char_icon_padding" href="'.$base_datasite.$item_datasite.$EQU_RANGED.'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.'RANGED'.'\');" onmouseout="HideTooltip(\'_b'.'RANGED'.'\');">
                         <img src="'.$equiped_items[18][1].'" class="'.$equiped_items[18][2].'" alt="Ranged" />
                       </a>';
+
+        if ( $mode )
+          $output .= '
+                      <div style="position: relative;">
+                        <a href="char.php?action=delete_item&id='.$id.'&bag='.$equiped_items[18][3]["bag"].'&slot='.$equiped_items[18][3]["slot"].'&item='.$equiped_items[18][3]["item_template"].'&mode='.$mode.'" id="ch_item_delete">
+                          <img src="img/aff_cross.png" />
+                        </a>
+                      </div>';
 
         // build a tooltip object for this item
         $i_fields = get_item_info($equiped_items[18][3]['item_template']);
@@ -1372,6 +1537,14 @@ function char_main()
                 </td>
                 <td>';
       }
+      // show Delete Mode / View Mode button depending on current mode
+      if ( $mode )
+        makebutton(lang("char", "viewmode"), 'char.php?id='.$id.'&realm='.$realmid.'&mode=0" type="def', 130);
+      else
+        makebutton(lang("char", "deletemode"), 'char.php?id='.$id.'&realm='.$realmid.'&mode=1" type="def', 130);
+      $output .= '
+                </td>
+                <td>';
       // only GM with update permission can send mail, mail can send items, so update permission is needed
       if ( $user_lvl >= $action_permission["update"] )
       {
@@ -1422,16 +1595,92 @@ function get_item_info($item)
 }
 
 
+//#############################################################################
+// DELETE ITEM FORM
+//#############################################################################
+function delete_item()
+{
+  global $output, $action_permission;
+
+  valid_login($action_permission["delete"]);
+
+  $output .= '
+          <center>
+            <img src="img/warn_red.gif" width="48" height="48" alt="" />
+              <h1>
+                <font class="error">'.lang("global", "are_you_sure").'</font>
+              </h1>
+              <br />
+              <font class="bold">'.
+                lang("char", "thisitem").'
+                <br />'.
+                lang("global", "will_be_erased").'
+              </font>
+              <br /><br />
+              <table width="300" class="hidden">
+                <tr>
+                  <td>';
+  makebutton(lang("global", "yes"), 'char.php?action=dodelete_item&id='.$_GET["id"].'&bag='.$_GET["bag"].'&slot='.$_GET["slot"].'&item='.$_GET["item"].'&mode='.$_GET["mode"].'" type="wrn', 130);
+  makebutton(lang("global", "no"), 'char.php?id='.$_GET["id"].'&mode='.$_GET["mode"].'" type="def', 130);
+  $output .= '
+                  </td>
+                </tr>
+              </table>
+            </center>';
+}
+
+
+//#############################################################################
+// DELETE ITEM
+//#############################################################################
+function dodelete_item()
+{
+  global $output, $action_permission, $sql, $core;
+
+  valid_login($action_permission["delete"]);
+
+  // get our variables
+  $cid = ( ( isset($_GET["id"]) ) ? $sql["char"]->quote_smart($_GET["id"]) : NULL );
+  $bag = ( ( isset($_GET["bag"]) ) ? $sql["char"]->quote_smart($_GET["bag"]) : NULL );
+  $slot = ( ( isset($_GET["slot"]) ) ? $sql["char"]->quote_smart($_GET["slot"]) : NULL );
+  $item = ( ( isset($_GET["item"]) ) ? $sql["char"]->quote_smart($_GET["item"]) : NULL );
+
+  if ( ( !isset($cid) ) || ( !isset($bag) ) || ( !isset($slot) ) || ( !isset($item) ) )
+    redirect("index.php");
+
+  if ( $core == 1 )
+    $query = "DELETE FROM playeritems WHERE ownerguid='".$cid."' AND entry='".$item."' AND containerslot='".$bag."' AND slot='".$slot."'";
+  else
+  {
+    $query = "SELECT item FROM character_inventory WHERE guid='".$cid."' AND item_template='".$item."' AND bag='".$bag."' AND slot='".$slot."'";
+    $result = $sql["char"]->query($query);
+    $result = $sql["char"]->fetch_assoc($result);
+    $item_guid = $result["item"];
+
+    $query = "DELETE FROM character_inventory WHERE item=".$item_guid;
+  }
+
+  $result = $sql["char"]->query($query);
+
+  redirect("char.php?id=".$cid."&mode=".$_GET["mode"]);
+}
+
+
 //########################################################################################################################
 // MAIN
 //########################################################################################################################
 
-//$action = (isset($_GET["action"])) ? $_GET["action"] : NULL;
+$action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
 $output .= '
       <div class="bubble">';
 
-char_main();
+if ( $action == 'delete_item' )
+  delete_item();
+elseif ( $action == 'dodelete_item' )
+  dodelete_item();
+else
+  char_main();
 
 unset($action_permission);
 
