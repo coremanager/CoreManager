@@ -129,17 +129,20 @@ function guild_bank()
     if ( $core == 1 )
       $result = $sql["char"]->query("SELECT gbi.SlotId, gbi.itemGuid, ii.entry,
         ii.count AS stack_count,
-        FROM guild_bankitems gbi INNER JOIN playeritems ii on ii.guid=gbi.itemGuid
+        FROM guild_bankitems gbi
+          INNER JOIN playeritems ii ON ii.guid=gbi.itemGuid
         WHERE gbi.guildid='".$guild_id."' AND TabID='".$current_tab."'");
     elseif ( $core == 2 )
       $result = $sql["char"]->query("SELECT gbi.SlotId, gbi.item_guid AS itemGuid, gbi.item_entry AS entry, 
         SUBSTRING_INDEX(SUBSTRING_INDEX(data, ' ', 15), ' ', -1) as stack_count 
-        FROM guild_bank_item gbi INNER JOIN item_instance ii on ii.guid=gbi.item_guid 
+        FROM guild_bank_item gbi
+          INNER JOIN item_instance ii ON ii.guid=gbi.item_guid 
         WHERE gbi.guildid='".$guild_id."' AND TabID='".$current_tab."'");
     else
-      $result = $sql["char"]->query("SELECT gbi.SlotId, gbi.item_guid AS itemGuid, gbi.item_entry AS entry, 
+      $result = $sql["char"]->query("SELECT gbi.SlotId, gbi.item_guid AS itemGuid, ii.itemEntry AS entry, 
         ii.count as stack_count 
-        FROM guild_bank_item gbi INNER JOIN item_instance ii on ii.guid=gbi.item_guid 
+        FROM guild_bank_item gbi
+          INNER JOIN item_instance ii ON ii.guid=gbi.item_guid 
         WHERE gbi.guildid='".$guild_id."' AND TabID='".$current_tab."'");
         
     $gb_slots = array();

@@ -121,7 +121,7 @@ function char_inv()
           WHERE character_inventory.guid='".$cid."' ORDER BY bag, slot");
       else
         $result = $sql["char"]->query("SELECT 
-          bag, slot, item_template AS entry, item, 
+          bag, slot, itemEntry AS entry, item, 
           creatorGuid AS creator,
           enchantments AS enchantment, 
           randomPropertyId AS property, 

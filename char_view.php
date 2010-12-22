@@ -133,9 +133,131 @@ function char_view()
       $sk = $b%256;
       $fh = $b2%256;
     }
-    else
+    elseif ( $core == 2 )
     {
       $inv_query = "SELECT * FROM character_inventory WHERE guid='".$id."'";
+      $inv_result = $sql["char"]->query($inv_query);
+
+      while ( $inv_row = $sql["char"]->fetch_assoc($inv_result) )
+      {
+        if ( $inv_row["bag"] == 0 )
+        {
+          switch ( $inv_row["slot"] )
+          {
+            case 0:
+            {
+              $item_head = $inv_row["item_template"];
+              break;
+            }
+            case 1:
+            {
+              $item_neck = $inv_row["item_template"];
+              break;
+            }
+            case 2:
+            {
+              $item_shoulder = $inv_row["item_template"];
+              break;
+            }
+            case 3:
+            {
+              $item_shirt = $inv_row["item_template"];
+              break;
+            }
+            case 4:
+            {
+              $item_chest = $inv_row["item_template"];
+              break;
+            }
+            case 5:
+            {
+              $item_belt = $inv_row["item_template"];
+              break;
+            }
+            case 6:
+            {
+              $item_legs = $inv_row["item_template"];
+              break;
+            }
+            case 7:
+            {
+              $item_feet = $inv_row["item_template"];
+              break;
+            }
+            case 8:
+            {
+              $item_wrist = $inv_row["item_template"];
+              break;
+            }
+            case 9:
+            {
+              $item_gloves = $inv_row["item_template"];
+              break;
+            }
+            case 10:
+            {
+              $item_finger1 = $inv_row["item_template"];
+              break;
+            }
+            case 11:
+            {
+              $item_finger2 = $inv_row["item_template"];
+              break;
+            }
+            case 12:
+            {
+              $item_trinket1 = $inv_row["item_template"];
+              break;
+            }
+            case 13:
+            {
+              $item_trinket2 = $inv_row["item_template"];
+              break;
+            }
+            case 14:
+            {
+              $item_back = $inv_row["item_template"];
+              break;
+            }
+            case 15:
+            {
+              $item_main_hand = $inv_row["item_template"];
+              break;
+            }
+            case 16:
+            {
+              $item_off_hand = $inv_row["item_template"];
+              break;
+            }
+            case 17:
+            {
+              $item_ranged_slot = $inv_row["item_template"];
+              break;
+            }
+            case 18:
+            {
+              // don't bother showing guild tabards
+              if ( $inv_row["item_template"] <> 5976 )
+                $item_tabard = $inv_row["item_template"];
+              break;
+            }
+          }
+        }
+      }
+
+      $b = $char["playerBytes"];
+      $b2 = $char["playerBytes2"];
+      $ha = ($b>>16)%256;
+      $hc = ($b>>24)%256;
+      $fa = ($b>>8)%256;
+      $sk = $b%256;
+      $fh = $b2%256;
+    }
+    else
+    {
+      $inv_query = "SELECT *, itemEntry AS item_template FROM character_inventory
+                      LEFT JOIN item_instance ON item_instance.guid=character_inventory.item
+                    WHERE character_inventory.guid='".$id."'";
       $inv_result = $sql["char"]->query($inv_query);
 
       while ( $inv_row = $sql["char"]->fetch_assoc($inv_result) )

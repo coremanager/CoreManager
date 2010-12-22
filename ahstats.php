@@ -125,7 +125,7 @@ function browse_auctions()
           elseif ( $core == 2 )
             $search_filter = "AND auction.item_template IN(0";
           else
-            $search_filter = "AND auctionhouse.item_template IN(0";
+            $search_filter = "AND item_instance.itemEntry IN(0";
 
           while ( $item = $sql["char"]->fetch_row($result) )
             $search_filter .= ", ".$item[0];
@@ -138,7 +138,7 @@ function browse_auctions()
         elseif ( $core == 2 )
           $search_filter = "AND auction.item_template='".$search_value."'";
         else
-          $search_filter = "AND auctionhouse.item_template='".$search_value."'";
+          $search_filter = "AND item_instance.itemEntry='".$search_value."'";
         break;
       case "seller_name":
         if ( ( ( $search_class >= 0 ) || ( $search_quality >= 0 ) ) && ( !isset($search_value) ) )
@@ -313,7 +313,7 @@ function browse_auctions()
         $post_order_by = "characters.name";
         break;
       case "item":
-        $post_order_by = "auctionhouse.item_template";
+        $post_order_by = "item_instance.itemEntry";
         break;
       case "buyout":
         $post_order_by = "auctionhouse.buyoutprice";
@@ -351,7 +351,7 @@ function browse_auctions()
         AND auction.itemguid=item_instance.guid
       ".$search_filter." ".$order_side." ORDER BY ".$post_order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
   else
-    $query = "SELECT characters.name AS owner_name, auctionhouse.item_template AS item_entry,
+    $query = "SELECT characters.name AS owner_name, item_instance.itemEntry AS item_entry,
       auctionhouse.itemowner AS owner, item_template.name AS itemname, itemguid AS item,
       auctionhouse.buyoutprice AS buyout, auctionhouse.time-unix_timestamp() AS time,
       c2.name AS bidder_name, auctionhouse.buyguid AS bidder, auctionhouse.lastbid AS bid, auctionhouse.startbid,
@@ -360,7 +360,7 @@ function browse_auctions()
       FROM characters, item_instance, ".$world_db[$realm_id]['name'].".item_template, auctionhouse
         LEFT JOIN characters c2 ON c2.guid=auctionhouse.buyguid
       WHERE auctionhouse.itemowner=characters.guid
-        AND auctionhouse.item_template=item_template.entry
+        AND item_instance.itemEntry=item_template.entry
         AND auctionhouse.itemguid=item_instance.guid
       ".$search_filter." ".$order_side." ORDER BY ".$post_order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
 

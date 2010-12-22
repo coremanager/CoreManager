@@ -383,7 +383,8 @@ function char_main()
       {
         $char_equip_query = "SELECT *,
           creatorGuid AS creator, enchantments AS enchantment,
-          randomPropertyId AS property, durability, flags
+          randomPropertyId AS property, durability, flags,
+          itemEntry AS item_template
           FROM character_inventory
             LEFT JOIN item_instance ON character_inventory.item=item_instance.guid
           WHERE character_inventory.guid='".$id."' AND character_inventory.bag=0";
