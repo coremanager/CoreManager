@@ -1,24 +1,24 @@
 <?php
 /*
-    CoreManager，针对ArcEmu、MaNGOS、和TrinityCore的PHP前端网站管理系统
-    版权(C)2010年 CoreManager 项目
-    
+    CoreManager, PHP Front End for ArcEmu, MaNGOS, and TrinityCore
+    Copyright (C) 2010  CoreManager Project
 
-    本程序为免费软件：您可以在自由软件基金会颁布的第三版或任何后续版本（根
-    据您的选择）的 GNU 通用公共许可协议下，重新分发或编辑此软件。
-    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-    此软件的发布目的是期望其变得实用，但不提供任何担保；甚至没有可用性的保
-    证或针对特殊目的的适用性。请查阅 GNU 通用公共许可协议以获得更多细节。
-    
-   
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-    您应该能随此程序，收到一份 GNU 通用公共许可协议的拷贝。如果没有，请查
-    阅<http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*
-    翻译者：Drama
+    Translated by: Drama
 */
 
 // ----- GENERAL ERROR CODES -----
@@ -786,8 +786,8 @@ $GLOBALS['lang_edit'] = array
   'chinese_simplified' => 'Chinese (Simplified)',
   'chinese_traditional' => 'Chinese (Traditional)',
   'french' => 'French',
-  'spanish_spain' => 'Spanish (Spain)',
-  'spanish_mexico' => 'Spanish (Mexico)',
+  'spanish_spain' => 'Spanish (Europe)',
+  'spanish_mexico' => 'Spanish (Latin America)',
   'russian' => 'Russian',
   'korean' => 'Korean',
 );

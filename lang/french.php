@@ -786,8 +786,8 @@ $GLOBALS['lang_edit'] = array
   'chinese_simplified' => 'Chinese (Simplified)',
   'chinese_traditional' => 'Chinese (Traditional)',
   'french' => 'French',
-  'spanish_spain' => 'Spanish (Spain)',
-  'spanish_mexico' => 'Spanish (Mexico)',
+  'spanish_spain' => 'Spanish (Europe)',
+  'spanish_mexico' => 'Spanish (Latin America)',
   'russian' => 'Russian',
   'korean' => 'Korean',
 );
