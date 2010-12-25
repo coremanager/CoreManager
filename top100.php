@@ -24,7 +24,7 @@ valid_login($action_permission["view"]);
 
 function top100($realmid)
 {
-  global $output, $logon_db, $characters_db, $server, $itemperpage, $developer_test_mode,
+  global $output, $logon_db, $characters_db, $dbc_db, $server, $itemperpage, $developer_test_mode,
     $multi_realm_mode, $sql, $core, $site_encoding;
 
   $realm_id = $realmid;
@@ -44,7 +44,8 @@ function top100($realmid)
   if ( !preg_match('/^[_[:lower:]]{1,14}$/', $order_by) )
     $order_by = 'level';
 
-  $dir = ( ( isset($_GET["dir"]) ) ? $sql["char"]->quote_smart($_GET["dir"]) : 1 );
+  // Top 100 should sort DESC by default...
+  $dir = ( ( isset($_GET["dir"]) ) ? $sql["char"]->quote_smart($_GET["dir"]) : 0 );
   if ( !preg_match('/^[01]{1}$/', $dir) )
     $dir = 1;
 
@@ -103,7 +104,8 @@ function top100($realmid)
       CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, ';', ".(PLAYER_FIELD_COMBAT_RATING_1+5)."), ';', -1) AS UNSIGNED) AS spell_hit,
       CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, ';', ".(PLAYER_FIELD_HONOR_CURRENCY+1)."), ';', -1) AS UNSIGNED) AS honor,
       CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, ';', ".(PLAYER_FIELD_LIFETIME_HONORBALE_KILLS+1)."), ';', -1) AS UNSIGNED) AS kills,
-      CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, ';', ".(PLAYER_FIELD_ARENA_CURRENCY+1)."), ';', -1) AS UNSIGNED) AS arena
+      CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, ';', ".(PLAYER_FIELD_ARENA_CURRENCY+1)."), ';', -1) AS UNSIGNED) AS arena,
+      IFNULL((SELECT SUM(points) FROM character_achievement LEFT JOIN coremanager_dbc.achievement ON coremanager_dbc.achievement.id=character_achievement.achievement WHERE character_achievement.guid=characters.guid),0) AS ach_points
       FROM characters 
       ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
   }
@@ -143,7 +145,8 @@ function top100($realmid)
               rangedCritPct AS range_crit,
               power1 AS melee_hit,
               power2 AS range_hit,
-              power3 AS spell_hit
+              power3 AS spell_hit,
+              IFNULL((SELECT SUM(points) FROM character_achievement LEFT JOIN coremanager_dbc.achievement ON coremanager_dbc.achievement.id=character_achievement.achievement WHERE character_achievement.guid=characters.guid),0) AS ach_points
               FROM characters
               LEFT JOIN character_stats ON character_stats.guid=characters.guid
               ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
@@ -230,7 +233,7 @@ function top100($realmid)
             </table>';
   //==========================top tage navigaion ENDS here ========================
   $output .= '
-            <table class="lined" id="top100_mainlist">
+            <table class="lined" id="'.( ( $type == 'level' ) ? 'top100_mainlist_wide' : 'top100_mainlist' ).'">
               <tr>
                 <th width="5%">#</th>
                 <th width="14%">'.lang("top", "name").'</th>
@@ -240,6 +243,7 @@ function top100($realmid)
   if ( $type == 'level' )
   {
     $output .= '
+                <th width="5%"><a href="top100.php?type='.$type.'&amp;order_by=ach_points&amp;start='.$start.'&amp;dir='.$dir.'"'.( ( $order_by == 'ach_points' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("top", "ach_points").'</a></th>
                 <th width="22%">'.lang("top", "guild").'</th>
                 <th width="20%"><a href="top100.php?type='.$type.'&amp;order_by=gold&amp;start='.$start.'&amp;dir='.$dir.'"'.( ( $order_by == 'gold' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("top", "money").'</a></th>
                 <th width="20%"><a href="top100.php?type='.$type.'&amp;order_by=totaltime&amp;start='.$start.'&amp;dir='.$dir.'"'.( ( $order_by == 'totaltime' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("top", "time_played").'</a></th>';
@@ -349,6 +353,7 @@ function top100($realmid)
         $time .= $hours.' hours';
 
       $output .= '
+                <td>'.$char["ach_points"].'</td>
                 <td><a href="guild.php?action=view_guild&amp;realm='.$realm_id.'&amp;error=3&amp;id='.$guild_name.'">'.htmlentities($guild_name, ENT_COMPAT, $site_encoding).'</a></td>
                 <td align="right">
                   '.substr($char["gold"],  0, -4).'<img src="img/gold.gif" alt="" align="middle" />

@@ -1350,6 +1350,7 @@ $GLOBALS['lang_top'] = array
   'class' => 'Class',
   'level' => 'Level',
   'guild' => 'Guild',
+  'ach_points' => 'Ach. Points',
   'money' => 'Money',
   'rank' => 'Rank',
   'honor_points' => 'Honor',
