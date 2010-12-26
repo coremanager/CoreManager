@@ -1794,7 +1794,7 @@ function doedit_user()
   $sec_level_result = $sql["mgr"]->query($sec_level_query);
   $sec_level_fields = $sql["mgr"]->fetch_assoc($sec_level_result);
 
-  if ( ( $sec_level_fields["SecurityLevel"] != NULL ) && ( $sec_level_fields["SecurityLevel"] != $seclevel ) )
+  if ( ( $sec_level_fields["SecurityLevel"] != NULL ) || ( $sec_level_fields["SecurityLevel"] != $seclevel ) )
     $sec_level_query = "UPDATE config_accounts SET SecurityLevel='".$seclevel."' WHERE Login=(".$acct_name_query.")";
   else
     $sec_level_query = "INSERT INTO config_accounts (Login, SecurityLevel) VALUES ((".$acct_name_query."), '".$seclevel."')";
