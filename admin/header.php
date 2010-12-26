@@ -21,12 +21,10 @@
 // HEADER SECTION
 //#############################################################################
 
-if ( isset($_COOKIE['lang']) )
+if ( isset($_COOKIE["lang"]) )
 {
-  $lang = $_COOKIE['lang'];
-  if ( file_exists('../lang/'.$lang.'.php') )
-    ;
-  else
+  $lang = $_COOKIE["lang"];
+  if ( !file_exists("../lang/".$lang.".php") )
     $lang = $language;
 }
 else
@@ -36,17 +34,17 @@ require_once 'lang/'.$lang.'.php';
 
 require_once 'libs/lang_lib.php';
 
-header('Content-Type: text/html; charset='.$site_encoding);
-header('Expires: Tue, 01 Jan 2000 00:00:00 GMT');
-header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Cache-Control: post-check=0, pre-check=0', false);
-header('Pragma: no-cache');
+header("Content-Type: text/html; charset=".$site_encoding);
+header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 $output .= '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>'.lang('admin', 'title').'</title>
+    <title>'.lang("admin", "title").'</title>
     <meta http-equiv="Content-Type" content="text/html; charset='.$site_encoding.'" />
     <meta http-equiv="Content-Type" content="text/javascript; charset='.$site_encoding.'" />
     <link rel="stylesheet" type="text/css" href="admin/admin.css" />
@@ -57,12 +55,12 @@ $output .= '
 
   <body>';
 
-if ( isset($_GET['section']) )
-  $section = $_GET['section'];
+if ( isset($_GET["section"]) )
+  $section = $_GET["section"];
 else
   redirect("admin.php?section=databases");
 
-if ( !isset($_GET['error']) )
+if ( !isset($_GET["error"]) )
   $output .= '
     <div id="header">';
 else
@@ -70,14 +68,30 @@ else
     <div id="header_error">';
 $output .= '
       <ul>
-        <li'.( ( $section == 'databases' ) ? ' class="current" ' : '' ).'><a href="admin.php?section=databases">'.lang('admin', 'database').'</a></li>
-        <li'.( ( $section == 'general' ) ? ' class="current" ' : '' ).'><a href="admin.php?section=general&amp;subsection=version">'.lang('admin', 'general').'</a></li>
-        <li'.( ( $section == 'servers' ) ? ' class="current" ' : '' ).'><a href="admin.php?section=servers">'.lang('admin', 'servers').'</a></li>
-        <li'.( ( $section == 'gmlevels' ) ? ' class="current" ' : '' ).'><a href="admin.php?section=gmlevels">'.lang('admin', 'gm_levels').'</a></li>
-        <li'.( ( $section == 'menus' ) ? ' class="current" ' : '' ).'><a href="admin.php?section=menus">'.lang('admin', 'menus').'</a></li>
-        <li'.( ( $section == 'forum' ) ? ' class="current" ' : '' ).'><a href="admin.php?section=forum">'.lang('admin', 'forum').'</a></li>
-        <li'.( ( $section == 'accounts' ) ? ' class="current" ' : '' ).'><a href="admin.php?section=accounts">'.lang('admin', 'accounts').'</a></li>
-        <li><a href="index.php">'.lang('admin', 'main').'</a></li>
+        <li'.( ( $section == "databases" ) ? ' class="current" ' : '' ).'>
+          <a href="admin.php?section=databases">'.lang("admin", "database").'</a>
+        </li>
+        <li'.( ( $section == "general" ) ? ' class="current" ' : '' ).'>
+          <a href="admin.php?section=general&amp;subsection=version">'.lang("admin", "general").'</a>
+        </li>
+        <li'.( ( $section == "servers" ) ? ' class="current" ' : '' ).'>
+          <a href="admin.php?section=servers">'.lang("admin", "servers").'</a>
+        </li>
+        <li'.( ( $section == "gmlevels" ) ? ' class="current" ' : '' ).'>
+          <a href="admin.php?section=gmlevels">'.lang("admin", "gm_levels").'</a>
+        </li>
+        <li'.( ( $section == "menus" ) ? ' class="current" ' : '' ).'>
+          <a href="admin.php?section=menus">'.lang("admin", "menus").'</a>
+        </li>
+        <li'.( ( $section == "forum" ) ? ' class="current" ' : '' ).'>
+          <a href="admin.php?section=forum">'.lang("admin", "forum").'</a>
+        </li>
+        <li'.( ( $section == "accounts" ) ? ' class="current" ' : '' ).'>
+          <a href="admin.php?section=accounts">'.lang("admin", "accounts").'</a>
+        </li>
+        <li>
+          <a href="index.php">'.lang("admin", "main").'</a>
+        </li>
       </ul>
     </div>';
 

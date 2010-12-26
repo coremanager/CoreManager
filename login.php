@@ -403,7 +403,7 @@ $output .= '
 
 $action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
-if ('dologin' === $action)
+if ( $action === 'dologin' )
   dologin();
 else
   login();

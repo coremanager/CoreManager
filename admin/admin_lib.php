@@ -23,23 +23,21 @@ function valid_login_webadmin($restrict_lvl)
 {
   global $sqlm;
 
-  if ( isset($_SESSION['login']) )
+  if ( isset($_SESSION["login"]) )
   {
-    $query = "SELECT * FROM config_accounts WHERE Login='".$_SESSION['login']."'";
+    $query = "SELECT * FROM config_accounts WHERE Login='".$_SESSION["login"]."'";
     $user = $sqlm->fetch_assoc($sqlm->query($query));
 
-    $user_lvl = $user['WebAdmin'];
-    $ip = ( ( isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR') );
-    if ( $ip === $_SESSION['client_ip'] )
-      ;
-    else
-      header('Location: '.'admin_login.php');
+    $user_lvl = $user["WebAdmin"];
+    $ip = ( ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv("REMOTE_ADDR") );
+    if ( !$ip === $_SESSION["client_ip"] )
+      header("Location: admin_login.php");
   }
   else
-    header('Location: '.'admin_login.php');
+    header("Location: admin_login.php");
 
   if ( $user_lvl < 1 )
-    header('Location: '.'admin_login.php?error=5');
+    header("Location: admin_login.php?error=5");
 }
 
 
@@ -52,7 +50,7 @@ function sec_level_name($sec)
   $query = "SELECT * FROM config_gm_level_names WHERE Security_Level='".$sec."'";
   $fields = $sqlm->fetch_assoc($sqlm->query($query));
   
-  return $fields['Full_Name'];
+  return $fields["Full_Name"];
 }
 
 
@@ -70,8 +68,8 @@ function sec_level_list()
   while ( $row = $sqlm->fetch_assoc($fields) )
   {
     $outrow = array();
-    $outrow['Sec'] = $row['Security_Level'];
-    $outrow['Name'] = $row['Full_Name'];
+    $outrow["Sec"] = $row["Security_Level"];
+    $outrow["Name"] = $row["Full_Name"];
     array_push($out, $outrow);
   }
   
@@ -91,10 +89,10 @@ function error($err)
 // Realm Icons for Servers Tab
 $get_icon_type = array
 (
-  0 => array( 0, 'normal'),
-  1 => array( 1, 'pvp'),
-  6 => array( 6, 'rp'),
-  8 => array( 8, 'rppvp'),
+  0 => array( 0, "normal"),
+  1 => array( 1, "pvp"),
+  6 => array( 6, "rp"),
+  8 => array( 8, "rppvp"),
 );
 
 
@@ -102,22 +100,22 @@ $get_icon_type = array
 // Realm Timezones for Servers Tab
 $get_timezone_type = array
 (
-  0 => array( 0, 'undefined'),
-  1 => array( 1, 'development'),
-  2 => array( 2, 'united_states'),
-  3 => array( 3, 'oceanic'),
-  4 => array( 4, 'latin_america'),
-  5 => array( 5, 'tournament'),
-  6 => array( 6, 'korea'),
-  8 => array( 8, 'english'),
-  9 => array( 9, 'german'),
- 10 => array(10, 'french'),
- 11 => array(11, 'spanish'),
- 12 => array(12, 'russian'),
- 14 => array(14, 'taiwan'),
- 16 => array(16, 'china'),
- 26 => array(26, 'test_server'),
- 28 => array(28, 'qa_server'),
+  0 => array( 0, "undefined"),
+  1 => array( 1, "development"),
+  2 => array( 2, "united_states"),
+  3 => array( 3, "oceanic"),
+  4 => array( 4, "latin_america"),
+  5 => array( 5, "tournament"),
+  6 => array( 6, "korea"),
+  8 => array( 8, "english"),
+  9 => array( 9, "german"),
+ 10 => array(10, "french"),
+ 11 => array(11, "spanish"),
+ 12 => array(12, "russian"),
+ 14 => array(14, "taiwan"),
+ 16 => array(16, "china"),
+ 26 => array(26, "test_server"),
+ 28 => array(28, "qa_server"),
 );
 
 
