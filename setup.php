@@ -27,7 +27,7 @@ require_once("configs/config.php");
 if ( isset($_COOKIE["lang"]) )
 {
   $lang = $_COOKIE["lang"];
-  if ( !file_exists('../lang/'.$lang.'.php') )
+  if ( !file_exists('lang/'.$lang.'.php') )
     $lang = 'english';
 }
 else
