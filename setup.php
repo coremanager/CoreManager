@@ -429,12 +429,15 @@ function import_db($dbchost, $dbcport, $dbcuser, $dbcpass, $dbcname)
   $dirArray = array();
   while ( $entryName = readdir($myDirectory) )
   {
-    if ( !is_dir($entryName) )
+    if ( ( $entryName != "." ) && ( $entryName != ".." ) )
     {
-      $check = explode("_", $entryName);
+      if ( !is_dir($entryName) )
+      {
+        $check = explode("_", $entryName);
 
-      if ( $check[0] > $base_rev )
-        $dirArray[] = $entryName;
+        if ( $check[0] > $base_rev )
+          $dirArray[] = $entryName;
+      }
     }
   }
 
