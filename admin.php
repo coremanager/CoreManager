@@ -2746,7 +2746,7 @@ function menus()
     {
       $top_index = $sqlm->quote_smart($_GET["top_index"]);
       $top_name = $sqlm->quote_smart($_GET["top_name"]);
-      $top_action = $sqlm->quote_smart($_GET["top_action"]);
+      $top_action = $sqlm->quote_smart($_GET["menu_action"]);
       $result = $sqlm->query("UPDATE config_top_menus SET Name='".$top_name."', Action='".$top_action."' WHERE `Index`='".$top_index."'");
       redirect("admin.php?section=menus");
       break;
