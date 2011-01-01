@@ -18,8 +18,8 @@
 */
 
 
-require_once 'header.php';
-require_once 'libs/char_lib.php';
+require_once "header.php";
+require_once "libs/char_lib.php";
 valid_login($action_permission["view"]);
 
 //#############################################################################
@@ -35,7 +35,7 @@ function browse_guilds()
   if ( !is_numeric($start) )
     $start = 0;
 
-  $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["char"]->quote_smart($_GET["order_by"]) : 'gid' );
+  $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["char"]->quote_smart($_GET["order_by"]) : "gid" );
   if ( !preg_match('/^[_[:lower:]]{1,10}$/', $order_by) )
     $order_by = 'gid';
 
@@ -95,11 +95,11 @@ function browse_guilds()
       else
         $result = $sql["logon"]->query("SELECT username AS login FROM account WHERE id='".$data["macct"]."'");
 
-      $uname = $sql["logon"]->result($result, 0, 'login');
+      $uname = $sql["logon"]->result($result, 0, "login");
 
       $result = $sql["mgr"]->query("SELECT SecurityLevel FROM config_accounts WHERE Login='".$uname."'");
 
-      $owner_gmlvl = $sql["logon"]->result($result, 0, 'SecurityLevel');
+      $owner_gmlvl = $sql["logon"]->result($result, 0, "SecurityLevel");
       if ( !isset($owner_gmlvl) )
         $owner_gmlvl = 0;
 
@@ -133,9 +133,9 @@ function browse_guilds()
     $search_by = $sql["char"]->quote_smart($_GET["search_by"]);
     $search_value = $sql["char"]->quote_smart($_GET["search_value"]);
 
-    $search_menu = array('name', 'leadername', 'guildid');
+    $search_menu = array("name", "leadername", "guildid");
     if ( !in_array($search_by, $search_menu) )
-      $search_by = 'name';
+      $search_by = "name";
 
     switch ( $search_by )
     {
@@ -264,6 +264,10 @@ function browse_guilds()
   //==========================Browse/Search Guilds CHECK end===================
   //==========================Browse/Search Guilds=============================
 
+  // a little XSS overhead
+  $search_by = htmlspecialchars($search_by);
+  $search_value = htmlspecialchars($search_value);
+
   $output .= '
         <center>
           <table class="top_hidden">
@@ -276,9 +280,9 @@ function browse_guilds()
                         <input type="hidden" name="error" value="4" />
                         <input type="text" size="24" name="search_value" value="'.$search_value.'" />
                         <select name="search_by">
-                          <option value="name" '.( ( $search_by == 'name' ) ? ' selected="selected"' : '' ).'>'.lang("guild", "by_name").'</option>
-                          <option value="leadername" '.( ( $search_by == 'leadername' ) ? ' selected="selected"' : '' ).'>'.lang("guild", "by_guild_leader").'</option>
-                          <option value="guildid" '.( ( $search_by == 'guildid' ) ? ' selected="selected"' : '' ).'>'.lang("guild", "by_id").'</option>
+                          <option value="name" '.( ( $search_by == "name" ) ? ' selected="selected"' : '' ).'>'.lang("guild", "by_name").'</option>
+                          <option value="leadername" '.( ( $search_by == "leadername" ) ? ' selected="selected"' : '' ).'>'.lang("guild", "by_guild_leader").'</option>
+                          <option value="guildid" '.( ( $search_by == "guildid" ) ? ' selected="selected"' : '' ).'>'.lang("guild", "by_id").'</option>
                         </select>
                       </form>
                     </td>
@@ -306,13 +310,13 @@ function browse_guilds()
                   </td>
                 </tr>
                 <tr>
-                  <th width="5%"><a href="guild.php?order_by=gid&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='gid' ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "id").'</a></th>
-                  <th width="30%"><a href="guild.php?order_by=guildname&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='guildname' ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "guild_name").'</a></th>
-                  <th width="20%"><a href="guild.php?order_by=lname&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='lname' ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "guild_leader").'</a></th>
-                  <th width="10%"><a href="guild.php?order_by=lfaction&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='lfaction' ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "guild_faction").'</a></th>
-                  <th width="15%"><a href="guild.php?order_by=tot_chars&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='tot_chars' ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "tot_members").'</a></th>
+                  <th width="5%"><a href="guild.php?order_by=gid&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( ( $order_by == "gid" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "id").'</a></th>
+                  <th width="30%"><a href="guild.php?order_by=guildname&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( ( $order_by == "guildname" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "guild_name").'</a></th>
+                  <th width="20%"><a href="guild.php?order_by=lname&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( ( $order_by == "lname" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "guild_leader").'</a></th>
+                  <th width="10%"><a href="guild.php?order_by=lfaction&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( ( $order_by == "lfaction" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "guild_faction").'</a></th>
+                  <th width="15%"><a href="guild.php?order_by=tot_chars&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( ( $order_by == "tot_chars" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "tot_members").'</a></th>
                   <th width="20%">'.lang("guild", "info").'</th>
-                  <th width="20%"><a href="guild.php?order_by=createdate&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( $order_by=='createdate' ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "create_date").'</a></th>
+                  <th width="20%"><a href="guild.php?order_by=createdate&amp;start='.$start.'&amp;dir='.$dir.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : "" ).'">'.( ( $order_by == "createdate" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : "" ).lang("guild", "create_date").'</a></th>
                 </tr>';
   while ( $data = $sql["char"]->fetch_assoc($query) )
   {
@@ -336,7 +340,7 @@ function browse_guilds()
                   <td><img src="img/'.( ( $data["lfaction"] == 0 ) ? "alliance" : "horde" ).'_small.gif" alt="" /></td>
                   <td>'.$data["tot_chars"].'</td>
                   <td>'.$data["info"].'</td>
-                  <td class="small">'.date('o-m-d', $data["createdate"]).'</td>
+                  <td class="small">'.date("o-m-d", $data["createdate"]).'</td>
                 </tr>';
   }
   $output .= '

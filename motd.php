@@ -18,9 +18,9 @@
 */
 
 
-require_once 'header.php';
-require_once 'libs/bb2html_lib.php';
-valid_login($action_permission["insert"],'Insert');
+require_once "header.php";
+require_once "libs/bb2html_lib.php";
+valid_login($action_permission["insert"], "Insert");
 
 //#############################################################################
 // BROWSE MOTDs

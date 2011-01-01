@@ -78,11 +78,11 @@ function edit_user()
                 <table class="flat">
                   <tr>
                     <td>'.lang("edit", "id").':</td>
-                    <td>'.$user_id.'</td>
+                    <td>'.htmlspecialchars($user_id).'</td>
                   </tr>
                   <tr>
                     <td>'.lang("edit", "username").':</td>
-                    <td>'.$user_name.'</td>
+                    <td>'.htmlspecialchars($user_name).'</td>
                   </tr>';
     if ( !$screen_name["ScreenName"] )
     {
@@ -97,7 +97,7 @@ function edit_user()
       $output .= '
                   <tr>
                     <td>'.lang("edit", "screenname").':</td>
-                    <td>'.$screen_name["ScreenName"].'</td>
+                    <td>'.htmlspecialchars($screen_name["ScreenName"]).'</td>
                   </tr>';
     }
     $output .= '
@@ -131,7 +131,7 @@ function edit_user()
                       <input type="text" name="referredby" size="20" maxlength="12" value="'.$referred_by.'" /> ('.lang("user", "charname").')';
     else
       $output .= '
-                    '.$referred_by.'';
+                    '.htmlspecialchars($referred_by).'';
     $output .= '
                     </td>
                   </tr>
@@ -141,7 +141,7 @@ function edit_user()
                   </tr>
                   <tr>
                     <td>'.lang("edit", "last_ip").':</td>
-                    <td>'.$acc["lastip"].'</td>
+                    <td>'.htmlspecialchars($acc["lastip"]).'</td>
                   </tr>';
     if ( $expansion_select )
     {
@@ -653,7 +653,7 @@ function doedit_user()
         $file_name = "lang/mail_templates/".$lang."/change_email.tpl";
       else
         $file_name = "lang/mail_templates/".$lang."/change_email_nohtml.tpl";
-      $fh = fopen($file_name, 'r');
+      $fh = fopen($file_name, "r");
       $subject = fgets($fh, 4096);
       $body = fread($fh, filesize($file_name));
       fclose($fh);
@@ -728,9 +728,9 @@ function doedit_user()
   if ( ( $override != $_COOKIE["override_remember_me"] ) || ( !isset($_COOKIE["override_remember_me"]) ) )
   {
     if ( $override )
-      setcookie('override_remember_me', '1', time()+60*60*24*30);
+      setcookie("override_remember_me", "1", time()+60*60*24*30);
     else
-      setcookie('override_remember_me', '0', time()+60*60*24*30);
+      setcookie("override_remember_me", "0", time()+60*60*24*30);
 
     $other_changes = 1;
   }
@@ -850,14 +850,23 @@ function profile_set()
   $class = $sql["logon"]->quote_smart($_GET["avatarclass"]);
   $level = $sql["logon"]->quote_smart($_GET["avatarlevel"]);
 
+  // for a little more XSS coverage we'll compare the
+  // mysql_real_escape_string (quote_smart we used above) of info & signatures with their htmlspecialchars
+  // if we fail, we set them to empty strings
+  if ( !( htmlspecialchars($_GET["profileinfo"]) == $info ) )
+    $info = "";
+
+  if ( !( htmlspecialchars($_GET["signature"]) == $signature ) )
+    $signature = "";
+
   // gm's can't change their avatars
   if ( $user_lvl == 0 )
   {
     if ( !is_numeric($level) && ( ( $level < 1 ) || ( $level > 80 ) ) )
-      redirect('edit.php?error=7');
+      redirect("edit.php?error=7");
 
     if ( $_GET["use_default"] )
-      $avatar = '';
+      $avatar = "";
     else
       $avatar = $gender.' '.$race.' '.$class.' '.$level;
   }
@@ -867,9 +876,9 @@ function profile_set()
   $sql["mgr"]->query($query);
 
   if ( $sql["mgr"]->affected_rows() )
-    redirect('edit.php?error=3');
+    redirect("edit.php?error=3");
   else
-    redirect('edit.php?error=4');
+    redirect("edit.php?error=4");
 }
 
 
@@ -917,7 +926,7 @@ function cancel_email_change()
   $cancel_query = "UPDATE config_accounts SET TempEmail='' WHERE Login='".$user_name."'";
   $sql["mgr"]->query($cancel_query);
 
-  redirect('edit.php');
+  redirect("edit.php");
 }
 
 //###############################################################################################################
@@ -964,17 +973,17 @@ $output .= '
 
 $action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
-if ( $action == 'doedit_user' )
+if ( $action == "doedit_user" )
   doedit_user();
-elseif ( $action == 'lang_set' )
+elseif ( $action == "lang_set" )
   lang_set();
-elseif ( $action == 'theme_set' )
+elseif ( $action == "theme_set" )
   theme_set();
-elseif ( $action == 'profile_set' )
+elseif ( $action == "profile_set" )
   profile_set();
-elseif ( $action == 'confirm_email' )
+elseif ( $action == "confirm_email" )
   confirm_email();
-elseif ( $action == 'cancel_email_change' )
+elseif ( $action == "cancel_email_change" )
   cancel_email_change();
 else
   edit_user();
@@ -982,6 +991,6 @@ else
 unset($action);
 unset($action_permission);
 
-require_once 'footer.php';
+require_once "footer.php";
 
 ?>

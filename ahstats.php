@@ -35,7 +35,7 @@ function browse_auctions()
 
   $red = '"#DD5047"';
   $blue = '"#0097CD"';
-  $sidecolor = array(1 => $blue,2 => $red,3 => $blue,4 => $blue,5 => $red,6 => $red,7 => $blue,8 => $red,10 => $red);
+  $sidecolor = array(1 => $blue, 2 => $red, 3 => $blue, 4 => $blue, 5 => $red, 6 => $red, 7 => $blue, 8 => $red, 10 => $red);
   $hiddencols = array(1, 8, 9, 10);
 
   //==========================$_GET and SECURE=================================
@@ -55,14 +55,14 @@ function browse_auctions()
   $dir = ( ( $dir ) ? 0 : 1 );
   //==========================$_GET and SECURE end=============================
 
-  if ( !$user_lvl && !$server[$realm_id]['both_factions'] )
+  if ( !$user_lvl && !$server[$realm_id]["both_factions"] )
   {
     $result = $sql["char"]->query("SELECT race FROM characters
       WHERE account=".$user_id." AND totaltime=(SELECT MAX(totaltime) FROM characters WHERE account=".$user_id.")
       LIMIT 1");
     if ( $sql["char"]->num_rows($result) )
     {
-      $order_side = ( ( in_array($sql["char"]->result($result, 0, 'race'), array(2, 5, 6, 8, 10)) ) ?
+      $order_side = ( ( in_array($sql["char"]->result($result, 0, "race"), array(2, 5, 6, 8, 10)) ) ?
       " AND characters.race IN (2,5,6,8,10) " : " AND characters.race IN (1,3,4,7,11) " );
     }
     else
@@ -366,7 +366,13 @@ function browse_auctions()
 
   $result = $sql["char"]->query($query);
 
-  $all_record = $sql["char"]->result($query_1,0);
+  $all_record = $sql["char"]->result($query_1, 0);
+
+  // give ourselves a little less XSS
+  $search_value = htmlspecialchars($search_value);
+  $search_by = htmlspecialchars($search_by);
+  $search_class = htmlspecialchars($search_class);
+  $search_quality = htmlspecialchars($search_quality);
 
   //=====================top tage navigaion starts here========================
   $output .= '
@@ -383,10 +389,10 @@ function browse_auctions()
                       </td>
                       <td>
                         <select name="search_by">
-                          <option'.( $search_by == 'item_name' ? ' selected="selected"' : '' ).' value="item_name">'.lang("auctionhouse", "item_name").'</option>
-                          <option'.( $search_by == 'item_id' ? ' selected="selected"' : '' ).' value="item_id">'.lang("auctionhouse", "item_id").'</option>
-                          <option'.( $search_by == 'seller_name' ? ' selected="selected"' : '' ).' value="seller_name">'.lang("auctionhouse", "seller_name").'</option>
-                          <option'.( $search_by == 'buyer_name' ? ' selected="selected"' : '' ).' value="buyer_name">'.lang("auctionhouse", "buyer_name").'</option>
+                          <option'.( $search_by == "item_name" ? ' selected="selected"' : '' ).' value="item_name">'.lang("auctionhouse", "item_name").'</option>
+                          <option'.( $search_by == "item_id" ? ' selected="selected"' : '' ).' value="item_id">'.lang("auctionhouse", "item_id").'</option>
+                          <option'.( $search_by == "seller_name" ? ' selected="selected"' : '' ).' value="seller_name">'.lang("auctionhouse", "seller_name").'</option>
+                          <option'.( $search_by == "buyer_name" ? ' selected="selected"' : '' ).' value="buyer_name">'.lang("auctionhouse", "buyer_name").'</option>
                         </select>
                       </td>
                       <td>

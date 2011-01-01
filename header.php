@@ -20,9 +20,7 @@
 
 $time_start = microtime(true);
 // resuming login session if available, or start new one
-if ( ini_get('session.auto_start') )
-  ;
-else
+if ( !ini_get('session.auto_start') )
   session_start();
 
 //---------------------Load Default and User Configuration---------------------
@@ -131,11 +129,9 @@ $output .= '
 
 // check for host php script execution time limit,
 //  warn user if it is not high enough for CoreManager to run
-if ( ini_get('max_execution_time') < 1800 )
+if ( ini_get("max_execution_time") < 1800 )
 {
-  if ( ini_set('max_execution_time',0) )
-    ;
-  else
+  if ( !ini_set("max_execution_time", 0) )
     error('Error - max_execution_time not set.<br /> Please set it manually to 0, in php.ini for full functionality.');
 }
 

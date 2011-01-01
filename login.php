@@ -18,7 +18,7 @@
 */
 
 
-require_once 'header.php';
+require_once "header.php";
 
 //#############################################################################
 // Login
@@ -92,7 +92,7 @@ function dologin()
     if ( $core == 1 )
       $acct = $sql["logon"]->result($result, 0, 'acct');
     else
-      $acct = $sql["logon"]->result($result, 0, 'id');
+      $acct = $sql["logon"]->result($result, 0, "id");
 
     if ( $core == 1 )
       $ban_query = "SELECT banned FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
@@ -101,35 +101,35 @@ function dologin()
 
     if ($sql["logon"]->result($sql["logon"]->query($ban_query), 0))
     {
-      redirect('login.php?error=3');
+      redirect("login.php?error=3");
     }
     else
     {
       $_SESSION["user_id"] = $acct;
       if ( $core == 1 )
-        $_SESSION["login"] = $sql["logon"]->result($result, 0, 'login');
+        $_SESSION["login"] = $sql["logon"]->result($result, 0, "login");
       else
-        $_SESSION["login"] = $sql["logon"]->result($result, 0, 'username');
+        $_SESSION["login"] = $sql["logon"]->result($result, 0, "username");
       // if we got a screen name, we'll want it later.
       $_SESSION["screenname"] = $name["ScreenName"];
       //gets our numerical level based on Security Level.
       $_SESSION["user_lvl"] = gmlevel($temp["gm"]);
       $_SESSION["realm_id"] = $sql["logon"]->quote_smart($_POST["realm"]);
-      $_SESSION["client_ip"] = ( ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv('REMOTE_ADDR') );
+      $_SESSION["client_ip"] = ( ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv("REMOTE_ADDR") );
       $_SESSION["logged_in"] = true;
 
       if ( isset($_POST["remember"]) && $_POST["remember"] != '' )
       {
-        setcookie(   'login', $_SESSION["login"], time()+60*60*24*30);
-        setcookie('realm_id', $_SESSION["realm_id"], time()+60*60*24*30);
-        setcookie('password', $user_pass, time()+60*60*24*30);
+        setcookie(   "login", bin2hex(gzcompress($_SESSION["login"])), time() + 60*60*24*30);
+        setcookie("password", bin2hex(gzcompress($user_pass)), time() + 60*60*24*30);
+        setcookie("realm_id", $_SESSION["realm_id"], time() + 60*60*24*30);
       }
-      redirect('index.php');
+      redirect("index.php");
     }
   }
   else
   {
-    redirect('login.php?error=1');
+    redirect("login.php?error=1");
   }
 }
 
@@ -227,8 +227,8 @@ function login()
                   <tr align="right">
                     <td colspan="3">
                       <input type="submit" value="" style="display:none" />';
-                        makebutton(lang("login", "not_registrated"), 'register.php" type="wrn', 130);
-                        makebutton(lang("login", "login"), 'javascript:dologin()" type="def', 130);
+  makebutton(lang("login", "not_registrated"), 'register.php" type="wrn', 130);
+  makebutton(lang("login", "login"), 'javascript:dologin()" type="def', 130);
   $output .= '
                     </td>
                   </tr>
@@ -260,12 +260,28 @@ function login()
 function do_cookie_login()
 {
   global $corem_db, $sql, $core;
-  
+
   if ( empty($_COOKIE["login"]) || empty($_COOKIE["password"]) || empty($_COOKIE["realm_id"]) )
-    redirect('login.php?error=2');
+    redirect("login.php?error=2");
 
   $user_name = $sql["logon"]->quote_smart($_COOKIE["login"]);
   $user_pass = $sql["logon"]->quote_smart($_COOKIE["password"]);
+
+  // see if our login & password cookies are old or new form...
+  if ( !preg_match("/^([A-Fa-f0-9]{2})*$/", $user_name) )
+  {
+    // we have old form cookies, we'll rebuild them to new form and go from there
+    setcookie("login",    bin2hex(gzcompress($user_name)), time() + 60*60*24*30);
+    setcookie("password", bin2hex(gzcompress($user_pass)), time() + 60*60*24*30);
+
+    redirect("login.php");
+  }
+  else
+  {
+    // we have new form cookies
+    $user_name = ( ( isset($_COOKIE["login"]) ) ? gzuncompress(pack("H*" , $_COOKIE["login"])) : NULL );
+		$user_pass = ( ( isset($_COOKIE["password"]) ) ? gzuncompress(pack("H*" , $_COOKIE["password"])) : NULL );
+  }
 
   // Users may log in using either their username or screen name
   // check for matching login
@@ -273,12 +289,15 @@ function do_cookie_login()
     $query = "SELECT * FROM accounts WHERE login='".$user_name."'";
   else
     $query = "SELECT * FROM account WHERE username='".$user_name."'";
+
   $name_result = $sql["logon"]->query($query);
+
   if ( !$sql["logon"]->num_rows($name_result) )
   {
     // if we didn't find one, check for matching screen name
     $query = "SELECT * FROM config_accounts WHERE ScreenName='".$user_name."'";
     $name_result = $sql["mgr"]->query($query);
+
     if ( $sql["mgr"]->num_rows($name_result) )
     {
       $name = $sql["mgr"]->fetch_assoc($name_result);
@@ -295,9 +314,12 @@ function do_cookie_login()
   // if we didn't find the name given for either entries, then the name will come up bad below
   
   if ( $core == 1 )
-    $query = "SELECT * FROM accounts WHERE login='".$user_name."'";
+    $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
   else
-    $query = "SELECT *, username AS login FROM account WHERE username='".$user_name."'";
+  {
+    $pass_hash = sha1(strtoupper($user_name.":".$user_pass));
+    $query = "SELECT *, username AS login FROM account WHERE username='".$user_name."' AND sha_pass_hash='".$pass_hash ."'";
+  }
 
   $result = $sql["logon"]->query($query);
 
@@ -318,18 +340,17 @@ function do_cookie_login()
   if ( $sql["logon"]->num_rows($result) )
   {
     if ( $core == 1)
-      $acct = $sql["logon"]->result($result, 0, 'acct');
+      $acct = $sql["logon"]->result($result, 0, "acct");
     else
-      $acct = $sql["logon"]->result($result, 0, 'id');
+      $acct = $sql["logon"]->result($result, 0, "id");
     
     if ( $core == 1 )
       $ban_query = "SELECT COUNT(*) FROM accounts WHERE acct='".$acct."' AND banned='1'";
     else
-      $ban_query = "SELECT COUNT(*) FROM account_banned WHERE id = '".$acct."' AND active = 1";
+      $ban_query = "SELECT COUNT(*) FROM account_banned WHERE id='".$acct."' AND active='1'";
+
     if ( $sql["logon"]->result($sql["logon"]->query($ban_query), 0) )
-    {
-      redirect('login.php?error=3');
-    }
+      redirect("login.php?error=3");
     else
     {
       $_SESSION["user_id"] = $acct;
@@ -339,17 +360,18 @@ function do_cookie_login()
       //gets our numerical level based on ArcEmu level.
       $_SESSION["user_lvl"] = gmlevel($temp["gm"]);
       $_SESSION["realm_id"] = $sql["logon"]->quote_smart($_COOKIE["realm_id"]);
-      $_SESSION["client_ip"] = ( ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv('REMOTE_ADDR') );
+      $_SESSION["client_ip"] = ( ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv("REMOTE_ADDR") );
       $_SESSION["logged_in"] = true;
-      redirect('index.php');
+      redirect("index.php");
     }
   }
   else
   {
-    setcookie (   'login', '', time() - 3600);
-    setcookie ('realm_id', '', time() - 3600);
-    setcookie ('password', '', time() - 3600);
-    redirect('login.php?error=1');
+    setcookie (   "login", "", time() - 3600);
+    setcookie ("realm_id", "", time() - 3600);
+    setcookie ("password", "", time() - 3600);
+
+    redirect("login.php?error=1");
   }
 }
 
@@ -403,7 +425,7 @@ $output .= '
 
 $action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
-if ( $action === 'dologin' )
+if ( $action === "dologin" )
   dologin();
 else
   login();
@@ -411,7 +433,7 @@ else
 unset($action);
 unset($action_permission);
 
-require_once 'footer.php';
+require_once "footer.php";
 
 
 ?>

@@ -18,13 +18,13 @@
 */
 
 
-require_once 'header.php';
-require_once 'libs/bb2html_lib.php';
-require_once 'libs/char_lib.php';
-require_once 'libs/map_zone_lib.php';
-require_once 'libs/get_uptime_lib.php';
-require_once 'libs/forum_lib.php';
-require_once 'libs/data_lib.php';
+require_once "header.php";
+require_once "libs/bb2html_lib.php";
+require_once "libs/char_lib.php";
+require_once "libs/map_zone_lib.php";
+require_once "libs/get_uptime_lib.php";
+require_once "libs/forum_lib.php";
+require_once "libs/data_lib.php";
 valid_login($action_permission["view"]);
 
 //#############################################################################
@@ -42,18 +42,18 @@ function front()
 
 //---------------------Information for Explorer Users--------------------------
 if ( preg_match("/MSIE/", $_SERVER["HTTP_USER_AGENT"]) )
-  $msie = "<br /><center><span id='index_explorer_warning'>
+  $msie = '<br /><center><span id="index_explorer_warning">
              Notice: This site will NOT function correctly on Microsoft Internet Explorer.
-           </span></center><br />";
+           </span></center><br />';
 else
   $msie = "";
 //-----------------------------------------------------------------------------
 
-  if ( test_port($server[$realm_id]['addr'], $server[$realm_id]['game_port']) )
+  if ( test_port($server[$realm_id]["addr"], $server[$realm_id]["game_port"]) )
   {
     if ( $core == 1 )
     {
-      $stats = get_uptime($server[$realm_id]['stats.xml']);
+      $stats = get_uptime($server[$realm_id]["stats.xml"]);
       
       $staticUptime = ' <em>'.htmlentities(get_realm_name($realm_id), ENT_COMPAT, $site_encoding).'</em> <br />'.$stats["platform"][4].' '.$stats["platform"][5].' '.$stats["platform"][6].'<br />'.lang("index", "online").' for '.$stats["uptime"];
       $output .= '
@@ -101,7 +101,7 @@ else
     }
     else
     {
-      $stats = $sql["logon"]->fetch_assoc($sql["logon"]->query('SELECT starttime, maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY starttime DESC LIMIT 1'), 0);
+      $stats = $sql["logon"]->fetch_assoc($sql["logon"]->query("SELECT starttime, maxplayers FROM uptime WHERE realmid='".$realm_id."' ORDER BY starttime DESC LIMIT 1"), 0);
       $uptimetime = time() - $stats["starttime"];
 
       function format_uptime($seconds)
@@ -226,11 +226,11 @@ else
     $start_m = 0;
 
   if ( $core == 1 )
-    $all_record_m = $sql["char"]->result($sql["char"]->query('SELECT COUNT(*) FROM gm_tickets WHERE deleted=0'), 0);
+    $all_record_m = $sql["char"]->result($sql["char"]->query("SELECT COUNT(*) FROM gm_tickets WHERE deleted=0"), 0);
   elseif ( $core == 2 )
-    $all_record_m = $sql["char"]->result($sql["char"]->query('SELECT COUNT(*) FROM character_ticket'), 0);
+    $all_record_m = $sql["char"]->result($sql["char"]->query("SELECT COUNT(*) FROM character_ticket"), 0);
   else
-    $all_record_m = $sql["char"]->result($sql["char"]->query('SELECT COUNT(*) FROM gm_tickets WHERE closed=0'), 0);
+    $all_record_m = $sql["char"]->result($sql["char"]->query("SELECT COUNT(*) FROM gm_tickets WHERE closed=0"), 0);
 
   // get our MotDs...
   $motd = "";
@@ -290,7 +290,7 @@ else
       $posted_screenname = $sql["mgr"]->fetch_assoc($posted_screenname_result);
 
       if ( $posted_screenname["ScreenName"] != NULL )
-        $posted_name = $posted_screenname["ScreenName"];
+        $posted_name = htmlspecialchars($posted_screenname["ScreenName"]);
 
       $output .= lang("motd", "posted_by").': '.( ( $user_lvl > -1 ) ? '<a href="user.php?action=edit_user&error=11&acct='.$temp["Created_By"].'">' : '' ).$posted_name.( ( $user_lvl > -1 ) ? '</a>' : '' ).' ('.date('m/d/Y H:i:s', $temp["Created"]).')';
       
@@ -310,7 +310,7 @@ else
       $edited_screenname = $sql["mgr"]->fetch_assoc($edited_screenname_result);
 
       if ( $edited_screenname["ScreenName"] != NULL )
-        $edited_name = $edited_screenname["ScreenName"];
+        $edited_name = htmlspecialchars($edited_screenname["ScreenName"]);
 
       if ( $temp["Last_Edited_By"] != 0 )
       {
@@ -402,13 +402,13 @@ else
             $output .= '<tr>
                   <td align="left">
                     <a href="char.php?id='.$post["playerGuid"].'">
-                        <span onmousemove="oldtoolTip(\''.$login["username"].' ('.id_get_gm_level($gm).')'.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($post["name"], ENT_COMPAT, $site_encoding).'</span>
+                        <span onmousemove="oldtoolTip(\''.htmlspecialchars($login["username"]).' ('.id_get_gm_level($gm).')'.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($post["name"], ENT_COMPAT, $site_encoding).'</span>
                     </a>
                  </td>
               </tr>
               <tr>
                 <td align="left">
-                  <span>'.$post["message"].'</span>
+                  <span>'.htmlspecialchars($post["message"]).'</span>
                  </td>
               </tr>
               <tr>
@@ -475,9 +475,9 @@ else
         {
           // Localization
           $namechange = lang("xname", "playerhasreq");
-          $namechange = str_replace("%1", $change_acct["login"], $namechange);
-          $namechange = str_replace("%2", $change_char["name"], $namechange);
-          $namechange = str_replace("%3", $change["new_name"], $namechange);
+          $namechange = str_replace("%1", htmlspecialchars($change_acct["login"]), $namechange);
+          $namechange = str_replace("%2", htmlspecialchars($change_char["name"]), $namechange);
+          $namechange = str_replace("%3", htmlspecialchars($change["new_name"]), $namechange);
 
           $output .= '
               <tr>
@@ -489,8 +489,8 @@ else
         {
           // Localization
           $racechange = lang("xrace", "playerhasreq");
-          $racechange = str_replace("%1", $change_acct["login"], $racechange);
-          $racechange = str_replace("%2", $change_char["name"], $racechange);
+          $racechange = str_replace("%1", htmlspecialchars($change_acct["login"]), $racechange);
+          $racechange = str_replace("%2", htmlspecialchars($change_char["name"]), $racechange);
           $racechange = str_replace("%3", char_get_race_name($change["new_race"]), $racechange);
 
           $output .= '
@@ -511,8 +511,8 @@ else
 
           // Localization
           $acctchange = lang("xacct", "playerhasreq");
-          $acctchange = str_replace("%1", $change_acct["login"], $acctchange);
-          $acctchange = str_replace("%2", $change_char["name"], $acctchange);
+          $acctchange = str_replace("%1", htmlspecialchars($change_acct["login"]), $acctchange);
+          $acctchange = str_replace("%2", htmlspecialchars($change_char["name"]), $acctchange);
           $acctchange = str_replace("%3", $new_acct_name, $acctchange);
 
           $output .= '
@@ -576,7 +576,7 @@ else
     if ( !is_numeric($start) )
       $start = 0;
 
-    $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["char"]->quote_smart($_GET["order_by"]) : 'name' );
+    $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["char"]->quote_smart($_GET["order_by"]) : "name" );
     if ( !preg_match('/^[_[:lower:]]{1,12}$/', $order_by) )
       $order_by = 'name';
 
@@ -588,21 +588,21 @@ else
     $dir = ( ( $dir ) ? 0 : 1 );
     //==========================$_GET and SECURE end=============================
 
-    if ( $order_by === 'mapid' )
-      $order_by = 'mapid '.$order_dir.', zoneid';
-    elseif ( $order_by === 'zoneid' )
-      $order_by = 'zoneid '.$order_dir.', mapid';
+    if ( $order_by === "mapid" )
+      $order_by = "mapid ".$order_dir.", zoneid";
+    elseif ( $order_by === "zoneid" )
+      $order_by = "zoneid ".$order_dir.", mapid";
 
-    $order_side = '';
-    if ( $user_lvl || $server[$realm_id]['both_factions'] );
-    else
+    $order_side = "";
+    if ( !( $user_lvl || $server[$realm_id]["both_factions"] ) )
     {
-      $result = $sql["char"]->query("SELECT race FROM characters WHERE acct = ".$user_id."
-        AND SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1) = (SELECT MAX(SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1)) FROM characters WHERE acct = ".$user_id.") LIMIT 1");
+      $result = $sql["char"]->query("SELECT race FROM characters WHERE acct=".$user_id."
+        AND SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1) = (SELECT MAX(SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1)) FROM characters WHERE acct=".$user_id.") LIMIT 1");
       if ( $sql["char"]->num_rows($result) )
-        $order_side = ( ( in_array($sql["char"]->result($result, 0),array(2,5,6,8,10)) ) ? " AND race IN (2,5,6,8,10) " : " AND race IN (1,3,4,7,11) " );
+        $order_side = ( ( in_array($sql["char"]->result($result, 0), array(2, 5, 6, 8, 10)) ) ? " AND race IN (2, 5, 6, 8, 10) " : " AND race IN (1, 3, 4, 7, 11) " );
     }
-    if ( $order_by == 'ip' )
+
+    if ( $order_by == "ip" )
       //this_is_junk: oops, cross referencing character & account works for me because I mix the logon & character databases :/
       //hmmm.... this will work as long as the logon & character databases are on the same MySQL server.
       $result = $sql["logon"]->query("SELECT acct, lastip FROM accounts WHERE acct=any(SELECT acct FROM ".$character_db[$realm_id]['name']."characters WHERE online=1) ORDER BY lastip ".$order_dir." LIMIT ".$start.", ".$itemperpage);
@@ -642,14 +642,14 @@ else
                 </td>
               </tr>
               <tr>
-                <th width="15%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=name&amp;dir='.$dir.'"'.( $order_by==='name' ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "name").'</a></th>
-                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=race&amp;dir='.$dir.'"'.( $order_by==='race' ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "race").'</a></th>
-                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=class&amp;dir='.$dir.'"'.( $order_by==='class' ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "class").'</a></th>
-                <th width="5%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=level&amp;dir='.$dir.'"'.( $order_by==='level' ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "level").'</a></th>
-                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=highest_rank&amp;dir='.$dir.'"'.( $order_by==='highest_rank' ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "rank").'</a></th>
-                <th width="15%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=gname&amp;dir='.$dir.'"'.( $order_by==='gname' ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "guild").'</a></th>
-                <th width="20%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=mapid&amp;dir='.$dir.'"'.( $order_by==='mapid '.$order_dir.', zoneid' ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "map").'</a></th>
-                <th width="25%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=zoneid&amp;dir='.$dir.'"'.( $order_by==='zoneid '.$order_dir.', mapid' ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "zone").'</a></th>';
+                <th width="15%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=name&amp;dir='.$dir.'"'.( ( $order_by === "name" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "name").'</a></th>
+                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=race&amp;dir='.$dir.'"'.( ( $order_by === "race" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "race").'</a></th>
+                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=class&amp;dir='.$dir.'"'.( ( $order_by === "class" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "class").'</a></th>
+                <th width="5%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=level&amp;dir='.$dir.'"'.( ( $order_by === "level" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "level").'</a></th>
+                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=highest_rank&amp;dir='.$dir.'"'.( ( $order_by === "highest_rank" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "rank").'</a></th>
+                <th width="15%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=gname&amp;dir='.$dir.'"'.( ( $order_by === "gname" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "guild").'</a></th>
+                <th width="20%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=mapid&amp;dir='.$dir.'"'.( ( $order_by === "mapid ".$order_dir.", zoneid" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "map").'</a></th>
+                <th width="25%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=zoneid&amp;dir='.$dir.'"'.( ( $order_by === "zoneid ".$order_dir.", mapid" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "zone").'</a></th>';
     if ( $core == 1 )
       $output .= '
                 <th width="25%">'.lang("index", "area").'</a></th>';
@@ -715,7 +715,7 @@ else
       if ( ( $user_lvl > 0 ) && ( ( $user_lvl >= gmlevel($gm) ) || ( $user_lvl == $action_permission["delete"] ) ) )
         $output .= '
                   <a href="char.php?id='.$char["guid"].'">
-                    <span onmousemove="oldtoolTip(\''.$char_acct["name"].' ('.id_get_gm_level($gm).')'.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($char["name"], ENT_COMPAT, $site_encoding).'</span>
+                    <span onmousemove="oldtoolTip(\''.htmlspecialchars($char_acct["name"]).' ('.id_get_gm_level($gm).')'.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($char["name"], ENT_COMPAT, $site_encoding).'</span>
                   </a>';
       else
         $output .='
@@ -801,21 +801,20 @@ else
             <br />
           </center>';
   }
-
 }
 
 //#############################################################################
 // MAIN
 //#############################################################################
 
-$output .= "
-        <div class=\"bubble\">";
+$output .= '
+        <div class="bubble">';
 
 front();
 
 unset($action_permission);
 
-require_once 'footer.php';
+require_once "footer.php";
 
 
 ?>

@@ -27,8 +27,8 @@ $time_start = microtime(true);
 //---------------------Loading User Theme and Language Settings----------------
 if ( isset($_COOKIE["theme"]) )
 {
-  if ( is_dir('themes/'.$_COOKIE["theme"]) )
-    if ( is_file('themes/'.$_COOKIE["theme"].'/'.$_COOKIE["theme"].'_1024.css') )
+  if ( is_dir("themes/".$_COOKIE["theme"]) )
+    if ( is_file("themes/".$_COOKIE["theme"]."/".$_COOKIE["theme"]."_1024.css") )
       $theme = $_COOKIE["theme"];
 }
 else
@@ -37,19 +37,19 @@ else
 if ( isset($_COOKIE["lang"]) )
 {
   $lang = $_COOKIE["lang"];
-  if ( !file_exists('lang/'.$lang.'.php') )
-    $lang = 'english';
+  if ( !file_exists("lang/".$lang.".php") )
+    $lang = "english";
 }
 else
-  $lang = 'english';
+  $lang = "english";
 
 //---------------------Load Default and User Configuration---------------------
-if ( file_exists('configs/config.php') )
+if ( file_exists("configs/config.php") )
 {
-  if ( !file_exists('configs/config.dist.php') )
+  if ( !file_exists("configs/config.dist.php") )
     exit('<center><br><code>\'configs/config.dist.php\'</code> not found,<br>
           please restore <code>\'configs/config.dist.php\'</code></center>');
-  require_once 'configs/config.php';
+  require_once "configs/config.php";
 }
 else
   exit('<center><br><code>\'configs/config.php\'</code> not found,<br>
@@ -63,13 +63,10 @@ require_once("libs/lang_lib.php");
 
 // generate minimum info to prevent php errors
 if ( $allow_anony && empty($_SESSION["logged_in"]) )
-{
   $_SESSION["user_lvl"] = -1;
-}
+
 if ( isset($_SESSION["user_lvl"]) )
-{
   $user_lvl = $_SESSION["user_lvl"];
-}
 
 // sets encoding defined in config for language support
 header('Content-Type: text/html; charset='.$site_encoding);
@@ -126,7 +123,7 @@ $output .= '
                       <br />'.lang("error", "error").'!
                     </font>
                   </h1>
-                  <br />'.$err.'<br />
+                  <br />'.htmlspecialchars($err).'<br />
                 </td>
               </tr>
             </table>
@@ -145,7 +142,7 @@ $output .= '
           </center>
           <!-- end of error.php -->';
 
-require_once 'footer.php';
+require_once "footer.php";
 
 
 ?>

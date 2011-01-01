@@ -50,7 +50,7 @@ function char_main()
   {
     $realmid = $sql["logon"]->quote_smart($_GET["realm"]);
     if ( is_numeric($realmid) )
-      $sql["char"]->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name'], $characters_db[$realmid]["encoding"]);
+      $sql["char"]->connect($characters_db[$realmid]["addr"], $characters_db[$realmid]["user"], $characters_db[$realmid]["pass"], $characters_db[$realmid]["name"], $characters_db[$realmid]["encoding"]);
     else
       $realmid = $realm_id;
   }
@@ -74,34 +74,34 @@ function char_main()
     error(lang("global", "empty_fields"));
 
   if ( $core == 1 )
-    $result = $sql["char"]->query('SELECT acct, race FROM characters WHERE guid='.$id.' LIMIT 1');
+    $result = $sql["char"]->query("SELECT acct, race FROM characters WHERE guid='".$id."' LIMIT 1");
   else
-    $result = $sql["char"]->query('SELECT account AS acct, race FROM characters WHERE guid='.$id.' LIMIT 1');
+    $result = $sql["char"]->query("SELECT account AS acct, race FROM characters WHERE guid='".$id."' LIMIT 1");
 
   if ( $sql["char"]->num_rows($result) )
   {
     //resrict by owner's gmlvl
-    $owner_acc_id = $sql["char"]->result($result, 0, 'acct');
+    $owner_acc_id = $sql["char"]->result($result, 0, "acct");
     if ( $core == 1 )
       $query = $sql["logon"]->query("SELECT login FROM accounts WHERE acct='".$owner_acc_id."'");
     else
       $query = $sql["logon"]->query("SELECT username as login FROM account WHERE id='".$owner_acc_id."'");
-    $owner_name = $sql["logon"]->result($query, 0, 'login');
+    $owner_name = $sql["logon"]->result($query, 0, "login");
 
     $query = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
-    $owner_gmlvl = $sql["mgr"]->result($query, 0, 'gm');
+    $owner_gmlvl = $sql["mgr"]->result($query, 0, "gm");
 
-    if ( $user_lvl || $server[$realmid]['both_factions'] )
+    if ( $user_lvl || $server[$realmid]["both_factions"] )
     {
       $side_v = 0;
       $side_p = 0;
     }
     else
     {
-      $side_p = ( ( in_array($sql["char"]->result($result, 0, 'race'), array(2, 5, 6, 8, 10)) ) ? 1 : 2 );
-      $result_1 = $sql["char"]->query('SELECT race FROM characters WHERE acct='.$user_id.' LIMIT 1');
+      $side_p = ( ( in_array($sql["char"]->result($result, 0, "race"), array(2, 5, 6, 8, 10)) ) ? 1 : 2 );
+      $result_1 = $sql["char"]->query("SELECT race FROM characters WHERE acct='".$user_id."' LIMIT 1");
       if ( $sql["char"]->num_rows($result) )
-        $side_v = ( ( in_array($sql["char"]->result($result_1, 0, 'race'), array(2, 5, 6, 8, 10)) ) ? 1 : 2 );
+        $side_v = ( ( in_array($sql["char"]->result($result_1, 0, "race"), array(2, 5, 6, 8, 10)) ) ? 1 : 2 );
       else
         $side_v = 0;
       unset($result_1);
@@ -150,8 +150,8 @@ function char_main()
       {
         $char_data = $char["data"];
         if ( empty($char_data) )
-          $char_data = str_repeat('0;', PLAYER_END);
-        $char_data = explode(';',$char_data);
+          $char_data = str_repeat("0;", PLAYER_END);
+        $char_data = explode(";",$char_data);
       }
       else
       {
@@ -243,23 +243,23 @@ function char_main()
 
       if ( $core == 1 )
       {
-        $block           = unpack('f', pack('L', $char_data[PLAYER_BLOCK_PERCENTAGE]));
+        $block           = unpack("f", pack("L", $char_data[PLAYER_BLOCK_PERCENTAGE]));
         $block           = round($block[1],2);
-        $dodge           = unpack('f', pack('L', $char_data[PLAYER_DODGE_PERCENTAGE]));
+        $dodge           = unpack("f", pack("L", $char_data[PLAYER_DODGE_PERCENTAGE]));
         $dodge           = round($dodge[1],2);
-        $parry           = unpack('f', pack('L', $char_data[PLAYER_PARRY_PERCENTAGE]));
+        $parry           = unpack("f", pack("L", $char_data[PLAYER_PARRY_PERCENTAGE]));
         $parry           = round($parry[1],2);
-        $crit            = unpack('f', pack('L', $char_data[PLAYER_CRIT_PERCENTAGE]));
+        $crit            = unpack("f", pack("L", $char_data[PLAYER_CRIT_PERCENTAGE]));
         $crit            = round($crit[1],2);
-        $ranged_crit     = unpack('f', pack('L', $char_data[PLAYER_RANGED_CRIT_PERCENTAGE]));
+        $ranged_crit     = unpack("f", pack("L", $char_data[PLAYER_RANGED_CRIT_PERCENTAGE]));
         $ranged_crit     = round($ranged_crit[1],2);
-        $maxdamage       = unpack('f', pack('L', $char_data[UNIT_FIELD_MAXDAMAGE]));
+        $maxdamage       = unpack("f", pack("L", $char_data[UNIT_FIELD_MAXDAMAGE]));
         $maxdamage       = round($maxdamage[1],0);
-        $mindamage       = unpack('f', pack('L', $char_data[UNIT_FIELD_MINDAMAGE]));
+        $mindamage       = unpack("f", pack("L", $char_data[UNIT_FIELD_MINDAMAGE]));
         $mindamage       = round($mindamage[1],0);
-        $maxrangeddamage = unpack('f', pack('L', $char_data[UNIT_FIELD_MAXRANGEDDAMAGE]));
+        $maxrangeddamage = unpack("f", pack("L", $char_data[UNIT_FIELD_MAXRANGEDDAMAGE]));
         $maxrangeddamage = round($maxrangeddamage[1],0);
-        $minrangeddamage = unpack('f', pack('L', $char_data[UNIT_FIELD_MINRANGEDDAMAGE]));
+        $minrangeddamage = unpack("f", pack("L", $char_data[UNIT_FIELD_MINRANGEDDAMAGE]));
         $minrangeddamage = round($minrangeddamage[1],0);
       }
       else
@@ -289,7 +289,7 @@ function char_main()
         $spell_crit = 100;
         for ( $i=0; $i<6; ++$i )
         {
-          $temp = unpack('f', pack('L', $char_data[PLAYER_SPELL_CRIT_PERCENTAGE1+1+$i]));
+          $temp = unpack("f", pack("L", $char_data[PLAYER_SPELL_CRIT_PERCENTAGE1+1+$i]));
           if ( $temp[1] < $spell_crit )
             $spell_crit = $temp[1];
         }
@@ -333,7 +333,7 @@ function char_main()
       //               I'm not sure which of these fields is which hit rating. :/
       $melee_hit = $char_data[PLAYER_FIELD_COMBAT_RATING_1+7];
 
-      $expertise  = ''.$char_data[PLAYER_EXPERTISE].' / '.$char_data[PLAYER_OFFHAND_EXPERTISE].'';
+      $expertise  = $char_data[PLAYER_EXPERTISE]." / ".$char_data[PLAYER_OFFHAND_EXPERTISE];
 
       //if ( $core == 1 )
       //{
@@ -359,7 +359,7 @@ function char_main()
       //}
       //else
       //{
-      $world_db_name = $world_db[$realm_id]['name'];
+      $world_db_name = $world_db[$realm_id]["name"];
 
       if ( $core == 1 )
       {
@@ -516,25 +516,25 @@ function char_main()
 
       $equiped_items = array
       (
-         1 => array('', ( ( $EQU_HEAD )      ? get_item_icon($EQU_HEAD)      : 0 ), ( ( $EQU_HEAD )      ? get_item_border($EQU_HEAD)      : 0 ), $EQU_HEAD_ROW),
-         2 => array('', ( ( $EQU_NECK )      ? get_item_icon($EQU_NECK)      : 0 ), ( ( $EQU_NECK )      ? get_item_border($EQU_NECK)      : 0 ), $EQU_NECK_ROW),
-         3 => array('', ( ( $EQU_SHOULDER )  ? get_item_icon($EQU_SHOULDER)  : 0 ), ( ( $EQU_SHOULDER )  ? get_item_border($EQU_SHOULDER)  : 0 ), $EQU_SHOULDER_ROW),
-         4 => array('', ( ( $EQU_SHIRT )     ? get_item_icon($EQU_SHIRT)     : 0 ), ( ( $EQU_SHIRT )     ? get_item_border($EQU_SHIRT)     : 0 ), $EQU_SHIRT_ROW),
-         5 => array('', ( ( $EQU_CHEST )     ? get_item_icon($EQU_CHEST)     : 0 ), ( ( $EQU_CHEST )     ? get_item_border($EQU_CHEST)     : 0 ), $EQU_CHEST_ROW),
-         6 => array('', ( ( $EQU_BELT )      ? get_item_icon($EQU_BELT)      : 0 ), ( ( $EQU_BELT )      ? get_item_border($EQU_BELT)      : 0 ), $EQU_BELT_ROW),
-         7 => array('', ( ( $EQU_LEGS )      ? get_item_icon($EQU_LEGS)      : 0 ), ( ( $EQU_LEGS )      ? get_item_border($EQU_LEGS)      : 0 ), $EQU_LEGS_ROW),
-         8 => array('', ( ( $EQU_FEET )      ? get_item_icon($EQU_FEET)      : 0 ), ( ( $EQU_FEET )      ? get_item_border($EQU_FEET)      : 0 ), $EQU_FEET_ROW),
-         9 => array('', ( ( $EQU_WRIST )     ? get_item_icon($EQU_WRIST)     : 0 ), ( ( $EQU_WRIST )     ? get_item_border($EQU_WRIST)     : 0 ), $EQU_WRIST_ROW),
-        10 => array('', ( ( $EQU_GLOVES )    ? get_item_icon($EQU_GLOVES)    : 0 ), ( ( $EQU_GLOVES )    ? get_item_border($EQU_GLOVES)    : 0 ), $EQU_GLOVES_ROW),
-        11 => array('', ( ( $EQU_FINGER1 )   ? get_item_icon($EQU_FINGER1)   : 0 ), ( ( $EQU_FINGER1 )   ? get_item_border($EQU_FINGER1)   : 0 ), $EQU_FINGER1_ROW),
-        12 => array('', ( ( $EQU_FINGER2 )   ? get_item_icon($EQU_FINGER2)   : 0 ), ( ( $EQU_FINGER2 )   ? get_item_border($EQU_FINGER2)   : 0 ), $EQU_FINGER2_ROW),
-        13 => array('', ( ( $EQU_TRINKET1 )  ? get_item_icon($EQU_TRINKET1)  : 0 ), ( ( $EQU_TRINKET1 )  ? get_item_border($EQU_TRINKET1)  : 0 ), $EQU_TRINKET1_ROW),
-        14 => array('', ( ( $EQU_TRINKET2 )  ? get_item_icon($EQU_TRINKET2)  : 0 ), ( ( $EQU_TRINKET2 )  ? get_item_border($EQU_TRINKET2)  : 0 ), $EQU_TRINKET2_ROW),
-        15 => array('', ( ( $EQU_BACK )      ? get_item_icon($EQU_BACK)      : 0 ), ( ( $EQU_BACK )      ? get_item_border($EQU_BACK)      : 0 ), $EQU_BACK_ROW),
-        16 => array('', ( ( $EQU_MAIN_HAND ) ? get_item_icon($EQU_MAIN_HAND) : 0 ), ( ( $EQU_MAIN_HAND ) ? get_item_border($EQU_MAIN_HAND) : 0 ), $EQU_MAIN_HAND_ROW),
-        17 => array('', ( ( $EQU_OFF_HAND )  ? get_item_icon($EQU_OFF_HAND)  : 0 ), ( ( $EQU_OFF_HAND )  ? get_item_border($EQU_OFF_HAND)  : 0 ), $EQU_OFF_HAND_ROW),
-        18 => array('', ( ( $EQU_RANGED )    ? get_item_icon($EQU_RANGED)    : 0 ), ( ( $EQU_RANGED )    ? get_item_border($EQU_RANGED)    : 0 ), $EQU_RANGED_ROW),
-        19 => array('', ( ( $EQU_TABARD )    ? get_item_icon($EQU_TABARD)    : 0 ), ( ( $EQU_TABARD )    ? get_item_border($EQU_TABARD)    : 0 ), $EQU_TABARD_ROW)
+         1 => array("", ( ( $EQU_HEAD )      ? get_item_icon($EQU_HEAD)      : 0 ), ( ( $EQU_HEAD )      ? get_item_border($EQU_HEAD)      : 0 ), $EQU_HEAD_ROW),
+         2 => array("", ( ( $EQU_NECK )      ? get_item_icon($EQU_NECK)      : 0 ), ( ( $EQU_NECK )      ? get_item_border($EQU_NECK)      : 0 ), $EQU_NECK_ROW),
+         3 => array("", ( ( $EQU_SHOULDER )  ? get_item_icon($EQU_SHOULDER)  : 0 ), ( ( $EQU_SHOULDER )  ? get_item_border($EQU_SHOULDER)  : 0 ), $EQU_SHOULDER_ROW),
+         4 => array("", ( ( $EQU_SHIRT )     ? get_item_icon($EQU_SHIRT)     : 0 ), ( ( $EQU_SHIRT )     ? get_item_border($EQU_SHIRT)     : 0 ), $EQU_SHIRT_ROW),
+         5 => array("", ( ( $EQU_CHEST )     ? get_item_icon($EQU_CHEST)     : 0 ), ( ( $EQU_CHEST )     ? get_item_border($EQU_CHEST)     : 0 ), $EQU_CHEST_ROW),
+         6 => array("", ( ( $EQU_BELT )      ? get_item_icon($EQU_BELT)      : 0 ), ( ( $EQU_BELT )      ? get_item_border($EQU_BELT)      : 0 ), $EQU_BELT_ROW),
+         7 => array("", ( ( $EQU_LEGS )      ? get_item_icon($EQU_LEGS)      : 0 ), ( ( $EQU_LEGS )      ? get_item_border($EQU_LEGS)      : 0 ), $EQU_LEGS_ROW),
+         8 => array("", ( ( $EQU_FEET )      ? get_item_icon($EQU_FEET)      : 0 ), ( ( $EQU_FEET )      ? get_item_border($EQU_FEET)      : 0 ), $EQU_FEET_ROW),
+         9 => array("", ( ( $EQU_WRIST )     ? get_item_icon($EQU_WRIST)     : 0 ), ( ( $EQU_WRIST )     ? get_item_border($EQU_WRIST)     : 0 ), $EQU_WRIST_ROW),
+        10 => array("", ( ( $EQU_GLOVES )    ? get_item_icon($EQU_GLOVES)    : 0 ), ( ( $EQU_GLOVES )    ? get_item_border($EQU_GLOVES)    : 0 ), $EQU_GLOVES_ROW),
+        11 => array("", ( ( $EQU_FINGER1 )   ? get_item_icon($EQU_FINGER1)   : 0 ), ( ( $EQU_FINGER1 )   ? get_item_border($EQU_FINGER1)   : 0 ), $EQU_FINGER1_ROW),
+        12 => array("", ( ( $EQU_FINGER2 )   ? get_item_icon($EQU_FINGER2)   : 0 ), ( ( $EQU_FINGER2 )   ? get_item_border($EQU_FINGER2)   : 0 ), $EQU_FINGER2_ROW),
+        13 => array("", ( ( $EQU_TRINKET1 )  ? get_item_icon($EQU_TRINKET1)  : 0 ), ( ( $EQU_TRINKET1 )  ? get_item_border($EQU_TRINKET1)  : 0 ), $EQU_TRINKET1_ROW),
+        14 => array("", ( ( $EQU_TRINKET2 )  ? get_item_icon($EQU_TRINKET2)  : 0 ), ( ( $EQU_TRINKET2 )  ? get_item_border($EQU_TRINKET2)  : 0 ), $EQU_TRINKET2_ROW),
+        15 => array("", ( ( $EQU_BACK )      ? get_item_icon($EQU_BACK)      : 0 ), ( ( $EQU_BACK )      ? get_item_border($EQU_BACK)      : 0 ), $EQU_BACK_ROW),
+        16 => array("", ( ( $EQU_MAIN_HAND ) ? get_item_icon($EQU_MAIN_HAND) : 0 ), ( ( $EQU_MAIN_HAND ) ? get_item_border($EQU_MAIN_HAND) : 0 ), $EQU_MAIN_HAND_ROW),
+        17 => array("", ( ( $EQU_OFF_HAND )  ? get_item_icon($EQU_OFF_HAND)  : 0 ), ( ( $EQU_OFF_HAND )  ? get_item_border($EQU_OFF_HAND)  : 0 ), $EQU_OFF_HAND_ROW),
+        18 => array("", ( ( $EQU_RANGED )    ? get_item_icon($EQU_RANGED)    : 0 ), ( ( $EQU_RANGED )    ? get_item_border($EQU_RANGED)    : 0 ), $EQU_RANGED_ROW),
+        19 => array("", ( ( $EQU_TABARD )    ? get_item_icon($EQU_TABARD)    : 0 ), ( ( $EQU_TABARD )    ? get_item_border($EQU_TABARD)    : 0 ), $EQU_TABARD_ROW)
       );
 
       $output .= '
@@ -648,14 +648,14 @@ function char_main()
                       </div>';
 
         // build a tooltip object for this item
-        $i_fields = get_item_info($equiped_items[1][3]['item_template']);
+        $i_fields = get_item_info($equiped_items[1][3]["item_template"]);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'HEAD'.'">
                         <table>
                           <tr>
                             <td>
-                              '.get_item_tooltip($i_fields, $equiped_items[1][3]['enchantment'], $equiped_items[1][3]['property'], $equiped_items[1][3]['creator'], $equiped_items[1][3]['durability'], $equiped_items[1][3]['flags']).'
+                              '.get_item_tooltip($i_fields, $equiped_items[1][3]["enchantment"], $equiped_items[1][3]["property"], $equiped_items[1][3]["creator"], $equiped_items[1][3]["durability"], $equiped_items[1][3]["flags"]).'
                             </td>
                           </tr>
                         </table>
@@ -734,14 +734,14 @@ function char_main()
                       </div>';
 
         // build a tooltip object for this item
-        $i_fields = get_item_info($equiped_items[10][3]['item_template']);
+        $i_fields = get_item_info($equiped_items[10][3]["item_template"]);
 
         $output .= '
                       <div class="item_tooltip" id="tooltip_b'.'GLOVES'.'">
                         <table>
                           <tr>
                             <td>
-                              '.get_item_tooltip($i_fields, $equiped_items[10][3]['enchantment'], $equiped_items[10][3]['property'], $equiped_items[10][3]['creator'], $equiped_items[10][3]['durability'], $equiped_items[10][3]['flags']).'
+                              '.get_item_tooltip($i_fields, $equiped_items[10][3]["enchantment"], $equiped_items[10][3]["property"], $equiped_items[10][3]["creator"], $equiped_items[10][3]["durability"], $equiped_items[10][3]["flags"]).'
                             </td>
                           </tr>
                         </table>

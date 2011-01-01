@@ -39,28 +39,25 @@ function doregister()
       $resp = recaptcha_check_answer($recaptcha_private_key, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
 
       if ( !$resp->is_valid )
-      {
         redirect("register.php?err=13");
-      }
     }
     else
     {
       if ( ( $_POST["security_code"] ) != ( $_SESSION["security_code"] ) )
-      {
         redirect("register.php?err=13");
-      }
     }
   }
 
   if ( empty($_POST["pass"]) || empty($_POST["email"]) || empty($_POST["username"]) )
-  {
     redirect("register.php?err=1");
-  }
 
   if ( $disable_acc_creation ) 
     redirect("register.php?err=4");
 
-  $last_ip =  ( ( getenv('HTTP_X_FORWARDED_FOR') ) ? getenv('HTTP_X_FORWARDED_FOR') : getenv('REMOTE_ADDR') );
+  if ( filter_var(getenv("HTTP_X_FORWARDED_FOR"), FILTER_VALIDATE_IP) )
+    $last_ip = $sql["mgr"]->quote_smart(getenv("HTTP_X_FORWARDED_FOR"));
+  else
+    $last_ip = $sql["mgr"]->quote_smart(getenv("REMOTE_ADDR"));
 
   if ( sizeof($valid_ip_mask) )
   {
@@ -94,7 +91,7 @@ function doregister()
       }
     }
     if ( !$qFlag )
-      redirect("register.php?err=9&usr=$last_ip");
+      redirect("register.php?err=9&usr=".$last_ip);
   }
 
   $user_name = $sql["logon"]->quote_smart(trim($_POST["username"]));

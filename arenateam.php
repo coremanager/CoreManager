@@ -47,16 +47,16 @@ function browse_teams()
   $dir = ( ( $dir ) ? 0 : 1 );
   //==========================$_GET and SECURE end=============================
   //==========================Browse/Search CHECK==============================
-  $search_by = '';
-  $search_value = '';
+  $search_by = "";
+  $search_value = "";
 
   if ( isset($_GET["search_value"]) && isset($_GET["search_by"]) )
   {
     $search_value = $sql["char"]->quote_smart($_GET["search_value"]);
     $search_by = $sql["char"]->quote_smart($_GET["search_by"]);
-    $search_menu = array('atname', 'leadername', 'atid');
+    $search_menu = array("atname", "leadername", "atid");
     if ( !in_array($search_by, $search_menu) )
-      $search_by = 'atid';
+      $search_by = "atid";
 
     // because I don't want to add another two columns to the display, we'll use season stats
     switch( $search_by )
@@ -309,6 +309,10 @@ function browse_teams()
 
   $member_count = 0;
   $members_online = 0;
+
+  // a little XSS prevention
+  $search_value = htmlspecialchars($search_value);
+  $search_by = htmlspecialchars($search_by);
 
 //==========================top page navigation starts here====================
   $output .= '

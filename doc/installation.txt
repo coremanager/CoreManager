@@ -2,7 +2,7 @@ REQUIREMENTS:
 
   WebServer with PHP support.
   MySQL 5.5.6 and above.       http://dev.mysql.com/downloads/mysql/5.5.html
-  PHP 5.1.0 and above.         http://www.php.net/downloads.php
+  PHP 5.2.0 and above.         http://www.php.net/downloads.php
   PHP GD Libraries Enabled.
 
   For Windows users:

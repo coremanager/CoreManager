@@ -19,9 +19,9 @@
 
 
 // page header, and any additional required libraries
-require_once 'header.php';
-require_once 'libs/char_lib.php';
-require_once 'libs/forum_lib.php';
+require_once "header.php";
+require_once "libs/char_lib.php";
+require_once "libs/forum_lib.php";
 // minimum permission to view page
 valid_login($action_permission["view"]);
 
@@ -39,9 +39,9 @@ function browse_users()
   if ( !is_numeric($start) )
     $start = 0;
 
-  $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["logon"]->quote_smart($_GET["order_by"]) : 'acct' );
+  $order_by = ( ( isset($_GET["order_by"]) ) ? $sql["logon"]->quote_smart($_GET["order_by"]) : "acct" );
   if ( !preg_match('/^[_[:lower:]]{1,15}$/', $order_by) )
-    $order_by = 'acct';
+    $order_by = "acct";
 
   $dir = ( ( isset($_GET["dir"]) ) ? $sql["logon"]->quote_smart($_GET["dir"]) : 1 );
   if ( !preg_match('/^[01]{1}$/', $dir) )
@@ -57,17 +57,17 @@ function browse_users()
   if ( $core == 1 )
   {
     $search_menu = array(
-          array('login',            'by_name'),
-          array('acct',             'by_id'),
-          array('gm',               'by_gm_level'),
-          array('greater_gmlevel',  'greater_gm_level'),
-          array('email',            'by_email'),
-          array('lastip',           'by_ip'),
-          array('gt_lastlogin',     'by_gt_last_login'),
-          array('lt_lastlogin',     'by_lt_last_login'),
-          array('banned',           'by_banned'),
-          array('muted',            'by_muted'),
-          array('expansion',        'by_expansion'));
+          array("login",            "by_name"),
+          array("acct",             "by_id"),
+          array("gm",               "by_gm_level"),
+          array("greater_gmlevel",  "greater_gm_level"),
+          array("email",            "by_email"),
+          array("lastip",           "by_ip"),
+          array("gt_lastlogin",     "by_gt_last_login"),
+          array("lt_lastlogin",     "by_lt_last_login"),
+          array("banned",           "by_banned"),
+          array("muted",            "by_muted"),
+          array("expansion",        "by_expansion"));
   }
   elseif ( $core == 2 )
   {
@@ -108,7 +108,7 @@ function browse_users()
 
     // special search cases
     // developer note: 'if else' is always faster then 'switch case'
-    if ( $search_by === 'greater_gmlevel' )
+    if ( $search_by === "greater_gmlevel" )
     {
       //TODO
       if ( $core == 1 )
@@ -139,7 +139,7 @@ function browse_users()
           WHERE gmlevel>'%".$search_value."%'");
       }
     }
-    elseif ( $search_by === 'gmlevel' )
+    elseif ( $search_by === "gmlevel" )
     {
       if ( $core == 1 )
       {
@@ -168,7 +168,7 @@ function browse_users()
           WHERE IFNULL(account_access.gmlevel, 0)='".$search_value."'");
       }
     }
-    elseif ( $search_by === 'banned' )
+    elseif ( $search_by === "banned" )
     {
       if ( $core == 1 )
       {
@@ -213,7 +213,7 @@ function browse_users()
       $query_1 = $sql["logon"]->query($count_query);
       unset($count_query);
     }
-    elseif ( ( $search_by == 'gt_last_login' ) || ( $search_by == 'gt_lastlogin' ) )
+    elseif ( ( $search_by == "gt_last_login" ) || ( $search_by == "gt_lastlogin" ) )
     {
       if ( $core == 1 )
       {
@@ -239,7 +239,7 @@ function browse_users()
         $query_1 = $sql["logon"]->query("SELECT COUNT(*) FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE last_login>=UNIX_TIMESTAMP(STR_TO_DATE('".$search_value."', '%c/%d/%Y'))");
       }
     }
-    elseif ( ( $search_by == 'lt_last_login' ) || ( $search_by == 'lt_lastlogin' ) )
+    elseif ( ( $search_by == "lt_last_login" ) || ( $search_by == "lt_lastlogin" ) )
     {
       if ( $core == 1 )
       {
@@ -322,8 +322,12 @@ function browse_users()
     }
   }
   // this is for multipage support
-  $all_record = $sql["logon"]->result($query_1,0);
+  $all_record = $sql["logon"]->result($query_1, 0);
   unset($query_1);
+
+  // a little XSS prevention
+  $search_value = htmlspecialchars($search_value);
+  $search_by = htmlspecialchars($search_by);
 
   //==========================top tage navigaion starts here========================
   // we start with a lead of 10 spaces,
@@ -338,7 +342,7 @@ function browse_users()
                 <td>';
   if ( $user_lvl >= $action_permission["insert"] )
   {
-                  makebutton(lang("user", "add_acc"), 'user.php?action=add_new', 130);
+    makebutton(lang("user", "add_acc"), 'user.php?action=add_new', 130);
   // backup is broken
   //              makebutton($lang_user["backup"], 'backup.php', 130);
   }
@@ -346,11 +350,11 @@ function browse_users()
   // cleanup unknown working condition
   //if($user_lvl >= $action_permission["delete"])
   //              makebutton($lang_user["cleanup"], 'cleanup.php', 130);
-                  makebutton(lang("global", "back"), 'javascript:window.history.back()', 130);
+  makebutton(lang("global", "back"), 'javascript:window.history.back()', 130);
+
   if ( $search_by && $search_value )
-  {
-                  makebutton(lang("user", "user_list"), 'user.php', 130);
-  }
+    makebutton(lang("user", "user_list"), 'user.php', 130);
+
   $output .= '
                 </td>
                 <td align="right" width="25%" rowspan="2">';
@@ -358,7 +362,7 @@ function browse_users()
   // multi page links
   $output .=
                   lang("user", "tot_acc").' : '.$all_record.'<br /><br />'.
-                  generate_pagination('user.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'', $all_record, $itemperpage, $start);
+                  generate_pagination('user.php?order_by='.$order_by.'&amp;dir='.( ($dir) ? 0 : 1 ).( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'', $all_record, $itemperpage, $start);
   // this part for search
   $output .= '
                 </td>
@@ -382,7 +386,7 @@ function browse_users()
                         </form>
                       </td>
                       <td>';
-                       makebutton(lang("global", "search"), 'javascript:do_submit()',80);
+  makebutton(lang("global", "search"), 'javascript:do_submit()',80);
   $output .= '
                       </td>
                     </tr>
@@ -433,7 +437,7 @@ function browse_users()
                   <th width="1%">'.lang("user", "online").'</a></th>';
   if ( $showcountryflag )
   {
-    require_once 'libs/misc_lib.php';
+    require_once "libs/misc_lib.php";
     $output .= '
                   <th width="1%">'.lang("global", "country").'</th>';
   }
