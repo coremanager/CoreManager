@@ -362,7 +362,7 @@ function browse_users()
   // multi page links
   $output .=
                   lang("user", "tot_acc").' : '.$all_record.'<br /><br />'.
-                  generate_pagination('user.php?order_by='.$order_by.'&amp;dir='.( ($dir) ? 0 : 1 ).( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'', $all_record, $itemperpage, $start);
+  generate_pagination('user.php?order_by='.$order_by.'&amp;dir='.( ($dir) ? 0 : 1 ).( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'', $all_record, $itemperpage, $start);
   // this part for search
   $output .= '
                 </td>
@@ -434,7 +434,7 @@ function browse_users()
                   <th width="1%"><a href="user.php?order_by=muted&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.( ( $order_by=='muted' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("user", "locked").'</a></th>';
     $output .= '
                   <th width="1%"><a href="user.php?order_by=lastlogin&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.( ( $order_by=='lastlogin' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("user", "last_login").'</a></th>
-                  <th width="1%">'.lang("user", "online").'</a></th>';
+                  <th width="1%">'.lang("user", "online").'</th>';
   if ( $showcountryflag )
   {
     require_once "libs/misc_lib.php";
@@ -626,14 +626,14 @@ function browse_users()
   else
     $output .= '11';
   $output .= '" class="hidden" align="right" width="25%">';
-  $output .= generate_pagination('user.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'', $all_record, $itemperpage, $start);
+  $output .= generate_pagination('user.php?order_by='.$order_by.'&amp;dir='.( ( $dir ) ? 0 : 1 ).( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'', $all_record, $itemperpage, $start);
   $output .= '
                   </td>
                 </tr>
                 <tr>
                   <td colspan="8" align="left" class="hidden">';
   if ( $user_lvl >= $action_permission["delete"] )
-                    makebutton(lang("user", "del_selected_users"), 'javascript:do_submit(\'form1\',0)" type="wrn',230);
+    makebutton(lang("user", "del_selected_users"), 'javascript:do_submit(\'form1\',0)" type="wrn',230);
 // backup is broken
 //if($user_lvl >= $action_permission["insert"])
 //                  makebutton($lang_user["backup_selected_users"], 'javascript:do_submit(\'form1\',1)',230);
@@ -678,7 +678,7 @@ function del_user()
   //skip to backup
   if ( isset($_GET["backup_op"] ) && ( $_GET["backup_op"] == 1 ) )
   {
-    for ( $i=0; $i<count($check); $i++ )
+    for ( $i = 0; $i < count($check); $i++ )
     {
       $pass_array .= "&check%5B%5D=".$check[$i];
     }
@@ -692,7 +692,7 @@ function del_user()
           <br />
           <font class="bold">'.lang("user", "acc_ids").': ';
 
-  for ( $i=0; $i<count($check); $i++ )
+  for ( $i = 0; $i < count($check); $i++ )
   {
     if ( $core == 1 )
       $login = $sql["logon"]->result($sql["logon"]->query("SELECT login FROM `accounts` WHERE acct='".$check[$i]."'"),0);
@@ -711,8 +711,8 @@ function del_user()
           <table width="300" class="hidden">
             <tr>
               <td>';
-                makebutton(lang("global", "yes"), "user.php?action=dodel_user".$pass_array." type=\"wrn" ,130);
-                makebutton(lang("global", "no"), "user.php\" type=\"def" ,130);
+  makebutton(lang("global", "yes"), "user.php?action=dodel_user".$pass_array."\" type=\"wrn" , 130);
+  makebutton(lang("global", "no"), "user.php\" type=\"def" , 130);
   $output .= '
               </td>
             </tr>
@@ -742,7 +742,7 @@ function dodel_user()
   $deleted_chars = 0;
   require_once("libs/del_lib.php");
 
-  for ( $i=0; $i<count($check); $i++ )
+  for ( $i = 0; $i < count($check); $i++ )
   {
     if ( $check[$i] != "" )
     {
@@ -772,7 +772,7 @@ function dodel_user()
           <table class="hidden">
             <tr>
               <td>';
-                makebutton(lang("user", "back_browsing"), "user.php", 230);
+  makebutton(lang("user", "back_browsing"), "user.php", 230);
   $output .= '
               </td>
             </tr>
@@ -1386,7 +1386,7 @@ function edit_user()
           $output .= '
                     <option value="'.$level["Security_Level"].'"';
           if ( gmlevel($screenname["SecurityLevel"]) == $level["Security_Level"] )
-            $output .= ' selected="selected" ';
+            $output .= ' selected="selected"';
           $output .= '>'.$level["Full_Name"].'</option>';
         }
       }

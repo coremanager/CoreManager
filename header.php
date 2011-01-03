@@ -20,16 +20,16 @@
 
 $time_start = microtime(true);
 // resuming login session if available, or start new one
-if ( !ini_get('session.auto_start') )
+if ( !ini_get("session.auto_start") )
   session_start();
 
 //---------------------Load Default and User Configuration---------------------
-if ( file_exists('configs/config.php') )
+if ( file_exists("configs/config.php") )
 {
-  if ( !file_exists('configs/config.dist.php') )
+  if ( !file_exists("configs/config.dist.php") )
     exit('<center><br><code>\'configs/config.dist.php\'</code> not found,<br>
           please restore <code>\'configs/config.dist.php\'</code></center>');
-  require_once 'configs/config.php';
+  require_once "configs/config.php";
 }
 else
   exit('<center><br><code>\'configs/config.php\'</code> not found,<br>
@@ -47,15 +47,15 @@ if ( ( $core < 1 ) || ( $core > 3 ) )
 if ( $debug )
   $tot_queries = 0;
 if ( $debug > 1 )
-  error_reporting (E_ALL);
+  error_reporting(E_ALL);
 else
-  error_reporting (E_COMPILE_ERROR);
+  error_reporting(E_COMPILE_ERROR);
 
 //---------------------Loading User Theme and Language Settings----------------
 if ( isset($_COOKIE["theme"]) )
 {
-  if ( is_dir('themes/'.$_COOKIE["theme"]) )
-    if ( is_file('themes/'.$_COOKIE["theme"].'/'.$_COOKIE["theme"].'_1024.css') )
+  if ( is_dir("themes/".$_COOKIE["theme"]) )
+    if ( is_file("themes/".$_COOKIE["theme"].'/'.$_COOKIE["theme"]."_1024.css") )
       $theme = $_COOKIE["theme"];
 }
 
@@ -69,29 +69,29 @@ else
 {
   $lang = $language;
   // if we didn't get a cookie for language, create one
-  setcookie('lang', $language, time()+60*60*24*30*6); // six months
+  setcookie("lang", $language, time()+60*60*24*30*6); // six months
 }
 
 //---------------------Current Filename----------------------------------------
 $cur_filename = substr($_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"], "/")+1);
 
 //---------------------Loading Libraries---------------------------------------
-require_once 'libs/db_lib.php';
-require_once 'lang/'.$lang.'.php';
+require_once "libs/db_lib.php";
+require_once "lang/".$lang.".php";
 
-require_once 'libs/data_lib.php';
-require_once 'libs/global_lib.php';
-require_once 'libs/lang_lib.php';
-require_once 'libs/get_lib.php';
+require_once "libs/data_lib.php";
+require_once "libs/global_lib.php";
+require_once "libs/lang_lib.php";
+require_once "libs/get_lib.php";
 
 //---------------------Cache Expiration Date Offset----------------------------
 //$expire_offset = 60 * 60 * 24 * 3;
 
 //---------------------Header's header-----------------------------------------
 // sets encoding defined in config for language support
-header('Content-Type: text/html; charset='.$site_encoding);
+header("Content-Type: text/html; charset=".$site_encoding);
 // the webserver should be adding this directive, but just in case...
-header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+header("Cache-Control: private, must-revalidate, post-check=0, pre-check=0");
 // dynamic pages can't be cached
 //header('Date: '.gmdate('D, d M Y H:i:s').' GMT');
 //header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($cur_filename)).' GMT');
@@ -139,11 +139,11 @@ if ( ini_get("max_execution_time") < 1800 )
 if ( $allow_anony && empty($_SESSION["logged_in"]) )
 {
   $_SESSION["user_lvl"] = -1;
-  $_SESSION["gm_lvl"] = '-1';
+  $_SESSION["gm_lvl"] = "-1";
   $_SESSION["login"] = $anony_uname;
   $_SESSION["user_id"] = -1;
   $_SESSION["realm_id"] = $anony_realm_id;
-  $_SESSION["client_ip"] = ( ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv('REMOTE_ADDR') );
+  $_SESSION["client_ip"] = ( ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv("REMOTE_ADDR") );
 }
 
 $realm_id = ( ( isset($_GET["realm_id"]) ) ? (int)$_GET["realm_id"] : $_SESSION["realm_id"] );
@@ -161,18 +161,18 @@ $sql["mgr"] = new SQL;
 $sql["mgr"]->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
 
 $sql["char"] = new SQL;
-$sql["char"]->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name'], $characters_db[$realm_id]["encoding"]);
+$sql["char"]->connect($characters_db[$realm_id]["addr"], $characters_db[$realm_id]["user"], $characters_db[$realm_id]["pass"], $characters_db[$realm_id]["name"], $characters_db[$realm_id]["encoding"]);
 
 $sql["world"] = new SQL;
-$sql["world"]->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name'], $world_db[$realm_id]["encoding"]);
+$sql["world"]->connect($world_db[$realm_id]["addr"], $world_db[$realm_id]["user"], $world_db[$realm_id]["pass"], $world_db[$realm_id]["name"], $world_db[$realm_id]["encoding"]);
 
 //----Check if a user has login, if Guest mode is enabled, code above will login as Guest
 if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSION["realm_id"]) && empty($_GET["err"]) )
 {
   // check for host php script max memory allowed,
   // setting it higher if it is not enough for CoreManager to run
-  if ( ini_get('memory_limit') < 16 )
-    @ini_set('memory_limit', '16M');
+  if ( ini_get("memory_limit") < 16 )
+    @ini_set("memory_limit", "16M");
 
   // resuming logged in user settings
   session_regenerate_id();
@@ -247,7 +247,7 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
                 <li><a href="edit.php">'.lang("header", "my_acc").'</a>
                   <ul>';
 
-  $result = $sql["mgr"]->query('SELECT `Index` AS id, Name AS name FROM `config_servers` LIMIT 10');
+  $result = $sql["mgr"]->query("SELECT `Index` AS id, Name AS name FROM `config_servers` LIMIT 10");
 
   // we check how many realms are configured, this does not check if config is valid
   if ( ( 1 < $sql["mgr"]->num_rows($result)) && ( 1 < count($server)) && ( 1 < count($characters_db)) )
@@ -278,9 +278,9 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
   else
   {
     if ( $core == 1 )
-      $result = $sql["char"]->query('SELECT guid, name, race, class, level, gender FROM characters WHERE acct = '.$user_id.'');
+      $result = $sql["char"]->query("SELECT guid, name, race, class, level, gender FROM characters WHERE acct='".$user_id."'");
     else
-      $result = $sql["char"]->query('SELECT guid, name, race, class, level, gender FROM characters WHERE account = '.$user_id.'');
+      $result = $sql["char"]->query("SELECT guid, name, race, class, level, gender FROM characters WHERE account='".$user_id."'");
 
     // this puts links to user characters of active realm in "My Account" menu
     if ( $sql["char"]->num_rows($result) )
@@ -350,7 +350,7 @@ $filename = $_SERVER["SCRIPT_NAME"];
 $filename = Explode('/', $filename);
 $filename = $filename[count($filename) - 1];
 
-if ( ( $allow_anony && empty($_SESSION["logged_in"]) ) && ( ( $filename != 'login.php' ) && ( $filename != 'register.php' ) ) )
+if ( ( $allow_anony && empty($_SESSION["logged_in"]) ) && ( ( $filename != "login.php" ) && ( $filename != "register.php" ) ) )
 {
   $output .= '
       <center>
@@ -368,7 +368,7 @@ if ( ( $allow_anony && empty($_SESSION["logged_in"]) ) && ( ( $filename != 'logi
 
 //---------------------Start of Body-------------------------------------------
 
-if ( ( isset($_SESSION["logged_in"]) ) || ( $filename == 'login.php' ) || ( $filename == 'register.php' ) )
+if ( ( isset($_SESSION["logged_in"]) ) || ( $filename == "login.php" ) || ( $filename == "register.php" ) )
   $output .= '
       <div id="body_main" class="body_main_shallow">';
 else

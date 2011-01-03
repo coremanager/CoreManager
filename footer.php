@@ -159,7 +159,7 @@
                   <!-- a href="http://validator.w3.org/check?uri=referer" target="_blank"><img src="img/logo-css.png" class="logo_border" alt="w3" /></a -->
                   <br />
                   <a href="http://www.mozilla.com/" target="_blank"><img src="img/logo-firefox.png" class="logo_border" alt="firefox" /></a>
-                  <a href="http://www.google.com/chrome?hl=en&brand=CHMI" target="_blank"><img src="img/logo-chrome.png" class="logo_border" alt="firefox" /></a>
+                  <a href="http://www.google.com/chrome?hl=en&amp;brand=CHMI" target="_blank"><img src="img/logo-chrome.png" class="logo_border" alt="firefox" /></a>
                   <a href="http://www.apple.com/safari/" target="_blank"><img src="img/logo-safari.png" class="logo_border" alt="firefox" /></a>
                   <a href="http://www.opera.com/" target="_blank"><img src="img/logo-opera.png" class="logo_border" alt="opera" /></a>
                 </p>

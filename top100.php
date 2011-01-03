@@ -18,8 +18,8 @@
 */
 
 
-require_once 'header.php';
-require_once 'libs/char_lib.php';
+require_once "header.php";
+require_once "libs/char_lib.php";
 valid_login($action_permission["view"]);
 
 function top100($realmid)
@@ -105,7 +105,7 @@ function top100($realmid)
       CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, ';', ".(PLAYER_FIELD_HONOR_CURRENCY+1)."), ';', -1) AS UNSIGNED) AS honor,
       CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, ';', ".(PLAYER_FIELD_LIFETIME_HONORBALE_KILLS+1)."), ';', -1) AS UNSIGNED) AS kills,
       CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, ';', ".(PLAYER_FIELD_ARENA_CURRENCY+1)."), ';', -1) AS UNSIGNED) AS arena,
-      IFNULL((SELECT SUM(points) FROM character_achievement LEFT JOIN coremanager_dbc.achievement ON coremanager_dbc.achievement.id=character_achievement.achievement WHERE character_achievement.guid=characters.guid),0) AS ach_points
+      IFNULL((SELECT SUM(points) FROM character_achievement LEFT JOIN `".$dbc_db["name"]."`.achievement ON `".$dbc_db["name"]."`.achievement.id=character_achievement.achievement WHERE character_achievement.guid=characters.guid),0) AS ach_points
       FROM characters 
       ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
   }
@@ -146,7 +146,7 @@ function top100($realmid)
               power1 AS melee_hit,
               power2 AS range_hit,
               power3 AS spell_hit,
-              IFNULL((SELECT SUM(points) FROM character_achievement LEFT JOIN coremanager_dbc.achievement ON coremanager_dbc.achievement.id=character_achievement.achievement WHERE character_achievement.guid=characters.guid),0) AS ach_points
+              IFNULL((SELECT SUM(points) FROM character_achievement LEFT JOIN `".$dbc_db["name"]."`.achievement ON `".$dbc_db["name"]."`.achievement.id=character_achievement.achievement WHERE character_achievement.guid=characters.guid),0) AS ach_points
               FROM characters
               LEFT JOIN character_stats ON character_stats.guid=characters.guid
               ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;

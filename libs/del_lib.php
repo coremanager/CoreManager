@@ -104,18 +104,18 @@ function del_acc($acc_id)
     $user_lvl, $user_id, $tab_del_user_realmd, $tab_del_user_char, $tab_del_user_characters, $sql, $core;
 
   $del_char = 0;
-  
+
   // get username name to delete from account table
   if ( $core == 1 )
     $query = $sql["logon"]->query("SELECT login AS username FROM accounts WHERE acct='".$acc_id."'");
   else
     $query = $sql["logon"]->query("SELECT username FROM account WHERE id='".$acc_id."'");
 
-  $acct_name = $sql["logon"]->result($query, 0, 'username');
+  $acct_name = $sql["logon"]->result($query, 0, "username");
 
   // get the account's owner's SecurityLevel (not 100% perfect since we don't use the core gm)
-  $query = $sql["mgr"]->query("SELECT SecurityLevel FROM config_accounts WHERE Login='".$acc_name."'");
-  $gmlevel = $sql["mgr"]->result($query, 0, 'SecurityLevel');
+  $query = $sql["mgr"]->query("SELECT SecurityLevel FROM config_accounts WHERE Login='".$acct_name."'");
+  $gmlevel = $sql["mgr"]->result($query, 0, "SecurityLevel");
 
   if ( ( $user_lvl >= gmlevel($gmlevel) ) || ( $acc_id == $user_id ) )
   {
@@ -150,7 +150,7 @@ function del_acc($acc_id)
       else
         $sql["logon"]->query("DELETE FROM account WHERE id='".$acc_id."'");
 
-      $sql["mgr"]->query("DELETE FROM config_accounts WHERE Login = '".$acct_name."'");
+      $sql["mgr"]->query("DELETE FROM config_accounts WHERE Login='".$acct_name."'");
       if ( $sql["logon"]->affected_rows() )
         return array(true, $del_char);
     }
