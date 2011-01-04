@@ -19,9 +19,9 @@
 
 
 // page header, and any additional required libraries
-require_once 'header.php';
-require_once 'libs/char_lib.php';
-require_once 'libs/item_lib.php';
+require_once "header.php";
+require_once "libs/char_lib.php";
+require_once "libs/item_lib.php";
 // minimum permission to view page
 valid_login($action_permission["view"]);
 
@@ -51,7 +51,7 @@ function char_inv()
   {
     $realmid = $sql["logon"]->quote_smart($_GET["realm"]);
     if ( is_numeric($realmid) )
-      $sql["char"]->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name'], $characters_db[$realmid]["encoding"]);
+      $sql["char"]->connect($characters_db[$realmid]["addr"], $characters_db[$realmid]["user"], $characters_db[$realmid]["pass"], $characters_db[$realmid]["name"], $characters_db[$realmid]["encoding"]);
     else
       $realmid = $realm_id;
   }
@@ -77,15 +77,15 @@ function char_inv()
     $char = $sql["char"]->fetch_assoc($result);
 
     // we get user permissions first
-    $owner_acc_id = $sql["char"]->result($result, 0, 'acct');
+    $owner_acc_id = $sql["char"]->result($result, 0, "acct");
     if ( $core == 1 )
       $query = $sql["logon"]->query("SELECT login FROM accounts WHERE acct='".$owner_acc_id."'");
     else
       $query = $sql["logon"]->query("SELECT username as login FROM account WHERE id='".$owner_acc_id."'");
-    $owner_name = $sql["logon"]->result($query, 0, 'login');
+    $owner_name = $sql["logon"]->result($query, 0, "login");
 
     $query = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
-    $owner_gmlvl = $sql["mgr"]->result($query, 0, 'gm');
+    $owner_gmlvl = $sql["mgr"]->result($query, 0, "gm");
 
     // find out what mode we're in View or Delete (0 = View, 1 = Delete)
     $mode = ( ( isset($_GET["mode"]) ) ? $_GET["mode"] : 0 );
@@ -176,8 +176,8 @@ function char_inv()
             {
               $bag_id[$slot["slot"]] = ($slot["slot"]-18);
               $equiped_bag_id[$slot["slot"]-18] = array($slot["entry"],
-                $sql["world"]->result($sql["world"]->query('SELECT containerslots FROM items
-                  WHERE entry = '.$slot["entry"].''), 0, 'containerslots'), $slot["count"]);
+                $sql["world"]->result($sql["world"]->query("SELECT containerslots FROM items
+                  WHERE entry='".$slot["entry"]."'"), 0, "containerslots"), $slot["count"]);
             }
             elseif ( $slot["slot"] < 39 ) // SLOT 23 TO 38 (BackPack)
             {
@@ -219,7 +219,7 @@ function char_inv()
               $bank_bag_id[$slot["slot"]] = ($slot["slot"]-66);
               $equip_bnk_bag_id[$slot["slot"]-66] = array($slot["entry"], 
                 $sql["world"]->result($sql["world"]->query("SELECT containerslots FROM items
-                  WHERE entry='".$slot["entry"]."'"), 0, 'containerslots'), $slot["count"]);
+                  WHERE entry='".$slot["entry"]."'"), 0, "containerslots"), $slot["count"]);
             }
           }
           else
@@ -272,7 +272,7 @@ function char_inv()
               $bag_id[$slot["item"]] = ($slot["slot"]-18);
               $equiped_bag_id[$slot["slot"]-18] = array($slot["entry"],
                 $sql["world"]->result($sql["world"]->query("SELECT ContainerSlots FROM item_template
-                  WHERE entry='".$slot["entry"]."'"), 0, 'containerslots'), $slot["count"]);
+                  WHERE entry='".$slot["entry"]."'"), 0, "containerslots"), $slot["count"]);
             }
             elseif ( $slot["slot"] < 39 ) // SLOT 23 TO 38 (BackPack)
             {
@@ -304,7 +304,7 @@ function char_inv()
               $bank_bag_id[$slot["item"]] = ($slot["slot"]-66);
               $equip_bnk_bag_id[$slot["slot"]-66] = array($slot["entry"], 
                 $sql["world"]->result($sql["world"]->query('SELECT ContainerSlots FROM item_template
-                  WHERE entry = '.$slot["entry"].''), 0, 'ContainerSlots'), $slot["count"]);
+                  WHERE entry = '.$slot["entry"].''), 0, "ContainerSlots"), $slot["count"]);
             }
           }
           else
@@ -377,11 +377,11 @@ function char_inv()
       //---------------Page Specific Data Starts Here--------------------------
 
       // equipped bags
-      for ( $i=4; $i > 0; --$i )
+      for ( $i = 4; $i > 0; --$i )
       {
         $output .= '
                   <th>';
-        if($equiped_bag_id[$i])
+        if ( $equiped_bag_id[$i] )
         {
           $output .= '
                     <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$equiped_bag_id[$i][0].'" target="_blank">
@@ -467,7 +467,7 @@ function char_inv()
       foreach ( $bag[0] as $pos => $item )
       {
         // this_is_junk: style left hardcoded because it's calculated.
-        $item[2] = $item[2] == 1 ? '' : $item[2];
+        $item[2] = ( ( $item[2] == 1 ) ? '' : $item[2] );
         $output .= '
                       <div style="left:'.($pos%4*42).'px;top:'.(floor($pos/4)*41).'px;">
                         <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');">
@@ -550,7 +550,7 @@ function char_inv()
                 <tr>';
 
       // equipped bank bags, first 4
-      for ( $i=1; $i < 5; ++$i )
+      for ( $i = 1; $i < 5; ++$i )
       {
         $output .= '
                   <th>';
@@ -571,7 +571,7 @@ function char_inv()
                 <tr>';
 
       // equipped bank bag slots
-      for ( $t=1; $t < 8; ++$t )
+      for ( $t = 1; $t < 8; ++$t )
       {
         // equipped bank bags, last 3
         if ( $t === 5 )
@@ -579,7 +579,7 @@ function char_inv()
           $output .= '
                 </tr>
                 <tr>';
-          for ( $i=5; $i < 8; ++$i )
+          for ( $i = 5; $i < 8; ++$i )
           {
             $output .= '
                   <th>';
@@ -767,7 +767,7 @@ function dodelete_item()
   $slot = $sql["char"]->quote_smart($_GET["slot"]);
   $item = $sql["char"]->quote_smart($_GET["item"]);
 
-  if ( ( empty($cid) ) || ( empty($bag) ) || ( empty($slot) ) || ( empty($item) ) )
+  if ( ( !isset($cid) ) || ( !isset($bag) ) || ( !isset($slot) ) || ( !isset($item) ) )
     redirect("char_inv.php");
 
   if ( $core == 1 )
@@ -797,16 +797,16 @@ $action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 $output .= '
       <div class="bubble">';
 
-if ( $action == 'delete_item' )
+if ( $action == "delete_item" )
   delete_item();
-elseif ( $action == 'dodelete_item' )
+elseif ( $action == "dodelete_item" )
   dodelete_item();
 else
   char_inv();
 
 unset($action_permission);
 
-require_once 'footer.php';
+require_once "footer.php";
 
 
 ?>

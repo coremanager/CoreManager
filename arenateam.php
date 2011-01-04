@@ -19,7 +19,7 @@
 
 
 require_once("header.php");
-require_once("./libs/char_lib.php");
+require_once("libs/char_lib.php");
 valid_login($action_permission["view"]);
 
 //########################################################################################################################
@@ -303,7 +303,7 @@ function browse_teams()
         FROM arena_team");
     }
   }
-  $all_record = $sql["char"]->result($query_1,0);
+  $all_record = $sql["char"]->result($query_1, 0);
   unset($query_1);
   $this_page = $sql["char"]->num_rows($query);
 
@@ -334,9 +334,9 @@ function browse_teams()
                         <input type="hidden" name="error" value="4" />
                         <input type="text" size="24" name="search_value" value="'.$search_value.'" />
                         <select name="search_by">
-                          <option value="atname"'.( ( $search_by == 'atname' ) ? ' selected="selected"' : '' ).'>'.lang("arenateam", "by_name").'</option>
-                          <option value="leadername"'.( ( $search_by == 'leadername' ) ? ' selected="selected"' : '' ).'>'.lang("arenateam", "by_team_leader").'</option>
-                          <option value="atid"'.( ( $search_by == 'atid' ) ? ' selected="selected"' : '' ).">".lang("arenateam", "by_id").'</option>
+                          <option value="atname"'.( ( $search_by == "atname" ) ? ' selected="selected"' : '' ).'>'.lang("arenateam", "by_name").'</option>
+                          <option value="leadername"'.( ( $search_by == "leadername" ) ? ' selected="selected"' : '' ).'>'.lang("arenateam", "by_team_leader").'</option>
+                          <option value="atid"'.( ( $search_by == "atid" ) ? ' selected="selected"' : '' ).">".lang("arenateam", "by_id").'</option>
                         </select>
                       </form>
                     </td>
@@ -358,15 +358,15 @@ function browse_teams()
   $output .= '
           <table class="lined">
             <tr>
-              <th width="1%"><a href="arenateam.php?order_by=atid&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'atid' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "id").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=atname&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'atname' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "arenateam_name").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=lname&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'lname' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "captain").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=attype&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'attype' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "type").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=tot_chars&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'tot_chars' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "members").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=arenateam_online&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'arenateam_online' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "arenateam_online").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=rating&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'rating' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "rating").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=atgames&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'atgames' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "games").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=atwins&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'atwins' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "wins").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=atid&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "atid" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "id").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=atname&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "atname" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "arenateam_name").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=lname&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "lname" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "captain").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=attype&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "attype" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "type").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=tot_chars&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "tot_chars" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "members").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=arenateam_online&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "arenateam_online" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "arenateam_online").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=rating&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "rating" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "rating").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=atgames&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "atgames" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "games").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=atwins&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "atwins" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "wins").'</a></th>
             </tr>';
   while ( $data = $sql["char"]->fetch_assoc($query) )
   {
@@ -395,7 +395,7 @@ function browse_teams()
               <td>'.$data["atid"].'</td>
               <td><a href="arenateam.php?action=view_team&amp;error=3&amp;id='.$data["atid"].'">'.htmlentities($data["atname"], ENT_COMPAT, $site_encoding).'</a></td>
               <td><a href="char.php?id='.$data["lguid"].'">'.htmlentities($data["lname"], ENT_COMPAT, $site_encoding).'</a></td>
-              <td>'.lang("arenateam", $data["attype"].( ( $core == 3 ) ? "T" : "AM" )).'</td>
+              <td>'.lang("arenateam", $data["attype"].( ( $core == 1 ) ? "A" : "MT" )).'</td>
               <td>'.$member_count.'</td>
               <td>'.$members_online.'</td>
               <td>'.$data["atrating"].'</td>

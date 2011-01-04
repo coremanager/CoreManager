@@ -19,9 +19,9 @@
 
 
 // page header, and any additional required libraries
-require_once 'header.php';
-require_once 'libs/char_lib.php';
-require_once 'libs/spell_lib.php';
+require_once "header.php";
+require_once "libs/char_lib.php";
+require_once "libs/spell_lib.php";
 // minimum permission to view page
 valid_login($action_permission["view"]);
 
@@ -48,7 +48,7 @@ function char_talent()
   {
     $realmid = $sql["logon"]->quote_smart($_GET["realm"]);
     if ( is_numeric($realmid) )
-      $sql["char"]->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name'], $characters_db[$realmid]["encoding"]);
+      $sql["char"]->connect($characters_db[$realmid]["addr"], $characters_db[$realmid]["user"], $characters_db[$realmid]["pass"], $characters_db[$realmid]["name"], $characters_db[$realmid]["encoding"]);
     else
       $realmid = $realm_id;
   }
@@ -56,9 +56,7 @@ function char_talent()
   //-------------------SQL Injection Prevention--------------------------------
   // no point going further if we don have a valid ID
   $id = $sql["char"]->quote_smart($_GET["id"]);
-  if ( is_numeric($id) )
-    ;
-  else
+  if ( !is_numeric($id) )
     error(lang("global", "empty_fields"));
 
   if ( $core == 1 )
@@ -74,12 +72,12 @@ function char_talent()
     $char = $sql["char"]->fetch_assoc($result);
 
     //resrict by owner's gmlvl
-    $owner_acc_id = $sql["char"]->result($result, 0, 'acct');
+    $owner_acc_id = $sql["char"]->result($result, 0, "acct");
     if ( $core == 1 )
       $query = $sql["logon"]->query("SELECT login FROM accounts WHERE acct='".$owner_acc_id."'");
     else
       $query = $sql["logon"]->query("SELECT username as login FROM account WHERE id='".$owner_acc_id."'");
-    $owner_name = $sql["logon"]->result($query, 0, 'login');
+    $owner_name = $sql["logon"]->result($query, 0, "login");
 
     if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
     {
@@ -171,7 +169,7 @@ function char_talent()
 
       if ( count($talents) > 1 )
       {
-        $talent_rate = ( ( isset($server[$realmid]['talent_rate']) ) ? $server[$realmid]['talent_rate'] : 1 );
+        $talent_rate = ( ( isset($server[$realmid]["talent_rate"]) ) ? $server[$realmid]["talent_rate"] : 1 );
         $talent_points = ($char["level"] - 9) * $talent_rate;
         $talent_points_left = $char["talent_points"];
         $talent_points_used = $talent_points - $talent_points_left;
@@ -196,7 +194,7 @@ function char_talent()
               if ( isset($tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]]) )
                 $l -=$tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]][1];
 
-              $tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]] = array($talent_spell, '5', '5');
+              $tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]] = array($talent_spell, "5", "5");
               $l += 5;
               if ( $tab["Talent1"] )
                 talent_dependencies($tabs, $tab, $l);
@@ -206,7 +204,7 @@ function char_talent()
               if ( isset($tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]]) )
                 $l -=$tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]][1];
 
-              $tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]] = array($talent_spell, '4', ( ( $tab["Spell5"] ) ? '2' : '5' ));
+              $tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]] = array($talent_spell, "4", ( ( $tab["Spell5"] ) ? "2" : "5" ));
               $l += 4;
               if ( $tab["Talent1"] )
                 talent_dependencies($tabs, $tab, $l);
@@ -216,7 +214,7 @@ function char_talent()
               if ( isset($tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]]) )
                 $l -=$tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]][1];
 
-              $tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]] = array($talent_spell,'3', ( ( $tab["Spell4"] ) ? '2' : '5' ));
+              $tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]] = array($talent_spell, "3", ( ( $tab["Spell4"] ) ? "2" : "5" ));
               $l += 3;
               if ( $tab["Talent1"] )
                 talent_dependencies($tabs, $tab, $l);
@@ -226,7 +224,7 @@ function char_talent()
               if ( isset($tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]]) )
                 $l -=$tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]][1];
 
-              $tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]] = array($talent_spell,'2', ( ( $tab["Spell3"] ) ? '2' : '5' ));
+              $tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]] = array($talent_spell, "2", ( ( $tab["Spell3"] ) ? "2" : "5" ));
               $l += 2;
               if ( $tab["Talent1"] )
                 talent_dependencies($tabs, $tab, $l);
@@ -236,7 +234,7 @@ function char_talent()
               if ( isset($tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]]) )
                 $l -=$tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]][1];
 
-              $tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]] = array($talent_spell,'1', ( ( $tab["Spell2"] ) ? '2' : '5' ));
+              $tabs[$tab["TalentTab"]][$tab["Row"]][$tab["Col"]] = array($talent_spell,'1', ( ( $tab["Spell2"] ) ? "2" : "5" ));
               $l += 1;
               if ( $tab["Talent1"] )
                 talent_dependencies($tabs, $tab, $l);
@@ -248,7 +246,7 @@ function char_talent()
         $class_name = get_class_name($char["class"]);
         foreach ( $tabs as $k=>$data )
         {
-          $talent_name = $sql["dbc"]->result($sql["dbc"]->query("SELECT name FROM talenttab WHERE id='".$k."'"), 0, 'name');
+          $talent_name = $sql["dbc"]->result($sql["dbc"]->query("SELECT name FROM talenttab WHERE id='".$k."'"), 0, "name");
           $talent_name = str_replace(" ", "", $talent_name);
           $points = 0;
           $output .= '
@@ -259,9 +257,9 @@ function char_talent()
                        </td>
                      </tr>
                      <tr>';
-          for ( $i=0; $i<11; ++$i )
+          for ( $i = 0; $i < 11; ++$i )
           {
-            for ( $j=0; $j<4; ++$j )
+            for ( $j = 0; $j < 4; ++$j )
             {
               if ( isset($data[$i][$j]) )
               {
@@ -292,7 +290,7 @@ function char_talent()
                      </tr>
                       <tr>
                         <td colspan="6" valign="bottom" align="left">
-                         '.$sql["dbc"]->result($sql["dbc"]->query('SELECT name FROM talenttab WHERE id = '.$k.''), 0, 'name').': '.$points.'
+                         '.$sql["dbc"]->result($sql["dbc"]->query("SELECT name FROM talenttab WHERE id='".$k."'"), 0, "name").': '.$points.'
                         </td>
                       </tr>
                     </table>
@@ -361,7 +359,7 @@ function char_talent()
         {
           if ( $glyphs[$i] )
           {
-            $glyph = $sql["dbc"]->result($sql["dbc"]->query("SELECT spellid FROM glyphproperties WHERE id = '".$glyphs[$i]."'"), 0);
+            $glyph = $sql["dbc"]->result($sql["dbc"]->query("SELECT spellid FROM glyphproperties WHERE id='".$glyphs[$i]."'"), 0);
 
             $output .='
                     <a href="'.$base_datasite.$spell_datasite.$glyph.'" target="_blank">
@@ -409,7 +407,7 @@ function char_talent()
       // only GM with update permission can send mail, mail can send items, so update permission is needed
       if ( $user_lvl >= $action_permission["update"] )
       {
-        makebutton(lang("char", "send_mail"), 'mail.php?type=ingame_mail&amp;to='.$char["name"].'', 130);
+        makebutton(lang("char", "send_mail"), 'mail.php?type=ingame_mail&amp;to='.$char["name"], 130);
         $output .= '
                 </td>
                 <td>';
@@ -436,16 +434,16 @@ function get_class_name($class_id)
 {
   $class_names = array
     (
-       1  => 'Warrior',
-       2  => 'Paladin',
-       3  => 'Hunter',
-       4  => 'Rogue',
-       5  => 'Priest',
-       6  => 'DeathKnight',
-       7  => 'Shaman',
-       8  => 'Mage',
-       9  => 'Warlock',
-       11 => 'Druid',
+       1  => "Warrior",
+       2  => "Paladin",
+       3  => "Hunter",
+       4  => "Rogue",
+       5  => "Priest",
+       6  => "DeathKnight",
+       7  => "Shaman",
+       8  => "Mage",
+       9  => "Warlock",
+       11 => "Druid",
     );
 
   return $class_names[$class_id];
@@ -456,13 +454,13 @@ function talent_dependencies(&$tabs, &$tab, &$i)
 {
   global $sql;
 
-  $query = 'SELECT TalentTab, Row, Col, Spell'.($tab["TalentCount1"] + 1).', Talent1, TalentCount1'.( ( $tab["TalentCount1"] < 4 ) ? ', Spell'.($tab["TalentCount1"] + 2).'' : '' ).' FROM talent WHERE id = '.$tab["Talent1"].' AND Spell'.($tab["TalentCount1"] + 1).' != 0 LIMIT 1';
+  $query = "SELECT TalentTab, Row, Col, Spell".($tab["TalentCount1"] + 1).", Talent1, TalentCount1".( ( $tab["TalentCount1"] < 4 ) ? ", Spell".($tab["TalentCount1"] + 2) : "" )." FROM talent WHERE id='".$tab["Talent1"]."' AND Spell".($tab["TalentCount1"] + 1)." != 0 LIMIT 1";
 
   if ( $dep = $sql["dbc"]->fetch_assoc($sql["dbc"]->query($query)) )
   {
     if ( empty($tabs[$dep["TalentTab"]][$dep["Row"]][$dep["Col"]]) )
     {
-      $tabs[$dep["TalentTab"]][$dep["Row"]][$dep["Col"]] = array($dep["Spell".($tab["TalentCount1"] + 1).''], ''.($tab["TalentCount1"] + 1).'', ( ( $tab["TalentCount1"] < 4 ) ? ($dep["Spell".($tab["TalentCount1"] + 2).''] ? '2' : '5' ) : '5'));
+      $tabs[$dep["TalentTab"]][$dep["Row"]][$dep["Col"]] = array($dep["Spell".($tab["TalentCount1"] + 1)], ($tab["TalentCount1"] + 1), ( ( $tab["TalentCount1"] < 4 ) ? ($dep["Spell".($tab["TalentCount1"] + 2)] ? "2" : "5" ) : "5" ));
       $i += ($tab["TalentCount1"] + 1);
       if ( $dep["Talent1"] )
         talent_dependencies($tabs, $dep, $i);
@@ -485,7 +483,7 @@ char_talent();
 
 unset($action_permission);
 
-require_once 'footer.php';
+require_once "footer.php";
 
 
 ?>
