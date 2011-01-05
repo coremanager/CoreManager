@@ -30,7 +30,7 @@ valid_login($action_permission["view"]);
 //########################################################################################################################
 function char_talent()
 {
-  global $output, $realm_id, $characters_db, $corem_db, $server, $action_permission,
+  global $output, $realm_id, $characters_db, $corem_db, $dbc_db, $server, $action_permission,
     $site_encoding, $user_lvl, $user_name, $base_datasite, $spell_datasite, $sql, $core;
 
   // this page uses wowhead tooltops
@@ -127,6 +127,20 @@ function char_talent()
             array_push($talents, $t);
             $pick = 1;
           }
+        }
+      }
+      elseif ( $core == 2 )
+      {
+        $query = "SELECT * FROM character_talent
+                    LEFT JOIN `".$dbc_db["name"]."`.talent ON character_talent.talent_id=talent.ID
+                  WHERE guid='".$id."' AND spec='".($cur_spec-1)."'";
+        $result = $sql["char"]->query($query);
+        $talents = array();
+        while ( $row = $sql["char"]->fetch_assoc($result) )
+        {
+          $cur_rank = $row["current_rank"] + 1;
+          array_push($talents, $row["Spell".$cur_rank]);
+          array_push($talent_ranks, 0);
         }
       }
       else
