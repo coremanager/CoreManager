@@ -1,7 +1,7 @@
 <?php
 /*
     CoreManager, PHP Front End for ArcEmu, MaNGOS, and TrinityCore
-    Copyright (C) 2010  CoreManager Project
+    Copyright (C) 2010-2011  CoreManager Project
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -428,7 +428,7 @@ $GLOBALS['lang_char'] = array
   'edit_char' => 'Editiere Charkaterdaten',
   'edit_button' => 'Bearbeite Daten',
   'edit_rules' => 'Die Werte sind Charakterbasiswerte ohne Gegenstands/Buffmodifikatoren.',
-  'edit_offline_only_char' => ' - Nur Charakter die offline sind k&ouml;nnen bearbeitet werden.',
+  'edit_offline_only_char' => 'Nur Charakter die offline sind k&ouml;nnen bearbeitet werden.',
   'no_permission' => 'Du hast nicht die ben&ouml;tigte Berechtigung um diesen Charakter zu bearbeiten.',
   'err_edit_online_char' => 'Charaktere, die online sind, k&ouml;nnen nicht bearbeitet werden.',
   'updated' => 'Charakterdaten wurden erfolgreich aktualisiert',

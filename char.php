@@ -1,7 +1,7 @@
 <?php
 /*
     CoreManager, PHP Front End for ArcEmu, MaNGOS, and TrinityCore
-    Copyright (C) 2010  CoreManager Project
+    Copyright (C) 2010-2011  CoreManager Project
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -159,45 +159,45 @@ function char_main()
         $char_data_result = $sql["char"]->query($query);
         $char_data_fields = $sql["char"]->fetch_assoc($char_data_result);
 
-        $char_data[PLAYER_BLOCK_PERCENTAGE] = ( ( $char_data_fields["blockPct"] ) ? $char_data_fields["blockPct"] : '&nbsp;' );
-        $char_data[PLAYER_DODGE_PERCENTAGE] = ( ( $char_data_fields["dodgePct"] ) ? $char_data_fields["dodgePct"] : '&nbsp;' );
-        $char_data[PLAYER_PARRY_PERCENTAGE] = ( ( $char_data_fields["parryPct"] ) ? $char_data_fields["parryPct"] : '&nbsp;' );
-        $char_data[PLAYER_CRIT_PERCENTAGE] = ( ( $char_data_fields["critPct"] ) ? $char_data_fields["critPct"] : '&nbsp;' );
-        $char_data[PLAYER_RANGED_CRIT_PERCENTAGE] = ( ( $char_data_fields["rangedCritPct"] ) ? $char_data_fields["rangedCritPct"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_MAXDAMAGE] = ( ( $char_data_fields["attackPower"] ) ? $char_data_fields["attackPower"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_MINDAMAGE] = ( ( $char_data_fields["attackPower"] ) ? $char_data_fields["attackPower"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_MAXRANGEDDAMAGE] = ( ( $char_data_fields["rangedAttackPower"] ) ? $char_data_fields["rangedAttackPower"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_MINRANGEDDAMAGE] = ( ( $char_data_fields["rangedAttackPower"] ) ? $char_data_fields["rangedAttackPower"] : '&nbsp;' );
-        $char_data[PLAYER_SPELL_CRIT_PERCENTAGE1] = ( ( $char_data_fields["spellCritPct"] ) ? $char_data_fields["spellCritPct"] : '&nbsp;' );
-        $char_data[PLAYER_FIELD_MOD_DAMAGE_DONE_POS] = ( ( $char_data_fields["spellPower"] ) ? $char_data_fields["spellPower"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_STAT0] = ( ( $char_data_fields["strength"] ) ? $char_data_fields["strength"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_STAT1] = ( ( $char_data_fields["agility"] ) ? $char_data_fields["agility"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_STAT2] = ( ( $char_data_fields["stamina"] ) ? $char_data_fields["stamina"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_STAT3] = ( ( $char_data_fields["intellect"] ) ? $char_data_fields["intellect"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_STAT4] = ( ( $char_data_fields["spirit"] ) ? $char_data_fields["spirit"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_RESISTANCES] = ( ( $char_data_fields["armor"] ) ? $char_data_fields["armor"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_RESISTANCES + 1] = ( ( $char_data_fields["resHoly"] ) ? $char_data_fields["resHoly"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_RESISTANCES + 2] = ( ( $char_data_fields["resArcane"] ) ? $char_data_fields["resArcane"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_RESISTANCES + 3] = ( ( $char_data_fields["resFire"] ) ? $char_data_fields["resFire"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_RESISTANCES + 4] = ( ( $char_data_fields["resNature"] ) ? $char_data_fields["resNature"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_RESISTANCES + 5] = ( ( $char_data_fields["resFrost"] ) ? $char_data_fields["resFrost"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_RESISTANCES + 6] = ( ( $char_data_fields["resShadow"] ) ? $char_data_fields["resShadow"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_HEALTH] = ( ( $char["health"] ) ? $char["health"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_MAXHEALTH] = ( ( $char_data_fields["maxhealth"] ) ? $char_data_fields["maxhealth"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_POWER1] = ( ( $char["power1"] ) ? $char["power1"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_POWER2] = ( ( $char["power2"] ) ? $char["power2"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_POWER3] = ( ( $char["power3"] ) ? $char["power3"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_POWER4] = ( ( $char["power4"] ) ? $char["power4"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_POWER5] = ( ( $char["power5"] ) ? $char["power5"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_POWER6] = ( ( $char["power6"] ) ? $char["power6"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_POWER7] = ( ( $char["power7"] ) ? $char["power7"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_MAXPOWER1] = ( ( $char_data_fields["maxpower1"] ) ? $char_data_fields["maxpower1"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_MAXPOWER2] = ( ( $char_data_fields["maxpower2"] ) ? $char_data_fields["maxpower2"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_MAXPOWER3] = ( ( $char_data_fields["maxpower3"] ) ? $char_data_fields["maxpower3"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_MAXPOWER4] = ( ( $char_data_fields["maxpower4"] ) ? $char_data_fields["maxpower4"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_MAXPOWER5] = ( ( $char_data_fields["maxpower5"] ) ? $char_data_fields["maxpower5"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_MAXPOWER6] = ( ( $char_data_fields["maxpower6"] ) ? $char_data_fields["maxpower6"] : '&nbsp;' );
-        $char_data[UNIT_FIELD_MAXPOWER7] = ( ( $char_data_fields["maxpower7"] ) ? $char_data_fields["maxpower7"] : '&nbsp;' );
+        $char_data[PLAYER_BLOCK_PERCENTAGE] = ( ( isset($char_data_fields["blockPct"]) ) ? $char_data_fields["blockPct"] : '&nbsp;' );
+        $char_data[PLAYER_DODGE_PERCENTAGE] = ( ( isset($char_data_fields["dodgePct"]) ) ? $char_data_fields["dodgePct"] : '&nbsp;' );
+        $char_data[PLAYER_PARRY_PERCENTAGE] = ( ( isset($char_data_fields["parryPct"]) ) ? $char_data_fields["parryPct"] : '&nbsp;' );
+        $char_data[PLAYER_CRIT_PERCENTAGE] = ( ( isset($char_data_fields["critPct"]) ) ? $char_data_fields["critPct"] : '&nbsp;' );
+        $char_data[PLAYER_RANGED_CRIT_PERCENTAGE] = ( ( isset($char_data_fields["rangedCritPct"]) ) ? $char_data_fields["rangedCritPct"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXDAMAGE] = ( ( isset($char_data_fields["attackPower"]) ) ? $char_data_fields["attackPower"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MINDAMAGE] = ( ( isset($char_data_fields["attackPower"]) ) ? $char_data_fields["attackPower"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXRANGEDDAMAGE] = ( ( isset($char_data_fields["rangedAttackPower"]) ) ? $char_data_fields["rangedAttackPower"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MINRANGEDDAMAGE] = ( ( isset($char_data_fields["rangedAttackPower"]) ) ? $char_data_fields["rangedAttackPower"] : '&nbsp;' );
+        $char_data[PLAYER_SPELL_CRIT_PERCENTAGE1] = ( ( isset($char_data_fields["spellCritPct"]) ) ? $char_data_fields["spellCritPct"] : '&nbsp;' );
+        $char_data[PLAYER_FIELD_MOD_DAMAGE_DONE_POS] = ( ( isset($char_data_fields["spellPower"]) ) ? $char_data_fields["spellPower"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_STAT0] = ( ( isset($char_data_fields["strength"]) ) ? $char_data_fields["strength"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_STAT1] = ( ( isset($char_data_fields["agility"]) ) ? $char_data_fields["agility"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_STAT2] = ( ( isset($char_data_fields["stamina"]) ) ? $char_data_fields["stamina"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_STAT3] = ( ( isset($char_data_fields["intellect"]) ) ? $char_data_fields["intellect"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_STAT4] = ( ( isset($char_data_fields["spirit"]) ) ? $char_data_fields["spirit"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES] = ( ( isset($char_data_fields["armor"]) ) ? $char_data_fields["armor"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES + 1] = ( ( isset($char_data_fields["resHoly"]) ) ? $char_data_fields["resHoly"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES + 2] = ( ( isset($char_data_fields["resArcane"]) ) ? $char_data_fields["resArcane"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES + 3] = ( ( isset($char_data_fields["resFire"]) ) ? $char_data_fields["resFire"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES + 4] = ( ( isset($char_data_fields["resNature"]) ) ? $char_data_fields["resNature"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES + 5] = ( ( isset($char_data_fields["resFrost"]) ) ? $char_data_fields["resFrost"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_RESISTANCES + 6] = ( ( isset($char_data_fields["resShadow"]) ) ? $char_data_fields["resShadow"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_HEALTH] = ( ( isset($char["health"]) ) ? $char["health"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXHEALTH] = ( ( isset($char_data_fields["maxhealth"]) ) ? $char_data_fields["maxhealth"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER1] = ( ( isset($char["power1"]) ) ? $char["power1"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER2] = ( ( isset($char["power2"]) ) ? $char["power2"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER3] = ( ( isset($char["power3"]) ) ? $char["power3"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER4] = ( ( isset($char["power4"]) ) ? $char["power4"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER5] = ( ( isset($char["power5"]) ) ? $char["power5"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER6] = ( ( isset($char["power6"]) ) ? $char["power6"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_POWER7] = ( ( isset($char["power7"]) ) ? $char["power7"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER1] = ( ( isset($char_data_fields["maxpower1"]) ) ? $char_data_fields["maxpower1"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER2] = ( ( isset($char_data_fields["maxpower2"]) ) ? $char_data_fields["maxpower2"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER3] = ( ( isset($char_data_fields["maxpower3"]) ) ? $char_data_fields["maxpower3"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER4] = ( ( isset($char_data_fields["maxpower4"]) ) ? $char_data_fields["maxpower4"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER5] = ( ( isset($char_data_fields["maxpower5"]) ) ? $char_data_fields["maxpower5"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER6] = ( ( isset($char_data_fields["maxpower6"]) ) ? $char_data_fields["maxpower6"] : '&nbsp;' );
+        $char_data[UNIT_FIELD_MAXPOWER7] = ( ( isset($char_data_fields["maxpower7"]) ) ? $char_data_fields["maxpower7"] : '&nbsp;' );
         $char_data[PLAYER_FIELD_MOD_HEALING_DONE_POS] = "ERR";
         $char_data[PLAYER_FIELD_COMBAT_RATING_1+5] = "ERR";
         $char_data[PLAYER_FIELD_COMBAT_RATING_1+17] = "ERR";
@@ -205,9 +205,9 @@ function char_main()
         $char_data[PLAYER_FIELD_COMBAT_RATING_1+7] = "ERR";
         $char_data[PLAYER_EXPERTISE] = "ERR";
         $char_data[PLAYER_OFFHAND_EXPERTISE] = "ERR";
-        $char_data[PLAYER_FIELD_HONOR_CURRENCY] = ( ( $char["totalHonorPoints"] ) ? $char["totalHonorPoints"] : '&nbsp;' );
-        $char_data[PLAYER_FIELD_ARENA_CURRENCY] = ( ( $char["arenaPoints"] ) ? $char["arenaPoints"] : '&nbsp;' );
-        $char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS] = ( ( $char["totalKills"] ) ? $char["totalKills"] : '&nbsp;' );
+        $char_data[PLAYER_FIELD_HONOR_CURRENCY] = ( ( isset($char["totalHonorPoints"]) ) ? $char["totalHonorPoints"] : '&nbsp;' );
+        $char_data[PLAYER_FIELD_ARENA_CURRENCY] = ( ( isset($char["arenaPoints"]) ) ? $char["arenaPoints"] : '&nbsp;' );
+        $char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS] = ( ( isset($char["totalKills"]) ) ? $char["totalKills"] : '&nbsp;' );
       }
 
       if ( $core == 1 )
@@ -619,7 +619,7 @@ function char_main()
                       <br />'.lang("char", "location").': '.get_map_name($char["mapid"]).' - '.get_zone_name($char["zoneid"]).'
                       <br />'.lang("char", "honor_points").': '.$char_data[PLAYER_FIELD_HONOR_CURRENCY].' | '.lang("char", "arena_points").': '.$char_data[PLAYER_FIELD_ARENA_CURRENCY].' | '.lang("char", "honor_kills").': '.$char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS].'
                       <br />'.lang("char", "guild").': '.$guild_name.' | '.lang("char", "rank").': '.htmlentities($guild_rank, ENT_COMPAT, $site_encoding).'
-                      <br />'.lang("char", "online").': '.( ( $char["online"] ) ? '<img src="img/up.gif" onmousemove="oldtoolTip(\'Online\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="online" />' : '<img src="img/down.gif" onmousemove="oldtoolTip(\'Offline\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="offline" />' );
+                      <br />'.lang("char", "online").': '.( ( $char["online"] ) ? '<img src="img/up.gif" onmousemove="oldtoolTip(\''.lang("char", "online").'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="online" />' : '<img src="img/down.gif" onmousemove="oldtoolTip(\''.lang("char", "offline").'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="offline" />' );
       if ( $showcountryflag )
       {
         require_once 'libs/misc_lib.php';
@@ -1523,9 +1523,9 @@ function char_main()
 
       // only higher level GM with delete access can edit character
       //  character edit allows removal of character items, so delete permission is needed
-      if ( ( $user_lvl > $owner_gmlvl ) && ( $user_lvl >= $action_permission["delete"] ) )
+      if ( ( $user_lvl >= $owner_gmlvl ) && ( $user_lvl >= $action_permission["delete"] ) )
       {
-                  //makebutton($lang_char["edit_button"], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
+        makebutton(lang("char", "edit_button"), 'char_edit.php?id='.$id.'&amp;realm='.$realmid, 130);
         $output .= '
                 </td>
                 <td>';
@@ -1549,11 +1549,20 @@ function char_main()
       // only GM with update permission can send mail, mail can send items, so update permission is needed
       if ( $user_lvl >= $action_permission["update"] )
       {
-        makebutton(lang("char", "send_mail"), 'mail.php?type=ingame_mail&amp;to='.$char["name"].'', 130);
+        makebutton(lang("char", "send_mail"), 'mail.php?type=ingame_mail&amp;to='.$char["name"], 130);
         $output .= '
                 </td>
                 <td>';
       }
+      else
+      {
+        $output .= '
+                </td>';
+      }
+      $output .= '
+              </tr>
+              <tr>
+                <td>';
       makebutton(lang("global", "back"), 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>

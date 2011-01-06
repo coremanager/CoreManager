@@ -5,6 +5,8 @@ CoreManager Project Team:
 
 LANGUAGE PACK TRANSLATORS:
 
+- Chinese (Simplified) -- Drama
+- French -- fra298
 - German -- Marcus <Knight>
 - Persian -- Lurker
 

@@ -1,7 +1,7 @@
 <?php
 /*
     CoreManager, PHP Front End for ArcEmu, MaNGOS, and TrinityCore
-    Copyright (C) 2010  CoreManager Project
+    Copyright (C) 2010-2011  CoreManager Project
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,6 +49,9 @@ function browse_users()
 
   $order_dir = ( ( $dir ) ? "ASC" : "DESC" );
   $dir = ( ( $dir ) ? 0 : 1 );
+
+  // temporary default
+  $show_chars = ( ( isset($_GET["show_chars"]) ) ? $sql["logon"]->quote_smart($_GET["show_chars"]) : 0 );
 
   //-------------------Search--------------------------------------------------
   $search_by = '';
@@ -412,6 +415,9 @@ function browse_users()
   else
     $output .= '
                   <th width="1%"></th>';
+  //expander symbol
+  $output .= '
+                  <th width="1%"></th>';
   $output .='
                   <th width="1%"><a href="user.php?order_by=acct&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.( ( $order_by=='acct' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("user", "acct").'</a></th>
                   <th width="1%"><a href="user.php?order_by=login&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.( ( $order_by=='login' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("user", "login").'</a></th>
@@ -461,18 +467,43 @@ function browse_users()
     // clear character count from previous account
     $char_count = 0;
 
+    // in case we're displaying the user's characters
+    $char_list = array();
+    $realm_list = array();
+
     foreach ( $characters_db as $db )
     {
-        $sqlt = new SQL;
-        $sqlt->connect($db["addr"], $db["user"], $db["pass"], $db["name"], $db["encoding"]);
+      $sqlt = new SQL;
+      $sqlt->connect($db["addr"], $db["user"], $db["pass"], $db["name"], $db["encoding"]);
+
+      if ( $core == 1 )
+        $char_query = "SELECT COUNT(*) FROM characters WHERE acct='".$data["acct"]."'";
+      else
+        $char_query = "SELECT COUNT(*) FROM characters WHERE account='".$data["acct"]."'";
+      $char_result = $sqlt->query($char_query);
+      $char_count_fields = $sqlt->fetch_assoc($char_result);
+      $char_count += $char_count_fields["COUNT(*)"];
+
+      // if we need to, build the character list
+      if ( $data["acct"] == $show_chars )
+      {
+        $realm_char_list = array();
+
+        // store the realm id for later
+        $realm_list[] = $db["id"];
 
         if ( $core == 1 )
-          $char_query = "SELECT COUNT(*) FROM characters WHERE acct='".$data["acct"]."'";
+          $char_query = "SELECT guid FROM characters WHERE acct='".$data["acct"]."' ORDER BY guid ASC";
         else
-          $char_query = "SELECT COUNT(*) FROM characters WHERE account='".$data["acct"]."'";
+          $char_query = "SELECT guid FROM characters WHERE account='".$data["acct"]."' ORDER BY guid ASC";
+
         $char_result = $sqlt->query($char_query);
-        $char_count_fields = $sqlt->fetch_assoc($char_result);
-        $char_count += $char_count_fields["COUNT(*)"];
+
+        while ( $row = $sqlt->fetch_assoc($char_result) )
+          $realm_char_list[] = $row["guid"];
+
+        $char_list[] = $realm_char_list;
+      }
     }
 
     //if ( ( $user_lvl >= gmlevel($screenname["sec_lvl"]) ) || ( $user_name == $data["login"] ) )
@@ -485,6 +516,11 @@ function browse_users()
       else
         $output .= '
                   <td>*</td>';
+      // show character expander symbol
+      $output .= '
+                  <td>
+                    <a href="user.php?order_by=acct&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.( ( $dir ) ? 0 : 1 ).'&amp;show_chars='.$data["acct"].'">+</a>
+                  </td>';
       if ( ( $user_lvl >= $action_permission["insert"] ) || ( $user_name == $data["login"] ) )
         $output .= '
                   <td>'.$data["acct"].'</td>
@@ -596,6 +632,63 @@ function browse_users()
       }
       $output .= '
                 </tr>';
+
+      // if we're going to, show characters owned by this account (all realms)
+      if ( $data["acct"] == $show_chars )
+      {
+        $output .= '
+                <tr>
+                  <td colspan="3">&nbsp;</td>
+                  <td colspan="';
+        if ( $expansion_select || $showcountryflag )
+        {
+          if ( $expansion_select && $showcountryflag )
+            $output .= '13';
+          else
+            $output .= '12';
+        }
+        else
+          $output .= '11';
+        $output .= '">
+                    <table class="hidden">';
+
+        for ( $i = 0; $i < count($char_list); $i++ )
+        {
+          $realm_chars = $char_list[$i];
+
+          $cur_realm = $realm_list[$i];
+          $realm_name_query = "SELECT * FROM config_servers WHERE `Index`='".$cur_realm."'";
+          $realm_name_result = $sql["mgr"]->query($realm_name_query);
+          $realm_name_result = $sql["mgr"]->fetch_assoc($realm_name_result);
+          $cur_realm_name = $realm_name_result["Name"];
+
+          $sqlt = new SQL;
+          $sqlt->connect($characters_db[$cur_realm]["addr"], $characters_db[$cur_realm]["user"], $characters_db[$cur_realm]["pass"], $characters_db[$cur_realm]["name"], $characters_db[$cur_realm]["encoding"]);
+
+          $output .= '
+                      <tr>
+                        <td align="left">'.$cur_realm_name.'</td>
+                      </tr>';
+          foreach ( $realm_chars as $row)
+          {
+            $row_name_query = "SELECT * FROM characters WHERE guid='".$row."'";
+            $row_name_result = $sqlt->query($row_name_query);
+            $row_name_result = $sqlt->fetch_assoc($row_name_result);
+
+            $output .= '
+                      <tr>
+                        <td align="left">
+                          <a href="char.php?id='.$row.'&amp;realm='.$cur_realm.'">'.$row_name_result["name"].'</a> - <img src="img/c_icons/'.$row_name_result["race"].'-'.$row_name_result["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($row_name_result["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
+                          <img src="img/c_icons/'.$row_name_result["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($row_name_result["class"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt=""/> - '.lang("char", "level_short").char_get_level_color($row_name_result["level"]).'
+                        </td>
+                      </tr>';
+          }
+        }
+        $output .= '
+                    </table>
+                  </td>
+                </tr>';
+      }
     }
     /*else
     {
@@ -619,12 +712,12 @@ function browse_users()
   if ( $expansion_select || $showcountryflag )
   {
     if ( $expansion_select && $showcountryflag )
-      $output .= '13';
+      $output .= '16';
     else
-      $output .= '12';
+      $output .= '15';
   }
   else
-    $output .= '11';
+    $output .= '14';
   $output .= '" class="hidden" align="right" width="25%">';
   $output .= generate_pagination('user.php?order_by='.$order_by.'&amp;dir='.( ( $dir ) ? 0 : 1 ).( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'', $all_record, $itemperpage, $start);
   $output .= '

@@ -1,7 +1,7 @@
 ﻿<?php
 /*
     CoreManager, PHP Front End for ArcEmu, MaNGOS, and TrinityCore
-    Copyright (C) 2010  CoreManager Project
+    Copyright (C) 2010-2011  CoreManager Project
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -428,7 +428,7 @@ $GLOBALS['lang_char'] = array
   'edit_char' => 'اصلاح اطلاعات کاراکتر',
   'edit_button' => 'اصلاح اطلاعات',
   'edit_rules' => 'مقادیر اطلاعات کاراکتر پایه می باشد و بدون در نظر گرفتن آیتم می باشد.',
-  'edit_offline_only_char' => ' - فقط کاراکتر غیر فعال قابل تصحیح می باشد',
+  'edit_offline_only_char' => 'فقط کاراکتر غیر فعال قابل تصحیح می باشد',
   'no_permission' => ' شما مجاز به اصلاح/دیدن این کاراکتر نیستید',
   'err_edit_online_char' => 'کاراکتر فعال قابل تصحیح نمی باشد',
   'updated' => 'اطلاعات کاراکتر با موفقیت به روز شد',

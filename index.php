@@ -1,7 +1,7 @@
 <?php
 /*
     CoreManager, PHP Front End for ArcEmu, MaNGOS, and TrinityCore
-    Copyright (C) 2010  CoreManager Project
+    Copyright (C) 2010-2011  CoreManager Project
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -375,7 +375,7 @@ else
       elseif ( $core == 2 )
         $result = $sql["char"]->query("SELECT character_ticket.ticket_id AS ticketid, characters.level,
           ticket_text AS message, characters.name, UNIX_TIMESTAMP(ticket_lastchange) AS timestamp,
-          character_ticket.guid, account AS acct
+          character_ticket.guid AS playerGuid, account AS acct
           FROM character_ticket
             LEFT JOIN characters ON characters.guid=character_ticket.guid
           ORDER BY ticketid DESC LIMIT ".$start_m.", 3");
@@ -402,7 +402,7 @@ else
             $output .= '<tr>
                   <td align="left">
                     <a href="char.php?id='.$post["playerGuid"].'">
-                        <span onmousemove="oldtoolTip(\''.htmlspecialchars($login["username"]).' ('.id_get_gm_level($gm).')'.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($post["name"], ENT_COMPAT, $site_encoding).'</span>
+                      <span onmousemove="oldtoolTip(\''.htmlspecialchars($login["username"]).' ('.id_get_gm_level($gm).')'.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($post["name"], ENT_COMPAT, $site_encoding).'</span>
                     </a>
                  </td>
               </tr>

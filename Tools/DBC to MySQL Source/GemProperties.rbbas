@@ -50,7 +50,7 @@ Inherits RunnerClass
 	#tag Note, Name = LICENSE
 		
 		CoreManager, PHP Front End for ArcEmu, MaNGOS, and TrinityCore
-		    Copyright (C) 2010  CoreManager Project
+		    Copyright (C) 2010-2011  CoreManager Project
 		
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
