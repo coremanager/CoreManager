@@ -32,7 +32,7 @@ valid_login($action_permission["view"]);
 //#############################################################################
 function front()
 {
-  global $output, $realm_id, $world_db, $logon_db, $corem_db, $server,
+  global $output, $realm_id, $world_db, $logon_db, $characters_db, $corem_db, $server,
     $action_permission, $user_lvl, $user_id, $site_encoding,
     $showcountryflag, $gm_online_count, $gm_online, $itemperpage,
     $hide_max_players, $hide_avg_latency, $hide_plr_latency, $hide_server_mem, $sql, $core;
@@ -602,25 +602,25 @@ else
         $order_side = ( ( in_array($sql["char"]->result($result, 0), array(2, 5, 6, 8, 10)) ) ? " AND race IN (2, 5, 6, 8, 10) " : " AND race IN (1, 3, 4, 7, 11) " );
     }
 
-    if ( $order_by == "ip" )
-      //this_is_junk: oops, cross referencing character & account works for me because I mix the logon & character databases :/
-      //hmmm.... this will work as long as the logon & character databases are on the same MySQL server.
-      $result = $sql["logon"]->query("SELECT acct, lastip FROM accounts WHERE acct=any(SELECT acct FROM ".$character_db[$realm_id]['name']."characters WHERE online=1) ORDER BY lastip ".$order_dir." LIMIT ".$start.", ".$itemperpage);
+    if ( $core == 1 )
+      $result = $sql["char"]->query("SELECT guid, name, race, class, zoneid, mapid, level, acct, gender,
+                            CAST( SUBSTRING_INDEX( SUBSTRING_INDEX( data, ';', ".(PLAYER_FIELD_HONOR_CURRENCY+1)." ), ';', -1 ) AS UNSIGNED ) AS highest_rank, lastip
+                            FROM characters
+                              LEFT JOIN `".$logon_db["name"]."`.accounts ON characters.acct=`".$logon_db["name"]."`.accounts.acct
+                            WHERE characters.online=1 ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
+    elseif ( $core == 2 ) // this_is_junk: MaNGOS doesn't store player latency
+      $result = $sql["char"]->query("SELECT guid, name, race, class, zone AS zoneid, map AS mapid, level, account AS acct, gender,
+                            totalHonorPoints AS highest_rank, last_ip AS lastip
+                            FROM characters
+                              LEFT JOIN `".$logon_db["name"]."`.account ON characters.account=`".$logon_db["name"]."`.account.id
+                            WHERE characters.online=1 ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
     else
-    {
-      if ( $core == 1 )
-        $result = $sql["char"]->query("SELECT guid, name, race, class, zoneid, mapid, level, acct, gender,
-                              CAST( SUBSTRING_INDEX( SUBSTRING_INDEX( data, ';', ".(PLAYER_FIELD_HONOR_CURRENCY+1)." ), ';', -1 ) AS UNSIGNED ) AS highest_rank
-                              FROM characters WHERE online=1 ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
-      elseif ( $core == 2 ) // this_is_junk: MaNGOS doesn't store player latency
-        $result = $sql["char"]->query("SELECT guid, name, race, class, zone AS zoneid, map AS mapid, level, account AS acct, gender,
-                              totalHonorPoints AS highest_rank
-                              FROM characters WHERE online=1 ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
-      else
-        $result = $sql["char"]->query("SELECT guid, name, race, class, zone AS zoneid, map AS mapid, level, account AS acct, gender,
-                              totalHonorPoints AS highest_rank, latency
-                              FROM characters WHERE online=1 ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
-    }
+      $result = $sql["char"]->query("SELECT guid, name, race, class, zone AS zoneid, map AS mapid, level, account AS acct, gender,
+                            totalHonorPoints AS highest_rank, latency, last_ip AS lastip
+                            FROM characters
+                              LEFT JOIN `".$logon_db["name"]."`.account ON characters.account=`".$logon_db["name"]."`.account.id
+                            WHERE characters.online=1 ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
+
     $total_online = $sql["char"]->result($sql["char"]->query("SELECT count(*) FROM characters WHERE online= 1"), 0);
     $replace = '
               <tr>
@@ -668,7 +668,7 @@ else
     {
       require_once 'libs/misc_lib.php';
       $output .= '
-                <th width="1%">'.lang("global", "country").'</th>';
+                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=lastip&amp;dir='.$dir.'"'.( ( $order_by === "lastip" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("global", "country").'</a></th>';
     }
 
     $output .= '
@@ -677,12 +677,6 @@ else
 
     while ( $char = $sql["char"]->fetch_assoc($result) )
     {
-      if ( $order_by == 'ip' )
-      {
-        $temp = $sql["char"]->fetch_assoc($sql["char"]->query("SELECT guid, name, race, class, zoneid, mapid, level, acct, gender FROM characters WHERE online=1 ".$order_side." AND acct=".$char["id"]));
-        $char = $temp;
-      }
-
       if ( $core == 1 )
         $ca_query = "SELECT accounts.login AS name FROM `".$logon_db["name"]."`.accounts LEFT JOIN `".$corem_db["name"]."`.config_accounts ON accounts.login = `".$corem_db["name"]."`.config_accounts.Login WHERE acct='".$char["acct"]."'";
       else
@@ -781,7 +775,7 @@ else
 
       if ( $showcountryflag )
       {
-        $country = misc_get_country_by_account($char["acct"]);
+        $country = misc_get_country_by_ip($char["lastip"]);
         $output .='
                 <td>'.( ( $country["code"] ) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).( ( $user_lvl >= $action_permission["update"] ) ? '<br />'.$country["actualip"] : '' ).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />' : '-' ).'</td>';
       }

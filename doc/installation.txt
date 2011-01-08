@@ -66,15 +66,19 @@ INSTALLATION:
 
   20. Click on both "Add Character Database" and "Add World Database".
 
-  21. Configure the settings for the Character, and World Databases.
+  21. Configure the settings for the section named "Host" with your database server's information.
 
-  22. Click on the 'Servers' tab in the ACP.
+  22. Configure the settings for the DBC and Authentication Databases.
+
+  23. Configure the settings for the Character and World Databases.
+
+  24. Click on the 'Servers' tab.
   
-  23. Click on "Add New Server".
+  25. Click on "Add New Server".
   
-  24. Click the "Edit" button for the new server.
+  26. Click the "Edit" button for the new server.
 
-  25. Make appropriate changes for the newly created server.
+  27. Make appropriate changes for the newly created server.
 
-  26. Run the included DBC to MySQL Convertor tool. Instructions are in \Tools\README (DBC to MySQL).txt
+  28. Run the included DBC to MySQL Convertor tool. Instructions are in \Tools\README (DBC to MySQL).txt
       (This must be run from Windows XP or greater, but the destination database may be hosted on *Nix)

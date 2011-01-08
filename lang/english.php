@@ -779,7 +779,7 @@ $GLOBALS['lang_edit'] = array
   'email_changed' => 'An Email Change has been requested.<br />(Click to <b>cancel</b> the request)',
   'email_change_failed' => 'Unable to change Email Address!',
   'pass_warning' => 'There may be some delay before the new password will work for game access.',
-  // translation note: do note translate
+  // translation note: do not translate
   'english' => 'English',
   'german' => 'German',
   'persian' => 'Persian',
@@ -1610,13 +1610,14 @@ $GLOBALS['lang_admin'] = array
   'name' => 'Name',
   'db_enc' => 'Encoding',
   'arcm' => 'DBC',
-  'logon' => 'Logon',
+  'logon' => 'Authentication',
   'char' => 'Character',
   'world' => 'World',
   'realm' => 'Realm',
   'addchar' => 'Add Character Database',
   'addworld' => 'Add World Database',
   'db_warn' => 'NOTICE: If you need to change the name of any of these databases, it is advised that you change the name here <b>first</b>, otherwise you will have to alter the database information in the CoreManager Config Database.  Because CoreManager will not function if it cannot find it\'s databases.',
+  'host_info' => 'All databases <b>must</b> be hosted on the same machine.',
 
   'addrow' => 'Add New Security Level',
   'delrow' => 'Delete Selected Row',

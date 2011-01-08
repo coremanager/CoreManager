@@ -55,9 +55,48 @@ function database()
             <tr>
               <td>
                 <fieldset class="admin_editdb_field">
-                  <legend>'.lang("admin", "arcm").'</legend>
+                  <legend>'.lang("admin", "host").'</legend>
                   <table>
                     <tr>
+                      <td colspan="4">
+                        <span style="color:red">'.lang("admin", "host_info").'</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="75px">'.lang("admin", "host").': </td>
+                      <td>
+                        <input type="text" name="host" value="'.$dbc_db["Address"].'" size="10%" />
+                      </td>
+                      <td width="75px">'.lang("admin", "port").': </td>
+                      <td>
+                        <input type="text" name="port" value="'.$dbc_db["Port"].'" size="10%" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="75px">'.lang("admin", "user").': </td>
+                      <td>
+                        <input type="text" name="user" value="'.$dbc_db["User"].'" size="10%" />
+                      </td>
+                      <td width="75px">'.lang("admin", "pass").': </td>
+                      <td>
+                        <input type="text" name="pass" value="'.$dbc_db["Password"].'" size="10%" />
+                      </td>
+                    </tr>
+                  </table>
+                </fieldset>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <hr />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <fieldset class="admin_editdb_field">
+                  <legend>'.lang("admin", "arcm").'</legend>
+                  <table>
+                    <!-- tr>
                       <td width="75px">'.lang("admin", "host").': </td>
                       <td>
                         <input type="text" name="dbc_host" value="'.$dbc_db["Address"].'" size="10%" />
@@ -76,7 +115,7 @@ function database()
                       <td>
                         <input type="text" name="dbc_pass" value="'.$dbc_db["Password"].'" size="10%" />
                       </td>
-                    </tr>
+                    </tr -->
                     <tr>
                       <td width="75px">'.lang("admin", "name").': </td>
                       <td>
@@ -94,7 +133,7 @@ function database()
                 <fieldset class="admin_editdb_field">
                   <legend>'.lang("admin", "logon").'</legend>
                   <table>
-                    <tr>
+                    <!-- tr>
                       <td width="75px">'.lang("admin", "host").': </td>
                       <td>
                         <input type="text" name="logon_host" value="'.$logon_db["Address"].'" size="10%" />
@@ -113,7 +152,7 @@ function database()
                       <td>
                         <input type="text" name="logon_pass" value="'.$logon_db["Password"].'" size="10%" />
                       </td>
-                    </tr>
+                    </tr -->
                     <tr>
                       <td width="75px">'.lang("admin", "name").': </td>
                       <td>
@@ -142,7 +181,7 @@ function database()
                 <fieldset class="admin_editdb_field">
                   <legend>'.lang("admin", "char").' ('.lang("admin", "realm").' '.$char["Index"].')</legend>
                   <table>
-                    <tr>
+                    <!-- tr>
                       <td width="75px">'.lang("admin", "host").': </td>
                       <td>
                         <input type="text" name="char_host[]" value="'.$char["Address"].'" size="10%" />
@@ -161,7 +200,7 @@ function database()
                       <td>
                         <input type="text" name="char_pass[]" value="'.$char["Password"].'" size="10%" />
                       </td>
-                    </tr>
+                    </tr -->
                     <tr>
                       <td width="75px">'.lang("admin", "name").': </td>
                       <td>
@@ -202,7 +241,7 @@ function database()
                 <fieldset class="admin_editdb_field">
                   <legend>'.lang("admin", "world").' ('.lang("admin", "realm").' '.$world["Index"].')</legend>
                   <table>
-                    <tr>
+                    <!-- tr>
                       <td width="75px">'.lang("admin", "host").': </td>
                       <td>
                         <input type="text" name="world_host[]" value="'.$world["Address"].'" size="10%" />
@@ -221,7 +260,7 @@ function database()
                       <td>
                         <input type="text" name="world_pass[]" value="'.$world["Password"].'" size="10%" />
                       </td>
-                    </tr>
+                    </tr -->
                     <tr>
                       <td width="75px">'.lang("admin", "name").': </td>
                       <td>
@@ -271,12 +310,12 @@ function savedbs()
   if ( isset($_GET["addworld"]) )
     $result_addworld = $sqlm->query("INSERT INTO config_world_databases (Encoding) VALUES ('utf8')");
 
-  if ( isset($_GET["dbc_host"]) )
+  if ( isset($_GET["dbc_name"]) )
   {
-    $dbc_host = $sqlm->quote_smart($_GET["dbc_host"]);
-    $dbc_port = $sqlm->quote_smart($_GET["dbc_port"]);
-    $dbc_user = $sqlm->quote_smart($_GET["dbc_user"]);
-    $dbc_pass = $sqlm->quote_smart($_GET["dbc_pass"]);
+    $dbc_host = $sqlm->quote_smart($_GET["host"]);
+    $dbc_port = $sqlm->quote_smart($_GET["port"]);
+    $dbc_user = $sqlm->quote_smart($_GET["user"]);
+    $dbc_pass = $sqlm->quote_smart($_GET["pass"]);
     $dbc_name = $sqlm->quote_smart($_GET["dbc_name"]);
     $dbc_encoding = $sqlm->quote_smart($_GET["dbc_encoding"]);
 
@@ -298,12 +337,12 @@ function savedbs()
     }
   }
 
-  if ( isset($_GET["logon_host"]) )
+  if ( isset($_GET["logon_name"]) )
   {
-    $logon_host = $sqlm->quote_smart($_GET["logon_host"]);
-    $logon_port = $sqlm->quote_smart($_GET["logon_port"]);
-    $logon_user = $sqlm->quote_smart($_GET["logon_user"]);
-    $logon_pass = $sqlm->quote_smart($_GET["logon_pass"]);
+    $logon_host = $sqlm->quote_smart($_GET["host"]);
+    $logon_port = $sqlm->quote_smart($_GET["port"]);
+    $logon_user = $sqlm->quote_smart($_GET["user"]);
+    $logon_pass = $sqlm->quote_smart($_GET["pass"]);
     $logon_name = $sqlm->quote_smart($_GET["logon_name"]);
     $logon_encoding = $sqlm->quote_smart($_GET["logon_encoding"]);
 
@@ -313,16 +352,16 @@ function savedbs()
   if ( isset($_GET["char_realm"]) )
   {
     $char_realms = ( ( isset($_GET["char_realm"]) ) ? $sqlm->quote_smart($_GET["char_realm"]) : NULL );
-    $char_hosts = ( ( isset($_GET["char_host"]) ) ? $sqlm->quote_smart($_GET["char_host"]) : NULL );
-    $char_ports = ( ( isset($_GET["char_port"]) ) ? $sqlm->quote_smart($_GET["char_port"]) : NULL );
-    $char_users = ( ( isset($_GET["char_user"]) ) ? $sqlm->quote_smart($_GET["char_user"]) : NULL );
-    $char_passes = ( ( isset($_GET["char_pass"]) ) ? $sqlm->quote_smart($_GET["char_pass"]) : NULL );
+    $char_hosts = ( ( isset($_GET["host"]) ) ? $sqlm->quote_smart($_GET["host"]) : NULL );
+    $char_ports = ( ( isset($_GET["port"]) ) ? $sqlm->quote_smart($_GET["port"]) : NULL );
+    $char_users = ( ( isset($_GET["user"]) ) ? $sqlm->quote_smart($_GET["user"]) : NULL );
+    $char_passes = ( ( isset($_GET["pass"]) ) ? $sqlm->quote_smart($_GET["pass"]) : NULL );
     $char_names = ( ( isset($_GET["char_name"]) ) ? $sqlm->quote_smart($_GET["char_name"]) : NULL );
     $char_encodings = ( ( isset($_GET["char_encoding"]) ) ? $sqlm->quote_smart($_GET["char_encoding"]) : NULL );
 
     for ( $i = 0; $i < count($char_hosts); $i++ )
     {
-      $result_char = $sqlm->query("UPDATE config_character_databases SET Address='".$char_hosts[$i]."', Port='".$char_ports[$i]."', User='".$char_users[$i]."', Password='".$char_passes[$i]."', Name='".$char_names[$i]."', Encoding='".$char_encodings[$i]."' WHERE `Index`='".$char_realms[$i]."'");
+      $result_char = $sqlm->query("UPDATE config_character_databases SET Address='".$char_hosts."', Port='".$char_ports."', User='".$char_users."', Password='".$char_passes."', Name='".$char_names[$i]."', Encoding='".$char_encodings[$i]."' WHERE `Index`='".$char_realms[$i]."'");
     }
   }
 
@@ -339,16 +378,16 @@ function savedbs()
   if ( isset($_GET["world_realm"]) )
   {
     $world_realms = ( ( isset($_GET["world_realm"]) ) ? $sqlm->quote_smart($_GET["world_realm"]) : NULL );
-    $world_hosts = ( ( isset($_GET["world_host"]) ) ? $sqlm->quote_smart($_GET["world_host"]) : NULL );
-    $world_ports = ( ( isset($_GET["world_port"]) ) ? $sqlm->quote_smart($_GET["world_port"]) : NULL );
-    $world_users = ( ( isset($_GET["world_user"]) ) ? $sqlm->quote_smart($_GET["world_user"]) : NULL );
-    $world_passes = ( ( isset($_GET["world_pass"]) ) ? $sqlm->quote_smart($_GET["world_pass"]) : NULL );
+    $world_hosts = ( ( isset($_GET["host"]) ) ? $sqlm->quote_smart($_GET["host"]) : NULL );
+    $world_ports = ( ( isset($_GET["port"]) ) ? $sqlm->quote_smart($_GET["port"]) : NULL );
+    $world_users = ( ( isset($_GET["user"]) ) ? $sqlm->quote_smart($_GET["user"]) : NULL );
+    $world_passes = ( ( isset($_GET["pass"]) ) ? $sqlm->quote_smart($_GET["pass"]) : NULL );
     $world_names = ( ( isset($_GET["world_name"]) ) ? $sqlm->quote_smart($_GET["world_name"]) : NULL );
     $world_encodings = ( ( isset($_GET["world_encoding"]) ) ? $sqlm->quote_smart($_GET["world_encoding"]) : NULL );
 
     for ( $i = 0; $i < count($world_hosts); $i++ )
     {
-      $result_world = $sqlm->query("UPDATE config_world_databases SET Address='".$world_hosts[$i]."', Port='".$world_ports[$i]."', User='".$world_users[$i]."', Password='".$world_passes[$i]."', Name='".$world_names[$i]."', Encoding='".$world_encodings[$i]."' WHERE `Index`='".$world_realms[$i]."'");
+      $result_world = $sqlm->query("UPDATE config_world_databases SET Address='".$world_hosts."', Port='".$world_ports."', User='".$world_users."', Password='".$world_passes."', Name='".$world_names[$i]."', Encoding='".$world_encodings[$i]."' WHERE `Index`='".$world_realms[$i]."'");
     }
   }
 

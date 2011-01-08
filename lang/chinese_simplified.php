@@ -779,7 +779,7 @@ $GLOBALS['lang_edit'] = array
   'email_changed' => '发出了一个变更 Email 地址的请求。<br />(点击以取消该请求)',
   'email_change_failed' => '无法变更Email地址！',
   'pass_warning' => '新密码起效前可能会有些许延迟。',
-  // translation note: do note translate
+  // translation note: do not translate
   'english' => 'English',
   'german' => 'German',
   'persian' => 'Persian',
@@ -1610,13 +1610,14 @@ $GLOBALS['lang_admin'] = array
   'name' => '数据库名',
   'db_enc' => '编码',
   'arcm' => 'DBC',
-  'logon' => 'Logon',
+  'logon' => 'Authentication',
   'char' => 'Character',
   'world' => 'World',
   'realm' => 'Realm',
   'addchar' => '添加 Character 数据库',
   'addworld' => '添加 World 数据库',
   'db_warn' => '注意：如果您需要变更这些数据库的名称，建议您先在<b>此处</b>改名， 或者先在 CoreManager Config Database 变更数据库信息。因为一旦 CoreManager 无法查找到它的数据库，将会停止响应。',
+  'host_info' => 'All databases <b>must</b> be hosted on the same machine.',
 
   'addrow' => '添加新的安全级别',
   'delrow' => '删除选中的行',
