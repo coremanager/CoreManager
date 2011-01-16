@@ -3281,7 +3281,9 @@ function accounts()
                 LEFT JOIN `".$corem_db["name"]."`.config_accounts ON accounts.login=`".$corem_db["name"]."`.config_accounts.Login
               ".$search."
               ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
-    $count_query = "SELECT COUNT(*) FROM accounts ".$search;
+    $count_query = "SELECT COUNT(*) FROM accounts
+                      LEFT JOIN `".$corem_db["name"]."`.config_accounts ON accounts.login=`".$corem_db["name"]."`.config_accounts.Login
+                    ".$search;
   }
   else
   {
@@ -3290,7 +3292,9 @@ function accounts()
                 LEFT JOIN `".$corem_db["name"]."`.config_accounts ON account.username=`".$corem_db["name"]."`.config_accounts.Login
               ".$search."
               ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
-    $count_query = "SELECT COUNT(*) FROM account ".$search;
+    $count_query = "SELECT COUNT(*) FROM account
+                      LEFT JOIN `".$corem_db["name"]."`.config_accounts ON account.username=`".$corem_db["name"]."`.config_accounts.Login
+                    ".$search;
   }
 
   $result = $sqll->query($query);
