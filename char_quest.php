@@ -128,9 +128,17 @@ function char_quest()
                 </tr>';
 
       if ( $core == 1 )
-        $result = $sql["char"]->query("SELECT quest_id, completed FROM questlog WHERE player_guid='".$id."'");
+        $result = $sql["char"]->query("SELECT quest_id, completed
+                                       FROM questlog
+                                       WHERE player_guid='".$id."'");
+      elseif ( $core == 2 )
+        $result = $sql["char"]->query("SELECT quest AS quest_id, status AS completed
+                                      FROM character_queststatus
+                                      WHERE guid='".$id."' AND rewarded=0 AND status<>0");
       else
-        $result = $sql["char"]->query("SELECT quest AS quest_id, status AS completed FROM character_queststatus WHERE guid='".$id."' AND rewarded=0 AND status<>0");
+        $result = $sql["char"]->query("SELECT quest AS quest_id, status AS completed
+                                      FROM character_queststatus
+                                      WHERE guid='".$id."' AND status<>0");
 
       $quests_1 = array();
       $quests_3 = array();

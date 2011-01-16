@@ -158,7 +158,7 @@ function edit_char()
       {
         $output .= '
                   <tr>
-                    <td colspan="2">'.lang("char", "gold").': <input type="text" name="money" size="10" maxlength="8" value="'.$char_data[PLAYER_FIELD_COINAGE].'" /></td>
+                    <td colspan="2">'.lang("char", "gold").': <input type="text" name="money" size="10" maxlength="10" value="'.$char_data[PLAYER_FIELD_COINAGE].'" /></td>
                     <td colspan="2">'.lang("char", "honor_points").': <input type="text" name="honor_points" size="8" maxlength="6" value="'.$char_data[PLAYER_FIELD_HONOR_CURRENCY].'" /></td>
                     <td colspan="2">'.lang("char", "arena_points").': <input type="text" name="arena_points" size="8" maxlength="6" value="'.$char_data[PLAYER_FIELD_ARENA_CURRENCY].'" /></td>
                     <td colspan="2">'.lang("char", "honor_kills").': <input type="text" name="total_kills" size="8" maxlength="6" value="'.$char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS].'" /></td>

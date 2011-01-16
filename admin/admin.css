@@ -302,7 +302,7 @@ a:link, a:visited
 {
 	width: 600px;
 }
-#admin_accounts
+.admin_accounts
 {
 	width: 450px;
 }
@@ -353,4 +353,20 @@ a:link, a:visited
 fieldset.half_frame
 {
 	width: 550px;
+}
+
+tr th a
+{
+	padding-right: 10px;
+	background-repeat: no-repeat;
+}
+tr th a.ASC
+{
+	background-image: url(../../img/arr_up.gif);
+	background-position: 100% 2px;
+}
+tr th a.DESC
+{
+	background-image: url(../../img/arr_dw.gif);
+	background-position: 100% 6px;
 }
