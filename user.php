@@ -282,7 +282,7 @@ function browse_users()
         $sql_query = "SELECT account.id AS acct, username AS login, IFNULL(gmlevel, 0) AS gm, email, last_ip AS lastip, locked AS muted, UNIX_TIMESTAMP(last_login) AS lastlogin, expansion AS flags, IFNULL(unbandate, 0) AS banned, active
           FROM account
             LEFT JOIN account_banned ON account_banned.id=account.id
-          WHERE ".$search_by." LIKE '%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage."'";
+          WHERE ".$search_by." LIKE '%".$search_value."%' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
         $query_1 = $sql["logon"]->query("SELECT COUNT(*) FROM account WHERE ".$search_by." LIKE '%".$search_value."%'");
       }
       else
