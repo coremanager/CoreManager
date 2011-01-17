@@ -659,7 +659,12 @@ else
     {
       if ( !$hide_plr_latency )
       {
-        $output .= '
+        // this_is_junk: Trinity is the only core which can sort by Player Latency
+        if ( $core == 3 )
+          $output .= '
+                  <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=latency&amp;dir='.$dir.'"'.( ( $order_by === "latency" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "latency").'</a></th>';
+        else
+          $output .= '
                   <th width="1%">'.lang("index", "latency").'</th>';
       }
     }

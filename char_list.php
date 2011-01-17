@@ -550,8 +550,8 @@ function del_char_form()
               <table width="300" class="hidden">
                 <tr>
                   <td>';
-                    makebutton(lang("global", "yes"), 'char_list.php?action=dodel_char'.$pass_array.'" type="wrn', 130);
-                    makebutton(lang("global", "no"), 'char_list.php" type="def', 130);
+  makebutton(lang("global", "yes"), "char_list.php?action=dodel_char".$pass_array, 130);
+  makebutton(lang("global", "no"), "char_list.php", 130);
   unset($pass_array);
   $output .= '
                   </td>

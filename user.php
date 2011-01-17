@@ -804,8 +804,8 @@ function del_user()
           <table width="300" class="hidden">
             <tr>
               <td>';
-  makebutton(lang("global", "yes"), "user.php?action=dodel_user".$pass_array."\" type=\"wrn" , 130);
-  makebutton(lang("global", "no"), "user.php\" type=\"def" , 130);
+  makebutton(lang("global", "yes"), "user.php?action=dodel_user".$pass_array , 130);
+  makebutton(lang("global", "no"), "user.php" , 130);
   $output .= '
               </td>
             </tr>

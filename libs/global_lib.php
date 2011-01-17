@@ -58,6 +58,9 @@ function time_offset_to_zone($offset)
     case "-5.0":
       $zone = "America/New_York";
       break;
+    case "-4.5":
+      $zone = "America/Caracas";
+      break;
     case "-4.0":
       $zone = "America/Aruba";
       break;

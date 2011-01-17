@@ -775,12 +775,12 @@ function view_team()
             <br />
             <table class="hidden">
               <tr>
-                <td>';
+                <!-- td>';
     if ( $user_lvl >= $action_permission["delete"] )
     {
       makebutton(lang("arenateam", "del_team"), "arenateam.php?action=del_team&amp;id=".$arenateam_id."\" type=\"wrn", 180);
       $output .= '
-                </td>
+                </td -->
                 <td>';
       makebutton(lang("arenateam", "arenateams"), "arenateam.php\" type=\"def", 130);
       $output .= '

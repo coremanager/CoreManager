@@ -148,7 +148,7 @@ function edit_user()
       if ( $core == 1 )
       {
         $output .= '
-                     <tr>
+                    <tr>
                       <td >'.lang("edit", "client_type").':</td>
                       <td>
                         <select name="expansion">
@@ -163,7 +163,7 @@ function edit_user()
       else
       {
         $output .= '
-                     <tr>
+                    <tr>
                       <td >'.lang("edit", "client_type").':</td>
                       <td>
                         <select name="expansion">
@@ -566,7 +566,7 @@ function edit_user()
 //#############################################################################################################
 function doedit_user()
 {
-  global $output, $user_name, $logon_db, $corem_db, $send_mail_on_email_change, $lang,
+  global $output, $user_name, $logon_db, $corem_db, $send_mail_on_email_change, $lang, $defaultoption,
     $format_mail_html, $GMailSender, $smtp_cfg, $title, $sql, $core;
 
   if ( ( empty($_POST["pass"]) || ( $_POST["pass"] == '' ) )
@@ -585,7 +585,7 @@ function doedit_user()
   // other
   $screenname = $sql["logon"]->quote_smart(trim($_POST["screenname"]));
   $new_mail = $sql["logon"]->quote_smart(trim($_POST["mail"]));
-  $new_expansion = $sql["logon"]->quote_smart(trim($_POST["expansion"]));
+  $new_expansion = ( ( isset($_POST["expansion"]) ) ? $sql["logon"]->quote_smart(trim($_POST["expansion"])) : $defaultoption );
   $referredby = $sql["logon"]->quote_smart(trim($_POST["referredby"]));
 
   // if we received a Screen Name, make sure it does not conflict with other Screen Names or with

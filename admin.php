@@ -1730,7 +1730,8 @@ function general()
                   <option value="-7.0" '.( ( $timezone["Value"] == "-7.0" ) ? 'selected="selected"' : '' ).'>(UTC -7:00) Mountain Time (US &amp; Canada)</option>
                   <option value="-6.0" '.( ( $timezone["Value"] == "-6.0" ) ? 'selected="selected"' : '' ).'>(UTC -6:00) Central Time (US &amp; Canada), Mexico City</option>
                   <option value="-5.0" '.( ( $timezone["Value"] == "-5.0" ) ? 'selected="selected"' : '' ).'>(UTC -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
-                  <option value="-4.0" '.( ( $timezone["Value"] == "-4.0" ) ? 'selected="selected"' : '' ).'>(UTC -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
+                  <option value="-4.5" '.( ( $timezone["Value"] == "-4.5" ) ? 'selected="selected"' : '' ).'>(UTC -4:30) Caracas</option>
+                  <option value="-4.0" '.( ( $timezone["Value"] == "-4.0" ) ? 'selected="selected"' : '' ).'>(UTC -4:00) Atlantic Time (Canada), La Paz</option>
                   <option value="-3.5" '.( ( $timezone["Value"] == "-3.5" ) ? 'selected="selected"' : '' ).'>(UTC -3:30) Newfoundland</option>
                   <option value="-3.0" '.( ( $timezone["Value"] == "-3.0" ) ? 'selected="selected"' : '' ).'>(UTC -3:00) Brazil, Buenos Aires, Georgetown</option>
                   <option value="-2.0" '.( ( $timezone["Value"] == "-2.0" ) ? 'selected="selected"' : '' ).'>(UTC -2:00) Mid-Atlantic</option>
