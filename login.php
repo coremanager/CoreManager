@@ -95,13 +95,19 @@ function dologin()
       $acct = $sql["logon"]->result($result, 0, "id");
 
     if ( $core == 1 )
-      $ban_query = "SELECT banned FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
+      $ban_query = "SELECT banned AS unbandate, banreason FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
     else
-      $ban_query = "SELECT COUNT(*) FROM account_banned WHERE id='".$acct."' AND active=1";
+      $ban_query = "SELECT unbandate, banreason FROM account_banned WHERE id='".$acct."' AND active=1";
 
-    if ($sql["logon"]->result($sql["logon"]->query($ban_query), 0))
+    $ban_result = $sql["logon"]->query($ban_query);
+    $ban = $sql["logon"]->fetch_assoc($ban_result);
+
+    if ( $sql["logon"]->num_rows($ban_result) != 0 )
     {
-      redirect("login.php?error=3");
+      $info = lang("login", "ban_reason")." ".$ban["banreason"];
+      $info .= "/br/"; // because we do a little XSS prevention, we'll replace this with <br /> below
+      $info .= lang("login", "unbandate")." ".date("g:i A", $ban["unbandate"])." on ".date("d-M-Y", $ban["unbandate"]);
+      redirect("login.php?error=3&info=".$info);
     }
     else
     {
@@ -398,6 +404,12 @@ elseif ( $err == 2 )
 elseif ( $err == 3 )
   $output .=  '
             <h1><font class="error">'.lang("login", "banned_acc").'</font></h1>';
+  if ( isset($info) )
+  {
+    $info = htmlspecialchars($info);
+    $info = str_replace("/br/", "<br />", $info);
+    $output .= '<h1>'.$info.'</h1>';
+  }
 elseif ( $err == 5 )
 {
   $output .=  '

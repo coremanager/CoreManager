@@ -517,10 +517,17 @@ function browse_users()
         $output .= '
                   <td>*</td>';
       // show character expander symbol
-      $output .= '
+      if ( ( $show_chars == 0 ) || ( $show_chars != $data["acct"] ) )
+        $output .= '
                   <td>
                     <a href="user.php?order_by='.$order_by.'&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.( ( $dir ) ? 0 : 1 ).'&amp;show_chars='.$data["acct"].'">+</a>
                   </td>';
+      else
+        $output .= '
+                  <td>
+                    <a href="user.php?order_by='.$order_by.'&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.( ( $dir ) ? 0 : 1 ).'&amp;show_chars=0">&#8211;</a>
+                  </td>';
+
       if ( ( $user_lvl >= $action_permission["insert"] ) || ( $user_name == $data["login"] ) )
         $output .= '
                   <td>'.$data["acct"].'</td>

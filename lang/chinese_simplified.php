@@ -84,7 +84,9 @@ $GLOBALS['lang_login'] = array
   'pass_recovery' => '忘记了您的密码吗？',
   'after_registration' => '您的账号已成功创建！',
   'after_activation' => '您的账号已成功激活！',
-  'confirm_sent' => '帐号激活邮件已发送'
+  'confirm_sent' => '帐号激活邮件已发送',
+  'ban_reason' => 'Ban reason:',
+  'unbandate' => 'Ban will expire at'
 );
 
 

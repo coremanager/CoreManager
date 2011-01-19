@@ -84,7 +84,9 @@ $GLOBALS['lang_login'] = array
   'pass_recovery' => 'Passwort vergessen?',
   'after_registration' => 'Ihr Benutzername wurde erfolgreich angelegt!',
   'after_activation' => 'Your account activation was successful!',
-  'confirm_sent' => 'Activation Email Sent'
+  'confirm_sent' => 'Activation Email Sent',
+  'ban_reason' => 'Ban reason:',
+  'unbandate' => 'Ban will expire at'
 );
 
 
