@@ -598,7 +598,7 @@ function view_team()
         </script>
         <center>
           <div class="fieldset_border arena_fieldset">
-            <span class="legend">'.lang("arenateam", "arenateam").' ('.lang("arenateam", $arenateam_data["type"].( ( $core == 3 ) ? "T" : "AM" )).')</span>
+            <span class="legend">'.lang("arenateam", "arenateam").' ('.lang("arenateam", $arenateam_data["type"].( ( $core == 1 ) ? "A" : "MT" )).')</span>
             <table class="lined" id="arena_table_with_banner">
               <tr class="bold">
                 <td rowspan="'.$banner_span.'">
