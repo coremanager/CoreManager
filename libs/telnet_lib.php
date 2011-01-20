@@ -100,17 +100,18 @@ class telnet_lib
         if ( $core == 2 )
           fputs($this->fp, $user."\r");
         elseif ( $core == 3 )
-          fputs($this->fp, "USER ".$user."\r");
+          fputs($this->fp, $user."\n");
         $this->Sleep();
 
         if ( $core == 2 )
           fputs($this->fp, $pass."\r");
         elseif ( $core == 3 )
-          fputs($this->fp, "PASS ".$pass."\r");
+          fputs($this->fp, $pass."\n");
         if ( $this->use_usleep )
           usleep($this->loginsleeptime);
         else
           sleep(1);
+
         $this->GetResponse($r);
         $r = explode("\n", $r);
         if ( ( $r[count($r)-1] == '' ) || ( $this->loginprompt == $r[count($r)-1] ) )
@@ -140,9 +141,14 @@ class telnet_lib
 
   function DoCommand($c, &$r)
   {
+    global $core;
+
     if ( $this->fp )
     {
-      fputs($this->fp, $c."\r");
+      if ( $core == 2 )
+        fputs($this->fp, $c."\r");
+      elseif ( $core == 3 )
+        fputs($this->fp, $c."\n");
       $this->Sleep();
       $this->GetResponse($r);
       $r = preg_replace('/^.*?\n(.*)\n[^\n]*$/', '$1', $r);
