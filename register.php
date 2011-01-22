@@ -141,7 +141,7 @@ function doregister()
 
   // make sure the mail is valid mail format
   $mail = $sql["logon"]->quote_smart(trim($_POST["email"]));
-  if ( ( !valid_email($mail) ) || ( strlen($mail) > 224 ) )
+  if ( ( !valid_email($mail) ) || ( strlen($mail) > 254 ) )
   {
     redirect("register.php?err=7");
   }

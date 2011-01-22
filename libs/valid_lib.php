@@ -22,7 +22,7 @@
 //making sure the input string contains only [A-Z][a-z][0-9]-_ chars.
 function valid_alphabetic($srting)
 {
-  if ( ereg('[^a-zA-Z0-9_-]{1,}', $srting) )
+  if ( ereg("[^a-zA-Z0-9_-]{1,}", $srting) )
     return false;
   else
     return true;
@@ -31,24 +31,24 @@ function valid_alphabetic($srting)
 
 //#############################################################################
 //testing given mail
-function valid_email($email='')
+function valid_email($email = "")
 {
   global $validate_mail_host;
   // checks proper syntax
-  if ( preg_match( '/^([a-zA-Z0-9])+([a-zA-Z0-9._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9._-]+)+$/', $email) )
+  if ( preg_match( "/^([\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+\.)*[\w\!\#$\%\&\'\*\+\-\/\=\?\^\`{\|\}\~]+@((((([a-z0-9]{1}[a-z0-9\-]{0,62}[a-z0-9]{1})|[a-z])\.)+[a-z]{2,6})|(\d{1,3}\.){3}\d{1,3}(\:\d{1,5})?)$/i", $email) )
   {
-    if ($validate_mail_host)
+    if ( $validate_mail_host )
     {
       // gets domain name
-      list($username,$domain) = split('@',$email);
+      list($username, $domain) = split("@", $email);
       // checks for if MX records in the DNS
       $mxhosts = array();
-      if (getmxrr($domain, $mxhosts))
+      if ( getmxrr($domain, $mxhosts) )
       {
         // mx records found
-        foreach ($mxhosts as $host)
+        foreach ( $mxhosts as $host )
         {
-          if (fsockopen($host,25,$errno,$errstr,7))
+          if ( fsockopen($host, 25, $errno, $errstr, 7) )
             return true;
         }
         return false;
@@ -56,7 +56,7 @@ function valid_email($email='')
       else
       {
         // no mx records, ok to check domain
-        if (fsockopen($domain,25,$errno,$errstr,7))
+        if ( fsockopen($domain, 25, $errno, $errstr, 7) )
           return true;
         else
           return false;
@@ -71,19 +71,18 @@ function valid_email($email='')
 
 
 //php under win does not support getmxrr()  function - so heres workaround
-if (function_exists ('getmxrr') );
-else
+if ( !function_exists("getmxrr") )
 {
   function getmxrr($hostname, &$mxhosts)
   {
     $mxhosts = array();
-    exec('%SYSTEMDIRECTORY%\\nslookup.exe -q=mx '.escapeshellarg($hostname), $result_arr);
-    foreach($result_arr as $line)
+    exec("%SYSTEMDIRECTORY%\\nslookup.exe -q=mx ".escapeshellarg($hostname), $result_arr);
+    foreach ( $result_arr as $line )
     {
-      if (preg_match('/.*mail exchanger = (.*)/', $line, $matches))
+      if ( preg_match("/.*mail exchanger = (.*)/", $line, $matches) )
         $mxhosts[] = $matches[1];
     }
-    return( count($mxhosts) > 0 );
+    return(count($mxhosts) > 0);
   }
 }
 
