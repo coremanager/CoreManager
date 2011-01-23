@@ -680,7 +680,7 @@ function rem_char_from_guild()
   {
     $realmid = $sql["logon"]->quote_smart($_GET["realm"]);
     if ( is_numeric($realmid) )
-      $sql["char"]->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name'], $characters_db[$realmid]['encoding']);
+      $sql["char"]->connect($characters_db[$realmid]["addr"], $characters_db[$realmid]["user"], $characters_db[$realmid]["pass"], $characters_db[$realmid]["name"], $characters_db[$realmid]["encoding"]);
     else
       $realmid = $realm_id;
   }
@@ -689,39 +689,47 @@ function rem_char_from_guild()
     $guid = $_GET["id"];
   else
     redirect("guild.php?error=1");
-  if ( is_numeric($guid) )
-    ;
-  else
+
+  if ( !is_numeric($guid) )
     redirect("guild.php?error=5");
+
   if ( isset($_GET["guld_id"]) )
     $guld_id = $_GET["guld_id"];
   else
     redirect("guild.php?error=1");
-  if ( is_numeric($guld_id) )
-    ;
-  else
+
+  if ( !is_numeric($guld_id) )
     redirect("guild.php?error=5");
 
   if ( $core == 1)
-    $q_amIguildleaderOrSelfRemoval = $sql["char"]->query("SELECT 1 FROM guild AS g LEFT OUTER JOIN guild_member AS gm ON gm.guildid=g.guildid
+    $q_amIguildleaderOrSelfRemoval = $sql["char"]->query("SELECT 1 FROM guild AS g
+        LEFT OUTER JOIN guild_member AS gm ON gm.guildid=g.guildid
       WHERE g.guildid='".$guld_id."' AND
       (g.leaderguid IN (SELECT guid FROM characters WHERE account='".$user_id."')
       OR gm.guid IN (SELECT guid FROM characters WHERE account='".$user_id."' AND guid='".$guid."'))");
   else
-    $q_amIguildleaderOrSelfRemoval = $sql["char"]->query("SELECT 1 FROM guild AS g LEFT OUTER JOIN guild_member AS gm ON gm.guildid=g.guildid
+    $q_amIguildleaderOrSelfRemoval = $sql["char"]->query("SELECT 1 FROM guild AS g
+        LEFT OUTER JOIN guild_member AS gm ON gm.guildid=g.guildid
       WHERE g.guildid='".$guld_id."' AND
       (g.leaderguid IN (SELECT guid FROM characters WHERE account='".$user_id."')
       OR gm.guid IN (SELECT guid FROM characters WHERE account='".$user_id."' AND guid='".$guid."'))");
-  $amIguildleaderOrSelfRemoval = $sql["char"]->result($q_amIguildleaderOrSelfRemoval, 0, '1');
+
+  $amIguildleaderOrSelfRemoval = $sql["char"]->result($q_amIguildleaderOrSelfRemoval, 0, "1");
+
   if ( $user_lvl < $action_permission["delete"] && !$amIguildleaderOrSelfRemoval )
     redirect("guild.php?error=6");
-  $char_data = $sql["char"]->query("SELECT data FROM `characters` WHERE guid = '".$guid."'");
-  $data = $sql["char"]->result($char_data, 0, 'data');
-  $data = explode(' ',$data);
-  $data[CHAR_DATA_OFFSET_GUILD_ID] = 0;
-  $data[CHAR_DATA_OFFSET_GUILD_RANK] = 0;
-  $data = implode(' ',$data);
-  $sql["char"]->query("UPDATE `characters` SET data='".$data."' WHERE guid='".$guid."'");
+
+  if ( $core == 1 )
+  {
+    $char_data = $sql["char"]->query("SELECT data FROM `characters` WHERE guid='".$guid."'");
+    $data = $sql["char"]->result($char_data, 0, "data");
+    $data = explode(" ",$data);
+    $data[CHAR_DATA_OFFSET_GUILD_ID] = 0;
+    $data[CHAR_DATA_OFFSET_GUILD_RANK] = 0;
+    $data = implode(" ",$data);
+    $sql["char"]->query("UPDATE `characters` SET data='".$data."' WHERE guid='".$guid."'");
+  }
+
   $sql["char"]->query("DELETE FROM guild_member WHERE guid='".$guid."'");
   redirect("guild.php?action=view_guild&amp;id=".$guld_id);
 }
@@ -782,11 +790,11 @@ $output .= '
 
 $action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 
-if ( $action == 'view_guild' )
+if ( $action == "view_guild" )
   view_guild();
-elseif ( $action == 'del_guild' )
+elseif ( $action == "del_guild" )
   del_guild();
-elseif ( $action == 'rem_char_from_guild' )
+elseif ( $action == "rem_char_from_guild" )
   rem_char_from_guild();
 else
   browse_guilds();
@@ -794,6 +802,6 @@ else
 unset($action);
 unset($action_permission);
 
-require_once 'footer.php';
+require_once "footer.php";
 
 ?>

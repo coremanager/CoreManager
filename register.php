@@ -95,56 +95,47 @@ function doregister()
   }
 
   $user_name = $sql["logon"]->quote_smart(trim($_POST["username"]));
-  $screenname = $sql["mgr"]->quote_smart(trim($_POST["screenname"]));
+  $screenname = ( ( !empty($_POST["screenname"]) ) ? $sql["mgr"]->quote_smart(trim($_POST["screenname"])) : NULL );
   $pass = $sql["logon"]->quote_smart($_POST["pass"]);
   $pass1 = $sql["logon"]->quote_smart($_POST["pass1"]);
 
   // make sure username/pass at least 4 chars long and less than max
   if ( ( strlen($user_name) < 4 ) || ( strlen($user_name) > 15 ) )
-  {
     redirect("register.php?err=5");
-  }
+
   if ( $core == 1 )
   {
     if ( ( strlen($pass) < 4 ) || ( strlen($pass) > 15 ) )
-    {
       redirect("register.php?err=5");
-    }
   }
   else
   {
     if ( ( strlen($pass1) < 4 ) || ( strlen($pass1) > 15 ) )
-    {
       redirect("register.php?err=5");
-    }
   }
 
   // make sure screen name is at least 4 chars long and less than max
-  if ( ( strlen($screenname) < 4 ) || ( strlen($screenname) > 15 ) )
+  if ( isset($screenname) )
   {
-    redirect("register.php?err=5");
+    if ( ( strlen($screenname) < 4 ) || ( strlen($screenname) > 15 ) )
+      redirect("register.php?err=5");
   }
 
   require_once("libs/valid_lib.php");
 
   // make sure it doesnt contain non english chars.
   if ( !valid_alphabetic($user_name) )
-  {
     redirect("register.php?err=6");
-  }
 
   // make sure screen name doesnt contain non english chars.
   if ( !valid_alphabetic($screenname) )
-  {
     redirect("register.php?err=6");
-  }
 
   // make sure the mail is valid mail format
   $mail = $sql["logon"]->quote_smart(trim($_POST["email"]));
+
   if ( ( !valid_email($mail) ) || ( strlen($mail) > 254 ) )
-  {
     redirect("register.php?err=7");
-  }
 
   // if we limit accounts per ip, we'll need to throw an error
   if ( $limit_acc_per_ip )
@@ -178,9 +169,7 @@ function doregister()
     $result = $sql["logon"]->query("SELECT username AS login, email FROM account WHERE email='".$mail."'");
 
   if ( $sql["logon"]->num_rows($result) )
-  {
     redirect("register.php?err=14");
-  }
 
   // username check
   if ( $core == 1 )
@@ -195,11 +184,15 @@ function doregister()
   }
   else
   {
-    // check for existing screen name
-    $query = "SELECT * FROM config_accounts WHERE ScreenName='".$screenname."'";
-    $result = $sql["mgr"]->query($query);
-    if ( $sql["mgr"]->num_rows($result) )
-      redirect("register.php?err=3&usr=".$screenname);
+    if ( isset($screenname) )
+    {
+      // check for existing screen name
+      $query = "SELECT * FROM config_accounts WHERE ScreenName='".$screenname."'";
+      $result = $sql["mgr"]->query($query);
+
+      if ( $sql["mgr"]->num_rows($result) )
+        redirect("register.php?err=3&usr=".$screenname);
+    }
 
     if ( $expansion_select )
       $expansion = ( ( isset($_POST["expansion"]) ) ? $sql["logon"]->quote_smart($_POST["expansion"]) : 0 );
@@ -220,7 +213,7 @@ function doregister()
       // for email confirmation we save their real password to their config_accounts entry
       // and a temporary (and incorrect) password into the logon database
       $temppass = $pass;
-      $pass_gen_list = 'abcdefghijklmnopqrstuvwxyz';
+      $pass_gen_list = "abcdefghijklmnopqrstuvwxyz";
       // generate a random, temporary pass
       $pass = $pass_gen_list[rand(0, 25)];
       $pass .= $pass_gen_list[rand(0, 25)];
