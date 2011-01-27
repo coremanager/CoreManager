@@ -615,10 +615,12 @@ else
                               LEFT JOIN `".$logon_db["name"]."`.account ON characters.account=`".$logon_db["name"]."`.account.id
                             WHERE characters.online=1 ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
     else
-      $result = $sql["char"]->query("SELECT guid, name, race, class, zone AS zoneid, map AS mapid, level, account AS acct, gender,
-                            totalHonorPoints AS highest_rank, latency, last_ip AS lastip
+      $result = $sql["char"]->query("SELECT characters.guid, characters.name, race, class, zone AS zoneid, map AS mapid, level, account AS acct, gender,
+                            totalHonorPoints AS highest_rank, latency, last_ip AS lastip, guild.name AS gname
                             FROM characters
                               LEFT JOIN `".$logon_db["name"]."`.account ON characters.account=`".$logon_db["name"]."`.account.id
+                              LEFT JOIN guild_member ON characters.guid=guild_member.guid
+                              LEFT JOIN guild ON guild_member.guildid=guild.guildid
                             WHERE characters.online=1 ".$order_side." ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
     $total_online = $sql["char"]->result($sql["char"]->query("SELECT count(*) FROM characters WHERE online= 1"), 0);
