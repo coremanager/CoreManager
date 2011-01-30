@@ -190,11 +190,16 @@ function browse_chars()
           $result = $sql["char"]->query("SELECT ownerguid
           FROM playeritems
           WHERE entry".$symbol."'".$search_value."'");
-        else
+        elseif ( $core == 2 )
           $result = $sql["char"]->query("SELECT owner_guid AS ownerguid
           FROM character_inventory
             LEFT JOIN item_instance ON character_inventory.item=item_instance.guid
           WHERE item_template".$symbol."'".$search_value."'");
+        else
+          $result = $sql["char"]->query("SELECT owner_guid AS ownerguid
+          FROM character_inventory
+            LEFT JOIN item_instance ON character_inventory.item=item_instance.guid
+          WHERE itemEntry".$symbol."'".$search_value."'");
 
         $where_out = "guid IN (0 ";
         while ($char = $sql["char"]->fetch_row($result))
