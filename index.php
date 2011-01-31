@@ -589,9 +589,17 @@ else
     //==========================$_GET and SECURE end=============================
 
     if ( $order_by === "mapid" )
-      $order_by = "mapid ".$order_dir.", zoneid";
+    {
+      $order_by = "mapid, zoneid ";
+      $order_hold = "mapid";
+    }
     elseif ( $order_by === "zoneid" )
-      $order_by = "zoneid ".$order_dir.", mapid";
+    {
+      $order_by = "zoneid, mapid ";
+      $order_hold = "zoneid";
+    }
+    else
+      $order_hold = $order_by;
 
     $order_side = "";
     if ( !( $user_lvl || $server[$realm_id]["both_factions"] ) )
@@ -639,7 +647,7 @@ else
             <table class="lined">
               <tr>
                 <td colspan="'.(9-$showcountryflag).'" align="right" class="hidden" width="25%">';
-    $output .= generate_pagination('index.php?start_m='.$start_m.'&amp;order_by='.$order_by.'&amp;dir='.( ( $dir ) ? 0 : 1 ), $total_online, $itemperpage, $start);
+    $output .= generate_pagination('index.php?start_m='.$start_m.'&amp;order_by='.$order_hold.'&amp;dir='.( ( $dir ) ? 0 : 1 ), $total_online, $itemperpage, $start);
     $output .= '
                 </td>
               </tr>
@@ -650,8 +658,8 @@ else
                 <th width="5%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=level&amp;dir='.$dir.'"'.( ( $order_by === "level" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "level").'</a></th>
                 <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=highest_rank&amp;dir='.$dir.'"'.( ( $order_by === "highest_rank" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "rank").'</a></th>
                 <th width="15%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=gname&amp;dir='.$dir.'"'.( ( $order_by === "gname" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "guild").'</a></th>
-                <th width="20%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=mapid&amp;dir='.$dir.'"'.( ( $order_by === "mapid ".$order_dir.", zoneid" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "map").'</a></th>
-                <th width="25%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=zoneid&amp;dir='.$dir.'"'.( ( $order_by === "zoneid ".$order_dir.", mapid" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "zone").'</a></th>';
+                <th width="20%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=mapid&amp;dir='.$dir.'"'.( ( $order_by === "mapid, zoneid " ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "map").'</a></th>
+                <th width="25%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=zoneid&amp;dir='.$dir.'"'.( ( $order_by === "zoneid, mapid " ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "zone").'</a></th>';
     if ( $core == 1 )
       $output .= '
                 <th width="25%">'.lang("index", "area").'</a></th>';

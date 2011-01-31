@@ -157,11 +157,15 @@ function edit_char()
       else
       {
         $output .= '
+                <tr>
+                  <td colspan="4">'.lang("char", "name").': <input type="text" name="cname" size="15" maxlength="12" value="'.$char["name"].'" /></td>
+                  <td colspan="4">'.lang("char", "gold").': <input type="text" name="money" size="10" maxlength="10" value="'.$char_data[PLAYER_FIELD_COINAGE].'" /></td>
+                </tr>
+                <tr>
                   <tr>
-                    <td colspan="2">'.lang("char", "gold").': <input type="text" name="money" size="10" maxlength="10" value="'.$char_data[PLAYER_FIELD_COINAGE].'" /></td>
                     <td colspan="2">'.lang("char", "honor_points").': <input type="text" name="honor_points" size="8" maxlength="6" value="'.$char_data[PLAYER_FIELD_HONOR_CURRENCY].'" /></td>
                     <td colspan="2">'.lang("char", "arena_points").': <input type="text" name="arena_points" size="8" maxlength="6" value="'.$char_data[PLAYER_FIELD_ARENA_CURRENCY].'" /></td>
-                    <td colspan="2">'.lang("char", "honor_kills").': <input type="text" name="total_kills" size="8" maxlength="6" value="'.$char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS].'" /></td>
+                    <td colspan="4">'.lang("char", "honor_kills").': <input type="text" name="total_kills" size="8" maxlength="6" value="'.$char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS].'" /></td>
                   </tr>
                 </table>';
       }
@@ -257,6 +261,12 @@ function do_edit_char()
         if ( !is_numeric($new_money) || !is_numeric($new_arena_points) || !is_numeric($new_honor_points) || !is_numeric($new_total_kills) )
           error(lang("char", "use_numeric"));
 
+        $new_name = $sql["char"]->quote_smart($_GET["cname"]);
+        $new_name = htmlspecialchars($new_name);
+
+        if ( $new_name != $_GET["cname"] )
+          redirect("char_edit.php?action=edit_char&id=".$id."&error=4");
+
         if ( $core == 1 )
         {
           $result = $sql["char"]->query("SELECT data FROM `characters` WHERE guid='".$id."'");
@@ -273,9 +283,9 @@ function do_edit_char()
         }
 
         if ( $core == 1 )
-          $query = "UPDATE `characters` SET data='".$data."' WHERE guid='".$id."'";
+          $query = "UPDATE `characters` SET name='".$new_name."', data='".$data."' WHERE guid='".$id."'";
         else
-          $query = "UPDATE `characters` SET money=".$new_money.", arenaPoints=".$new_arena_points.", totalHonorPoints=".$new_honor_points.", totalKills=".$new_total_kills." WHERE guid='".$id."'";
+          $query = "UPDATE `characters` SET name='".$new_name."', money=".$new_money.", arenaPoints=".$new_arena_points.", totalHonorPoints=".$new_honor_points.", totalKills=".$new_total_kills." WHERE guid='".$id."'";
 
         $result = $sql["char"]->query($query);
 
