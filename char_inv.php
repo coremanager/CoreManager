@@ -772,17 +772,32 @@ function dodelete_item()
 
   if ( $core == 1 )
     $query = "DELETE FROM playeritems WHERE ownerguid='".$cid."' AND entry='".$item."' AND containerslot='".$bag."' AND slot='".$slot."'";
-  else
+  elseif ( $core == 2 )
   {
     $query = "SELECT item FROM character_inventory WHERE guid='".$cid."' AND item_template='".$item."' AND bag='".$bag."' AND slot='".$slot."'";
     $result = $sql["char"]->query($query);
     $result = $sql["char"]->fetch_assoc($result);
     $item_guid = $result["item"];
 
-    $query = "DELETE FROM character_inventory WHERE item=".$item_guid;
+    $query = "DELETE FROM character_inventory WHERE item='".$item_guid."'";
+    $query2 = "DELETE FROM item_instance WHERE guid='".$item_guid."';";
+  }
+  else
+  {
+    $query = "SELECT item FROM character_inventory
+                LEFT JOIN item_instance ON character_inventory.item=item_instance.guid
+              WHERE character_inventory.guid='".$cid."' AND itemEntry='".$item."' AND bag='".$bag."' AND slot='".$slot."'";
+    $result = $sql["char"]->query($query);
+    $result = $sql["char"]->fetch_assoc($result);
+    $item_guid = $result["item"];
+
+    $query = "DELETE FROM character_inventory WHERE item='".$item_guid."'";
+    $query2 = "DELETE FROM item_instance WHERE guid='".$item_guid."';";
   }
 
   $result = $sql["char"]->query($query);
+  if ( isset($query2) )
+    $result = $sql["char"]->query($query2);
 
   redirect("char_inv.php?id=".$cid."&mode=".$_GET["mode"]);
 }
