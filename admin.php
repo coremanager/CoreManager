@@ -2922,7 +2922,7 @@ function forum()
                   </center>
                 </td>
                 <td style="background-color:'.$color.'" colspan="2">
-                  <a href="admin.php?section=forum&amp;ddforum=addforum">'.lang("admin", "addforum").'</a>
+                  <a href="admin.php?section=forum&amp;addforum=addforum">'.lang("admin", "addforum").'</a>
                 </td>
               </tr>
             </table>
