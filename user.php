@@ -1845,8 +1845,9 @@ function doedit_user()
   }
 
   //restricting access to lower security level
-  if ( ( $seclevel > $user_lvl ) || ( $user_lvl <> $action_permission["delete"] ) )
+  if ( ( $seclevel > $user_lvl ) || ( $user_lvl < $action_permission["delete"] ) )
     redirect("user.php?action=edit_user&acct=".$_POST["acct"]."&error=16");
+
   require_once("libs/valid_lib.php");
   if ( !valid_alphabetic($login) )
     redirect("user.php?action=edit_user&error=9&acct=".$acct);
