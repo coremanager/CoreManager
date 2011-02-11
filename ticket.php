@@ -98,6 +98,13 @@ function browse_tickets()
             <input type="hidden" name="action" value="delete_tickets" />
             <input type="hidden" name="start" value="'.$start.'" />
             <table class="lined">
+              <tr>
+                <td colspan="3" align="left" class="hidden">';
+  if ( $user_lvl >= $action_permission["delete"] )
+    makebutton(lang("ticket", "del_selected_tickets"), "javascript:do_submit()\" type=\"wrn", 230);
+  $output .= '
+                </td>
+              </tr>
               <tr>';
   if ( $user_lvl >= $action_permission["delete"] )
     $output .= '

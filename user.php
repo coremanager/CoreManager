@@ -404,6 +404,13 @@ function browse_users()
               <input type="hidden" name="start" value="'.$start.'" />
               <input type="hidden" name="backup_op" value="0"/>
               <table class="lined">
+                <tr>
+                  <td colspan="8" align="left" class="hidden">';
+  if ( $user_lvl >= $action_permission["delete"] )
+    makebutton(lang("user", "del_selected_users"), 'javascript:do_submit(\'form1\',0)" type="wrn',230);
+  $output .= '
+                  </td>
+                </tr>
                 <tr>';
   // column headers, with links for sorting
   // first column is the  selection check box
@@ -1215,7 +1222,7 @@ function doadd_new()
     $result = $sql["logon"]->query("INSERT INTO account (username, sha_pass_hash, email, last_ip, locked, last_login, expansion)
       VALUES ('".$new_user."','".$password."', '".$new_mail."', '".$last_ip."', '".$locked."' ,NULL , '".$expansion."')");
 
-  $sn_query = "INSERT INTO config_accounts (Login, ScreenName, SecurityLevel, WebAdmin) VALUES ('".$new_user."', '".$new_screenname."', 0, 0)";
+  $sn_query = "INSERT INTO config_accounts (Login, ScreenName, SecurityLevel) VALUES ('".$new_user."', '".$new_screenname."', 0)";
   $sn_result = $sql["mgr"]->query($sn_query);
 
   if ( $result )

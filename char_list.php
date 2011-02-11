@@ -369,6 +369,13 @@ function browse_chars()
             <input type="hidden" name="start" value="'.$start.'" />
             <table class="lined">
               <tr>
+                <td colspan="6" align="left" class="hidden">';
+  if ( ( $user_lvl >= $action_permission["delete"] ) || ( $owner_acc_name == $user_name ) )
+    makebutton(lang("char_list", "del_selected_chars"), 'javascript:do_submit(\'form1\',0)" type="wrn', 220);
+  $output .= '
+                </td>
+              </tr>
+              <tr>
                 <th width="1%"><input name="allbox" type="checkbox" value="Check All" onclick="CheckAll(document.form1);" /></th>
                 <th width="1%"><a href="char_list.php?order_by=guid&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'guid' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '' ).lang("char_list", "id").'</a></th>
                 <th width="1%"><a href="char_list.php?order_by=name&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;symbol='.$_GET["symbol"].'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == 'name' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '' ).lang("char_list", "char_name").'</a></th>
