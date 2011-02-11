@@ -82,6 +82,9 @@ function dologin()
   if ( $temp["gm"] == NULL )
     $temp["gm"] = 0;
 
+  if ( $temp["gm"] >= 1073741824 )
+    $temp["gm"] -= 1073741824;
+
   $_SESSION["gm_lvl"] = $temp["gm"];
 
   //we need this later
