@@ -1062,7 +1062,7 @@ function general()
                 <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "publickey").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "publickey").'</a>:
               </td>
               <td>
-                <input type="text" name="publickey" value="'.$publickey["Value"].'" size="60" />
+                <input type="text" name="publickey" value="'.$publickey["Value"].'" size="52" />
               </td>
             </tr>
             <tr>
@@ -1070,7 +1070,7 @@ function general()
                 <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "privatekey").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "privatekey").'</a>:
               </td>
               <td>
-                <input type="text" name="privatekey" value="'.$privatekey["Value"].'" size="60" />
+                <input type="text" name="privatekey" value="'.$privatekey["Value"].'" size="52" />
               </td>
             </tr>
             <tr>
@@ -3217,7 +3217,7 @@ function saveforum()
 
 function accounts()
 {
-  global $output, $corem_db, $logon_db, $core;
+  global $output, $corem_db, $logon_db, $itemperpage, $core;
 
   $sqlm = new SQL;
   $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
@@ -3242,9 +3242,9 @@ function accounts()
   if ( !preg_match('/^[01]{1}$/', $dir) )
     $dir = 1;
 
-  $itemperpage = ( ( isset($_GET["perpage"]) ) ? $sqll->quote_smart($_GET["perpage"]) : 25 );
-  if ( !is_numeric($itemperpage) )
-    $itemperpage = 25;
+  $accts_per_page = ( ( isset($_GET["perpage"]) ) ? $sqll->quote_smart($_GET["perpage"]) : $itemperpage );
+  if ( !is_numeric($accts_per_page) )
+    $accts_per_page = $itemperpage;
 
   $order_dir = ( ( $dir ) ? "ASC" : "DESC" );
   $dir = ( ( $dir ) ? 0 : 1 );
@@ -3282,7 +3282,7 @@ function accounts()
               FROM accounts
                 LEFT JOIN `".$corem_db["name"]."`.config_accounts ON accounts.login=`".$corem_db["name"]."`.config_accounts.Login
               ".$search."
-              ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
+              ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$accts_per_page;
     $count_query = "SELECT COUNT(*) FROM accounts
                       LEFT JOIN `".$corem_db["name"]."`.config_accounts ON accounts.login=`".$corem_db["name"]."`.config_accounts.Login
                     ".$search;
@@ -3293,7 +3293,7 @@ function accounts()
               FROM account
                 LEFT JOIN `".$corem_db["name"]."`.config_accounts ON account.username=`".$corem_db["name"]."`.config_accounts.Login
               ".$search."
-              ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
+              ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$accts_per_page;
     $count_query = "SELECT COUNT(*) FROM account
                       LEFT JOIN `".$corem_db["name"]."`.config_accounts ON account.username=`".$corem_db["name"]."`.config_accounts.Login
                     ".$search;
@@ -3333,7 +3333,7 @@ function accounts()
           </table>';
 
     $output .= '
-          <a href="admin.php?section=accounts&amp;order_by='.$order_by.'&amp;start='.$start.'&amp;dir='.( ( $dir ) ? 0 : 1 ).'&perpage='.$itemperpage.'">'.lang("admin", "clearsearch").'</a>
+          <a href="admin.php?section=accounts&amp;order_by='.$order_by.'&amp;start='.$start.'&amp;dir='.( ( $dir ) ? 0 : 1 ).'&perpage='.$accts_per_page.'">'.lang("admin", "clearsearch").'</a>
           <br />
           <br />';
 
@@ -3349,7 +3349,7 @@ function accounts()
 
     for ( $i = 0; $i < count($per_page_choices); $i++ )
     {
-      if ( $itemperpage != $per_page_choices[$i] )
+      if ( $accts_per_page != $per_page_choices[$i] )
         $output .= '<a href="admin.php?section=accounts&amp;order_by='.$order_by.'&amp;start='.$start.'&amp;dir='.( ( $dir ) ? 0 : 1 ).( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;perpage='.$per_page_choices[$i].'">'.$per_page_choices[$i].'</a>';
       else
         $output .= $per_page_choices[$i];
@@ -3364,7 +3364,7 @@ function accounts()
               <td align="left">'.lang("admin", "total").': '.$all_record.'</td>
               <td align="right">';
 
-    $output .= generate_pagination('admin.php?section=accounts&amp;order_by='.$order_by.'&amp;start='.$start.'&amp;dir='.( ( $dir ) ? 0 : 1 ).( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;perpage='.$itemperpage, $all_record, $itemperpage, $start);
+    $output .= generate_pagination('admin.php?section=accounts&amp;order_by='.$order_by.'&amp;start='.$start.'&amp;dir='.( ( $dir ) ? 0 : 1 ).( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;perpage='.$accts_per_page, $all_record, $accts_per_page, $start);
 
     $output .= '
               </td>
@@ -3376,19 +3376,19 @@ function accounts()
               <tr>
                 <th width="10%">'.lang("admin", "edit").'</th>
                 <th>
-                  <a href="admin.php?section=accounts&amp;order_by=acct&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'&amp;perpage='.$itemperpage.'"'.( ( $order_by == 'acct' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("user", "acct").'</a>
+                  <a href="admin.php?section=accounts&amp;order_by=acct&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'&amp;perpage='.$accts_per_page.'"'.( ( $order_by == 'acct' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("user", "acct").'</a>
                 </th>
                 <th>
-                  <a href="admin.php?section=accounts&amp;order_by=login&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'&amp;perpage='.$itemperpage.'"'.( ( $order_by == 'login' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("admin", "login").'</a>
+                  <a href="admin.php?section=accounts&amp;order_by=login&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'&amp;perpage='.$accts_per_page.'"'.( ( $order_by == 'login' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("admin", "login").'</a>
                 </th>
                 <th>
-                  <a href="admin.php?section=accounts&amp;order_by=ScreenName&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'&amp;perpage='.$itemperpage.'"'.( ( $order_by == 'ScreenName' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("admin", "screenname").'</a>
+                  <a href="admin.php?section=accounts&amp;order_by=ScreenName&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'&amp;perpage='.$accts_per_page.'"'.( ( $order_by == 'ScreenName' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("admin", "screenname").'</a>
                 </th>
                 <th width="20%">
-                  <a href="admin.php?section=accounts&amp;order_by=SecurityLevel&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'&amp;perpage='.$itemperpage.'"'.( ( $order_by == 'SecurityLevel' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("admin", "seclvl").'</a>
+                  <a href="admin.php?section=accounts&amp;order_by=SecurityLevel&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'&amp;perpage='.$accts_per_page.'"'.( ( $order_by == 'SecurityLevel' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("admin", "seclvl").'</a>
                 </th>
                 <th width="15%">
-                  <a href="admin.php?section=accounts&amp;order_by=WebAdmin&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'&amp;perpage='.$itemperpage.'"'.( ( $order_by == 'WebAdmin' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("admin", "acpaccess").'</a>
+                  <a href="admin.php?section=accounts&amp;order_by=WebAdmin&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'&amp;perpage='.$accts_per_page.'"'.( ( $order_by == 'WebAdmin' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("admin", "acpaccess").'</a>
                 </th>
               </tr>';
     $color = "#EEEEEE";

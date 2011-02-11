@@ -2,13 +2,24 @@ Q: I'm getting this message:
   Fatal error: Call to undefined function error() in /XXXX/coremanager/libs/db_lib/mysql.php on line 46
     or
   Error - Connection to database is not established !
-  
+
 A: Most likely you've made a mistake in the database configuration your provided for CoreManager.
   Please note: For usernames and passwords MySQL is case sensitive.
 
 
 Q: Why is the Character Sheet page incomplete or garbled?
 
-A: Because your Game Server isn't saving all of Character Data we need.
+A1: Because your Game Server isn't saving all of Character Data we need.
   For ArcEmu: Set SaveExtendedCharData to "1".
   For MaNGOS/Trinity: Set PlayerSave.Stats.MinLevel to 1.
+
+A2: Because your Game Server doesn't store all the information CoreManager wants to display.
+  For ArcEmu: You're not having this problem.
+  For MaNGOS/Trinity: Get your core's dev team to add more columns to the character_stats table.
+
+
+Q: Why doesn't changing the Security Level of an account make them a GM in-game?
+
+A: Because ArcEmu, MaNGOS, and Trinity all store or use GM Levels differently,
+  CoreManager uses a separate system.
+  (two actually; Web Admin, which is for ACP access, is separate also)

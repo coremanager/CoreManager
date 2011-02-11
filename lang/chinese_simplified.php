@@ -186,9 +186,9 @@ $GLOBALS['lang_register'] = array
   'i_dont_agree' => '我不同意',
   'pass_too_long' => '您输入的密码超出了最大许可长度',
   'invited_by' => '邀请人',
-  'invited_info' => '请填写邀请您前来注册的玩家的帐号名称。',
+  'invited_info' => 'Character name of the player who invited you to register here.',
   'email_address_used' => '这个email已经注册了帐号。<br/>不能再创建更多帐号了。',
-  'referrer_not_found' => '很不幸，我们的数据库中没有查找到指定的帐号。<br/>请确认您输入了有效的帐号名称或者将&quot;邀请人&quot;栏位留空。',
+  'referrer_not_found' => '<br />Unfortunately the specified referring character was not found in our database.<br />Please use Edit My Account and enter a valid character name in the &quot;Invited By&quot; field.',
   'lang' => '语言',
   'not_client' => '网站语言，不影响游戏中的语言设置。',
 );

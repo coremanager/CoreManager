@@ -201,12 +201,11 @@ function doregister()
 
     // insert screen name (if we didn't get a screen name, we still need to exit registration correctly.
     if ( $screenname )
-    {
       $query = "INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '".$screenname."')";
-      $s_result = $sql["mgr"]->query($query);
-    }
     else
-      $s_result = true;
+      $query = "INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '')";
+
+    $s_result = $sql["mgr"]->query($query);
 
     if ( $send_confirmation_mail_on_creation )
     {
@@ -243,6 +242,19 @@ function doregister()
 
       $a_result = $sql["logon"]->query($query);
     }
+
+    // do referral
+    if ( $core == 1 )
+      $our_acct_query = "SELECT acct AS id FROM accounts WHERE login='".$user_name."'";
+    else
+      $our_acct_query = "SELECT id FROM account WHERE username='".$user_name."'";
+
+    $our_acct_result = $sql["logon"]->query($our_acct_query);
+    $our_acct_result = $sql["logon"]->fetch_assoc($our_acct_result);
+    $our_acct = $our_acct_result["id"];
+
+    $referredby = ( ( isset($_POST["invitedby"]) ) ? $sql["logon"]->quote_smart($_POST["invitedby"]) : NULL );
+    $referralresult = doupdate_referral($referredby, $our_acct);
 
     if ( $core == 1 )
       ;
@@ -415,10 +427,15 @@ function doregister()
 
     if ( $result )
     {
-      if ( $send_confirmation_mail_on_creation )
-        redirect("login.php?error=8");
+      if ( $referralresult )
+        $appendinfo = "";
       else
-        redirect("login.php?error=6");
+        $appendinfo = "&info=1";
+
+      if ( $send_confirmation_mail_on_creation )
+        redirect("login.php?error=8".$appendinfo);
+      else
+        redirect("login.php?error=6".$appendinfo);
     }
   }
 }
@@ -514,6 +531,14 @@ function register()
                 <input type="text" name="email" id="reg_email" maxlength="225" />
                 <br />
                 '.lang("register", "use_valid_mail").'
+              </td>
+            </tr>
+            <tr>
+              <td valign="top">'.lang("register", "invited_by").':</td>
+              <td>
+                <input type="text" name="invitedby" id="reg_invitedby" maxlength="25" />
+                <br />
+                '.lang("register", "invited_info").'
               </td>
             </tr>
             <tr>
@@ -971,6 +996,9 @@ switch ( $err )
     break;
   case 15:
     $output .= '<h1><font class="error">'.lang("register", "used_ip").'</font></h1>';
+    break;
+  case 16:
+    $output .= '<h1><font class="error">'.lang("register", "referrer_not_found").'</font></h1>';
     break;
   default:
     $output .= '<h1><font class="error">'.lang("register", "fill_all_fields").'</font></h1>';

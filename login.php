@@ -402,6 +402,7 @@ elseif ( $err == 2 )
   $output .=  '
             <h1><font class="error">'.lang("login", "missing_pass_user").'</font></h1>';
 elseif ( $err == 3 )
+{
   $output .=  '
             <h1><font class="error">'.lang("login", "banned_acc").'</font></h1>';
   if ( isset($info) )
@@ -410,6 +411,7 @@ elseif ( $err == 3 )
     $info = str_replace("/br/", "<br />", $info);
     $output .= '<h1>'.$info.'</h1>';
   }
+}
 elseif ( $err == 5 )
 {
   $output .=  '
@@ -418,14 +420,22 @@ elseif ( $err == 5 )
     $output .= '<h1><font class="error">'.lang("login", "req_permision").': '.$info.'</font></h1>';
 }
 elseif ( $err == 6 )
+{
   $output .=  '
             <h1><font class="error">'.lang("login", "after_registration").'</font></h1>';
+  if ( isset($info) )
+    $output .= '<h1><font class="error">'.lang("register", "referrer_not_found").'</font></h1>';
+}
 elseif ( $err == 7 )
   $output .=  '
             <h1><font class="error">'.lang("login", "after_activation").'</font></h1>';
 elseif ( $err == 8 )
+{
   $output .=  '
             <h1><font class="error">'.lang("login", "confirm_sent").'</font></h1>';
+  if ( isset($info) )
+    $output .= '<h1><font class="error">'.lang("register", "referrer_not_found").'</font></h1>';
+}
 else
   $output .=  '
             <h1>'.lang("login", "enter_valid_logon").'</h1>';

@@ -1975,51 +1975,6 @@ function doedit_user()
     redirect("user.php?action=edit_user&error=12&acct=".$acct);
 }
 
-function doupdate_referral($referredby, $user_id)
-{
-  global $logon_db, $corem_db, $characters_db, $realm_id, $sql, $core;
-
-  $result = $sql["mgr"]->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount='".$user_id."'");
-  $result = $sql["mgr"]->fetch_assoc($result);
-  $result = $result["InvitedBy"];
-
-  if ( $result == NULL )
-  {
-    $referred_by_result = $sql["char"]->query("SELECT guid FROM characters WHERE name='".$referredby."'");
-    $referred_by = $sql["char"]->fetch_assoc($referred_by_result);
-    $referred_by = $referred_by["guid"];
-
-    if ( $referred_by != NULL )
-    {
-      // get the account to which the character belongs
-      if ( $core == 1 )
-        $query = "SELECT acct FROM characters WHERE guid='".$referred_by."'";
-      else
-        $query = "SELECT account AS acct FROM characters WHERE guid='".$referred_by."'";
-      $c_acct = $sql["char"]->fetch_row($sql["char"]->query($query));
-
-      // check that the account actually exists (that we don't have an orphan character)
-      if ( $core == 1 )
-        $query = "SELECT acct FROM accounts WHERE acct='".$c_acct[0]."'";
-      else
-        $query = "SELECT id AS acct FROM account WHERE id='".$c_acct[0]."'";
-      $result = $sql["logon"]->query($query);
-      $result = $sql["logon"]->fetch_assoc($result);
-      $result = $result["acct"];
-
-      // save
-      if ( $result != $user_id )
-      {
-        $query = "INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES ('".$user_id."', '".$referred_by."', '".$result."')";
-        $sql["mgr"]->query($query);
-        return true;
-      }
-      else
-        return false;
-    }
-  }
-}
-
 
 //###############################################################################################################
 // CANCEL EMAIL CHANGE

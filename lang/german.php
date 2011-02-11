@@ -186,9 +186,9 @@ $GLOBALS['lang_register'] = array
   'i_dont_agree' => 'Ich bin nicht einverstanden',
   'pass_too_long' => 'Das angegebene Passwort &uuml;berschreitet die maximal erlaube L&auml;nge',
   'invited_by' => 'Geworben von',
-  'invited_info' => 'Wenn dich ein anderer Spieler geworben hat, gib hier seinen Accountnamen an.',
+  'invited_info' => 'Character name of the player who invited you to register here.',
   'email_address_used' => 'Diese Mailadresse hat schon einen Account.',
-  'referrer_not_found' => 'Der Account des Spielers, der dich geworben hat, wurde nicht gefunden.<br/>Stelle bitte sicher, dass du einen g&uuml;ltigen Accountnamen eingegeben hast.',
+  'referrer_not_found' => '<br />Unfortunately the specified referring character was not found in our database.<br />Please use Edit My Account and enter a valid character name in the &quot;Invited By&quot; field.',
   'lang' => 'Language',
   'not_client' => 'Does not affect In-Game Language',
 );

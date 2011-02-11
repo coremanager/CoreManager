@@ -475,4 +475,67 @@ function get_page_permission($restrict_lvl, $page)
 }
 
 
+//#############################################################################
+// Create Invited By entry in point_system_invites table
+function doupdate_referral($referredby, $our_acct)
+{
+  global $corem_db, $logon_db, $user_id, $sql;
+
+  if ( $referredby != NULL )
+  {
+    if ( isset($our_acct) )
+      // we got here from a new registration
+      $referred_acct = $our_acct;
+    else
+      // an existing account is declaring their Invited By
+      $referred_acct = $user_id;
+
+    $query = "SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount='".$referred_acct."'";
+    $result = $sql["mgr"]->query($query);
+    $result = $sql["mgr"]->fetch_assoc($result);
+    $result = $result["InvitedBy"];
+
+    if ( $result == NULL )
+    {
+      $query = "SELECT guid FROM characters WHERE name='".$referredby."'";
+      $referred_by_result = $sql["char"]->query($query);
+      $referred_by = $sql["char"]->fetch_assoc($referred_by_result);
+      $referred_by = $referred_by["guid"];
+
+      if ( $referred_by != NULL )
+      {
+        // get the account to which the character belongs
+        if ( $core == 1 )
+          $query = "SELECT acct FROM characters WHERE guid='".$referred_by."'";
+        else
+          $query = "SELECT account AS acct FROM characters WHERE guid='".$referred_by."'";
+        $c_acct = $sql["char"]->fetch_row($sql["char"]->query($query));
+
+        // check that the account actually exists (that we don't have an orphan character)
+        if ( $core == 1 )
+          $query = "SELECT acct FROM accounts WHERE acct='".$c_acct[0]."'";
+        else
+          $query = "SELECT id AS acct FROM account WHERE id='".$c_acct[0]."'";
+        $result = $sql["logon"]->query($query);
+        $result = $sql["logon"]->fetch_assoc($result);
+        $result = $result["acct"];
+
+        // save
+        if ( $result != $user_id )
+        {
+          $query = "INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES ('".$referred_acct."', '".$referred_by."', '".$result."')";
+          $sql["mgr"]->query($query);
+          return true;
+        }
+        else
+          return false;
+      }
+      return false;
+    }
+  }
+  else
+    return true; // Invited By was left blank
+}
+
+
 ?>
