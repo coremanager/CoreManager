@@ -70,6 +70,7 @@ $GLOBALS['lang_login'] = array
 (
   'login' => 'اتصال',
   'username' => 'نام کاربری',
+  'or_screenname' => 'You may use either your Username or Screen Name to login.',
   'password' => 'اسم رمز',
   'not_registrated' => 'ساخت اکانت',
   'bad_pass_user' => 'نام کاربری/اسم رمز اشتباه است',
@@ -142,10 +143,12 @@ $GLOBALS['lang_register'] = array
 (
   'create_acc' => 'ساخت اکانت',
   'username' => 'نام کاربری',
+  'username_use' => 'You will need to use your Username to play.',
   'screenname' => 'Screen Name',
   'optional' => '(Optional)',
   'use_eng_chars_limited_len' => 'فقط از حروف انگلیسی و عدد استفاده کنید<br />حداقل 4 حرف | حد اکثر 14 حرف',
-  'willbeused' => 'This is the name that will be displayed here.<br />(You will need to use your Username to play)<br />You may use either your Username or Screen Name to login here.',
+  'willbeused' => 'This is the name that will be displayed here.',
+  'willbeused2' => 'It can be the same as Username.',
   'password' => 'اسم رمز',
   'confirm_password' => 'تایید اسم رمز',
   'min_pass_len' => 'حداقل 4 حرف | حد اکثر 25 حرف',

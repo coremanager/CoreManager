@@ -70,6 +70,7 @@ $GLOBALS['lang_login'] = array
 (
   'login' => '登陆',
   'username' => '用户名称',
+  'or_screenname' => '登陆此网站，您可以用用户名称或显示名称中的任何一个。',
   'password' => '用户密码',
   'not_registrated' => '注册',
   'bad_pass_user' => '无效的用户名称或用户密码！',
@@ -142,10 +143,12 @@ $GLOBALS['lang_register'] = array
 (
   'create_acc' => '创建帐号',
   'username' => '用户名称',
+  'username_use' => '您将使用用户名称进行游戏',
   'screenname' => '显示名称',
   'optional' => '(可选项)',
   'use_eng_chars_limited_len' => '仅可使用英文字母和数字。<br />最小长度 4 位  | 最大长度 14 位。',
-  'willbeused' => '这是将显示在本网站的名称。<br />(您将使用用户名称进行游戏)<br />登陆此网站，您可以用用户名称或显示名称中的任何一个。',
+  'willbeused' => '这是将显示在本网站的名称。',
+  'willbeused2' => 'It can be the same as Username.',
   'password' => '用户密码',
   'confirm_password' => '确认密码',
   'min_pass_len' => '最短 4 位 | 最长 25位。',

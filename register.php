@@ -491,6 +491,8 @@ function register()
               <td>
                 <input type="text" name="username" id="reg_username" maxlength="14" />
                 <br />
+                '.lang("register", "username_use").'
+                <br />
                 '.lang("register", "use_eng_chars_limited_len").'
                 <br />
               </td>
@@ -505,6 +507,8 @@ function register()
                 <input type="text" name="screenname" id="reg_screenname" maxlength="14" />
                 <br />
                 '.lang("register", "willbeused").'
+                <br />
+                '.lang("register", "willbeused2").'
                 <br />
                 '.lang("register", "use_eng_chars_limited_len").'
                 <br />

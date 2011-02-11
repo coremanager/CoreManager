@@ -70,6 +70,7 @@ $GLOBALS['lang_login'] = array
 (
   'login' => 'Login',
   'username' => 'Username',
+  'or_screenname' => 'You may use either your Username or Screen Name to login.',
   'password' => 'Password',
   'not_registrated' => 'Register',
   'bad_pass_user' => 'Invalid Username and/or Password!',
@@ -142,10 +143,12 @@ $GLOBALS['lang_register'] = array
 (
   'create_acc' => 'Create Account',
   'username' => 'Username',
+  'username_use' => 'You will need to use your Username to play.',
   'screenname' => 'Screen Name',
   'optional' => '(Optional)',
   'use_eng_chars_limited_len' => 'Use English characters and numbers only.<br />Minimum Length 4 | Maximum Length 14.',
-  'willbeused' => 'This is the name that will be displayed here.<br />(You will need to use your Username to play)<br />You may use either your Username or Screen Name to login here.',
+  'willbeused' => 'This is the name that will be displayed here.',
+  'willbeused2' => 'It can be the same as Username.',
   'password' => 'Password',
   'confirm_password' => 'Confirm Password',
   'min_pass_len' => 'Minimum Length 4 | Maximum Length 25.',

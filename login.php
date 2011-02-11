@@ -175,10 +175,12 @@ function login()
                     </td>
                   </tr>
                   <tr>
-                    <td align="right">'.lang("login", "username").' :</td>
+                    <td align="right" valign="top" style="width: 35%;">'.lang("login", "username").' :</td>
 										<td>&nbsp;</td>
                     <td align="left">
                       <input type="text" name="login" size="24" maxlength="16" onfocus="this.select()" />
+                      <br />
+                      '.lang("login", "or_screenname").'
                     </td>
                   </tr>
                   <tr>
@@ -227,10 +229,9 @@ function login()
   $output .= ' /></td>
                   </tr>
                   <tr>
-                    <td>
-                    </td>
+                    <td colspan="3"></td>
                   </tr>
-                  <tr align="right">
+                  <tr align="center">
                     <td colspan="3">
                       <input type="submit" value="" style="display:none" />';
   makebutton(lang("login", "not_registrated"), 'register.php" type="wrn', 130);
@@ -239,7 +240,9 @@ function login()
                     </td>
                   </tr>
                   <tr align="center">
-                    <td colspan="3"><a href="register.php?action=pass_recovery">'.lang("login", "pass_recovery").'</a></td>
+                    <td colspan="3">
+                      <a href="register.php?action=pass_recovery">'.lang("login", "pass_recovery").'</a>
+                    </td>
                   </tr>
                   <tr>
                     <td colspan="3">
