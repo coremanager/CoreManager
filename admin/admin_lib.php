@@ -28,7 +28,7 @@ function valid_login_webadmin($restrict_lvl)
     $query = "SELECT * FROM config_accounts WHERE Login='".$_SESSION["login"]."'";
     $user = $sqlm->fetch_assoc($sqlm->query($query));
 
-    $user_lvl = $user["WebAdmin"];
+    $user_lvl = $user["SecurityLevel"];
     $ip = ( ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv("REMOTE_ADDR") );
     if ( !$ip === $_SESSION["client_ip"] )
       header("Location: admin_login.php");
@@ -36,7 +36,7 @@ function valid_login_webadmin($restrict_lvl)
   else
     header("Location: admin_login.php");
 
-  if ( $user_lvl < 1 )
+  if ( $user_lvl < 1073741824 )
     header("Location: admin_login.php?error=5");
 }
 

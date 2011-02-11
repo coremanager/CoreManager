@@ -3271,14 +3271,14 @@ function accounts()
   if ( ( $search_value != "" ) && ( $search_by != "" ) )
   {
     if ( $search_by == "WebAdmin" )
-      $search = "WHERE ".$search_by."='".$search_value."'";
+      $search = "WHERE SecurityLevel>='1073741824'"; // WebAdmin column removed r197
     else
       $search = "WHERE ".$search_by." LIKE '%".$search_value."%'";
   }
 
   if ( $core == 1 )
   {
-    $query = "SELECT *
+    $query = "SELECT *, (SecurityLevel & 1073741824) AS WebAdmin
               FROM accounts
                 LEFT JOIN `".$corem_db["name"]."`.config_accounts ON accounts.login=`".$corem_db["name"]."`.config_accounts.Login
               ".$search."
@@ -3289,7 +3289,7 @@ function accounts()
   }
   else
   {
-    $query = "SELECT *, id AS acct, username AS login
+    $query = "SELECT *, id AS acct, username AS login, (SecurityLevel & 1073741824) AS WebAdmin
               FROM account
                 LEFT JOIN `".$corem_db["name"]."`.config_accounts ON account.username=`".$corem_db["name"]."`.config_accounts.Login
               ".$search."
@@ -3398,6 +3398,9 @@ function accounts()
       $acct["WebAdmin"] = ( ( isset($acct["WebAdmin"]) ) ? $acct["WebAdmin"] : 0 );
       $acct["ScreenName"] = ( ( isset($acct["ScreenName"]) ) ? $acct["ScreenName"] : "" );
 
+      if ( $acct["SecurityLevel"] >= 1073741824 )
+        $acct["SecurityLevel"] -= 1073741824;
+
       $sl_query = "SELECT * FROM config_gm_level_names WHERE Security_Level='".$acct["SecurityLevel"]."'";
       $sl_result = $sqlm->query($sl_query);
       $sl = $sqlm->fetch_assoc($sl_result);
@@ -3453,6 +3456,13 @@ function accounts()
     $sl_result = $sqlm->query($sl_query);
 
     $sn_acct = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_accounts WHERE Login='".$acct."'"));
+
+    $sec_level_only = ( ( $sn_acct["SecurityLevel"] ) ? $sn_acct["SecurityLevel"] : 0 );
+    if ( $sec_level_only >= 1073741824 )
+      $sec_level_only -= 1073741824;
+
+    $web_admin_only = ($sn_acct["SecurityLevel"] & 1073741824);
+
     $output .= '
         <center>
           <form name="form" action="admin.php" method="get">
@@ -3479,7 +3489,7 @@ function accounts()
     while ( $row = $sqlm->fetch_assoc($sl_result) )
     {
       $output .= '
-                      <option value="'.$row["Security_Level"].'" '.( ( $sn_acct["SecurityLevel"] == $row["Security_Level"] ) ? 'selected="selected"' : '' ).'>'.$row["Full_Name"].' ('.$row["Security_Level"].')</option>';
+                      <option value="'.$row["Security_Level"].'" '.( ( $sec_level_only == $row["Security_Level"] ) ? 'selected="selected"' : '' ).'>'.$row["Full_Name"].' ('.$row["Security_Level"].')</option>';
     }
     $output .= '
                     </select>
@@ -3490,7 +3500,7 @@ function accounts()
                     <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "acpaccess").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "acpaccess").'</a>:
                   </td>
                   <td>
-                    <input type="checkbox" name="acp" '.($sn_acct["WebAdmin"] ? 'checked' : '').' />
+                    <input type="checkbox" name="acp" '.($web_admin_only ? 'checked' : '').' />
                   </td>
                 </tr>
               </table>
@@ -3513,11 +3523,14 @@ function saveacct()
   $sec = ( ( isset($_GET["sec"]) ) ? $sqlm->quote_smart($_GET["sec"]) : 0 );
   $acp = ( ( isset($_GET["acp"]) ) ? 1 : 0 );
 
+  if ( $acp )
+    $sec += 1073741824;
+
   $result = $sqlm->query("SELECT * FROM config_accounts WHERE Login='".$acct."'");
   if ( $sqlm->num_rows($result) )
-    $result = $sqlm->query("UPDATE config_accounts SET ScreenName='".$sn."', WebAdmin='".$acp."', SecurityLevel='".$sec."' WHERE Login='".$acct."'");
+    $result = $sqlm->query("UPDATE config_accounts SET ScreenName='".$sn."', SecurityLevel='".$sec."' WHERE Login='".$acct."'");
   else
-    $result = $sqlm->query("INSERT INTO config_accounts (Login, ScreenName, WebAdmin) VALUES ('".$acct."', '".$sn."', '".$acp."')");
+    $result = $sqlm->query("INSERT INTO config_accounts (Login, ScreenName, SecurityLevel) VALUES ('".$acct."', '".$sn."', '".$sec."')");
 
   redirect("admin.php?section=accounts");
 }

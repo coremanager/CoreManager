@@ -458,6 +458,9 @@ function browse_users()
     $sn_query = "SELECT *, SecurityLevel AS sec_lvl FROM config_accounts WHERE Login='".$data["login"]."'";
     $sn_result = $sql["mgr"]->query($sn_query);
     $screenname = $sql["mgr"]->fetch_assoc($sn_result);
+
+    if ( $screenname["sec_lvl"] >= 1073741824 )
+      $screenname["sec_lvl"] -= 1073741824;
     
     // if the user doesn't have a value in their SecurityLevel field,
     // assume it's Player (ZERO)
@@ -1362,6 +1365,7 @@ function edit_user()
             <input type="hidden" name="acct" value="'.$acct.'" />
             <input type="hidden" name="oldscreenname" value="'.$screenname["ScreenName"].'" />
             <input type="hidden" name="oldlogin" value="'.$data["login"].'" />
+            <input type="hidden" name="webadmin" value="'.($screenname["SecurityLevel"] & 1073741824).'" />
             <table class="flat">
               <tr>
                 <td>'.lang("user", "acct").':</td>
@@ -1470,6 +1474,11 @@ function edit_user()
               </tr>
               <tr>
                 <td>'.lang("user", "sec_level_long").':</td>';
+
+    $sec_lvl_only = $screenname["SecurityLevel"];
+    if ( $sec_lvl_only >= 1073741824 )
+      $sec_lvl_only -= 1073741824;
+
     if ( $user_lvl >= $action_permission["update"] )
     {
       $output .= '
@@ -1485,7 +1494,7 @@ function edit_user()
         {
           $output .= '
                     <option value="'.$level["Security_Level"].'"';
-          if ( gmlevel($screenname["SecurityLevel"]) == $level["Security_Level"] )
+          if ( gmlevel($sec_lvl_only) == $level["Security_Level"] )
             $output .= ' selected="selected"';
           $output .= '>'.$level["Full_Name"].'</option>';
         }
@@ -1813,6 +1822,7 @@ function doedit_user()
   $failed = ( ( isset($_POST["failed"]) ) ? $sql["logon"]->quote_smart($_POST["failed"]) : 0 );
   $gmlevel = ( ( isset($_POST["gm"]) ) ? $sql["logon"]->quote_smart($_POST["gm"]) : 0 );
   $seclevel = ( ( isset($_POST["seclvl"]) ) ? $sql["logon"]->quote_smart($_POST["seclvl"]) : 0 );
+  $webadmin = ( ( isset($_POST["webadmin"]) ) ? $sql["logon"]->quote_smart($_POST["webadmin"]) : 0 );
   $expansion = ( ( isset($_POST["expansion"]) ) ? $sql["logon"]->quote_smart($_POST["expansion"]) : $defaultoption );
   $banned = ( ( isset($_POST["banned"]) ) ? $sql["logon"]->quote_smart($_POST["banned"]) : 0 );
   $locked = ( ( isset($_POST["locked"]) ) ? $sql["logon"]->quote_smart($_POST["locked"]) : 0 );
@@ -1900,9 +1910,9 @@ function doedit_user()
   $sec_level_fields = $sql["mgr"]->fetch_assoc($sec_level_result);
 
   if ( ( $sec_level_fields["SecurityLevel"] != NULL ) || ( $sec_level_fields["SecurityLevel"] != $seclevel ) )
-    $sec_level_query = "UPDATE config_accounts SET SecurityLevel='".$seclevel."' WHERE Login=(".$acct_name_query.")";
+    $sec_level_query = "UPDATE config_accounts SET SecurityLevel='".($seclevel + $webadmin)."' WHERE Login=(".$acct_name_query.")";
   else
-    $sec_level_query = "INSERT INTO config_accounts (Login, SecurityLevel) VALUES ((".$acct_name_query."), '".$seclevel."')";
+    $sec_level_query = "INSERT INTO config_accounts (Login, SecurityLevel) VALUES ((".$acct_name_query."), '".($seclevel + $webadmin)."')";
 
   $sec_level_result = $sql["mgr"]->query($sec_level_query);
 

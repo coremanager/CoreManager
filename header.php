@@ -317,11 +317,11 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
   $web_admin_query = "SELECT * FROM config_accounts WHERE Login='".$user_name."'";
   $web_admin_result = $sql["mgr"]->query($web_admin_query);
   $web_admin = $sql["mgr"]->fetch_assoc($web_admin_result);
-  $web_admin = $web_admin["WebAdmin"];
+  $web_admin = $web_admin["SecurityLevel"] & 1073741824;
   //if (!$_SESSION["screenname"])
   //{
     $output .= '
-            <div id="username">'.( ( isset($_SESSION["screenname"]) ) ? $_SESSION["screenname"] : $user_name ).' .:'.( $web_admin ? '<a href="admin.php">' : '' ).$user_lvl_name.'\'s '.lang("header", "menu").( $web_admin ? '</a>' : '' ).':.</div>';
+            <div id="username">'.( ( isset($_SESSION["screenname"]) ) ? $_SESSION["screenname"] : $user_name ).' .:'.( ( $web_admin ) ? '<a href="admin.php">' : '' ).$user_lvl_name.'\'s '.lang("header", "menu").( ( $web_admin ) ? '</a>' : '' ).':.</div>';
   //}
   //else
   //{

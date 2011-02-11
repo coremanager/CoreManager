@@ -53,6 +53,10 @@ function edit_user()
         FROM config_accounts WHERE Login='".$user_name."'";
     $screen_name = $sql["mgr"]->query($screen_name_query);
     $screen_name = $sql["mgr"]->fetch_assoc($screen_name);
+
+    if ( $screen_name["SecurityLevel"] >= 1073741824 )
+      $screen_name["SecurityLevel"] -= 1073741824;
+
     $output .= '
           <center>
             <script type="text/javascript" src="libs/js/sha1.js"></script>
