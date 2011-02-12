@@ -490,6 +490,8 @@ $GLOBALS['lang_char'] = array
   'played' => 'Joué',
   'thisweek' => 'Cette semaine',
   'thisseason' => 'Cette saison',
+  // ---- char_tools.php ----
+  'char_tools' => 'Character Tools',
 );
 
 
@@ -729,6 +731,7 @@ $GLOBALS['lang_char_list'] = array
   'total' => 'Total',
   'zone' => 'Zone',
   'transfer' => 'Transfert de Compte',
+  'char_tools' => 'Character Tools',
 );
 
 

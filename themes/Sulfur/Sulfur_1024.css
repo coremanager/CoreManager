@@ -1873,3 +1873,13 @@ tr td.rep0
 {
   width: 140px;
 }
+
+/* CHAR_TOOLS.PHP */
+.char_tools_table
+{
+  width: 500px;
+}
+.char_tools_avatar
+{
+  width: 150px;
+}

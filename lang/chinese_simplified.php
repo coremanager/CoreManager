@@ -490,6 +490,8 @@ $GLOBALS['lang_char'] = array
   'played' => 'Played',
   'thisweek' => '本周',
   'thisseason' => '本季度',
+  // ---- char_tools.php ----
+  'char_tools' => 'Character Tools',
 );
 
 
@@ -729,6 +731,7 @@ $GLOBALS['lang_char_list'] = array
   'total' => '全部',
   'zone' => '区域',
   'transfer' => '帐号迁移',
+  'char_tools' => 'Character Tools',
 );
 
 

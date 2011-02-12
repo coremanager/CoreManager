@@ -400,7 +400,7 @@ function browse_chars()
   if ( $user_lvl >= $action_permission["update"] )
   {
     $output .= '
-                <th width="1%"><img src="img/arrow_switch.png" onmousemove="oldtoolTip(\''.lang("char_list", "transfer").'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></th>';
+                <th width="1%"><img src="img/arrow_switch.png" onmousemove="oldtoolTip(\''.lang("char_list", "char_tools").'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></th>';
   }
 
   $output .= '
@@ -488,7 +488,7 @@ function browse_chars()
       }
       if ( $user_lvl >= $action_permission["update"] )
         $output .= '
-                <td><a href="change_char_account.php?action=chooseacct&priority=1&char='.$char["guid"].'"><img src="img/arrow_switch.png"  /></a></td>';
+                <td><a href="char_tools.php?char='.$char["guid"].'"><img src="img/arrow_switch.png"  /></a></td>';
       $output .= '
               </tr>';
     }
@@ -500,6 +500,7 @@ function browse_chars()
       if ( $showcountryflag )
         $output .= '<td>*</td>';
       $output .= '
+                <td>*</td>
               </tr>';
     }
   }
