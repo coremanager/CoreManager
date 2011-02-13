@@ -343,9 +343,9 @@ function save()
   // set up web admin account
   $account = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_accounts WHERE Login='".$acctname."'"));
   if ( $account["Login"] <> '' )
-    $result = $sqlm->query("UPDATE config_accounts SET ScreenName='".$screenname."', SecurityLevel='4', WebAdmin='1' WHERE Login='".$acctname."'");
+    $result = $sqlm->query("UPDATE config_accounts SET ScreenName='".$screenname."', SecurityLevel=(4+1073741824) WHERE Login='".$acctname."'");
   else
-    $result = $sqlm->query("INSERT INTO config_accounts (Login, ScreenName, SecurityLevel, WebAdmin) VALUES (UPPER('".$acctname."'), '".$screenname."', '4', '1')");
+    $result = $sqlm->query("INSERT INTO config_accounts (Login, ScreenName, SecurityLevel) VALUES (UPPER('".$acctname."'), '".$screenname."', (4+1073741824))");
 
   $result = $sqlm->query("UPDATE config_misc SET Value='1' WHERE `Key`='Installed'");
 
