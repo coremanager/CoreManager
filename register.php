@@ -687,7 +687,7 @@ function pass_recovery()
 
   $output .= '
     <center>
-      <div class="half_frame">
+      <div class="half_frame fieldset_border">
       <span class="legend">'.lang("register", "recover_acc_password".( ( $core == 1 ) ? "A" : "MT" )).'</span>
       <form method="post" action="register.php?action=do_pass_recovery" name="form">
         <table class="flat">
@@ -731,7 +731,7 @@ function pass_recovery()
 //#####################################################################################################
 function do_pass_recovery()
 {
-  global $logon_db, $from_mail, $mailer_type, $smtp_cfg, $title, $GMailSender,
+  global $logon_db, $from_mail, $mailer_type, $smtp_cfg, $title, $GMailSender, $lang,
     $format_mail_html, $sql, $core;
 
   if ( empty($_POST["username"]) || empty($_POST["email"]) )

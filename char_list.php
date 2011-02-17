@@ -421,6 +421,9 @@ function browse_chars()
 
     $gm_query = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_acc_name."'");
     $owner_gmlvl = $sql["mgr"]->result($gm_query, 0, 'gm');
+
+    if ( $owner_gmlvl >= 1073741824 )
+      $owner_gmlvl -= 1073741824;
       
     $time_offset = $timezone * 3600;
       

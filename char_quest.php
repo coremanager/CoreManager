@@ -97,6 +97,9 @@ function char_quest()
     $sec_res = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
     $owner_gmlvl = $sql["mgr"]->result($sec_res, 0, 'gm');
 
+    if ( $owner_gmlvl >= 1073741824 )
+      $owner_gmlvl -= 1073741824;
+
     if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
     {
       $output .= '
