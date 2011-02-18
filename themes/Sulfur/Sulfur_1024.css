@@ -1883,3 +1883,58 @@ tr td.rep0
 {
   width: 150px;
 }
+
+/* OBJECT.PHP */
+.mini_map
+{
+  position: relative;
+  width: 488px;
+  height: 326px;
+  margin: 10px;
+}
+.gob_header
+{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.gob_name
+{
+  font-size: 15pt;
+}
+.zone_active
+{
+  font-weight: bold;
+}
+
+/* GPS Tooltip */
+.gps_tooltip
+{
+  visibility: hidden;
+  position: absolute;
+  z-index: 99;
+}
+.gps_tooltip table
+{
+  background-color: #454545;
+	border: 1px solid #F0D070;
+  color: #ffffff;
+  width: 80px;
+}
+.gps_tooltip table .name_level
+{
+	border-bottom: 1px solid  #F0D070;
+  text-align: center;
+}
+.gps_tooltip table .race
+{
+  text-align: left;
+}
+.gps_tooltip table .class
+{
+  text-align: left;
+}
+.gps_tooltip table .zone
+{
+	border-top: 1px solid  #F0D070;
+  text-align: center;
+}

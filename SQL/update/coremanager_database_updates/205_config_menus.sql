@@ -1,0 +1,2 @@
+UPDATE config_menus SET Menu='5' WHERE Menu='4';
+INSERT INTO config_menus (Menu, `Order`, Action, `Name`, `View`, `Insert`, `Update`, `Delete`, Enabled) VALUES ('4', '1', 'object.php', 'objects', '0', '4', '4', '4', '1');

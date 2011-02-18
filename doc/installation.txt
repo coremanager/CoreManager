@@ -24,61 +24,65 @@ INSTALLATION:
       (If you're NOT planning on using CoreManager as your primary website, copy the entire directory)
       To save transfer time, you may skip the following directories: doc, outdated, and Tools.
 
-   2. Extract all 5 of \img\icons\*_icons.part*.rar into \img\icons\.
+   2a. Extract all 5 of \img\icons\*_icons.part*.rar into \img\icons\.
 
-   3. Extract any .zip files in \img\icons\updates\ into \img\icons\.
+   2b. Extract any .zip files in \img\icons\updates\ into \img\icons\.
 
-   4. Extract \img\arena_emblems\*_arena_emblems.zip into \img\arena_emblems\.
+   2c. Extract \img\arena_emblems\*_arena_emblems.zip into \img\arena_emblems\.
 
-   5. Extract any .zip files in \img\arena_emblems\updates into \img\arena_emblems\.
+   2d. Extract any .zip files in \img\arena_emblems\updates into \img\arena_emblems\.
 
-   6. Extract \img\emblems\*_emblems.zip into \img\emblems\.
+   2e. Extract \img\emblems\*_emblems.zip into \img\emblems\.
 
-   7. Extract any .zip files in \img\emblems\updates into \img\emblems\.
+   2f. Extract any .zip files in \img\emblems\updates into \img\emblems\.
 
-   8. Create a new database for CoreManager's Configuration data.
+   2g. Extract \img\map\area_small\*_area_small.zip into \img\map\area_small\.
 
-   9. Create a new database for CoreManager DBC data.
+   2h. Extract any .zip files in \img\map\area_small\updates into \img\map\area_small\.
+
+   3. Create a new database for CoreManager's Configuration data.
+
+   4. Create a new database for CoreManager DBC data.
       (optional: you can use the one you just created for the configs if you like)
 
-  10. Copy \configs\config.dist.php into \configs\ as config.php.
+   5. Copy \configs\config.dist.php into \configs\ as config.php.
 
-  11. Open \configs\config.php for editing.
+   6. Open \configs\config.php for editing.
 
-  12. Set the entry for $core.
+   7. Set the entry for $core.
 
-  13. Configure all 5 entries for $corem_db with the info for your CoreManager Database
+   8. Configure all 5 entries for $corem_db with the info for your CoreManager Database
 
-  14. Configure the setting for $db_type. (NOTICE: ONLY MySQL IS KNOWN TO BE FUNCTIONAL)
+   9. Configure the setting for $db_type. (NOTICE: ONLY MySQL IS KNOWN TO BE FUNCTIONAL)
 
-  15. Save and close \configs\config.php.
+  10. Save and close \configs\config.php.
 
-  16. Open {URL to your server}/setup.php in your browser.  (e.g. http://127.0.0.1/setup.php)
+  11. Open {URL to your server}/setup.php in your browser.  (e.g. http://127.0.0.1/setup.php)
 
-  17. Enter the values indicated.
+  12. Enter the values indicated.
 
-  18. Click "Save Changes".
+  13. Click "Save Changes".
       (this may take a while as it's populating the CoreManager & DBC Databases)
 
-  19. It will take you to the ACP Login Screen.
+  14. It will take you to the ACP Login Screen.
       You'll be told you don't have permission; IN THIS CASE, IT IS ACTUALLY OK.
       Just log in using the account you selected in setup.php for Admin Account.
 
-  20. Click on both "Add Character Database" and "Add World Database".
+  15. Click on both "Add Character Database" and "Add World Database".
 
-  21. Configure the settings for the section named "Host" with your database server's information.
+  16. Configure the settings for the section named "Host" with your database server's information.
 
-  22. Configure the settings for the DBC and Authentication Databases.
+  17. Configure the settings for the DBC and Authentication Databases.
 
-  23. Configure the settings for the Character and World Databases.
+  18. Configure the settings for the Character and World Databases.
 
-  24. Click on the 'Servers' tab.
+  19. Click on the 'Servers' tab.
   
-  25. Click on "Add New Server".
+  20. Click on "Add New Server".
   
-  26. Click the "Edit" button for the new server.
+  21. Click the "Edit" button for the new server.
 
-  27. Make appropriate changes for the newly created server.
+  22. Make appropriate changes for the newly created server.
 
-  28. Run the included DBC to MySQL Convertor tool. Instructions are in \Tools\README (DBC to MySQL).txt
+  23. Run the included DBC to MySQL Convertor tool. Instructions are in \Tools\README (DBC to MySQL).txt
       (This must be run from Windows XP or greater, but the destination database may be hosted on *Nix)
