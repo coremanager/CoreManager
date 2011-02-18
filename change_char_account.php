@@ -112,12 +112,12 @@ function chooseacct()
     $priority = 1;
 
   if ( $core == 1 )
-    $accts_query = "SELECT acct, login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
+    $accts_query = "SELECT acct, login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '') AS ScreenName
     FROM accounts
       LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=accounts.login
     WHERE acct<>(SELECT acct FROM `".$characters_db[$realm_id]['name']."`.characters WHERE guid='".$guid."')";
   else
-    $accts_query = "SELECT id AS acct, username AS login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
+    $accts_query = "SELECT id AS acct, username AS login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '') AS ScreenName
     FROM account
       LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=account.username
     WHERE id<>(SELECT account FROM `".$characters_db[$realm_id]['name']."`.characters WHERE guid='".$guid."')";
@@ -164,7 +164,7 @@ function chooseacct()
     // Players see Screen Name if available
     if ( $user_lvl < 4 )
     {
-      if ( $row["Login"] == '' )
+      if ( $row["ScreenName"] == '' )
         $output .= $row["login"];
       else
         $output .= $row["ScreenName"];
