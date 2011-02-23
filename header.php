@@ -40,7 +40,7 @@ require_once("libs/config_lib.php");
 
 //----------------- Make sure a valid core has been selected ------------------
 
-if ( ( $core < 1 ) || ( $core > 3 ) )
+if ( ( $core < 0 ) || ( $core > 3 ) )
   die("Invalid Core selected.");
 
 //---------------------Error reports for Debugging-----------------------------
@@ -165,6 +165,10 @@ $sql["char"]->connect($characters_db[$realm_id]["addr"], $characters_db[$realm_i
 
 $sql["world"] = new SQL;
 $sql["world"]->connect($world_db[$realm_id]["addr"], $world_db[$realm_id]["user"], $world_db[$realm_id]["pass"], $world_db[$realm_id]["name"], $world_db[$realm_id]["encoding"]);
+
+// if $core is ZERO then we auto-detect based on the auth database
+if ( $core == 0 )
+  $core = detectcore();
 
 //----Check if a user has login, if Guest mode is enabled, code above will login as Guest
 if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSION["realm_id"]) && empty($_GET["err"]) )

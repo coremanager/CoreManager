@@ -55,7 +55,10 @@ $go_types = array
   28 => array(28, lang("game_object", "LOTTERY_KIOSK")),
   29 => array(29, lang("game_object", "CAPTURE_POINT")),
   30 => array(30, lang("game_object", "AURA_GENERATOR")),
-  31 => array(31, lang("game_object", "DUNGEON_DIFFICULTY"))
+  31 => array(31, lang("game_object", "DUNGEON_DIFFICULTY")),
+  32 => array(32, lang("game_object", "BARBER_CHAIR")),
+  33 => array(33, lang("game_object", "DESTRUCTIBLE_BUILDING")),
+  34 => array(34, lang("game_object", "GUILD_BANK"))
 );
 
 function get_go_type($flag)

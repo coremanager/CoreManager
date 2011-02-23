@@ -409,6 +409,10 @@ function general()
 {
   global $output, $corem_db, $core;
 
+  // we need $core to be set
+  if ( $core == 0 )
+    $core = detectcore();
+
   $sqlm = new SQL;
   $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
 
@@ -2116,6 +2120,10 @@ function servers()
 {
   global $output, $corem_db, $get_icon_type, $get_timezone_type, $core;
 
+  // we need $core to be set
+  if ( $core == 0 )
+    $core = detectcore();
+
   $sqlm = new SQL;
   $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
 
@@ -3218,6 +3226,10 @@ function saveforum()
 function accounts()
 {
   global $output, $corem_db, $logon_db, $itemperpage, $core;
+
+  // we need $core to be set
+  if ( $core == 0 )
+    $core = detectcore();
 
   $sqlm = new SQL;
   $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);

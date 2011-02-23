@@ -212,4 +212,31 @@ function generate_pagination($base_url, $num_items, $per_page, $start_item, $sta
 }
 
 
+//#############################################################################
+// Detect Core Type
+function detectcore()
+{
+  global $logon_db;
+
+  $sqll = new SQL;
+  $sqll->connect($logon_db["addr"], $logon_db["user"], $logon_db["pass"], $logon_db["name"], $logon_db["encoding"]);
+
+  // are we ArcEmu?
+  $query = "SHOW TABLES FROM `".$logon_db["name"]."` LIKE 'accounts'";
+  $result = $sqll->query($query);
+
+  if ( $sqll->num_rows($result) == 1 )
+    return 1; // we're ArcEmu
+
+  // no? ...then are we Trinity?
+  $query = "SHOW TABLES FROM `".$logon_db["name"]."` LIKE 'account_access'";
+  $result = $sqll->query($query);
+
+  if ( $sqll->num_rows($result) == 1 )
+    return 3; // we're Trinity
+  else
+    return 2; // we're MaNGOS
+}
+
+
 ?>

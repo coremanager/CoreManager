@@ -538,4 +538,28 @@ function doupdate_referral($referredby, $our_acct)
 }
 
 
+//#############################################################################
+// Detect Core Type
+function detectcore()
+{
+  global $sql, $logon_db;
+
+  // are we ArcEmu?
+  $query = "SHOW TABLES FROM `".$logon_db["name"]."` LIKE 'accounts'";
+  $result = $sql["logon"]->query($query);
+
+  if ( $sql["logon"]->num_rows($result) == 1 )
+    return 1; // we're ArcEmu
+
+  // no? ...then are we Trinity?
+  $query = "SHOW TABLES FROM `".$logon_db["name"]."` LIKE 'account_access'";
+  $result = $sql["logon"]->query($query);
+
+  if ( $sql["logon"]->num_rows($result) == 1 )
+    return 3; // we're Trinity
+  else
+    return 2; // we're MaNGOS
+}
+
+
 ?>
