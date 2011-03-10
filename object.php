@@ -76,7 +76,7 @@ function get_go_type($flag)
 //########################################################################################################################
 function search()
 {
-  global $output, $world_db, $realm_id, $base_datasite, $go_datasite, $sql_search_limit,
+  global $output, $world_db, $realm_id, $base_datasite, $go_datasite, $sql_search_limit, $locales_search_option,
     $itemperpage, $go_types, $sql, $core;
 
   //-------------------SQL Injection Prevention--------------------------------
@@ -242,7 +242,7 @@ function search()
     $where .= "AND type='".$type."' ";
   if ( isset($displayId) )
     $where .= "AND displayId='".$displayId."' ";
-  if (isset($faction) )
+  if ( isset($faction) )
     $where .= "AND gameobject_template.faction='".$faction."' ";
   if ( isset($flags ) )
     $where .= "AND flags='".$flags."' ";
@@ -252,18 +252,20 @@ function search()
 
   if ( $core == 1 )
   {
-    $query = "SELECT gameobject_names.entry, type, displayId, name
-              FROM gameobject_names
-              WHERE ".$where."
+    $query = "SELECT *, gameobject_names.Name AS name1, gameobject_names_localized.name AS name
+              FROM gameobject_names "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN gameobject_names_localized ON gameobject_names.entry=gameobject_names_localized.entry AND language_code='".$locales_search_option."') " : " " ).
+              "WHERE ".$where."
               ORDER BY gameobject_names.entry
               LIMIT ".$start.", ".$itemperpage;
     $query1 = "SELECT COUNT(*) FROM gameobject_names WHERE ".$where;
   }
   else
   {
-    $query = "SELECT gameobject_template.entry, type, displayId, name, faction
-              FROM gameobject_template
-              WHERE ".$where."
+    $query = "SELECT *
+              FROM gameobject_template "
+                .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_gameobject ON gameobject_template.entry=locales_gameobject.entry " : "" ).
+              "WHERE ".$where."
               ORDER BY gameobject_template.entry
               LIMIT ".$start.", ".$itemperpage;
     $query1 = "SELECT COUNT(*) FROM gameobject_template WHERE ".$where;
@@ -307,22 +309,28 @@ function search()
 
   for ( $i = 1; $i <= $page_total; $i++ )
   {
-    $go = $sql["world"]->fetch_row($result);
+    $go = $sql["world"]->fetch_assoc($result);
+
+    // localization
+    if ( $core == 1 )
+      $go["name"] = ( ( $locales_search_option ) ? $go["name"] : $go["name1"] );
+    else
+      $go["name"] = ( ( $locales_search_option ) ? $go["name_loc".$locales_search_option] : $go["name"] );
 
     $output .= '
             <tr>
               <td>
-                <a href="object.php?action=view&amp;entry='.$go[0].( ( $name ) ? '&amp;name='.$name : '' ).( ( $type ) ? '&amp;type='.$type : '' ).( ( $displayid ) ? '&amp;displayid='.$displayid : '' ).( ( $faction ) ? '&amp;faction='.$faction : '' ).( ( $flags ) ? '&amp;flags='.$flags : '' ).'&amp;error=3">'.$go[0].'</a>
+                <a href="object.php?action=view&amp;entry='.$go["entry"].( ( $name ) ? '&amp;name='.$name : '' ).( ( $type ) ? '&amp;type='.$type : '' ).( ( $displayid ) ? '&amp;displayid='.$displayid : '' ).( ( $faction ) ? '&amp;faction='.$faction : '' ).( ( $flags ) ? '&amp;flags='.$flags : '' ).'&amp;error=3">'.$go["entry"].'</a>
               </td>
               <td>
-                <a href="object.php?action=view&amp;entry='.$go[0].( ( $name ) ? '&amp;name='.$name : '' ).( ( $type ) ? '&amp;type='.$type : '' ).( ( $displayid ) ? '&amp;displayid='.$displayid : '' ).( ( $faction ) ? '&amp;faction='.$faction : '' ).( ( $flags ) ? '&amp;flags='.$flags : '' ).'&amp;error=3">'.htmlentities($go[3]).'</a>
+                <a href="object.php?action=view&amp;entry='.$go["entry"].( ( $name ) ? '&amp;name='.$name : '' ).( ( $type ) ? '&amp;type='.$type : '' ).( ( $displayid ) ? '&amp;displayid='.$displayid : '' ).( ( $faction ) ? '&amp;faction='.$faction : '' ).( ( $flags ) ? '&amp;flags='.$flags : '' ).'&amp;error=3">'.htmlentities($go["name"]).'</a>
               </td>
-              <td>'.get_go_type($go[1]).'</td>
-              <td>'.$go[2].'</td>';
-  if ( $core != 1 )
+              <td>'.get_go_type($go["type"]).'</td>
+              <td>'.$go["displayId"].'</td>';
+    if ( $core != 1 )
+      $output .= '
+              <td>'.$go["faction"].'</td>';
     $output .= '
-              <td>'.$go[4].'</td>';
-  $output .= '
             </tr>';
   }
   $output .= '
@@ -345,7 +353,7 @@ function search()
 //########################################################################################################################
 function view_go()
 {
-  global $output, $corem_db, $dbc_db, $user_id, $sql, $core;
+  global $output, $corem_db, $dbc_db, $locales_search_option, $user_id, $sql, $core;
 
   // SQL injection prevention
   $entry = ( ( isset($_GET["entry"]) ) ? $sql["world"]->quote_smart($_GET["entry"]) : NULL );
@@ -381,12 +389,23 @@ function view_go()
 
   // object info
   if ( $core == 1 )
-    ;
+    $go_info_query = "SELECT *, gameobject_names.Name AS name1, gameobject_names_localized.name AS name
+                      FROM gameobject_names "
+                        .( ( $locales_search_option != 0 ) ? "LEFT JOIN gameobject_names_localized ON gameobject_names.entry=gameobject_names_localized.entry AND language_code='".$locales_search_option."') " : " " ).
+                      "WHERE entry='".$entry."'";
   else
-    $go_info_query = "SELECT * FROM gameobject_template WHERE entry='".$entry."'";
+    $go_info_query = "SELECT * FROM gameobject_template "
+                        .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_gameobject ON gameobject_template.entry=locales_gameobject.entry " : "" ).
+                      "WHERE entry='".$entry."'";
 
   $go_info_result = $sql["world"]->query($go_info_query);
   $go_info = $sql["world"]->fetch_assoc($go_info_result);
+
+  // localization
+  if ( $core == 1 )
+    $go["name"] = ( ( $locales_search_option ) ? $go["name"] : $go["name1"] );
+  else
+    $go["name"] = ( ( $locales_search_option ) ? $go["name_loc".$locales_search_option] : $go["name"] );
 
   // counts & areas
   if ( $core == 1 )
