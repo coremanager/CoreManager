@@ -121,7 +121,7 @@ function search()
   // a little XSS prevention
   if ( htmlspecialchars($entry) != $entry )
     $entry = "";
-  if ( htmlspecialchars($name) != $name )
+  if ( htmlspecialchars($name, ENT_COMPAT, $site_encoding) != $name )
     $name = "";
   if ( htmlspecialchars($type) != $type )
     $type = -1;
@@ -323,7 +323,7 @@ function search()
                 <a href="object.php?action=view&amp;entry='.$go["entry"].( ( $name ) ? '&amp;name='.$name : '' ).( ( $type ) ? '&amp;type='.$type : '' ).( ( $displayid ) ? '&amp;displayid='.$displayid : '' ).( ( $faction ) ? '&amp;faction='.$faction : '' ).( ( $flags ) ? '&amp;flags='.$flags : '' ).'&amp;error=3">'.$go["entry"].'</a>
               </td>
               <td>
-                <a href="object.php?action=view&amp;entry='.$go["entry"].( ( $name ) ? '&amp;name='.$name : '' ).( ( $type ) ? '&amp;type='.$type : '' ).( ( $displayid ) ? '&amp;displayid='.$displayid : '' ).( ( $faction ) ? '&amp;faction='.$faction : '' ).( ( $flags ) ? '&amp;flags='.$flags : '' ).'&amp;error=3">'.htmlentities($go["name"]).'</a>
+                <a href="object.php?action=view&amp;entry='.$go["entry"].( ( $name ) ? '&amp;name='.$name : '' ).( ( $type ) ? '&amp;type='.$type : '' ).( ( $displayid ) ? '&amp;displayid='.$displayid : '' ).( ( $faction ) ? '&amp;faction='.$faction : '' ).( ( $flags ) ? '&amp;flags='.$flags : '' ).'&amp;error=3">'.htmlspecialchars($go["name"], ENT_COMPAT, $site_encoding).'</a>
               </td>
               <td>'.get_go_type($go["type"]).'</td>
               <td>'.$go["displayId"].'</td>';
@@ -392,20 +392,20 @@ function view_go()
     $go_info_query = "SELECT *, gameobject_names.Name AS name1, gameobject_names_localized.name AS name
                       FROM gameobject_names "
                         .( ( $locales_search_option != 0 ) ? "LEFT JOIN gameobject_names_localized ON gameobject_names.entry=gameobject_names_localized.entry AND language_code='".$locales_search_option."') " : " " ).
-                      "WHERE entry='".$entry."'";
+                      "WHERE gameobject_names.entry='".$entry."'";
   else
     $go_info_query = "SELECT * FROM gameobject_template "
                         .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_gameobject ON gameobject_template.entry=locales_gameobject.entry " : "" ).
-                      "WHERE entry='".$entry."'";
+                      "WHERE gameobject_template.entry='".$entry."'";
 
   $go_info_result = $sql["world"]->query($go_info_query);
   $go_info = $sql["world"]->fetch_assoc($go_info_result);
 
   // localization
   if ( $core == 1 )
-    $go["name"] = ( ( $locales_search_option ) ? $go["name"] : $go["name1"] );
+    $go_info["name"] = ( ( $locales_search_option ) ? $go_info["name"] : $go_info["name1"] );
   else
-    $go["name"] = ( ( $locales_search_option ) ? $go["name_loc".$locales_search_option] : $go["name"] );
+    $go_info["name"] = ( ( $locales_search_option ) ? $go_info["name_loc".$locales_search_option] : $go_info["name"] );
 
   // counts & areas
   if ( $core == 1 )
