@@ -60,13 +60,17 @@ $output = '
 //#############################################################################
 function dologin()
 {
-  global $corem_db, $logon_db, $core;
+  global $corem_db, $logon_db, $sql, $core;
 
   $sql["logon"] = new SQL;
   $sql["logon"]->connect($logon_db["addr"], $logon_db["user"], $logon_db["pass"], $logon_db["name"], $logon_db["encoding"]);
 
   $sql["mgr"] = new SQL;
   $sql["mgr"]->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
+  
+  // if $core is ZERO then we auto-detect based on the auth database
+  if ( $core == 0 )
+    $core = detectcore();
 
   if ( empty($_POST["login"]) || empty($_POST["password"]) )
     redirect('admin_login.php?error=2');

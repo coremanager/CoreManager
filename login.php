@@ -98,7 +98,7 @@ function dologin()
       $acct = $sql["logon"]->result($result, 0, "id");
 
     if ( $core == 1 )
-      $ban_query = "SELECT banned AS unbandate, banreason FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
+      $ban_query = "SELECT banned AS unbandate, banreason FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."' AND banned<>0";
     else
       $ban_query = "SELECT unbandate, banreason FROM account_banned WHERE id='".$acct."' AND active=1";
 
