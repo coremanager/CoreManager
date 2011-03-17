@@ -3292,11 +3292,11 @@ function accounts()
   {
     $query = "SELECT *, (SecurityLevel & 1073741824) AS WebAdmin
               FROM accounts
-                LEFT JOIN `".$corem_db["name"]."`.config_accounts ON accounts.login=`".$corem_db["name"]."`.config_accounts.Login
+                LEFT JOIN `".$corem_db["name"]."`.config_accounts ON accounts.login=`".$corem_db["name"]."`.config_accounts.Login COLLATE utf8_general_ci
               ".$search."
               ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$accts_per_page;
     $count_query = "SELECT COUNT(*) FROM accounts
-                      LEFT JOIN `".$corem_db["name"]."`.config_accounts ON accounts.login=`".$corem_db["name"]."`.config_accounts.Login
+                      LEFT JOIN `".$corem_db["name"]."`.config_accounts ON accounts.login=`".$corem_db["name"]."`.config_accounts.Login COLLATE utf8_general_ci
                     ".$search;
   }
   else

@@ -69,7 +69,9 @@ function edit_user()
                   document.form.pass.value = document.form.user_pass.value;';
     else
       $output .= '
-                  document.form.pass.value = hex_sha1("'.strtoupper($user_name).':"+document.form.user_pass.value.toUpperCase());
+                  document.form.pass.value = hex_sha1("'.strtoupper($user_name).':"+document.form.user_pass.value.toUpperCase());';
+
+    $output .= '
                   document.form.pass.value = document.form.pass.value.toUpperCase();
                   do_submit();
                 }

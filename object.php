@@ -252,7 +252,7 @@ function search()
 
   if ( $core == 1 )
   {
-    $query = "SELECT *, gameobject_names.Name AS name1, gameobject_names_localized.name AS name
+    $query = "SELECT *, Type AS type, DisplayID AS displayId, gameobject_names.Name AS name1".( ( $locales_search_option != 0 ) ? ", gameobject_names_localized.name AS name" : "" )."
               FROM gameobject_names "
                 .( ( $locales_search_option != 0 ) ? "LEFT JOIN gameobject_names_localized ON gameobject_names.entry=gameobject_names_localized.entry AND language_code='".$locales_search_option."') " : " " ).
               "WHERE ".$where."
@@ -389,7 +389,7 @@ function view_go()
 
   // object info
   if ( $core == 1 )
-    $go_info_query = "SELECT *, gameobject_names.Name AS name1, gameobject_names_localized.name AS name
+    $go_info_query = "SELECT *, Type AS type, DisplayID AS displayId, gameobject_names.Name AS name1".( ( $locales_search_option != 0 ) ? ", gameobject_names_localized.name AS name" : "" )."
                       FROM gameobject_names "
                         .( ( $locales_search_option != 0 ) ? "LEFT JOIN gameobject_names_localized ON gameobject_names.entry=gameobject_names_localized.entry AND language_code='".$locales_search_option."') " : " " ).
                       "WHERE gameobject_names.entry='".$entry."'";
@@ -409,7 +409,14 @@ function view_go()
 
   // counts & areas
   if ( $core == 1 )
-    ;
+  {
+    $query_count = "SELECT COUNT(*) FROM gameobject_spawns
+                      LEFT JOIN `".$corem_db["name"]."`.worldmaparea_fine ON ((position_x<=X1 AND position_x>=X2) AND (position_y<=Y1 AND position_y>=Y2) AND (position_z<=Z1 AND position_z>=Z2) AND gameobject_spawns.map=worldmaparea_fine.Map)
+                    WHERE gameobject_spawns.entry='".$entry."' AND (gameobject_spawns.map=0 OR gameobject_spawns.map=1 OR gameobject_spawns.map=530 OR gameobject_spawns.map=571) ORDER BY worldmaparea_fine.AreaTable ASC";
+    $query_areas = "SELECT DISTINCT(worldmaparea_fine.AreaTable), worldmaparea_fine.ID, RefCon, Name FROM gameobject_spawns
+                      LEFT JOIN `".$corem_db["name"]."`.worldmaparea_fine ON ((position_x<=X1 AND position_x>=X2) AND (position_y<=Y1 AND position_y>=Y2) AND (position_z<=Z1 AND position_z>=Z2) AND gameobject_spawns.map=worldmaparea_fine.Map)
+                    WHERE gameobject_spawns.entry='".$entry."' AND (gameobject_spawns.map=0 OR gameobject_spawns.map=1 OR gameobject_spawns.map=530 OR gameobject_spawns.map=571) ORDER BY worldmaparea_fine.AreaTable ASC";
+  }
   else
   {
     $query_count = "SELECT COUNT(*) FROM gameobject
@@ -451,7 +458,9 @@ function view_go()
     }
 
     if ( $core == 1 )
-      ;
+      $query_count_by_area = "SELECT COUNT(*) FROM gameobject_spawns
+                                LEFT JOIN `".$corem_db["name"]."`.worldmaparea_fine ON ((position_x<=X1 AND position_x>=X2) AND (position_y<=Y1 AND position_y>=Y2) AND (position_z<=Z1 AND position_z>=Z2) AND gameobject_spawns.map=worldmaparea_fine.Map)
+                              WHERE gameobject_spawns.entry='".$entry."' AND (gameobject_spawns.map=0 OR gameobject_spawns.map=1 OR gameobject_spawns.map=530 OR gameobject_spawns.map=571) AND worldmaparea_fine.AreaTable='".$row["AreaTable"]."'";
     else
       $query_count_by_area = "SELECT COUNT(*) FROM gameobject
                                 LEFT JOIN `".$corem_db["name"]."`.worldmaparea_fine ON ((position_x<=X1 AND position_x>=X2) AND (position_y<=Y1 AND position_y>=Y2) AND (position_z<=Z1 AND position_z>=Z2) AND gameobject.map=worldmaparea_fine.Map)
@@ -477,7 +486,10 @@ function view_go()
           </div>';
 
   if ( $core == 1 )
-    ;
+    $query = "SELECT gameobject_spawns.id AS guid, Yw, Xw, position_y, position_x, position_z, worldmaparea.X1 AS XBase, worldmaparea.Y1 AS YBase, Z1, Z2 FROM gameobject_spawns
+                LEFT JOIN `".$corem_db["name"]."`.worldmaparea_fine ON ((position_x<=X1 AND position_x>=X2) AND (position_y<=Y1 AND position_y>=Y2) AND (position_z<=Z1 AND position_z>=Z2) AND gameobject_spawns.map=worldmaparea_fine.Map)
+                LEFT JOIN `".$dbc_db["name"]."`.worldmaparea ON worldmaparea_fine.AreaTable=worldmaparea.AreaTable
+              WHERE gameobject_spawns.entry='".$entry."' AND (gameobject_spawns.map=0 OR gameobject_spawns.map=1 OR gameobject_spawns.map=530 OR gameobject_spawns.map=571) AND worldmaparea_fine.AreaTable='".$show."'".$display_floor;
   else
     $query = "SELECT guid, Yw, Xw, position_y, position_x, position_z, worldmaparea.X1 AS XBase, worldmaparea.Y1 AS YBase, Z1, Z2 FROM gameobject
                 LEFT JOIN `".$corem_db["name"]."`.worldmaparea_fine ON ((position_x<=X1 AND position_x>=X2) AND (position_y<=Y1 AND position_y>=Y2) AND (position_z<=Z1 AND position_z>=Z2) AND gameobject.map=worldmaparea_fine.Map)
@@ -543,7 +555,10 @@ function view_go()
 
   // get our characters
   if ( $core == 1 )
-    ;
+    $query_chars = "SELECT guid, race, class, level, gender, characters.name AS cname, Yw, Xw, positionY AS position_y, positionX AS position_x, positionZ AS position_z, worldmaparea.X1 AS XBase, worldmaparea.Y1 AS YBase FROM characters
+                      LEFT JOIN `".$corem_db["name"]."`.worldmaparea_fine ON ((positionX<=X1 AND positionX>=X2) AND (positionY<=Y1 AND positionY>=Y2) AND (positionZ<=Z1 AND positionZ>=Z2) AND characters.mapId=worldmaparea_fine.Map)
+                      LEFT JOIN `".$dbc_db["name"]."`.worldmaparea ON worldmaparea_fine.AreaTable=worldmaparea.AreaTable
+                    WHERE acct='".$user_id."' AND (positionZ<='".$area_Z1."' AND positionZ>='".$area_Z2."') AND (characters.mapId=0 OR characters.mapId=1 OR characters.mapId=530 OR characters.mapId=571) AND worldmaparea_fine.AreaTable='".$show."'";
   else
     $query_chars = "SELECT guid, race, class, level, gender, characters.name AS cname, Yw, Xw, position_y, position_x, position_z, worldmaparea.X1 AS XBase, worldmaparea.Y1 AS YBase FROM characters
                       LEFT JOIN `".$corem_db["name"]."`.worldmaparea_fine ON ((position_x<=X1 AND position_x>=X2) AND (position_y<=Y1 AND position_y>=Y2) AND (position_z<=Z1 AND position_z>=Z2) AND characters.map=worldmaparea_fine.Map)

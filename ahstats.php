@@ -333,9 +333,10 @@ function browse_auctions()
     // this_is_junk: the guid in auction is stored raw, so we have to subtract 4611686018427387904 to get the matching guid stored in playeritems :/
     $query = "SELECT characters.name AS owner_name, owner, playeritems.entry AS item_entry,
       item-4611686018427387904 AS item, buyout, time-UNIX_TIMESTAMP() AS time, bidder, bid
-      FROM auctions, ".$world_db[$realm_id]['name'].".items
+      FROM auctions
         LEFT JOIN characters ON auctions.owner=characters.guid
         LEFT JOIN playeritems ON auctions.item-4611686018427387904=playeritems.guid
+        LEFT JOIN ".$world_db[$realm_id]['name'].".items ON ".$world_db[$realm_id]['name'].".items.entry=playeritems.entry
       ".$seach_filter." ".$order_side." ORDER BY ".$post_order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
   elseif ( $core == 2 )
     $query = "SELECT characters.name AS owner_name, auction.item_template AS item_entry,
