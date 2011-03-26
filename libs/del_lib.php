@@ -75,17 +75,19 @@ function del_char($guid, $realm)
         $sql["char"]->query("DELETE FROM character_pet WHERE owner='".$guid."'");
       }
 
+      // this_is_junk: Tutorials are account based, we shouldn't make people redo them because a character was deleted
       // MaNGOS & Trinity: Delete character_tutorial
-      if ( $core != 1 )
-        $sql["char"]->query('DELETE FROM character_tutorial WHERE account='.$owner_acc_id.'');
+      //if ( $core != 1 )
+        //$sql["char"]->query('DELETE FROM character_tutorial WHERE account='.$owner_acc_id.'');
 
       // delete everything else from the character
       foreach ( $tab_del_user_characters as $value )
         $sql["char"]->query('DELETE FROM '.$value[0].' WHERE '.$value[1].'='.$guid.'');
 
+      // this_is_junk: More Account based info that should be kept
       // ArcEmu: Delete account_data for this user
-      if ( $core == 1 )
-        $sql["char"]->query("DELETE FROM account_data WHERE acct='".$owner_acc_id."'");
+      //if ( $core == 1 )
+        //$sql["char"]->query("DELETE FROM account_data WHERE acct='".$owner_acc_id."'");
 
       // finally, delete the character
       $sql["char"]->query("DELETE FROM characters WHERE guid = '".$guid."'");
@@ -143,6 +145,18 @@ function del_acc($acc_id)
           $temp = del_char($row["guid"], $db["id"]);
           $del_char++;
         }
+
+        // MaNGOS: Delete character_tutorial
+        if ( $core == 2 )
+          $sqlx->query("DELETE FROM character_tutorial WHERE account='".$owner_acc_id."'");
+
+        // Trinity: Delete account_tutorial
+        if ( $core == 3 )
+          $sqlx->query("DELETE FROM account_tutorial WHERE accountId='".$owner_acc_id."'");
+
+        // ArcEmu: Delete account_data for this user
+        if ( $core == 1 )
+          $sqlx->query("DELETE FROM account_data WHERE acct='".$owner_acc_id."'");
       }
 
       if ( $core == 1 )
