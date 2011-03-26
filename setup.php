@@ -364,7 +364,7 @@ function import_db($dbchost, $dbcport, $dbcuser, $dbcpass, $dbcname)
 
 
   // revision of current structure
-  $base_rev = '162';
+  $base_rev = '214';
 
 
   //#############################################################################

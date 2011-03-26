@@ -28,7 +28,7 @@ elseif ($db_type === 'SQLLite')
   require_once 'db_lib/sqlite.php';
 else
   exit('<center /><br /><code />'.$db_type.'</code> is not a valid database type.<br>
-    Please check settings in <code>\'scripts/config.php\'</code>.</center>');
+    Please check settings in <code>\'configs/config.php\'</code>.</center>');
 
 
 ?>

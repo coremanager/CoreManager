@@ -14,7 +14,6 @@ CREATE TABLE `config_accounts` (
   `Login` varchar(32) DEFAULT NULL,
   `ScreenName` varchar(32) DEFAULT NULL,
   `SecurityLevel` int(11) NOT NULL DEFAULT '0',
-  `WebAdmin` int(11) DEFAULT NULL,
   `TempPassword` varchar(75) DEFAULT NULL,
   `TempEmail` varchar(255) NOT NULL DEFAULT '',
   `JoinDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -108,7 +107,7 @@ CREATE TABLE `config_menus` (
   `Delete` int(11) DEFAULT NULL,
   `Enabled` int(11) DEFAULT NULL,
   PRIMARY KEY (`Index`)
-) ENGINE=MyISAM AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -231,6 +230,25 @@ CREATE TABLE `point_system_invites` (
   `Rewarded` int(1) NOT NULL DEFAULT '0',
   UNIQUE KEY `entry` (`entry`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `worldmaparea_fine` (
+  `ID` int(11) NOT NULL DEFAULT '0',
+  `AreaTable` int(11) DEFAULT NULL,
+  `Map` int(11) DEFAULT NULL,
+  `RefCon` varchar(255) DEFAULT NULL,
+  `Name` varchar(255) DEFAULT NULL,
+  `Y1` float DEFAULT NULL,
+  `Y2` float DEFAULT NULL,
+  `X1` float DEFAULT NULL,
+  `X2` float DEFAULT NULL,
+  `Z1` float DEFAULT NULL,
+  `Z2` float DEFAULT NULL,
+  `Yw` int(11) DEFAULT NULL,
+  `Xw` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
