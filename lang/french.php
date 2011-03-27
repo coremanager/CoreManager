@@ -290,7 +290,7 @@ $GLOBALS['lang_footer'] = array
 (
   'bugs_to_admin' => 'Problèmes et reports de bugs à',
   'site_admin' => 'Administrateur du site',
-  'powered' => 'Powered by <a href="http://coremanager.0fees.net/">CoreManager</a>',
+  'powered' => 'Powered by <a href="http://coremanager.strangled.net/">CoreManager</a>',
   'version' => 'Version',
   'revision' => 'Révision',
   'execute' => 'Temps d\'Exécution',

@@ -1,4 +1,4 @@
-Website: http://coremanager.0fees.net
+Website: http://coremanager.strangled.net
 Trac: http://trac6.assembla.com/coremanager/timeline
 Ohloh: https://www.ohloh.net/p/coremanager
 
