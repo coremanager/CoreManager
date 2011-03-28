@@ -172,6 +172,11 @@ function database()
                 <hr />
               </td>
             </tr>
+            <tr>
+              <td colspan="2">
+                <span style="color:red">'.lang("admin", "realm_info").'</span>
+              </td>
+            </tr>
             <tr>';
   while ( $char = $sqlm->fetch_assoc($char_dbs) )
   {
@@ -212,12 +217,15 @@ function database()
                       </td>
                     </tr>
                     <tr>
+                      <td width="75px">'.lang("admin", "realm").': </td>
+                      <td>
+                        <input type="text" name="char_new_realm[]" value="'.$char["Index"].'" size="10%" />
+                      </td>
                       <td colspan="2">
                         <a href="admin.php?section=databases&amp;action=savedbs&amp;remove_char[]='.$char["Index"].'">
                           <img src="img/aff_cross.png" alt="" /> '.lang("admin", "remove").'
                         </a>
                       </td>
-                      <td colspan="2"></td>
                     </tr>
                   </table>
                 </fieldset>
@@ -272,12 +280,15 @@ function database()
                       </td>
                     </tr>
                     <tr>
+                      <td width="75px">'.lang("admin", "realm").': </td>
+                      <td>
+                        <input type="text" name="world_new_realm[]" value="'.$world["Index"].'" size="10%" />
+                      </td>
                       <td colspan="2">
                         <a href="admin.php?section=databases&amp;action=savedbs&amp;remove_world[]='.$world["Index"].'">
                           <img src="img/aff_cross.png" alt="" /> '.lang("admin", "remove").'
                         </a>
                       </td>
-                      <td colspan="2"></td>
                     </tr>
                   </table>
                 </fieldset>
@@ -305,10 +316,28 @@ function savedbs()
   $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
 
   if ( isset($_GET["addchar"]) )
-    $result_addchar = $sqlm->query("INSERT INTO config_character_databases (Encoding) VALUES ('utf8')");
+  {
+    // Add new Character Database
+    // get highest index
+    $i_query = "SELECT IFNULL(MAX(`Index`), 0) AS MaxID FROM config_character_databases";
+    $i_result = $sqlm->query($i_query);
+    $i_result = $sqlm->fetch_assoc($i_result);
+    $max_index = $i_result["MaxID"];
+
+    $result_addchar = $sqlm->query("INSERT INTO config_character_databases (`Index`, Encoding) VALUES ('".($max_index+1)."', 'utf8')");
+  }
 
   if ( isset($_GET["addworld"]) )
-    $result_addworld = $sqlm->query("INSERT INTO config_world_databases (Encoding) VALUES ('utf8')");
+  {
+    // Add new World Database
+    // get highest index
+    $i_query = "SELECT IFNULL(MAX(`Index`), 0) AS MaxID FROM config_world_databases";
+    $i_result = $sqlm->query($i_query);
+    $i_result = $sqlm->fetch_assoc($i_result);
+    $max_index = $i_result["MaxID"];
+
+    $result_addworld = $sqlm->query("INSERT INTO config_world_databases (`Index`, Encoding) VALUES ('".($max_index+1)."', 'utf8')");
+  }
 
   if ( isset($_GET["dbc_name"]) )
   {
@@ -352,6 +381,7 @@ function savedbs()
   if ( isset($_GET["char_realm"]) )
   {
     $char_realms = ( ( isset($_GET["char_realm"]) ) ? $sqlm->quote_smart($_GET["char_realm"]) : NULL );
+    $char_new_realms = ( ( isset($_GET["char_new_realm"]) ) ? $sqlm->quote_smart($_GET["char_new_realm"]) : NULL );
     $char_hosts = ( ( isset($_GET["host"]) ) ? $sqlm->quote_smart($_GET["host"]) : NULL );
     $char_ports = ( ( isset($_GET["port"]) ) ? $sqlm->quote_smart($_GET["port"]) : NULL );
     $char_users = ( ( isset($_GET["user"]) ) ? $sqlm->quote_smart($_GET["user"]) : NULL );
@@ -361,7 +391,7 @@ function savedbs()
 
     for ( $i = 0; $i < count($char_hosts); $i++ )
     {
-      $result_char = $sqlm->query("UPDATE config_character_databases SET Address='".$char_hosts."', Port='".$char_ports."', User='".$char_users."', Password='".$char_passes."', Name='".$char_names[$i]."', Encoding='".$char_encodings[$i]."' WHERE `Index`='".$char_realms[$i]."'");
+      $result_char = $sqlm->query("UPDATE config_character_databases SET `Index`='".$char_new_realms[$i]."', Address='".$char_hosts."', Port='".$char_ports."', User='".$char_users."', Password='".$char_passes."', Name='".$char_names[$i]."', Encoding='".$char_encodings[$i]."' WHERE `Index`='".$char_realms[$i]."'");
     }
   }
 
@@ -378,6 +408,7 @@ function savedbs()
   if ( isset($_GET["world_realm"]) )
   {
     $world_realms = ( ( isset($_GET["world_realm"]) ) ? $sqlm->quote_smart($_GET["world_realm"]) : NULL );
+    $world_new_realms = ( ( isset($_GET["world_new_realm"]) ) ? $sqlm->quote_smart($_GET["world_new_realm"]) : NULL );
     $world_hosts = ( ( isset($_GET["host"]) ) ? $sqlm->quote_smart($_GET["host"]) : NULL );
     $world_ports = ( ( isset($_GET["port"]) ) ? $sqlm->quote_smart($_GET["port"]) : NULL );
     $world_users = ( ( isset($_GET["user"]) ) ? $sqlm->quote_smart($_GET["user"]) : NULL );
@@ -387,7 +418,7 @@ function savedbs()
 
     for ( $i = 0; $i < count($world_hosts); $i++ )
     {
-      $result_world = $sqlm->query("UPDATE config_world_databases SET Address='".$world_hosts."', Port='".$world_ports."', User='".$world_users."', Password='".$world_passes."', Name='".$world_names[$i]."', Encoding='".$world_encodings[$i]."' WHERE `Index`='".$world_realms[$i]."'");
+      $result_world = $sqlm->query("UPDATE config_world_databases SET `Index`='".$world_new_realms[$i]."', Address='".$world_hosts."', Port='".$world_ports."', User='".$world_users."', Password='".$world_passes."', Name='".$world_names[$i]."', Encoding='".$world_encodings[$i]."' WHERE `Index`='".$world_realms[$i]."'");
     }
   }
 
@@ -2253,6 +2284,12 @@ function servers()
               <input type="hidden" name="index" value="'.$server["Index"].'" />
               <table>
                 <tr>
+                  <td width="45%">'.lang("admin", "realm").': </td>
+                  <td>
+                    <input type="text" name="new_index" value="'.$server["Index"].'" />
+                  </td>
+                </tr>
+                <tr>
                   <td width="45%">'.lang("admin", "name").': </td>
                   <td>
                     <input type="text" name="server_name" value="'.$server["Name"].'" />
@@ -2396,7 +2433,13 @@ function servers()
         }
       }
 
-      $result = $sqlm->query("INSERT INTO config_servers (Port, Name, Both_Factions, Telnet_Port, Address) VALUES ('".$port."', '".$name."', 1, 0, '127.0.0.1')");
+      // get highest server index
+      $i_query = "SELECT IFNULL(MAX(`Index`), 0) AS MaxID FROM config_servers";
+      $i_result = $sqlm->query($i_query);
+      $i_result = $sqlm->fetch_assoc($i_result);
+      $max_index = $i_result["MaxID"];
+
+      $result = $sqlm->query("INSERT INTO config_servers (`Index`, Port, Name, Both_Factions, Telnet_Port, Address) VALUES ('".($max_index+1)."', '".$port."', '".$name."', 1, 0, '127.0.0.1')");
 
       redirect("admin.php?section=servers");
     }
@@ -2411,6 +2454,7 @@ function saveserver()
   $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
 
   $server_id = $sqlm->quote_smart($_GET["index"]);
+  $new_server_id = $sqlm->quote_smart($_GET["new_index"]);
   $server_name = $sqlm->quote_smart($_GET["server_name"]);
   $server_hosti = $sqlm->quote_smart($_GET["server_hosti"]);
   $server_hostp = $sqlm->quote_smart($_GET["server_hostp"]);
@@ -2424,7 +2468,7 @@ function saveserver()
   $server_factions = $sqlm->quote_smart($_GET["server_both"]);
   $server_stats = ( ( isset($_GET["server_stats"]) ) ? $sqlm->quote_smart($_GET["server_stats"]) : NULL );
 
-  $result = $sqlm->query("UPDATE config_servers SET Address='".$server_hosti."', Port='".$server_port."', Telnet_Port='".$server_telnet_port."', Telnet_User='".$server_telnet_user."', Telnet_Pass='".$server_telnet_pass."', Both_Factions='".$server_factions."', Stats_XML='".$server_stats."', Name='".$server_name."', External_Address='".$server_hostp."', Port='".$server_port."', Icon='".$server_type."', Color='".$server_color."', Timezone='".$server_timezone."' WHERE `Index`='".$server_id."'");
+  $result = $sqlm->query("UPDATE config_servers SET `Index`='".$new_server_id."', Address='".$server_hosti."', Port='".$server_port."', Telnet_Port='".$server_telnet_port."', Telnet_User='".$server_telnet_user."', Telnet_Pass='".$server_telnet_pass."', Both_Factions='".$server_factions."', Stats_XML='".$server_stats."', Name='".$server_name."', External_Address='".$server_hostp."', Port='".$server_port."', Icon='".$server_type."', Color='".$server_color."', Timezone='".$server_timezone."' WHERE `Index`='".$server_id."'");
   redirect("admin.php?section=servers");
 }
 

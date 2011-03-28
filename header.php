@@ -160,6 +160,31 @@ $sql["dbc"]->connect($dbc_db["addr"], $dbc_db["user"], $dbc_db["pass"], $dbc_db[
 $sql["mgr"] = new SQL;
 $sql["mgr"]->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
 
+// we have to make sure that the realm id we have has entries
+$db_query = "SELECT * FROM config_character_databases WHERE `Index`='".$realm_id."'";
+$db_result = $sql["mgr"]->query($db_query);
+$db_count = $sql["mgr"]->num_rows($db_result);
+$db_query = "SELECT * FROM config_world_databases WHERE `Index`='".$realm_id."'";
+$db_result = $sql["mgr"]->query($db_query);
+$db_count += $sql["mgr"]->num_rows($db_result);
+$db_query = "SELECT * FROM config_servers WHERE `Index`='".$realm_id."'";
+$db_result = $sql["mgr"]->query($db_query);
+$db_count += $sql["mgr"]->num_rows($db_result);
+
+if ( $db_count < 3 )
+{
+  // gotta love cold failure >_<
+  $death = lang("global", "err_bad_realmid");
+  $death = str_replace('%1', '<a href="mailto:'.$admin_mail.'">'.lang("footer", "site_admin").'</a>', $death);
+  if ( $_SESSION["realm_id"] = $anony_realm_id )
+    die($death);
+  else
+  {
+    $_SESSION["realm_id"] = $anony_realm_id;
+    redirect("index.php");
+  }
+}
+
 $sql["char"] = new SQL;
 $sql["char"]->connect($characters_db[$realm_id]["addr"], $characters_db[$realm_id]["user"], $characters_db[$realm_id]["pass"], $characters_db[$realm_id]["name"], $characters_db[$realm_id]["encoding"]);
 

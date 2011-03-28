@@ -32,6 +32,8 @@ $GLOBALS['lang_global'] = array
   'err_no_search_passed' => 'No Search Value Passed.',
   'err_invalid_input' => '无效的输入',
   'err_no_permission' => '未经许可，您无权查询或修改该数据',
+  // translation note %1 will be replaced with a mailto for Site Admin
+  'err_bad_realmid' => 'The selected Realm is not properly configured! Please contact: %1',
   // ------ GENERAL -----
   'empty_fields' => '某些栏位未填写信息。',
   'search' => '查找',
@@ -1628,6 +1630,7 @@ $GLOBALS['lang_admin'] = array
   'addworld' => '添加 World 数据库',
   'db_warn' => '注意：如果您需要变更这些数据库的名称，建议您先在<b>此处</b>改名， 或者先在 CoreManager Config Database 变更数据库信息。因为一旦 CoreManager 无法查找到它的数据库，将会停止响应。',
   'host_info' => 'All databases <b>must</b> be hosted on the same machine.',
+  'realm_info' => 'NOTICE: Each entry here must have corresponding entry (based on the Realm value) in the Servers Tab and Anonymous Realm ID (General->Guests) must be a valid Realm ID!',
 
   'addrow' => '添加新的安全级别',
   'delrow' => '删除选中的行',
@@ -1644,7 +1647,7 @@ $GLOBALS['lang_admin'] = array
   'telnetport' => 'Telnet<br />端口',
   'telnetuser' => 'Telnet<br />用户',
   'telnetpass' => 'Telnet<br />密码',
-  'server_warn' => '这里的每个条目都必须拥有和 Character & World 数据库中相对应的记录(依据服务器参数)！',
+  'server_warn' => 'Each entry here must have corresponding entries (based on the Realm value) for Character & World Databases and Anonymous Realm ID (General->Guests) must be a valid Realm ID!',
   'hosti' => '内网地址',
   'hostp' => '外网地址',
   'icon' => '图标',

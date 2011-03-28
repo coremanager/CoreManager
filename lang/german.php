@@ -32,6 +32,8 @@ $GLOBALS['lang_global'] = array
   'err_no_search_passed' => 'Kein Suchwert &uuml;bergeben.',
   'err_invalid_input' => 'Ung&uuml;ltige Eingabe',
   'err_no_permission' => 'Sie haben nicht die Erlaubnis, auf diese Daten zu zugreifen oder sie zu bearbeiten',
+  // translation note %1 will be replaced with a mailto for Site Admin
+  'err_bad_realmid' => 'The selected Realm is not properly configured! Please contact: %1',
   // ------ GENERAL -----
   'empty_fields' => 'Es wurden Felder frei gelassen',
   'search' => 'Suche',
@@ -1628,6 +1630,7 @@ $GLOBALS['lang_admin'] = array
   'addworld' => 'Neue World Datenbank',
   'db_warn' => 'NOTICE: If you need to change the name of any of these databases, it is advised that you change the name here <b>first</b>, otherwise you will have to alter the database information in the CoreManager Config Database.  Because CoreManager will not function if it cannot find it\'s databases.',
   'host_info' => 'All databases <b>must</b> be hosted on the same machine.',
+  'realm_info' => 'NOTICE: Each entry here must have corresponding entry (based on the Realm value) in the Servers Tab and Anonymous Realm ID (General->Guests) must be a valid Realm ID!',
 
   'addrow' => 'Neue Zeile',
   'delrow' => 'Ausgew&auml;hlte Zeile l&ouml;schen',
@@ -1644,7 +1647,7 @@ $GLOBALS['lang_admin'] = array
   'telnetport' => 'Telnet<br />Port',
   'telnetuser' => 'Telnet<br />User',
   'telnetpass' => 'Telnet<br />Pass',
-  'server_warn' => 'Each entry here must have corresponding entries (based on the Realm value) for Character & World Databases!',
+  'server_warn' => 'Each entry here must have corresponding entries (based on the Realm value) for Character & World Databases and Anonymous Realm ID (General->Guests) must be a valid Realm ID!',
   'hosti' => 'Internal Address',
   'hostp' => 'Public Address',
   'icon' => 'Icon',
