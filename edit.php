@@ -57,6 +57,14 @@ function edit_user()
     if ( $screen_name["SecurityLevel"] >= 1073741824 )
       $screen_name["SecurityLevel"] -= 1073741824;
 
+    // ArcEmu: find out if we're using an encrypted password for this account
+    if ( $core == 1 )
+    {
+      $pass_query = "SELECT * FROM accounts WHERE login='".$user_name."' AND encrypted_password<>''";
+      $pass_result = $sql["logon"]->query($pass_query);
+      $arc_encrypted = $sql["logon"]->num_rows($pass_result);
+    }
+
     $output .= '
           <center>
             <script type="text/javascript" src="libs/js/sha1.js"></script>
@@ -65,8 +73,14 @@ function edit_user()
                 function do_submit_data ()
                 {';
     if ( $core == 1 )
-      $output .= '
+    {
+      if ( $arc_encrypted )
+        $output .= '
+                  document.form.pass.value = hex_sha1("'.strtoupper($user_name).':"+document.form.user_pass.value.toUpperCase());';
+      else
+        $output .= '
                   document.form.pass.value = document.form.user_pass.value;';
+    }
     else
       $output .= '
                   document.form.pass.value = hex_sha1("'.strtoupper($user_name).':"+document.form.user_pass.value.toUpperCase());';
@@ -581,10 +595,23 @@ function doedit_user()
     && ( empty($_POST["referredby"]) || ( $_POST["referredby"] == '' ) ) )
     redirect('edit.php?error=1');
 
+  // ArcEmu: find out if we're using an encrypted password for this account
+  if ( $core == 1 )
+  {
+    $pass_query = "SELECT * FROM accounts WHERE login='".$user_name."' AND encrypted_password<>''";
+    $pass_result = $sql["logon"]->query($pass_query);
+    $arc_encrypted = $sql["logon"]->num_rows($pass_result);
+  }
+
   // password
   if ( $_POST["user_pass"] != "******" )
     if ( $core == 1 )
-      $new_pass = "password='".$sql["logon"]->quote_smart($_POST["pass"])."', ";
+    {
+      if ( $arc_encrypted )
+        $new_pass = "encrypted_password='".$sql["logon"]->quote_smart($_POST["pass"])."', ";
+      else
+        $new_pass = "password='".$sql["logon"]->quote_smart($_POST["pass"])."', ";
+    }
     else
       $new_pass = "sha_pass_hash='".$sql["logon"]->quote_smart($_POST["pass"])."', ";
 

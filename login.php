@@ -36,13 +36,27 @@ function dologin()
   if ( ( strlen($user_name) > 255 ) || ( strlen($user_pass) > 255 ) )
     redirect('login.php?error=1');
 
+  // ArcEmu: Detect whether account uses clear or encrypted password
+  if ( $core == 1 )
+  {
+    $pass_query = "SELECT * FROM accounts WHERE login='".$user_name."' AND encrypted_password<>''";
+    $pass_result = $sql["logon"]->query($pass_query);
+    $arc_encrypted = $sql["logon"]->num_rows($pass_result);
+  }
+
   // Users may log in using either their username or screen name
   // check for matching login
   if ( $core == 1 )
-    $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
+  {
+    if ( $arc_encrypted )
+      $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND encrypted_password='".$user_pass."'";
+    else
+      $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND SHA(CONCAT(UPPER(login), ':', UPPER(password)))='".$user_pass."'";
+  }
   else
   {
-    $pass_hash = sha1(strtoupper($user_name.":".$user_pass));
+    //$pass_hash = sha1(strtoupper($user_name.":".$user_pass));
+    $pass_hash = $user_pass;
     $query = "SELECT * FROM account WHERE username='".$user_name."' AND sha_pass_hash='".$pass_hash."'";
   }
 
@@ -68,10 +82,16 @@ function dologin()
   // if we didn't find the name given for either entries, then the name will come up bad below
 
   if ( $core == 1 )
-    $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
+  {
+    if ( $arc_encrypted )
+      $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND encrypted_password='".$user_pass."'";
+    else
+      $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND SHA(CONCAT(UPPER(login), ':', UPPER(password)))='".$user_pass."'";
+  }
   else
   {
-    $pass_hash = sha1(strtoupper($user_name.":".$user_pass));
+    //$pass_hash = sha1(strtoupper($user_name.":".$user_pass));
+    $pass_hash = $user_pass;
     $query = "SELECT * FROM account WHERE username='".$user_name."' AND sha_pass_hash='".$pass_hash."'";
   }
 
@@ -98,7 +118,7 @@ function dologin()
       $acct = $sql["logon"]->result($result, 0, "id");
 
     if ( $core == 1 )
-      $ban_query = "SELECT banned AS unbandate, banreason FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."' AND banned<>0";
+      $ban_query = "SELECT banned AS unbandate, banreason FROM accounts WHERE login='".$user_name."' AND banned<>0";
     else
       $ban_query = "SELECT unbandate, banreason FROM account_banned WHERE id='".$acct."' AND active=1";
 
@@ -162,7 +182,7 @@ function login()
               // <![CDATA[
                 function dologin ()
                 {
-                  document.form.password.value = document.form.login_pass.value;
+                  document.form.password.value = hex_sha1(document.form.login.value.toUpperCase()+":"+document.form.login_pass.value.toUpperCase());
                   do_submit();
                 }
               // ]]>
@@ -442,6 +462,8 @@ elseif ( $err == 8 )
   if ( isset($info) )
     $output .= '<h1><font class="error">'.lang("register", "referrer_not_found").'</font></h1>';
 }
+elseif ( $err == 9 )
+  $output .= '<h1><font class="error">'.lang("register", "recovery_mail_sent".( ( $core == 1 ) ? "A" : "MT" )).'</font></h1>';
 else
   $output .=  '
             <h1>'.lang("login", "enter_valid_logon").'</h1>';

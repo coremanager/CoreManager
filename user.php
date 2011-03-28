@@ -1316,6 +1316,14 @@ function edit_user()
   if ( ( $info == '' ) || ( $info == NULL ) )
     $info = '...';
 
+  // ArcEmu: find out if we're using an encrypted password for this account
+  if ( $core == 1 )
+  {
+    $pass_query = "SELECT * FROM accounts WHERE login='".$data["login"]."' AND encrypted_password<>''";
+    $pass_result = $sql["logon"]->query($pass_query);
+    $arc_encrypted = $sql["logon"]->num_rows($pass_result);
+  }
+
   if ( $sql["logon"]->num_rows($result) )
   {
     $output .= '
@@ -1326,8 +1334,17 @@ function edit_user()
               function do_submit_data ()
               {';
     if ( $core == 1 )
-      $output .= '
+    {
+      if ( $arc_encrypted )
+        $output .= '
+                if ( document.form.new_pass.value != "******" )
+                  document.form.pass.value = hex_sha1(document.form.login.value.toUpperCase()+":"+document.form.new_pass.value.toUpperCase());
+                else
+                  document.form.pass.value = "******";';
+      else
+        $output .= '
                 document.form.pass.value = document.form.new_pass.value;';
+    }
     else
       $output .= '
                 if ( document.form.new_pass.value != "******" )
@@ -1335,7 +1352,7 @@ function edit_user()
                 else
                   document.form.pass.value = "******";';
     $output .= '
-                document.form.new_pass.value = "0";
+                document.form.new_pass.value = "******";
                 do_submit();
               }
             // ]]>
@@ -1912,12 +1929,12 @@ function doedit_user()
   else
     $acct_name_query = "SELECT username AS login FROM `".$logon_db["name"]."`.account WHERE id='".$acct."'";
 
-  $sec_level_query = "SELECT * FROM config_accounts WHERE Login=(".$acct_name_query.")";
+  $sec_level_query = "SELECT * FROM config_accounts WHERE Login=(".$acct_name_query.") COLLATE utf8_general_ci";
   $sec_level_result = $sql["mgr"]->query($sec_level_query);
   $sec_level_fields = $sql["mgr"]->fetch_assoc($sec_level_result);
 
   if ( ( $sec_level_fields["SecurityLevel"] != NULL ) || ( $sec_level_fields["SecurityLevel"] != $seclevel ) )
-    $sec_level_query = "UPDATE config_accounts SET SecurityLevel='".($seclevel + $webadmin)."' WHERE Login=(".$acct_name_query.")";
+    $sec_level_query = "UPDATE config_accounts SET SecurityLevel='".($seclevel + $webadmin)."' WHERE Login=(".$acct_name_query.") COLLATE utf8_general_ci";
   else
     $sec_level_query = "INSERT INTO config_accounts (Login, SecurityLevel) VALUES ((".$acct_name_query."), '".($seclevel + $webadmin)."')";
 
@@ -1938,9 +1955,17 @@ function doedit_user()
       $s_result = $sql["mgr"]->query("INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$login."', '".$screenname."')");
   }
   else
-      $s_result = true;
+    $s_result = true;
 
-  // record changes in password
+  // ArcEmu: find out if we're using an encrypted password for this account
+  if ( $core == 1 )
+  {
+    $pass_query = "SELECT * FROM accounts WHERE login='".$login."' AND encrypted_password<>''";
+    $pass_result = $sql["logon"]->query($pass_query);
+    $arc_encrypted = $sql["logon"]->num_rows($pass_result);
+  }
+
+  // record changes to account
   if ( $password == "******" )
   {
     if ( $core == 1 )
@@ -1965,7 +1990,12 @@ function doedit_user()
   else
   {
     if ( $core == 1 )
-      $a_result = $sql["logon"]->query("UPDATE accounts SET login='".$login."', email='".$mail."', password='".$password."', muted='".$locked."', gm='".$gmlevel."', flags='".$expansion."' WHERE acct=".$acct);
+    {
+      if ( $arc_encrypted )
+        $a_result = $sql["logon"]->query("UPDATE accounts SET login='".$login."', email='".$mail."', encrypted_password='".$password."', muted='".$locked."', gm='".$gmlevel."', flags='".$expansion."' WHERE acct=".$acct);
+      else
+        $a_result = $sql["logon"]->query("UPDATE accounts SET login='".$login."', email='".$mail."', password='".$password."', muted='".$locked."', gm='".$gmlevel."', flags='".$expansion."' WHERE acct=".$acct);
+    }
     elseif ( $core == 2 )
       $a_result = $sql["logon"]->query("UPDATE account SET username='".$login."', email='".$mail."', sha_pass_hash=UCASE('".$password."'), locked='".$locked."', gmlevel='".$gmlevel."', expansion='".$expansion."', v=0, s=0 WHERE id=".$acct);
     else

@@ -30,6 +30,14 @@ function doregister()
     $mailer_type, $smtp_cfg, $title, $expansion_select, $defaultoption, $GMailSender, $format_mail_html,
     $enable_captcha, $use_recaptcha, $recaptcha_private_key, $send_confirmation_mail_on_creation, $sql, $core;
 
+  // ArcEmu: if one account has an encrypted password all new accounts will as well
+  if ( $core == 1 )
+  {
+    $pass_query = "SELECT * FROM accounts WHERE encrypted_password<>'' LIMIT 1";
+    $pass_result = $sql["logon"]->query($pass_query);
+    $arc_encrypted = $sql["logon"]->num_rows($pass_result);
+  }
+
   if ( $enable_captcha )
   {
     if ( $use_recaptcha )
@@ -103,7 +111,7 @@ function doregister()
   if ( ( strlen($user_name) < 4 ) || ( strlen($user_name) > 15 ) )
     redirect("register.php?err=5");
 
-  if ( $core == 1 )
+  if ( ( $core == 1 ) && ( !$arc_encrypted ) )
   {
     if ( ( strlen($pass) < 4 ) || ( strlen($pass) > 15 ) )
       redirect("register.php?err=5");
@@ -236,7 +244,12 @@ function doregister()
     {
       // otherwise, we just save
       if ( $core == 1 )
-        $query = "INSERT INTO accounts (login, password, gm, banned, email, flags) VALUES ('".$user_name."', '".$pass."', '0', '0', '".$mail."', '".$expansion."')";
+      {
+        if ( $arc_encrypted )
+          $query = "INSERT INTO accounts (login, password, encrypted_password, gm, banned, email, flags) VALUES ('".$user_name."', '', '".$pass."', '0', '0', '".$mail."', '".$expansion."')";
+        else
+          $query = "INSERT INTO accounts (login, password, gm, banned, email, flags) VALUES ('".$user_name."', '".$pass."', '0', '0', '".$mail."', '".$expansion."')";
+      }
       else
         $query = "INSERT INTO account (username, sha_pass_hash, email, expansion) VALUES ('".$user_name."', '".$pass."', '".$mail."', '".$expansion."')";
 
@@ -256,9 +269,7 @@ function doregister()
     $referredby = ( ( isset($_POST["invitedby"]) ) ? $sql["logon"]->quote_smart($_POST["invitedby"]) : NULL );
     $referralresult = doupdate_referral($referredby, $our_acct);
 
-    if ( $core == 1 )
-      ;
-    else
+    if ( $core != 1 )
     {
       $id_query = "SELECT * FROM account WHERE username='".$user_name."'";
       $id_result = $sql["logon"]->query($id_query);
@@ -317,7 +328,12 @@ function doregister()
       $body = str_replace("<password>", $pass1, $body);
       $body = str_replace("<base_url>", $_SERVER["SERVER_NAME"], $body);
       if ( $core == 1 )
-        $body = str_replace("<key>", sha1(strtoupper($user_name.":".$temppass)), $body);
+      {
+        if ( $arc_encrypted )
+          $body = str_replace("<key>", $temppass, $body);
+        else
+          $body = str_replace("<key>", sha1(strtoupper($user_name.":".$temppass)), $body);
+      }
       else
         $body = str_replace("<key>", $temppass, $body);
 
@@ -445,7 +461,15 @@ function doregister()
 //#####################################################################################################
 function register()
 {
-  global $output, $expansion_select, $enable_captcha, $use_recaptcha, $lang, $recaptcha_public_key, $core;
+  global $output, $expansion_select, $enable_captcha, $use_recaptcha, $lang, $recaptcha_public_key, $sql, $core;
+
+  // ArcEmu: if one account has an encrypted password all new accounts will as well
+  if ( $core == 1 )
+  {
+    $pass_query = "SELECT * FROM accounts WHERE encrypted_password<>'' LIMIT 1";
+    $pass_result = $sql["logon"]->query($pass_query);
+    $arc_encrypted = $sql["logon"]->num_rows($pass_result);
+  }
 
   $output .= '
     <center>
@@ -467,13 +491,19 @@ function register()
           else
           {';
   if ( $core == 1 )
-    $output .= '
+  {
+    if ( $arc_encrypted )
+      $output .= '
+            document.form.pass.value = hex_sha1(document.form.username.value.toUpperCase()+":"+document.form.pass1.value.toUpperCase());';
+    else
+      $output .= '
             document.form.pass.value = document.form.pass1.value;';
+  }
   else
     $output .= '
             document.form.pass.value = hex_sha1(document.form.username.value.toUpperCase()+":"+document.form.pass1.value.toUpperCase());';
   $output .= '
-            document.form.pass2.value = "0";
+            document.form.pass2.value = "******";
             do_submit();
           }
         }
@@ -740,8 +770,22 @@ function do_pass_recovery()
   $user_name = $sql["logon"]->quote_smart(trim($_POST["username"]));
   $email_addr = $sql["logon"]->quote_smart($_POST["email"]);
 
+  // ArcEmu: find out if we're using an encrypted password for this account
+  // (enrypted passwords cannot be recovered)
   if ( $core == 1 )
-    $result = $sql["logon"]->query("SELECT password FROM accounts WHERE login='".$user_name."' AND email='".$email_addr."'");
+  {
+    $pass_query = "SELECT * FROM accounts WHERE login='".$user_name."' AND encrypted_password<>''";
+    $pass_result = $sql["logon"]->query($pass_query);
+    $arc_encrypted = $sql["logon"]->num_rows($pass_result);
+  }
+
+  if ( $core == 1 )
+  {
+    if ( $arc_encrypted )
+      $result = $sql["logon"]->query("SELECT login FROM accounts WHERE login='".$user_name."' AND email='".$email_addr."'");
+    else
+      $result = $sql["logon"]->query("SELECT password FROM accounts WHERE login='".$user_name."' AND email='".$email_addr."'");
+  }
   else
     $result = $sql["logon"]->query("SELECT *, username AS login FROM account WHERE username='".$user_name."' AND email='".$email_addr."'");
 
@@ -749,9 +793,9 @@ function do_pass_recovery()
   {
     $pass = $sql["logon"]->fetch_assoc($result);
 
-    // Password recovery is, basically, impossible on MaNGOS and Trinity
+    // Password recovery is, basically, impossible on MaNGOS and Trinity (and ArcEmu with encrypted passwords)
     // so we just generate a new one
-    if ( $core != 1 )
+    if ( ( $core != 1 ) || ( $arc_encrypted ) )
     {
       $pass_gen_list = 'abcdefghijklmnopqrstuvwxyz';
       // generate a random, temporary password
@@ -765,6 +809,7 @@ function do_pass_recovery()
       $pass["password"] = $temppass;
     }
 
+    // MaNGOS & Trinity
     if ( $core != 1 )
     {
       $sha = sha1(strtoupper($pass["login"].":".$pass["password"]));
@@ -772,7 +817,15 @@ function do_pass_recovery()
       $result = $sql["logon"]->query($query);
     }
 
-    if ( $core == 1 )
+    // ArcEmu (encrypted)
+    if ( ( $core == 1 ) && ( $arc_encrypted ) )
+    {
+      $sha = sha1(strtoupper($pass["login"].":".$pass["password"]));
+      $query = "UPDATE accounts SET encrypted_password='".$sha."' WHERE login='".$pass["login"]."'";
+      $result = $sql["logon"]->query($query);
+    }
+
+    if ( ( $core == 1 ) && ( !$arc_encrypted) )
     {
       if ( $format_mail_html )
         $file_name = "lang/mail_templates/".$lang."/recover_password.tpl";
@@ -815,7 +868,7 @@ function do_pass_recovery()
       } 
       else 
       {
-        redirect("register.php?action=pass_recovery&err=12");
+        redirect("login.php?error=9");
       }
     }
     else
@@ -851,7 +904,7 @@ function do_pass_recovery()
       else 
       {
         $mail->ClearAddresses();
-        redirect("register.php?action=pass_recovery&err=12");
+        redirect("login.php?err=9");
       }
     }
   }
@@ -869,21 +922,43 @@ function do_activate()
 
   $key = $sql["mgr"]->quote_smart($_GET["key"]);
 
+  // ArcEmu: if one account has an encrypted password all new accounts will as well
   if ( $core == 1 )
   {
-    // because we don't support ArcEmu's encrypted password feature, we have more work to do :/
-    $query = "SELECT Login, TempPassword FROM config_accounts";
-    $result = $sql["mgr"]->query($query);
-    while ( $row = $sql["mgr"]->fetch_assoc($result) )
+    $pass_query = "SELECT * FROM accounts WHERE encrypted_password<>'' LIMIT 1";
+    $pass_result = $sql["logon"]->query($pass_query);
+    $arc_encrypted = $sql["logon"]->num_rows($pass_result);
+  }
+
+  if ( $core == 1 )
+  {
+    if ( $arc_encrypted )
     {
-      if ( sha1(strtoupper($row["Login"].":".$row["TempPassword"])) == $key )
+      $query = "SELECT Login, TempPassword FROM config_accounts WHERE TempPassword='".$key."'";
+      $result = $sql["mgr"]->query($query);
+      $row = $sql["mgr"]->fetch_assoc($result);
+      // update our user's account to correct their password
+      $u_query = "UPDATE accounts SET password='', encrypted_password='".$row["TempPassword"]."' WHERE login='".$row["Login"]."'";
+      $u_result = $sql["logon"]->query($u_query);
+      // destroy the temporary password
+      $p_query = "UPDATE config_accounts SET TempPassword='' WHERE Login='".$row["Login"]."'";
+      $p_result = $sql["mgr"]->query($p_query);
+    }
+    else
+    {
+      $query = "SELECT Login, TempPassword FROM config_accounts";
+      $result = $sql["mgr"]->query($query);
+      while ( $row = $sql["mgr"]->fetch_assoc($result) )
       {
-        // update our user's account to correct their password
-        $u_query = "UPDATE accounts SET password='".$row["TempPassword"]."' WHERE login='".$row["Login"]."'";
-        $u_result = $sql["logon"]->query($u_query);
-        // destroy the temporary password
-        $p_query = "UPDATE config_accounts SET TempPassword='' WHERE Login='".$row["Login"]."'";
-        $p_result = $sql["mgr"]->query($p_query);
+        if ( sha1(strtoupper($row["Login"].":".$row["TempPassword"])) == $key )
+        {
+          // update our user's account to correct their password
+          $u_query = "UPDATE accounts SET password='".$row["TempPassword"]."' WHERE login='".$row["Login"]."'";
+          $u_result = $sql["logon"]->query($u_query);
+          // destroy the temporary password
+          $p_query = "UPDATE config_accounts SET TempPassword='' WHERE Login='".$row["Login"]."'";
+          $p_result = $sql["mgr"]->query($p_query);
+        }
       }
     }
   }
