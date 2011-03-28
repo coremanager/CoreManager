@@ -173,11 +173,13 @@ $db_count += $sql["mgr"]->num_rows($db_result);
 
 if ( $db_count < 3 )
 {
-  // gotta love cold failure >_<
-  $death = lang("global", "err_bad_realmid");
-  $death = str_replace('%1', '<a href="mailto:'.$admin_mail.'">'.lang("footer", "site_admin").'</a>', $death);
   if ( $_SESSION["realm_id"] = $anony_realm_id )
+  {
+    // gotta love cold failure >_<
+    $death = lang("global", "err_bad_realmid");
+    $death = str_replace('%1', '<a href="mailto:'.$admin_mail.'">'.lang("footer", "site_admin").'</a>', $death);
     die($death);
+  }
   else
   {
     $_SESSION["realm_id"] = $anony_realm_id;
