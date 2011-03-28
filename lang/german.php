@@ -789,15 +789,15 @@ $GLOBALS['lang_edit'] = array
   'email_changed' => 'An Email Change has been requested.<br />(Click to <b>cancel</b> the request)',
   'email_change_failed' => 'Unable to change Email Address!',
   'pass_warning' => 'There may be some delay before the new password will work for game access.',
-  // translation note: do not translate
+  // translation note: do not translate language names
   'english' => 'English',
   'german' => 'German',
   'persian' => 'Persian',
   'chinese_simplified' => 'Chinese (Simplified)',
   'chinese_traditional' => 'Chinese (Traditional)',
   'french' => 'French',
-  'spanish_spain' => 'Spanish (Europe)',
-  'spanish_mexico' => 'Spanish (Latin America)',
+  'spanish_eu' => 'Spanish (Europe)',
+  'spanish_la' => 'Spanish (Latin America)',
   'russian' => 'Russian',
   'korean' => 'Korean',
 );

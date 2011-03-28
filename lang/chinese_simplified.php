@@ -789,15 +789,15 @@ $GLOBALS['lang_edit'] = array
   'email_changed' => '发出了一个变更 Email 地址的请求。<br />(点击以取消该请求)',
   'email_change_failed' => '无法变更Email地址！',
   'pass_warning' => '新密码起效前可能会有些许延迟。',
-  // translation note: do not translate
+  // translation note: do not translate language names
   'english' => 'English',
   'german' => 'German',
   'persian' => 'Persian',
   'chinese_simplified' => 'Chinese (Simplified)',
   'chinese_traditional' => 'Chinese (Traditional)',
   'french' => 'French',
-  'spanish_spain' => 'Spanish (Europe)',
-  'spanish_mexico' => 'Spanish (Latin America)',
+  'spanish_eu' => 'Spanish (Europe)',
+  'spanish_la' => 'Spanish (Latin America)',
   'russian' => 'Russian',
   'korean' => 'Korean',
 );

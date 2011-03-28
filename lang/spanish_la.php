@@ -789,17 +789,17 @@ $GLOBALS['lang_edit'] = array
   'email_changed' => 'Cambio de Correo Solicitado.<br />(Haz Click para <b>cancelar</b> la solicitud)',
   'email_change_failed' => 'No es posible cambiar el Correo!',
   'pass_warning' => 'Podria haber un lapso de espera para el cambio de clave en el juego.',
-  // translation note: do not translate
-  'english' => 'Ingles',
-  'german' => 'Aleman',
-  'persian' => 'Persa',
-  'chinese_simplified' => 'Chino (Simplificado)',
-  'chinese_traditional' => 'Chino (Tradicional)',
-  'french' => 'Frances',
-  'spanish_spain' => 'Latin (Europa)',
-  'spanish_mexico' => 'Latin (America Latina)',
-  'russian' => 'Ruso',
-  'korean' => 'Koreano',
+  // translation note: do not translate language names
+  'english' => 'English',
+  'german' => 'German',
+  'persian' => 'Persian',
+  'chinese_simplified' => 'Chinese (Simplified)',
+  'chinese_traditional' => 'Chinese (Traditional)',
+  'french' => 'French',
+  'spanish_eu' => 'Spanish (Europe)',
+  'spanish_la' => 'Spanish (Latin America)',
+  'russian' => 'Russian',
+  'korean' => 'Korean',
 );
 
 
