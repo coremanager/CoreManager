@@ -185,7 +185,7 @@ else
           $lat_query = "SELECT SUM(latency), COUNT(*) FROM characters WHERE online=1";
           $lat_result = $sql["char"]->query($lat_query);
           $lat_fields = $sql["char"]->fetch_assoc($lat_result);
-          $avglat = number_format($lat_fields["SUM(latency)"] / $lat_fields["COUNT(*)"], 3);
+          $avglat = sprintf("%.3f", $lat_fields["SUM(latency)"] / $lat_fields["COUNT(*)"]);
           
           $output .= '
                     <br />'
