@@ -19,9 +19,14 @@
 
 $tokens = array(
   0 => array("/body_background_color/", "#2a2a2a"),
-  1 => array("/focus_color/", "#f6b620"),
-  2 => array("/hilite_color/", "#bbbbbb"),
-  3 => array("/default_text_color/", "#d4d4d4"),
+  1 => array("/body_background_image/", ""),
+  2 => array("/body_background_repeat/", ""),
+  3 => array("/body_background_attachment/", ""),
+  4 => array("/body_background_position/", ""),
+  
+  51 => array("/focus_color/", "#f6b620"),
+  52 => array("/hilite_color/", "#bbbbbb"),
+  53 => array("/default_text_color/", "#d4d4d4"),
   
   100 => array("/input_background_color/", "#2a2a2a"),
   101 => array("/input_border_color/", "#565656"),
