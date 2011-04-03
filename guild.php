@@ -103,6 +103,9 @@ function browse_guilds()
       if ( !isset($owner_gmlvl) )
         $owner_gmlvl = 0;
 
+      if ( $owner_gmlvl >= 1073741824 )
+        $owner_gmlvl -= 1073741824;
+
       $output .= '
               <tr>
                 <td>'.$data["gid"].'</td>
@@ -546,6 +549,9 @@ function view_guild()
     
     $result = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$user."'");
     $owner_gmlvl = $sql["logon"]->result($result, 0, 'gm');
+
+    if ( $owner_gmlvl >= 1073741824 )
+      $owner_gmlvl -= 1073741824;
 
     $output .= '
               <tr>';
