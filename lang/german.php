@@ -21,6 +21,10 @@
     Translated by: Marcus <Knight>
 */
 
+/*
+    Translation Note: Please keep the line numbering as it is.
+*/
+
 // ----- GENERAL ERROR CODES -----
 $GLOBALS['lang_global'] = array
 (
@@ -1841,6 +1845,21 @@ $GLOBALS['lang_admin'] = array
   'languagesiteencoding' => 'Seitenencoding',
   'shownewuser' => 'Show Newest Member',
   'sendonemail' => 'Send Mail On Email Change',
+  'customlogos' => 'Custom Logos',
+  'usecustomlogo' => 'Use Custom Logo',
+  'customlogo' => 'Custom Logo',
+  'uploadlogo' => 'Upload Custom Logo',
+  'upload' => 'Upload',
+  'deleteselectedlogo' => 'Delete Selected File',
+  'uploaderror1' => 'Unknown error',
+  'uploaderror2' => 'Image is too large',
+  'uploaderror3' => 'Image was only partially uploaded',
+  'uploaderror4' => 'No image was uploaded',
+  'uploaderror5' => 'Upload folder not found',
+  'uploaderror6' => 'Unable to write uploaded file',
+  'uploaderror7' => 'Upload failed due to extension',
+  'uploaderror8' => 'File is not an uploaded file',
+  'uploaderror9' => 'File is not an image',
 
   'edit' => '&Auml;ndern',
   'remove' => 'L&ouml;schen',
@@ -2068,6 +2087,10 @@ $GLOBALS['lang_admin_tip'] = array
   'languagesiteencoding' => 'Seitenencoding Character Set.',
   'shownewuser' => 'Show Newest Member message at bottom of page.',
   'sendonemail' => 'Send a confirmation email to their old address when a user attempts to change their email address.',
+  'usecustomlogo' => 'If set, CoreManager will use the Custom Logo you select.',
+  'customlogo' => 'The Custom Logo that will be used.',
+  'uploadlogo' => 'Upload a new Custom Logo.',
+  'deleteselectedlogo' => 'Delete the Selected Custom Logo File',
 
   'edit' => '&Auml;ndern',
   'save' => 'Speichern',

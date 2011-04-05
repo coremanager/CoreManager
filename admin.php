@@ -1663,8 +1663,19 @@ function general()
         $language_site_encoding = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Language_Site_Encoding'"));
         $show_newest_user = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Show_Newest_User'"));
         $send_on_email = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Send_Mail_On_Email_Change'"));
+        $use_custom_logo = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Use_Custom_Logo'"));
+        $custom_logo = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Custom_Logo'"));
+
+        $custom_logos_result = $sqlm->query("SELECT * FROM custom_logos");
+        $custom_logo_count = $sqlm->num_rows($custom_logos_result);
+        $custom_logos = array();
+        while ( $row = $sqlm->fetch_assoc($custom_logos_result) )
+        {
+          $custom_logos[] = $row;
+        }
+
         $output .= '
-        <form name="form" action="admin.php" method="get">
+        <form name="form" action="admin.php" method="get" enctype="multipart/form-data">
           <input type="hidden" name="section" value="general" />
           <input type="hidden" name="subaction" value="savemore" />
           <input type="hidden" name="subsection" value="more" />
@@ -1731,23 +1742,23 @@ function general()
               </td>
               <td>
                 <select name="defaultlanguage">';
-    if ( is_dir("./lang") )
-    {
-      if ( $dh = opendir("./lang") )
-      {
-        while ( ( $file = readdir($dh) ) == true )
+        if ( is_dir("./lang") )
         {
-          $lang_temp = explode(".", $file);
-          if ( isset($lang_temp[1]) && ( $lang_temp[1] == "php" ) )
+          if ( $dh = opendir("./lang") )
           {
-            $output .= '
-                  <option value="'.$lang_temp[0].'"'.( ( $default_language["Value"] == $lang_temp[0] ) ? ' selected="selected" ' : '' ).'>'.lang("edit", $lang_temp[0]).'</option>';
+            while ( ( $file = readdir($dh) ) == true )
+            {
+              $lang_temp = explode(".", $file);
+              if ( isset($lang_temp[1]) && ( $lang_temp[1] == "php" ) )
+              {
+                $output .= '
+                      <option value="'.$lang_temp[0].'"'.( ( $default_language["Value"] == $lang_temp[0] ) ? ' selected="selected" ' : '' ).'>'.lang("edit", $lang_temp[0]).'</option>';
+              }
+            }
+            closedir($dh);
           }
         }
-        closedir($dh);
-      }
-    }
-    $output .= '
+        $output .= '
                 </select>
               </td>
             </tr>
@@ -1902,6 +1913,50 @@ function general()
             </tr>
             <tr>
               <td colspan="2">
+                <b>'.lang("admin", "customlogos").'</b>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "usecustomlogo").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "usecustomlogo").'</a>:
+              </td>
+              <td>
+                <input type="checkbox" name="usecustomlogo" '.( ( $use_custom_logo["Value"] == 1 ) ? 'checked="checked"' : '' ).' '.( ( $custom_logo_count > 0 ) ? '' : 'disabled="disabled"' ).' />
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "customlogo").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "customlogo").'</a>:
+              </td>
+              <td>
+                <select name="customlogo" '.( ( $custom_logo_count > 0 ) ? '' : 'disabled="disabled"' ).'>';
+        foreach ( $custom_logos as $row )
+        {
+          $output .= '
+                      <option value="'.$row["id"].'" '.( ( $row["id"] == $custom_logo["Value"] ) ? 'selected="selected"' : '' ).'>'.$row["filename"].'</option>';
+        }
+        $output .= '
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "deleteselectedlogo").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "deleteselectedlogo").'</a>:
+              </td>
+              <td>
+                <input type="checkbox" name="deleteselectedlogo" '.( ( $custom_logo_count > 0 ) ? '' : 'disabled="disabled"' ).' />
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "uploadlogo").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "uploadlogo").'</a>:
+              </td>
+              <td>
+                <a href="admin.php?section=general&subsection=upload_logo">'.lang("admin", "upload").'</a>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
                 <b>'.lang("admin", "language").'</b>
               </td>
             </tr>
@@ -1961,6 +2016,9 @@ function general()
         $hide_server_mem = $sqlm->quote_smart($_GET["hideservermem"]);
         $show_newest_user = ( ( isset($_GET["shownewuser"]) ) ? 1 : 0 );
         $send_on_email = ( ( isset($_GET["sendonemail"]) ) ? 1 : 0 );
+        $use_custom_logo = ( ( isset($_GET["usecustomlogo"]) ) ? 1 : 0 );
+        $custom_logo = ( ( isset($_GET["customlogo"]) ) ? $sqlm->quote_smart($_GET["customlogo"]) : NULL );
+        $delete_selected = ( ( isset($_GET["deleteselectedlogo"]) ) ? 1 : 0 );
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$sql_search_limit."' WHERE `Key`='SQL_Search_Limit'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$item_icons."' WHERE `Key`='Item_Icons'");
@@ -1987,7 +2045,96 @@ function general()
         $result = $sqlm->query("UPDATE config_misc SET Value='".$show_newest_user."' WHERE `Key`='Show_Newest_User'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$send_on_email."' WHERE `Key`='Send_Mail_On_Email_Change'");
 
+        if ( $delete_selected )
+        {
+          $result = $sqlm->query("DELETE FROM custom_logos WHERE id='".$custom_logo."'");
+
+          // if we have no more logos, then we don't want Use Custom Logos checked.
+          $result = $sqlm->query("SELECT * FROM custom_logos");
+          $logo_count = $sqlm->num_rows($result);
+
+          if ( $logo_count == 0 )
+            $use_custom_logo = 0;
+          else
+          {
+            // we don't want the Custom_Logo field set to the one we just deleted
+            // so we'll set it to the first one on the list
+            $temp = $sqlm->fetch_assoc($result);
+            $custom_logo = $temp["id"];
+          }
+        }
+
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$use_custom_logo."' WHERE `Key`='Use_Custom_Logo'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$custom_logo."' WHERE `Key`='Custom_Logo'");
+
         redirect("admin.php?section=general&subsection=more");
+      }
+      break;
+    }
+    case "upload_logo":
+    {
+      if ( !$sub_action )
+      {
+        $upload_err = ( ( isset($_GET["up_err"]) ) ? $_GET["up_err"] : NULL );
+
+        $output .= '
+        <form name="form" action="admin.php?section=general&subsection=upload_logo&subaction=upload" method="post" enctype="multipart/form-data">
+          <table class="simple" id="admin_more">';
+
+        if ( isset($upload_err) )
+        {
+          $msg = lang("admin", "uploaderror".abs($upload_err));
+
+          $output .= '
+            <td colspan="2">
+              <span class="error" style="display: block; width: 100%; text-align: center;">'.$msg.'</span>
+            </td>';
+        }
+
+        $output .= '
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "uploadlogo").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "uploadlogo").'</a>:
+              </td>
+              <td>
+                <input type="file" name="image" />
+              </td>
+            </tr>
+          </table>
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
+          <input type="button" name="cancel" value="'.lang("admin", "cancel").'" onclick="window.location=\'admin.php?section=general&subsection=more\'"/>
+        </form>';
+      }
+      else
+      {
+        if ( !array_key_exists("image", $_FILES) )
+          redirect("admin.php?section=general&subsection=upload_logo&error=1");
+
+        $image = $_FILES["image"];
+
+        $err = checkValidUpload($image["error"]);
+
+        if ( $err < 0 )
+          redirect("admin.php?section=general&subsection=upload_logo&up_err=".$err);
+        else
+        {
+          if ( !is_uploaded_file($image["tmp_name"]) )
+            redirect("admin.php?section=general&subsection=upload_logo&up_err=-8");
+
+          $info = getImageSize($image["tmp_name"]);
+
+          if ( !$info )
+            redirect("admin.php?section=general&subsection=upload_logo&up_err=-9");
+
+          $name = $sqlm->quote_smart($image["name"]);
+          $mime = $sqlm->quote_smart($info["mime"]);
+          $data = $sqlm->quote_smart(file_get_contents($image["tmp_name"]));
+
+          $upload_query = "INSERT INTO custom_logos (filename, mime_type, file_size, file_data) VALUES ('".$name."', '".$mime."', '".$image['size']."', '".$data."')";
+          $sqlm->query($upload_query);
+
+          redirect("admin.php?section=general&subsection=more");
+        }
       }
       break;
     }

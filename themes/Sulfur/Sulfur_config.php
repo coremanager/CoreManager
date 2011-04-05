@@ -17,34 +17,37 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+require_once "../../configs/config.php";
+require_once "../../libs/config_lib.php";
+
 $tokens = array(
   0 => array("/body_background_color/", "#2a2a2a"),
   1 => array("/body_background_image/", ""),
   2 => array("/body_background_repeat/", ""),
   3 => array("/body_background_attachment/", ""),
   4 => array("/body_background_position/", ""),
-  
+
   51 => array("/focus_color/", "#f6b620"),
   52 => array("/hilite_color/", "#bbbbbb"),
   53 => array("/default_text_color/", "#d4d4d4"),
-  
+
   100 => array("/input_background_color/", "#2a2a2a"),
   101 => array("/input_border_color/", "#565656"),
-  
+
   150 => array("/anchor_hover/", "#ffee40"),
   151 => array("/btn_background_color/", "#565656"),
   152 => array("/btn_wrn_background_color/", "#4a1a1a"),
   153 => array("/btn_def_background_color/", "#1a4a1a"),
   154 => array("/btn_border/", "#76827b"),
-  
+
   174 => array("/submenu_background_color/", "#282927"),
   175 => array("/submenu_hilite_background_color/", "#444543"),
 
   200 => array("/table_background_color/", "#383838"),
-  
+
   1000 => array("/font_1/", "Verdana, sans-serif"),
   1001 => array("/font_2/", "Trebuchet MS, sans-serif"),
-  
+
   2001 => array("/font_size_1/", "6pt"),
   2002 => array("/font_size_2/", "8pt"),
   2003 => array("/font_size_3/", "9pt"),
@@ -58,6 +61,8 @@ $tokens = array(
   2011 => array("/font_size_11/", "1.3em"),
   2012 => array("/font_size_12/", "15pt"),
   2013 => array("/font_size_13/", "16pt"),
+
+  9999 => array("/header_logo/", ( ( $use_custom_logo ) ? "" : "url(logo.png)" )),
 );
 
 ?>

@@ -21,6 +21,10 @@
     Translated by: CYREX (NEOGMX.COM TITAN)
 */
 
+/*
+    Translation Note: Please keep the line numbering as it is.
+*/
+
 // ----- GENERAL ERROR CODES -----
 $GLOBALS['lang_global'] = array
 (
@@ -1841,6 +1845,21 @@ $GLOBALS['lang_admin'] = array
   'languagesiteencoding' => 'Site Encoding',
   'shownewuser' => 'Show Newest Member',
   'sendonemail' => 'Send Mail On Email Change',
+  'customlogos' => 'Custom Logos',
+  'usecustomlogo' => 'Use Custom Logo',
+  'customlogo' => 'Custom Logo',
+  'uploadlogo' => 'Upload Custom Logo',
+  'upload' => 'Upload',
+  'deleteselectedlogo' => 'Delete Selected File',
+  'uploaderror1' => 'Unknown error',
+  'uploaderror2' => 'Image is too large',
+  'uploaderror3' => 'Image was only partially uploaded',
+  'uploaderror4' => 'No image was uploaded',
+  'uploaderror5' => 'Upload folder not found',
+  'uploaderror6' => 'Unable to write uploaded file',
+  'uploaderror7' => 'Upload failed due to extension',
+  'uploaderror8' => 'File is not an uploaded file',
+  'uploaderror9' => 'File is not an image',
 
   'edit' => 'Editar',
   'remove' => 'Remove',
@@ -2068,6 +2087,10 @@ $GLOBALS['lang_admin_tip'] = array
   'languagesiteencoding' => 'Codificacion de Caracteres para el Sitio.',
   'shownewuser' => 'Mostrar Usuario Nuevo en la parte inferior de la pantalla.',
   'sendonemail' => 'Enviar un Correo de Confirmacion a su viejo EMail cuando el Usuario intente cambiar la Direccion de Correo.',
+  'usecustomlogo' => 'If set, CoreManager will use the Custom Logo you select.',
+  'customlogo' => 'The Custom Logo that will be used.',
+  'uploadlogo' => 'Upload a new Custom Logo.',
+  'deleteselectedlogo' => 'Delete the Selected Custom Logo File',
 
   'edit' => 'Editar',
   'save' => 'Salvar Cambios',
@@ -2192,6 +2215,5 @@ $GLOBALS['lang_game_object'] = array
   'NAN' => 'Invalid parameter!',
   'foundin' => 'This object can be found in',
 );
-
 
 ?>

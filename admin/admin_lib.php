@@ -239,4 +239,40 @@ function detectcore()
 }
 
 
+//#############################################################################
+// Validate Upload
+function checkValidUpload($code)
+{
+  if ( $code == UPLOAD_ERR_OK )
+    return 1;
+
+  switch ( $code )
+  {
+    case UPLOAD_ERR_INI_SIZE:
+    case UPLOAD_ERR_FORM_SIZE:
+      $err = -2;
+      break;
+    case UPLOAD_ERR_PARTIAL:
+      $err = -3;
+      break;
+    case UPLOAD_ERR_NO_FILE:
+      $err = -4;
+      break;
+    case UPLOAD_ERR_NO_TMP_DIR:
+      $err = -5;
+      break;
+    case UPLOAD_ERR_CANT_WRITE:
+      $err = -6;
+      break;
+    case UPLOAD_ERR_EXTENSION:
+      $err = -7;
+      break;
+    default:
+      $err = -1;
+  }
+
+  return $err;
+}
+
+
 ?>

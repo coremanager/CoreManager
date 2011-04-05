@@ -121,9 +121,18 @@ $output .= '
 $output .= '
   <body onload="dynamicLayout();">
     <center>
-      <table class="table_top">
-        <tr>
-          <td class="table_top_left" valign="top">';
+      <div class="table_top">
+        <div class="header_logo">';
+
+if ( $use_custom_logo )
+{
+  $output .= '
+          <img src="libs/custom_logo_lib.php" alt="" />';
+}
+
+$output .= '
+        </div>
+        <div class="table_top_left" valign="top">';
 // this_is_junk: how did this site ever really work?  we can't clear a global!  idiots. <_<
 //unset($title);
 
@@ -221,15 +230,15 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
 
   //---------------------Top Menu----------------------------------------------
   $output .= '
-            <div id="menuwrapper">
-              <ul id="menubar">';
+          <div id="menuwrapper">
+            <ul id="menubar">';
 
   $action_permission = array();
   foreach ( $menu_array as $trunk )
   {
     // ignore "invisible array" this is for setting security read/write values
     // for not accessible elements not in the navbar!
-    if ('invisible' == $trunk[1])
+    if ( 'invisible' == $trunk[1] )
     {
       foreach ( $trunk[2] as $branch )
       {
@@ -245,10 +254,10 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
     else
     {
       $output .= '
-                <li><a href="'.$trunk[0].'">'.( ( lang("header", $trunk[1]) ) ? lang("header", $trunk[1]) : $trunk[1] ).'</a>';
+              <li><a href="'.$trunk[0].'">'.( ( lang("header", $trunk[1]) ) ? lang("header", $trunk[1]) : $trunk[1] ).'</a>';
       if ( isset($trunk[2][0]) )
         $output .= '
-                  <ul>';
+                <ul>';
       foreach ( $trunk[2] as $branch )
       {
         if ( $branch[0] === $lookup_file )
@@ -260,13 +269,13 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
         }
         if ( $user_lvl >= $branch[2] )
           $output .= '
-                    <li><a href="'.$branch[0].'">'.( ( lang("header", $branch[1]) ) ? lang("header", $branch[1]) : $branch[1] ).'</a></li>';
+                  <li><a href="'.$branch[0].'">'.( ( lang("header", $branch[1]) ) ? lang("header", $branch[1]) : $branch[1] ).'</a></li>';
       }
       if ( isset($trunk[2][0]) )
         $output .= '
-                  </ul>';
+                </ul>';
       $output .= '
-                </li>';
+              </li>';
     }
   }
   unset($branch);
@@ -275,8 +284,8 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
   unset($menu_array);
 
   $output .= '
-                <li><a href="edit.php">'.lang("header", "my_acc").'</a>
-                  <ul>';
+              <li><a href="edit.php">'.lang("header", "my_acc").'</a>
+                <ul>';
 
   $result = $sql["mgr"]->query("SELECT `Index` AS id, Name AS name FROM `config_servers` LIMIT 10");
 
@@ -284,14 +293,14 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
   if ( ( 1 < $sql["mgr"]->num_rows($result)) && ( 1 < count($server)) && ( 1 < count($characters_db)) )
   {
     $output .= '
-                    <li><span style="text-align:center"><a href="#">'.lang("header", "realms").'</a></span></li>';
+                  <li><span style="text-align:center"><a href="#">'.lang("header", "realms").'</a></span></li>';
     while ( $realm = $sql["mgr"]->fetch_assoc($result) )
     {
       if ( isset($server[$realm["id"]]) )
       {
         $set = ( ( $realm_id === $realm["id"] ) ? '>' : '' );
         $output .= '
-                    <li><a href="realm.php?action=set_def_realm&amp;id='.$realm["id"].'&amp;url='.$_SERVER["PHP_SELF"].'">'.htmlentities($set.' '.$realm["name"], ENT_COMPAT, $site_encoding).'</a></li>';
+                  <li><a href="realm.php?action=set_def_realm&amp;id='.$realm["id"].'&amp;url='.$_SERVER["PHP_SELF"].'">'.htmlentities($set.' '.$realm["name"], ENT_COMPAT, $site_encoding).'</a></li>';
       }
     }
     unset($set);
@@ -302,9 +311,9 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
   if ( $allow_anony && empty($_SESSION["logged_in"]) )
   {
     $output .= '
-                    <li><span style="text-align:center"><a href="#">'.lang("header", "account").'</a></span></li>
-                    <li><a href="register.php">'.lang("login", "not_registrated").'</a></li>
-                    <li><a href="login.php">'.lang("login", "login").'</a></li>';
+                  <li><span style="text-align:center"><a href="#">'.lang("header", "account").'</a></span></li>
+                  <li><a href="register.php">'.lang("login", "not_registrated").'</a></li>
+                  <li><a href="login.php">'.lang("login", "login").'</a></li>';
   }
   else
   {
@@ -317,34 +326,35 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
     if ( $sql["char"]->num_rows($result) )
     {
       $output .= '
-                    <li><span style="text-align:center"><a href="#">'.lang("header", "my_characters").'</a></span></li>';
+                  <li><span style="text-align:center"><a href="#">'.lang("header", "my_characters").'</a></span></li>';
       while ( $char = $sql["char"]->fetch_assoc($result) )
       {
         $output .= '
-                    <li>
-                      <a href="char.php?id='.$char["guid"].'">
-                        <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" alt="" /><img src="img/c_icons/'.$char["class"].'.gif" alt="" />'.
-                        ' '.$char["name"].
-                        ' ('.$char["level"].') '.'
-                      </a>
-                    </li>';
+                  <li>
+                    <a href="char.php?id='.$char["guid"].'">
+                      <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" alt="" /><img src="img/c_icons/'.$char["class"].'.gif" alt="" />'.
+                      ' '.$char["name"].
+                      ' ('.$char["level"].') '.'
+                    </a>
+                  </li>';
       }
       unset($char);
     }
     $output .= '
-                    <li><span style="text-align:center"><a href="#">'.lang("header", "account").'</a></span></li>
-                    <li><a href="edit.php">'.lang("header", "edit_my_acc").'</a></li>
-                    <li><a href="logout.php">'.lang("header", "logout").'</a></li>';
+                  <li><span style="text-align:center"><a href="#">'.lang("header", "account").'</a></span></li>
+                  <li><a href="edit.php">'.lang("header", "edit_my_acc").'</a></li>
+                  <li><a href="logout.php">'.lang("header", "logout").'</a></li>';
   }
   unset($result);
   $output .= '
-                  </ul>
-                </li>
-              </ul>
-              <br class="clearit" />
-            </div><!-- menu_wrapper -->
-          </td>
-          <td class="table_top_middle">';
+                </ul>
+              </li>
+            </ul>
+            <br class="clearit" />
+          </div><!-- menu_wrapper -->
+        </div>
+        <div class="table_top_middle"></div>
+        <div class="header_middle">';
   $web_admin_query = "SELECT * FROM config_accounts WHERE Login='".$user_name."'";
   $web_admin_result = $sql["mgr"]->query($web_admin_query);
   $web_admin = $sql["mgr"]->fetch_assoc($web_admin_result);
@@ -352,7 +362,7 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
   //if (!$_SESSION["screenname"])
   //{
     $output .= '
-            <div id="username">'.( ( isset($_SESSION["screenname"]) ) ? $_SESSION["screenname"] : $user_name ).' .:'.( ( $web_admin ) ? '<a href="admin.php">' : '' ).$user_lvl_name.'\'s '.lang("header", "menu").( ( $web_admin ) ? '</a>' : '' ).':.</div>';
+          <div id="username">'.( ( isset($_SESSION["screenname"]) ) ? $_SESSION["screenname"] : $user_name ).' .:'.( ( $web_admin ) ? '<a href="admin.php">' : '' ).$user_lvl_name.'\'s '.lang("header", "menu").( ( $web_admin ) ? '</a>' : '' ).':.</div>';
   //}
   //else
   //{
@@ -360,10 +370,9 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
     //        <div id="username">'..' .:'.( $web_admin ? '<a href="admin.php">' : '' ).$user_lvl_name.'\'s '.lang("header", "menu").( $web_admin ? '</a>' : '' ).':.</div>';
   //}
   $output .= '
-          </td>
-          <td class="table_top_right"></td>
-        </tr>
-      </table>';
+        </div>
+        <div class="table_top_right"></div>
+      </div>';
 }
 else
 {

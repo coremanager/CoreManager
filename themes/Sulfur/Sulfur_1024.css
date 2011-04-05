@@ -52,37 +52,58 @@ a:hover, a:focus
 
 .table_top 
 {
-  border-width: 0px;
-  border-spacing: 0px;
-  border-style: none;
-  border-collapse: collapse;
-  width: 845px;
+  position: relative;
+  width: 838px;
   height: 120px;
 }
 .table_top_left
- {
+{
+  position: absolute;
   background-image: url(logo_l.gif);
   background-repeat: no-repeat;
-  width: 500px;
+  width: 47px;
+  height: 120px;
 }
 .table_top_middle 
 {
+  position: absolute;
   background-image: url(logo_m.gif);
-  text-align: right;
-  width: 260px;
+  left: 47px;
+  width: 744px;
+  height: 120px;
 }
 .table_top_right
  {
+  position: absolute;
   background-image: url(logo_r.gif);
   background-repeat: no-repeat;
+  left: 791px;
   width: 47px;
+  height: 120px;
+}
+.header_logo
+{
+  position: absolute;
+  background-image: /header_logo/;
+  background-repeat: no-repeat;
+  width: 554px;
+  height: 120px;
+  z-index: 100;
+}
+.header_middle
+{
+  position: absolute;
+  text-align: right;
+  left: 500px;
+  width: 310px;
+  height: 120px;
 }
 
 /*********** MENU BAR***********/
 #menubar 
 {
   position: relative;
-  left: 25px;
+  left: 20px;
   top: 81px;
   z-index: 100;
   width: 36em; /*total len*/
@@ -173,7 +194,7 @@ a:hover, a:focus
 #username
 {
   position: relative;
-  top: 37px;
+  top: 88px;
   z-index: 20;
   color: /focus_color/;
   font: /font_size_8/ /font_1/;

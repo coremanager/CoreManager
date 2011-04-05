@@ -21,6 +21,10 @@
     Translated by: Drama
 */
 
+/*
+    Translation Note: Please keep the line numbering as it is.
+*/
+
 // ----- GENERAL ERROR CODES -----
 $GLOBALS['lang_global'] = array
 (
@@ -1841,6 +1845,21 @@ $GLOBALS['lang_admin'] = array
   'languagesiteencoding' => '网站编码',
   'shownewuser' => '显示最新成员',
   'sendonemail' => '电子邮件变更时发送邮件',
+  'customlogos' => 'Custom Logos',
+  'usecustomlogo' => 'Use Custom Logo',
+  'customlogo' => 'Custom Logo',
+  'uploadlogo' => 'Upload Custom Logo',
+  'upload' => 'Upload',
+  'deleteselectedlogo' => 'Delete Selected File',
+  'uploaderror1' => 'Unknown error',
+  'uploaderror2' => 'Image is too large',
+  'uploaderror3' => 'Image was only partially uploaded',
+  'uploaderror4' => 'No image was uploaded',
+  'uploaderror5' => 'Upload folder not found',
+  'uploaderror6' => 'Unable to write uploaded file',
+  'uploaderror7' => 'Upload failed due to extension',
+  'uploaderror8' => 'File is not an uploaded file',
+  'uploaderror9' => 'File is not an image',
 
   'edit' => '编辑',
   'remove' => '移除',
@@ -2068,6 +2087,10 @@ $GLOBALS['lang_admin_tip'] = array
   'languagesiteencoding' => '网站文字编码。',
   'shownewuser' => '在页面底部显示最新成员消息。',
   'sendonemail' => '当用户试图变更邮件地址时，发送一封确认邮件至他原先的邮箱地址。',
+  'usecustomlogo' => 'If set, CoreManager will use the Custom Logo you select.',
+  'customlogo' => 'The Custom Logo that will be used.',
+  'uploadlogo' => 'Upload a new Custom Logo.',
+  'deleteselectedlogo' => 'Delete the Selected Custom Logo File',
 
   'edit' => '编辑',
   'save' => '保存修改',

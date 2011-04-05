@@ -595,6 +595,16 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $send_mail_on_email_change = $misc_row["Value"];
       break;
     }
+    case "Use_Custom_Logo":
+    {
+      $use_custom_logo = $misc_row["Value"];
+      break;
+    }
+    case "Custom_Logo":
+    {
+      $custom_logo = $misc_row["Value"];
+      break;
+    }
   }
 }
 
