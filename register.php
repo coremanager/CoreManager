@@ -25,7 +25,7 @@ require_once("header.php");
 //#####################################################################################################
 function doregister()
 {
-  global $characters_db, $logon_db, $corem_db, $realm_id, $disable_acc_creation, $lang,
+  global $characters_db, $logon_db, $corem_db, $realm_id, $disable_acc_creation, $invite_only, $lang,
     $limit_acc_per_ip, $valid_ip_mask, $send_mail_on_creation, $create_acc_locked, $from_mail,
     $mailer_type, $smtp_cfg, $title, $expansion_select, $defaultoption, $GMailSender, $format_mail_html,
     $enable_captcha, $use_recaptcha, $recaptcha_private_key, $send_confirmation_mail_on_creation, $sql, $core;
@@ -59,7 +59,12 @@ function doregister()
   if ( empty($_POST["pass"]) || empty($_POST["email"]) || empty($_POST["username"]) )
     redirect("register.php?err=1");
 
-  if ( $disable_acc_creation ) 
+  // if Disable Account Creation is enabled and Invitation Only is disabled then we error out
+  if ( $disable_acc_creation && !$invite_only ) 
+    redirect("register.php?err=4");
+
+  // if Invitation Only is enabled and we didn't get an Invitation Key then we error out
+  if ( $invite_only && !isset($_POST["invitationkey"]) ) 
     redirect("register.php?err=4");
 
   if ( filter_var(getenv("HTTP_X_FORWARDED_FOR"), FILTER_VALIDATE_IP) )
@@ -106,6 +111,12 @@ function doregister()
   $screenname = ( ( !empty($_POST["screenname"]) ) ? $sql["mgr"]->quote_smart(trim($_POST["screenname"])) : NULL );
   $pass = $sql["logon"]->quote_smart($_POST["pass"]);
   $pass1 = $sql["logon"]->quote_smart($_POST["pass1"]);
+
+  // get invitation key
+  $invite_key = ( ( isset($_POST["invitationkey"]) ) ? $sql["logon"]->quote_smart($_POST["invitationkey"]) : NULL );
+  // check it for XSS
+  if ( $invite_key != htmlspecialchars($_POST["invitationkey"]) )
+    redirect("register.php?err=4");
 
   // make sure username/pass at least 4 chars long and less than max
   if ( ( strlen($user_name) < 4 ) || ( strlen($user_name) > 15 ) )
@@ -185,6 +196,17 @@ function doregister()
   else
     $result = $sql["logon"]->query("SELECT username AS login, email FROM account WHERE username='".$user_name."' OR username='".$screenname."'");
 
+  // make sure we got a valid Invitation Key
+  if ( $invite_only )
+  {
+    $check_invite_query = "SELECT * FROM invitations WHERE invited_email='".$mail."' AND invitation_key='".$invite_key."'";
+    $check_invite_result = $sql["mgr"]->query($check_invite_query);
+    $check_invite = $sql["mgr"]->num_rows($check_invite_result);
+
+    if ( $check_invite == 0 )
+      redirect("register.php?err=17&by=".$_POST["invitedby"]."&key=".$invite_key);
+  }
+
   if ( $sql["logon"]->num_rows($result) )
   {
     // there is already someone with same account name
@@ -254,6 +276,13 @@ function doregister()
         $query = "INSERT INTO account (username, sha_pass_hash, email, expansion) VALUES ('".$user_name."', '".$pass."', '".$mail."', '".$expansion."')";
 
       $a_result = $sql["logon"]->query($query);
+    }
+
+    // if we got an Invitation Key then we need to remove the invitation
+    if ( isset($invite_key) )
+    {
+      $clear_invite_query = "DELETE FROM invitations WHERE invitation_key='".$invite_key."'";
+      $clear_invite_result = $sql["mgr"]->query($clear_invite_query);
     }
 
     // do referral
@@ -471,6 +500,10 @@ function register()
     $arc_encrypted = $sql["logon"]->num_rows($pass_result);
   }
 
+  // if we came here from an invitation email we'll have some values for our fields
+  $by = ( ( isset($_GET["by"]) ) ? $_GET["by"] : NULL );
+  $key = ( ( isset($_GET["key"]) ) ? $_GET["key"] : NULL );
+
   $output .= '
     <center>
       <script type="text/javascript" src="libs/js/sha1.js">
@@ -570,9 +603,15 @@ function register()
             <tr>
               <td valign="top">'.lang("register", "invited_by").':</td>
               <td>
-                <input type="text" name="invitedby" id="reg_invitedby" maxlength="25" />
+                <input type="text" name="invitedby" id="reg_invitedby" maxlength="25" '.( ( isset($by) ) ? 'value="'.$by.'"' : '' ).' />
                 <br />
                 '.lang("register", "invited_info").'
+              </td>
+            </tr>
+            <tr>
+              <td valign="top">'.lang("register", "invite_key").':</td>
+              <td>
+                <input type="text" name="invitationkey" id="reg_invitationkey" maxlength="25" '.( ( isset($key) ) ? 'value="'.$key.'"' : '' ).' />
               </td>
             </tr>
             <tr>
@@ -1029,58 +1068,69 @@ $output .=  '
   <div class="bubble">
     <div class="top">';
 
-switch ( $err )
+// display a message about closed registration
+if ( $disable_acc_creation && !$invite_only && ( !isset($err) ) )
+  $output .= '<h1><font class="error">'.lang("register", "acc_reg_closed").'</font></h1>';
+elseif ( $disable_acc_creation && $invite_only && ( !isset($err) ) )
+  $output .= '<h1><font class="error">'.lang("register", "acc_reg_closed_invite").'</font></h1>';
+else
 {
-  case 1:
-    $output .= '<h1><font class="error">'.lang("global", "empty_fields").'</font></h1>';
-    break;
-  case 2:
-    $output .= '<h1><font class="error">'.lang("register", "diff_pass_entered").'</font></h1>';
-    break;
-  case 3:
-    $output .= '<h1><font class="error">'.lang("register", "username").' '.$usr.' '.lang("register", "already_exist").'</font></h1>';
-    break;
-  case 4:
-    $output .= '<h1><font class="error">'.lang("register", "acc_reg_closed").'</font></h1>';
-    break;
-  case 5:
-    $output .= '<h1><font class="error">'.lang("register", "wrong_pass_username_size").'</font></h1>';
-    break;
-  case 6:
-    $output .= '<h1><font class="error">'.lang("register", "bad_chars_used").'</font></h1>';
-    break;
-  case 7:
-    $output .= '<h1><font class="error">'.lang("register", "invalid_email").'</font></h1>';
-    break;
-  case 8:
-    $output .= '<h1><font class="error">'.lang("register", "banned_ip").' ('.$usr.')<br />'.lang("register", "contact_serv_admin").'</font></h1>';
-    break;
-  case 9:
-    $output .= '<h1><font class="error">'.lang("register", "users_ip_range").': '.$usr.' '.lang("register", "cannot_create_acc").'</font></h1>';
-    break;
-  case 10:
-    $output .= '<h1><font class="error">'.lang("register", "user_mail_not_found").'</font></h1>';
-    break;
-  case 11:
-    $output .= '<h1><font class="error">Mailer Error: '.$usr.'</font></h1>';
-    break;
-  case 12:
-    $output .= '<h1><font class="error">'.lang("register", "recovery_mail_sent".( ( $core == 1 ) ? "A" : "MT" )).'</font></h1>';
-    break;
-  case 13:
-    $output .= '<h1><font class="error">'.lang("captcha", "invalid_code").'</font></h1>';
-    break;
-  case 14:
-    $output .= '<h1><font class="error">'.lang("register", "email_address_used").'</font></h1>';
-    break;
-  case 15:
-    $output .= '<h1><font class="error">'.lang("register", "used_ip").'</font></h1>';
-    break;
-  case 16:
-    $output .= '<h1><font class="error">'.lang("register", "referrer_not_found").'</font></h1>';
-    break;
-  default:
-    $output .= '<h1><font class="error">'.lang("register", "fill_all_fields").'</font></h1>';
+  switch ( $err )
+  {
+    case 1:
+      $output .= '<h1><font class="error">'.lang("global", "empty_fields").'</font></h1>';
+      break;
+    case 2:
+      $output .= '<h1><font class="error">'.lang("register", "diff_pass_entered").'</font></h1>';
+      break;
+    case 3:
+      $output .= '<h1><font class="error">'.lang("register", "username").' '.$usr.' '.lang("register", "already_exist").'</font></h1>';
+      break;
+    case 4:
+      $output .= '<h1><font class="error">'.lang("register", "acc_reg_closed").'</font></h1>';
+      break;
+    case 5:
+      $output .= '<h1><font class="error">'.lang("register", "wrong_pass_username_size").'</font></h1>';
+      break;
+    case 6:
+      $output .= '<h1><font class="error">'.lang("register", "bad_chars_used").'</font></h1>';
+      break;
+    case 7:
+      $output .= '<h1><font class="error">'.lang("register", "invalid_email").'</font></h1>';
+      break;
+    case 8:
+      $output .= '<h1><font class="error">'.lang("register", "banned_ip").' ('.$usr.')<br />'.lang("register", "contact_serv_admin").'</font></h1>';
+      break;
+    case 9:
+      $output .= '<h1><font class="error">'.lang("register", "users_ip_range").': '.$usr.' '.lang("register", "cannot_create_acc").'</font></h1>';
+      break;
+    case 10:
+      $output .= '<h1><font class="error">'.lang("register", "user_mail_not_found").'</font></h1>';
+      break;
+    case 11:
+      $output .= '<h1><font class="error">Mailer Error: '.$usr.'</font></h1>';
+      break;
+    case 12:
+      $output .= '<h1><font class="error">'.lang("register", "recovery_mail_sent".( ( $core == 1 ) ? "A" : "MT" )).'</font></h1>';
+      break;
+    case 13:
+      $output .= '<h1><font class="error">'.lang("captcha", "invalid_code").'</font></h1>';
+      break;
+    case 14:
+      $output .= '<h1><font class="error">'.lang("register", "email_address_used").'</font></h1>';
+      break;
+    case 15:
+      $output .= '<h1><font class="error">'.lang("register", "used_ip").'</font></h1>';
+      break;
+    case 16:
+      $output .= '<h1><font class="error">'.lang("register", "referrer_not_found").'</font></h1>';
+      break;
+    case 17:
+      $output .= '<h1><font class="error">'.lang("register", "invite_bad_email").'</font></h1>';
+      break;
+    default:
+      $output .= '<h1><font class="error">'.lang("register", "fill_all_fields").'</font></h1>';
+  }
 }
 
 unset($err);

@@ -1194,6 +1194,10 @@ tr td.rep0
 {
   width: 335px;
 }
+#reg_invitationkey
+{
+  width: 335px;
+}
 #recaptcha_response_field 
 {
   border-color: black;
@@ -1606,6 +1610,10 @@ tr td.rep0
 {
   width: 540px;
   text-align: left;
+}
+#active_invites_table
+{
+  width: 100%;
 }
 
 /* FOOTER.PHP */

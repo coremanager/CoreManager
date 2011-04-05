@@ -164,6 +164,7 @@ $GLOBALS['lang_register'] = array
   'diff_pass_entered' => 'هر دو اسم رمز باید یک باشد',
   'already_exist' => 'وجود دارد',
   'acc_reg_closed' => 'متاسفانه ساخت اکانت در حال حاضر بسته است',
+  'acc_reg_closed_invite' => 'Account registration is by Invitation only.',
   'wrong_pass_username_size' => 'نام کاربری/اسم رمز باید بین 4 تا 15 حرف باشد',
   'bad_chars_used' => 'باشد [A-Z][a-z][0-9]نام کاربری/اسم رمز فقط باید شامل',
   'invalid_email' => 'لطفا ایمیل صحیح وارد کنید',
@@ -196,10 +197,12 @@ $GLOBALS['lang_register'] = array
   'pass_too_long' => 'The password you have entered exceeds the maximum allowed length',
   'invited_by' => 'دعوت شده به وسیله',
   'invited_info' => 'Character name of the player who invited you to register here.',
+  'invite_key' => 'Invitation Key',
   'email_address_used' => 'This email has an account already.<br/>No more accounts can be created for this email address.',
   'referrer_not_found' => '<br />Unfortunately the specified referring character was not found in our database.<br />Please use Edit My Account and enter a valid character name in the &quot;Invited By&quot; field.',
   'lang' => 'Language',
   'not_client' => 'Does not affect In-Game Language',
+  'invite_bad_email' => 'The Email Address does not match any active Invitations',
 );
 
 
@@ -765,6 +768,10 @@ $GLOBALS['lang_edit'] = array
   'characters' => 'کاراکترها در ریلم',
   'update' => 'Update Data',
   'del_acc' => 'حذف اکانت',
+  'invite_options' => 'Invitations', 
+  'invite_email' => 'Email address of person you wish to invite',
+  'sendinvite' => 'Send Invitation',
+  'active_invites' => 'Active Invitations',
   'theme_options' => 'Theme Options',
   'profile_options' => 'Profile Options',
   'profile_info' => 'Player Info',
@@ -1761,6 +1768,7 @@ $GLOBALS['lang_admin'] = array
 
   'acct_creation' => 'Account Creation',
   'disableacccreation' => 'Disable Account Creation',
+  'inviteonly' => 'Invitation Only',
   'expansionselect' => 'Enable Expansion Select',
   'defaultexpansion' => 'Default Expansion',
   'enabledcaptcha' => 'Enable Captcha',
@@ -2006,6 +2014,7 @@ $GLOBALS['lang_admin_tip'] = array
 
   'acct_creation' => 'Account Creation',
   'disableacccreation' => 'Prevent new users from creating accounts.',
+  'inviteonly' => 'Allow creation only by invitation.',
   'expansionselect' => 'Allow users to choose Client Expansion, if disabled, we will use the Default Expansion.',
   'defaultexpansion' => 'Default Expansion.',
   'enabledcaptcha' => "Display a security image to prevent \'bot\' registrations.",

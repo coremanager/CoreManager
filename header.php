@@ -207,7 +207,7 @@ if ( $core == 0 )
   $core = detectcore();
 
 //----Check if a user has login, if Guest mode is enabled, code above will login as Guest
-if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSION["realm_id"]) && empty($_GET["err"]) )
+if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSION["realm_id"]) && empty($_GET["site_error"]) )
 {
   // check for host php script max memory allowed,
   // setting it higher if it is not enough for CoreManager to run

@@ -29,7 +29,7 @@ valid_login($action_permission["view"]);
 //##############################################################################################################
 function edit_user()
 {
-  global $output, $corem_db, $logon_db, $characters_db, $corem_db, $realm_id,
+  global $output, $corem_db, $logon_db, $characters_db, $corem_db, $realm_id, $invite_only,
     $user_name, $user_id, $expansion_select, $server, $developer_test_mode, $multi_realm_mode,
     $remember_me_checked, $sql, $core;
 
@@ -500,12 +500,72 @@ function edit_user()
                 </table>
               </form>
             </div>
+            <div id="edit_theme_fieldset" class="fieldset_border">
+              <span class="legend">'.lang("edit", "invite_options").'</span>
+              <table class="hidden" id="edit_theme_table">
+                <tr>
+                  <td align="left">'.lang("edit", "invite_email").': </td>
+                  <td align="right">
+                    <form action="edit.php" method="get" name="form4">
+                      <input type="hidden" name="action" value="send_invite" />
+                      <input type="text" name="invite_email" value="" size="30" />
+                    </form>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">';
+    makebutton(lang("edit", "sendinvite"), 'javascript:do_submit(\'form4\', 0)', 130);
+    $output .= '
+                  </td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td align="left" colspan="2">'.lang("edit", "active_invites").': </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <table class="lined" id="active_invites_table">
+                      <tr>
+                        <th width="15%">Delete</th>
+                        <th>Email</th>
+                        <th width="15%">Resend</th>
+                      </tr>';
+
+    $invites_query = "SELECT * FROM invitations WHERE issuer_acct_id='".$user_id."'";
+    $invites_result = $sql["mgr"]->query($invites_query);
+
+    while ( $row = $sql["mgr"]->fetch_assoc($invites_result) )
+    {
+      $output .= '
+                      <tr>
+                        <td>
+                          <a href="edit.php?action=delete_invite&key='.$row["invitation_key"].'">
+                            <img src="img/aff_cross.png" alt="Delete" />
+                          </a>
+                        </td>
+                        <td>'.$row["invited_email"].'</td>
+                        <td>
+                          <a href="edit.php?action=resend_invite&key='.$row["invitation_key"].'">
+                            <img src="img/add.png" alt="Resend" />
+                          </a>
+                        </td>
+                      </tr>';
+    }
+
+    $output .= '
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </div>
             <br />
             <div id="edit_theme_fieldset" class="fieldset_border">
               <span class="legend">'.lang("edit", "theme_options").'</span>
               <table class="hidden" id="edit_theme_table">
                 <tr>
-                  <td align="left">'.lang("edit", "select_layout_lang").' :</td>
+                  <td align="left">'.lang("edit", "select_layout_lang").': </td>
                   <td align="right">
                     <form action="edit.php" method="get" name="form1">
                       <input type="hidden" name="action" value="lang_set" />
@@ -538,7 +598,7 @@ function edit_user()
                   </td>
                 </tr>
                 <tr>
-                  <td align="left">'.lang("edit", "select_theme").' :</td>
+                  <td align="left">'.lang("edit", "select_theme").': </td>
                   <td align="right">
                     <form action="edit.php" method="get" name="form2">
                       <input type="hidden" name="action" value="theme_set" />
@@ -550,7 +610,8 @@ function edit_user()
       {
         while ( ( $file = readdir($dh) ) == true )
         {
-          if ( ( $file == '.' ) || ( $file == '..' ) || ( $file == '.htaccess' ) || ( $file == 'index.html' ) || ( $file == '.svn' ) );
+          if ( ( $file == '.' ) || ( $file == '..' ) || ( $file == '.htaccess' ) || ( $file == 'index.html' ) || ( $file == '.svn' ) )
+            ;
           else
           {
             $output .= '
@@ -917,6 +978,232 @@ function cancel_email_change()
   redirect("edit.php");
 }
 
+
+//###############################################################################################################
+// INVITATIONS
+//###############################################################################################################
+function send_invite($resend = false)
+{
+  global $lang, $GMailSender, $smtp_cfg, $title, $format_mail_html, $user_name, $user_id, $sql, $core;
+
+  if ( !$resend )
+  {
+    if ( empty($_GET["invite_email"]) )
+      redirect("edit.php?error=1");
+
+    $invited = $sql["mgr"]->quote_smart($_GET["invite_email"]);
+
+    // a little XSS prevention
+    if ( $invited != htmlspecialchars($_GET["invite_email"]) )
+      redirect("edit.php?error=1");
+
+    // make sure we're not inviting someone who already has an account here
+    if ( $core == 1 )
+      $check_mail_query = "SELECT * FROM accounts WHERE email='".$invited."'";
+    else
+      $check_mail_query = "SELECT * FROM account WHERE email='".$invited."'";
+
+    $check_mail_result = $sql["logon"]->query($check_mail_query);
+
+    if ( $sql["logon"]->num_rows($check_mail_result) > 0 )
+      redirect("edit.php?error=2");
+
+    // make sure we're not inviting someone who already has an invitation
+    $check_mail_query = "SELECT * FROM invitations WHERE invited_email='".$invited."'";
+
+    $check_mail_result = $sql["mgr"]->query($check_mail_query);
+
+    if ( $sql["mgr"]->num_rows($check_mail_result) > 0 )
+      redirect("edit.php?error=2");
+
+    // generate a private key based on our user name and the target's email
+    $key = sha1($user_name.":".$invited);
+
+    // get the name of one of our characters
+    if ( $core == 1 )
+      $char_query = "SELECT name FROM characters WHERE acct='".$user_id."' LIMIT 1";
+    else
+      $char_query = "SELECT name FROM characters WHERE account='".$user_id."' LIMIT 1";
+
+    $char_result = $sql["char"]->query($char_query);
+    $char = $sql["char"]->fetch_assoc($char_result);
+    $char = $char["name"];
+
+    // prepare our invitation message
+    if ( $format_mail_html )
+      $file_name = "lang/mail_templates/".$lang."/invite.tpl";
+    else
+      $file_name = "lang/mail_templates/".$lang."/invite_nohtml.tpl";
+    $fh = fopen($file_name, "r");
+    $subject = fgets($fh, 4096);
+    $body = fread($fh, filesize($file_name));
+    fclose($fh);
+
+    $mail = $invited;
+
+    $subject = str_replace("<title>", $title, $subject);
+    if ( $format_mail_html )
+    {
+      $body = str_replace("\n", "<br />", $body);
+      $body = str_replace("\r", " ", $body);
+    }
+    $body = str_replace("<username>", $user_name, $body);
+    $body = str_replace("<key>", $key, $body);
+    $body = str_replace("<title>", $title, $body);
+    $body = str_replace("<char>", $char, $body);
+    $body = str_replace("<core>", core_name($core), $body);
+    $body = str_replace("<base_url>", $_SERVER["SERVER_NAME"], $body);
+
+    if ( $GMailSender )
+    {
+      require_once("libs/mailer/authgMail_lib.php");
+
+      $fromName = $title." Admin";
+      authgMail($from_mail, $fromName, $mail, $mail, $subject, $body, $smtp_cfg);
+    }
+    else
+    {
+      require_once("libs/mailer/class.phpmailer.php");
+      $mailer = new PHPMailer();
+      $mailer->Mailer = $mailer_type;
+      if ( $mailer_type == "smtp" )
+      {
+        $mailer->Host = $smtp_cfg["host"];
+        $mailer->Port = $smtp_cfg["port"];
+        if( $smtp_cfg["user"] != "" )
+        {
+          $mailer->SMTPAuth  = true;
+          $mailer->Username  = $smtp_cfg["user"];
+          $mailer->Password  =  $smtp_cfg["pass"];
+        }
+      }
+
+      $mailer->WordWrap = 50;
+      $mailer->From = $from_mail;
+      $mailer->FromName = $title." Admin";
+      $mailer->Subject = $subject;
+      $mailer->IsHTML($format_mail_html);
+      $mailer->Body = $body;
+      $mailer->AddAddress($mail);
+      $mailer->Send();
+      $mailer->ClearAddresses();
+    }
+
+    // create entry in invitations table
+    $create_query = "INSERT INTO invitations (issuer_acct_id, invited_email, invitation_key) VALUES ('".$user_id."', '".$invited."', '".$key."')";
+    $create_result = $sql["mgr"]->query($create_query);
+  }
+  else
+  {
+    if ( empty($_GET["key"]) )
+      redirect("edit.php?error=1");
+
+    $key = $sql["mgr"]->quote_smart($_GET["key"]);
+
+    // a little XSS prevention
+    if ( $key != htmlspecialchars($_GET["key"]) )
+      redirect("edit.php?error=1");
+
+    // get the invitation we need to resend
+    $invite_query = "SELECT invited_email FROM invitations WHERE invitation_key='".$key."'";
+    $invite_result = $sql["mgr"]->query($invite_query);
+    $invite_result = $sql["mgr"]->fetch_assoc($invite_result);
+
+    $invited = $invite_result["invited_email"];
+
+    // get the name of one of our characters
+    if ( $core == 1 )
+      $char_query = "SELECT name FROM characters WHERE acct='".$user_id."' LIMIT 1";
+    else
+      $char_query = "SELECT name FROM characters WHERE account='".$user_id."' LIMIT 1";
+
+    $char_result = $sql["char"]->query($char_query);
+    $char = $sql["char"]->fetch_assoc($char_result);
+    $char = $char["name"];
+
+    // prepare our invitation message
+    if ( $format_mail_html )
+      $file_name = "lang/mail_templates/".$lang."/invite.tpl";
+    else
+      $file_name = "lang/mail_templates/".$lang."/invite_nohtml.tpl";
+    $fh = fopen($file_name, "r");
+    $subject = fgets($fh, 4096);
+    $body = fread($fh, filesize($file_name));
+    fclose($fh);
+
+    $mail = $invited;
+
+    $subject = str_replace("<title>", $title, $subject);
+    if ( $format_mail_html )
+    {
+      $body = str_replace("\n", "<br />", $body);
+      $body = str_replace("\r", " ", $body);
+    }
+    $body = str_replace("<username>", $user_name, $body);
+    $body = str_replace("<key>", $key, $body);
+    $body = str_replace("<title>", $title, $body);
+    $body = str_replace("<char>", $char, $body);
+    $body = str_replace("<core>", core_name($core), $body);
+    $body = str_replace("<base_url>", $_SERVER["SERVER_NAME"], $body);
+
+    if ( $GMailSender )
+    {
+      require_once("libs/mailer/authgMail_lib.php");
+
+      $fromName = $title." Admin";
+      authgMail($from_mail, $fromName, $mail, $mail, $subject, $body, $smtp_cfg);
+    }
+    else
+    {
+      require_once("libs/mailer/class.phpmailer.php");
+      $mailer = new PHPMailer();
+      $mailer->Mailer = $mailer_type;
+      if ( $mailer_type == "smtp" )
+      {
+        $mailer->Host = $smtp_cfg["host"];
+        $mailer->Port = $smtp_cfg["port"];
+        if( $smtp_cfg["user"] != "" )
+        {
+          $mailer->SMTPAuth  = true;
+          $mailer->Username  = $smtp_cfg["user"];
+          $mailer->Password  =  $smtp_cfg["pass"];
+        }
+      }
+
+      $mailer->WordWrap = 50;
+      $mailer->From = $from_mail;
+      $mailer->FromName = $title." Admin";
+      $mailer->Subject = $subject;
+      $mailer->IsHTML($format_mail_html);
+      $mailer->Body = $body;
+      $mailer->AddAddress($mail);
+      $mailer->Send();
+      $mailer->ClearAddresses();
+    }
+  }
+
+  redirect("edit.php");
+}
+
+function delete_invite()
+{
+  global $sql;
+
+  if ( empty($_GET["key"]) )
+    redirect("edit.php?error=1");
+
+  $key = $sql["mgr"]->quote_smart($_GET["key"]);
+
+  // a little XSS prevention
+  if ( $key != htmlspecialchars($_GET["key"]) )
+    redirect("edit.php?error=1");
+
+  $delete_query = "DELETE FROM invitations WHERE invitation_key='".$key."'";
+  $delete_result = $sql["mgr"]->query($delete_query);
+
+  redirect("edit.php");
+}
+
 //###############################################################################################################
 // MAIN
 //###############################################################################################################
@@ -973,6 +1260,12 @@ elseif ( $action == "confirm_email" )
   confirm_email();
 elseif ( $action == "cancel_email_change" )
   cancel_email_change();
+elseif ( $action == "send_invite" )
+  send_invite();
+elseif ( $action == "delete_invite" )
+  delete_invite();
+elseif ( $action == "resend_invite" )
+  send_invite(true);
 else
   edit_user();
 

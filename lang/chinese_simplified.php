@@ -164,6 +164,7 @@ $GLOBALS['lang_register'] = array
   'diff_pass_entered' => '用户密码必须前后一致。',
   'already_exist' => '已经存在',
   'acc_reg_closed' => '对不起，当前网站已关闭了注册。',
+  'acc_reg_closed_invite' => 'Account registration is by Invitation only.',
   'wrong_pass_username_size' => '用户名称/显示名称/用户密码 的长度必须在4 - 15 个字符！',
   'bad_chars_used' => '用户名称/显示名称必须只包含[A-Z][a-z][0-9]！',
   'invalid_email' => '请提供一个有效的Email地址！',
@@ -196,10 +197,12 @@ $GLOBALS['lang_register'] = array
   'pass_too_long' => '您输入的密码超出了最大许可长度',
   'invited_by' => '邀请人',
   'invited_info' => '邀请您在此注册的玩家的角色名称。',
+  'invite_key' => 'Invitation Key',
   'email_address_used' => '这个email已经注册了帐号。<br/>不能再创建更多帐号了。',
   'referrer_not_found' => '<br />Unfortunately the specified referring character was not found in our database.<br />Please use Edit My Account and enter a valid character name in the &quot;Invited By&quot; field.',
   'lang' => '语言',
   'not_client' => '网站语言，不影响游戏中的语言设置。',
+  'invite_bad_email' => 'The Email Address does not match any active Invitations',
 );
 
 
@@ -765,6 +768,10 @@ $GLOBALS['lang_edit'] = array
   'characters' => '本服务器中的角色',
   'update' => '更新数据',
   'del_acc' => '删除帐号',
+  'invite_options' => 'Invitations', 
+  'invite_email' => 'Email address of person you wish to invite',
+  'sendinvite' => 'Send Invitation',
+  'active_invites' => 'Active Invitations',
   'theme_options' => '模版选项',
   'profile_options' => '个人信息选项',
   'profile_info' => '玩家信息',
@@ -1761,6 +1768,7 @@ $GLOBALS['lang_admin'] = array
 
   'acct_creation' => '帐号创建',
   'disableacccreation' => '关闭帐号创建',
+  'inviteonly' => 'Invitation Only',
   'expansionselect' => '开启资料片选择',
   'defaultexpansion' => '默认资料片',
   'enabledcaptcha' => '开启Captcha',
@@ -2006,6 +2014,7 @@ $GLOBALS['lang_admin_tip'] = array
 
   'acct_creation' => '创建帐号',
   'disableacccreation' => '阻止新用户创建帐号。',
+  'inviteonly' => 'Allow creation only by invitation.',
   'expansionselect' => '允许用户选择客户端的资料片版本，如果禁用，将使用默认的资料片版本。',
   'defaultexpansion' => '默认资料片版本。',
   'enabledcaptcha' => "显示一张验证图用以阻止 \'机器人\' 注册。",

@@ -164,6 +164,7 @@ $GLOBALS['lang_register'] = array
   'diff_pass_entered' => 'Las claves deben ser identicas.',
   'already_exist' => 'Ya existe',
   'acc_reg_closed' => 'Disculpa, La Creacion de Cuenta esta Actualmente Cerrada.',
+  'acc_reg_closed_invite' => 'Account registration is by Invitation only.',
   'wrong_pass_username_size' => 'Usuario/Nombre de Pantalla/Clave deben ser entre 4 a 15 caracteres!',
   'bad_chars_used' => 'Usuario/Nombre de Pantalla solo deben contener caracteres [A-Z][a-z][0-9]!',
   'invalid_email' => 'Por Favor ingresa un correo VALIDO!',
@@ -196,10 +197,12 @@ $GLOBALS['lang_register'] = array
   'pass_too_long' => 'La Clave que has ingresado excede su maxima longitud',
   'invited_by' => 'Invitado por',
   'invited_info' => 'Por Favor ingrese la cuenta del usuario que lo invito.',
+  'invite_key' => 'Invitation Key',
   'email_address_used' => 'Esto correo ya tiene una cuenta creada.<br/>No se podran crear mas cuentas con este correo.',
   'referrer_not_found' => 'Desafortunadamente la cuenta especifica no se encuentra en la Base de Datos.<br/>Por Favor ingrese una cuenta valida o deje la opcion de &quot;Invitado por&quot; vacia.',
   'lang' => 'Lenguaje',
   'not_client' => 'No afecta el lenguaje dentro del juego',
+  'invite_bad_email' => 'The Email Address does not match any active Invitations',
 );
 
 
@@ -765,6 +768,10 @@ $GLOBALS['lang_edit'] = array
   'characters' => 'Personajes en el Reino',
   'update' => 'Actualizar Data',
   'del_acc' => 'Borrar Cuenta',
+  'invite_options' => 'Invitations', 
+  'invite_email' => 'Email address of person you wish to invite',
+  'sendinvite' => 'Send Invitation',
+  'active_invites' => 'Active Invitations',
   'theme_options' => 'Opciones de Tema',
   'profile_options' => 'Opciones del Perfil',
   'profile_info' => 'Info del Jugador',
@@ -1761,6 +1768,7 @@ $GLOBALS['lang_admin'] = array
 
   'acct_creation' => 'Account Creation',
   'disableacccreation' => 'Disable Account Creation',
+  'inviteonly' => 'Invitation Only',
   'expansionselect' => 'Enable Expansion Select',
   'defaultexpansion' => 'Default Expansion',
   'enabledcaptcha' => 'Enable Captcha',
@@ -2006,6 +2014,7 @@ $GLOBALS['lang_admin_tip'] = array
 
   'acct_creation' => 'Account Creation',
   'disableacccreation' => 'Prevent new users from creating accounts.',
+  'inviteonly' => 'Allow creation only by invitation.',
   'expansionselect' => 'Allow users to choose Client Expansion, if disabled, we will use the Default Expansion.',
   'defaultexpansion' => 'Default Expansion.',
   'enabledcaptcha' => "Display a security image to prevent \'bot\' registrations.",

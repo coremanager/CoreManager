@@ -605,6 +605,11 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $custom_logo = $misc_row["Value"];
       break;
     }
+    case "Invitation_Only":
+    {
+      $invite_only = $misc_row["Value"];
+      break;
+    }
   }
 }
 

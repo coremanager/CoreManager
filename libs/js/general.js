@@ -33,6 +33,9 @@ function do_submit (form_name,backup)
     if (form_name == 'form3')
       document.form3.submit();
   else
+    if (form_name == 'form4')
+      document.form4.submit();
+  else
     document.form.submit();
 }
 
