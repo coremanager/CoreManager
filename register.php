@@ -490,7 +490,8 @@ function doregister()
 //#####################################################################################################
 function register()
 {
-  global $output, $expansion_select, $enable_captcha, $use_recaptcha, $lang, $recaptcha_public_key, $sql, $core;
+  global $output, $expansion_select, $enable_captcha, $use_recaptcha, $lang, $recaptcha_public_key,
+    $disable_reg_invite, $sql, $core;
 
   // ArcEmu: if one account has an encrypted password all new accounts will as well
   if ( $core == 1 )
@@ -547,7 +548,14 @@ function register()
       <div class="half_frame fieldset_border">
         <span class="legend">'.lang("register", "create_acc").'</span>
         <form method="post" action="register.php?action=doregister" name="form">
-          <input type="hidden" name="pass" value="" maxlength="256" />
+          <input type="hidden" name="pass" value="" maxlength="256" />';
+
+  if ( $disable_reg_invite )
+    $output .= '
+          <input type="hidden" name="invitedby" '.( ( isset($by) ) ? 'value="'.$by.'"' : '' ).' />
+          <input type="hidden" name="invitationkey" '.( ( isset($key) ) ? 'value="'.$key.'"' : '' ).' />';
+
+  $output .= '
           <table class="flat">
             <tr>
               <td valign="top">'.lang("register", "username").':</td>
@@ -599,7 +607,11 @@ function register()
                 <br />
                 '.lang("register", "use_valid_mail").'
               </td>
-            </tr>
+            </tr>';
+
+  if ( !$disable_reg_invite )
+  {
+    $output .= '
             <tr>
               <td valign="top">'.lang("register", "invited_by").':</td>
               <td>
@@ -613,7 +625,10 @@ function register()
               <td>
                 <input type="text" name="invitationkey" id="reg_invitationkey" maxlength="25" '.( ( isset($key) ) ? 'value="'.$key.'"' : '' ).' />
               </td>
-            </tr>
+            </tr>';
+  }
+
+  $output .= '
             <tr>
               <td valign="top">'.lang("register", "lang").':</td>
               <td>

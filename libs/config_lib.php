@@ -610,6 +610,11 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $invite_only = $misc_row["Value"];
       break;
     }
+    case "Disable_Invitation":
+    {
+      $disable_reg_invite = $misc_row["Value"];
+      break;
+    }
   }
 }
 

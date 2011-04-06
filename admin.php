@@ -1024,6 +1024,7 @@ function general()
       {
         $disable_acc_creation = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Disable_Acc_Creation'"));
         $invite_only = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Invitation_Only'"));
+        $disable_reg_invite = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Disable_Invitation'"));
         $expansion_select = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Expansion_Select'"));
         $default_expansion = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Default_Expansion'"));
         $enabled_captcha = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Enabled_Captcha'"));
@@ -1054,6 +1055,14 @@ function general()
               </td>
               <td>
                 <input type="checkbox" name="inviteonly" '.( ( $invite_only["Value"] == 1 ) ? 'checked="checked"' : '' ).' '.( ( $disable_acc_creation["Value"] == 1 ) ? '' : 'disabled="disabled"' ).' />
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "disablereginvite").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "disablereginvite").'</a>:
+              </td>
+              <td>
+                <input type="checkbox" name="disablereginvite" '.( ( $disable_reg_invite["Value"] == 1 ) ? 'checked="checked"' : '' ).' '.( ( $invite_only["Value"] == 0 ) ? '' : 'disabled="disabled"' ).' />
               </td>
             </tr>
             <tr>
@@ -1157,6 +1166,7 @@ function general()
       {
         $disable_acc_creation = ( ( isset($_GET["disableacccreation"]) ) ? 1 : 0 );
         $invite_only = ( ( isset($_GET["inviteonly"]) ) ? 1 : 0 );
+        $disable_reg_invite = ( ( isset($_GET["disablereginvite"]) ) ? 1 : 0 );
         $expansion_select = ( ( isset($_GET["expansionselect"]) ) ? 1 : 0 );
         $default_expansion = $sqlm->quote_smart($_GET["defaultexpansion"]);
         $enabled_captcha = ( ( isset($_GET["enabledcaptcha"]) ) ? 1 : 0 );
@@ -1170,6 +1180,7 @@ function general()
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$disable_acc_creation."' WHERE `Key`='Disable_Acc_Creation'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$invite_only."' WHERE `Key`='Invitation_Only'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$disable_reg_invite."' WHERE `Key`='Disable_Invitation'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$expansion_select."' WHERE `Key`='Expansion_Select'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$default_expansion."' WHERE `Key`='Default_Expansion'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$enabled_captcha."' WHERE `Key`='Enabled_Captcha'");
