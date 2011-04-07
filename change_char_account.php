@@ -115,12 +115,12 @@ function chooseacct()
     $accts_query = "SELECT acct, login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '') AS ScreenName
     FROM accounts
       LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=accounts.login
-    WHERE acct<>(SELECT acct FROM `".$characters_db[$realm_id]['name']."`.characters WHERE guid='".$guid."')";
+    WHERE acct<>(SELECT acct FROM `".$characters_db[$realm_id]['name']."`.characters WHERE guid='".$guid."') ORDER BY ScreenName ASC";
   else
     $accts_query = "SELECT id AS acct, username AS login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '') AS ScreenName
     FROM account
       LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=account.username
-    WHERE id<>(SELECT account FROM `".$characters_db[$realm_id]['name']."`.characters WHERE guid='".$guid."')";
+    WHERE id<>(SELECT account FROM `".$characters_db[$realm_id]['name']."`.characters WHERE guid='".$guid."') ORDER BY ScreenName ASC";
   $accts = $sql["logon"]->query($accts_query);
 
   $query = "SELECT * FROM characters WHERE guid='".$guid."'";
