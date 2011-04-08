@@ -1869,6 +1869,7 @@ $GLOBALS['lang_admin'] = array
   'uploaderror7' => 'Upload failed due to extension',
   'uploaderror8' => 'File is not an uploaded file',
   'uploaderror9' => 'File is not an image',
+  'allowcaching' => 'Allow Logo Caching',
 
   'edit' => 'Editar',
   'remove' => 'Remove',
@@ -2101,7 +2102,8 @@ $GLOBALS['lang_admin_tip'] = array
   'usecustomlogo' => 'If set, CoreManager will use the Custom Logo you select.',
   'customlogo' => 'The Custom Logo that will be used.',
   'uploadlogo' => 'Upload a new Custom Logo.',
-  'deleteselectedlogo' => 'Delete the Selected Custom Logo File',
+  'deleteselectedlogo' => 'Delete the Selected Custom Logo File.',
+  'allowcaching' => 'Enable Image Caching. (Use this option only if you plan on using one logo)',
 
   'edit' => 'Editar',
   'save' => 'Salvar Cambios',

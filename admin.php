@@ -1687,6 +1687,7 @@ function general()
         $send_on_email = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Send_Mail_On_Email_Change'"));
         $use_custom_logo = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Use_Custom_Logo'"));
         $custom_logo = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Custom_Logo'"));
+        $allow_caching = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Allow_Logo_Caching'"));
 
         $custom_logos_result = $sqlm->query("SELECT * FROM custom_logos");
         $custom_logo_count = $sqlm->num_rows($custom_logos_result);
@@ -1974,7 +1975,15 @@ function general()
                 <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "uploadlogo").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "uploadlogo").'</a>:
               </td>
               <td>
-                <a href="admin.php?section=general&subsection=upload_logo">'.lang("admin", "upload").'</a>
+                <a href="admin.php?section=general&amp;subsection=upload_logo">'.lang("admin", "upload").'</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "allowcaching").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "allowcaching").'</a>:
+              </td>
+              <td>
+                <input type="checkbox" name="allowcaching" '.( ( $show_country_flags["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
               </td>
             </tr>
             <tr>
@@ -2041,6 +2050,7 @@ function general()
         $use_custom_logo = ( ( isset($_GET["usecustomlogo"]) ) ? 1 : 0 );
         $custom_logo = ( ( isset($_GET["customlogo"]) ) ? $sqlm->quote_smart($_GET["customlogo"]) : NULL );
         $delete_selected = ( ( isset($_GET["deleteselectedlogo"]) ) ? 1 : 0 );
+        $allow_caching = ( ( isset($_GET["allowcaching"]) ) ? 1 : 0 );
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$sql_search_limit."' WHERE `Key`='SQL_Search_Limit'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$item_icons."' WHERE `Key`='Item_Icons'");
@@ -2088,6 +2098,7 @@ function general()
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$use_custom_logo."' WHERE `Key`='Use_Custom_Logo'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$custom_logo."' WHERE `Key`='Custom_Logo'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$allow_caching."' WHERE `Key`='Allow_Logo_Caching'");
 
         redirect("admin.php?section=general&subsection=more");
       }

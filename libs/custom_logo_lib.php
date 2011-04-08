@@ -31,8 +31,16 @@ $logo_result = $sqlm->query($logo_query);
 
 $image = $sqlm->fetch_assoc($logo_result);
 
-header("Content-type: ".$image["mime_type"]);
-header("Content-length: ".$image["file_size"]);
+header("Content-Type: ".$image["mime_type"]);
+header("Content-Length: ".$image["file_size"]);
+
+if ( $allow_caching )
+{
+  // seconds, minutes, hours, days
+  $expires = 60*60*24*14;
+  header("Cache-Control: maxage=".$expires.", must-revalidate");
+  header("Expires: ".gmdate("D, d M Y H:i:s", time()+$expires)." GMT");
+}
 
 echo $image["file_data"];
 

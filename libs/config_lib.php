@@ -615,6 +615,11 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $disable_reg_invite = $misc_row["Value"];
       break;
     }
+    case "Allow_Logo_Caching":
+    {
+      $allow_caching = $misc_row["Value"];
+      break;
+    }
   }
 }
 
