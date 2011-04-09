@@ -1983,7 +1983,7 @@ function general()
                 <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "allowcaching").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "allowcaching").'</a>:
               </td>
               <td>
-                <input type="checkbox" name="allowcaching" '.( ( $show_country_flags["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
+                <input type="checkbox" name="allowcaching" '.( ( $allow_caching["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
               </td>
             </tr>
             <tr>
