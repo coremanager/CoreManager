@@ -18,101 +18,104 @@
 */
 
 
-require_once 'db_lib.php';
+require_once "db_lib.php";
 
 $sqlm = new SQL;
 $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
 
-$temp = $sqlm->fetch_assoc($sqlm->query('SELECT * FROM config_dbc_database'));
+$temp = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_dbc_database"));
 $dbc_db["addr"]     = $temp["Address"].":".$temp["Port"];
 $dbc_db["user"]     = $temp["User"];
 $dbc_db["pass"]     = $temp["Password"];
 $dbc_db["name"]     = $temp["Name"];
 $dbc_db["encoding"] = $temp["Encoding"];
 
-$temp = $sqlm->fetch_assoc($sqlm->query('SELECT * FROM config_logon_database'));
+$temp = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_logon_database"));
 $logon_db["addr"]     = $temp["Address"].":".$temp["Port"];
 $logon_db["user"]     = $temp["User"];
 $logon_db["pass"]     = $temp["Password"];
 $logon_db["name"]     = $temp["Name"];
 $logon_db["encoding"] = $temp["Encoding"];
 
-$temp = $sqlm->query('SELECT * FROM config_world_databases');
-while ($world = $sqlm->fetch_assoc($temp))
+$temp = $sqlm->query("SELECT * FROM config_world_databases");
+while ( $world = $sqlm->fetch_assoc($temp) )
 {
-  $world_db[$world["Index"]]['id']            = $world["Index"];
-  $world_db[$world["Index"]]['addr']          = $world["Address"].":".$world["Port"];
-  $world_db[$world["Index"]]['user']          = $world["User"];
-  $world_db[$world["Index"]]['pass']          = $world["Password"];
-  $world_db[$world["Index"]]['name']          = $world["Name"];
-  $world_db[$world["Index"]]['encoding']      = $world["Encoding"];
+  $world_db[$world["Index"]]["id"]            = $world["Index"];
+  $world_db[$world["Index"]]["addr"]          = $world["Address"].":".$world["Port"];
+  $world_db[$world["Index"]]["user"]          = $world["User"];
+  $world_db[$world["Index"]]["pass"]          = $world["Password"];
+  $world_db[$world["Index"]]["name"]          = $world["Name"];
+  $world_db[$world["Index"]]["encoding"]      = $world["Encoding"];
 }
 
-$temp = $sqlm->query('SELECT * FROM config_character_databases');
-while ($char = $sqlm->fetch_assoc($temp))
+$temp = $sqlm->query("SELECT * FROM config_character_databases");
+while ( $char = $sqlm->fetch_assoc($temp) )
 {
-  $characters_db[$char["Index"]]['id']       = $char["Index"];
-  $characters_db[$char["Index"]]['addr']     = $char["Address"].":".$char["Port"];
-  $characters_db[$char["Index"]]['user']     = $char["User"];
-  $characters_db[$char["Index"]]['pass']     = $char["Password"];
-  $characters_db[$char["Index"]]['name']     = $char["Name"];
-  $characters_db[$char["Index"]]['encoding'] = $char["Encoding"];
+  $characters_db[$char["Index"]]["id"]       = $char["Index"];
+  $characters_db[$char["Index"]]["addr"]     = $char["Address"].":".$char["Port"];
+  $characters_db[$char["Index"]]["user"]     = $char["User"];
+  $characters_db[$char["Index"]]["pass"]     = $char["Password"];
+  $characters_db[$char["Index"]]["name"]     = $char["Name"];
+  $characters_db[$char["Index"]]["encoding"] = $char["Encoding"];
 }
 
-$temp = $sqlm->query('SELECT * FROM config_servers');
-while ($servers = $sqlm->fetch_assoc($temp))
+$temp = $sqlm->query("SELECT * FROM config_servers");
+while ( $servers = $sqlm->fetch_assoc($temp) )
 {
-  $server[$servers["Index"]]['id']            = $servers["Index"];
-  $server[$servers["Index"]]['addr']          = $servers["Address"];
-  $server[$servers["Index"]]['game_port']     = $servers["Port"];
-  $server[$servers["Index"]]['telnet_port']   = $servers["Telnet_Port"];
-  $server[$servers["Index"]]['telnet_user']   = $servers["Telnet_User"];
-  $server[$servers["Index"]]['telnet_pass']   = $servers["Telnet_Pass"];
-  $server[$servers["Index"]]['both_factions'] = $servers["Both_Factions"];
-  $server[$servers["Index"]]['stats.xml']     = $servers["Stats_XML"];
+  $server[$servers["Index"]]["id"]            = $servers["Index"];
+  $server[$servers["Index"]]["addr"]          = $servers["Address"];
+  $server[$servers["Index"]]["game_port"]     = $servers["Port"];
+  $server[$servers["Index"]]["telnet_port"]   = $servers["Telnet_Port"];
+  $server[$servers["Index"]]["telnet_user"]   = $servers["Telnet_User"];
+  $server[$servers["Index"]]["telnet_pass"]   = $servers["Telnet_Pass"];
+  $server[$servers["Index"]]["both_factions"] = $servers["Both_Factions"];
+  $server[$servers["Index"]]["stats.xml"]     = $servers["Stats_XML"];
 }
 
-$temp = $sqlm->query('SELECT * FROM config_valid_ip_mask');
-while ($mask = $sqlm->fetch_assoc($temp))
+$temp = $sqlm->query("SELECT * FROM config_valid_ip_mask");
+while ( $mask = $sqlm->fetch_assoc($temp) )
 {
   $valid_ip_mask[$mask["Index"]] = $mask["ValidIPMask"];
 }
 
-$temp = $sqlm->query('SELECT * FROM config_gm_level_names');
-while ($levels = $sqlm->fetch_assoc($temp))
+$temp = $sqlm->query("SELECT * FROM config_gm_level_names");
+while ( $levels = $sqlm->fetch_assoc($temp) )
 {
   $gm_level_arr[$levels["Security_Level"]][0] = $levels["Full_Name"];
   $gm_level_arr[$levels["Security_Level"]][1] = $levels["Short_Name"];
 }
 
 $menu_array = array();
-$temp = $sqlm->query('SELECT * FROM config_top_menus');
-while ($tmenus = $sqlm->fetch_assoc($temp))
+$temp = $sqlm->query("SELECT * FROM config_top_menus");
+while ( $tmenus = $sqlm->fetch_assoc($temp) )
 {
-  $top = array();
-  $top[0] = $tmenus["Action"];
-  $top[1] = $tmenus["Name"];
-
-  $m = array();
-  $temp_menus = $sqlm->query("SELECT * FROM config_menus WHERE Menu = '".$tmenus["Index"]."' ORDER BY `Order`");
-  while ($menus = $sqlm->fetch_assoc($temp_menus))
+  if ( $tmenus["Enabled"] )
   {
-    if ($menus["Enabled"])
+    $top = array();
+    $top[] = $tmenus["Action"];
+    $top[] = $tmenus["Name"];
+
+    $m = array();
+    $temp_menus = $sqlm->query("SELECT * FROM config_menus WHERE Menu='".$tmenus["Index"]."' ORDER BY `Order`");
+    while ( $menus = $sqlm->fetch_assoc($temp_menus) )
     {
-      $menu = array();
-      array_push($menu,$menus["Action"]);
-      array_push($menu,$menus["Name"]);
-      array_push($menu,$menus["View"]);
-      array_push($menu,$menus["Insert"]);
-      array_push($menu,$menus["Update"]);
-      array_push($menu,$menus["Delete"]);
-      array_push($m, $menu);
+      if ( $menus["Enabled"] )
+      {
+        $menu = array();
+        array_push($menu,$menus["Action"]);
+        array_push($menu,$menus["Name"]);
+        array_push($menu,$menus["View"]);
+        array_push($menu,$menus["Insert"]);
+        array_push($menu,$menus["Update"]);
+        array_push($menu,$menus["Delete"]);
+        array_push($m, $menu);
+      }
     }
+
+    $top[] = $m;
+
+    array_push($menu_array, $top);
   }
-
-  $top[2] = $m;
-
-  array_push($menu_array, $top);
 }
 
 $misc = $sqlm->query("SELECT * FROM config_misc");

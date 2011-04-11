@@ -2688,8 +2688,9 @@ function menus()
               <tr>
                 <th>'.lang("admin", "edit").'</th>
                 <th>'.lang("admin", "remove").'</th>
-                <th>'.lang("admin", "internalname").': </th>
-                <th>'.lang("admin", "action").': </th>
+                <th>'.lang("admin", "internalname").'</th>
+                <th>'.lang("admin", "action").'</th>
+                <th>'.lang("admin", "enabled").'</th>
               </tr>';
       $color = "#EEEEEE";
       while ( $top_menu = $sqlm->fetch_assoc($top_menus) )
@@ -2716,6 +2717,9 @@ function menus()
                 <td style="background-color:'.$color.'">
                   <center>'.$top_menu["Action"].'</center>
                 </td>
+                <td style="background-color:'.$color.'">
+                  <center><img src="img/'.( ( $top_menu["Enabled"] ) ? 'up' : 'down' ).'.gif" alt="" /></center>
+                </td>
               </tr>';
         $color = ( ( $color == "#EEEEEE" ) ? "#FFFFFF" : "#EEEEEE" );
       }
@@ -2728,7 +2732,7 @@ function menus()
                     </a>
                   </center>
                 </td>
-                <td style="background-color:'.$color.'" colspan="3">
+                <td style="background-color:'.$color.'" colspan="4">
                   <a href="admin.php?section=menus&amp;addmenu=addmenu">'.lang("admin", "addmenu").'</a>
                 </td>
               </tr>
@@ -2748,7 +2752,13 @@ function menus()
         <center>
           <form name="form" action="admin.php" method="get">
             <input type="hidden" name="section" value="menus" />
-            <input type="hidden" name="top_index" value="'.$top_menu.'" />
+            <input type="hidden" name="top_index" value="'.$top_menu.'" />';
+
+      if ( ( $top["Name"] == "main" ) || ( $top["Name"] == "invisible" ) )
+        $output .= '
+            <input type="hidden" name="enabled" value="1" />';
+
+      $output .= '
             <table class="simple" id="admin_edit_top_menu_nameaction">
               <tr>
                 <th colspan="2">'.lang("admin", "top_menu").'</th>
@@ -2763,6 +2773,19 @@ function menus()
                 <td>'.lang("admin", "action").': </td>
                 <td>
                   <textarea name="menu_action" class="admin_edit_top_menu_action" rows="2" cols="32">'.$top["Action"].'</textarea>
+                </td>
+              </tr>
+              <tr>
+                <td>'.lang("admin", "enabled").': </td>
+                <td>';
+
+      if ( ( $top["Name"] != "main" ) && ( $top["Name"] != "invisible" ) )
+        $output .= '
+                  <input type="checkbox" name="enabled"'.( ( $top["Enabled"] ) ? ' checked="checked"' : '' ).' />';
+      else
+        $output .= '<img src="img/lock.png" alt="" /> ('.lang("admin", "nodisable").')';
+
+      $output .= '
                 </td>
               </tr>
             </table>
@@ -2998,7 +3021,7 @@ function menus()
     {
       $max = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_top_menus"));
       $max = $max["MAX(`Index`)"] + 1;
-      $result = $sqlm->query("INSERT INTO config_top_menus (`Index`, Action, Name) VALUES ('".$max."', '','')");
+      $result = $sqlm->query("INSERT INTO config_top_menus (`Index`, Action, Name, Enabled) VALUES ('".$max."', '', '', '0')");
       redirect("admin.php?section=menus");
       break;
     }
@@ -3019,7 +3042,8 @@ function menus()
       $top_index = $sqlm->quote_smart($_GET["top_index"]);
       $top_name = $sqlm->quote_smart($_GET["top_name"]);
       $top_action = $sqlm->quote_smart($_GET["menu_action"]);
-      $result = $sqlm->query("UPDATE config_top_menus SET Name='".$top_name."', Action='".$top_action."' WHERE `Index`='".$top_index."'");
+      $enabled = ( ( isset($_GET["enabled"]) ) ? 1 : 0 );
+      $result = $sqlm->query("UPDATE config_top_menus SET Name='".$top_name."', Action='".$top_action."', Enabled='".$enabled."' WHERE `Index`='".$top_index."'");
       redirect("admin.php?section=menus");
       break;
     }

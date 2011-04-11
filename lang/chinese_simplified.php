@@ -1697,6 +1697,7 @@ $GLOBALS['lang_admin'] = array
   'internalname' => '站内名称',
   'internalname2' => '菜单<br />名称',
   'order' => '排序',
+  'nodisable' => 'This Menu cannot be disabled.',
 
   'editforum' => '编辑论坛',
   'delforum' => '删除论坛',

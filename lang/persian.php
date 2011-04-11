@@ -1697,6 +1697,7 @@ $GLOBALS['lang_admin'] = array
   'internalname' => 'Internal Name',
   'internalname2' => 'Internal<br />Name',
   'order' => 'Order',
+  'nodisable' => 'This Menu cannot be disabled.',
 
   'editforum' => 'Edit Forum',
   'delforum' => 'Delete Forum',
