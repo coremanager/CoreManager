@@ -107,13 +107,12 @@ function browse_teams()
         }
         else
         {
-          $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname,
+          $query = $sql["char"]->query("SELECT arena_team.arenaTeamId AS atid, arena_team.name AS atname,
             arena_team.captainguid AS lguid, arena_team.type AS attype, 
             (SELECT name FROM `characters` WHERE guid=lguid) AS lname, 
-            (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
-            rating AS atrating, games AS atgames, wins AS atwins
+            (SELECT COUNT(*) FROM  arena_team_member WHERE arenaTeamId=atid) AS tot_chars, 
+            rating AS atrating, seasonGames AS atgames, seasonWins AS atwins
             FROM arena_team
-              LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
             WHERE arena_team.name LIKE '%".$search_value."%' 
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
@@ -168,13 +167,12 @@ function browse_teams()
         }
         else
         {
-          $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
+          $query = $sql["char"]->query("SELECT arena_team.arenaTeamId AS atid, arena_team.name AS atname, 
             arena_team.captainguid AS lguid, arena_team.type AS attype, 
             (SELECT name FROM `characters` WHERE guid=lguid) AS lname,
-            (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
-            rating AS atrating, games AS atgames, wins AS atwins 
+            (SELECT COUNT(*) FROM  arena_team_member WHERE arenaTeamId=atid) AS tot_chars, 
+            rating AS atrating, seasonGames AS atgames, seasonWins AS atwins 
             FROM arena_team
-              LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
             WHERE arena_team.captainguid IN (SELECT guid FROM characters WHERE name LIKE '%".$search_value."%') 
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
@@ -229,19 +227,18 @@ function browse_teams()
         }
         else
         {
-          $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
+          $query = $sql["char"]->query("SELECT arena_team.arenaTeamId AS atid, arena_team.name AS atname, 
             arena_team.captainguid AS lguid, arena_team.type AS attype, 
             (SELECT name FROM `characters` WHERE guid=lguid) AS lname,
-            (SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid=atid) AS tot_chars, 
-            rating AS atrating, games AS atgames, wins AS atwins 
+            (SELECT COUNT(*) FROM  arena_team_member WHERE arenaTeamId=atid) AS tot_chars, 
+            rating AS atrating, seasonGames AS atgames, seasonWins AS atwins 
             FROM arena_team
-              LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
-            WHERE arena_team.arenateamid='".$search_value."' 
+            WHERE arena_team.arenaTeamId='".$search_value."' 
             ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
           $query_1 = $sql["char"]->query("SELECT COUNT(*)
             FROM arena_team 
-            WHERE arena_team.arenateamid='".$search_value."'");
+            WHERE arena_team.arenaTeamId='".$search_value."'");
         }
         break;
       }
@@ -289,14 +286,13 @@ function browse_teams()
     }
     else
     {
-      $query = $sql["char"]->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, 
+      $query = $sql["char"]->query("SELECT arena_team.arenaTeamId AS atid, arena_team.name AS atname, 
         arena_team.captainguid AS lguid, arena_team.type AS attype, 
         (SELECT name FROM `characters` WHERE guid=lguid) AS lname, 
-        (SELECT COUNT(*) FROM arena_team_member WHERE arenateamid=atid) AS tot_chars, 
-        rating AS atrating, games AS atgames, wins AS atwins, 
-        (SELECT COUNT(*) AS GCNT FROM `arena_team_member`, `characters`, `arena_team` WHERE arena_team.arenateamid=atid AND arena_team_member.arenateamid=arena_team.arenateamid AND arena_team_member.guid=characters.guid AND characters.online=1) AS arenateam_online
+        (SELECT COUNT(*) FROM arena_team_member WHERE arenaTeamId=atid) AS tot_chars, 
+        rating AS atrating, seasonGames AS atgames, seasonWins AS atwins, 
+        (SELECT COUNT(*) AS GCNT FROM `arena_team_member`, `characters`, `arena_team` WHERE arena_team.arenaTeamId=atid AND arena_team_member.arenaTeamId=arena_team.arenaTeamId AND arena_team_member.guid=characters.guid AND characters.online=1) AS arenateam_online
         FROM arena_team
-          LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
         ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
       $query_1 = $sql["char"]->query("SELECT COUNT(*)
@@ -443,7 +439,7 @@ function view_team()
     emblemstyle AS EmblemStyle, borderstyle AS BorderStyle
     FROM arenateams
     WHERE id='".$arenateam_id."'");
-  else
+  elseif ( $core == 2 )
     $query = $sql["char"]->query("SELECT arenateamid AS id, name, type,
     INET_NTOA(BackgroundColor) AS BackgroundColor,
     INET_NTOA(BorderColor) AS BorderColor,
@@ -451,6 +447,15 @@ function view_team()
     EmblemStyle, BorderStyle
     FROM arena_team
     WHERE arenateamid='".$arenateam_id."'");
+  else
+    $query = $sql["char"]->query("SELECT arenaTeamId AS id, name, type,
+    INET_NTOA(BackgroundColor) AS BackgroundColor,
+    INET_NTOA(BorderColor) AS BorderColor,
+    INET_NTOA(EmblemColor) AS EmblemColor,
+    EmblemStyle, BorderStyle
+    FROM arena_team
+    WHERE arenaTeamId='".$arenateam_id."'");
+
   $arenateam_data = $sql["char"]->fetch_assoc($query);
 
   if ( $core == 1 )
@@ -484,17 +489,18 @@ function view_team()
   }
   else
   {
-    $query = "SELECT arena_team.arenateamid AS id, rating,
-      games, wins, played, wins2, rank AS ranking,
-      (SELECT COUNT(*) FROM arena_team_member WHERE arenateamid=id) AS tot_chars
+    $query = "SELECT arena_team.arenaTeamId AS id, rating,
+      arena_team.weekGames, arena_team.weekWins, arena_team.weekGames AS played, arena_team.seasonWins, rank AS ranking,
+      (SELECT COUNT(*) FROM arena_team_member WHERE arenaTeamId=id) AS tot_chars
       FROM arena_team
-        LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
-        LEFT JOIN arena_team_member ON arena_team_member.arenateamid=arena_team.arenateamid
-      WHERE arena_team.arenateamid='".$arenateam_id."'";
+        LEFT JOIN arena_team_member ON arena_team_member.arenaTeamId=arena_team.arenaTeamId
+      WHERE arena_team.arenaTeamId='".$arenateam_id."'";
 
     $query = $sql["char"]->query($query);
 
-    $m_query = "SELECT * FROM arena_team_member WHERE arenateamid='".$arenateam_id."'";
+    $m_query = "SELECT guid, weekWins AS wons_week, weekGames AS played_week,
+                seasonWins AS wons_season, seasonGames AS played_season, personalRating as personal_rating
+                FROM arena_team_member WHERE arenaTeamId='".$arenateam_id."'";
     $m_query = $sql["char"]->query($m_query);
   }
   $arenateamstats_data = $sql["char"]->fetch_row($query);
@@ -694,10 +700,10 @@ function view_team()
                   <td>'.( ( $member_char[5] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>
                   <td>'.$member[1].'</td>
                   <td>'.$member[2].'</td>
-                  <td>'.$ww_pct.' %</td>
+                  <td>'.$ww_pct.'</td>
                   <td>'.$member[3].'</td>
                   <td>'.$member[4].'</td>
-                  <td>'.$ws_pct.' %</td>';
+                  <td>'.$ws_pct.'</td>';
 
         if ( $showcountryflag )
         {
@@ -751,16 +757,16 @@ function view_team()
                   <td>'.( ( $member_char["online"] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>
                   <td>'.$member["played_week"].'</td>
                   <td>'.$member["wons_week"].'</td>
-                  <td>'.$ww_pct.' %</td>
+                  <td>'.$ww_pct.'</td>
                   <td>'.$member["played_season"].'</td>
                   <td>'.$member["wons_season"].'</td>
-                  <td>'.$ws_pct.' %</td>';
+                  <td>'.$ws_pct.'</td>';
 
         if ( $showcountryflag )
         {
           require_once './libs/misc_lib.php';
 
-          $country = misc_get_country_by_account($member_char["acct"]);
+          $country = misc_get_country_by_account($accid);
           $output .= '
                   <td>'.( (  $country["code"]) ? '<img src="img/flags/'.$country["code"].'.png" onmousemove="oldtoolTip(\''.($country["country"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />' : '-').'</td>';
         }

@@ -99,12 +99,15 @@ function char_pvp()
   }
   else
   {
-    $query = "SELECT *,arena_team.arenateamid AS id, rating, type,
-      games, wins, played, wins2, rank AS ranking,
-      (SELECT COUNT(*) FROM arena_team_member WHERE arenateamid=id) AS tot_chars
+    $query = "SELECT *, arena_team.arenaTeamId AS id, rating, type,
+      arena_team.weekGames AS games, arena_team.weekWins AS wins,
+      arena_team.seasonGames AS played, arena_team.seasonWins AS wins2,
+      rank AS ranking,
+      arena_team_member.weekGames as played_week, arena_team_member.weekWins as wons_week,
+      arena_team_member.seasonGames as played_season, arena_team_member.seasonWins as wons_season,
+      (SELECT COUNT(*) FROM arena_team_member WHERE arenaTeamId=id) AS tot_chars
       FROM arena_team
-        LEFT JOIN arena_team_stats ON arena_team_stats.arenateamid=arena_team.arenateamid
-        LEFT JOIN arena_team_member ON arena_team_member.arenateamid=arena_team.arenateamid
+        LEFT JOIN arena_team_member ON arena_team_member.arenaTeamId=arena_team.arenaTeamId
       WHERE arena_team_member.guid='".$id."'";
 
     $arena_team_query = $sql["char"]->query($query);
@@ -534,7 +537,7 @@ function arenateam_data($arenateam_id)
     emblemstyle AS EmblemStyle, borderstyle AS BorderStyle
     FROM arenateams
     WHERE id='".$arenateam_id."'");
-  else
+  elseif ( $core == 2 )
     $query = $sql["char"]->query("SELECT arenateamid AS id, name, type,
     INET_NTOA(BackgroundColor) AS BackgroundColor,
     INET_NTOA(BorderColor) AS BorderColor,
@@ -542,6 +545,14 @@ function arenateam_data($arenateam_id)
     EmblemStyle, BorderStyle
     FROM arena_team
     WHERE arenateamid='".$arenateam_id."'");
+  else
+    $query = $sql["char"]->query("SELECT arenaTeamId AS id, name, type,
+    INET_NTOA(BackgroundColor) AS BackgroundColor,
+    INET_NTOA(BorderColor) AS BorderColor,
+    INET_NTOA(EmblemColor) AS EmblemColor,
+    EmblemStyle, BorderStyle
+    FROM arena_team
+    WHERE arenaTeamId='".$arenateam_id."'");
 
   $arenateam_data = $sql["char"]->fetch_assoc($query);
 

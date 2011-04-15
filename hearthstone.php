@@ -111,11 +111,16 @@ function approve()
 
   if ( $core == 1 )
     $query = "SELECT * FROM characters WHERE guid='".$guid."'";
-  else
+  elseif ( $core == 2 )
     $query = "SELECT *, characters.guid AS guid,
       characters.map AS mapId, characters.zone AS zoneId,
       character_homebind.map AS bindmapId, character_homebind.zone AS bindzoneId
-      FROM characters LEFT JOIN character_homebind ON characters.guid = character_homebind.guid WHERE characters.guid='".$guid."'";
+      FROM characters LEFT JOIN character_homebind ON characters.guid=character_homebind.guid WHERE characters.guid='".$guid."'";
+  else
+    $query = "SELECT *, characters.guid AS guid,
+      characters.map AS mapId, characters.zone AS zoneId,
+      character_homebind.mapId AS bindmapId, character_homebind.zoneId AS bindzoneId
+      FROM characters LEFT JOIN character_homebind ON characters.guid=character_homebind.guid WHERE characters.guid='".$guid."'";
 
   $char = $sql["char"]->fetch_assoc($sql["char"]->query($query));
 
@@ -204,13 +209,20 @@ function saveloc()
 
   if ( $core == 1 )
     $query = "SELECT * FROM characters WHERE guid='".$guid."'";
-  else
+  elseif ( $core == 2 )
     $query = "SELECT *,
       characters.map AS mapId, characters.zone AS zoneId,
       character_homebind.map AS bindmapId, character_homebind.zone AS bindzoneId,
       character_homebind.position_x AS bindpositionX, character_homebind.position_y AS bindpositionY,
       character_homebind.position_z AS bindpositionZ
-      FROM characters LEFT JOIN character_homebind ON characters.guid = character_homebind.guid WHERE characters.guid='".$guid."'";
+      FROM characters LEFT JOIN character_homebind ON characters.guid=character_homebind.guid WHERE characters.guid='".$guid."'";
+  else
+    $query = "SELECT *,
+      characters.map AS mapId, characters.zone AS zoneId,
+      character_homebind.mapId AS bindmapId, character_homebind.zoneId AS bindzoneId,
+      character_homebind.position_x AS bindpositionX, character_homebind.position_y AS bindpositionY,
+      character_homebind.position_z AS bindpositionZ
+      FROM characters LEFT JOIN character_homebind ON characters.guid=character_homebind.guid WHERE characters.guid='".$guid."'";
 
   $char = $sql["char"]->fetch_assoc($sql["char"]->query($query));
 
