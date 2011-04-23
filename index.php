@@ -230,7 +230,7 @@ else
   elseif ( $core == 2 )
     $all_record_m = $sql["char"]->result($sql["char"]->query("SELECT COUNT(*) FROM character_ticket"), 0);
   else
-    $all_record_m = $sql["char"]->result($sql["char"]->query("SELECT COUNT(*) FROM gm_tickets WHERE closed=0"), 0);
+    $all_record_m = $sql["char"]->result($sql["char"]->query("SELECT COUNT(*) FROM gm_tickets WHERE closedBy=0"), 0);
 
   // get our MotDs...
   $motd = "";
@@ -381,9 +381,9 @@ else
           ORDER BY ticketid DESC LIMIT ".$start_m.", 3");
       else
         $result = $sql["char"]->query("SELECT gm_tickets.guid AS ticketid, characters.level, message,
-          gm_tickets.name, closed AS deleted, timestamp, gm_tickets.playerGuid, account AS acct
+          gm_tickets.name, closedBy AS deleted, lastModifiedTime AS timestamp, gm_tickets.guid AS playerGuid, account AS acct
           FROM gm_tickets
-            LEFT JOIN characters ON characters.guid=gm_tickets.playerGuid
+            LEFT JOIN characters ON characters.guid=gm_tickets.guid
           ORDER BY ticketid DESC LIMIT ".$start_m.", 3");
 
       while ( $post = $sql["char"]->fetch_assoc($result) )

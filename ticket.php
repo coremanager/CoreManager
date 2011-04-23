@@ -52,7 +52,7 @@ function browse_tickets()
   elseif ( $core == 2 )
     $query_1 = $sql["char"]->query("SELECT COUNT(*) FROM character_ticket");
   else
-    $query_1 = $sql["char"]->query("SELECT COUNT(*) FROM gm_tickets WHERE closed=0");
+    $query_1 = $sql["char"]->query("SELECT COUNT(*) FROM gm_tickets WHERE closedBy=0");
   $all_record = $sql["char"]->result($query_1,0);
   unset($query_1);
 
@@ -70,16 +70,16 @@ function browse_tickets()
                         op.name AS opener,
                         0 AS status, UNIX_TIMESTAMP(character_ticket.ticket_lastchange) AS timestamp
                         FROM character_ticket
-                        LEFT JOIN `characters` AS op ON character_ticket.guid=op.`guid`
+                          LEFT JOIN `characters` AS op ON character_ticket.guid=op.`guid`
                         ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
   else
-    $query = $sql["char"]->query("SELECT gm_tickets.guid AS guid, gm_tickets.playerGuid AS player,
+    $query = $sql["char"]->query("SELECT gm_tickets.guid AS guid, gm_tickets.guid AS player,
                         gm_tickets.message AS message,
                         op.name AS opener, gm.name AS closer,
-                        gm_tickets.closed AS status, gm_tickets.timestamp AS timestamp
+                        gm_tickets.closedBy AS status, gm_tickets.lastModifiedTime AS timestamp
                         FROM gm_tickets
-                        LEFT JOIN `characters` AS op ON gm_tickets.playerGuid=op.`guid`
-                        LEFT JOIN `characters` AS gm ON gm_tickets.closed=gm.`guid`
+                          LEFT JOIN `characters` AS op ON gm_tickets.guid=op.`guid`
+                          LEFT JOIN `characters` AS gm ON gm_tickets.closedBy=gm.`guid`
                         ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
   $output .= '
@@ -241,7 +241,7 @@ function edit_ticket()
                         `characters`.name AS opener,
                         gm_tickets.deleted AS status, gm_tickets.timestamp AS timestamp
                         FROM gm_tickets
-                        LEFT JOIN `characters` ON gm_tickets.playerGuid=`characters`.`guid`
+                          LEFT JOIN `characters` ON gm_tickets.playerGuid=`characters`.`guid`
                         WHERE ticketid='".$id."'");
   elseif ( $core == 2)
     $query = $sql["char"]->query("SELECT character_ticket.ticket_id AS guid, character_ticket.guid AS player,
@@ -249,16 +249,16 @@ function edit_ticket()
                         op.name AS opener,
                         UNIX_TIMESTAMP(character_ticket.ticket_lastchange) AS timestamp
                         FROM character_ticket
-                        LEFT JOIN `characters` AS op ON character_ticket.guid=op.`guid`
+                          LEFT JOIN `characters` AS op ON character_ticket.guid=op.`guid`
                         WHERE character_ticket.ticket_id='".$id."'");
   else
-    $query = $sql["char"]->query("SELECT gm_tickets.guid AS guid, gm_tickets.playerGuid AS player,
+    $query = $sql["char"]->query("SELECT gm_tickets.guid AS guid, gm_tickets.guid AS player,
                         gm_tickets.message AS message,
                         op.name AS opener, gm.name AS closer,
-                        gm_tickets.closed AS status, gm_tickets.timestamp AS timestamp
+                        gm_tickets.closedBy AS status, lastModifiedTime AS timestamp
                         FROM gm_tickets
-                        LEFT JOIN `characters` AS op ON gm_tickets.playerGuid=op.`guid`
-                        LEFT JOIN `characters` AS gm ON gm_tickets.closed=gm.`guid`
+                          LEFT JOIN `characters` AS op ON gm_tickets.guid=op.`guid`
+                          LEFT JOIN `characters` AS gm ON gm_tickets.closedBy=gm.`guid`
                         WHERE gm_tickets.guid='".$id."'");
 
   if ( $ticket = $sql["char"]->fetch_assoc($query) )
@@ -403,7 +403,7 @@ function do_mark_ticket()
     // this_is_junk: MaNGOS doesn't have a way to close a ticket?  Just delete it?
     $query = $sql["char"]->query("DELETE FROM character_ticket WHERE ticket_id='".$id."'");
   else
-    $query = $sql["char"]->query("UPDATE gm_tickets SET closed=".$closer." WHERE guid='".$id."'");
+    $query = $sql["char"]->query("UPDATE gm_tickets SET closedBy=".$closer." WHERE guid='".$id."'");
 
   if ( $sql["char"]->affected_rows() )
     redirect("ticket.php?error=5");
