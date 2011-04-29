@@ -2229,6 +2229,7 @@ $GLOBALS['lang_game_object'] = array
   'search_results' => '过滤结果',
   'NAN' => '无效参数！',
   'foundin' => '此物品可以被查找于',
+  'spawncount' => 'Spawn Count',
 );
 
 // ----- NPC.PHP -----
@@ -2316,6 +2317,7 @@ $GLOBALS['lang_creature'] = array
   'faction_H' => 'Faction (Horde)',
   'NAN' => 'Invalid parameter!',
   'foundin' => 'This object can be found in',
+  'spawncount' => 'Spawn Count',
 );
 
 ?>

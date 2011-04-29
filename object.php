@@ -305,6 +305,7 @@ function search()
     $output .= '
               <th width="15%">'.lang("game_object", "faction").'</th>';
   $output .= '
+              <th>'.lang("game_object", "spawncount").'</th>
             </tr>';
 
   for ( $i = 1; $i <= $page_total; $i++ )
@@ -316,6 +317,16 @@ function search()
       $go["name"] = ( ( $locales_search_option ) ? $go["name"] : $go["name1"] );
     else
       $go["name"] = ( ( $locales_search_option ) ? $go["name_loc".$locales_search_option] : $go["name"] );
+
+    // individual spawn counts
+    if ( $core == 1 )
+      $count_query = "SELECT COUNT(*) FROM gameobject_spawns WHERE Entry='".$go["entry"]."'";
+    else
+      $count_query = "SELECT COUNT(*) FROM gameobject WHERE id='".$go["entry"]."'";
+
+    $count_result = $sql["world"]->query($count_query);
+    $count_result = $sql["world"]->fetch_assoc($count_result);
+    $spawn_count = $count_result["COUNT(*)"];
 
     $output .= '
             <tr>
@@ -331,6 +342,7 @@ function search()
       $output .= '
               <td>'.$go["faction"].'</td>';
     $output .= '
+              <td>'.$spawn_count.'</td>
             </tr>';
   }
   $output .= '

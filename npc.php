@@ -526,6 +526,7 @@ function search()
               <th width="20%">'.lang("creature", "faction_A").'</th>
               <th width="20%">'.lang("creature", "faction_H").'</th>';
   $output .= '
+              <th>'.lang("creature", "spawncount").'</th>
             </tr>';
 
   for ( $i = 1; $i <= $page_total; $i++ )
@@ -537,6 +538,16 @@ function search()
       $creature["name"] = ( ( $locales_search_option ) ? $creature["name"] : $creature["name1"] );
     else
       $creature["name"] = ( ( $locales_search_option ) ? $creature["name_loc".$locales_search_option] : $creature["name"] );
+
+    // individual spawn counts
+    if ( $core == 1 )
+      $count_query = "SELECT COUNT(*) FROM creature_spawns WHERE entry='".$creature["entry"]."'";
+    else
+      $count_query = "SELECT COUNT(*) FROM creature WHERE id='".$creature["entry"]."'";
+
+    $count_result = $sql["world"]->query($count_query);
+    $count_result = $sql["world"]->fetch_assoc($count_result);
+    $spawn_count = $count_result["COUNT(*)"];
 
     $output .= '
             <tr>
@@ -555,6 +566,7 @@ function search()
               <td>'.$creature["faction_A"].'</td>
               <td>'.$creature["faction_H"].'</td>';
     $output .= '
+              <td>'.$spawn_count.'</th>
             </tr>';
   }
   $output .= '
