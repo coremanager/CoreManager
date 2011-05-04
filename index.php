@@ -104,6 +104,12 @@ else
       $stats = $sql["logon"]->fetch_assoc($sql["logon"]->query("SELECT starttime, maxplayers FROM uptime WHERE realmid='".$realm_id."' ORDER BY starttime DESC LIMIT 1"), 0);
       $uptimetime = time() - $stats["starttime"];
 
+      // a more reliable method of counting how many characters have been online since server start
+      $maxplayers_query = "SELECT COUNT(*) FROM characters WHERE logout_time>'".$stats["starttime"]."'";
+      $maxplayers_result = $sql["char"]->query($maxplayers_query);
+      $maxplayers_result = $sql["char"]->fetch_assoc($maxplayers_result);
+      $stats["maxplayers"] = $maxplayers_result["COUNT(*)"];
+
       function format_uptime($seconds)
       {
         $secs  = intval($seconds % 60);
