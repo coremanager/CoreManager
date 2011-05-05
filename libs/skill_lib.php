@@ -26,7 +26,7 @@ function skill_get_type($id)
   global $sql;
 
   //This table came from CSWOWD as its fields are named
-  $skill_type = $sql["dbc"]->fetch_assoc($sql["dbc"]->query('SELECT SkillLineCategory FROM skillline WHERE id='.$id.' LIMIT 1'));
+  $skill_type = $sql["dbc"]->fetch_assoc($sql["dbc"]->query("SELECT SkillLineCategory FROM skillline WHERE id='".$id."' LIMIT 1"));
   return $skill_type["SkillLineCategory"];
 }
 
@@ -39,7 +39,7 @@ function skill_get_name($id)
   global $sql;
 
   //This table came from CSWOWD as its fields are named
-  $skill_name = $sql["dbc"]->fetch_assoc($sql["dbc"]->query('SELECT Name FROM skillline WHERE id='.$id.' LIMIT 1'));
+  $skill_name = $sql["dbc"]->fetch_assoc($sql["dbc"]->query("SELECT Name FROM skillline WHERE id='".$id."' LIMIT 1"));
   return $skill_name["Name"];
 }
 

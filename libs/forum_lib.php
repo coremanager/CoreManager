@@ -30,7 +30,7 @@ function bbcode_editor_js()
         if ( document.selection && document.selection.createRange )
         {
           sel = document.selection.createRange();
-          if (sel.parentElement()==obj)
+          if ( sel.parentElement()==obj )
           sel.text = sel.text+txt;
         }
         elseif ( String(typeof obj.selectionStart) != "undefined" )
@@ -81,18 +81,18 @@ function bbcode_callbacks_wow($item)
     </a>';
 }
 
-function handle_url_tag($url, $link = '')
+function handle_url_tag($url, $link = "")
 {
   // From PunBB
-  $full_url = str_replace(array(' ', '\'', '`', '"'), array('%20', '', '', ''), $url);
-  if ( strpos($url, 'www.') === 0 )            // If it starts with www, we add http://
-    $full_url = 'http://'.$full_url;
-  elseif ( strpos($url, 'ftp.') === 0 )    // Else if it starts with ftp, we add ftp://
-    $full_url = 'ftp://'.$full_url;
-  elseif ( !preg_match('#^([a-z0-9]{3,6})://#', $url, $bah) )     // Else if it doesn't start with abcdef://, we add http://
-    $full_url = 'http://'.$full_url;
+  $full_url = str_replace(array(" ", "'", "`", '"'), array("%20", "", "", ""), $url);
+  if ( strpos($url, "www.") === 0 )            // If it starts with www, we add http://
+    $full_url = "http://".$full_url;
+  elseif ( strpos($url, "ftp.") === 0 )    // Else if it starts with ftp, we add ftp://
+    $full_url = "ftp://".$full_url;
+  elseif ( !preg_match("#^([a-z0-9]{3,6})://#", $url, $bah) )     // Else if it doesn't start with abcdef://, we add http://
+    $full_url = "http://".$full_url;
   // Ok, not very pretty :-)
-  $link = ( ( $link == '' || $link == $url ) ? ((strlen($url) > 55) ? substr($url, 0 , 39).' &hellip; '.substr($url, -10) : $url) : stripslashes($link) );
+  $link = ( ( $link == "" || $link == $url ) ? ( ( strlen($url) > 55 ) ? substr($url, 0 , 39)." &hellip; ".substr($url, -10) : $url ) : stripslashes($link) );
   return '<a href="'.$full_url.'">'.$link.'</a>';
 }
 
@@ -101,7 +101,7 @@ function do_clickable($text)
   global $userid;
 
   // From  PunBB
-  $text = ' '.$text;
+  $text = " ".$text;
   $text = preg_replace('#([\s\(\)])(https?|ftp|news){1}://([\w\-]+\.([\w\-]+\.)*[\w]+(:[0-9]+)?(/[^"\s\(\)<\[]*)?)#sie', '\'$1\'.handle_url_tag(\'$2://$3\')', $text);
   $text = preg_replace('#([\s\(\)])(www|ftp)\.(([\w\-]+\.)*[\w]+(:[0-9]+)?(/[^"\s\(\)<\[]*)?)#sie', '\'$1\'.handle_url_tag(\'$2.$3\', \'$2.$3\')', $text);
   // Regex [youtube] et [/youtube]

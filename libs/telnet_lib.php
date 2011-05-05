@@ -51,17 +51,17 @@ class telnet_lib
     global $core;
 
     $rv = 0;
-    $vers = explode('.', PHP_VERSION);
-    $needvers = array(4,3,0);
+    $vers = explode(".", PHP_VERSION);
+    $needvers = array(4, 3, 0);
     $j = count($vers);
     $k = count($needvers);
     if ( $k < $j )
       $j = $k;
-    for ( $i=0; $i<$j; ++$i )
+    for ( $i = 0; $i < $j; ++$i )
     {
-      if ( ( $vers[$i]+0 ) > $needvers[$i] )
+      if ( ( $vers[$i] + 0 ) > $needvers[$i] )
         break;
-      if ( ( $vers[$i]+0 ) < $needvers[$i] )
+      if ( ( $vers[$i] + 0 ) < $needvers[$i] )
         return 4;
     }
 
@@ -69,12 +69,12 @@ class telnet_lib
 
     if ( strlen($server) )
     {
-      if ( preg_match('/[^0-9.]/', $server) )
+      if ( preg_match("/[^0-9.]/", $server) )
       {
         $ip = gethostbyname($server);
         if ( $ip == $server )
         {
-          $ip = '';
+          $ip = "";
           $rv = 2;
         }
       }
@@ -82,7 +82,7 @@ class telnet_lib
         $ip = $server;
     }
     else
-      $ip = '127.0.0.1';
+      $ip = "127.0.0.1";
 
     if ( strlen($ip) )
     {
@@ -114,7 +114,7 @@ class telnet_lib
 
         $this->GetResponse($r);
         $r = explode("\n", $r);
-        if ( ( $r[count($r)-1] == '' ) || ( $this->loginprompt == $r[count($r)-1] ) )
+        if ( ( $r[count($r)-1] == "" ) || ( $this->loginprompt == $r[count($r) - 1] ) )
         {
           $rv = 3;
           $this->Disconnect();
@@ -132,7 +132,7 @@ class telnet_lib
     if ( $this->fp )
     {
       if ( $exit )
-        $this->DoCommand('exit', $junk);
+        $this->DoCommand("exit", $junk);
       fclose($this->fp);
       $this->fp = NULL;
     }
@@ -151,15 +151,15 @@ class telnet_lib
         fputs($this->fp, $c."\n");
       $this->Sleep();
       $this->GetResponse($r);
-      $r = preg_replace('/^.*?\n(.*)\n[^\n]*$/', '$1', $r);
+      $r = preg_replace("/^.*?\n(.*)\n[^\n]*$/", "$1", $r);
     }
-    return ( $this->fp ? 1 : 0 );
+    return ( ( $this->fp ) ? 1 : 0 );
   }
 
 
   function GetResponse(&$r)
   {
-    $r = '';
+    $r = "";
     do
     {
       $r .= fread($this->fp, 1000);

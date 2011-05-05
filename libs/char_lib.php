@@ -177,29 +177,29 @@ function char_get_pvp_rank_id($honor_points=0, $side_id=0)
 //#############################################################################
 //get avatar image by char level, gender, race, class and gm level
 
-function char_get_avatar_img($level, $gender, $race, $class, $gm=0)
+function char_get_avatar_img($level, $gender, $race, $class, $gm = 0)
 {
-  if ($gm > 0)
+  if ( $gm > 0 )
   {
-    if(file_exists('img/avatars/bliz/'.$gm.'.gif'))
-      $avatar = 'img/avatars/bliz/'.$gm.'.gif';
+    if ( file_exists("img/avatars/bliz/".$gm.".gif") )
+      $avatar = "img/avatars/bliz/".$gm.".gif";
     else
-      $avatar = 'img/avatars/bliz/bliz.gif';
+      $avatar = "img/avatars/bliz/bliz.gif";
   }
-  elseif($level < 60)
+  elseif ( $level < 60 )
   {
-    $avatar = 'img/avatars/np/'.$gender.'-'.$race.'-'.$class.'.gif';
+    $avatar = "img/avatars/np/".$gender."-".$race."-".$class.".gif";
   }
-  elseif($level < 70)
+  elseif ( $level < 70 )
   {
-    $avatar = 'img/avatars/60/'.$gender.'-'.$race.'-'.$class.'.gif';
+    $avatar = "img/avatars/60/".$gender."-".$race."-".$class.".gif";
   }
-  elseif($level < 80)
+  elseif ( $level < 80 )
   {
-    $avatar = 'img/avatars/70/'.$gender.'-'.$race.'-'.$class.'.gif';
+    $avatar = "img/avatars/70/".$gender."-".$race."-".$class.".gif";
   }
   else
-    $avatar = 'img/avatars/80/'.$gender.'-'.$race.'-'.$class.'.gif';
+    $avatar = "img/avatars/80/".$gender."-".$race."-".$class.".gif";
 
   return $avatar;
 }
@@ -210,18 +210,18 @@ function char_get_avatar_img($level, $gender, $race, $class, $gm=0)
 
 function char_get_level_color($lvl)
 {
-  if($lvl < 40)
+  if ( $lvl < 40 )
   {
-    if($lvl < 20)
+    if ( $lvl < 20 )
     {
-      if($lvl < 10)
+      if ( $lvl < 10 )
         $level_color = '<font color="#FFFFFF">'.$lvl.'</font>';
       else
         $level_color = '<font color="#858585">'.$lvl.'</font>';
     }
     else
     {
-      if($lvl < 30)
+      if ( $lvl < 30 )
         $level_color = '<font color="#339900">'.$lvl.'</font>';
       else
         $level_color = '<font color="#3300CC">'.$lvl.'</font>';
@@ -229,20 +229,20 @@ function char_get_level_color($lvl)
   }
   else
   {
-    if($lvl < 60)
+    if ( $lvl < 60 )
     {
-      if($lvl < 50)
+      if ( $lvl < 50 )
         $level_color = '<font color="#C552FF">'.$lvl.'</font>';
       else
         $level_color = '<font color="#FF8000">'.$lvl.'</font>';
     }
     else
     {
-      if($lvl < 70)
+      if ( $lvl < 70 )
         $level_color = '<font color="#FFF280">'.$lvl.'</font>';
       else
       {
-        if($lvl < 80)
+        if ( $lvl < 80 )
           $level_color = '<font color="#FF0000">'.$lvl.'</font>';
         else
           $level_color = '<font color="#000000">'.$lvl.'</font>';
@@ -314,27 +314,27 @@ function char_get_level_color($lvl)
 // for calc next level xp
 function xp_Diff($lvl)
 {
-  if( $lvl < 29 )
+  if ( $lvl < 29 )
     return 0;
-  if( $lvl == 29 )
+  if ( $lvl == 29 )
     return 1;
-  if( $lvl == 30 )
+  if ( $lvl == 30 )
     return 3;
-  if( $lvl == 31 )
+  if ( $lvl == 31 )
     return 6;
   else
-    return (5*($lvl-30));
+    return (5 * ($lvl - 30));
 }
 
 function mxp($lvl)
 {
-  if ($lvl < 60)
+  if ( $lvl < 60 )
   {
-    return (45 + (5*$lvl));
+    return (45 + (5 * $lvl));
   }
   else
   {
-     return (235 + (5*$lvl));
+    return (235 + (5 * $lvl));
   }
 }
 
@@ -342,17 +342,17 @@ function char_get_xp_to_level($lvl)
 {
   $RATE_XP_PAST_70 = 1;
   $xp = 0;
-  if ($lvl < 60)
+  if ( $lvl < 60 )
   {
-    $xp = (8*$lvl + xp_Diff($lvl)) * mxp($lvl);
+    $xp = (8 * $lvl + xp_Diff($lvl)) * mxp($lvl);
   }
-  elseif ($lvl == 60)
+  elseif ( $lvl == 60 )
   {
-    $xp = (155 + mxp($lvl) * (1344 - 70 - ((69 - $lvl) * (7 + (69 - $lvl) * 8 - 1)/2)));
+    $xp = (155 + mxp($lvl) * (1344 - 70 - ((69 - $lvl) * (7 + (69 - $lvl) * 8 - 1) / 2)));
   }
-  elseif ($lvl < 70)
+  elseif ( $lvl < 70 )
   {
-    $xp = (155 + mxp($lvl) * (1344 - ((69-$lvl) * (7 + (69 - $lvl) * 8 - 1)/2)));
+    $xp = (155 + mxp($lvl) * (1344 - ((69 - $lvl) * (7 + (69 - $lvl) * 8 - 1) / 2)));
   }
   else
   {
@@ -363,9 +363,9 @@ function char_get_xp_to_level($lvl)
   // The $xp to Level is always rounded to the nearest 100 points (50 rounded to high).
   $xp = (($xp + 50) / 100) * 100;                  // use additional () for prevent free association operations in C++
 
-  if (($lvl > 10) && ($lvl < 60))                  // compute discount added in 2.3.x
+  if ( ( $lvl > 10 ) && ( $lvl < 60 ) )                  // compute discount added in 2.3.x
   {
-    $discount = ($lvl < 28) ? ($lvl - 10) : 18;
+    $discount = ( ( $lvl < 28 ) ? ( $lvl - 10 ) : 18 );
     $xp = ($xp * (100 - $discount)) / 100;         // apply discount
     $xp = ($xp / 100) * 100;                       // floor to hundreds
   }

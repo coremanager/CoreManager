@@ -78,17 +78,17 @@ function get_days_with_color($how_long)
 {
   $days = count_days($how_long, time());
 
-  if($days < 1)
+  if ( $days < 1 )
     $lastlogin = '<font color="#009900">'.$days.'</font>';
-  else if($days < 8)
+  elseif ( $days < 8 )
     $lastlogin = '<font color="#0000CC">'.$days.'</font>';
-  else if($days < 15)
+  elseif ( $days < 15 )
     $lastlogin = '<font color="#FFFF00">'.$days.'</font>';
-  else if($days < 22)
+  elseif ( $days < 22 )
     $lastlogin = '<font color="#FF8000">'.$days.'</font>';
-  else if($days < 29)
+  elseif ( $days < 29 )
     $lastlogin = '<font color="#FF0000">'.$days.'</font>';
-  else if($days < 61)
+  elseif ( $days < 61 )
     $lastlogin = '<font color="#FF00FF">'.$days.'</font>';
   else
     $lastlogin = '<font color="#FF0000">'.$days.'</font>';
@@ -121,37 +121,37 @@ function get_lang_id()
   # 15 = Unknown
 
   global $language;
-  if (isset($_COOKIE["lang"]))
+  if ( isset($_COOKIE["lang"]) )
     $language=$_COOKIE["lang"];
 
 // 0 = English/Default; 1 = Korean; 2 = French; 4 = German; 8 = Chinese; 16 = Taiwanese; 32 = Spanish; 64 = Russian; 128 = Persian;
-  switch ($language)
+  switch ( $language )
   {
-    case 'korean':
+    case "korean":
       return 1;
       break;
-    case 'french':
+    case "french":
       return 2;
       break;
-    case 'german':
+    case "german":
       return 3;
       break;
-    case 'chinese':
+    case "chinese":
       return 4;
       break;
-    case 'taiwanese':
+    case "taiwanese":
       return 5;
       break;
-    case 'spanish':
+    case "spanish":
       return 6;
       break;
-    case 'mexican':
+    case "mexican":
       return 7;
       break;
-    case 'russian':
+    case "russian":
       return 8;
       break;
-    case 'Persian':  // this_is_junk:  WoW doesn't come in 'Persian' lol
+    case "Persian":  // this_is_junk:  WoW doesn't come in 'Persian' lol
       return 9;
       break;
     default:

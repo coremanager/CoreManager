@@ -69,7 +69,7 @@ function achieve_get_id_category($id)
   global $sql;
 
   $achieve_cat = array();
-  $result = ($sql["dbc"]->query('SELECT id, name, description, reward, points FROM achievement WHERE category = \''.$id.'\' ORDER BY `orderInGroup` DESC'));
+  $result = ($sql["dbc"]->query("SELECT id, name, description, reward, points FROM achievement WHERE category='".$id."' ORDER BY `orderInGroup` DESC"));
   while ($achieve_cat[] = $sql["dbc"]->fetch_assoc($result));
   return $achieve_cat;
 }
@@ -83,7 +83,7 @@ function achieve_get_main_category()
   global $sql;
 
   $main_cat = array();
-  $result = $sql["dbc"]->query('SELECT ID, Name FROM achievement_category WHERE ParentID = -1 and ID != 1 ORDER BY `GroupID` ASC');
+  $result = $sql["dbc"]->query("SELECT ID, Name FROM achievement_category WHERE ParentID=-1 and ID<>1 ORDER BY `GroupID` ASC");
   while ($main_cat[] = $sql["dbc"]->fetch_assoc($result));
   return $main_cat;
 }
@@ -97,7 +97,7 @@ function achieve_get_sub_category()
   global $sql;
 
   $sub_cat = array();
-  $result = $sql["dbc"]->query('SELECT ID, ParentID, Name FROM achievement_category WHERE ParentID != -1 ORDER BY `GroupID` ASC');
+  $result = $sql["dbc"]->query("SELECT ID, ParentID, Name FROM achievement_category WHERE ParentID<>-1 ORDER BY `GroupID` ASC");
   $temp = $sql["dbc"]->fetch_assoc($result);
   while ($sub_cat[$temp["ParentID"]][$temp["ID"]] = $temp["Name"])
   {
@@ -114,7 +114,7 @@ function achieve_get_details($id)
 {
   global $sql;
 
-  $result = ($sql["dbc"]->query('SELECT id, name, description, reward, points FROM achievement WHERE id = \''.$id.'\' LIMIT 1'));
+  $result = ($sql["dbc"]->query("SELECT id, name, description, reward, points FROM achievement WHERE id='".$id."' LIMIT 1"));
   $details = $sql["dbc"]->fetch_assoc($result);
   return $details;
 }
@@ -127,7 +127,7 @@ function achieve_get_icon($achieveid)
 {
   global $proxy_cfg, $get_icons_from_web, $item_icons, $sql;
 
-  $result = $sql["dbc"]->query('SELECT spellIcon FROM achievement WHERE id = \''.$achieveid.'\' LIMIT 1');
+  $result = $sql["dbc"]->query("SELECT spellIcon FROM achievement WHERE id='".$achieveid."' LIMIT 1");
 
 
   if ($result)
@@ -137,7 +137,7 @@ function achieve_get_icon($achieveid)
 
   if ($displayid)
   {
-    $result = $sql["dbc"]->query('SELECT Name FROM spellicon WHERE ID = '.$displayid.' LIMIT 1');
+    $result = $sql["dbc"]->query("SELECT Name FROM spellicon WHERE ID='".$displayid."' LIMIT 1");
 
     if($result)
     {

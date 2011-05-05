@@ -19,47 +19,47 @@
 
 
 //#############################################################################
-//get spell name by its id
+// get spell name by its id
 // this_is_junk: This isn't used.
 
 function spell_get_name($id)
 {
   global $sql;
 
-  $spell_name = $sql["dbc"]->fetch_assoc($sql["dbc"]->query('SELECT spellname_loc0 FROM dbc_spell WHERE spellID='.$id.' LIMIT 1'));
+  $spell_name = $sql["dbc"]->fetch_assoc($sql["dbc"]->query("SELECT spellname_loc0 FROM dbc_spell WHERE spellID='".$id."' LIMIT 1"));
   return $spell_name["spellname_loc0"];
 }
 
 
 //#############################################################################
-//get spell icon - if icon not exists in item_icons folder D/L it from web.
+// get spell icon.
 
 function spell_get_icon($auraid)
 {
   global $proxy_cfg, $get_icons_from_web, $item_icons, $sql;
 
-  $result = $sql["dbc"]->query('SELECT spellIconId FROM spell WHERE ID = '.$auraid.' LIMIT 1');
+  $result = $sql["dbc"]->query("SELECT spellIconId FROM spell WHERE ID='".$auraid."' LIMIT 1");
 
-  if ($result)
+  if ( $result )
     $displayid = $sql["dbc"]->result($result, 0);
   else
     $displayid = 0;
 
-  if ($displayid)
+  if ( $displayid )
   {
-    $result = $sql["dbc"]->query('SELECT Name FROM spellicon WHERE id = '.$displayid.' LIMIT 1');
+    $result = $sql["dbc"]->query("SELECT Name FROM spellicon WHERE id='".$displayid."' LIMIT 1");
 
-    if($result)
+    if ( $result )
     {
       $aura = $sql["dbc"]->result($result, 0);
       $aura = explode("\\", $aura);
       $aura = $aura[count($aura) - 1];
 
-      if ($aura)
+      if ( $aura )
       {
         //if (file_exists(''.$item_icons.'/'.$aura.'.png'))
         //{
-          return ''.$item_icons.'/'.$aura.'.png';
+          return $item_icons."/".$aura.".png";
         //}
         //else
           //$aura = '';
@@ -82,13 +82,13 @@ function spell_get_icon($auraid)
         //  $aura = '';*/
       }
       else
-        $aura = '';
+        $aura = "";
     }
     else
-      $aura = '';
+      $aura = "";
   }
   else
-    $aura = '';
+    $aura = "";
 }
 
 

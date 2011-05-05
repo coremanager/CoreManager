@@ -32,7 +32,7 @@
 //########################################################################################################################
 function banner()
 {
-  $f = '../img/arena_emblems/PVP-Banner-'.$_GET["f"].'.png';
+  $f = "../img/arena_emblems/PVP-Banner-".$_GET["f"].".png";
   $img = @imagecreatefrompng($f);
 
   $color_r = $_GET["r"];
@@ -88,7 +88,7 @@ function banner()
 //########################################################################################################################
 function border()
 {
-  $f = '../img/arena_emblems/PVP-Banner-'.$_GET["f2"].'-Border-'.$_GET["f"].'.png';
+  $f = "../img/arena_emblems/PVP-Banner-".$_GET["f2"]."-Border-".$_GET["f"].".png";
   $img = @imagecreatefrompng($f);
 
   $color_r = $_GET["r"];
@@ -144,7 +144,7 @@ function border()
 //########################################################################################################################
 function emblem()
 {
-  $f = '../img/arena_emblems/PVP-Banner-Emblem-'.$_GET["f"].'.png';
+  $f = "../img/arena_emblems/PVP-Banner-Emblem-".$_GET["f"].".png";
   $img = @imagecreatefrompng($f);
 
   $color_r = $_GET["r"];
@@ -199,17 +199,17 @@ $action = $_GET["action"];
 
 switch ( $action )
 {
-  case 'banner':
+  case "banner":
   {
     banner();
     break;
   }
-  case 'border':
+  case "border":
   {
     border();
     break;
   }
-  case 'emblem':
+  case "emblem":
   {
     emblem();
     break;

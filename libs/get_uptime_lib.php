@@ -17,58 +17,64 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// Parse ArcEmu's Stats.XML
 function get_uptime($statsfile)
 {
   $file_obj = fopen($statsfile, "r");
 
-  for ($i = 0; $i < 4; $i++)
+  for ( $i = 0; $i < 4; $i++ )
     $temp = fgets($file_obj);
 
-  $out["platform"] = explode(' ', fgets($file_obj));
-  $out["platform"][4] = str_replace("<platform>","",$out["platform"][4]);
+  $out["platform"] = explode(" ", fgets($file_obj));
+  $out["platform"][4] = str_replace("<platform>", "", $out["platform"][4]);
   $out["uptime"] = fgets($file_obj);
-  $out["uptime"] = str_replace("<uptime>","",$out["uptime"]);
-  $out["uptime"] = str_replace("</uptime>","",$out["uptime"]);
-  for ($i = 0; $i < 1; $i++)
+  $out["uptime"] = str_replace("<uptime>", "", $out["uptime"]);
+  $out["uptime"] = str_replace("</uptime>", "", $out["uptime"]);
+
+  for ( $i = 0; $i < 1; $i++ )
     $temp = fgets($file_obj);
+
   $out["cpu"] = fgets($file_obj);
-  $out["cpu"] = str_replace("<cpu>","",$out["cpu"]);
-  $out["cpu"] = str_replace("</cpu>","",$out["cpu"]);
-  for ($i = 0; $i < 1; $i++)
+  $out["cpu"] = str_replace("<cpu>", "", $out["cpu"]);
+  $out["cpu"] = str_replace("</cpu>", "", $out["cpu"]);
+
+  for ( $i = 0; $i < 1; $i++ )
     $temp = fgets($file_obj);
+
   $out["ram"] = fgets($file_obj);
-  $out["ram"] = str_replace("<ram>","",$out["ram"]);
-  $out["ram"] = str_replace("</ram>","",$out["ram"]);
+  $out["ram"] = str_replace("<ram>", "", $out["ram"]);
+  $out["ram"] = str_replace("</ram>", "", $out["ram"]);
   $out["avglat"] = fgets($file_obj);
-  $out["avglat"] = str_replace("<avglat>","",$out["avglat"]);
-  $out["avglat"] = str_replace("</avglat>","",$out["avglat"]);
+  $out["avglat"] = str_replace("<avglat>", "", $out["avglat"]);
+  $out["avglat"] = str_replace("</avglat>", "", $out["avglat"]);
   $out["threads"] = fgets($file_obj);
-  $out["threads"] = str_replace("<threads>","",$out["threads"]);
-  $out["threads"] = str_replace("</threads>","",$out["threads"]);
-  for ($i = 0; $i < 7; $i++)
+  $out["threads"] = str_replace("<threads>", "", $out["threads"]);
+  $out["threads"] = str_replace("</threads>", "", $out["threads"]);
+
+  for ( $i = 0; $i < 7; $i++ )
     $temp = fgets($file_obj);
 
   $out["peak"] = fgets($file_obj);
-  $out["peak"] = str_replace("<peakcount>","",$out["peak"]);
-  $out["peak"] = str_replace("</peakcount>","",$out["peak"]);
+  $out["peak"] = str_replace("<peakcount>", "", $out["peak"]);
+  $out["peak"] = str_replace("</peakcount>", "", $out["peak"]);
 
-  if (file_exists($statsfile))
+  if ( file_exists($statsfile) )
   {
     $xml = simplexml_load_file($statsfile);
 
     $plrs = array();
-    foreach($xml->children() as $child)
+    foreach ( $xml->children() as $child )
     {
-      if ($child->getName() == "sessions")
+      if ( $child->getName() == "sessions" )
       {
-        foreach($child->children() as $sess_child)
+        foreach ( $child->children() as $sess_child )
         {
-          if ($sess_child->getName() == "plr")
+          if ( $sess_child->getName() == "plr" )
           {
             $plr = array();
-            foreach($sess_child->children() as $plr_child)
+            foreach ( $sess_child->children() as $plr_child )
             {
-              switch ($plr_child->getName())
+              switch ( $plr_child->getName() )
               {
                 case "name":
                 {
@@ -82,7 +88,7 @@ function get_uptime($statsfile)
                 }
               }
             }
-            if (count($plr) <> 0)
+            if ( count($plr) <> 0 )
               array_push($plrs, $plr);
           } 
         }
@@ -92,23 +98,23 @@ function get_uptime($statsfile)
 
   $out["plrs_lat"] = $plrs;
 
-  if (file_exists($statsfile))
+  if ( file_exists($statsfile) )
   {
     $xml = simplexml_load_file($statsfile);
 
     $plrs = array();
-    foreach($xml->children() as $child)
+    foreach ( $xml->children() as $child )
     {
-      if ($child->getName() == "sessions")
+      if ( $child->getName() == "sessions" )
       {
-        foreach($child->children() as $sess_child)
+        foreach ( $child->children() as $sess_child )
         {
-          if ($sess_child->getName() == "plr")
+          if ( $sess_child->getName() == "plr" )
           {
             $plr = array();
-            foreach($sess_child->children() as $plr_child)
+            foreach ( $sess_child->children() as $plr_child )
             {
-              switch ($plr_child->getName())
+              switch ( $plr_child->getName() )
               {
                 case "name":
                 {
@@ -122,7 +128,7 @@ function get_uptime($statsfile)
                 }
               }
             }
-            if (count($plr) <> 0)
+            if ( count($plr) <> 0 )
               array_push($plrs, $plr);
           } 
         }

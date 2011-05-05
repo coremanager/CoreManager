@@ -18,7 +18,7 @@
 */
 
 
-if ( !function_exists('mysql_connect') )
+if ( !function_exists("mysql_connect") )
   die("This PHP environment doesn't have MySQL support built in.");
 
 class SQL //MySQL
@@ -27,7 +27,7 @@ class SQL //MySQL
   var $query_result;
   var $num_queries = 0;
 
-  function connect($db_host, $db_username, $db_password, $db_name = '', $use_names = '', $pconnect = false, $newlink = true)
+  function connect($db_host, $db_username, $db_password, $db_name = "", $use_names = "", $pconnect = false, $newlink = true)
   {
     global $lang_global;
 
@@ -152,15 +152,15 @@ class SQL //MySQL
   {
     if( is_array($value) )
     {
-      return array_map(array(&$this, 'quote_smart'), $value);
+      return array_map(array(&$this, "quote_smart"), $value);
     }
     else
     {
       if( get_magic_quotes_gpc() )
         $value = stripslashes($value);
-      if( $value === '' )
+      if( $value === "" )
         $value = NULL;
-      if ( function_exists('mysql_real_escape_string') )
+      if ( function_exists("mysql_real_escape_string") )
         return mysql_real_escape_string($value, $this->link_id);
       else
         return mysql_escape_string($value);
@@ -198,4 +198,5 @@ class SQL //MySQL
     return;
   }
 }
+
 ?>

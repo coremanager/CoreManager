@@ -20,12 +20,12 @@
 
 //#############################################################################
 //global output string - hands off...
-$output = '';
+$output = "";
 
 
 //#############################################################################
 //to avoid Strict Standards notices in php 5.1
-if ( function_exists ('date_default_timezone_set') )
+if ( function_exists ("date_default_timezone_set") )
 {
   date_default_timezone_set(time_offset_to_zone($timezone));
 }
@@ -138,7 +138,7 @@ function time_offset_to_zone($offset)
 
 //#############################################################################
 // wowhead tooltip script location
-$tt_script = 'http://www.wowhead.com/widgets/power.js';
+$tt_script = "http://www.wowhead.com/widgets/power.js";
 
 
 //#############################################################################
@@ -163,17 +163,17 @@ function valid_login($restrict_lvl, $info)
   if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["user_id"]) && isset($_SESSION["realm_id"]) && isset($_SESSION["login"]) )
   {
     $user_lvl = $_SESSION["user_lvl"];
-    $ip = ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv('REMOTE_ADDR');
+    $ip = ( ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv("REMOTE_ADDR") );
     if ( $ip === $_SESSION["client_ip"] )
       ;
     else
-      redirect('login.php?error=5'.( ( isset($info) ) ? '&info='.$info : '' ) );
+      redirect("login.php?error=5".( ( isset($info) ) ? "&info=".$info : "" ) );
   }
   else
-    redirect('login.php?error=5'.( ( isset($info) ) ? '&info='.$info : '' ) );
+    redirect("login.php?error=5".( ( isset($info) ) ? "&info=".$info : "" ) );
 
   if ( $user_lvl < $restrict_lvl )
-    redirect('login.php?error=5'.( ( isset($info) ) ? '&info='.$info : '' ) );
+    redirect("login.php?error=5".( ( isset($info) ) ? "&info=".$info : "" ) );
 }
 
 
@@ -181,9 +181,9 @@ function valid_login($restrict_lvl, $info)
 // Fix reditection error under MS-IIS fuckedup-servers.
 function redirect($url)
 {
-  if ( strpos($_SERVER["SERVER_SOFTWARE"], 'Microsoft-IIS') === false )
+  if ( strpos($_SERVER["SERVER_SOFTWARE"], "Microsoft-IIS") === false )
   {
-    header('Location: '.$url);
+    header("Location: ".$url);
     exit();
   }
   else
@@ -198,7 +198,7 @@ function error($err)
   //$err = addslashes($err);
   // pass the error via session cookie instead of url
   $_SESSION["pass_error"] = $err;
-  redirect('error.php?err=oopsy');
+  redirect("error.php?err=oopsy");
 }
 
 
@@ -222,7 +222,7 @@ function aasort(&$array, $field, $order = false)
 {
   if ( is_string($field) )
     $field = "'".$field."'";
-  $order = ( ( $order ) ? '<' : '>' );
+  $order = ( ( $order ) ? "<" : ">" );
   usort
   (
     $array,
@@ -287,27 +287,27 @@ function maketooltip($text, $link, $tip, $class, $target = 'target="_self"')
 //#############################################################################
 // Generate paging navigation.
 // Original from PHPBB with some modifications to make them more simple
-function generate_pagination($base_url, $num_items, $per_page, $start_item, $start_tag = 'start', $add_prevnext_text = TRUE)
+function generate_pagination($base_url, $num_items, $per_page, $start_item, $start_tag = "start", $add_prevnext_text = TRUE)
 {
   if ( $num_items )
     ;
   else
-    return '';
+    return "";
 
   $total_pages = ceil($num_items/$per_page);
-  if ( $total_pages == 1)
+  if ( $total_pages == 1 )
   {
-    return '';
+    return "";
   }
-  $on_page = floor($start_item / $per_page)+1;
-  $page_string = '';
+  $on_page = floor($start_item / $per_page) + 1;
+  $page_string = "";
   if ( $total_pages > 10 )
   {
-    $init_page_max = (3 < $total_pages) ? 3 : $total_pages;
+    $init_page_max = ( ( 3 < $total_pages ) ? 3 : $total_pages );
     $count = $init_page_max+1;
-    for ( $i=1; $i<$count; ++$i )
+    for ( $i = 1; $i < $count; ++$i )
     {
-      $page_string .= ( ( $i == $on_page ) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>' );
+      $page_string .= ( ( $i == $on_page ) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i - 1) * $per_page).'">'.$i.'</a>' );
       if ( $i < $init_page_max )
       {
         $page_string .= ', ';
@@ -317,43 +317,43 @@ function generate_pagination($base_url, $num_items, $per_page, $start_item, $sta
     {
       if ( ( $on_page > 1 ) && ( $on_page < $total_pages ) )
       {
-        $page_string  .= ( ( $on_page > 5 ) ? ' ... ' : ', ' );
+        $page_string  .= ( ( $on_page > 5 ) ? " ... " : ", " );
         $init_page_min = ( ( $on_page > 4 ) ? $on_page : 5 );
         $init_page_max = ( ( $on_page < $total_pages - 4 ) ? $on_page : $total_pages - 4 );
 
-        $count = $init_page_max+2;
-        for ( $i=$init_page_min-1; $i<$count; ++$i )
+        $count = $init_page_max + 2;
+        for ( $i=$init_page_min - 1; $i < $count; ++$i )
         {
-          $page_string .= ( ( $i === $on_page ) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>' );
-          if ( $i <  $init_page_max+1 )
+          $page_string .= ( ( $i === $on_page ) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i - 1) * $per_page).'">'.$i.'</a>' );
+          if ( $i <  $init_page_max + 1 )
           {
-            $page_string .= ', ';
+            $page_string .= ", ";
           }
         }
-        $page_string .= ( ( $on_page < $total_pages-4 ) ? ' ... ' : ', ' );
+        $page_string .= ( ( $on_page < $total_pages - 4 ) ? " ... " : ", " );
       }
       else
       {
-        $page_string .= ' ... ';
+        $page_string .= " ... ";
       }
-      $count = $total_pages+1;
-      for ( $i=$total_pages-2; $i<$count; ++$i )
+      $count = $total_pages + 1;
+      for ( $i=$total_pages - 2; $i < $count; ++$i )
       {
-        $page_string .= ( ( $i == $on_page ) ? '<b>'.$i.'</b>'  : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>' );
+        $page_string .= ( ( $i == $on_page ) ? '<b>'.$i.'</b>'  : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i - 1 ) * $per_page).'">'.$i.'</a>' );
         if ( $i < $total_pages )
         {
-          $page_string .= ', ';
+          $page_string .= ", ";
         }
       }
     }
   }
   else
   {
-    $count = $total_pages+1;
-    for ( $i=1; $i<$count; ++$i )
+    $count = $total_pages + 1;
+    for ( $i = 1; $i < $count; ++$i )
     {
-      $page_string .= ( ( $i == $on_page ) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>' );
-      if ( $i <  $total_pages )
+      $page_string .= ( ( $i == $on_page ) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i - 1) * $per_page).'">'.$i.'</a>' );
+      if ( $i < $total_pages )
       {
         $page_string .= ', ';
       }
@@ -363,14 +363,14 @@ function generate_pagination($base_url, $num_items, $per_page, $start_item, $sta
   {
     if ( $on_page > 1 )
     {
-      $page_string = '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($on_page-2)*$per_page).'">Prev</a>&nbsp;&nbsp;'.$page_string;
+      $page_string = '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($on_page - 2) * $per_page).'">Prev</a>&nbsp;&nbsp;'.$page_string;
     }
     if ( $on_page < $total_pages )
     {
-      $page_string .= '&nbsp;&nbsp;<a href="'.$base_url.'&amp;'.$start_tag.'='.($on_page*$per_page).'">Next</a>';
+      $page_string .= '&nbsp;&nbsp;<a href="'.$base_url.'&amp;'.$start_tag.'='.($on_page * $per_page).'">Next</a>';
     }
   }
-  $page_string = 'Page: '.$page_string;
+  $page_string = "Page: ".$page_string;
 
   return $page_string;
 
@@ -385,15 +385,15 @@ function core_name($core_id)
   {
     case 1:
     {
-      return 'ArcEmu';
+      return "ArcEmu";
     }
     case 2:
     {
-      return 'MaNGOS';
+      return "MaNGOS";
     }
     case 3:
     {
-      return 'Trinity';
+      return "Trinity";
     }
   }
 }

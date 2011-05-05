@@ -42,12 +42,12 @@ function get_item_border($item_id)
       $result = $sql["world"]->query("SELECT quality FROM items WHERE entry='".$item_id."'");
     else
       $result = $sql["world"]->query("SELECT Quality AS quality FROM item_template WHERE entry='".$item_id."'");
-    $iborder = ( ( $sql["world"]->num_rows($result) == 1 ) ? $sql["world"]->result($result, 0, "quality") : 'Quality: '.$iborder.' Not Found' );
+    $iborder = ( ( $sql["world"]->num_rows($result) == 1 ) ? $sql["world"]->result($result, 0, "quality") : "Quality: ".$iborder." Not Found" );
 
-    return 'icon_border_'.$iborder.'';
+    return "icon_border_".$iborder;
   }
   else
-    return 'icon_border_0';
+    return "icon_border_0";
 }
 
 
@@ -62,7 +62,7 @@ function get_item_name($item_id)
   {
     $deplang = get_lang_id();
     $result = $sql["world"]->query("SELECT name1 FROM items WHERE entry='".$item_id."'");
-    $item_name = ( ( $sql["world"]->num_rows($result) == 1 ) ? $sql["world"]->result($result, 0, "name1") : 'ItemID: '.$item_id.' Not Found' );
+    $item_name = ( ( $sql["world"]->num_rows($result) == 1 ) ? $sql["world"]->result($result, 0, "name1") : "ItemID: ".$item_id." Not Found" );
 
     return $item_name;
   }
@@ -222,7 +222,7 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
 
       // if for some reason there is no localized item name, we'll use the English
       // (hopefully there will be one to show)
-      if ( $itemname == '' )
+      if ( $itemname == "" )
         $itemname = htmlspecialchars($item["name"], ENT_COMPAT, $site_encoding);
     }
     else
@@ -561,16 +561,16 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
       {
         case 37:
         {
-          $type = 'dmg_type1';
-          $min = 'dmg_min1';
-          $max = 'dmg_max1';
+          $type = "dmg_type1";
+          $min = "dmg_min1";
+          $max = "dmg_max1";
           break;
         }
         case 40:
         {
-          $type = 'dmg_type2';
-          $min = 'dmg_min2';
-          $max = 'dmg_max2';
+          $type = "dmg_type2";
+          $min = "dmg_min2";
+          $max = "dmg_max2";
           break;
         }
       }
@@ -616,62 +616,62 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
       {
         case 0:
         {
-          $type = 'stat_type1';
-          $value = 'stat_value1';
+          $type = "stat_type1";
+          $value = "stat_value1";
           break;
         }
         case 2:
         {
-          $type = 'stat_type2';
-          $value = 'stat_value2';
+          $type = "stat_type2";
+          $value = "stat_value2";
           break;
         }
         case 4:
         {
-          $type = 'stat_type3';
-          $value = 'stat_value3';
+          $type = "stat_type3";
+          $value = "stat_value3";
           break;
         }
         case 6:
         {
-          $type = 'stat_type4';
-          $value = 'stat_value4';
+          $type = "stat_type4";
+          $value = "stat_value4";
           break;
         }
         case 8:
         {
-          $type = 'stat_type5';
-          $value = 'stat_value5';
+          $type = "stat_type5";
+          $value = "stat_value5";
           break;
         }
         case 10:
         {
-          $type = 'stat_type6';
-          $value = 'stat_value6';
+          $type = "stat_type6";
+          $value = "stat_value6";
           break;
         }
         case 12:
         {
-          $type = 'stat_type7';
-          $value = 'stat_value7';
+          $type = "stat_type7";
+          $value = "stat_value7";
           break;
         }
         case 14:
         {
-          $type = 'stat_type8';
-          $value = 'stat_value8';
+          $type = "stat_type8";
+          $value = "stat_value8";
           break;
         }
         case 16:
         {
-          $type = 'stat_type9';
-          $value = 'stat_value9';
+          $type = "stat_type9";
+          $value = "stat_value9";
           break;
         }
         case 18:
         {
-          $type = 'stat_type10';
-          $value = 'stat_value10';
+          $type = "stat_type10";
+          $value = "stat_value10";
           break;
         }
       }
@@ -728,17 +728,17 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
       {
         case 72:
         {
-          $sock = 'socketColor_1';
+          $sock = "socketColor_1";
           break;
         }
         case 73:
         {
-          $sock = 'socketColor_2';
+          $sock = "socketColor_2";
           break;
         }
         case 74:
         {
-          $sock = 'socketColor_3';
+          $sock = "socketColor_3";
           break;
         }
       }
@@ -783,11 +783,11 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
 
         $query = "SELECT * FROM spellitemenchantment 
           WHERE ".
-          ( $prop1 ? "ID=".$prop1 : "" ).
-          ( $prop2 ? " OR ID=".$prop2 : "" ).
-          ( $prop3 ? " OR ID=".$prop3 : "" ).
-          ( $prop4 ? " OR ID=".$prop4 : "" ).
-          ( $prop5 ? " OR ID=".$prop5 : "" );
+          ( ( $prop1 ) ? "ID=".$prop1 : "" ).
+          ( ( $prop2 ) ? " OR ID=".$prop2 : "" ).
+          ( ( $prop3 ) ? " OR ID=".$prop3 : "" ).
+          ( ( $prop4 ) ? " OR ID=".$prop4 : "" ).
+          ( ( $prop5 ) ? " OR ID=".$prop5 : "" );
         $result = $sql["dbc"]->query($query);
         while ( $prop_row = $sql["dbc"]->fetch_assoc($result) )
         {
@@ -822,15 +822,24 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
     if ( ( $item["AllowableClass"] ) && ( $item["AllowableClass"] != -1 ) && ( $item["AllowableClass"] != 1503 ) )
     {
       $tooltip .= lang("item", "class").":";
-      if ($item["AllowableClass"] & 1) $tooltip .= " ".lang("id_tab", "warrior")." ";
-      if ($item["AllowableClass"] & 2) $tooltip .= " ".lang("id_tab", "paladin")." ";
-      if ($item["AllowableClass"] & 4) $tooltip .= " ".lang("id_tab", "hunter")." ";
-      if ($item["AllowableClass"] & 8) $tooltip .= " ".lang("id_tab", "rogue")." ";
-      if ($item["AllowableClass"] & 16) $tooltip .= " ".lang("id_tab", "priest")." ";
-      if ($item["AllowableClass"] & 64) $tooltip .= " ".lang("id_tab", "shaman")." ";
-      if ($item["AllowableClass"] & 128) $tooltip .= " ".lang("id_tab", "mage")." ";
-      if ($item["AllowableClass"] & 256) $tooltip .= " ".lang("id_tab", "warlock")." ";
-      if ($item["AllowableClass"] & 1024) $tooltip .= " ".lang("id_tab", "druid")." ";
+      if ( $item["AllowableClass"] & 1 )
+        $tooltip .= " ".lang("id_tab", "warrior")." ";
+      if ( $item["AllowableClass"] & 2 )
+        $tooltip .= " ".lang("id_tab", "paladin")." ";
+      if ( $item["AllowableClass"] & 4 )
+        $tooltip .= " ".lang("id_tab", "hunter")." ";
+      if ( $item["AllowableClass"] & 8 )
+        $tooltip .= " ".lang("id_tab", "rogue")." ";
+      if ( $item["AllowableClass"] & 16 )
+        $tooltip .= " ".lang("id_tab", "priest")." ";
+      if ( $item["AllowableClass"] & 64 )
+        $tooltip .= " ".lang("id_tab", "shaman")." ";
+      if ( $item["AllowableClass"] & 128 )
+        $tooltip .= " ".lang("id_tab", "mage")." ";
+      if ( $item["AllowableClass"] & 256 )
+        $tooltip .= " ".lang("id_tab", "warlock")." ";
+      if ( $item["AllowableClass"] & 1024 )
+        $tooltip .= " ".lang("id_tab", "druid")." ";
       $tooltip .= "<br />";
     }
 
@@ -838,7 +847,7 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
     if ( $item["ContainerSlots"] )
       $tooltip .= " ".$item["ContainerSlots"]." ".lang("item", "slots")."<br />";
 
-    $tooltip .= "</font><font color='#1eff00'>";
+    $tooltip .= '</font><font color="#1eff00">';
 
     //created enchantments
     if ( $ench )
@@ -853,62 +862,62 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
         {
           case 0:
           {
-            $type = 'stat_type1';
-            $value = 'stat_value1';
+            $type = "stat_type1";
+            $value = "stat_value1";
             break;
           }
           case 2:
           {
-            $type = 'stat_type2';
-            $value = 'stat_value2';
+            $type = "stat_type2";
+            $value = "stat_value2";
             break;
           }
           case 4:
           {
-            $type = 'stat_type3';
-            $value = 'stat_value3';
+            $type = "stat_type3";
+            $value = "stat_value3";
             break;
           }
           case 6:
           {
-            $type = 'stat_type4';
-            $value = 'stat_value4';
+            $type = "stat_type4";
+            $value = "stat_value4";
             break;
           }
           case 8:
           {
-            $type = 'stat_type5';
-            $value = 'stat_value5';
+            $type = "stat_type5";
+            $value = "stat_value5";
             break;
           }
           case 10:
           {
-            $type = 'stat_type6';
-            $value = 'stat_value6';
+            $type = "stat_type6";
+            $value = "stat_value6";
             break;
           }
           case 12:
           {
-            $type = 'stat_type7';
-            $value = 'stat_value7';
+            $type = "stat_type7";
+            $value = "stat_value7";
             break;
           }
           case 14:
           {
-            $type = 'stat_type8';
-            $value = 'stat_value8';
+            $type = "stat_type8";
+            $value = "stat_value8";
             break;
           }
           case 16:
           {
-            $type = 'stat_type9';
-            $value = 'stat_value9';
+            $type = "stat_type9";
+            $value = "stat_value9";
             break;
           }
           case 18:
           {
-            $type = 'stat_type10';
-            $value = 'stat_value10';
+            $type = "stat_type10";
+            $value = "stat_value10";
             break;
           }
         }
@@ -1006,37 +1015,37 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
       {
         case 27:
         {
-          $spellid = 'spellid_1';
-          $trigger = 'spelltrigger_1';
-          $charges = 'spellcharges_1';
+          $spellid = "spellid_1";
+          $trigger = "spelltrigger_1";
+          $charges = "spellcharges_1";
           break;
         }
         case 28:
         {
-          $spellid = 'spellid_2';
-          $trigger = 'spelltrigger_2';
-          $charges = 'spellcharges_2';
+          $spellid = "spellid_2";
+          $trigger = "spelltrigger_2";
+          $charges = "spellcharges_2";
           break;
         }
         case 29:
         {
-          $spellid = 'spellid_3';
-          $trigger = 'spelltrigger_3';
-          $charges = 'spellcharges_3';
+          $spellid = "spellid_3";
+          $trigger = "spelltrigger_3";
+          $charges = "spellcharges_3";
           break;
         }
         case 30:
         {
-          $spellid = 'spellid_4';
-          $trigger = 'spelltrigger_4';
-          $charges = 'spellcharges_4';
+          $spellid = "spellid_4";
+          $trigger = "spelltrigger_4";
+          $charges = "spellcharges_4";
           break;
         }
         case 31:
         {
-          $spellid = 'spellid_5';
-          $trigger = 'spelltrigger_5';
-          $charges = 'spellcharges_5';
+          $spellid = "spellid_5";
+          $trigger = "spelltrigger_5";
+          $charges = "spellcharges_5";
           break;
         }
       }
@@ -1103,7 +1112,7 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
         $creator = $c_field["name"];
       }
 
-      $tooltip .= "<font color='#1eff00'>&lt; ".lang("item", "madeby")." ".$creator." &gt;</font><br />";
+      $tooltip .= '<font color="#1eff00">&lt; '.lang("item", "madeby")." ".$creator.' &gt;</font><br />';
     }
 
     if ( $item["SellPrice"] )
@@ -1113,13 +1122,13 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
 
       // break it into gold, silver, and copper
       $pg = substr($SellPrice,  0, -4);
-      if ( $pg == '' )
+      if ( $pg == "" )
         $pg = 0;
       $ps = substr($SellPrice, -4,  2);
-      if ( ( $ps == '' ) || ( $ps == '00' ) )
+      if ( ( $ps == "" ) || ( $ps == "00" ) )
         $ps = 0;
       $pc = substr($SellPrice, -2);
-      if ( ( $pc == '' ) || ( $pc == '00' ) )
+      if ( ( $pc == "" ) || ( $pc == "00" ) )
         $pc = 0;
 
       // convert the strings into numbers
@@ -1128,12 +1137,12 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
       $pc = floor($pc);
 
       $tooltip .= lang("item", "sellprice").": ";
-      if  ( $pg )
-        $tooltip .= $pg."<img class='item_tooltip_price' src='img/gold.gif' alt='' align='middle' />";
-      if  ( $ps )
-        $tooltip .= $ps."<img class='item_tooltip_price' src='img/silver.gif' alt='' align='middle' />";
-      if  ( $pc )
-        $tooltip .= $pc."<img class='item_tooltip_price' src='img/copper.gif' alt='' align='middle' />";
+      if ( $pg )
+        $tooltip .= $pg.'<img class="item_tooltip_price" src="img/gold.gif" alt="" align="middle" />';
+      if ( $ps )
+        $tooltip .= $ps.'<img class="item_tooltip_price" src="img/silver.gif" alt="" align="middle" />';
+      if ( $pc )
+        $tooltip .= $pc.'<img class="item_tooltip_price" src="img/copper.gif" alt="" align="middle" />';
     }
     else
     {
