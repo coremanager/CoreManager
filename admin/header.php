@@ -30,9 +30,9 @@ if ( isset($_COOKIE["lang"]) )
 else
   $lang = $language;
 
-require_once 'lang/'.$lang.'.php';
+require_once "lang/".$lang.".php";
 
-require_once 'libs/lang_lib.php';
+require_once "libs/lang_lib.php";
 
 header("Content-Type: text/html; charset=".$site_encoding);
 header("Expires: Tue, 01 Jan 2000 00:00:00 GMT");
@@ -55,6 +55,51 @@ $output .= '
 
   <body>';
 
+// get our current revision
+if ( is_readable('.svn/entries') )
+{
+  $file_obj = new SplFileObject('.svn/entries');
+  // line 4 is where svn revision is stored
+  $file_obj->seek(3);
+  $current = rtrim($file_obj->current());
+  unset($file_obj);
+}
+
+// detect latest revision
+// first, we ask assembla's trac for the latest changeset
+// and parse it into an array
+$handle = fopen("http://trac6.assembla.com/coremanager/changeset", "r");
+$data = fread($handle, 256);
+$data = explode("\n", $data);
+
+// search the array for the blessed line
+for ( $i = 0; $i < count($data); $i++ )
+{
+  if ( strpos($data[$i], "Changeset") <> false )
+    break;
+}
+
+// if we got the line containing the revision then we need just the number
+if ( strpos($data[$i], "Changeset") <> false )
+{
+  // convert the line into an array
+  $revision = explode(" ", $data[$i]);
+
+  // find the number
+  for ( $j = 0; $j < count($revision); $j++ )
+  {
+    if ( is_numeric($revision[$j]) )
+      break;
+  }
+
+  // compare
+  if ( $current <> $revision[$j] )
+  {
+    $_GET["error"] = 3; // force an error
+    $latest = $revision[$j];
+  }
+}
+
 if ( isset($_GET["section"]) )
   $section = $_GET["section"];
 else
@@ -66,6 +111,7 @@ if ( !isset($_GET["error"]) )
 else
   $output .= '
     <div id="header_error">';
+
 $output .= '
       <ul>
         <li'.( ( $section == "databases" ) ? ' class="current" ' : '' ).'>

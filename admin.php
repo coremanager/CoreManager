@@ -3834,7 +3834,13 @@ switch ( $err )
               <font class="error">'.lang("admin", "nocarets").'</font>
             </h1>';
     break;
- default:
+  case 3:
+    $output .= '
+            <h1>
+              <font class="error">'.lang("admin", "newer_revision").' '.lang("admin", "current_rev").': '.$current.'; '.lang("admin", "latest_rev").': '.$latest.'</font>
+            </h1>';
+    break;
+  default:
     $output .= '
             <h1></h1>';
 }

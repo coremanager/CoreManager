@@ -1615,6 +1615,9 @@ $GLOBALS['lang_xacct'] = array
 $GLOBALS['lang_admin'] = array
 (
   'title' => 'CoreManager Administration Kontrollzentrum',
+  'newer_revision' => 'A newer revision is available!',
+  'current_rev' => 'Current',
+  'latest_rev' => 'Newer',
   'general' => 'General',
   'database' => 'Datenbanken',
   'gm_levels' => 'Security Levels',
