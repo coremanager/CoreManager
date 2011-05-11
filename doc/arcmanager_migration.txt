@@ -1,0 +1,1 @@
+To migrate from ArcManager to CoreManager.1. Run the SQL file "SQL/arcmanager_migration.sql" on your ArcManager Database.   2. Run all of the updates in "SQL/update/coremanager_database_updates" on your old ArcManager Database in numeric order.3. Run all of the updates in "SQL/update/coremanager_dbc_database_updates" on your DBC Database in numeric order.

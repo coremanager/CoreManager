@@ -541,7 +541,7 @@ function general()
           <table class="simple">
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "show").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "show").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "show_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "show").'</a>:
               </td>
               <td>
                 <select name="showversion" id="admin_showversion_field">
@@ -553,7 +553,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "version").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "version").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "version_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "version").'</a>:
               </td>
               <td>
                 <input type="text" name="version" value="'.$show_version_version["Value"].'" readonly="readonly" />
@@ -561,7 +561,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "versionlvl").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "versionlvl").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "versionlvl_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "versionlvl").'</a>:
               </td>
               <td>
                 <input type="text" name="versionlvl" value="'.$show_version_version_lvl["Value"].'" readonly="readonly" />
@@ -569,7 +569,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "revision").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "revision").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "revision_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "revision").'</a>:
               </td>
               <td>
                 <input type="text" name="revision" value="'.$show_version_revision["Value"].'" readonly="readonly" />
@@ -577,7 +577,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "revisionlvl").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "revisionlvl").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "revisionlvl_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "revisionlvl").'</a>:
               </td>
               <td>
                 <input type="text" name="revisionlvl" value="'.$show_version_revision_lvl["Value"].'" />
@@ -631,7 +631,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "adminemail").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "adminemail").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "adminemail_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "adminemail").'</a>:
               </td>
               <td>
                 <input type="text" name="adminemail" value="'.$mail_admin_email["Value"].'" />
@@ -639,7 +639,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "mailertype").'\', s\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "mailertype").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "mailertype_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "mailertype").'</a>:
               </td>
               <td>
                 <select name="mailertype" id="admin_mailertype_field">
@@ -651,7 +651,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "fromemail").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "fromemail").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "fromemail_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "fromemail").'</a>:
               </td>
               <td>
                 <input type="text" name="fromemail" value="'.$mail_from_email["Value"].'" />
@@ -659,7 +659,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "usegmail").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "usegmail").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "usegmail_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "usegmail").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="gmail" '.( ( $mail_gmailsender["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -667,7 +667,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "formathtml").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "formathtml").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "formathtml_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "formathtml").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="usehtml" '.( ( $format_mail_html["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -680,7 +680,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "smtphost").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "smtphost").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "smtphost_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "smtphost").'</a>:
               </td>
               <td>
                 <input type="text" name="smtphost" value="'.$smtp_host["Value"].'" />
@@ -688,7 +688,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "smtpport").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "smtpport").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "smtpport_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "smtpport").'</a>:
               </td>
               <td>
                 <input type="text" name="smtpport" value="'.$smtp_port["Value"].'" />
@@ -696,7 +696,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "smtpuser").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "smtpuser").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "smtpuser_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "smtpuser").'</a>:
               </td>
               <td>
                 <input type="text" name="smtpuser" value="'.$smtp_user["Value"].'" />
@@ -704,7 +704,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "smtppass").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "smtppass").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "smtppass_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "smtppass").'</a>:
               </td>
               <td>
                 <input type="text" name="smtppass" value="'.$smtp_pass["Value"].'" />
@@ -717,7 +717,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "pmfrom").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "pmfrom").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "pmfrom_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "pmfrom").'</a>:
               </td>
               <td>
                 <input type="text" name="fromchar" value="'.$pm_from_char["Value"].'" />
@@ -725,7 +725,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "pmstation").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "pmstation").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "pmstation_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "pmstation").'</a>:
               </td>
               <td>
                 <input type="text" name="stationary" value="'.$pm_stationary["Value"].'" />
@@ -781,7 +781,7 @@ function general()
           <table class="simple">
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "irchost").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "irchost").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "irchost_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "irchost").'</a>:
               </td>
               <td>
                 <input type="text" name="irchost" value="'.$irc_host["Value"].'" />
@@ -789,7 +789,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ircport").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ircport").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "ircport_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ircport").'</a>:
               </td>
               <td>
                 <input type="text" name="ircport" value="'.$irc_port["Value"].'" />
@@ -797,7 +797,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ircchannel").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ircchannel").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "ircchannel_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ircchannel").'</a>:
               </td>
               <td>
                 <input type="text" name="ircchannel" value="'.$irc_channel["Value"].'" />
@@ -805,7 +805,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "irchelppage").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "irchelppage").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "irchelppage_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "irchelppage").'</a>:
               </td>
               <td>
                 <input type="text" name="irchelppage" value="'.$irc_helppage["Value"].'" readonly="readonly" />
@@ -847,7 +847,7 @@ function general()
           <table class="simple">
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "proxyhost").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "proxyhost").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "proxyhost_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "proxyhost").'</a>:
               </td>
               <td>
                 <input type="text" name="proxyhost" value="'.$proxy_host["Value"].'" />
@@ -855,7 +855,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "proxyport").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "proxyport").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "proxyport_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "proxyport").'</a>:
               </td>
               <td>
                 <input type="text" name="proxyport" value="'.$proxy_port["Value"].'" />
@@ -863,7 +863,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "proxyuser").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "proxyuser").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "proxyuser_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "proxyuser").'</a>:
               </td>
               <td>
                 <input type="text" name="proxyuser" value="'.$proxy_user["Value"].'" />
@@ -871,7 +871,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "proxypass").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "proxypass").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "proxypass_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "proxypass").'</a>:
               </td>
               <td>
                 <input type="text" name="proxypass" value="'.$proxy_pass["Value"].'" />
@@ -918,7 +918,7 @@ function general()
           <table class="simple" id="admin_datasite">
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasitebase").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitebase").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "datasitebase_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitebase").'</a>:
               </td>
               <td>
                 <input type="text" name="datasitebase" value="'.$datasite_base["Value"].'" size="50" />
@@ -926,7 +926,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasitename").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitename").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "datasitename_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitename").'</a>:
               </td>
               <td>
                 <input type="text" name="datasitename" value="'.$datasite_name["Value"].'" size="50" />
@@ -934,7 +934,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasiteitem").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasiteitem").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "datasiteitem_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasiteitem").'</a>:
               </td>
               <td>
                 <input type="text" name="datasiteitem" value="'.$datasite_item["Value"].'" size="50" />
@@ -942,7 +942,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasitequest").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitequest").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "datasitequest_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitequest").'</a>:
               </td>
               <td>
                 <input type="text" name="datasitequest" value="'.$datasite_quest["Value"].'" size="50" />
@@ -950,7 +950,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasitecreature").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitecreature").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "datasitecreature_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitecreature").'</a>:
               </td>
               <td>
                 <input type="text" name="datasitecreature" value="'.$datasite_creature["Value"].'" size="50" />
@@ -958,7 +958,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasitespell").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitespell").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "datasitespell_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitespell").'</a>:
               </td>
               <td>
                 <input type="text" name="datasitespell" value="'.$datasite_spell["Value"].'" size="50" />
@@ -966,7 +966,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasiteskill").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasiteskill").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "datasiteskill_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasiteskill").'</a>:
               </td>
               <td>
                 <input type="text" name="datasiteskill" value="'.$datasite_skill["Value"].'" size="50" />
@@ -974,7 +974,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasitego").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitego").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "datasitego_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasitego").'</a>:
               </td>
               <td>
                 <input type="text" name="datasitego" value="'.$datasite_go["Value"].'" size="50" />
@@ -982,7 +982,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "datasiteachieve").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasiteachieve").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "datasiteachieve_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "datasiteachieve").'</a>:
               </td>
               <td>
                 <input type="text" name="datasiteachieve" value="'.$datasite_achieve["Value"].'" size="50" />
@@ -1043,7 +1043,7 @@ function general()
           <table class="simple" id="admin_acct_creation">
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "disableacccreation").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "disableacccreation").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "disableacccreation_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "disableacccreation").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="disableacccreation" '.( ( $disable_acc_creation["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1051,7 +1051,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "inviteonly").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "inviteonly").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "inviteonly_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "inviteonly").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="inviteonly" '.( ( $invite_only["Value"] == 1 ) ? 'checked="checked"' : '' ).' '.( ( $disable_acc_creation["Value"] == 1 ) ? '' : 'disabled="disabled"' ).' />
@@ -1059,7 +1059,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "disablereginvite").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "disablereginvite").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "disablereginvite_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "disablereginvite").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="disablereginvite" '.( ( $disable_reg_invite["Value"] == 1 ) ? 'checked="checked"' : '' ).' '.( ( $invite_only["Value"] == 0 ) ? '' : 'disabled="disabled"' ).' />
@@ -1067,7 +1067,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "expansionselect").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "expansionselect").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "expansionselect_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "expansionselect").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="expansionselect" '.( ( $expansion_select["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1075,7 +1075,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "defaultexpansion").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "defaultexpansion").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "defaultexpansion_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "defaultexpansion").'</a>:
               </td>
               <td>
                 <select name="defaultexpansion">';
@@ -1096,7 +1096,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "enabledcaptcha").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "enabledcaptcha").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "enabledcaptcha_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "enabledcaptcha").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="enabledcaptcha" '.( ( $enabled_captcha["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1104,7 +1104,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "userecaptcha").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "userecaptcha").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "userecaptcha_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "userecaptcha").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="userecaptcha" '.( ( $using_recaptcha["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1112,7 +1112,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "publickey").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "publickey").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "publickey_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "publickey").'</a>:
               </td>
               <td>
                 <input type="text" name="publickey" value="'.$publickey["Value"].'" size="52" />
@@ -1120,7 +1120,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "privatekey").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "privatekey").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "privatekey_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "privatekey").'</a>:
               </td>
               <td>
                 <input type="text" name="privatekey" value="'.$privatekey["Value"].'" size="52" />
@@ -1128,7 +1128,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sendmailoncreation").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sendmailoncreation").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "sendmailoncreation_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sendmailoncreation").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="sendmailoncreation" '.( ( $send_mail_on_creation["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1136,7 +1136,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sendconfirmmailoncreation").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sendconfirmmailoncreation").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "sendconfirmmailoncreation_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sendconfirmmailoncreation").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="sendconfirmmailoncreation" '.( ( $send_confirmation_mail_on_creation["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1144,7 +1144,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "validatemailhost").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "validatemailhost").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "validatemailhost_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "validatemailhost").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="validatemailhost" '.( ( $validate_mail_host["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1152,7 +1152,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "limitaccperip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "limitaccperip").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "limitaccperip_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "limitaccperip").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="limitaccperip" '.( ( $limit_acc_per_ip["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1211,7 +1211,7 @@ function general()
           <table class="simple">
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "allowanony").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "allowanony").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "allowanony_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "allowanony").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="allowanony" '.( ( $acp_allow_anony["Value"] == 1 ) ? 'checked="checked"' : '' ).' disabled="disabled" />
@@ -1219,7 +1219,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "anonyname").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "anonyname").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "anonyname_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "anonyname").'</a>:
               </td>
               <td>
                 <input type="text" name="anonyname" value="'.$acp_anony_name["Value"].'" />
@@ -1227,7 +1227,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "anonyrealmid").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "anonyrealmid").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "anonyrealmid_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "anonyrealmid").'</a>:
               </td>
               <td>
                 <input type="text" name="anonyrealmid" value="'.$acp_anony_realm_id["Value"].'" />
@@ -1280,7 +1280,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "questitemvendorlevelmul").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "questitemvendorlevelmul").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "questitemvendorlevelmul_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "questitemvendorlevelmul").'</a>:
               </td>
               <td>
                 <input type="text" name="questitemvendorlevelmul" value="'.$quest_item_vendor_level_mul["Value"].'" />
@@ -1288,7 +1288,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "questitemvendorrewmul").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "questitemvendorrewmul").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "questitemvendorrewmul_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "questitemvendorrewmul").'</a>:
               </td>
               <td>
                 <input type="text" name="questitemvendorrewmul" value="'.$quest_item_vendor_rew_mul["Value"].'" />
@@ -1301,7 +1301,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult0").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult0").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "ultravendormult0_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult0").'</a>:
               </td>
               <td>
                 <input type="text" name="ultravendormult0" value="'.$ultra_vendor_mult_0["Value"].'" />
@@ -1309,7 +1309,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult1").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult1").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "ultravendormult1_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult1").'</a>:
               </td>
               <td>
                 <input type="text" name="ultravendormult1" value="'.$ultra_vendor_mult_1["Value"].'" />
@@ -1317,7 +1317,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult2").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult2").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "ultravendormult2_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult2").'</a>:
               </td>
               <td>
                 <input type="text" name="ultravendormult2" value="'.$ultra_vendor_mult_2["Value"].'" />
@@ -1325,7 +1325,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult3").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult3").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "ultravendormult3_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult3").'</a>:
               </td>
               <td>
                 <input type="text" name="ultravendormult3" value="'.$ultra_vendor_mult_3["Value"].'" />
@@ -1333,7 +1333,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult4").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult4").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "ultravendormult4_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult4").'</a>:
               </td>
               <td>
                 <input type="text" name="ultravendormult4" value="'.$ultra_vendor_mult_4["Value"].'" />
@@ -1341,7 +1341,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult5").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult5").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "ultravendormult5_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult5").'</a>:
               </td>
               <td>
                 <input type="text" name="ultravendormult5" value="'.$ultra_vendor_mult_5["Value"].'" />
@@ -1349,7 +1349,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult6").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult6").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "ultravendormult6_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult6").'</a>:
               </td>
               <td>
                 <input type="text" name="ultravendormult6" value="'.$ultra_vendor_mult_6["Value"].'" />
@@ -1357,7 +1357,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendormult7").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult7").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "ultravendormult7_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendormult7").'</a>:
               </td>
               <td>
                 <input type="text" name="ultravendormult7" value="'.$ultra_vendor_mult_7["Value"].'" />
@@ -1365,7 +1365,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "ultravendorbase").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendorbase").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "ultravendorbase_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "ultravendorbase").'</a>:
               </td>
               <td>
                 <input type="text" name="ultravendorbase" value="'.$ultra_vendor_base["Value"].'" />
@@ -1428,54 +1428,54 @@ function general()
           <table class="simple">
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "statusgmincludeall").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "statusgmincludeall").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "statusgmincludeall_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "statusgmincludeall").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="statusgmincludeall" '.( ( $map_status_gm_include_all["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
               </td>
             </tr>
             <!-- tr>
-              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "gmshowonlineonlygmoff").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmshowonlineonlygmoff").'</a>: </td>
+              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin", "gmshowonlineonlygmoff_tip").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmshowonlineonlygmoff").'</a>: </td>
               <td><input type="checkbox" name="gmshowonlineonlygmoff" '.( ( $map_gm_show_online_only_gmoff["Value"] == 1 ) ? 'checked="checked"' : '' ).' /></td>
             </tr>
             <tr>
-              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "gmshowonlineonlygmvisible").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmshowonlineonlygmvisible").'</a>: </td>
+              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin", "gmshowonlineonlygmvisible_tip").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmshowonlineonlygmvisible").'</a>: </td>
               <td><input type="checkbox" name="gmshowonlineonlygmvisible" '.( ( $map_gm_show_online_only_gmvisible["Value"] == 1 ) ? 'checked="checked"' : '' ).' disabled="disabled" /></td>
             </tr -->
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "gmaddsuffix").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmaddsuffix").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "gmaddsuffix_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmaddsuffix").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="gmaddsuffix" '.( ( $map_gm_add_suffix["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
               </td>
             </tr>
             <!-- tr>
-              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "showstatus").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showstatus").'</a>: </td>
+              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin", "showstatus_tip").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showstatus").'</a>: </td>
               <td><input type="checkbox" name="showstatus" '.( ( $map_show_status["Value"] == 1 ) ? 'checked="checked"' : '' ).' disabled="disabled" /></td>
             </tr>
             <tr>
-              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "showtimer").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showtimer").'</a>: </td>
+              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin", "showtimer_tip").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showtimer").'</a>: </td>
               <td><input type="checkbox" name="showtimer" '.( ( $map_show_timer["Value"] == 1 ) ? 'checked="checked"' : '' ).' disabled="disabled" /></td>
             </tr>
             <tr>
-              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "timer").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timer").'</a>: </td>
+              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin", "timer_tip").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timer").'</a>: </td>
               <td><input type="text" name="timer" value="'.$map_timer["Value"].'" readonly="readonly" /></td>
             </tr>
             <tr>
-              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "showonline").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showonline").'</a>: </td>
+              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin", "showonline_tip").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showonline").'</a>: </td>
               <td><input type="checkbox" name="showonline" '.( ( $map_show_online["Value"] == 1 ) ? 'checked="checked"' : '' ).' disabled="disabled" /></td>
             </tr>
             <tr>
-              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "timetoshowuptime").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timetoshowuptime").'</a>: </td>
+              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin", "timetoshowuptime_tip").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timetoshowuptime").'</a>: </td>
               <td><input type="text" name="timetoshowuptime" value="'.$map_time_to_show_uptime["Value"].'" readonly="readonly" /></td>
             </tr>
             <tr>
-              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "timetoshowmaxonline").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timetoshowmaxonline").'</a>: </td>
+              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin", "timetoshowmaxonline_tip").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timetoshowmaxonline").'</a>: </td>
               <td><input type="text" name="timetoshowmaxonline" value="'.$map_time_to_show_maxonline["Value"].'" readonly="readonly" /></td>
             </tr>
             <tr>
-              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "timetoshowgmonline").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timetoshowgmonline").'</a>: </td>
+              <td class="help"><a href="#" onmouseover="oldtoolTip(\''.lang("admin", "timetoshowgmonline_tip").'\',\'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timetoshowgmonline").'</a>: </td>
               <td><input type="text" name="timetoshowgmonline" value="'.$map_time_to_show_gmonline["Value"].'" readonly="readonly" /></td>
             </tr -->
           </table>
@@ -1587,7 +1587,7 @@ function general()
                 <center>'.lang("admin", "index").'</center>
               </th>
               <th class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "validipmask").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "validipmask").'</a>
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "validipmask_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "validipmask").'</a>
               </th>
             </tr>
             <tr>
@@ -1627,7 +1627,7 @@ function general()
           <table class="simple" id="admin_more">
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "enablebottomad").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "enablebottomad").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "enablebottomad_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "enablebottomad").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="enablebottomad" '.( ( $enable_bottom_ad["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1635,7 +1635,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "bottomadcontent").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "bottomadcontent").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "bottomadcontent_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "bottomadcontent").'</a>:
               </td>
               <td>
                 <textarea name="bottomadcontent" rows="5" cols="40">'.$bottom_ad_content["Value"].'</textarea>
@@ -1705,7 +1705,7 @@ function general()
           <table class="simple" id="admin_more">
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sqlsearchlimit").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sqlsearchlimit").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "sqlsearchlimit_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sqlsearchlimit").'</a>:
               </td>
               <td>
                 <input type="text" name="sqlsearchlimit" value="'.$sql_search_limit["Value"].'" />
@@ -1713,7 +1713,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "itemicons").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "itemicons").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "itemicons_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "itemicons").'</a>:
               </td>
               <td>
                 <input type="text" name="itemicons" value="'.$item_icons["Value"].'" />
@@ -1721,7 +1721,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "remembermechecked").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "remembermechecked").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "remembermechecked_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "remembermechecked").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="remembermechecked" '.( ( $remember_me_checked["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1729,7 +1729,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sitetitle").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sitetitle").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "sitetitle_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sitetitle").'</a>:
               </td>
               <td>
                 <input type="text" name="sitetitle" value="'.$site_title["Value"].'" size="50"/>
@@ -1737,7 +1737,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "itemperpage").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "itemperpage").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "itemperpage_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "itemperpage").'</a>:
               </td>
               <td>
                 <input type="text" name="itemperpage" value="'.$item_per_page["Value"].'" />
@@ -1745,7 +1745,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "showcountryflags").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showcountryflags").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "showcountryflags_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showcountryflags").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="showcountryflags" '.( ( $show_country_flags["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1753,7 +1753,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "defaulttheme").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "defaulttheme").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "defaulttheme_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "defaulttheme").'</a>:
               </td>
               <td>
                 <input type="text" name="defaulttheme" value="'.$default_theme["Value"].'" />
@@ -1761,7 +1761,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "defaultlanguage").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "defaultlanguage").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "defaultlanguage_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "defaultlanguage").'</a>:
               </td>
               <td>
                 <select name="defaultlanguage">';
@@ -1787,7 +1787,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "timezone").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timezone").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "timezone_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timezone").'</a>:
               </td>
               <td>
                 <select name="timezone">
@@ -1828,7 +1828,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "gmonline").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmonline").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "gmonline_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmonline").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="gmonline" '.( ( $gm_online["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1836,7 +1836,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "gmonlinecount").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmonlinecount").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "gmonlinecount_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmonlinecount").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="gmonlinecount" '.( ( $gm_online_count["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1844,7 +1844,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hidemaxplayers").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hidemaxplayers").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "hidemaxplayers_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hidemaxplayers").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="hidemaxplayers" '.( ( $hide_max_players["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1852,15 +1852,18 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hideavglatency").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hideavglatency").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "hideavglatency_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hideavglatency").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="hideavglatency" '.( ( $hide_avg_latency["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
               </td>
-            </tr>
+            </tr>';
+
+        if ( $core == 1 )
+          $output .= '
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hideservermem").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hideservermem").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "hideservermem_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hideservermem").'</a>:
               </td>
               <td>
                 <select name="hideservermem">
@@ -1869,10 +1872,12 @@ function general()
                   <option value="2" '.( ( $hide_server_mem["Value"] == 2 ) ? 'selected="selected"' : '' ).'>'.lang("admin", "showall").'</option>
                 </select>
               </td>
-            </tr>
+            </tr>';
+
+        $output .= '
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hideplrlatency").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hideplrlatency").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "hideplrlatency_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hideplrlatency").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="hideplrlatency" '.( ( $hide_plr_latency["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1880,7 +1885,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "backupdir").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "backupdir").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "backupdir_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "backupdir").'</a>:
               </td>
               <td>
                 <input type="text" name="backupdir" value="'.$backup_dir["Value"].'" readonly="readonly" />
@@ -1888,7 +1893,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "debug").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "debug").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "debug_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "debug").'</a>:
               </td>
               <td>
                 <input type="text" name="debug" value="'.$debug["Value"].'" />
@@ -1896,7 +1901,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "testmode").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "testmode").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "testmode_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "testmode").'</a>:
               </td>
               <td>
                 <input type="text" name="testmode" value="'.$test_mode["Value"].'" readonly="readonly" />
@@ -1904,7 +1909,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "multirealm").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "multirealm").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "multirealm_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "multirealm").'</a>:
               </td>
               <td>
                 <input type="text" name="multirealm" value="'.$multi_realm["Value"].'" readonly="readonly" />
@@ -1912,7 +1917,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "showemblem").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showemblem").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "showemblem_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "showemblem").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="showemblem" '.( ( $show_emblem["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1920,7 +1925,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "shownewuser").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "shownewuser").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "shownewuser_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "shownewuser").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="shownewuser" '.( ( $show_newest_user["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1928,7 +1933,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sendonemail").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sendonemail").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "sendonemail_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sendonemail").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="sendonemail" '.( ( $send_on_email["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1941,7 +1946,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "usecustomlogo").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "usecustomlogo").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "usecustomlogo_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "usecustomlogo").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="usecustomlogo" '.( ( $use_custom_logo["Value"] == 1 ) ? 'checked="checked"' : '' ).' '.( ( $custom_logo_count > 0 ) ? '' : 'disabled="disabled"' ).' />
@@ -1949,7 +1954,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "customlogo").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "customlogo").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "customlogo_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "customlogo").'</a>:
               </td>
               <td>
                 <select name="customlogo" '.( ( $custom_logo_count > 0 ) ? '' : 'disabled="disabled"' ).'>';
@@ -1964,7 +1969,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "deleteselectedlogo").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "deleteselectedlogo").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "deleteselectedlogo_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "deleteselectedlogo").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="deleteselectedlogo" '.( ( $custom_logo_count > 0 ) ? '' : 'disabled="disabled"' ).' />
@@ -1972,7 +1977,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "uploadlogo").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "uploadlogo").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "uploadlogo_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "uploadlogo").'</a>:
               </td>
               <td>
                 <a href="admin.php?section=general&amp;subsection=upload_logo">'.lang("admin", "upload").'</a>
@@ -1980,7 +1985,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "allowcaching").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "allowcaching").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "allowcaching_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "allowcaching").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="allowcaching" '.( ( $allow_caching["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
@@ -1993,7 +1998,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "languagelocalessearchoption").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "languagelocalessearchoption").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "languagelocalessearchoption_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "languagelocalessearchoption").'</a>:
               </td>
               <td>
                 <select name="languagelocalessearchoption">
@@ -2011,7 +2016,7 @@ function general()
             </tr>
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "languagesiteencoding").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "languagesiteencoding").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "languagesiteencoding_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "languagesiteencoding").'</a>:
               </td>
               <td>
                 <input type="text" name="languagesiteencoding" value="'.$language_site_encoding["Value"].'" />
@@ -2127,7 +2132,7 @@ function general()
         $output .= '
             <tr>
               <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "uploadlogo").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "uploadlogo").'</a>:
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "uploadlogo_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "uploadlogo").'</a>:
               </td>
               <td>
                 <input type="file" name="image" />
@@ -2260,7 +2265,7 @@ function gmlevels()
 
       $del_row = ( ( isset($_GET["delrow"]) ) ? $_GET["delrow"] : "" );
       $add_row = ( ( isset($_GET["addrow"]) ) ? $_GET["addrow"] : "" );
-      $edit_row = $sqlm->quote_smart($$_GET["edit"]);
+      $edit_row = $sqlm->quote_smart($_GET["edit"]);
 
       if ( $add_row )
       {
@@ -2285,7 +2290,7 @@ function gmlevels()
             <table>
               <tr>
                 <td class="help">
-                  <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "seclvl").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "seclvl").'</a>:
+                  <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "seclvl_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "seclvl").'</a>:
                 </td>
                 <td>
                   <input type="text" name="seclvl" value="'.$gm_level["Security_Level"].'" />
@@ -2477,7 +2482,7 @@ function servers()
                 </tr>
                 <tr>
                   <td width="45%" class="help">
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hosti").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hosti").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "hosti_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hosti").'</a>:
                   </td>
                   <td>
                     <input type="text" name="server_hosti" value="'.$server["Address"].'" />
@@ -2485,7 +2490,7 @@ function servers()
                 </tr>
                 <tr>
                   <td width="45%" class="help">
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "hostp").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hostp").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "hostp_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hostp").'</a>:
                   </td>
                   <td>
                     <input type="text" name="server_hostp" value="'.$server["External_Address"].'" />
@@ -2500,19 +2505,19 @@ function servers()
         if ( $core != 1 )
           $output .= '
                 <tr>
-                  <td>'.lang("admin_tip", "telnetport").':</td>
+                  <td>'.lang("admin", "telnetport_tip").':</td>
                   <td>
                     <input type="text" name="server_telnet_port" value="'.$server["Telnet_Port"].'" />
                   </td>
                 </tr>
                 <tr>
-                  <td>'.lang("admin_tip", "telnetuser").':</td>
+                  <td>'.lang("admin", "telnetuser_tip").':</td>
                   <td>
                     <input type="text" name="server_telnet_user" value="'.$server["Telnet_User"].'" />
                   </td>
                 </tr>
                 <tr>
-                  <td>'.lang("admin_tip", "telnetpass").':</td>
+                  <td>'.lang("admin", "telnetpass_tip").':</td>
                   <td>
                     <input type="text" name="server_telnet_pass" value="'.$server["Telnet_Pass"].'" />
                   </td>
@@ -2552,7 +2557,7 @@ function servers()
                 </tr>
                 <tr>
                   <td class="help">
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "bothfactions").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "bothfactions").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "bothfactions_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "bothfactions").'</a>:
                   </td>
                   <td>
                     <input type="text" name="server_both" value="'.$server["Both_Factions"].'" />
@@ -2562,7 +2567,7 @@ function servers()
           $output .= '
                 <tr>
                   <td class="help">
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "statsxml").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "statsxml").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "statsxml_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "statsxml").'</a>:
                   </td>
                   <td>
                     <input type="text" name="server_stats" value="'.$server["Stats_XML"].'" />
@@ -2891,7 +2896,7 @@ function menus()
               <table class="help" id="admin_edit_menu">
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "menu").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "menu").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "menu_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "menu").'</a>:
                   </td>
                   <td>
                     <select name="menu">';
@@ -2907,7 +2912,7 @@ function menus()
                 </tr>
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "order").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "order").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "order_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "order").'</a>:
                   </td>
                   <td>
                     <input type="text" name="order" value="'.$menu["Order"].'" class="admin_edit_menu_fields" />
@@ -2915,7 +2920,7 @@ function menus()
                 </tr>
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "menuname").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "internalname2").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "menuname_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "internalname2").'</a>:
                   </td>
                   <td>
                     <input type="text" name="name" value="'.$menu["Name"].'" class="admin_edit_menu_fields" />
@@ -2923,7 +2928,7 @@ function menus()
                 </tr>
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "action").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "action").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "action_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "action").'</a>:
                   </td>
                   <td>
                     <textarea name="menu_action" style="width:260px" rows="2" cols="32">'.$menu["Action"].'</textarea>
@@ -2931,7 +2936,7 @@ function menus()
                 </tr>
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "view").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "view").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "view_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "view").'</a>:
                   </td>
                   <td>
                     <select name="view">';
@@ -2946,7 +2951,7 @@ function menus()
                 </tr>
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "insert").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "insert").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "insert").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "insert").'</a>:
                   </td>
                   <td>
                     <select name="insert">';
@@ -2961,7 +2966,7 @@ function menus()
                 </tr>
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "update").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "update").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "update_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "update").'</a>:
                   </td>
                   <td>
                     <select name="update">';
@@ -2976,7 +2981,7 @@ function menus()
                 </tr>
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "delete").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "delete").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "delete").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "delete").'</a>:
                   </td>
                   <td>
                     <select name="delete">';
@@ -2993,7 +2998,7 @@ function menus()
         $output .= '
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "enabled").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "enabled").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "enabled_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "enabled").'</a>:
                   </td>
                   <td>
                     <input type="checkbox" name="enabled" '.( ( $menu["Enabled"] ) ? 'checked="checked"' : '' ).' />
@@ -3003,7 +3008,7 @@ function menus()
         $output .= '
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "enabled").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "enabled").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "enabled_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "enabled").'</a>:
                   </td>
                   <td>
                     <input type="checkbox" name="enabled" '.( ( $menu["Enabled"] ) ? 'checked="checked' : '' ).' disabled="disabled" />
@@ -3302,7 +3307,7 @@ function forum()
               <table class="help" id="admin_edit_forum_item">
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "cat").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "cat").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "cat_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "cat").'</a>:
                   </td>
                   <td>
                     <select name="menu">';
@@ -3318,7 +3323,7 @@ function forum()
                 </tr>
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "forumname").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "name").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "forumname_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "name").'</a>:
                   </td>
                   <td>
                     <input type="text" name="name" value="'.$forum["Name"].'" class="admin_edit_menu_fields" />
@@ -3326,7 +3331,7 @@ function forum()
                 </tr>
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "desc").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "desc").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "desc_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "desc").'</a>:
                   </td>
                   <td>
                     <input type="text" name="desc" value="'.$forum["Desc"].'" class="admin_edit_menu_fields" />
@@ -3334,7 +3339,7 @@ function forum()
                 </tr>
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sideaccess").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sideaccess2").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "sideaccess_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sideaccess2").'</a>:
                   </td>
                   <td>
                     <input type="text" name="sideaccess" value="'.$forum["Side_Access"].'" class="admin_edit_menu_fields" />
@@ -3342,7 +3347,7 @@ function forum()
                 </tr>
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "secread").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "secread2").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "secread_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "secread2").'</a>:
                   </td>
                   <td>
                     <select name="min_security_level_read">';
@@ -3357,7 +3362,7 @@ function forum()
                 </tr>
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "secpost").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "secpost2").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "secpost_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "secpost2").'</a>:
                   </td>
                   <td>
                     <select name="min_security_level_post">';
@@ -3372,7 +3377,7 @@ function forum()
                 </tr>
                 <tr>
                   <td>
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "sectopic").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sectopic2").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "sectopic_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "sectopic2").'</a>:
                   </td>
                   <td>
                     <select name="min_security_level_create_topic">';
@@ -3757,7 +3762,7 @@ function accounts()
                 </tr>
                 <tr>
                   <td class="help">
-                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin_tip", "acpaccess").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "acpaccess").'</a>:
+                    <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "acpaccess_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "acpaccess").'</a>:
                   </td>
                   <td>
                     <input type="checkbox" name="acp" '.($web_admin_only ? 'checked' : '').' />
