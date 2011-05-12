@@ -3310,7 +3310,7 @@ function forum()
                     <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "cat_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "cat").'</a>:
                   </td>
                   <td>
-                    <select name="menu">';
+                    <select name="category">';
                     //<input type="text" name="category" value="'.$forum["Category"].'" id="admin_edit_menu_fields">
       while ( $row = $sqlm->fetch_assoc($cat_list_result) )
       {
