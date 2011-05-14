@@ -389,7 +389,7 @@ function savedbs()
     $char_names = ( ( isset($_GET["char_name"]) ) ? $sqlm->quote_smart($_GET["char_name"]) : NULL );
     $char_encodings = ( ( isset($_GET["char_encoding"]) ) ? $sqlm->quote_smart($_GET["char_encoding"]) : NULL );
 
-    for ( $i = 0; $i < count($char_hosts); $i++ )
+    for ( $i = 0; $i <= count($char_hosts); $i++ )
     {
       $result_char = $sqlm->query("UPDATE config_character_databases SET `Index`='".$char_new_realms[$i]."', Address='".$char_hosts."', Port='".$char_ports."', User='".$char_users."', Password='".$char_passes."', Name='".$char_names[$i]."', Encoding='".$char_encodings[$i]."' WHERE `Index`='".$char_realms[$i]."'");
     }
@@ -399,7 +399,7 @@ function savedbs()
   {
     $remove_chars = ( ( isset($_GET["remove_char"]) ) ? $sqlm->quote_smart($_GET["remove_char"]) : NULL );
 
-    for ( $i = 0; $i < count($remove_chars); $i++ )
+    for ( $i = 0; $i <= count($remove_chars); $i++ )
     {
       $result_char = $sqlm->query("DELETE FROM config_character_databases WHERE `Index`='".$remove_chars[$i]."'");
     }
@@ -416,7 +416,7 @@ function savedbs()
     $world_names = ( ( isset($_GET["world_name"]) ) ? $sqlm->quote_smart($_GET["world_name"]) : NULL );
     $world_encodings = ( ( isset($_GET["world_encoding"]) ) ? $sqlm->quote_smart($_GET["world_encoding"]) : NULL );
 
-    for ( $i = 0; $i < count($world_hosts); $i++ )
+    for ( $i = 0; $i <= count($world_hosts); $i++ )
     {
       $result_world = $sqlm->query("UPDATE config_world_databases SET `Index`='".$world_new_realms[$i]."', Address='".$world_hosts."', Port='".$world_ports."', User='".$world_users."', Password='".$world_passes."', Name='".$world_names[$i]."', Encoding='".$world_encodings[$i]."' WHERE `Index`='".$world_realms[$i]."'");
     }
@@ -426,9 +426,9 @@ function savedbs()
   {
     $remove_worlds = ( ( isset($_GET["remove_world"]) ) ? $sqlm->quote_smart($_GET["remove_world"]) : NULL );
 
-    for ( $i = 0; $i < count($remove_worlds); $i++ )
+    for ( $i = 0; $i <= count($remove_worlds); $i++ )
     {
-      $remove_query .= "DELETE FROM config_world_databases WHERE `Index`='".$remove_worlds[$i]."'";
+      $remove_query = "DELETE FROM config_world_databases WHERE `Index`='".$remove_worlds[$i]."'";
       $result_world = $sqlm->query($remove_query);
     }
   }
