@@ -259,7 +259,7 @@ function send_mail()
               $result = $sql["logon"]->query("SELECT email FROM account
                   LEFT JOIN account_access ON account_access.id=account.id
                 WHERE IFNULL(gmlevel, 0) ".$group_sign." '".$group_value."'");
-            while ( $user = $sql->fetch_row($result) )
+            while ( $user = $sql["logon"]->fetch_row($result) )
             {
               if ( $user[0] != "" )
                 array_push($email_array, $user[0]);
