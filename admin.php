@@ -3514,7 +3514,7 @@ function accounts()
   $order_dir = ( ( $dir ) ? "ASC" : "DESC" );
   $dir = ( ( $dir ) ? 0 : 1 );
 
-  $search_value = ( ( isset($_GET["Search_value"]) ) ? $sqll->quote_smart($_GET["search_value"]) : "" );
+  $search_value = ( ( isset($_GET["search_value"]) ) ? $sqll->quote_smart($_GET["search_value"]) : "" );
   $search_by = ( ( isset($_GET["search_by"]) ) ? $sqll->quote_smart($_GET["search_by"]) : "" );
 
   if ( $core == 1 )
