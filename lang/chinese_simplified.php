@@ -440,7 +440,7 @@ $GLOBALS['lang_char'] = array
   'map' => '地图',
   'zone' => '区域',
   'online' => '在线',
-    // ---- edit_char.php ----
+    // ---- char_edit.php ----
   'update' => '更新角色数据',
   'edit_char' => '编辑角色数据',
   'edit_button' => '编辑数据',
@@ -458,6 +458,7 @@ $GLOBALS['lang_char'] = array
   'move_to' => '传送至(.tele 地点名称)',
   'max_acc' => '您试图用以转移该角色的帐号已经达到了最大角色数。',
   'no_tp_location' => '用您提供的名称没有查找到相应的传送点。',
+  'mod_level_info' => 'Changing Level will reset Experience to 0.',
   // ---- char_achieve.php ----
   'show' => '显示',
   'all' => '所有',

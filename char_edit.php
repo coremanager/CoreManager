@@ -32,7 +32,7 @@ function edit_char()
   global $output, $logon_db, $characters_db, $realm_id, $corem_db, 
     $action_permission, $user_lvl, $item_datasite, $core, $sql;
 
-  wowhead_tt();
+  //wowhead_tt();
 
   valid_login($action_permission["delete"]);
   if ( empty($_GET["id"]) )
@@ -161,15 +161,17 @@ function edit_char()
       {
         $output .= '
                 <tr>
-                  <td colspan="4">'.lang("char", "name").': <input type="text" name="cname" size="15" maxlength="12" value="'.$char["name"].'" /></td>
+                  <td colspan="2">'.lang("char", "name").': <input type="text" name="cname" size="15" maxlength="12" value="'.$char["name"].'" /></td>
+                  <td colspan="2">'.lang("char", "level").': <input type="text" name="level" size="15" maxlength="12" value="'.$char["level"].'" />
+                  <img src="img/information.png" onmousemove="oldtoolTip(\''.lang("char", "mod_level_info").'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" />
+                  </td>
                   <td colspan="4">'.lang("char", "gold").': <input type="text" name="money" size="10" maxlength="10" value="'.$char_data[PLAYER_FIELD_COINAGE].'" /></td>
                 </tr>
                 <tr>
-                  <tr>
-                    <td colspan="2">'.lang("char", "honor_points").': <input type="text" name="honor_points" size="8" maxlength="6" value="'.$char_data[PLAYER_FIELD_HONOR_CURRENCY].'" /></td>
-                    <td colspan="2">'.lang("char", "arena_points").': <input type="text" name="arena_points" size="8" maxlength="6" value="'.$char_data[PLAYER_FIELD_ARENA_CURRENCY].'" /></td>
-                    <td colspan="4">'.lang("char", "honor_kills").': <input type="text" name="total_kills" size="8" maxlength="6" value="'.$char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS].'" /></td>
-                  </tr>
+                  <td colspan="2">'.lang("char", "honor_points").': <input type="text" name="honor_points" size="8" maxlength="6" value="'.$char_data[PLAYER_FIELD_HONOR_CURRENCY].'" /></td>
+                  <td colspan="2">'.lang("char", "arena_points").': <input type="text" name="arena_points" size="8" maxlength="6" value="'.$char_data[PLAYER_FIELD_ARENA_CURRENCY].'" /></td>
+                  <td colspan="4">'.lang("char", "honor_kills").': <input type="text" name="total_kills" size="8" maxlength="6" value="'.$char_data[PLAYER_FIELD_LIFETIME_HONORBALE_KILLS].'" /></td>
+                </tr>
                 </table>';
       }
       $output .= '
@@ -230,9 +232,9 @@ function do_edit_char()
     error(lang("char", "use_numeric"));
 
   if ( $core == 1 )
-    $query = "SELECT acct AS account, online FROM `characters` WHERE guid='".$id."'";
+    $query = "SELECT acct AS account, online, level FROM `characters` WHERE guid='".$id."'";
   else
-    $query = "SELECT account, online FROM `characters` WHERE guid='".$id."'";
+    $query = "SELECT account, online, level FROM `characters` WHERE guid='".$id."'";
 
   $result = $sql["char"]->query($query);
 
@@ -257,12 +259,15 @@ function do_edit_char()
       if ( $user_lvl >= $owner_gmlvl )
       {
         $new_money = ( ( isset($_GET["money"]) ) ? $sql["char"]->quote_smart($_GET["money"]) : 0 );
+        $new_level = ( ( isset($_GET["level"]) ) ? $sql["char"]->quote_smart($_GET["level"]) : 0 );
         $new_arena_points = ( ( isset($_GET["arena_points"]) ) ? $sql["char"]->quote_smart($_GET["arena_points"]) : 0 );
         $new_honor_points = ( ( isset($_GET["honor_points"]) ) ? $sql["char"]->quote_smart($_GET["honor_points"]) : 0 );
         $new_total_kills = ( ( isset($_GET["total_kills"]) ) ? $sql["char"]->quote_smart($_GET["total_kills"]) : 0 );
 
-        if ( !is_numeric($new_money) || !is_numeric($new_arena_points) || !is_numeric($new_honor_points) || !is_numeric($new_total_kills) )
+        if ( !is_numeric($new_money) || !is_numeric($new_level) || !is_numeric($new_arena_points) || !is_numeric($new_honor_points) || !is_numeric($new_total_kills) )
           error(lang("char", "use_numeric"));
+
+        $old_level = $sql["mgr"]->result($result, 0, "level");
 
         $new_name = $sql["char"]->quote_smart($_GET["cname"]);
         $new_name = htmlspecialchars($new_name);
@@ -285,10 +290,16 @@ function do_edit_char()
           $data = implode(" ", $char_data);
         }
 
-        if ( $core == 1 )
-          $query = "UPDATE `characters` SET name='".$new_name."', data='".$data."' WHERE guid='".$id."'";
+        // changing level also resets XP
+        if ( $old_level != $new_level )
+          $level_change = " level='".$new_level."', xp='0', ";
         else
-          $query = "UPDATE `characters` SET name='".$new_name."', money=".$new_money.", arenaPoints=".$new_arena_points.", totalHonorPoints=".$new_honor_points.", totalKills=".$new_total_kills." WHERE guid='".$id."'";
+          $level_change = "";
+
+        if ( $core == 1 )
+          $query = "UPDATE `characters` SET name='".$new_name."',".$level_change." data='".$data."' WHERE guid='".$id."'";
+        else
+          $query = "UPDATE `characters` SET name='".$new_name."',".$level_change." money=".$new_money.", arenaPoints=".$new_arena_points.", totalHonorPoints=".$new_honor_points.", totalKills=".$new_total_kills." WHERE guid='".$id."'";
 
         $result = $sql["char"]->query($query);
 

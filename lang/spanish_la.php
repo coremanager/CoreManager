@@ -440,7 +440,7 @@ $GLOBALS['lang_char'] = array
   'map' => 'Mapa',
   'zone' => 'Zona',
   'online' => 'Online',
-    // ---- edit_char.php ----
+    // ---- char_edit.php ----
   'update' => 'Actualizar Data del Personaje',
   'edit_char' => 'Editar Data del Personaje',
   'edit_button' => 'Editar Data',
@@ -458,6 +458,7 @@ $GLOBALS['lang_char'] = array
   'move_to' => 'Teleportar a',
   'max_acc' => 'La cuenta a la cual deseas mover el personaje ya tiene la maxima cantidad de personajes.',
   'no_tp_location' => 'Ningun sitio de teleportacion a sido encontrado con el nombre ingresado.',
+  'mod_level_info' => 'Changing Level will reset Experience to 0.',
   // ---- char_achieve.php ----
   'show' => 'Mostrar',
   'all' => 'Todo',

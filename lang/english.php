@@ -440,7 +440,7 @@ $GLOBALS['lang_char'] = array
   'map' => 'Map',
   'zone' => 'Zone',
   'online' => 'Online',
-    // ---- edit_char.php ----
+    // ---- char_edit.php ----
   'update' => 'Update Character\'s Data',
   'edit_char' => 'Edit Character\'s Data',
   'edit_button' => 'Edit Data',
@@ -458,6 +458,7 @@ $GLOBALS['lang_char'] = array
   'move_to' => 'Teleport to (.tele location name)',
   'max_acc' => 'The account you are trying to move this character to has the max ammount of players in it.',
   'no_tp_location' => 'No teleport location found using provided name.',
+  'mod_level_info' => 'Changing Level will reset Experience to 0.',
   // ---- char_achieve.php ----
   'show' => 'Show',
   'all' => 'All',
