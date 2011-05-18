@@ -50,12 +50,12 @@ function print_mail_form()
                     <select name="type">';
   if ( $type == "email" )
     $output .= '
-                      <option value="ingame_mail">'.lang("mail", "ingame_mail").'</option>
-                      <option value="email">'.lang("mail", "email").'</option>';
+                      <option value="email" selected="selected">'.lang("mail", "email").'</option>
+                      <option value="ingame_mail">'.lang("mail", "ingame_mail").'</option>';
   else
     $output .= '
                       <option value="email">'.lang("mail", "email").'</option>
-                      <option value="ingame_mail">'.lang("mail", "ingame_mail").'</option>';
+                      <option value="ingame_mail" selected="selected">'.lang("mail", "ingame_mail").'</option>';
   $output .= '
                     </select>
                   </td>
