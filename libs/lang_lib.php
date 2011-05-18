@@ -24,13 +24,20 @@ function lang($section, $key)
 {
   global $lang;
 
-  if ( isset( $GLOBALS["lang_".$section][$key] ) )
+  if ( isset($GLOBALS["lang_".$section][$key]) )
     $lang_out = $GLOBALS["lang_".$section][$key];
   else
   {
     lang_unpack();
     require("lang/english.php");
-    $lang_out = $GLOBALS["lang_".$section][$key];
+
+    // if the English Pack doesn't have it, we return the missing ordinal
+    // otherwise we return the English version
+    if ( !isset($GLOBALS["lang_".$section][$key]) )
+      $lang_out = "Element missing from Language Pack! Section: (".$section.") Key: (".$key.")";
+    else
+      $lang_out = $GLOBALS["lang_".$section][$key];
+
     lang_unpack();
     require("lang/".$lang.".php");
   }
