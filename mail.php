@@ -591,17 +591,17 @@ function result()
   global $output;
   $mess = ( ( isset($_GET["mess"]) ) ? $_GET["mess"] : NULL );
   $recipient = $_GET["recipient"];
-  switch ( $mess )
+  switch ( is_numeric($mess) )
   {
-    case 0: // success
+    case true: // success
     {
       $mess = lang("mail", "result_success");
       $mess = str_replace("%1", $recipient, $mess);
       break;
     }
-    case -1: //failure
+    case false: //failure
     {
-      $mess = lang("mail", "result_failed");
+      $mess .= "<br ><br />".lang("mail", "result_failed");
       $mess = str_replace("%1", $recipient, $mess);
       break;
     }
