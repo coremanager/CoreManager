@@ -617,7 +617,7 @@ else
     }
 
     if ( $core == 1 )
-      $result = $sql["char"]->query("SELECT guid, name, race, class, zoneid, mapid, level, acct, gender,
+      $result = $sql["char"]->query("SELECT guid, name, race, class, zoneid, mapid, level, characters.acct, gender,
                             CAST( SUBSTRING_INDEX( SUBSTRING_INDEX( data, ';', ".(PLAYER_FIELD_HONOR_CURRENCY+1)." ), ';', -1 ) AS UNSIGNED ) AS highest_rank, lastip
                             FROM characters
                               LEFT JOIN `".$logon_db["name"]."`.accounts ON characters.acct=`".$logon_db["name"]."`.accounts.acct
@@ -699,9 +699,9 @@ else
     while ( $char = $sql["char"]->fetch_assoc($result) )
     {
       if ( $core == 1 )
-        $ca_query = "SELECT accounts.login AS name FROM `".$logon_db["name"]."`.accounts LEFT JOIN `".$corem_db["name"]."`.config_accounts ON accounts.login = `".$corem_db["name"]."`.config_accounts.Login WHERE acct='".$char["acct"]."'";
+        $ca_query = "SELECT accounts.login AS name FROM `".$logon_db["name"]."`.accounts LEFT JOIN `".$corem_db["name"]."`.config_accounts ON accounts.login=`".$corem_db["name"]."`.config_accounts.Login COLLATE utf8_unicode_ci WHERE acct='".$char["acct"]."'";
       else
-        $ca_query = "SELECT *, username AS name FROM `".$logon_db["name"]."`.account LEFT JOIN `".$corem_db["name"]."`.config_accounts ON account.username = `".$corem_db["name"]."`.config_accounts.Login WHERE id='".$char["acct"]."'";
+        $ca_query = "SELECT *, username AS name FROM `".$logon_db["name"]."`.account LEFT JOIN `".$corem_db["name"]."`.config_accounts ON account.username=`".$corem_db["name"]."`.config_accounts.Login WHERE id='".$char["acct"]."'";
         
       $ca_result = $sql["mgr"]->query($ca_query);
       $char_acct = $sql["mgr"]->fetch_assoc($ca_result);
