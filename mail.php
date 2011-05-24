@@ -40,24 +40,18 @@ function print_mail_form()
               <br />
               <table class="top_hidden" id="mail_type">
                 <tr>
-                  <td align="left">'.lang("mail", "recipient").': 
+                  <td align="left" rowspan="2">'.lang("mail", "recipient").': 
                     <input type="text" name="to" size="32" value="'.$to.'" maxlength="225" />
                   </td>
-                  <td align="left">'.lang("mail", "subject").': 
+                  <td align="left" rowspan="2">'.lang("mail", "subject").': 
                     <input type="text" name="subject" size="32" maxlength="50" />
                   </td>
-                  <td width="1" align="right">
-                    <select name="type">';
-  if ( $type == "email" )
-    $output .= '
-                      <option value="email" selected="selected">'.lang("mail", "email").'</option>
-                      <option value="ingame_mail">'.lang("mail", "ingame_mail").'</option>';
-  else
-    $output .= '
-                      <option value="email">'.lang("mail", "email").'</option>
-                      <option value="ingame_mail" selected="selected">'.lang("mail", "ingame_mail").'</option>';
-  $output .= '
-                    </select>
+                </tr>
+                <tr>
+                  <td width="15%" align="left">
+                    <input type="radio" name="type" value="email" '.( ( $type == "email" ) ? 'checked="checked"' : '' ).' />'.lang("mail", "email").'
+                    <br />
+                    <input type="radio" name="type" value="ingame_mail" '.( ( $type == "ingame_mail" ) ? 'checked="checked"' : '' ).' />'.lang("mail", "ingame_mail").'
                   </td>
                 </tr>
                 <tr>
@@ -183,7 +177,7 @@ function send_mail()
   switch ( $type )
   {
     case "email":
-
+    {
       require_once("libs/mailer/class.phpmailer.php");
       require_once("libs/mailer/authgMail_lib.php");
       $mail = new PHPMailer();
@@ -320,7 +314,9 @@ function send_mail()
       else
         redirect("mail.php?error=1");
       break;
+    }
     case "ingame_mail":
+    {
       $value = NULL;
       for ( $i = 0; $i < count($body); $i++ )
         $value .= $body[$i]." ";
@@ -420,6 +416,7 @@ function send_mail()
           redirect("mail.php?error=4");
       }
       break;
+    }
     default:
       redirect("mail.php?error=1");
   }
@@ -550,7 +547,7 @@ function send_ingame_mail_MT($realm_id, $massmails)
     {
       $receiver_list .= ', '.$receiver;
     }
-    $reveiver_list = substr($receiver_list, 2, strlen($receiver_list)-2);
+    $receiver_list = substr($receiver_list, 2, strlen($receiver_list)-2);
   }
   elseif ( $result == 1 )
     $mess_str = lang("telnet", "unable");
@@ -564,16 +561,16 @@ function send_ingame_mail_MT($realm_id, $massmails)
   if ( !isset($_GET["redirect"]) )
   {
     if ( count($massmails) == 1 )
-      redirect("mail.php?action=result&error=6&mess=".$mess_str."&recipient=".$reveiver_list);
+      redirect("mail.php?action=result&error=6&mess=".$mess_str."&mailresult=".$result."&recipient=".$receiver_list);
     else
-      redirect("mail.php?action=result&error=6&mess=&recipient=".$reveiver_list);
+      redirect("mail.php?action=result&error=6&mess=&mailresult=".$result."&recipient=".$receiver_list);
   }
   else
   {
     $money_result = $sql["char"]->quote_smart($_GET["moneyresult"]);
     $redirect = $sql["char"]->quote_smart($_GET["redirect"]);
 
-    redirect($redirect."?moneyresult=".$money_result."&mailresult=1");
+    redirect($redirect."?moneyresult=".$money_result."&mailresult=".$result);
   }
 
 }
@@ -589,17 +586,20 @@ function send_ingame_mail_MT($realm_id, $massmails)
 function result()
 {
   global $output;
+
   $mess = ( ( isset($_GET["mess"]) ) ? $_GET["mess"] : NULL );
+  $resultcode = ( ( isset($_GET["mailresult"]) ) ? $_GET["mailresult"] : NULL );
   $recipient = $_GET["recipient"];
-  switch ( is_numeric($mess) )
+
+  switch ( $resultcode )
   {
-    case true: // success
+    case 0: // success
     {
       $mess = lang("mail", "result_success");
       $mess = str_replace("%1", $recipient, $mess);
       break;
     }
-    case false: //failure
+    default: //failure
     {
       $mess .= "<br ><br />".lang("mail", "result_failed");
       $mess = str_replace("%1", $recipient, $mess);
