@@ -876,6 +876,7 @@ $GLOBALS['lang_motd'] = array
   'enabled' => 'Enabled',
   'target' => 'Cible',
   'targetname' => 'Utilisateur Cible',
+  'min_sec_level' => 'Minimum Security Level',
   'private' => 'Message Privé',
   'posted_by' => 'Posté par',
   'edited_by' => 'Edité par',  

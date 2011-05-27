@@ -264,84 +264,87 @@ else
 
   while ( $temp = $sql["mgr"]->fetch_assoc($motd_result) )
   {
-    $motd = bb2html($temp["Message"])."<br /><br />";
-    if ( $motd )
+    if ( $user_lvl >= $temp["Min_Sec_Level"] )
     {
-      if ( $temp["Target"] != 0 )
-        $output .= '
-              <tr>
-                <td align="left">'.lang("motd", "private").'</td>
-              </tr>';
-
-      $output .= '
-              <tr>
-                <td align="left">';
-      $output .= $motd;
-      $output .= '
-                  <br />';
-
-      // Get User Name for poster
-      if ( $core == 1 )
-        $posted_name_query = "SELECT login FROM accounts WHERE acct='".$temp["Created_By"]."'";
-      else
-        $posted_name_query = "SELECT username AS login FROM account WHERE id='".$temp["Created_By"]."'";
-
-      $posted_name_result = $sql["logon"]->query($posted_name_query);
-      $posted_name = $sql["logon"]->fetch_assoc($posted_name_result);
-      $posted_name = $posted_name["login"];
-
-      // Get Screen Name for poster, if available
-      $posted_screenname_query = "SELECT ScreenName FROM config_accounts WHERE Login='".$posted_name."'";
-      $posted_screenname_result = $sql["mgr"]->query($posted_screenname_query);
-      $posted_screenname = $sql["mgr"]->fetch_assoc($posted_screenname_result);
-
-      if ( $posted_screenname["ScreenName"] != NULL )
-        $posted_name = htmlspecialchars($posted_screenname["ScreenName"]);
-
-      $output .= lang("motd", "posted_by").': '.( ( $user_lvl > -1 ) ? '<a href="user.php?action=edit_user&error=11&acct='.$temp["Created_By"].'">' : '' ).$posted_name.( ( $user_lvl > -1 ) ? '</a>' : '' ).' ('.date('m/d/Y H:i:s', $temp["Created"]).')';
-      
-      // Get User Name for last editor
-      if ( $core == 1 )
-        $edited_name_query = "SELECT login FROM accounts WHERE acct='".$temp["Last_Edited_By"]."'";
-      else
-        $edited_name_query = "SELECT username AS login FROM account WHERE id='".$temp["Last_Edited_By"]."'";
-
-      $edited_name_result = $sql["logon"]->query($edited_name_query);
-      $edited_name = $sql["logon"]->fetch_assoc($edited_name_result);
-      $edited_name = $edited_name["login"];
-
-      // Get Screen Name for last editor, if available
-      $edited_screenname_query = "SELECT ScreenName FROM config_accounts WHERE Login='".$edited_name."'";
-      $edited_screenname_result = $sql["mgr"]->query($edited_screenname_query);
-      $edited_screenname = $sql["mgr"]->fetch_assoc($edited_screenname_result);
-
-      if ( $edited_screenname["ScreenName"] != NULL )
-        $edited_name = htmlspecialchars($edited_screenname["ScreenName"]);
-
-      if ( $temp["Last_Edited_By"] != 0 )
+      $motd = bb2html($temp["Message"])."<br /><br />";
+      if ( $motd )
       {
-        $output .= '
-                  <br />';
-        $output .= lang("motd", "edited_by").': '.( ( $user_lvl > -1 ) ? '<a href="user.php?action=edit_user&error=11&acct='.$temp["Last_Edited_By"].'">' : '' ).$edited_name.( ( $user_lvl > -1 ) ? '</a>' : '' ).' ('.date('m/d/Y H:i:s', $temp["Last_Edited"]).')';
-      }
-      $output .= '
-                </td>
-              </tr>';
-
-      if ( $user_lvl >= $action_permission["update"] )
-        $output .= '
-              <tr>
-                <td align="right">
-                  <img src="img/cross.png" width="12" height="12" onclick="answerBox(\''.lang("global", "delete").': &lt;font color=white&gt;'.$temp["ID"].'&lt;/font&gt;&lt;br /&gt;'.lang("global", "are_you_sure").'\', del_motd + '.$temp["ID"].');" id="index_delete_cursor" alt="" />';
-      if ( $user_lvl >= $action_permission["update"] )
-        $output .= '
-                  <a href="motd.php?action=edit_motd&amp;error=3&amp;id='.$temp["ID"].'">
-                    <img src="img/edit.png" width="14" height="14" alt="" />
-                  </a>
-                 </td>
+        if ( $temp["Target"] != 0 )
+          $output .= '
+                <tr>
+                  <td align="left">'.lang("motd", "private").'</td>
                 </tr>';
-      $output .= '
-                <th></th>';
+
+        $output .= '
+                <tr>
+                  <td align="left">';
+        $output .= $motd;
+        $output .= '
+                    <br />';
+
+        // Get User Name for poster
+        if ( $core == 1 )
+          $posted_name_query = "SELECT login FROM accounts WHERE acct='".$temp["Created_By"]."'";
+        else
+          $posted_name_query = "SELECT username AS login FROM account WHERE id='".$temp["Created_By"]."'";
+
+        $posted_name_result = $sql["logon"]->query($posted_name_query);
+        $posted_name = $sql["logon"]->fetch_assoc($posted_name_result);
+        $posted_name = $posted_name["login"];
+
+        // Get Screen Name for poster, if available
+        $posted_screenname_query = "SELECT ScreenName FROM config_accounts WHERE Login='".$posted_name."'";
+        $posted_screenname_result = $sql["mgr"]->query($posted_screenname_query);
+        $posted_screenname = $sql["mgr"]->fetch_assoc($posted_screenname_result);
+
+        if ( $posted_screenname["ScreenName"] != NULL )
+          $posted_name = htmlspecialchars($posted_screenname["ScreenName"]);
+
+        $output .= lang("motd", "posted_by").': '.( ( $user_lvl > -1 ) ? '<a href="user.php?action=edit_user&error=11&acct='.$temp["Created_By"].'">' : '' ).$posted_name.( ( $user_lvl > -1 ) ? '</a>' : '' ).' ('.date('m/d/Y H:i:s', $temp["Created"]).')';
+        
+        // Get User Name for last editor
+        if ( $core == 1 )
+          $edited_name_query = "SELECT login FROM accounts WHERE acct='".$temp["Last_Edited_By"]."'";
+        else
+          $edited_name_query = "SELECT username AS login FROM account WHERE id='".$temp["Last_Edited_By"]."'";
+
+        $edited_name_result = $sql["logon"]->query($edited_name_query);
+        $edited_name = $sql["logon"]->fetch_assoc($edited_name_result);
+        $edited_name = $edited_name["login"];
+
+        // Get Screen Name for last editor, if available
+        $edited_screenname_query = "SELECT ScreenName FROM config_accounts WHERE Login='".$edited_name."'";
+        $edited_screenname_result = $sql["mgr"]->query($edited_screenname_query);
+        $edited_screenname = $sql["mgr"]->fetch_assoc($edited_screenname_result);
+
+        if ( $edited_screenname["ScreenName"] != NULL )
+          $edited_name = htmlspecialchars($edited_screenname["ScreenName"]);
+
+        if ( $temp["Last_Edited_By"] != 0 )
+        {
+          $output .= '
+                    <br />';
+          $output .= lang("motd", "edited_by").': '.( ( $user_lvl > -1 ) ? '<a href="user.php?action=edit_user&error=11&acct='.$temp["Last_Edited_By"].'">' : '' ).$edited_name.( ( $user_lvl > -1 ) ? '</a>' : '' ).' ('.date('m/d/Y H:i:s', $temp["Last_Edited"]).')';
+        }
+        $output .= '
+                  </td>
+                </tr>';
+
+        if ( $user_lvl >= $action_permission["update"] )
+          $output .= '
+                <tr>
+                  <td align="right">
+                    <img src="img/cross.png" width="12" height="12" onclick="answerBox(\''.lang("global", "delete").': &lt;font color=white&gt;'.$temp["ID"].'&lt;/font&gt;&lt;br /&gt;'.lang("global", "are_you_sure").'\', del_motd + '.$temp["ID"].');" id="index_delete_cursor" alt="" />';
+        if ( $user_lvl >= $action_permission["update"] )
+          $output .= '
+                    <a href="motd.php?action=edit_motd&amp;error=3&amp;id='.$temp["ID"].'">
+                      <img src="img/edit.png" width="14" height="14" alt="" />
+                    </a>
+                   </td>
+                  </tr>';
+        $output .= '
+                  <th></th>';
+      }
     }
   }
   if ( $sql["mgr"]->num_rows($motd_result) )

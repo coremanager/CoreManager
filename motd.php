@@ -20,6 +20,7 @@
 
 require_once "header.php";
 require_once "libs/bb2html_lib.php";
+require_once "libs/global_lib.php";
 valid_login($action_permission["insert"], "Insert");
 
 //#############################################################################
@@ -42,6 +43,7 @@ function browse_motd()
               <th width="1%">'.lang("motd", "enabled").'</th>
               <th width="20%">'.lang("motd", "message").'</th>
               <th width="1%">'.lang("motd", "target").'</th>
+              <th width="1%">'.lang("motd", "min_sec_level").'</th>
             </tr>';
 
   while ( $motd = $sql["mgr"]->fetch_assoc($motds) )
@@ -76,6 +78,9 @@ function browse_motd()
               </td>
               <td>
                 '.$un.'
+              </td>
+              <td>
+                '.gmlevel_name($motd["Min_Sec_Level"]).'
               </td>
             </tr>';
   }
@@ -123,6 +128,12 @@ function add_motd()
                   </td>
                 </tr>
                 <tr>
+                  <td colspan="3" align="left">
+                    '.lang("motd", "enabled").': 
+                    <input type="checkbox" name="enabled" checked="checked" />
+                  </td>
+                </tr>
+                <tr>
                   <td>'.lang("motd", "priority").': 
                     <select name="priority">
                       <option value="0">'.lang("motd", "veryhigh").'</option>
@@ -133,12 +144,24 @@ function add_motd()
                     </select>
                   </td>
                   <td>
-                    <input type="checkbox" name="enabled" checked="checked" />
-                    '.lang("motd", "enabled").'
-                  </td>
-                  <td>
                     '.lang("motd", "targetname").':
                     <input type="text" name="target" />
+                  </td>
+                  <td>
+                    '.lang("motd", "min_sec_level").':
+                    <select name="min_sec_level">';
+
+  $s_query = "SELECT * FROM config_gm_level_names";
+  $s_result = $sql["mgr"]->query($s_query);
+
+  while ( $level = $sql["mgr"]->fetch_assoc($s_result) )
+  {
+    $output .= '
+                      <option value="'.$level["Security_Level"].'">'.gmlevel_name($level["Security_Level"]).'</option>';
+  }
+
+  $output .= '
+                    </select>
                   </td>
                 </tr>
                 <tr>
@@ -210,6 +233,8 @@ function edit_motd()
   }
   $target = $un;
 
+  $min_sec_level = $sql["mgr"]->result($sql["mgr"]->query("SELECT Min_Sec_Level FROM motd WHERE ID='".$id."'"), 0);
+
   $output .= '
           <script>
             function do_submit_preview()
@@ -232,6 +257,12 @@ function edit_motd()
                   </td>
                 </tr>
                 <tr>
+                  <td colspan="3" align="left">
+                    '.lang("motd", "enabled").': 
+                    <input type="checkbox" name="enabled" '.($enabled ? 'checked="checked"' : '').' />
+                  </td>
+                </tr>
+                <tr>
                   <td>'.lang("motd", "priority").': 
                     <select name="priority">
                       <option value="0" '.( $priority == 0 ? 'selected="selected"' : '' ).'>'.lang("motd", "veryhigh").'</option>
@@ -242,12 +273,24 @@ function edit_motd()
                     </select>
                   </td>
                   <td>
-                    <input type="checkbox" name="enabled" '.($enabled ? 'checked="checked"' : '').' />
-                    '.lang("motd", "enabled").'
-                  </td>
-                  <td>
                     '.lang("motd", "targetname").':
                     <input type="text" name="target" value="'.$target.'" />
+                  </td>
+                  <td>
+                    '.lang("motd", "min_sec_level").':
+                    <select name="min_sec_level">';
+
+  $s_query = "SELECT * FROM config_gm_level_names";
+  $s_result = $sql["mgr"]->query($s_query);
+
+  while ( $level = $sql["mgr"]->fetch_assoc($s_result) )
+  {
+    $output .= '
+                      <option value="'.$level["Security_Level"].'"'.( ( $min_sec_level == $level["Security_Level"] ) ? ' selected="selected"' : '' ).'>'.gmlevel_name($level["Security_Level"]).'</option>';
+  }
+
+  $output .= '
+                    </select>
                   </td>
                 </tr>
                 <tr>
@@ -320,12 +363,17 @@ function do_add_motd()
     $target = $target["acct"];
   }
 
+  if ( !isset($_GET["min_sec_level"]) )
+    $min_sec_level = -1;
+  else
+    $min_sec_level = $sql["mgr"]->quote_smart($_GET["min_sec_level"]);
+
   $msg = $sql["mgr"]->quote_smart($_GET["msg"]);
   $oldmsg = $sql["mgr"]->quote_smart($_GET["oldmsg"]);
   if ( strlen($msg) > 4096 )
     redirect('motd.php?error=2');
 
-  $sql["mgr"]->query("INSERT INTO motd (Message, Priority, Enabled, Created_By, Created, Target) VALUES ('".$msg."', '".$priority."', '".$enabled."', '".$user_id."', NOW(), '".$target."')");
+  $sql["mgr"]->query("INSERT INTO motd (Message, Priority, Enabled, Created_By, Created, Target, Min_Sec_Level) VALUES ('".$msg."', '".$priority."', '".$enabled."', '".$user_id."', NOW(), '".$target."', '".$min_sec_level."')");
 
   unset($by);
   unset($msg);
@@ -373,6 +421,11 @@ function do_edit_motd()
     $target = $target["acct"];
   }
 
+  if ( empty($_GET["min_sec_level"]) )
+    $min_sec_level = -1;
+  else
+    $min_sec_level = $sql["mgr"]->quote_smart($_GET["min_sec_level"]);
+
   $id = $sql["mgr"]->quote_smart($_GET["id"]);
   if( !is_numeric($id) )
     redirect('motd.php?error=1');
@@ -382,8 +435,12 @@ function do_edit_motd()
   if ( strlen($msg) > 4096 )
     redirect('motd.php?error=2');
 
-  if ( $oldmsg <> $msg )
-    $sql["mgr"]->query("UPDATE motd SET Message='".$msg."', Priority='".$priority."', Enabled='".$enabled."', Last_Edited_By='".$user_id."', Target='".$target."' WHERE ID='".$id."'");
+  $old_enabled = $sql["mgr"]->quote_smart($sql["mgr"]->result($sql["mgr"]->query("SELECT Enabled FROM motd WHERE ID='".$id."'"), 0));
+  $old_target = $sql["mgr"]->quote_smart($sql["mgr"]->result($sql["mgr"]->query("SELECT Target FROM motd WHERE ID='".$id."'"), 0));
+  $old_min_sec = $sql["mgr"]->quote_smart($sql["mgr"]->result($sql["mgr"]->query("SELECT Min_Sec_Level FROM motd WHERE ID='".$id."'"), 0));
+
+  if ( ( $oldmsg <> $msg ) || ( $old_enabled <> $enabled ) || ( $old_target <> $target ) || ( $old_min_sec <> $min_sec_level ) )
+    $sql["mgr"]->query("UPDATE motd SET Message='".$msg."', Priority='".$priority."', Enabled='".$enabled."', Last_Edited_By='".$user_id."', Target='".$target."', Min_Sec_Level='".$min_sec_level."' WHERE ID='".$id."'");
   //else
     //$sql["mgr"]->query("UPDATE motd SET Message='".$msg."', Priority='".$priority."', Enabled='".$enabled."', Target='".$target."' WHERE ID='".$id."'");
 
