@@ -2023,6 +2023,7 @@ $GLOBALS['lang_setup'] = array
   'screenname' => 'Account Anzeigename',
   'save' => '&Auml;nderungen speichern',
   'acctinfo' => "The 'Account Logon Name' must match an existing Game Server Account!",
+  'databases' => 'Database General Settings',
 );
 
 // ----- HEARTHSTONE.PHP -----

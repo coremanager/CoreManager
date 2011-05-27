@@ -127,36 +127,47 @@ function show()
     }
   }
 
+  // separate the address and port from $corem_db
+  $host_port = explode(":", $corem_db["addr"]);
+  $host = $host_port[0];
+  $port = $host_port[1];
+
   $output .= '
       <form name="form" action="setup.php" method="GET">
         <input type="hidden" name="action" value="save" />
         <div id="setup_logon_field" class="fieldset_border">
-          <span class="legend">'.lang("setup", "logon_db").'</span>
+          <span class="legend">'.lang("setup", "databases").'</span>
           <table>
             <tr>
               <td>'.lang("setup", "host").': </td>
               <td>
-                <input type="text" name="host" value="" />
+                <input type="text" name="host" value="'.$host.'" />
               </td>
             </tr>
             <tr>
               <td>'.lang("setup", "port").': </td>
               <td>
-                <input type="text" name="port" value="" />
+                <input type="text" name="port" value="'.$port.'" />
               </td>
             </tr>
             <tr>
               <td>'.lang("setup", "user").': </td>
               <td>
-                <input type="text" name="user" value="" />
+                <input type="text" name="user" value="'.$corem_db["user"].'" />
               </td>
             </tr>
             <tr>
               <td>'.lang("setup", "pass").': </td>
               <td>
-                <input type="text" name="pass" value="" />
+                <input type="text" name="pass" value="'.$corem_db["pass"].'" />
               </td>
             </tr>
+          </table>
+        </div>
+        <br />
+        <div id="setup_logon_field" class="fieldset_border">
+          <span class="legend">'.lang("setup", "logon_db").'</span>
+          <table>
             <tr>
               <td>'.lang("setup", "name").': </td>
               <td>
@@ -169,30 +180,6 @@ function show()
         <div id="setup_logon_field" class="fieldset_border">
           <span class="legend">'.lang("setup", "dbc_db").'</span>
           <table>
-            <tr>
-              <td>'.lang("setup", "host").': </td>
-              <td>
-                <input type="text" name="dbchost" value="" />
-              </td>
-            </tr>
-            <tr>
-              <td>'.lang("setup", "port").': </td>
-              <td>
-                <input type="text" name="dbcport" value="" />
-              </td>
-            </tr>
-            <tr>
-              <td>'.lang("setup", "user").': </td>
-              <td>
-                <input type="text" name="dbcuser" value="" />
-              </td>
-            </tr>
-            <tr>
-              <td>'.lang("setup", "pass").': </td>
-              <td>
-                <input type="text" name="dbcpass" value="" />
-              </td>
-            </tr>
             <tr>
               <td>'.lang("setup", "name").': </td>
               <td>
@@ -237,6 +224,7 @@ function save()
 
 
   // then we get the config data
+  // General Database Settings
   if ( $_GET["host"] <> "" )
     $host = $sqlm->quote_smart($_GET["host"]);
   else
@@ -257,32 +245,15 @@ function save()
   else
     redirect("setup.php?error=1");
 
+
+  // Authentication DB Name
   if ( $_GET["name"] <> "" )
     $name = $sqlm->quote_smart($_GET["name"]);
   else
     redirect("setup.php?error=1");
 
 
-  if ( $_GET["dbchost"] <> "" )
-    $dbchost = $sqlm->quote_smart($_GET["dbchost"]);
-  else
-    redirect("setup.php?error=1");
-
-  if ( $_GET["dbcport"] <> "" )
-    $dbcport = $sqlm->quote_smart($_GET["dbcport"]);
-  else
-    redirect("setup.php?error=1");
-
-  if ( $_GET["dbcuser"] <> "" )
-    $dbcuser = $sqlm->quote_smart($_GET["dbcuser"]);
-  else
-    redirect("setup.php?error=1");
-
-  if ( $_GET["dbcpass"] <> "" )
-    $dbcpass = $sqlm->quote_smart($_GET["dbcpass"]);
-  else
-    redirect("setup.php?error=1");
-
+  // DBC DB Name
   if ( $_GET["dbcname"] <> "" )
     $dbcname = $sqlm->quote_smart($_GET["dbcname"]);
   else
@@ -301,7 +272,7 @@ function save()
 
 
   // first, we import databases
-  import_db($dbchost, $dbcport, $dbcuser, $dbcpass, $dbcname);
+  import_db($host, $port, $user, $pass, $dbcname);
 
 
   // save logon database configs
@@ -327,16 +298,16 @@ function save()
   if ( $dbc_count["COUNT(*)"] == 1)
   {
     $dbc_upper = $sqlm->fetch_assoc($sqlm->query("SELECT MAX(`Index`) FROM config_dbc_database"));
-    $result = $sqlm->query("UPDATE config_dbc_database SET Address='".$dbchost."', Port='".$dbcport."', Name='".$dbcname."', User='".$dbcuser."', Password='".$dbcpass."', Encoding='utf8' WHERE `Index`='".$dbc_upper["MAX(`Index`)"]."'");
+    $result = $sqlm->query("UPDATE config_dbc_database SET Address='".$host."', Port='".$port."', Name='".$dbcname."', User='".$user."', Password='".$pass."', Encoding='utf8' WHERE `Index`='".$dbc_upper["MAX(`Index`)"]."'");
   }
   elseif ( $dbc_count["COUNT(*)"] > 1 )
   {
     $result = $sqlm->query("TRUNCATE TABLE config_dbc_database");
-    $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbchost."', '".$dbcport."', '".$dbcuser."', '".$dbcname."', '".$dbcpass."', 'utf8')");
+    $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$host."', '".$port."', '".$user."', '".$dbcname."', '".$pass."', 'utf8')");
   }
   else
   {
-    $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$dbchost."', '".$dbcport."', '".$dbcuser."', '".$dbcname."', '".$dbcpass."', 'utf8')");
+    $result = $sqlm->query("INSERT INTO config_dbc_database (Address, Port, User, Name, Password, Encoding) VALUES ('".$host."', '".$port."', '".$user."', '".$dbcname."', '".$pass."', 'utf8')");
   }
 
 

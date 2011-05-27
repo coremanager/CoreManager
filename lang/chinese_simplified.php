@@ -2024,6 +2024,7 @@ $GLOBALS['lang_setup'] = array
   'screenname' => '帐号显示名称',
   'save' => '保存修改',
   'acctinfo' => "'帐号登陆名称'必须与一个已存在的游戏服务器帐号吻合！",
+  'databases' => 'Database General Settings',
 );
 
 // ----- HEARTHSTONE.PHP -----

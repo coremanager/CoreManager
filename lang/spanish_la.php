@@ -2022,6 +2022,7 @@ $GLOBALS['lang_setup'] = array
   'screenname' => 'Nombre de Pantalla',
   'save' => 'Salvar Cambios',
   'acctinfo' => "El nombre de Login (Cuenta) debe ser igual a uno ya existente en el juego!",
+  'databases' => 'Database General Settings',
 );
 
 // ----- HEARTHSTONE.PHP -----
