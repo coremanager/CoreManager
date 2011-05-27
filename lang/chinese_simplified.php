@@ -237,6 +237,7 @@ $GLOBALS['lang_index'] = array
   'tickets' => 'GM 回报单',
   'motd' => '服务器消息',
   'pendingchanges' => '等待处理的角色变更',
+  'explorer_warn' => 'Notice: This site will NOT function correctly on Microsoft Internet Explorer.',
 );
 
 
@@ -1618,6 +1619,7 @@ $GLOBALS['lang_admin'] = array
 (
   'title' => 'CoreManager 管理员控制面板',
   'newer_revision' => 'A newer revision is available!',
+  'dbc_warn' => 'Notice: One or more of the DBC Database tables are empty!',
   'current_rev' => 'Current',
   'latest_rev' => 'Newer',
   'general' => '主要设置',

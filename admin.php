@@ -32,6 +32,45 @@ valid_login_webadmin(0);
 
 $output = '';
 
+//------------------Detect and Announce Empty DBC Tables-----------------------
+$sql["dbc"] = new SQL;
+$sql["dbc"]->connect($dbc_db["addr"], $dbc_db["user"], $dbc_db["pass"], $dbc_db["name"], $dbc_db["encoding"]);
+
+$achievement = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM achievement"), 0);
+$achievement_category = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM achievement_category"), 0);
+$achievement_criteria = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM achievement_criteria"), 0);
+$areatable = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM areatable"), 0);
+$faction = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM faction"), 0);
+$factiontemplate = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM factiontemplate"), 0);
+$gemproperties = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM gemproperties"), 0);
+$glyphproperties = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM glyphproperties"), 0);
+$item = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM item"), 0);
+$itemdisplayinfo = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM itemdisplayinfo"), 0);
+$itemextendedcost = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM itemextendedcost"), 0);
+$itemrandomproperties = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM itemrandomproperties"), 0);
+$itemrandomsuffix = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM itemrandomsuffix"), 0);
+$itemset = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM itemset"), 0);
+$map = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM map"), 0);
+$skillline = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM skillline"), 0);
+$skilllineability = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM skilllineability"), 0);
+$skillraceclassinfo = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM skillraceclassinfo"), 0);
+$spell = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM spell"), 0);
+$spellicon = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM spellicon"), 0);
+$spellitemenchantment = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM spellitemenchantment"), 0);
+$talent = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM talent"), 0);
+$talenttab = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM talenttab"), 0);
+$worldmaparea = $sql["dbc"]->result($sql["dbc"]->query("SELECT COUNT(*) FROM worldmaparea"), 0);
+unset($sql);
+
+if ( ( $achievement == 0 ) || ( $achievement_category == 0 ) || ( $achievement_criteria == 0 ) || ( $areatable == 0 ) 
+  || ( $faction == 0 ) || ( $factiontemplate == 0 ) || ( $gemproperties == 0 ) || ( $glyphproperties == 0 ) 
+  || ( $item == 0 ) || ( $itemdisplayinfo == 0 ) || ( $itemextendedcost == 0 ) || ( $itemrandomproperties == 0 ) 
+  || ( $itemrandomsuffix == 0 ) || ( $itemset == 0 ) || ( $map == 0 ) || ( $skillline == 0 ) 
+  || ( $skilllineability == 0 ) || ( $skillraceclassinfo == 0 ) || ( $spell == 0 ) || ( $spellicon == 0 ) 
+  || ( $spellitemenchantment == 0 ) || ( $talent == 0 ) || ( $talenttab == 0 ) || ( $worldmaparea == 0 ) )
+  $_GET["error"] = 4; // force an error
+//-----------------------------------------------------------------------------
+
 require_once("admin/header.php");
 
 function database()
@@ -3843,6 +3882,12 @@ switch ( $err )
     $output .= '
             <h1>
               <font class="error">'.lang("admin", "newer_revision").' '.lang("admin", "current_rev").': '.$current.'; '.lang("admin", "latest_rev").': '.$latest.'</font>
+            </h1>';
+    break;
+  case 4:
+    $output .= '
+            <h1>
+              <font class="error">'.lang("admin", "dbc_warn").'</font>
             </h1>';
     break;
   default:

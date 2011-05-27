@@ -237,6 +237,7 @@ $GLOBALS['lang_index'] = array
   'tickets' => 'GM Tickets',
   'motd' => 'Server MOTD',
   'pendingchanges' => 'Ausstehende Charakter &Auml;nderungen',
+  'explorer_warn' => 'Notice: This site will NOT function correctly on Microsoft Internet Explorer.',
 );
 
 
@@ -1618,6 +1619,7 @@ $GLOBALS['lang_admin'] = array
 (
   'title' => 'CoreManager Administration Kontrollzentrum',
   'newer_revision' => 'A newer revision is available!',
+  'dbc_warn' => 'Notice: One or more of the DBC Database tables are empty!',
   'current_rev' => 'Current',
   'latest_rev' => 'Newer',
   'general' => 'General',

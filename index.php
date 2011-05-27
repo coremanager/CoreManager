@@ -40,14 +40,17 @@ function front()
   $output .= '
           <div class="top">';
 
-//---------------------Information for Explorer Users--------------------------
-if ( preg_match("/MSIE/", $_SERVER["HTTP_USER_AGENT"]) )
-  $msie = '<br /><center><span id="index_explorer_warning">
-             Notice: This site will NOT function correctly on Microsoft Internet Explorer.
-           </span></center><br />';
-else
-  $msie = "";
-//-----------------------------------------------------------------------------
+  //---------------------Information for Explorer Users--------------------------
+  if ( preg_match("/MSIE/", $_SERVER["HTTP_USER_AGENT"]) )
+    $msie = '
+            <br />
+            <center>
+              <span id="index_explorer_warning">'.lang("index", "explorer_warn").'</span>
+            </center>
+            <br />';
+  else
+    $msie = '';
+  //-----------------------------------------------------------------------------
 
   if ( test_port($server[$realm_id]["addr"], $server[$realm_id]["game_port"]) )
   {
@@ -214,8 +217,7 @@ else
   }
   else
   {
-    $output .= '
-            <h1><font class="error">'.lang("index", "realm").' <em>'.htmlentities(get_realm_name($realm_id), ENT_COMPAT, $site_encoding).'</em> '.lang("index", "offline_or_let_high").'</font></h1>';
+    $output .= $msie.'<h1><font class="error">'.lang("index", "realm").' <em>'.htmlentities(get_realm_name($realm_id), ENT_COMPAT, $site_encoding).'</em> '.lang("index", "offline_or_let_high").'</font></h1>';
     $online = false;
   }
 
