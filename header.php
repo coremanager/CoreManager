@@ -299,8 +299,16 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
       if ( isset($server[$realm["id"]]) )
       {
         $set = ( ( $realm_id === $realm["id"] ) ? '>' : '' );
+
+        $current_page = $_SERVER["PHP_SELF"];
+
+        // the Character Sheet Pages require a character to be selected
+        // so, rather than have an error, we'll go to the Character List Page instead
+        if ( $current_page == "/char.php" )
+          $current_page = "/char_list.php";
+
         $output .= '
-                  <li><a href="realm.php?action=set_def_realm&amp;id='.$realm["id"].'&amp;url='.$_SERVER["PHP_SELF"].'">'.htmlentities($set.' '.$realm["name"], ENT_COMPAT, $site_encoding).'</a></li>';
+                  <li><a href="realm.php?action=set_def_realm&amp;id='.$realm["id"].'&amp;url='.$current_page.'">'.htmlentities($set.' '.$realm["name"], ENT_COMPAT, $site_encoding).'</a></li>';
       }
     }
     unset($set);
