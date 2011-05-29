@@ -615,8 +615,13 @@ function front()
     $order_side = "";
     if ( !( $user_lvl || $server[$realm_id]["both_factions"] ) )
     {
-      $result = $sql["char"]->query("SELECT race FROM characters WHERE acct=".$user_id."
-        AND SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1) = (SELECT MAX(SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1)) FROM characters WHERE acct=".$user_id.") LIMIT 1");
+      if ( $core == 1 )
+        $result = $sql["char"]->query("SELECT race FROM characters WHERE acct=".$user_id."
+          AND SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1)=(SELECT MAX(SUBSTRING_INDEX(SUBSTRING_INDEX(playedtime, ' ', 2), ' ', -1)) FROM characters WHERE acct=".$user_id.") LIMIT 1");
+      else
+        $result = $sql["char"]->query("SELECT race FROM characters WHERE account=".$user_id."
+          AND totaltime=(SELECT MAX(totaltime) FROM characters WHERE account=".$user_id.") LIMIT 1");
+
       if ( $sql["char"]->num_rows($result) )
         $order_side = ( ( in_array($sql["char"]->result($result, 0), array(2, 5, 6, 8, 10)) ) ? " AND race IN (2, 5, 6, 8, 10) " : " AND race IN (1, 3, 4, 7, 11) " );
     }

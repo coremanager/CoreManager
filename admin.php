@@ -2461,7 +2461,7 @@ function servers()
                   <center>'.lang("realm", $timezone[1]).'</center>
                 </td>
                 <td style="background-color:'.$color.'">
-                  <center>'.$server["Both_Factions"].'</center>
+                  <center>'.( ( $server["Both_Factions"] ) ? lang("global", "yes_low") : lang("global", "no_low") ).'</center>
                 </td>';
       if ( $core == 1 )
         $output .= '
@@ -2599,7 +2599,7 @@ function servers()
                     <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "bothfactions_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "bothfactions").'</a>:
                   </td>
                   <td>
-                    <input type="text" name="server_both" value="'.$server["Both_Factions"].'" />
+                    <input type="checkbox" name="server_both" value="1" '.( ( $server["Both_Factions"] ) ? 'checked="checked"' : '' ).' />
                   </td>
                 </tr>';
         if ( $core == 1 )
@@ -2689,7 +2689,7 @@ function saveserver()
   $server_type = $sqlm->quote_smart($_GET["server_type"]);
   $server_color = $sqlm->quote_smart($_GET["server_color"]);
   $server_timezone = $sqlm->quote_smart($_GET["server_timezone"]);
-  $server_factions = $sqlm->quote_smart($_GET["server_both"]);
+  $server_factions = ( ( isset($_GET["server_both"]) ) ? 1 : 0 );
   $server_stats = ( ( isset($_GET["server_stats"]) ) ? $sqlm->quote_smart($_GET["server_stats"]) : NULL );
 
   $result = $sqlm->query("UPDATE config_servers SET `Index`='".$new_server_id."', Address='".$server_hosti."', Port='".$server_port."', Telnet_Port='".$server_telnet_port."', Telnet_User='".$server_telnet_user."', Telnet_Pass='".$server_telnet_pass."', Both_Factions='".$server_factions."', Stats_XML='".$server_stats."', Name='".$server_name."', External_Address='".$server_hostp."', Port='".$server_port."', Icon='".$server_type."', Color='".$server_color."', Timezone='".$server_timezone."' WHERE `Index`='".$server_id."'");

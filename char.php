@@ -102,7 +102,12 @@ function char_main()
     else
     {
       $side_p = ( ( in_array($sql["char"]->result($result, 0, "race"), array(2, 5, 6, 8, 10)) ) ? 1 : 2 );
-      $result_1 = $sql["char"]->query("SELECT race FROM characters WHERE acct='".$user_id."' LIMIT 1");
+      
+      if ( $core == 1 )
+        $result_1 = $sql["char"]->query("SELECT race FROM characters WHERE acct='".$user_id."' LIMIT 1");
+      else
+        $result_1 = $sql["char"]->query("SELECT race FROM characters WHERE account='".$user_id."' LIMIT 1");
+
       if ( $sql["char"]->num_rows($result) )
         $side_v = ( ( in_array($sql["char"]->result($result_1, 0, "race"), array(2, 5, 6, 8, 10)) ) ? 1 : 2 );
       else

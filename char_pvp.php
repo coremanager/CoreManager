@@ -295,7 +295,7 @@ function char_pvp()
                       <td colspan="4">&nbsp;</td>
                     </tr>
                     </tr>
-                      <td colspan="4"><span id="ch_pvp_dim">('.lang("arenateam", "2T").')</span></td>
+                      <td colspan="4"><span id="ch_pvp_dim">('.lang("arenateam", "2MT").')</span></td>
                     </tr>
                     </tr>
                       <td colspan="4">&nbsp;</td>
@@ -374,7 +374,7 @@ function char_pvp()
                       <td colspan="4">&nbsp;</td>
                     </tr>
                     </tr>
-                      <td colspan="4"><span id="ch_pvp_dim">('.lang("arenateam", "3T").')</span></td>
+                      <td colspan="4"><span id="ch_pvp_dim">('.lang("arenateam", "3MT").')</span></td>
                     </tr>
                     </tr>
                       <td colspan="4">&nbsp;</td>
@@ -453,7 +453,7 @@ function char_pvp()
                       <td colspan="4">&nbsp;</td>
                     </tr>
                     </tr>
-                      <td colspan="4"><span id="ch_pvp_dim">('.lang("arenateam", "5T").')</span></td>
+                      <td colspan="4"><span id="ch_pvp_dim">('.lang("arenateam", "5MT").')</span></td>
                     </tr>
                     </tr>
                       <td colspan="4">&nbsp;</td>
