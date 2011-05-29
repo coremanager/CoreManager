@@ -133,8 +133,11 @@ function select_quest()
 
   if ( $core == 1 )
     $query = "SELECT * FROM questlog WHERE player_guid='".$guid."'";
-  else
+  elseif ( $core == 2 )
     $query = "SELECT *, quest AS quest_id FROM character_queststatus WHERE guid='".$guid."' AND status<>0 AND rewarded=0";
+  else
+    $query = "SELECT *, quest AS quest_id FROM character_queststatus WHERE guid='".$guid."' AND status<>0";
+
   $result = $sql["char"]->query($query);
   $num_rows = $sql["char"]->num_rows($result);
 
