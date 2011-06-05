@@ -767,6 +767,8 @@ $GLOBALS['lang_edit'] = array
   'tbc' => 'TBC',
   'wotlk' => 'WotLK',
   'wotlktbc' => 'WotLK+TBC',
+  'credits' => 'Credits',
+  'unlimited' => 'Unlimited',
   'tot_chars' => 'Personajes Totales',
   'characters' => 'Personajes en el Reino',
   'update' => 'Actualizar Data',
@@ -805,6 +807,7 @@ $GLOBALS['lang_edit'] = array
   'email_changed' => 'Cambio de Correo Solicitado.<br />(Haz Click para <b>cancelar</b> la solicitud)',
   'email_change_failed' => 'No es posible cambiar el Correo!',
   'pass_warning' => 'Podria haber un lapso de espera para el cambio de clave en el juego.',
+  'recruits' => 'Recruits',
   // translation note: do not translate language names
   'english' => 'English',
   'german' => 'German',
@@ -1050,6 +1053,12 @@ $GLOBALS['lang_user'] = array
   'ban_expired' => 'El Baneo ha Expirado',
   'charname' => 'Nombre de Personaje',
   'expansion_short' => 'EXP',
+  'credits' => 'Credits',
+  'unlimited' => 'Unlimited',
+  'recruits' => 'Recruits',
+  'no_reward' => 'Unavailable because the Inviting account has Unlimited Credits.',
+  'reward' => 'Reward',
+  'rewarded' => 'Rewarded',
 );
 
 
@@ -1926,6 +1935,15 @@ $GLOBALS['lang_admin'] = array
   'bottomadcontent' => 'Page Bottom Ad Content',
   'bottomadcontent_tip' => 'Contenido Publicitario (Seccion Inferior).',
 
+  'pointsystem' => 'Point System',
+  'recruitment' => 'Recruitment',
+  'credits_per_recruit' => 'Credits per Recruitment',
+  'credits_per_recruit_tip' => 'Amount to award for successful recruitment.',
+  'recruit_reward_auto' => 'Automatically Reward',
+  'recruit_reward_auto_tip' => 'Automatically reward on successful account creation.<br />Warning: Enabling this can easily lead to abuse!',
+  'initial_credits' => 'New Account Credits',
+  'initial_credits_tip' => 'Amount of credits to automatically assign to new accounts.',
+
   'more' => 'More',
   'sqlsearchlimit' => 'SQL Search Limit',
   'sqlsearchlimit_tip' => 'Maxima Cantidad de Resultados a Buscar (Limite).',
@@ -1979,6 +1997,8 @@ $GLOBALS['lang_admin'] = array
   'shownewuser_tip' => 'Mostrar Usuario Nuevo en la parte inferior de la pantalla.',
   'sendonemail' => 'Send Mail On Email Change',
   'sendonemail_tip' => 'Enviar un Correo de Confirmacion a su viejo EMail cuando el Usuario intente cambiar la Direccion de Correo.',
+  'indexshowrealms' => 'Show Realm List on Main Page',
+  'indexshowrealms_tip' => 'Show a realm status list on the main page.<br />NOTE: Will not show on single realm servers.',
   'customlogos' => 'Custom Logos',
   'usecustomlogo' => 'Use Custom Logo',
   'usecustomlogo_tip' => 'If set, CoreManager will use the Custom Logo you select.',

@@ -479,7 +479,7 @@ function get_page_permission($restrict_lvl, $page)
 // Create Invited By entry in point_system_invites table
 function doupdate_referral($referredby, $our_acct)
 {
-  global $corem_db, $logon_db, $user_id, $sql;
+  global $corem_db, $logon_db, $recruit_reward_auto, $credits_per_recruit, $user_id, $sql;
 
   if ( $referredby != NULL )
   {
@@ -513,11 +513,12 @@ function doupdate_referral($referredby, $our_acct)
 
         // check that the account actually exists (that we don't have an orphan character)
         if ( $core == 1 )
-          $query = "SELECT acct FROM accounts WHERE acct='".$c_acct[0]."'";
+          $query = "SELECT acct, login AS username FROM accounts WHERE acct='".$c_acct[0]."'";
         else
-          $query = "SELECT id AS acct FROM account WHERE id='".$c_acct[0]."'";
+          $query = "SELECT id AS acct, username FROM account WHERE id='".$c_acct[0]."'";
         $result = $sql["logon"]->query($query);
         $result = $sql["logon"]->fetch_assoc($result);
+        $refer = $result["username"];
         $result = $result["acct"];
 
         // save
@@ -525,6 +526,16 @@ function doupdate_referral($referredby, $our_acct)
         {
           $query = "INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES ('".$referred_acct."', '".$referred_by."', '".$result."')";
           $sql["mgr"]->query($query);
+
+          // if we automatically reward for recruitment
+          if ( $recruit_reward_auto )
+          {
+            $query = "UPDATE config_accounts SET Credits=(Credits + '".$credits_per_recruit."') WHERE Login='".$refer."'";
+            $sql["mgr"]->query($query);
+            $query = "UPDATE point_system_invites SET Rewarded='1' WHERE PlayersAccount='".$referred_acct."'";
+            $sql["mgr"]->query($query);
+          }
+
           return true;
         }
         else

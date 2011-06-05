@@ -546,6 +546,11 @@ function general()
             </td>
           </tr>
           <tr>
+            <td '.( ( $subsection == "points" ) ? 'class="current"' : '' ).'>
+              <a href="admin.php?section=general&amp;subsection=points">'.lang("admin", "pointsystem").'</a>
+            </td>
+          </tr>
+          <tr>
             <td '.( ( $subsection == "more" ) ? 'class="current"' : '' ).'>
               <a href="admin.php?section=general&amp;subsection=more">'.lang("admin", "more").'</a>
             </td>
@@ -1691,8 +1696,73 @@ function general()
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$page_bottom_ad."' WHERE `Key`='Enable_Page_Bottom_Ad'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$page_bottom_ad_content."' WHERE `Key`='Page_Bottom_Ad_Content'");
-		
+
         redirect("admin.php?section=general&subsection=ads");
+      }
+      break;
+    }
+    case "points":
+    {
+      if ( !$sub_action )
+      {
+        $credits_per_recruit = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Credits_Per_Recruit'"));
+        $recruit_reward_auto = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Recruit_Reward_Auto'"));
+        $initial_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='New_Account_Credits'"));
+        $output .= '
+        <form name="form" action="admin.php" method="get">
+          <input type="hidden" name="section" value="general" />
+          <input type="hidden" name="subaction" value="savepoints" />
+          <input type="hidden" name="subsection" value="points" />
+          <table class="simple" id="admin_more">
+            <tr>
+              <td colspan="2">
+                <b>'.lang("admin", "recruitment").'</b>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "credits_per_recruit_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "credits_per_recruit").'</a>:
+              </td>
+              <td>
+                <input type="text" name="creditsperrecruit" value="'.$credits_per_recruit["Value"].'"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "recruit_reward_auto_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "recruit_reward_auto").'</a>:
+              </td>
+              <td>
+                <input type="checkbox" name="recruitrewardauto" '.( ( $recruit_reward_auto["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <hr />
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "initial_credits_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "initial_credits").'</a>:
+              </td>
+              <td>
+                <input type="text" name="initialcredits" value="'.$initial_credits["Value"].'"/>
+              </td>
+            </tr>
+          </table>
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
+        </form>';
+      }
+      else
+      {
+        $credits_per_recruit = $sqlm->quote_smart($_GET["creditsperrecruit"]);
+        $recruit_reward_auto = ( ( isset($_GET["recruitrewardauto"]) ) ? 1 : 0 );
+        $initial_credits = $sqlm->quote_smart($_GET["initialcredits"]);
+
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$credits_per_recruit."' WHERE `Key`='Credits_Per_Recruit'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$recruit_reward_auto."' WHERE `Key`='Recruit_Reward_Auto'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$initial_credits."' WHERE `Key`='New_Account_Credits'");
+
+        redirect("admin.php?section=general&subsection=points");
       }
       break;
     }
@@ -1727,6 +1797,7 @@ function general()
         $use_custom_logo = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Use_Custom_Logo'"));
         $custom_logo = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Custom_Logo'"));
         $allow_caching = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Allow_Logo_Caching'"));
+        $index_show_realms = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Index_Show_Realms'"));
 
         $custom_logos_result = $sqlm->query("SELECT * FROM custom_logos");
         $custom_logo_count = $sqlm->num_rows($custom_logos_result);
@@ -1979,6 +2050,14 @@ function general()
               </td>
             </tr>
             <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "indexshowrealms_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "indexshowrealms").'</a>:
+              </td>
+              <td>
+                <input type="checkbox" name="indexshowrealms" '.( ( $index_show_realms["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
+              </td>
+            </tr>
+            <tr>
               <td colspan="2">
                 <b>'.lang("admin", "customlogos").'</b>
               </td>
@@ -2091,6 +2170,7 @@ function general()
         $hide_server_mem = $sqlm->quote_smart($_GET["hideservermem"]);
         $show_newest_user = ( ( isset($_GET["shownewuser"]) ) ? 1 : 0 );
         $send_on_email = ( ( isset($_GET["sendonemail"]) ) ? 1 : 0 );
+        $index_show_realms = ( ( isset($_GET["indexshowrealms"]) ) ? 1 : 0 );
         $use_custom_logo = ( ( isset($_GET["usecustomlogo"]) ) ? 1 : 0 );
         $custom_logo = ( ( isset($_GET["customlogo"]) ) ? $sqlm->quote_smart($_GET["customlogo"]) : NULL );
         $delete_selected = ( ( isset($_GET["deleteselectedlogo"]) ) ? 1 : 0 );
@@ -2120,6 +2200,7 @@ function general()
         $result = $sqlm->query("UPDATE config_misc SET Value='".$language_site_encoding."' WHERE `Key`='Language_Site_Encoding'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$show_newest_user."' WHERE `Key`='Show_Newest_User'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$send_on_email."' WHERE `Key`='Send_Mail_On_Email_Change'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$index_show_realms."' WHERE `Key`='Index_Show_Realms'");
 
         if ( $delete_selected )
         {

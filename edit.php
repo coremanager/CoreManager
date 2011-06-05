@@ -195,6 +195,12 @@ function edit_user()
                     </tr>';
       }
     }
+
+    $output .= '
+                    <tr>
+                      <td>'.lang("edit", "credits").':</td>
+                      <td>'.( ( $screen_name["Credits"] < 0 ) ? lang("edit", "unlimited") : $screen_name["Credits"] ).'</td>
+                    </tr>';
     
     foreach ( $characters_db as $db )
     {

@@ -1291,6 +1291,10 @@ tr td.rep0
 {
   width: 550px;
 }
+#user_recruits
+{
+  width: 550px;
+}
 #user_bubble
 {
   width: 960px;
@@ -1620,6 +1624,12 @@ tr td.rep0
 .footer_register_login
 {
   width: 130px;
+}
+.realm_fieldset
+{
+  width: 97%;
+  margin-top: 0px;
+  margin-bottom: 5px;
 }
 
 /* FORUM.PHP */

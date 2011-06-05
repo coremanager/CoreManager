@@ -164,6 +164,8 @@ function del_acc($acc_id)
       else
         $sql["logon"]->query("DELETE FROM account WHERE id='".$acc_id."'");
 
+      $sql["mgr"]->query("DELETE FROM point_system_invites WHERE PlayersAccount='".$acc_id."'");
+
       $sql["mgr"]->query("DELETE FROM config_accounts WHERE Login='".$acct_name."'");
       if ( $sql["logon"]->affected_rows() )
         return array(true, $del_char);

@@ -623,6 +623,26 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $allow_caching = $misc_row["Value"];
       break;
     }
+    case "Index_Show_Realms":
+    {
+      $index_show_realms = $misc_row["Value"];
+      break;
+    }
+    case "Credits_Per_Recruit":
+    {
+      $credits_per_recruit = $misc_row["Value"];
+      break;
+    }
+    case "Recruit_Reward_Auto":
+    {
+      $recruit_reward_auto = $misc_row["Value"];
+      break;
+    }
+    case "New_Account_Credits":
+    {
+      $initial_credits = $misc_row["Value"];
+      break;
+    }
   }
 }
 

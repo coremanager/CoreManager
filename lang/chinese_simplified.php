@@ -767,6 +767,8 @@ $GLOBALS['lang_edit'] = array
   'tbc' => 'TBC',
   'wotlk' => 'WotLK',
   'wotlktbc' => 'WotLK+TBC',
+  'credits' => 'Credits',
+  'unlimited' => 'Unlimited',
   'tot_chars' => '所有角色',
   'characters' => '本服务器中的角色',
   'update' => '更新数据',
@@ -805,6 +807,7 @@ $GLOBALS['lang_edit'] = array
   'email_changed' => '发出了一个变更 Email 地址的请求。<br />(点击以取消该请求)',
   'email_change_failed' => '无法变更Email地址！',
   'pass_warning' => '新密码起效前可能会有些许延迟。',
+  'recruits' => 'Recruits',
   // translation note: do not translate language names
   'english' => 'English',
   'german' => 'German',
@@ -1050,6 +1053,12 @@ $GLOBALS['lang_user'] = array
   'ban_expired' => 'The Ban has Expired',
   'charname' => '角色名称',
   'expansion_short' => '客户端',
+  'credits' => 'Credits',
+  'unlimited' => 'Unlimited',
+  'recruits' => 'Recruits',
+  'no_reward' => 'Unavailable because the Inviting account has Unlimited Credits.',
+  'reward' => 'Reward',
+  'rewarded' => 'Rewarded',
 );
 
 
@@ -1758,7 +1767,6 @@ $GLOBALS['lang_admin'] = array
   'show' => '显示版本',
   'show_tip' => '在页脚显示修订版本号？',
   'dontshow' => '不显示',
-  'dontshow_tip' => '不显示',
   'verrev' => '显示',
   'verrev_tip' => '版本 & 修订版本',
   'versionlvl' => '版本等级',
@@ -1775,7 +1783,6 @@ $GLOBALS['lang_admin'] = array
   'mailertype' => '邮件服务器类型',
   'mailertype_tip' => '发送 email 的方式。<br />Mail<br />SendMail<br />SMTP',
   'sendmail' => '发送邮件',
-  'sendmail_tip' => '发送Mail',
   'smtp' => 'SMTP',
   'fromemail' => 'From Email',
   'fromemail_tip' => '发送邮件时使用并显示的回复邮件地址。',
@@ -1921,12 +1928,21 @@ $GLOBALS['lang_admin'] = array
   'editipmask' => '编辑 IP Mask',
   'addipmask' => '添加 IP Mask',
   'deleteipmask' => '删除 IP Mask',
-  
+
   'ads' => '广告',
   'enablebottomad' => '开启页面底部广告',
   'enablebottomad_tip' => '启用页面底部广告。',
   'bottomadcontent' => '页面底部广告内容',
   'bottomadcontent_tip' => '页面底部广告内容。',
+
+  'pointsystem' => 'Point System',
+  'recruitment' => 'Recruitment',
+  'credits_per_recruit' => 'Credits per Recruitment',
+  'credits_per_recruit_tip' => 'Amount to award for successful recruitment.',
+  'recruit_reward_auto' => 'Automatically Reward',
+  'recruit_reward_auto_tip' => 'Automatically reward on successful account creation.<br />Warning: Enabling this can easily lead to abuse!',
+  'initial_credits' => 'New Account Credits',
+  'initial_credits_tip' => 'Amount of credits to automatically assign to new accounts.',
 
   'more' => '更多',
   'sqlsearchlimit' => 'SQL查找限制',
@@ -1981,6 +1997,8 @@ $GLOBALS['lang_admin'] = array
   'shownewuser_tip' => '在页面底部显示最新成员消息。',
   'sendonemail' => '电子邮件变更时发送邮件',
   'sendonemail_tip' => '当用户试图变更邮件地址时，发送一封确认邮件至他原先的邮箱地址。',
+  'indexshowrealms' => 'Show Realm List on Main Page',
+  'indexshowrealms_tip' => 'Show a realm status list on the main page.<br />NOTE: Will not show on single realm servers.',
   'customlogos' => 'Custom Logos',
   'usecustomlogo' => 'Use Custom Logo',
   'usecustomlogo_tip' => 'If set, CoreManager will use the Custom Logo you select.',

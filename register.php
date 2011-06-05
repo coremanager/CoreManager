@@ -28,7 +28,8 @@ function doregister()
   global $characters_db, $logon_db, $corem_db, $realm_id, $disable_acc_creation, $invite_only, $lang,
     $limit_acc_per_ip, $valid_ip_mask, $send_mail_on_creation, $create_acc_locked, $from_mail,
     $mailer_type, $smtp_cfg, $title, $expansion_select, $defaultoption, $GMailSender, $format_mail_html,
-    $enable_captcha, $use_recaptcha, $recaptcha_private_key, $send_confirmation_mail_on_creation, $sql, $core;
+    $enable_captcha, $use_recaptcha, $recaptcha_private_key, $send_confirmation_mail_on_creation, $sql,
+    $initial_credits, $core;
 
   // ArcEmu: if one account has an encrypted password all new accounts will as well
   if ( $core == 1 )
@@ -231,9 +232,9 @@ function doregister()
 
     // insert screen name (if we didn't get a screen name, we still need to exit registration correctly.
     if ( $screenname )
-      $query = "INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '".$screenname."')";
+      $query = "INSERT INTO config_accounts (Login, ScreenName, Credits) VALUES ('".$user_name."', '".$screenname."', '".$initial_credits."')";
     else
-      $query = "INSERT INTO config_accounts (Login, ScreenName) VALUES ('".$user_name."', '')";
+      $query = "INSERT INTO config_accounts (Login, ScreenName, Credits) VALUES ('".$user_name."', '', '".$initial_credits."')";
 
     $s_result = $sql["mgr"]->query($query);
 

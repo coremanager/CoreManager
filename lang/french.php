@@ -767,6 +767,8 @@ $GLOBALS['lang_edit'] = array
   'tbc' => 'TBC',
   'wotlk' => 'WotLK',
   'wotlktbc' => 'WotLK+TBC',
+  'credits' => 'Credits',
+  'unlimited' => 'Unlimited',
   'tot_chars' => 'Nombre Total de Personnage(s)',
   'characters' => 'Personnage(s) sur le Royaume',
   'update' => 'Mise à Jour',
@@ -805,6 +807,7 @@ $GLOBALS['lang_edit'] = array
   'email_changed' => 'Requête de changement d\'E-Mail.<br />(Cliquer pour <b>annuler</b> la requête)',
   'email_change_failed' => 'Impossible de changer l\'adresse E-Mail!',
   'pass_warning' => 'Un certain delai peut être necessaire  pour que le nouveau mot de passe soit utilisable pour acceder au jeu.',
+  'recruits' => 'Recruits',
   // translation note: do not translate language names
   'english' => 'English',
   'german' => 'German',
@@ -1050,6 +1053,12 @@ $GLOBALS['lang_user'] = array
   'ban_expired' => 'Le Ban a Expiré',
   'charname' => 'Nom du Personnage',
   'expansion_short' => 'EXT',
+  'credits' => 'Credits',
+  'unlimited' => 'Unlimited',
+  'recruits' => 'Recruits',
+  'no_reward' => 'Unavailable because the Inviting account has Unlimited Credits.',
+  'reward' => 'Reward',
+  'rewarded' => 'Rewarded',
 );
 
 
@@ -1718,7 +1727,6 @@ $GLOBALS['lang_admin'] = array
   // do not translate the \'lang_header\' portion in this one...
   'menuname_tip' => "Name to display for menu item.<br />If the Language Pack (in \'lang_header\') doesn\'t have the entry we will use the value entered.",
   'key' => 'Key',
-  'key_tip' => 'Internal name',
   'lang' => 'Language',
   'value' => 'Value',
   'internalname' => 'Internal Name',
@@ -1797,7 +1805,6 @@ $GLOBALS['lang_admin'] = array
   'pmstation_tip' => 'Stationary to use for In-Game mail.',
 
   'irc' => 'IRC',
-  'irc_tip' => 'IRC',
   'irchost' => 'IRC Host',
   'irchost_tip' => 'IRC Host.',
   'ircport' => 'IRC Port',
@@ -1921,12 +1928,21 @@ $GLOBALS['lang_admin'] = array
   'editipmask' => 'Edit IP Mask',
   'addipmask' => 'Add IP Mask',
   'deleteipmask' => 'Delete IP Mask',
-  
+
   'ads' => 'Advertisements',
   'enablebottomad' => 'Enable Page Bottom Ad',
   'enablebottomad_tip' => 'Enable Page Bottom Advertising.',
   'bottomadcontent' => 'Page Bottom Ad Content',
   'bottomadcontent_tip' => 'Page Bottom Ad Content.',
+
+  'pointsystem' => 'Point System',
+  'recruitment' => 'Recruitment',
+  'credits_per_recruit' => 'Credits per Recruitment',
+  'credits_per_recruit_tip' => 'Amount to award for successful recruitment.',
+  'recruit_reward_auto' => 'Automatically Reward',
+  'recruit_reward_auto_tip' => 'Automatically reward on successful account creation.<br />Warning: Enabling this can easily lead to abuse!',
+  'initial_credits' => 'New Account Credits',
+  'initial_credits_tip' => 'Amount of credits to automatically assign to new accounts.',
 
   'more' => 'More',
   'sqlsearchlimit' => 'SQL Search Limit',
@@ -1981,6 +1997,8 @@ $GLOBALS['lang_admin'] = array
   'shownewuser_tip' => 'Show Newest Member message at bottom of page.',
   'sendonemail' => 'Send Mail On Email Change',
   'sendonemail_tip' => 'Send a confirmation email to their old address when a user attempts to change their email address.',
+  'indexshowrealms' => 'Show Realm List on Main Page',
+  'indexshowrealms_tip' => 'Show a realm status list on the main page.<br />NOTE: Will not show on single realm servers.',
   'customlogos' => 'Custom Logos',
   'usecustomlogo' => 'Use Custom Logo',
   'usecustomlogo_tip' => 'If set, CoreManager will use the Custom Logo you select.',

@@ -1238,7 +1238,7 @@ function edit_user()
 {
   global $output, $logon_db, $characters_db, $realm_id, $corem_db, $corem_db, $realm_id,
     $user_lvl, $user_name, $gm_level_arr, $action_permission, $expansion_select, $developer_test_mode,
-    $multi_realm_mode, $server, $timezone, $sql, $core;
+    $multi_realm_mode, $server, $timezone, $recruit_reward_auto, $sql, $core;
 
   if ( empty($_GET["acct"]) )
     redirect("user.php?error=10");
@@ -1693,7 +1693,38 @@ function edit_user()
                 <td>'.lang("user", "online").':</td>
                 <td><img src="img/'.( ( $acct_online ) ? 'up' : 'down' ).'.gif" alt="" /></td>
               </tr>';
-              
+
+    if ( $user_lvl >= $action_permission["update"] )
+    {
+      if ( $screenname["Credits"] != -1 )
+        $output.= '
+              <tr>
+                <td>'.lang("user", "credits").':</td>
+                <td><input type="text" name="credits" value="'.$screenname["Credits"].'" /></td>
+              </tr>';
+      else
+        $output.= '
+              <tr>
+                <td>'.lang("user", "credits").':</td>
+                <td>'.lang("user", "unlimited").'</td>
+              </tr>';
+    }
+    else
+    {
+      if ( $screenname["Credits"] >= 0 )
+        $output.= '
+              <tr>
+                <td>'.lang("user", "credits").':</td>
+                <td>'.$screenname["Credits"].'</td>
+              </tr>';
+      else
+        $output.= '
+              <tr>
+                <td>'.lang("user", "credits").':</td>
+                <td>'.lang("user", "unlimited").'</td>
+              </tr>';
+    }
+
     //$realms = $sql["mgr"]->query('SELECT id, name FROM realmlist');
     //while ( $realm = $sql["mgr"]->fetch_assoc($realms) )
     foreach ( $characters_db as $db )
@@ -1811,6 +1842,84 @@ function edit_user()
               </table>
             </form>
           </div>
+          <br />';
+
+    $query = "SELECT * FROM point_system_invites WHERE InviterAccount='".$acct."'";
+    $result = $sql["mgr"]->query($query);
+
+    if ( $sql["mgr"]->num_rows($result) > 0 )
+    {
+      $output .= '
+          <div id="user_recruits" class="fieldset_border">
+            <span class="legend">'.lang("user", "recruits").'</span>
+            <table class="lined" style="width: 95%">
+              <tr>
+                <th>'.lang("user", "login").'</th>
+                <th>'.lang("user", "last_ip").'</th>
+                <th>'.lang("user", "reward").'</th>
+              </tr>';
+
+      while ( $row = $sql["mgr"]->fetch_assoc($result) )
+      {
+        if ( $core == 1 )
+          $recruit_query = "SELECT *, acct AS id, login AS username, lastip AS last_ip FROM accounts WHERE acct='".$row["PlayersAccount"]."'";
+        else
+          $recruit_query = "SELECT * FROM account WHERE id='".$row["PlayersAccount"]."'";
+
+        $recruit_result = $sql["logon"]->query($recruit_query);
+        $recruit = $sql["logon"]->fetch_assoc($recruit_result);
+
+        if ( $recruit != NULL )
+        {
+          $output .= '
+                <tr>
+                  <td><a href="user.php?action=edit_user&amp;acct='.$recruit["id"].'">'.$recruit["username"].'</a></td>
+                  <td>'.$recruit["last_ip"].'</td>
+                  <td>';
+
+          if ( $row["Rewarded"] == 0 )
+          {
+            // if the recruitment hasn't been rewarded
+            if ( $user_lvl >= $action_permission["update"] )
+            {
+              if ( $screenname["Credits"] >= 0 )
+                // if the recruiter can gain Credits
+                $output .= '
+                        <a href="user.php?action=reward&amp;acct='.$recruit["id"].'&amp;recruiter='.$acct.'">
+                          <img src="img/aff_tick.png" alt="" />
+                        </a>';
+              else
+                // if the recruiter cannot gain Credits (Unlimited)
+                $output .= '
+                        <a href="" onmouseover="oldtoolTip(\''.lang("user", "no_reward").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">
+                          <img src="img/lock.png" alt="" />
+                        </a>';
+            }
+            else
+            {
+              // if the user viewing the recruiter does not have permissions
+              $output .= '
+                      <a href="" onmouseover="oldtoolTip(\''.lang("user", "you_have_no_permission").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">
+                        <img src="img/lock.png" alt="" />
+                      </a>';
+            }
+          }
+          else
+            $output .= '
+                  <span>'.lang("user", "rewarded").'</span>';
+
+          $output .= '
+                  </td>
+                </tr>';
+        }
+      }
+
+      $output .= '
+            </table>
+          </div>';
+    }
+
+    $output .= '
           <br />
         </center>';
   }
@@ -2040,6 +2149,45 @@ function cancel_email_change()
 }
 
 
+//###############################################################################################################
+// MANUALLY REWARD RECRUITMENT
+//###############################################################################################################
+function reward_recruitment()
+{
+  global $action_permission, $credits_per_recruit, $sql, $core;
+
+  valid_login($action_permission["update"]);
+
+  // SQL injection prevention
+  $recruiter = $sql["mgr"]->quote_smart($_GET["recruiter"]);
+  $recruit = $sql["mgr"]->quote_smart($_GET["acct"]);
+
+  if ( !is_numeric($recruiter) )
+    redirect("user.php?action=edit_user&error=12&acct=".$recruiter);
+
+  if ( !is_numeric($recruit) )
+    redirect("user.php?action=edit_user&error=12&acct=".$recruiter);
+
+  // Get recruiter's user name
+  if ( $core == 1 )
+    $query = "SELECT login AS username FROM accounts WHERE acct='".$recruiter."'";
+  else
+    $query = "SELECT username FROM account WHERE id='".$recruiter."'";
+
+  $result = $sql["logon"]->query($query);
+  $result = $sql["logon"]->fetch_assoc($result);
+  $recruiter_name = $result["username"];
+
+  // Reward
+  $query = "UPDATE config_accounts SET Credits=(Credits + '".$credits_per_recruit."') WHERE Login='".$recruiter_name."'";
+  $sql["mgr"]->query($query);
+  $query = "UPDATE point_system_invites SET Rewarded='1' WHERE PlayersAccount='".$recruit."'";
+  $sql["mgr"]->query($query);
+
+  redirect("user.php?action=edit_user&error=13&acct=".$recruiter);
+}
+
+
 //########################################################################################################################
 // MAIN
 //########################################################################################################################
@@ -2152,6 +2300,9 @@ switch ( $action )
     break;
   case "cancel_email_change":
     cancel_email_change();
+    break;
+  case "reward":
+    reward_recruitment();
     break;
   default:
     browse_users();

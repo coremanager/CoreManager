@@ -1,0 +1,1 @@
+ALTER TABLE `config_accounts` ADD COLUMN `Credits` INT(11) DEFAULT '0' AFTER `Signature`;
