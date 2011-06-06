@@ -20,7 +20,7 @@
 
   // level 1 debug prints total queries,
   //  so we would have to close these, or we can't have debug output
-  if( $debug )
+  if ( $debug )
   {
     if ( isset($sql["logon"]) )
       $sql["logon"]->close();
@@ -34,13 +34,13 @@
     // level 3 debug lists all global vars, but can't read classes
     // level 4 debug prints all global arrays, but can't print content of classes
     //  so we would have to close these, or we can't have debug output
-    if( $debug > 2)
+    if ( $debug > 2)
     {
       unset($sql);
-      unset($sql["logon"]);
+      /*unset($sql["logon"]);
       unset($sql["char"]);
       unset($sql["mgr"]);
-      unset($sql["world"]);
+      unset($sql["world"]);*/
     }
   }
 
@@ -159,7 +159,7 @@
   unset($time_start);
 
   // if any debug mode is activated, show memory usage
-  if( $debug )
+  if ( $debug )
   {
     $output .= '
                 Queries: '.$tot_queries.' on '.$_SERVER["SERVER_SOFTWARE"];
@@ -174,7 +174,7 @@
                 <div id="version">'.lang("footer", "powered").': ';
   if ( $show_version["show"] && $user_lvl >= $show_version["version_lvl"] )
   {
-    if ( ( 1 < $show_version["show"]) && $user_lvl >= $show_version["svnrev_lvl"] )
+    if ( ( 1 < $show_version["show"] ) && ( $user_lvl >= $show_version["svnrev_lvl"] ) )
     {
       $show_version["svnrev"] = '';
       // if file exists and readable
@@ -186,7 +186,8 @@
         $show_version["svnrev"] = rtrim($file_obj->current());
         unset($file_obj);
       }
-	  $output .= 
+
+      $output .= 
         $show_version["version"].lang("footer", "revision").': <a href="http://trac6.assembla.com/coremanager/changeset/'.$show_version["svnrev"].'">'.$show_version["svnrev"].'</a>';
     }
     else
@@ -256,7 +257,7 @@
   unset($output);
   // we need to close $output before we start debug mode 3 or higher
   //  we will get double output if we don't
-  if( $debug > 2 )
+  if ( $debug > 2 )
   {
     echo '
           <table>
@@ -265,14 +266,18 @@
     $arrayObj = new ArrayObject(get_defined_vars());
     for ( $iterator = $arrayObj->getIterator(); $iterator->valid(); $iterator->next() )
     {
-      echo '
-                <br />'.$iterator->key() . ' => ' . $iterator->current();
+      if ( is_array($iterator->current()) )
+        echo '
+                <br />'.$iterator->key().' => '.print_r($iterator->current());
+      elseif ( !is_a($iterator->current(), "SQL") )
+        echo '
+                <br />'.$iterator->key().' => '.$iterator->current();
     }
     unset($iterator);
     unset($arrayObj);
     // debug mode 3 lists all global vars and their values, but not for arrays
     // debug mode 4 branches all arrays and their content,
-    if( $debug > 3 )
+    if ( $debug > 3 )
     {
       echo '
                 <pre>';

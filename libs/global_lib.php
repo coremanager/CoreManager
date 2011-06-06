@@ -158,15 +158,13 @@ function wowhead_tt()
 
 //#############################################################################
 //validates sessions' vars and restricting access to given level
-function valid_login($restrict_lvl, $info)
+function valid_login($restrict_lvl, $info = '')
 {
   if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["user_id"]) && isset($_SESSION["realm_id"]) && isset($_SESSION["login"]) )
   {
     $user_lvl = $_SESSION["user_lvl"];
     $ip = ( ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv("REMOTE_ADDR") );
-    if ( $ip === $_SESSION["client_ip"] )
-      ;
-    else
+    if ( !($ip === $_SESSION["client_ip"]) )
       redirect("login.php?error=5".( ( isset($info) ) ? "&info=".$info : "" ) );
   }
   else
@@ -204,7 +202,7 @@ function error($err)
 
 //#############################################################################
 //testing for open port
-function test_port($server,$port)
+function test_port($server, $port)
 {
   $sock = @fsockopen($server, $port, $ERROR_NO, $ERROR_STR, (float)0.5);
   if ( $sock )
