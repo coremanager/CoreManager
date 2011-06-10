@@ -544,9 +544,16 @@ function select_quantity()
   $char = $sql["char"]->fetch_assoc($cresult);
 
   if ( $core == 1 )
-    $ciquery = "SELECT * FROM playeritems WHERE ownerguid='".$char["guid"]."' AND entry='".$questitem."'";
+    $ciquery = "SELECT * FROM playeritems
+                WHERE ownerguid='".$char["guid"]."' AND entry='".$questitem."'";
+  elseif ( $core == 2 )
+    $ciquery = "SELECT * FROM character_inventory
+                  LEFT JOIN item_instance ON character_inventory.item=item_instance.guid
+                WHERE character_inventory.guid='".$char["guid"]."' AND item_template='".$questitem."'";
   else
-    $ciquery = "SELECT * FROM character_inventory LEFT JOIN item_instance ON character_inventory.item = item_instance.guid WHERE character_inventory.guid='".$char["guid"]."' AND item_template='".$questitem."'";
+    $ciquery = "SELECT * FROM character_inventory
+                  LEFT JOIN item_instance ON character_inventory.item=item_instance.guid
+                WHERE character_inventory.guid='".$char["guid"]."' AND itemEntry='".$questitem."'";
   $ciresult = $sql["char"]->query($ciquery);
   $cifield = $sql["char"]->fetch_assoc($ciresult);
   $cinumrows = $sql["char"]->num_rows($ciresult);
