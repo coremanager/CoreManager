@@ -67,7 +67,8 @@ $GLOBALS['lang_global'] = array
   'language_6' => 'Spanish (Spain)',
   'language_7' => 'Spanish (Mexico)',
   'language_8' => 'Russian',
-  'language_9' => 'Persian'
+  'language_9' => 'Persian',
+  'credits_unlimited' => 'You have <b>Unlimited Credits</b> and may do this for <b>free</b>.',
   );
 
 
@@ -782,6 +783,10 @@ $GLOBALS['lang_edit'] = array
   'profile_info' => '玩家信息',
   'signature' => '论坛签名',
   'prefavatar' => '偏爱的头像',
+  'viewmods' => "Visibility of my Characters' Pages (GM's can always see these)",
+  'onlyme' => 'Only Me',
+  'friends' => 'Friends',
+  'reg_users' => 'Registered Users',
   'select_theme' => '选择模版',
   'language' => '语言',
   'select_layout_lang' => '选择界面语言',
@@ -1054,7 +1059,7 @@ $GLOBALS['lang_user'] = array
   'charname' => '角色名称',
   'expansion_short' => '客户端',
   'credits' => 'Credits',
-  'unlimited' => 'Unlimited',
+  'credits_info' => 'Use -1 to grant an account Unlimited Credits.',
   'recruits' => 'Recruits',
   'no_reward' => 'Unavailable because the Inviting account has Unlimited Credits.',
   'reward' => 'Reward',
@@ -1286,6 +1291,18 @@ $GLOBALS['lang_questitem'] = array
   // translation note: %1 = [quest name], %2 = [required quantity], %3 = [item name]
   //                   %4 = optional line break, %5 = [char], %6 = [char's quantity]
   'requires' => '%1 需要 %2x %3%4，而 %5 已拥有 %6',
+  // translation note: %1 = [credits], %2 = [item name]
+  'credits_peritem' => 'Or, you may spend %1 Credits for each %2.',
+  // translation note: %1 = [credits]
+  'credits_avail' => 'You have %1 Credits.',
+  // translation note: %1 = [quantity], %2 = [item name]
+  'insufficient_credits' => "You don't have enough Credits for %1x %2.",
+  // translation note: %1 = [quantity], %2 = [item name], %3 = [credits]
+  'credits_purchase' => 'Purchase %1x %2 for %3 Credits?',
+  'or' => 'or',
+  'and' => 'and',
+  'submit_money' => 'Use Money',
+  'submit_credits' => 'Use Credits',
 );
   
 // ----- ULTRA_VENDOR.PHP -----
@@ -1314,12 +1331,26 @@ $GLOBALS['lang_ultra'] = array
   'or' => '或者 %1 每件（份）。',
   // translation note: %1 = [account name]
   'nochars' => "%1, 您没有任何角色！",
+  // translation note: %1 = [credits], %2 = [item name]
+  'credits_peritem' => 'Or, you may spend %1 Credits for each %2.',
+  // translation note: %1 = [credits]
+  'credits_avail' => 'You have %1 Credits.',
   // translation note: %1 = [char], %2 = [quantity], %3 = [item name]
   'insufficientfunds' => "%1 没有足够的金钱购买 %2x %3",
   // translation note: %1 = [char], $2 = [money]
   'has' => '%1 有 %2',
   // translation note: %1 = [quantity], %2 = [item name], %3 = [money]
   'purchase' => '花费 %3 用以订购 %1x %2 ？',
+  // translation note: %1 = [credits], %2 = [item name]
+  'credits_peritem' => 'Or, you may spend %1 Credits for each %2.',
+  // translation note: %1 = [quantity], %2 = [item name]
+  'insufficient_credits' => "You don't have enough Credits for %1x %2.",
+  // translation note: %1 = [quantity], %2 = [item name], %3 = [credits]
+  'credits_purchase' => 'Purchase %1x %2 for %3 Credits?',
+  'or_credits' => 'or',
+  'and_credits' => 'and',
+  'submit_money' => 'Use Money',
+  'submit_credits' => 'Use Credits',
 );
   
 // ----- ULTRA_VENDOR.PHP -----
@@ -1554,6 +1585,12 @@ $GLOBALS['lang_xname'] = array
   'subject' => '角色更名被拒绝',
   'body' => '对不起，+%1，您的角色更名请求被否决。',
   // end message
+  'insufficient_credits' => "You don't have enough Credits for a Name Change.",
+  'delay_warning' => 'You Credit balance will not be altered until the Name Change is approved. If your balance is not sufficient at that time, your request will be removed without notice.',
+  // translation note: %1 = [credits]
+  'credit_cost' => 'Each Name Change costs %1 Credits.',
+  // translation note: %1 = [credits]
+  'credit_balance' => 'And you have %1 Credits.',
 );
 
 // ----- CHANGE_CHAR_RACE.PHP -----
@@ -1588,6 +1625,12 @@ $GLOBALS['lang_xrace'] = array
   'subject' => '角色转生被拒绝',
   'body' => '对不起，+%1，您的角色转生请求被否决。',
   // end message
+  'insufficient_credits' => "You don't have enough Credits for a Race Change.",
+  'delay_warning' => 'You Credit balance will not be altered until the Race Change is approved. If your balance is not sufficient at that time, your request will be removed without notice.',
+  // translation note: %1 = [credits]
+  'credit_cost' => 'Each Race Change costs %1 Credits.',
+  // translation note: %1 = [credits]
+  'credit_balance' => 'And you have %1 Credits.',
 );
 
 // ----- CHANGE_CHAR_ACCOUNT.PHP -----
@@ -1621,6 +1664,12 @@ $GLOBALS['lang_xacct'] = array
   'subject' => '角色迁移被拒绝',
   'body' => '对不起，+%1，您的角色迁移请求被否决。',
   // end message
+  'insufficient_credits' => "You don't have enough Credits for an Account Transfer.",
+  'delay_warning' => 'You Credit balance will not be altered until the Account Transfer is approved. If your balance is not sufficient at that time, your request will be removed without notice.',
+  // translation note: %1 = [credits]
+  'credit_cost' => 'Each Account Transfer costs %1 Credits.',
+  // translation note: %1 = [credits]
+  'credit_balance' => 'And you have %1 Credits.',
 );
 
 // ----- ADMIN.PHP -----
@@ -1936,13 +1985,35 @@ $GLOBALS['lang_admin'] = array
   'bottomadcontent_tip' => '页面底部广告内容。',
 
   'pointsystem' => 'Point System',
+  'fractional' => 'Allow Fractional Credits',
+  'fractional_tip' => 'Allow spending of Credits in non-whole amounts.<br />EXAMPLE: 5.3 Credits.<br />NOTE: If disabled: all, non-whole, required Credit amounts will be rounded up to nearest whole value.',
   'recruitment' => 'Recruitment',
   'credits_per_recruit' => 'Credits per Recruitment',
   'credits_per_recruit_tip' => 'Amount to award for successful recruitment.',
   'recruit_reward_auto' => 'Automatically Reward',
   'recruit_reward_auto_tip' => 'Automatically reward on successful account creation.<br />Warning: Enabling this can easily lead to abuse!',
+  'newaccounts' => 'New Accounts',
   'initial_credits' => 'New Account Credits',
   'initial_credits_tip' => 'Amount of credits to automatically assign to new accounts.',
+  'credits' => 'Credits',
+  'tool_qiv' => 'Tool: Quest Item Vendor',
+  'qiv_credits_per_gold' => 'Credits per Gold',
+  'qiv_credits_per_gold_tip' => 'Credits to spend in place of the specified amount of Money for Quest Item Vendor.<br />NOTE: To disable: put zeros in all three money fields.',
+  'tool_uv' => 'Tool: Ultra Vendor',
+  'uv_credits_per_gold' => 'Credits per Gold',
+  'uv_credits_per_gold_tip' => 'Credits to spend in place of the specified amount of Money for Ultra Vendor.<br />NOTE: To disable: put zeros in all three money fields.',
+  'tool_name' => 'Tool: Character Name Changer',
+  'name_credits' => 'Credits Per Use',
+  'name_credits_tip' => 'Cost to use the Character Name Changer Tool.',
+  'tool_race' => 'Tool: Character Race Changer',
+  'race_credits' => 'Credits Per Use',
+  'race_credits_tip' => 'Cost to use the Character Race Changer Tool.',
+  'tool_trans' => 'Tool: Character Transfer',
+  'trans_credits' => 'Credits Per Use',
+  'trans_credits_tip' => 'Cost to use the Character Transfer Tool.',
+  'tool_hearth' => 'Tool: Hearthstone',
+  'hearth_credits' => 'Credits Per Use',
+  'hearth_credits_tip' => 'Cost to use the Hearthstone Tool.',
 
   'more' => '更多',
   'sqlsearchlimit' => 'SQL查找限制',
@@ -2064,6 +2135,11 @@ $GLOBALS['lang_unstuck'] = array
   'newloc' => '新的地点',
   'save' => '保存修改',
   'done' => '角色被成功传送。',
+  'insufficient_credits' => "You don't have enough Credits to use the Hearthstone.",
+  // translation note: %1 = [credits]
+  'credit_cost' => 'Each Hearthstone use costs %1 Credits.',
+  // translation note: %1 = [credits]
+  'credit_balance' => 'And you have %1 Credits.',
 );
 
 // ----- MAP.PHP -----

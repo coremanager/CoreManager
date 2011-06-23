@@ -24,9 +24,9 @@ require_once("libs/forum_lib.php");
 require_once("libs/bb2html_lib.php");
 valid_login($action_permission["view"]);
 
-if ( isset($_COOKIE["lang"]) )
+if ( isset($_COOKIE["corem_lang"]) )
 {
-  $forumlang = $_COOKIE["lang"];
+  $forumlang = $_COOKIE["corem_lang"];
 
   if ( !file_exists("lang/".$forumlang.".php") )
     $forumlang = $language;

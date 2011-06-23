@@ -96,7 +96,8 @@ function sel_char()
 
 function choosename()
 {
-  global $output, $action_permission, $characters_db, $realm_id, $user_id, $sql, $core;
+  global $output, $action_permission, $characters_db, $realm_id, $user_id, $user_name, $name_credits,
+    $sql, $core;
 
   valid_login($action_permission["view"]);
 
@@ -110,6 +111,17 @@ function choosename()
 
   $query = "SELECT * FROM characters WHERE guid='".$guid."'";
   $char = $sql["char"]->fetch_assoc($sql["char"]->query($query));
+
+  // credits
+  if ( $name_credits >= 0 )
+  {
+    // get our credit balance
+    $cr_query = "SELECT Credits FROM config_accounts WHERE Login='".$user_name."'";
+    $cr_result = $sql["mgr"]->query($cr_query);
+    $cr_result = $sql["mgr"]->fetch_assoc($cr_result);
+    $credits = $cr_result["Credits"];
+  }
+
   $output .= '
           <center>
             <div id="xname_choose" class="fieldset_border">
@@ -133,7 +145,55 @@ function choosename()
                   </tr>
                   <tr>
                     <td>&nbsp;</td>
+                  </tr>';
+
+  if ( $name_credits > 0 )
+  {
+    $cost_line = lang("xname", "credit_cost");
+    $cost_line = str_replace("%1", '<b>'.$name_credits.'</b>', $cost_line);
+
+    $output .= '
+                  <tr>
+                    <td colspan="2">'.$cost_line.'</td>
+                  </tr>';
+
+    if ( $credits >= 0 )
+    {
+      $credit_balance = lang("xname", "credit_balance");
+      $credit_balance = str_replace("%1", '<b>'.(float)$credits.'</b>', $credit_balance);
+
+      $output .= '
+                  <tr>
+                    <td colspan="2">'.$credit_balance.'</td>
+                  </tr>';
+
+      if ( $credits < $name_credits )
+        $output .= '
+                  <tr>
+                    <td colspan="2">'.lang("xname", "insufficient_credits").'</td>
+                  </tr>';
+      else
+        $output .= '
+                  <tr>
+                    <td colspan="2">&nbsp;</td>
                   </tr>
+                  <tr>
+                    <td colspan="2">'.lang("xname", "delay_warning").'</td>
+                  </tr>';
+    }
+    else
+      $output .= '
+                  <tr>
+                    <td colspan="2">'.lang("global", "credits_unlimited").'</td>
+                  </tr>';
+
+    $output .= '
+                  <tr>
+                    <td colspan="2">&nbsp;</td>
+                  </tr>';
+  }
+
+  $output .= '
                   <tr>
                     <td colspan="2"><b>'.lang("xname", "entername").':</b></td>
                   </tr>
@@ -144,16 +204,27 @@ function choosename()
                   <tr>
                     <td>'.lang("xname", "confirmname").':</td>
                     <td><input type="text" name="new2" value="'.$new1.'" maxlength="12" /></td>
-                  </tr>
+                  </tr>';
+
+    // if we have unlimited credits, then we fake our credit balance here
+    $credits = ( ( $credits < 0 ) ? $name_credits : $credits );
+
+    if ( ( $name_credits <= 0 ) || ( $credits >= $name_credits ) )
+    {
+      $output .= '
                   <tr>
-                    <td>&nbsp;</td>
+                    <td colspan="2">&nbsp;</td>
                   </tr>
                   <tr>
                     <td>';
-  makebutton(lang("xname", "save"), "javascript:do_submit()",180);
-  $output .= '
+      makebutton(lang("xname", "save"), "javascript:do_submit()", 180);
+      $output .= '
                     </td>
-                  </tr>
+                    <td>&nbsp;</td>
+                  </tr>';
+    }
+
+    $output .= '
                 </table>
               </form>
             </div>
@@ -168,7 +239,8 @@ function choosename()
 
 function getapproval()
 {
-  global $output, $action_permission, $corem_db, $characters_db, $realm_id, $user_id, $sql;
+  global $output, $action_permission, $corem_db, $characters_db, $realm_id, $user_id,
+    $name_credits, $sql;
 
   valid_login($action_permission["view"]);
 
@@ -186,6 +258,33 @@ function getapproval()
   $count = $sql["char"]->num_rows($sql["char"]->query("SELECT * FROM characters WHERE name='".$new1."'"));
   if ( $count )
     redirect("change_char_name.php?error=4");
+
+  // credits
+  // we do a credit balance check here in case of URL insertion
+  if ( $name_credits > 0 )
+  {
+    // we need the player's account
+    if ( $core == 1 )
+      $acct_query = "SELECT login AS username FROM accounts WHERE acct=(SELECT acct FROM ".$characters_db[$realm_id]["name"].".characters WHERE guid='".$guid."')";
+    else
+      $acct_query = "SELECT username FROM account WHERE id=(SELECT account FROM ".$characters_db[$realm_id]["name"].".characters WHERE guid='".$guid."')";
+
+    $acct_result = $sql["logon"]->query($acct_query);
+    $acct_result = $sql["logon"]->fetch_assoc($acct_result);
+    $username = $acct_result["username"];
+
+    // now we get the user's credit balance
+    $cr_query = "SELECT Credits FROM config_accounts WHERE Login='".$username."'";
+    $cr_result = $sql["mgr"]->query($cr_query);
+    $cr_result = $sql["mgr"]->fetch_assoc($cr_result);
+    $credits = $cr_result["Credits"];
+
+    // we fake how many credits the account has if the account is unlimited
+    $credits = ( ( $credits < 0 ) ? $name_credits : $credits );
+
+    if ( $credits < $name_credits )
+      redirect("change_char_name.php?error=6");
+  }
 
   $result = $sql["mgr"]->query("INSERT INTO char_changes (guid, new_name) VALUES ('".$guid."', '".$new1."')");
 
@@ -224,7 +323,7 @@ function denied()
 function savename()
 {
   global $output, $action_permission, $corem_db, $characters_db, $realm_id,
-    $user_id, $sql;
+    $user_id, $name_credits, $sql, $core;
 
   valid_login($action_permission["update"]);
 
@@ -232,7 +331,46 @@ function savename()
 
   $name = $sql["mgr"]->fetch_assoc($sql["mgr"]->query("SELECT * FROM char_changes WHERE guid='".$guid."'"));
 
-  $result = $sql["char"]->query("UPDATE characters SET name='".$name["new_name"]."' WHERE guid='".$guid."'");
+  $int_err = 0;
+
+  // credits
+  if ( $name_credits > 0 )
+  {
+    // we need the player's account
+    if ( $core == 1 )
+      $acct_query = "SELECT login AS username FROM accounts WHERE acct=(SELECT acct FROM ".$characters_db[$realm_id]["name"].".characters WHERE guid='".$guid."')";
+    else
+      $acct_query = "SELECT username FROM account WHERE id=(SELECT account FROM ".$characters_db[$realm_id]["name"].".characters WHERE guid='".$guid."')";
+
+    $acct_result = $sql["logon"]->query($acct_query);
+    $acct_result = $sql["logon"]->fetch_assoc($acct_result);
+    $username = $acct_result["username"];
+
+    // now we get the user's credit balance
+    $cr_query = "SELECT Credits FROM config_accounts WHERE Login='".$username."'";
+    $cr_result = $sql["mgr"]->query($cr_query);
+    $cr_result = $sql["mgr"]->fetch_assoc($cr_result);
+    $credits = $cr_result["Credits"];
+
+    // since this action is delayed, we have to make sure the account still has sufficient funds
+    // if the account doesn't have enough, we just delete the change request
+    if ( ( $credits >= 0 ) && ( $credits < $name_credits ) )
+      $int_err = 1;
+
+    if ( !$int_err )
+    {
+      // we don't charge credits if the account is unlimited
+      if ( $credits >= 0 )
+        $credits = $credits - $name_credits;
+
+      $money_query = "UPDATE config_accounts SET Credits='".$credits."' WHERE Login='".$username."'";
+
+      $money_result = $sql["mgr"]->query($money_query);
+    }
+  }
+
+  if ( !$int_err )
+    $result = $sql["char"]->query("UPDATE characters SET name='".$name["new_name"]."' WHERE guid='".$guid."'");
 
   $result = $sql["mgr"]->query("DELETE FROM char_changes WHERE guid='".$guid."'");
 
@@ -264,6 +402,9 @@ elseif ( $err == 4 )
 elseif ( $err == 5 )
   $output .= '
             <h1>'.lang("xname", "done").'</h1>';
+elseif ( $err == 6 )
+  $output .= '
+            <h1><font class="error">'.lang("xname", "insufficient_credits").'</font></h1>';
 else
   $output .= '
             <h1>'.lang("xname", "changename").'</h1>';

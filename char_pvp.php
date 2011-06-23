@@ -151,41 +151,252 @@ function char_pvp()
     else
       $result = $sql["logon"]->query("SELECT username AS login FROM account WHERE id='".$char["acct"]."'");
     $owner_name = $sql["logon"]->result($result, 0, 'login');
-    $result = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
-    $owner_gmlvl = $sql["mgr"]->result($result, 0, 'gm');
+
+    $s_query = "SELECT *, SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'";
+    $s_result = $sql["mgr"]->query($s_query);
+    $s_fields = $sql["mgr"]->fetch_assoc($s_result);
+    $owner_gmlvl = $s_fields["gm"];
+    $view_mod = $s_fields["View_Mod_PvP"];
 
     if ( $owner_gmlvl >= 1073741824 )
       $owner_gmlvl -= 1073741824;
 
-    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+    // owner configured overrides
+    $view_override = false;
+    if ( $view_mod > 0 )
+    {
+      if ( $view_mod == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $view_mod == 2 )
+      {
+        // only registered users may view this page
+        if ( $user_lvl > -1 )
+          $view_override = true;
+      }
+    }
+
+    // visibility overrides for specific tabs
+    $view_inv_override = false;
+    if ( $s_fields["View_Mod_Inv"] > 0 )
+    {
+      if ( $s_fields["View_Mod_Inv"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_Inv"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_inv_override = true;
+      }
+    }
+    else
+    {
+      if ( $owner_name == $user_name )
+        $view_inv_override = true;
+    }
+
+    $view_talent_override = false;
+    if ( $s_fields["View_Mod_Talent"] > 0 )
+    {
+      if ( $s_fields["View_Mod_Talent"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_Talent"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_talent_override = true;
+      }
+    }
+    else
+    {
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+        $view_talent_override = true;
+    }
+
+    $view_achieve_override = false;
+    if ( $s_fields["View_Mod_Achieve"] > 0 )
+    {
+      if ( $s_fields["View_Mod_Achieve"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_Achieve"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_achieve_override = true;
+      }
+    }
+    else
+    {
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+        $view_achieve_override = true;
+    }
+
+    $view_quest_override = false;
+    if ( $s_fields["View_Mod_Quest"] > 0 )
+    {
+      if ( $s_fields["View_Mod_Quest"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_Quest"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_quest_override = true;
+      }
+    }
+    else
+    {
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+        $view_quest_override = true;
+    }
+
+    $view_friends_override = false;
+    if ( $s_fields["View_Mod_Friends"] > 0 )
+    {
+      if ( $s_fields["View_Mod_Friends"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_Friends"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_friends_override = true;
+      }
+    }
+    else
+    {
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+        $view_friends_override = true;
+    }
+
+    $view_view_override = false;
+    if ( $s_fields["View_Mod_View"] > 0 )
+    {
+      if ( $s_fields["View_Mod_View"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_View"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_view_override = true;
+      }
+    }
+    else
+    {
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+        $view_view_override = true;
+    }
+
+    $view_pets_override = false;
+    if ( $s_fields["View_Mod_Pets"] > 0 )
+    {
+      if ( $s_fields["View_Mod_Pets"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_Pets"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_pets_override = true;
+      }
+    }
+    else
+    {
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+        $view_pets_override = true;
+    }
+
+    $view_rep_override = false;
+    if ( $s_fields["View_Mod_Rep"] > 0 )
+    {
+      if ( $s_fields["View_Mod_Rep"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_Rep"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_rep_override = true;
+      }
+    }
+    else
+    {
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+        $view_rep_override = true;
+    }
+
+    $view_skill_override = false;
+    if ( $s_fields["View_Mod_Skill"] > 0 )
+    {
+      if ( $s_fields["View_Mod_Skill"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_Skill"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_skill_override = true;
+      }
+    }
+    else
+    {
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+        $view_skill_override = true;
+    }
+
+    if ( ( $view_override ) || ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
     {
       $output .= '
           <center>
             <div id="tab">
               <ul>
-                <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>
-                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "inventory").'</a></li>
-                '.( ( $char["level"] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "talents").'</a></li>' ).'
-                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "achievements").'</a></li>
-                <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "quests").'</a></li>
-                <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "friends").'</a></li>
-                <li><a href="char_view.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "view").'</a></li>
-               </ul>
+                <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
+
+      if ( $view_inv_override )
+        $output .= '
+                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "inventory").'</a></li>';
+
+      if ( $view_talent_override )
+        $output .= '
+                '.( ( $char["level"] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "talents").'</a></li>' ).'';
+
+      if ( $view_achieve_override )
+        $output .= '
+                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "achievements").'</a></li>';
+
+      if ( $view_quest_override )
+        $output .= '
+                <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "quests").'</a></li>';
+
+      if ( $view_friends_override )
+        $output .= '
+                <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "friends").'</a></li>';
+
+      if ( $view_view_override )
+        $output .= '
+                <li><a href="char_view.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "view").'</a></li>';
+
+      $output .= '
+              </ul>
             </div>
             <div id="tab_content">
               <div id="tab">
                 <ul>
                   <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
-      if ( char_get_class_name($char["class"]) == 'Hunter' )
+
+      if ( ( char_get_class_name($char["class"]) == "Hunter" ) && ( $view_pets_override ) )
         $output .= '
                   <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pets").'</a></li>';
+
+      if ( $view_rep_override )
+        $output .= '
+                  <li><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "reputation").'</a></li>';
+
+      if ( $view_skill_override )
+        $output .= '
+                  <li><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>';
+
       $output .= '
-                  <li><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "reputation").'</a></li>
-                  <li><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>
                   <li id="selected"><a href="char_pvp.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pvp").'</a></li>';
+
       if ( ( $owner_name == $user_name ) || ( $user_lvl >= get_page_permission("insert", "char_mail.php") ) )
         $output .= '
                   <li><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "mail").'</a></li>';
+
       $output .= '
                 </ul>
               </div>

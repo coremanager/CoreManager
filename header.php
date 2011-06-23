@@ -52,16 +52,16 @@ else
   error_reporting(E_COMPILE_ERROR);
 
 //---------------------Loading User Theme and Language Settings----------------
-if ( isset($_COOKIE["theme"]) )
+if ( isset($_COOKIE["corem_theme"]) )
 {
-  if ( is_dir("themes/".$_COOKIE["theme"]) )
-    if ( is_file("themes/".$_COOKIE["theme"].'/'.$_COOKIE["theme"]."_1024.css") )
-      $theme = $_COOKIE["theme"];
+  if ( is_dir("themes/".$_COOKIE["corem_theme"]) )
+    if ( is_file("themes/".$_COOKIE["corem_theme"].'/'.$_COOKIE["corem_theme"]."_1024.css") )
+      $theme = $_COOKIE["corem_theme"];
 }
 
-if ( isset($_COOKIE["lang"]) )
+if ( isset($_COOKIE["corem_lang"]) )
 {
-  $lang = $_COOKIE["lang"];
+  $lang = $_COOKIE["corem_lang"];
   if ( !file_exists('lang/'.$lang.'.php') )
     $lang = $language;
 }
@@ -69,7 +69,7 @@ else
 {
   $lang = $language;
   // if we didn't get a cookie for language, create one
-  setcookie("lang", $language, time()+60*60*24*30*6); // six months
+  setcookie("corem_lang", $language, time()+60*60*24*30*6); // six months
 }
 
 //---------------------Current Filename----------------------------------------

@@ -21,9 +21,9 @@
 // HEADER SECTION
 //#############################################################################
 
-if ( isset($_COOKIE["lang"]) )
+if ( isset($_COOKIE["corem_lang"]) )
 {
-  $lang = $_COOKIE["lang"];
+  $lang = $_COOKIE["corem_lang"];
   if ( !file_exists("lang/".$lang.".php") )
     $lang = $language;
 }

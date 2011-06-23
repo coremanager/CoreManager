@@ -643,6 +643,51 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $initial_credits = $misc_row["Value"];
       break;
     }
+    case "QIV_Credits":
+    {
+      $qiv_credits = $misc_row["Value"];
+      break;
+    }
+    case "QIV_Gold":
+    {
+      $qiv_money = $misc_row["Value"];
+      break;
+    }
+    case "UV_Credits":
+    {
+      $uv_credits = $misc_row["Value"];
+      break;
+    }
+    case "UV_Gold":
+    {
+      $uv_money = $misc_row["Value"];
+      break;
+    }
+    case "Credits_Fractional":
+    {
+      $credits_fractional = $misc_row["Value"];
+      break;
+    }
+    case "Name_Change_Credits":
+    {
+      $name_credits = $misc_row["Value"];
+      break;
+    }
+    case "Race_Change_Credits":
+    {
+      $race_credits = $misc_row["Value"];
+      break;
+    }
+    case "Transfer_Credits":
+    {
+      $transfer_credits = $misc_row["Value"];
+      break;
+    }
+    case "Hearthstone_Credits":
+    {
+      $hearthstone_credits = $misc_row["Value"];
+      break;
+    }
   }
 }
 

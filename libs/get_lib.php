@@ -67,6 +67,10 @@ function id_get_exp_lvl()
 
 function id_get_gm_level($id)
 {
+  // we're not concerned with Web Admin
+  if ( $id >= 1073741824 )
+    $id -= 1073741824;
+
   return gmlevel_name($id);
 }
 

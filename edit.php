@@ -199,7 +199,7 @@ function edit_user()
     $output .= '
                     <tr>
                       <td>'.lang("edit", "credits").':</td>
-                      <td>'.( ( $screen_name["Credits"] < 0 ) ? lang("edit", "unlimited") : $screen_name["Credits"] ).'</td>
+                      <td>'.( ( $screen_name["Credits"] < 0 ) ? lang("edit", "unlimited") : (float)$screen_name["Credits"] ).'</td>
                     </tr>';
     
     foreach ( $characters_db as $db )
@@ -287,7 +287,7 @@ function edit_user()
     unset($result);
     unset($realms);
 
-    $override_remember_me = $_COOKIE["override_remember_me"];
+    $override_remember_me = $_COOKIE["corem_override_remember_me"];
     if ( !isset($override_remember_me) )
       $override_remember_me = 1;
 
@@ -330,6 +330,9 @@ function edit_user()
                     <td></td>
                   </tr>
                   <tr>
+                    <td></td>
+                  </tr>
+                  <tr>
                     <td align="left" colspan="3">'.lang("edit", "signature").'</td>
                   </tr>
                   <tr>
@@ -342,6 +345,9 @@ function edit_user()
                     <td align="left" colspan="3">
                       <textarea id="msg" name="signature" rows="6" cols="65">'.$screen_name["Signature"].'</textarea>
                     </td>
+                  </tr>
+                  <tr>
+                    <td></td>
                   </tr>
                   <tr>
                     <td></td>
@@ -459,15 +465,6 @@ function edit_user()
                     <td>
                       <input type="text" name="avatarlevel" value="'.$screen_name["avatarlevel"].'" />
                     </td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td>';
-      makebutton(lang("edit", "save"), 'javascript:do_submit(\'form3\', 0)', 130);
-      $output .= '
-                    </td>
                   </tr>';
     }
     else
@@ -491,6 +488,127 @@ function edit_user()
                   <tr>
                     <td>'.lang("edit", "level").':</td>
                     <td>'.lang("edit", "unavailable").'</td>
+                  </tr>';
+    }
+    $output .= '
+                  <tr>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td align="left" colspan="3">'.lang("edit", "viewmods").'</td>
+                  </tr>
+                  <tr>
+                    <td>'.lang("char", "char_sheet").':</td>
+                    <td colspan="2">
+                      <select name="viewmod_sheet">
+                        <option value="0" '.( ( $screen_name["View_Mod_Sheet"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "onlyme").'</option>
+                        <!-- option value="1" '.( ( $screen_name["View_Mod_Sheet"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "friends").'</option -->
+                        <option value="2" '.( ( $screen_name["View_Mod_Sheet"] == 2 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "reg_users").'</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>'.lang("char", "achievements").':</td>
+                    <td colspan="2">
+                      <select name="viewmod_achieve">
+                        <option value="0" '.( ( $screen_name["View_Mod_Achieve"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "onlyme").'</option>
+                        <!-- option value="1" '.( ( $screen_name["View_Mod_Achieve"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "friends").'</option -->
+                        <option value="2" '.( ( $screen_name["View_Mod_Achieve"] == 2 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "reg_users").'</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>'.lang("char", "friends").':</td>
+                    <td colspan="2">
+                      <select name="viewmod_friends">
+                        <option value="0" '.( ( $screen_name["View_Mod_Friends"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "onlyme").'</option>
+                        <!-- option value="1" '.( ( $screen_name["View_Mod_Friends"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "friends").'</option -->
+                        <option value="2" '.( ( $screen_name["View_Mod_Friends"] == 2 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "reg_users").'</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>'.lang("char", "inventory").':</td>
+                    <td colspan="2">
+                      <select name="viewmod_inv">
+                        <option value="0" '.( ( $screen_name["View_Mod_Inv"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "onlyme").'</option>
+                        <!-- option value="1" '.( ( $screen_name["View_Mod_Inv"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "friends").'</option -->
+                        <option value="2" '.( ( $screen_name["View_Mod_Inv"] == 2 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "reg_users").'</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>'.lang("char", "pets").':</td>
+                    <td colspan="2">
+                      <select name="viewmod_pets">
+                        <option value="0" '.( ( $screen_name["View_Mod_Pets"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "onlyme").'</option>
+                        <!-- option value="1" '.( ( $screen_name["View_Mod_Pets"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "friends").'</option -->
+                        <option value="2" '.( ( $screen_name["View_Mod_Pets"] == 2 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "reg_users").'</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>'.lang("char", "pvp").':</td>
+                    <td colspan="2">
+                      <select name="viewmod_pvp">
+                        <option value="0" '.( ( $screen_name["View_Mod_PvP"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "onlyme").'</option>
+                        <!-- option value="1" '.( ( $screen_name["View_Mod_PvP"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "friends").'</option -->
+                        <option value="2" '.( ( $screen_name["View_Mod_PvP"] == 2 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "reg_users").'</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>'.lang("char", "quests").':</td>
+                    <td colspan="2">
+                      <select name="viewmod_quests">
+                        <option value="0" '.( ( $screen_name["View_Mod_Quest"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "onlyme").'</option>
+                        <!-- option value="1" '.( ( $screen_name["View_Mod_Quest"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "friends").'</option -->
+                        <option value="2" '.( ( $screen_name["View_Mod_Quest"] == 2 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "reg_users").'</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>'.lang("char", "reputation").':</td>
+                    <td colspan="2">
+                      <select name="viewmod_rep">
+                        <option value="0" '.( ( $screen_name["View_Mod_Rep"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "onlyme").'</option>
+                        <!-- option value="1" '.( ( $screen_name["View_Mod_Rep"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "friends").'</option -->
+                        <option value="2" '.( ( $screen_name["View_Mod_Rep"] == 2 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "reg_users").'</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>'.lang("char", "skills").':</td>
+                    <td colspan="2">
+                      <select name="viewmod_skills">
+                        <option value="0" '.( ( $screen_name["View_Mod_Skill"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "onlyme").'</option>
+                        <!-- option value="1" '.( ( $screen_name["View_Mod_Skill"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "friends").'</option -->
+                        <option value="2" '.( ( $screen_name["View_Mod_Skill"] == 2 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "reg_users").'</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>'.lang("char", "talents").':</td>
+                    <td colspan="2">
+                      <select name="viewmod_talents">
+                        <option value="0" '.( ( $screen_name["View_Mod_Talent"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "onlyme").'</option>
+                        <!-- option value="1" '.( ( $screen_name["View_Mod_Talent"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "friends").'</option -->
+                        <option value="2" '.( ( $screen_name["View_Mod_Talent"] == 2 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "reg_users").'</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>'.lang("char", "view").':</td>
+                    <td colspan="2">
+                      <select name="viewmod_view">
+                        <option value="0" '.( ( $screen_name["View_Mod_View"] == 0 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "onlyme").'</option>
+                        <!-- option value="1" '.( ( $screen_name["View_Mod_View"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "friends").'</option -->
+                        <option value="2" '.( ( $screen_name["View_Mod_View"] == 2 ) ? 'selected="selected" ' : '' ).'>'.lang("edit", "reg_users").'</option>
+                      </select>
+                    </td>
                   </tr>
                   <tr>
                     <td></td>
@@ -500,9 +618,7 @@ function edit_user()
       makebutton(lang("edit", "save"), 'javascript:do_submit(\'form3\', 0)', 130);
       $output .= '
                     </td>
-                  </tr>';
-    }
-    $output .= '
+                  </tr>
                 </table>
               </form>
             </div>
@@ -587,7 +703,7 @@ function edit_user()
           if ( isset($lang[1]) && ( $lang[1] == 'php' ) )
           {
             $output .= '
-                        <option value="'.$lang[0].'"'.( ( isset($_COOKIE["lang"]) && ( $_COOKIE["lang"] == $lang[0] ) ) ? ' selected="selected" ' : '' ).'>'.lang("edit", $lang[0]).'</option>';
+                        <option value="'.$lang[0].'"'.( ( isset($_COOKIE["corem_lang"]) && ( $_COOKIE["corem_lang"] == $lang[0] ) ) ? ' selected="selected" ' : '' ).'>'.lang("edit", $lang[0]).'</option>';
           }
         }
         closedir($dh);
@@ -621,7 +737,7 @@ function edit_user()
           else
           {
             $output .= '
-                          <option value="'.$file.'"'.( ( isset($_COOKIE["theme"] ) && ( $_COOKIE["theme"] == $file) ) ? ' selected="selected" ' : '' ).'>'.$file.'</option>';
+                          <option value="'.$file.'"'.( ( isset($_COOKIE["corem_theme"] ) && ( $_COOKIE["corem_theme"] == $file) ) ? ' selected="selected" ' : '' ).'>'.$file.'</option>';
           }
         }
         closedir($dh);
@@ -770,7 +886,10 @@ function doedit_user()
       $body = str_replace("<email>", $new_mail, $body);
       $body = str_replace("<key>", $new_mail_sha, $body);
       $body = str_replace("<title>", $title, $body);
-      $body = str_replace("<base_url>", $_SERVER["SERVER_NAME"], $body);
+
+      $server_addr = ( ( $_SERVER["SERVER_PORT"] != 80 ) ? $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"] : $_SERVER["SERVER_NAME"] );
+
+      $body = str_replace("<base_url>", $server_addr, $body);
 
       if ( $GMailSender )
       {
@@ -825,12 +944,12 @@ function doedit_user()
   else
     $override = 1;
 
-  if ( ( $override != $_COOKIE["override_remember_me"] ) || ( !isset($_COOKIE["override_remember_me"]) ) )
+  if ( ( $override != $_COOKIE["corem_override_remember_me"] ) || ( !isset($_COOKIE["corem_override_remember_me"]) ) )
   {
     if ( $override )
-      setcookie("override_remember_me", "1", time()+60*60*24*30);
+      setcookie("corem_override_remember_me", "1", time()+60*60*24*30);
     else
-      setcookie("override_remember_me", "0", time()+60*60*24*30);
+      setcookie("corem_override_remember_me", "0", time()+60*60*24*30);
 
     $other_changes = 1;
   }
@@ -863,7 +982,7 @@ function lang_set()
 
   if ( $lang )
   {
-    setcookie('lang', $lang, time()+60*60*24*30*6); //six month
+    setcookie('corem_lang', $lang, time()+60*60*24*30*6); //six month
     redirect('edit.php');
   }
   else
@@ -883,7 +1002,7 @@ function theme_set()
 
   if ( $tmpl )
   {
-    setcookie('theme', $tmpl, time()+3600*24*30*6); //six month
+    setcookie('corem_theme', $tmpl, time()+3600*24*30*6); //six month
     redirect('edit.php');
   }
   else
@@ -904,6 +1023,41 @@ function profile_set()
   $race = $sql["logon"]->quote_smart($_GET["avatarrace"]);
   $class = $sql["logon"]->quote_smart($_GET["avatarclass"]);
   $level = $sql["logon"]->quote_smart($_GET["avatarlevel"]);
+
+  // Character Sheet Page visibility overrides
+  $view_mod_sheet = $sql["logon"]->quote_smart($_GET["viewmod_sheet"]);
+  $view_mod_achieve = $sql["logon"]->quote_smart($_GET["viewmod_achieve"]);
+  $view_mod_friends = $sql["logon"]->quote_smart($_GET["viewmod_friends"]);
+  $view_mod_inv = $sql["logon"]->quote_smart($_GET["viewmod_inv"]);
+  $view_mod_pets = $sql["logon"]->quote_smart($_GET["viewmod_pets"]);
+  $view_mod_pvp = $sql["logon"]->quote_smart($_GET["viewmod_pvp"]);
+  $view_mod_quests = $sql["logon"]->quote_smart($_GET["viewmod_quests"]);
+  $view_mod_rep = $sql["logon"]->quote_smart($_GET["viewmod_rep"]);
+  $view_mod_skills = $sql["logon"]->quote_smart($_GET["viewmod_skills"]);
+  $view_mod_talents = $sql["logon"]->quote_smart($_GET["viewmod_talents"]);
+  $view_mod_view = $sql["logon"]->quote_smart($_GET["viewmod_view"]);
+
+  // the main Character Sheet's override must be the same as the most permissive of the others
+  if ( $view_mod_sheet < $view_mod_achieve )
+    $view_mod_sheet = $view_mod_achieve;
+  if ( $view_mod_sheet < $view_mod_friends )
+    $view_mod_sheet = $view_mod_friends;
+  if ( $view_mod_sheet < $view_mod_inv )
+    $view_mod_sheet = $view_mod_inv;
+  if ( $view_mod_sheet < $view_mod_pets )
+    $view_mod_sheet = $view_mod_pets;
+  if ( $view_mod_sheet < $view_mod_pvp )
+    $view_mod_sheet = $view_mod_pvp;
+  if ( $view_mod_sheet < $view_mod_quests )
+    $view_mod_sheet = $view_mod_quests;
+  if ( $view_mod_sheet < $view_mod_rep )
+    $view_mod_sheet = $view_mod_rep;
+  if ( $view_mod_sheet < $view_mod_skills )
+    $view_mod_sheet = $view_mod_skills;
+  if ( $view_mod_sheet < $view_mod_talents )
+    $view_mod_sheet = $view_mod_talents;
+  if ( $view_mod_sheet < $view_mod_view )
+    $view_mod_sheet = $view_mod_view;
 
   // for a little more XSS coverage we'll compare the
   // mysql_real_escape_string (quote_smart we used above) of info & signatures with their htmlspecialchars
@@ -926,7 +1080,13 @@ function profile_set()
       $avatar = $gender.' '.$race.' '.$class.' '.$level;
   }
 
+  // profile
   $query = "UPDATE config_accounts SET Avatar='".$avatar."', Info='".$info."', Signature='".$signature."' WHERE Login='".$user_name."'";
+
+  $sql["mgr"]->query($query);
+
+  // view mods
+  $query = "UPDATE config_accounts SET View_Mod_Sheet='".$view_mod_sheet."', View_Mod_Achieve='".$view_mod_achieve."', View_Mod_Friends='".$view_mod_friends."', View_Mod_Inv='".$view_mod_inv."', View_Mod_Pets='".$view_mod_pets."', View_Mod_PvP='".$view_mod_pvp."', View_Mod_Quest='".$view_mod_quests."', View_Mod_Rep='".$view_mod_rep."', View_Mod_Skill='".$view_mod_skills."', View_Mod_Talent='".$view_mod_talents."', View_Mod_View='".$view_mod_view."' WHERE Login='".$user_name."'";
 
   $sql["mgr"]->query($query);
 
@@ -1058,7 +1218,10 @@ function send_invite($resend = false)
     $body = str_replace("<title>", $title, $body);
     $body = str_replace("<char>", $char, $body);
     $body = str_replace("<core>", core_name($core), $body);
-    $body = str_replace("<base_url>", $_SERVER["SERVER_NAME"], $body);
+
+    $server_addr = ( ( $_SERVER["SERVER_PORT"] != 80 ) ? $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"] : $_SERVER["SERVER_NAME"] );
+
+    $body = str_replace("<base_url>", $server_addr, $body);
 
     if ( $GMailSender )
     {
@@ -1150,7 +1313,10 @@ function send_invite($resend = false)
     $body = str_replace("<title>", $title, $body);
     $body = str_replace("<char>", $char, $body);
     $body = str_replace("<core>", core_name($core), $body);
-    $body = str_replace("<base_url>", $_SERVER["SERVER_NAME"], $body);
+
+    $server_addr = ( ( $_SERVER["SERVER_PORT"] != 80 ) ? $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"] : $_SERVER["SERVER_NAME"] );
+
+    $body = str_replace("<base_url>", $server_addr, $body);
 
     if ( $GMailSender )
     {

@@ -356,7 +356,10 @@ function doregister()
       else
         $body = str_replace("<screenname>", "NONE GIVEN", $body);
       $body = str_replace("<password>", $pass1, $body);
-      $body = str_replace("<base_url>", $_SERVER["SERVER_NAME"], $body);
+
+      $server_addr = ( ( $_SERVER["SERVER_PORT"] != 80 ) ? $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"] : $_SERVER["SERVER_NAME"] );
+
+      $body = str_replace("<base_url>", $server_addr, $body);
       if ( $core == 1 )
       {
         if ( $arc_encrypted )
@@ -432,7 +435,10 @@ function doregister()
         else
           $body = str_replace("<screenname>", "NONE GIVEN", $body);
         $body = str_replace("<password>", $pass1, $body);
-        $body = str_replace("<base_url>", $_SERVER["SERVER_NAME"], $body);
+
+        $server_addr = ( ( $_SERVER["SERVER_PORT"] != 80 ) ? $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"] : $_SERVER["SERVER_NAME"] );
+
+        $body = str_replace("<base_url>", $server_addr, $body);
 
         if ( $GMailSender )
         {
@@ -907,7 +913,10 @@ function do_pass_recovery()
     }
     $body = str_replace("<username>", $user_name, $body);
     $body = str_replace("<password>", $pass["password"], $body);
-    $body = str_replace("<base_url>", $_SERVER["HTTP_HOST"], $body);
+
+    $server_addr = ( ( $_SERVER["SERVER_PORT"] != 80 ) ? $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"] : $_SERVER["SERVER_NAME"] );
+
+    $body = str_replace("<base_url>", $server_addr, $body);
     $body = str_replace("<title>", $title, $body);
 
     if ( $GMailSender )

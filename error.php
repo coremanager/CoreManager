@@ -25,18 +25,18 @@ session_start();
 $time_start = microtime(true);
 
 //---------------------Loading User Theme and Language Settings----------------
-if ( isset($_COOKIE["theme"]) )
+if ( isset($_COOKIE["corem_theme"]) )
 {
-  if ( is_dir("themes/".$_COOKIE["theme"]) )
-    if ( is_file("themes/".$_COOKIE["theme"]."/".$_COOKIE["theme"]."_1024.css") )
-      $theme = $_COOKIE["theme"];
+  if ( is_dir("themes/".$_COOKIE["corem_theme"]) )
+    if ( is_file("themes/".$_COOKIE["corem_theme"]."/".$_COOKIE["corem_theme"]."_1024.css") )
+      $theme = $_COOKIE["corem_theme"];
 }
 else
   $theme = "Sulfur";
 
-if ( isset($_COOKIE["lang"]) )
+if ( isset($_COOKIE["corem_lang"]) )
 {
-  $lang = $_COOKIE["lang"];
+  $lang = $_COOKIE["corem_lang"];
   if ( !file_exists("lang/".$lang.".php") )
     $lang = "english";
 }

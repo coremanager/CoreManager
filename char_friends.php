@@ -93,13 +93,121 @@ function char_friends()
 
     $owner_name = $sql["logon"]->result($result, 0, 'login');
       
-    $sec_res = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'");
-    $owner_gmlvl = $sql["mgr"]->result($sec_res, 0, 'gm');
+    $s_query = "SELECT *, SecurityLevel AS gm FROM config_accounts WHERE Login='".$owner_name."'";
+    $s_result = $sql["mgr"]->query($s_query);
+    $s_fields = $sql["mgr"]->fetch_assoc($s_result);
+    $owner_gmlvl = $s_fields["gm"];
+    $view_mod = $s_fields["View_Mod_Friends"];
 
     if ( $owner_gmlvl >= 1073741824 )
       $owner_gmlvl -= 1073741824;
 
-    if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+    // owner configured overrides
+    $view_override = false;
+    if ( $view_mod > 0 )
+    {
+      if ( $view_mod == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $view_mod == 2 )
+      {
+        // only registered users may view this page
+        if ( $user_lvl > -1 )
+          $view_override = true;
+      }
+    }
+
+    // visibility overrides for specific tabs
+    $view_inv_override = false;
+    if ( $s_fields["View_Mod_Inv"] > 0 )
+    {
+      if ( $s_fields["View_Mod_Inv"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_Inv"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_inv_override = true;
+      }
+    }
+    else
+    {
+      if ( $owner_name == $user_name )
+        $view_inv_override = true;
+    }
+
+    $view_talent_override = false;
+    if ( $s_fields["View_Mod_Talent"] > 0 )
+    {
+      if ( $s_fields["View_Mod_Talent"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_Talent"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_talent_override = true;
+      }
+    }
+    else
+    {
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+        $view_talent_override = true;
+    }
+
+    $view_achieve_override = false;
+    if ( $s_fields["View_Mod_Achieve"] > 0 )
+    {
+      if ( $s_fields["View_Mod_Achieve"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_Achieve"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_achieve_override = true;
+      }
+    }
+    else
+    {
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+        $view_achieve_override = true;
+    }
+
+    $view_quest_override = false;
+    if ( $s_fields["View_Mod_Quest"] > 0 )
+    {
+      if ( $s_fields["View_Mod_Quest"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_Quest"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_quest_override = true;
+      }
+    }
+    else
+    {
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+        $view_quest_override = true;
+    }
+
+    $view_view_override = false;
+    if ( $s_fields["View_Mod_View"] > 0 )
+    {
+      if ( $s_fields["View_Mod_View"] == 1 )
+        ;// TODO: Add friends limit
+      elseif ( $s_fields["View_Mod_View"] == 2 )
+      {
+        // only registered users may view this tab
+        if ( $user_lvl > -1 )
+          $view_view_override = true;
+      }
+    }
+    else
+    {
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
+        $view_view_override = true;
+    }
+
+    if ( ( $view_override ) || ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
     {
       //------------------------Character Tabs---------------------------------
       // we start with a lead of 10 spaces,
@@ -118,13 +226,32 @@ function char_friends()
             </script>
             <div id="tab">
               <ul>
-                <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>
-                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "inventory").'</a></li>
-                '.( ( $char["level"] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "talents").'</a></li>' ).'
-                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "achievements").'</a></li>
-                <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "quests").'</a></li>
-                <li id="selected"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "friends").'</a></li>
-                <li><a href="char_view.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "view").'</a></li>
+                <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
+
+      if ( $view_inv_override )
+        $output .= '
+                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "inventory").'</a></li>';
+
+      if ( $view_talent_override )
+        $output .= '
+                '.( ( $char["level"] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "talents").'</a></li>' ).'';
+
+      if ( $view_achieve_override )
+        $output .= '
+                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "achievements").'</a></li>';
+
+      if ( $view_quest_override )
+        $output .= '
+                <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "quests").'</a></li>';
+
+      $output .= '
+                <li id="selected"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "friends").'</a></li>';
+
+      if ( $view_view_override )
+        $output .= '
+                <li><a href="char_view.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "view").'</a></li>';
+
+      $output .= '
               </ul>
             </div>
             <div id="tab_content">

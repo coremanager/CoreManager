@@ -1573,7 +1573,7 @@ function edit_user()
     }
     else
     {
-      $output .= '.
+      $output .= '
                 <td>'.$ban_info.'</td>';
     }
     $output .= '
@@ -1696,32 +1696,13 @@ function edit_user()
 
     if ( $user_lvl >= $action_permission["update"] )
     {
-      if ( $screenname["Credits"] != -1 )
-        $output.= '
+      $output.= '
               <tr>
                 <td>'.lang("user", "credits").':</td>
-                <td><input type="text" name="credits" value="'.$screenname["Credits"].'" /></td>
-              </tr>';
-      else
-        $output.= '
-              <tr>
-                <td>'.lang("user", "credits").':</td>
-                <td>'.lang("user", "unlimited").'</td>
-              </tr>';
-    }
-    else
-    {
-      if ( $screenname["Credits"] >= 0 )
-        $output.= '
-              <tr>
-                <td>'.lang("user", "credits").':</td>
-                <td>'.$screenname["Credits"].'</td>
-              </tr>';
-      else
-        $output.= '
-              <tr>
-                <td>'.lang("user", "credits").':</td>
-                <td>'.lang("user", "unlimited").'</td>
+                <td>
+                  <input type="text" name="credits" value="'.(float)$screenname["Credits"].'" />
+                  <img src="img/information.png" onmousemove="oldtoolTip(\''.lang("user", "credits_info").'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" />
+                </td>
               </tr>';
     }
 
@@ -1960,6 +1941,7 @@ function doedit_user()
   $banned = ( ( isset($_POST["banned"]) ) ? $sql["logon"]->quote_smart($_POST["banned"]) : 0 );
   $locked = ( ( isset($_POST["locked"]) ) ? $sql["logon"]->quote_smart($_POST["locked"]) : 0 );
   $referredby = $sql["logon"]->quote_smart(trim($_POST["referredby"]));
+  $credits = $sql["logon"]->quote_smart($_POST["credits"]);
 
   //make sure username/pass at least 4 chars long and less than max
   if ( ( strlen($login) < 4 ) || ( strlen($login) > 15 ) )
@@ -2031,6 +2013,18 @@ function doedit_user()
 
     $sql["logon"]->query($ban_query);
   }
+
+  // record changes in Credits
+  if ( $core == 1 )
+    $acct_name_query = "SELECT login FROM `".$logon_db["name"]."`.accounts WHERE acct='".$acct."'";
+  else
+    $acct_name_query = "SELECT username AS login FROM `".$logon_db["name"]."`.account WHERE id='".$acct."'";
+
+  $acct_name_result = $sql["logon"]->query($acct_name_query);
+  $acct_name_result = $sql["logon"]->fetch_assoc($acct_name_result);
+
+  $credit_query = "UPDATE config_accounts SET Credits='".$credits."' WHERE Login='".$acct_name_result["login"]."'";
+  $credit_result = $sql["mgr"]->query($credit_query);
 
   // record changes in Security Level
   if ( $core == 1 )

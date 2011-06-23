@@ -19,6 +19,7 @@
 
 
 require_once("header.php");
+require_once("libs/char_lib.php");
 valid_login($action_permission["view"]);
 
 //########################################################################################################################
@@ -62,7 +63,14 @@ function show_list()
     $output .= '
                     <form method="get" action="questitem_vendor.php" name="form">
                       <input type="hidden" name="action" value="selected_char" />
-                      <table>';
+                      <table class="lined" id="xname_char_table">
+                        <tr>
+                          <th class="xname_radio">&nbsp;</th>
+                          <th class="xname_name">'.lang("xname", "char").'</th>
+                          <th class="xname_LRC">'.lang("xname", "lvl").'</th>
+                          <th class="xname_LRC">'.lang("xname", "race").'</th>
+                          <th class="xname_LRC">'.lang("xname", "class").'</th>
+                        </tr>';
     if( $num_rows > 1 )
     {
       while ( $field = $sql["char"]->fetch_assoc($result) )
@@ -70,7 +78,15 @@ function show_list()
         $output .= '
                         <tr>
                           <td>
-                            <input type="radio" name="charname" value="'.$field["name"].'" />'.$field["name"].'
+                            <input type="radio" name="charname" value="'.$field["name"].'" />
+                          </td>
+                          <td>'.$field["name"].'</td>
+                          <td>'.char_get_level_color($field["level"]).'</td>
+                          <td>
+                            <img src="img/c_icons/'.$field["race"].'-'.$field["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($field["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
+                          </td>
+                          <td>
+                            <img src="img/c_icons/'.$field["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($field["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                           </td>
                         </tr>';
       }
@@ -87,11 +103,11 @@ function show_list()
     }
     $output .= '
                         <tr>
-                          <td>';
+                          <td class="hidden" colspan="3">';
     makebutton(lang("questitem", "select"), "javascript:do_submit()\" type=\"def",180);
     $output .= '
                           </td>
-                          <td>';
+                          <td class="hidden" colspan="2">';
     makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def",130);
     $output .= '
                           </td>
@@ -479,7 +495,7 @@ function select_item()
 function select_quantity()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
-    $locales_search_option, $quest_item, $sql, $core;
+    $locales_search_option, $quest_item, $qiv_credits, $qiv_money, $credits_fractional, $sql, $core;
 
   valid_login($action_permission["view"]);
 
@@ -620,10 +636,21 @@ function select_quantity()
                 <center>
                   <div class="half_frame fieldset_border">
                     <span class="legend">'.lang("questitem", "selectquantity").'</span>';
-  $output .= $char_has_money;
+
+  // Localization
+  $requires = lang("questitem", "requires");
+  $requires = str_replace("%1", '<b>'.$quest["Title"].'</b>', $requires);
+  $requires = str_replace("%2", '<span id="qiv_quest_requires">'.$count.'</span>', $requires);
+  $requires = str_replace("%3", '<b>'.$item["name1"].'</b>', $requires);
+  $requires = str_replace("%4", '<br />', $requires);
+  $requires = str_replace("%5", '<b>'.$_GET["charname"].'</b>', $requires);
+  $requires = str_replace("%6", '<span id="qiv_player_has">'.$have.'</span>', $requires);
+
+  $output .= $requires;
   $output .= '
                     <br />
                     <br />';
+
   $output .= $quest_will_reward;
   $output .= '
                     <br />
@@ -657,19 +684,53 @@ function select_quantity()
                     <br />
                     <br />';
 
-  // Localization
-  $requires = lang("questitem", "requires");
-  $requires = str_replace("%1", '<b>'.$quest["Title"].'</b>', $requires);
-  $requires = str_replace("%2", '<span id="qiv_quest_requires">'.$count.'</span>', $requires);
-  $requires = str_replace("%3", '<b>'.$item["name1"].'</b>', $requires);
-  $requires = str_replace("%4", '<br />', $requires);
-  $requires = str_replace("%5", '<b>'.$_GET["charname"].'</b>', $requires);
-  $requires = str_replace("%6", '<span id="qiv_player_has">'.$have.'</span>', $requires);
-
-  $output .= $requires;
+  $output .= $char_has_money;
   $output .= '
                     <br />
                     <br />';
+
+  // credits
+  if ( $qiv_money > 0 )
+  {
+    // get our credit balance
+    $query = "SELECT Credits FROM config_accounts WHERE Login='".$user_name."'";
+    $result = $sql["mgr"]->query($query);
+    $result = $sql["mgr"]->fetch_assoc($result);
+    $credits = $result["Credits"];
+
+    if ( $credits < 0 )
+    {
+      // unlimited credits
+      $output .= lang("global", "credits_unlimited");
+      $output .= '
+                    <br />
+                    <br />';
+    }
+    elseif ( $credits >= 0 )
+    {
+      $credit_cost = $qiv_credits * ($gold / $qiv_money);
+
+      // if Allow Fractional Credits is disabled then cost must be a whole number
+      $credit_cost = ( ( !$credits_fractional ) ? ceil($credit_cost) : $credit_cost );
+
+      $credits_per_item = lang("questitem", "credits_peritem");
+      $credits_per_item = str_replace("%1", '<b>'.$credit_cost.'</b>', $credits_per_item);
+      $credits_per_item = str_replace("%2", '<b>'.$item["name1"].'</b>', $credits_per_item);
+
+      $output .= $credits_per_item;
+      $output .= '
+                    <br />
+                    <br />';
+
+      $credits_avail = lang("questitem", "credits_avail");
+      $credits_avail = str_replace("%1", '<b>'.(float)$credits.'</b>', $credits_avail);
+
+      $output .= $credits_avail;
+      $output .= '
+                    <br />
+                    <br />';
+    }
+  }
 
   $need = $count - $have;
 
@@ -714,7 +775,7 @@ function select_quantity()
 function approve()
 {
   global $world_db, $characters_db, $realm_id, $user_name, $output, $action_permission, $user_lvl,
-    $locales_search_option, $quest_item, $sql, $core;
+    $locales_search_option, $quest_item, $qiv_credits, $qiv_money, $credits_fractional, $sql, $core;
 
   valid_login($action_permission["view"]);
 
@@ -763,13 +824,33 @@ function approve()
   if ( ( $cc == '' ) || ( $cc == '00' ) )
     $cc = 0;
 
+  // credits
+  if ( $qiv_money > 0 )
+  {
+    // get our credit balance
+    $cr_query = "SELECT Credits FROM config_accounts WHERE Login='".$user_name."'";
+    $cr_result = $sql["mgr"]->query($cr_query);
+    $cr_result = $sql["mgr"]->fetch_assoc($cr_result);
+    $credits = $cr_result["Credits"];
+
+    $credit_cost = $qiv_credits * ($_GET["gold"] / $qiv_money);
+
+    // if Allow Fractional Credits is disabled then cost must be a whole number
+    $credit_cost = ( ( !$credits_fractional ) ? ceil($credit_cost) : $credit_cost );
+
+    // multiply by quantity desired
+    $credit_cost = $credit_cost * $_GET["want"];
+  }
+
   $output .= '
           <table class="top_hidden">
             <tr>
               <td>
                 <center>
                   <div class="half_frame fieldset_border">
-                    <span class="legend">'.lang("questitem", "approvecost").'</span>';
+                    <span class="legend">'.lang("questitem", "approvecost").'</span>
+                    <table>';
+
   if ( $total > $char["gold"] )
   {
     // Localization
@@ -779,20 +860,14 @@ function approve()
     $poor = str_replace("%3", '<b>'.$item["name1"].'</b>', $poor);
 
     $output .= '
-                    <table>
                       <tr>
-                        <td>';
+                        <td colspan="3">
+                          <center>';
     $output .= $poor;
     $output .= '
+                          </center>
                         </td>
-                      </tr>
-                      <tr>
-                        <td align="left">';
-    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def", 130);
-    $output .= '
-                        </td>
-                      </tr>
-                    </table>';
+                      </tr>';
   }
   else
   {
@@ -806,35 +881,140 @@ function approve()
     $purchase = str_replace("%3", $gold_display, $purchase);
 
     $output .= '
-                    <form method="get" action="questitem_vendor.php" name="form">
-                      <input type="hidden" name="action" value="purchase" />
-                      <input type="hidden" name="char" value="'.$char["name"].'" />
-                      <input type="hidden" name="item" value="'.$item["entry"].'" />
-                      <input type="hidden" name="want" value="'.$_GET["want"].'" />
-                      <input type="hidden" name="total" value="'.$total.'" />
-                      <table>
-                        <tr>
-                          <td colspan="2">
-                            <center>';
+                      <tr>
+                        <td colspan="3">
+                          <center>';
     $output .= $purchase;
     $output .= '
-                            </center>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>';
-    makebutton(lang("questitem", "submit"), "javascript:do_submit()\" type=\"def", 180);
-    $output .= '
-                          </td>
-                          <td>';
-    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def",130);
-    $output .= '
-                          </td>
-                        </tr>
-                      </table>
-                    </form>';
+                          </center>
+                        </td>
+                      </tr>';
   }
+
+  if ( ( $total > $char["gold"] ) && ( ( $credit_cost > $credits ) && ( $credits >= 0 ) ) )
+  {
+    $output .= '
+                      <tr>
+                        <td colspan="3">
+                          <center>'.lang("questitem", "and").'</center>
+                        </td>
+                      </tr>';
+  }
+  else
+  {
+    $output .= '
+                      <tr>
+                        <td colspan="3">
+                          <center>'.lang("questitem", "or").'</center>
+                        </td>
+                      </tr>';
+  }
+
+  if ( $credits >= 0 )
+  {
+    if ( $credit_cost > $credits )
+    {
+      // Localization
+      $poor = lang("questitem", "insufficient_credits");
+      $poor = str_replace("%1", '<span id="qiv_insufficient_funds">'.$_GET["want"].'</span>', $poor);
+      $poor = str_replace("%2", '<b>'.$item["name1"].'</b>', $poor);
+
+      $output .= '
+                      <tr>
+                        <td colspan="3">
+                          <center>';
+      $output .= $poor;
+      $output .= '
+                          </center>
+                        </td>
+                      </tr>';
+    }
+    else
+    {
+      // Localization
+      $purchase = lang("questitem", "credits_purchase");
+      $purchase = str_replace("%1", '<span id="qiv_approve_quantity">'.$_GET["want"].'</span>', $purchase);
+      $purchase = str_replace("%2", '<b>'.$item["name1"].'</b>', $purchase);
+      $purchase = str_replace("%3", $credit_cost, $purchase);
+
+      $output .= '
+                      <tr>
+                        <td colspan="3">
+                          <center>';
+      $output .= $purchase;
+      $output .= '
+                          </center>
+                        </td>
+                      </tr>';
+    }
+  }
+  else
+  {
+    // Unlimited Credits
+    $output .= '
+                      <tr>
+                        <td colspan="3">
+                          <center>'.lang("questitem", "credits_unlimited").'</center>
+                        </td>
+                      </tr>';
+
+    // to make deciding whether to display the Use Credits button easier,
+    // we'll fake our credit balance...
+    $credits = $credit_cost;
+  }
+
+  if ( ( $total > $char["gold"] ) && ( $credit_cost > $credits ) )
+  {
+    $output .= '
+                      <tr>
+                        <td align="left">';
+    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def", 130);
+    $output .= '
+                        </td>
+                      </tr>';
+  }
+  else
+  {
+    $output .= '
+                        <tr>';
+    if ( $total <= $char["gold"] )
+    {
+      $output .= '
+                          <td>';
+      makebutton(lang("questitem", "submit_money"), "questitem_vendor.php?action=purchase&amp;mode=money&amp;char=".$char["name"]."&amp;item=".$item["entry"]."&amp;want=".$_GET["want"]."&amp;total=".$total."\" type=\"def", 180);
+      $output .= '
+                          </td>';
+    }
+    else
+    {
+      $output .= '
+                          <td></td>';
+    }
+
+    if ( $credit_cost <= $credits )
+    {
+      $output .= '
+                          <td>';
+      makebutton(lang("questitem", "submit_credits"), "questitem_vendor.php?action=purchase&amp;mode=credits&amp;char=".$char["name"]."&amp;item=".$item["entry"]."&amp;want=".$_GET["want"]."&amp;total=".$credit_cost."\" type=\"def", 180);
+      $output .= '
+                          </td>';
+    }
+    else
+    {
+      $output .= '
+                          <td></td>';
+    }
+
+    $output .= '
+                          <td>';
+    makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def", 130);
+    $output .= '
+                          </td>
+                        </tr>';
+  }
+
   $output .= '
+                    </table>
                   </div>
                 </center>
               </td>
@@ -844,7 +1024,7 @@ function approve()
 
 
 //########################################################################################################################
-// CHARGE THE CHARACTER AND SEND THE ITEM
+// CHARGE THE CHARACTER OR ACCOUNT AND SEND THE ITEM
 //########################################################################################################################
 function purchase()
 {
@@ -859,6 +1039,8 @@ function purchase()
     redirect("questitem_vendor.php?error=1");
   if ( empty($_GET["want"]) )
     redirect("questitem_vendor.php?error=1");
+
+  $mode = $_GET["mode"];
 
   if ( $core == 1 )
     $iquery = "SELECT * FROM items "
@@ -889,15 +1071,34 @@ function purchase()
   $cresult = $sql["char"]->query($cquery);
   $char = $sql["char"]->fetch_assoc($cresult);
 
-  $char_money = $char["gold"];
-  $char_money = $char_money - $_GET["total"];
+  if ( $mode == "money" )
+  {
+    $char_money = $char["gold"];
+    $char_money = $char_money - $_GET["total"];
 
-  if ( $core == 1 )
-    $money_query = "UPDATE characters SET gold='".$char_money."' WHERE guid='".$char["guid"]."'";
+    if ( $core == 1 )
+      $money_query = "UPDATE characters SET gold='".$char_money."' WHERE guid='".$char["guid"]."'";
+    else
+      $money_query = "UPDATE characters SET money='".$char_money."' WHERE guid='".$char["guid"]."'";
+
+    $money_result = $sql["char"]->query($money_query);
+  }
   else
-    $money_query = "UPDATE characters SET money='".$char_money."' WHERE guid='".$char["guid"]."'";
+  {
+    // get our credit balance
+    $cr_query = "SELECT Credits FROM config_accounts WHERE Login='".$user_name."'";
+    $cr_result = $sql["mgr"]->query($cr_query);
+    $cr_result = $sql["mgr"]->fetch_assoc($cr_result);
+    $credits = $cr_result["Credits"];
 
-  $money_result = $sql["char"]->query($money_query);
+    // we don't charge credits if the account is unlimited
+    if ( $credits >= 0 )
+      $credits = $credits - $_GET["total"];
+
+    $money_query = "UPDATE config_accounts SET Credits='".$credits."' WHERE Login='".$user_name."'";
+
+    $money_result = $sql["mgr"]->query($money_query);
+  }
 
   if ( $core == 1 )
   {

@@ -68,6 +68,7 @@ $GLOBALS['lang_global'] = array
   'language_7' => 'Spanisch (Mexiko)',
   'language_8' => 'Russisch',
   'language_9' => 'Persisch',
+  'credits_unlimited' => 'You have <b>Unlimited Credits</b> and may do this for <b>free</b>.',
   );
 
 
@@ -782,6 +783,10 @@ $GLOBALS['lang_edit'] = array
   'profile_info' => 'Player Info',
   'signature' => 'Forum Signature',
   'prefavatar' => 'Prefered Avatar',
+  'viewmods' => "Visibility of my Characters' Pages (GM's can always see these)",
+  'onlyme' => 'Only Me',
+  'friends' => 'Friends',
+  'reg_users' => 'Registered Users',
   'select_theme' => 'Theme ausw&auml;hlen',
   'language' => 'Sprache',
   'select_layout_lang' => 'W&auml;hle die Cberfl&auml;chensprache',
@@ -1054,7 +1059,7 @@ $GLOBALS['lang_user'] = array
   'charname' => 'Character Name',
   'expansion_short' => 'EXP',
   'credits' => 'Credits',
-  'unlimited' => 'Unlimited',
+  'credits_info' => 'Use -1 to grant an account Unlimited Credits.',
   'recruits' => 'Recruits',
   'no_reward' => 'Unavailable because the Inviting account has Unlimited Credits.',
   'reward' => 'Reward',
@@ -1286,6 +1291,18 @@ $GLOBALS['lang_questitem'] = array
   // translation note: %1 = [quest name], %2 = [required quantity], %3 = [item name]
   //                   %4 = optional line break, %5 = [char], %6 = [char's quantity]
   'requires' => '%1 ben&ouml;tigt %2x %3%4und %5 hat %6',
+  // translation note: %1 = [credits], %2 = [item name]
+  'credits_peritem' => 'Or, you may spend %1 Credits for each %2.',
+  // translation note: %1 = [credits]
+  'credits_avail' => 'You have %1 Credits.',
+  // translation note: %1 = [quantity], %2 = [item name]
+  'insufficient_credits' => "You don't have enough Credits for %1x %2.",
+  // translation note: %1 = [quantity], %2 = [item name], %3 = [credits]
+  'credits_purchase' => 'Purchase %1x %2 for %3 Credits?',
+  'or' => 'or',
+  'and' => 'and',
+  'submit_money' => 'Use Money',
+  'submit_credits' => 'Use Credits',
 );
   
 // ----- ULTRA_VENDOR.PHP -----
@@ -1314,12 +1331,26 @@ $GLOBALS['lang_ultra'] = array
   'or' => 'oder %1 jedes',
   // translation note: %1 = [account name]
   'nochars' => '%1, du hast keine Charaktere!',
+  // translation note: %1 = [credits], %2 = [item name]
+  'credits_peritem' => 'Or, you may spend %1 Credits for each %2.',
+  // translation note: %1 = [credits]
+  'credits_avail' => 'You have %1 Credits.',
   // translation note: %1 = [char], %2 = [quantity], %3 = [item name]
   'insufficientfunds' => '%1 hat nicht genug geld f&uuml;r %2x %3',
   // translation note: %1 = [char], $2 = [money]
   'has' => '%1 hat %2',
   // translation note: %1 = [quantity], %2 = [item name], %3 = [money]
   'purchase' => 'Kaufen %1x %2 f&uuml;r %3?',
+  // translation note: %1 = [credits], %2 = [item name]
+  'credits_peritem' => 'Or, you may spend %1 Credits for each %2.',
+  // translation note: %1 = [quantity], %2 = [item name]
+  'insufficient_credits' => "You don't have enough Credits for %1x %2.",
+  // translation note: %1 = [quantity], %2 = [item name], %3 = [credits]
+  'credits_purchase' => 'Purchase %1x %2 for %3 Credits?',
+  'or_credits' => 'or',
+  'and_credits' => 'and',
+  'submit_money' => 'Use Money',
+  'submit_credits' => 'Use Credits',
 );
 
 // ----- ULTRA_VENDOR.PHP -----    
@@ -1554,6 +1585,12 @@ $GLOBALS['lang_xname'] = array
   'subject' => 'Namens%E4nderung+abgelehnt',
   'body' => 'Entschuldige,+%1,+dein+Namen%E4nderungsantrag+wurde+abgelehnt.',
   // end message
+  'insufficient_credits' => "You don't have enough Credits for a Name Change.",
+  'delay_warning' => 'You Credit balance will not be altered until the Name Change is approved. If your balance is not sufficient at that time, your request will be removed without notice.',
+  // translation note: %1 = [credits]
+  'credit_cost' => 'Each Name Change costs %1 Credits.',
+  // translation note: %1 = [credits]
+  'credit_balance' => 'And you have %1 Credits.',
 );
 
 // ----- CHANGE_CHAR_RACE.PHP -----
@@ -1588,6 +1625,12 @@ $GLOBALS['lang_xrace'] = array
   'subject' => 'Rassen%E4nderung+abgelehnt',
   'body' => 'Entschuldige,+%1,+dein+Rassen%E4nderungsantrag+wurde+abgelehnt.',
   // end message
+  'insufficient_credits' => "You don't have enough Credits for a Race Change.",
+  'delay_warning' => 'You Credit balance will not be altered until the Race Change is approved. If your balance is not sufficient at that time, your request will be removed without notice.',
+  // translation note: %1 = [credits]
+  'credit_cost' => 'Each Race Change costs %1 Credits.',
+  // translation note: %1 = [credits]
+  'credit_balance' => 'And you have %1 Credits.',
 );
 
 // ----- CHANGE_CHAR_ACCOUNT.PHP -----
@@ -1621,6 +1664,12 @@ $GLOBALS['lang_xacct'] = array
   'subject' => 'Transfer+denied',
   'body' => 'Sorry,+%1,+your+Transfer+request+has+been+denied.',
   // end message
+  'insufficient_credits' => "You don't have enough Credits for an Account Transfer.",
+  'delay_warning' => 'You Credit balance will not be altered until the Account Transfer is approved. If your balance is not sufficient at that time, your request will be removed without notice.',
+  // translation note: %1 = [credits]
+  'credit_cost' => 'Each Account Transfer costs %1 Credits.',
+  // translation note: %1 = [credits]
+  'credit_balance' => 'And you have %1 Credits.',
 );
 
 // ----- ADMIN.PHP ----- 
@@ -1936,13 +1985,35 @@ $GLOBALS['lang_admin'] = array
   'bottomadcontent_tip' => 'Page Bottom Ad Content.',
 
   'pointsystem' => 'Point System',
+  'fractional' => 'Allow Fractional Credits',
+  'fractional_tip' => 'Allow spending of Credits in non-whole amounts.<br />EXAMPLE: 5.3 Credits.<br />NOTE: If disabled: all, non-whole, required Credit amounts will be rounded up to nearest whole value.',
   'recruitment' => 'Recruitment',
   'credits_per_recruit' => 'Credits per Recruitment',
   'credits_per_recruit_tip' => 'Amount to award for successful recruitment.',
   'recruit_reward_auto' => 'Automatically Reward',
   'recruit_reward_auto_tip' => 'Automatically reward on successful account creation.<br />Warning: Enabling this can easily lead to abuse!',
+  'newaccounts' => 'New Accounts',
   'initial_credits' => 'New Account Credits',
   'initial_credits_tip' => 'Amount of credits to automatically assign to new accounts.',
+  'credits' => 'Credits',
+  'tool_qiv' => 'Tool: Quest Item Vendor',
+  'qiv_credits_per_gold' => 'Credits per Gold',
+  'qiv_credits_per_gold_tip' => 'Credits to spend in place of the specified amount of Money for Quest Item Vendor.<br />NOTE: To disable: put zeros in all three money fields.',
+  'tool_uv' => 'Tool: Ultra Vendor',
+  'uv_credits_per_gold' => 'Credits per Gold',
+  'uv_credits_per_gold_tip' => 'Credits to spend in place of the specified amount of Money for Ultra Vendor.<br />NOTE: To disable: put zeros in all three money fields.',
+  'tool_name' => 'Tool: Character Name Changer',
+  'name_credits' => 'Credits Per Use',
+  'name_credits_tip' => 'Cost to use the Character Name Changer Tool.',
+  'tool_race' => 'Tool: Character Race Changer',
+  'race_credits' => 'Credits Per Use',
+  'race_credits_tip' => 'Cost to use the Character Race Changer Tool.',
+  'tool_trans' => 'Tool: Character Transfer',
+  'trans_credits' => 'Credits Per Use',
+  'trans_credits_tip' => 'Cost to use the Character Transfer Tool.',
+  'tool_hearth' => 'Tool: Hearthstone',
+  'hearth_credits' => 'Credits Per Use',
+  'hearth_credits_tip' => 'Cost to use the Hearthstone Tool.',
 
   'more' => 'Mehr',
   'sqlsearchlimit' => 'SQL Such-Limit',
@@ -2064,6 +2135,11 @@ $GLOBALS['lang_unstuck'] = array
   'newloc' => 'Neue Position',
   'save' => '&Auml;nderungen Speichern',
   'done' => 'Der Charakter wurde erfolgreich teleportiert.',
+  'insufficient_credits' => "You don't have enough Credits to use the Hearthstone.",
+  // translation note: %1 = [credits]
+  'credit_cost' => 'Each Hearthstone use costs %1 Credits.',
+  // translation note: %1 = [credits]
+  'credit_balance' => 'And you have %1 Credits.',
 );
 
 // ----- MAP.PHP -----

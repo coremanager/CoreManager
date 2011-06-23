@@ -96,8 +96,8 @@ function sel_char()
 
 function chooseacct()
 {
-  global $output, $action_permission, $characters_db, $corem_db, $realm_id,
-    $user_id, $user_lvl, $sql, $core;
+  global $output, $action_permission, $characters_db, $corem_db, $realm_id, $user_name,
+    $transfer_credits, $user_id, $user_lvl, $sql, $core;
 
   valid_login($action_permission["view"]);
 
@@ -125,6 +125,17 @@ function chooseacct()
 
   $query = "SELECT * FROM characters WHERE guid='".$guid."'";
   $char = $sql["char"]->fetch_assoc($sql["char"]->query($query));
+
+  // credits
+  if ( $transfer_credits >= 0 )
+  {
+    // get our credit balance
+    $cr_query = "SELECT Credits FROM config_accounts WHERE Login='".$user_name."'";
+    $cr_result = $sql["mgr"]->query($cr_query);
+    $cr_result = $sql["mgr"]->fetch_assoc($cr_result);
+    $credits = $cr_result["Credits"];
+  }
+
   $output .= '
           <center>
             <div id="xname_choose" class="fieldset_border">
@@ -148,7 +159,55 @@ function chooseacct()
                   </tr>
                   <tr>
                     <td>&nbsp;</td>
+                  </tr>';
+
+  if ( $transfer_credits > 0 )
+  {
+    $cost_line = lang("xacct", "credit_cost");
+    $cost_line = str_replace("%1", '<b>'.$transfer_credits.'</b>', $cost_line);
+
+    $output .= '
+                  <tr>
+                    <td colspan="2">'.$cost_line.'</td>
+                  </tr>';
+
+    if ( $credits >= 0 )
+    {
+      $credit_balance = lang("xacct", "credit_balance");
+      $credit_balance = str_replace("%1", '<b>'.(float)$credits.'</b>', $credit_balance);
+
+      $output .= '
+                  <tr>
+                    <td colspan="2">'.$credit_balance.'</td>
+                  </tr>';
+
+      if ( $credits < $transfer_credits )
+        $output .= '
+                  <tr>
+                    <td colspan="2">'.lang("xacct", "insufficient_credits").'</td>
+                  </tr>';
+      else
+        $output .= '
+                  <tr>
+                    <td colspan="2">&nbsp;</td>
                   </tr>
+                  <tr>
+                    <td colspan="2">'.lang("xacct", "delay_warning").'</td>
+                  </tr>';
+    }
+    else
+      $output .= '
+                  <tr>
+                    <td colspan="2">'.lang("global", "credits_unlimited").'</td>
+                  </tr>';
+
+    $output .= '
+                  <tr>
+                    <td colspan="2">&nbsp;</td>
+                  </tr>';
+  }
+
+  $output .= '
                   <tr>
                     <td colspan="2"><b>'.lang("xacct", "enteracct").':</b></td>
                   </tr>
@@ -156,6 +215,7 @@ function chooseacct()
                     <td>'.lang("xacct", "newacct").':</td>
                     <td>
                       <select name="new">';
+
   while ( $row = $sql["logon"]->fetch_assoc($accts) )
   {
     $output .= '
@@ -175,6 +235,7 @@ function chooseacct()
     $output .= '
                         </option>';
   }
+
   $output .= '
                       </select>
                     </td>
@@ -182,16 +243,27 @@ function chooseacct()
                   <tr>
                     <td>'.lang("xacct", "newacct1").':</td>
                     <td><input type="text" name="new1" value="" /></td>
-                  </tr>
+                  </tr>';
+
+    // if we have unlimited credits, then we fake our credit balance here
+    $credits = ( ( $credits < 0 ) ? $transfer_credits : $credits );
+
+    if ( ( $transfer_credits <= 0 ) || ( $credits >= $transfer_credits ) )
+    {
+      $output .= '
                   <tr>
-                    <td>&nbsp;</td>
+                    <td colspan="2">&nbsp;</td>
                   </tr>
                   <tr>
                     <td>';
-  makebutton(lang("xacct", "save"), "javascript:do_submit()",180);
-  $output .= '
+      makebutton(lang("xacct", "save"), "javascript:do_submit()", 180);
+      $output .= '
                     </td>
-                  </tr>
+                    <td>&nbsp;</td>
+                  </tr>';
+    }
+
+    $output .= '
                 </table>
               </form>
             </div>
@@ -201,12 +273,13 @@ function chooseacct()
 
 
 //#############################################################################
-// SUBMIT NAME CHANGE
+// SUBMIT ACCOUNT CHANGE
 //#############################################################################
 
 function getapproval()
 {
-  global $output, $action_permission, $corem_db, $characters_db, $realm_id, $user_id, $sql;
+  global $output, $action_permission, $corem_db, $characters_db, $realm_id, $user_id,
+    $transfer_credits, $sql;
 
   valid_login($action_permission["view"]);
 
@@ -240,6 +313,33 @@ function getapproval()
   if ( $count )
     redirect("change_char_account.php?error=3");
 
+  // credits
+  // we do a credit balance check here in case of URL insertion
+  if ( $transfer_credits > 0 )
+  {
+    // we need the player's account
+    if ( $core == 1 )
+      $acct_query = "SELECT login AS username FROM accounts WHERE acct=(SELECT acct FROM ".$characters_db[$realm_id]["name"].".characters WHERE guid='".$guid."')";
+    else
+      $acct_query = "SELECT username FROM account WHERE id=(SELECT account FROM ".$characters_db[$realm_id]["name"].".characters WHERE guid='".$guid."')";
+
+    $acct_result = $sql["logon"]->query($acct_query);
+    $acct_result = $sql["logon"]->fetch_assoc($acct_result);
+    $username = $acct_result["username"];
+
+    // now we get the user's credit balance
+    $cr_query = "SELECT Credits FROM config_accounts WHERE Login='".$username."'";
+    $cr_result = $sql["mgr"]->query($cr_query);
+    $cr_result = $sql["mgr"]->fetch_assoc($cr_result);
+    $credits = $cr_result["Credits"];
+
+    // we fake how many credits the account has if the account is unlimited
+    $credits = ( ( $credits < 0 ) ? $transfer_credits : $credits );
+
+    if ( $credits < $transfer_credits )
+      redirect("change_char_acount.php?error=6");
+  }
+
   $result = $sql["mgr"]->query("INSERT INTO char_changes (guid, new_acct) VALUES ('".$guid."', '".$new."')");
 
   redirect("change_char_account.php?error=4");
@@ -247,7 +347,7 @@ function getapproval()
 
 
 //#############################################################################
-// DENY NAME CHANGE
+// DENY ACOUNT CHANGE
 //#############################################################################
 
 function denied()
@@ -271,13 +371,13 @@ function denied()
 
 
 //#############################################################################
-// SAVE NEW NAME
+// SAVE NEW ACCOUNT
 //#############################################################################
 
-function savename()
+function saveacct()
 {
   global $output, $action_permission, $corem_db, $characters_db, $realm_id,
-    $user_id, $sql, $core;
+    $user_id, $transfer_credits, $sql, $core;
 
   valid_login($action_permission["update"]);
 
@@ -285,10 +385,51 @@ function savename()
 
   $acct = $sql["mgr"]->fetch_assoc($sql["mgr"]->query("SELECT * FROM char_changes WHERE guid='".$guid."'"));
 
-  if ( $core == 1 )
-    $result = $sql["char"]->query("UPDATE characters SET acct='".$acct["new_acct"]."' WHERE guid='".$guid."'");
-  else
-    $result = $sql["char"]->query("UPDATE characters SET account='".$acct["new_acct"]."' WHERE guid='".$guid."'");
+  $int_err = 0;
+
+  // credits
+  if ( $transfer_credits > 0 )
+  {
+    // we need the player's account
+    if ( $core == 1 )
+      $acct_query = "SELECT login AS username FROM accounts WHERE acct=(SELECT acct FROM ".$characters_db[$realm_id]["name"].".characters WHERE guid='".$guid."')";
+    else
+      $acct_query = "SELECT username FROM account WHERE id=(SELECT account FROM ".$characters_db[$realm_id]["name"].".characters WHERE guid='".$guid."')";
+
+    $acct_result = $sql["logon"]->query($acct_query);
+    $acct_result = $sql["logon"]->fetch_assoc($acct_result);
+    $username = $acct_result["username"];
+
+    // now we get the user's credit balance
+    $cr_query = "SELECT Credits FROM config_accounts WHERE Login='".$username."'";
+    $cr_result = $sql["mgr"]->query($cr_query);
+    $cr_result = $sql["mgr"]->fetch_assoc($cr_result);
+    $credits = $cr_result["Credits"];
+
+    // since this action is delayed, we have to make sure the account still has sufficient funds
+    // if the account doesn't have enough, we just delete the change request
+    if ( ( $credits >= 0 ) && ( $credits < $transfer_credits ) )
+      $int_err = 1;
+
+    if ( !$int_err )
+    {
+      // we don't charge credits if the account is unlimited
+      if ( $credits >= 0 )
+        $credits = $credits - $transfer_credits;
+
+      $money_query = "UPDATE config_accounts SET Credits='".$credits."' WHERE Login='".$username."'";
+
+      $money_result = $sql["mgr"]->query($money_query);
+    }
+  }
+
+  if ( !$int_err )
+  {
+    if ( $core == 1 )
+      $result = $sql["char"]->query("UPDATE characters SET acct='".$acct["new_acct"]."' WHERE guid='".$guid."'");
+    else
+      $result = $sql["char"]->query("UPDATE characters SET account='".$acct["new_acct"]."' WHERE guid='".$guid."'");
+  }
 
   $result = $sql["mgr"]->query("DELETE FROM char_changes WHERE guid='".$guid."'");
 
@@ -297,10 +438,10 @@ function savename()
 
 
 //#############################################################################
-// SAVE NEW NAME (DIRECT APPROVAL VIA CHAR_LIST.PHP)
+// SAVE NEW ACCOUNT (DIRECT APPROVAL VIA CHAR_LIST.PHP)
 //#############################################################################
 
-function savename_direct()
+function saveacct_direct()
 {
   global $output, $action_permission, $corem_db, $characters_db, $realm_id,
     $user_id, $sql, $core;
@@ -363,6 +504,9 @@ elseif ( $err == 3 )
 elseif ( $err == 4 )
   $output .= '
             <h1>'.lang("xacct", "done").'</h1>';
+elseif ( $err == 6 )
+  $output .= '
+            <h1><font class="error">'.lang("xacct", "insufficient_credits").'</font></h1>';
 else
   $output .= '
             <h1>'.lang("xacct", "changename").'</h1>';
@@ -381,9 +525,9 @@ elseif ( $action == 'getapproval' )
 elseif ( $action == 'denied' )
   denied();
 elseif ( $action == 'approve' )
-  savename();
+  saveacct();
 elseif ( $action == 'direct' )
-  savename_direct();
+  saveacct_direct();
 else
   sel_char();
 

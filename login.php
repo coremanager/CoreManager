@@ -149,9 +149,9 @@ function dologin()
 
       if ( isset($_POST["remember"]) && $_POST["remember"] != '' )
       {
-        setcookie(   "login", bin2hex(gzcompress($_SESSION["login"])), time() + 60*60*24*30);
-        setcookie("password", bin2hex(gzcompress($user_pass)), time() + 60*60*24*30);
-        setcookie("realm_id", $_SESSION["realm_id"], time() + 60*60*24*30);
+        setcookie(   "corem_login", bin2hex(gzcompress($_SESSION["login"])), time() + 60*60*24*30);
+        setcookie("corem_password", bin2hex(gzcompress($user_pass)), time() + 60*60*24*30);
+        setcookie("corem_realm_id", $_SESSION["realm_id"], time() + 60*60*24*30);
       }
       redirect("index.php");
     }
@@ -170,7 +170,7 @@ function login()
 {
   global $output, $characters_db, $server, $remember_me_checked, $sql, $core, $site_encoding;
   
-  $override_remember_me = $_COOKIE["override_remember_me"];
+  $override_remember_me = $_COOKIE["corem_override_remember_me"];
   // if the cookie doesn't exist, we default to showing
   if ( !isset($override_remember_me) )
     $override_remember_me = 1;
@@ -293,26 +293,26 @@ function do_cookie_login()
 {
   global $corem_db, $sql, $core;
 
-  if ( empty($_COOKIE["login"]) || empty($_COOKIE["password"]) || empty($_COOKIE["realm_id"]) )
+  if ( empty($_COOKIE["corem_login"]) || empty($_COOKIE["corem_password"]) || empty($_COOKIE["corem_realm_id"]) )
     redirect("login.php?error=2");
 
-  $user_name = $sql["logon"]->quote_smart($_COOKIE["login"]);
-  $user_pass = $sql["logon"]->quote_smart($_COOKIE["password"]);
+  $user_name = $sql["logon"]->quote_smart($_COOKIE["corem_login"]);
+  $user_pass = $sql["logon"]->quote_smart($_COOKIE["corem_password"]);
 
   // see if our login & password cookies are old or new form...
   if ( !preg_match("/^([A-Fa-f0-9]{2})*$/", $user_name) )
   {
     // we have old form cookies, we'll rebuild them to new form and go from there
-    setcookie("login",    bin2hex(gzcompress($user_name)), time() + 60*60*24*30);
-    setcookie("password", bin2hex(gzcompress($user_pass)), time() + 60*60*24*30);
+    setcookie("corem_login",    bin2hex(gzcompress($user_name)), time() + 60*60*24*30);
+    setcookie("corem_password", bin2hex(gzcompress($user_pass)), time() + 60*60*24*30);
 
     redirect("login.php");
   }
   else
   {
     // we have new form cookies
-    $user_name = ( ( isset($_COOKIE["login"]) ) ? gzuncompress(pack("H*" , $_COOKIE["login"])) : NULL );
-		$user_pass = ( ( isset($_COOKIE["password"]) ) ? gzuncompress(pack("H*" , $_COOKIE["password"])) : NULL );
+    $user_name = ( ( isset($_COOKIE["corem_login"]) ) ? gzuncompress(pack("H*" , $_COOKIE["corem_login"])) : NULL );
+		$user_pass = ( ( isset($_COOKIE["corem_password"]) ) ? gzuncompress(pack("H*" , $_COOKIE["corem_password"])) : NULL );
   }
 
   // Users may log in using either their username or screen name
@@ -391,7 +391,7 @@ function do_cookie_login()
       $_SESSION["screenname"] = $name["ScreenName"];
       //gets our numerical level based on ArcEmu level.
       $_SESSION["user_lvl"] = gmlevel($temp["gm"]);
-      $_SESSION["realm_id"] = $sql["logon"]->quote_smart($_COOKIE["realm_id"]);
+      $_SESSION["realm_id"] = $sql["logon"]->quote_smart($_COOKIE["corem_realm_id"]);
       $_SESSION["client_ip"] = ( ( isset($_SERVER["REMOTE_ADDR"]) ) ? $_SERVER["REMOTE_ADDR"] : getenv("REMOTE_ADDR") );
       $_SESSION["logged_in"] = true;
       redirect("index.php");
@@ -399,9 +399,9 @@ function do_cookie_login()
   }
   else
   {
-    setcookie (   "login", "", time() - 3600);
-    setcookie ("realm_id", "", time() - 3600);
-    setcookie ("password", "", time() - 3600);
+    setcookie (   "corem_login", "", time() - 3600);
+    setcookie ("corem_realm_id", "", time() - 3600);
+    setcookie ("corem_password", "", time() - 3600);
 
     redirect("login.php?error=1");
   }
@@ -411,7 +411,7 @@ function do_cookie_login()
 //#################################################################################################
 // MAIN
 //#################################################################################################
-if ( isset($_COOKIE["login"]) && isset($_COOKIE["password"]) && isset($_COOKIE["realm_id"]) && empty($_GET["error"]) )
+if ( isset($_COOKIE["corem_login"]) && isset($_COOKIE["corem_password"]) && isset($_COOKIE["corem_realm_id"]) && empty($_GET["error"]) )
   do_cookie_login();
 
 $err = ( ( isset($_GET["error"]) ) ? $_GET["error"] : NULL );
