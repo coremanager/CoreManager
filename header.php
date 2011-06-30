@@ -19,9 +19,28 @@
 
 
 $time_start = microtime(true);
+
+// if CoreManager isn't in the / path we probably need to
+// specify a path in our session cookie
+// get our path
+$path = $_SERVER["SCRIPT_NAME"];
+$filename = Explode("/", $path);
+$filename = $filename[count($filename) - 1];
+// remove the current filename from the path
+$path = str_replace("/".$filename, "", $path);
+
 // resuming login session if available, or start new one
 if ( !ini_get("session.auto_start") )
+{
+  if ( $path != "" )
+  {
+    // we're not in the / path, use our current path in the session cookie
+    $params = session_get_cookie_params();
+    session_set_cookie_params($params["lifetime"], $path, $params["domain"], $params["secure"], $params["httponly"]);
+  }
+
   session_start();
+}
 
 //---------------------Load Default and User Configuration---------------------
 if ( file_exists("configs/config.php") )

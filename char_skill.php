@@ -117,7 +117,7 @@ function char_skill()
     }
     else
     {
-      if ( $owner_name == $user_name )
+      if ( ( $user_lvl > $owner_gmlvl ) || ( $owner_name === $user_name ) || ( $user_lvl == $action_permission["delete"] ) )
         $view_inv_override = true;
     }
 

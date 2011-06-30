@@ -999,6 +999,9 @@ $GLOBALS['lang_user'] = array
   'email' => 'Mail',
   'join_date' => 'Join Date',
   'banned' => 'Banned',
+  'ban_from' => 'From',
+  'ban_until' => 'Until',
+  'ban_by' => 'By',
   'banned_reason' => 'Ban Reason',
   'ip' => 'IP',
   'char_count' => 'Total Characters',
@@ -1531,7 +1534,7 @@ $GLOBALS['lang_forum'] = array
   "normal" => "Normal",
 
   // delete_post
-  "delete_topic" => "Do you really want to delete this topic and all his sub-messages?",
+  "delete_topic" => "Do you really want to delete this topic and all its sub-messages?",
   "delete_post" => "Do you really want to delete this post?",
   "back" => "Back",
   "confirm" => "Confirm",

@@ -1551,13 +1551,16 @@ function edit_user()
               <tr>
                 <td>'.lang("user", "banned").':</td>';
     if ( $core == 1 )
-      $que = $sql["logon"]->query("SELECT banned FROM accounts WHERE banned<>0 AND acct=".$acct);
+      $que = $sql["logon"]->query("SELECT banned, banreason FROM accounts WHERE banned<>0 AND acct=".$acct);
     else
       $que = $sql["logon"]->query("SELECT bandate, unbandate, bannedby, banreason FROM account_banned WHERE active=1 AND id=".$acct);
     if ( $sql["logon"]->num_rows($que) )
     {
       $banned = $sql["logon"]->fetch_row($que);
-      $ban_info = " From:".date('d-m-Y G:i', $banned[0])." till:".date('d-m-Y G:i', $banned[1])."<br />by: ".$banned[2];
+      if ( $core == 1 )
+        $ban_info = ' '.lang("user", "ban_until").': '.date("d-m-Y G:i", $banned[0]);
+      else
+        $ban_info = ' '.lang("user", "ban_from").': '.date("d-m-Y G:i", $banned[0]).', '.lang("user", "ban_until").': '.date("d-m-Y G:i", $banned[1]).',<br />'.lang("user", "ban_by").': '.$banned[2];
       $ban_checked = ' checked="checked"';
     }
     else

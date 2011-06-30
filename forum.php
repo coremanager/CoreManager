@@ -1119,7 +1119,7 @@ function forum_do_add_topic()
   if ( strlen($msg) < 5 )
     error(lang("forum", "msg_too_short"));
 
-  $msg = str_replace('\n', '<br />', $msg);
+  //$msg = str_replace('\n', '<br />', $msg);
 
   $time = date("m/d/y H:i:s");
 

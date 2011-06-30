@@ -79,6 +79,14 @@ function bb2html($text)
                 "<img src='img/emoticons/lol.gif' />",
                 '>',
                 '">');
+
+  // replace newlines
+  // first we do windows newlines because they use both
+  $newtext = str_replace("\r\n", "<br />", $text);
+  // if there's newlines left, the post wasn't made from a windows machine
+  $newtext = str_replace("\r", "<br />", $text);
+  $newtext = str_replace("\n", "<br />", $text);
+
   $newtext = str_replace($bbcode, $htmlcode, $text);
   $newtext = nl2br($newtext);//second pass
   return $newtext;
