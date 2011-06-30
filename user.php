@@ -1539,7 +1539,7 @@ function edit_user()
     if ( $user_lvl >= $action_permission["update"] )
     {
       $output .= '
-                <td>'.$data["lastip"].'<a href="banned.php?action=do_add_entry&amp;entry='.$data["lastip"].'&amp;bantime=3600&amp;ban_type=ip_banned"> &lt;- '.lang("user", "ban_this_ip").'</a></td>';
+                <td>'.$data["lastip"].'<a href="banned.php?action=do_add_entry&amp;entry='.$data["lastip"].'&amp;bantime=3600&amp;ban_type=ipbans"> &lt;- '.lang("user", "ban_this_ip").'</a></td>';
     }
     else
     {
