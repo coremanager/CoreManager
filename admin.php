@@ -3384,6 +3384,10 @@ function savemenu()
   $delete = $sqlm->quote_smart($_GET["delete"]);
   $enabled = ( ( isset($_GET["enabled"]) ) ? 1 : 0 );
 
+  if ( empty($order) || !isset($order) )
+    redirect("admin.php?section=menus&error=1");
+  
+
   $result = $sqlm->query("SELECT * FROM config_menus WHERE `Index`='".$menu_item."'");
   if ( $sqlm->num_rows($result) )
     $result = $sqlm->query("UPDATE config_menus SET Menu='".$menu."', `Order`='".$order."', Name='".$name."', Action='".$action."', View='".$view."', `Insert`='".$insert."', `Update`='".$update."', `Delete`='".$delete."', Enabled='".$enabled."' WHERE `Index`='".$menu_item."'");

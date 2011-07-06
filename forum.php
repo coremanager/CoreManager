@@ -538,13 +538,13 @@ function forum_view_topic()
       }
 
       if ( $post[9] == "1" )
-        $output .= "
-                <a href=\"forum.php?action=edit_close&amp;id=".$post[0]."&amp;state=0\">
-                  <img src=\"img/forums/lock.gif\" border=\"0\" alt=\"".lang("forum", "open")."\" />
-                </a>";
+        $output .= '
+                <a href="forum.php?action=edit_close&amp;id='.$post[0].'&amp;state=0">
+                  <img src="img/forums/lock.gif" border="0" alt="'.lang("forum", "open").'" />
+                </a>';
       else
         $output .= '
-                <a href=\"forum.php?action=edit_close&amp;id='.$post[0].'&amp;state=1">
+                <a href="forum.php?action=edit_close&amp;id='.$post[0].'&amp;state=1">
                   <img src="img/forums/unlock.gif" border="0" alt="'.lang("forum", "close").'" />
                 </a>';
 
