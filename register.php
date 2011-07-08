@@ -299,22 +299,25 @@ function doregister()
     $referredby = ( ( isset($_POST["invitedby"]) ) ? $sql["logon"]->quote_smart($_POST["invitedby"]) : NULL );
     $referralresult = doupdate_referral($referredby, $our_acct);
 
-    if ( $core != 1 )
+    // Trinity uses a separate table for gm levels and realm access
+    if ( $core == 3 )
     {
       $id_query = "SELECT * FROM account WHERE username='".$user_name."'";
       $id_result = $sql["logon"]->query($id_query);
       $id_fields = $sql["logon"]->fetch_assoc($id_result);
       $new_id = $id_fields["id"];
-      
+
       $query = "INSERT INTO account_access (id, gmlevel, RealmID) VALUES ('".$new_id."', '0', '-1')";
       $aa_result = $sql["logon"]->query($query);
     }
 
-    if ( $core == 1 )
+    // compile results
+    if ( $core != 3 )
       $result = $s_result && $a_result;
     else
       $result = $s_result && $a_result && $aa_result;
 
+    // destroy the terms cookie
     setcookie ("terms", "", time() - 3600);
 
     // set $lang global
