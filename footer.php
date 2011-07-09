@@ -131,9 +131,9 @@
   {
     if ( $core == 1 )
     {
-      $new_query = "SELECT accounts.acct, Login, JoinDate AS joindate
+      $new_query = "SELECT accounts.acct, config_accounts.Login, JoinDate AS joindate
         FROM config_accounts
-          LEFT JOIN accounts ON accounts.login=config_accounts.Login
+          LEFT JOIN `".$logon_db["name"]."`.accounts ON accounts.login=config_accounts.Login COLLATE utf8_unicode_ci
         ORDER BY joindate DESC LIMIT 1";
       $new_result = $sql["mgr"]->query($new_query);
       $new = $sql["mgr"]->fetch_assoc($new_result);
