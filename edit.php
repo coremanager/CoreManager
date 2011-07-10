@@ -365,6 +365,11 @@ function edit_user()
             (SELECT login FROM `".$logon_db["name"]."`.accounts WHERE `".$logon_db["name"]."`.accounts.acct=`".$characters_db[$realm_id]['name']."`.characters.acct) AS login
             FROM `".$characters_db[$realm_id]['name']."`.characters
             WHERE level IN (SELECT MAX(level) FROM `".$characters_db[$realm_id]['name']."`.characters WHERE acct='".$user_id."')";
+        elseif ( $core == 2 )
+          $avatar_query = "SELECT account AS acct, name, gender, race, class, level, gmlevel,
+            (SELECT username FROM `".$logon_db["name"]."`.account WHERE `".$logon_db["name"]."`.account.id=`".$characters_db[$realm_id]['name']."`.characters.account) AS login
+            FROM `".$characters_db[$realm_id]['name']."`.characters
+            WHERE level IN (SELECT MAX(level) FROM `".$characters_db[$realm_id]['name']."`.characters WHERE account='".$user_id."') AND account='".$user_id."'";
         else
           $avatar_query = "SELECT account AS acct, name, gender, race, class, level,
             (SELECT gmlevel FROM `".$logon_db["name"]."`.account_access WHERE `".$logon_db["name"]."`.account_access.id=`".$characters_db[$realm_id]['name']."`.characters.account) AS gmlevel,
