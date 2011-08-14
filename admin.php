@@ -1947,8 +1947,10 @@ function general()
         $default_theme = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Default_Theme'"));
         $default_language = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Default_Language'"));
         $timezone = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Timezone'"));
+        $player_online = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Player_Online'"));
         $gm_online = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='GM_Online'"));
         $gm_online_count = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='GM_Online_Count'"));
+        $hide_uptime = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Hide_Uptime'"));
         $hide_max_players = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Hide_Max_Players'"));
         $hide_avg_latency = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Hide_Avg_Latency'"));
         $hide_server_mem = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Hide_Server_Mem'"));
@@ -2106,6 +2108,27 @@ function general()
             </tr>
             <tr>
               <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "playeronline_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "playeronline").'</a>:
+              </td>
+              <td>
+                <select name="playeronline">';
+
+        $sl_query = "SELECT * FROM config_gm_level_names";
+        $sl_result = $sqlm->query($sl_query);
+
+        while ( $row = $sqlm->fetch_assoc($sl_result) )
+        {
+          $output .= '
+                          <option value="'.$row["Security_Level"].'" '.( ( $player_online["Value"] == $row["Security_Level"] ) ? 'selected="selected"' : '' ).'>'.$row["Full_Name"].' ('.$row["Security_Level"].')</option>';
+        }
+
+        $output .= '
+                </select>
+                <!-- input type="checkbox" name="playeronline" '.( ( $player_online["Value"] == 1 ) ? 'checked="checked"' : '' ).' / -->
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
                 <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "gmonline_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "gmonline").'</a>:
               </td>
               <td>
@@ -2118,6 +2141,14 @@ function general()
               </td>
               <td>
                 <input type="checkbox" name="gmonlinecount" '.( ( $gm_online_count["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "hideuptime_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hideuptime").'</a>:
+              </td>
+              <td>
+                <input type="checkbox" name="hideuptime" '.( ( $hide_uptime["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
               </td>
             </tr>
             <tr>
@@ -2323,8 +2354,10 @@ function general()
         $default_theme = $sqlm->quote_smart($_GET["defaulttheme"]);
         $default_language = $sqlm->quote_smart($_GET["defaultlanguage"]);
         $timezone = $sqlm->quote_smart($_GET["timezone"]);
+        $player_online = $sqlm->quote_smart($_GET["playeronline"]);
         $gm_online = ( ( isset($_GET["gmonline"]) ) ? 1 : 0 );
         $gm_online_count = ( ( isset($_GET["gmonlinecount"]) ) ? 1 : 0 );
+        $hide_uptime = ( ( isset($_GET["hideuptime"]) ) ? 1 : 0 );
         $hide_max_players = ( ( isset($_GET["hidemaxplayers"]) ) ? 1 : 0 );
         $hide_avg_latency = ( ( isset($_GET["hideavglatency"]) ) ? 1 : 0 );
         $hide_plr_latency = ( ( isset($_GET["hideplrlatency"]) ) ? 1 : 0 );
@@ -2353,8 +2386,10 @@ function general()
         $result = $sqlm->query("UPDATE config_misc SET Value='".$default_theme."' WHERE `Key`='Default_Theme'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$default_language."' WHERE `Key`='Default_Language'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$timezone."' WHERE `Key`='Timezone'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$player_online."' WHERE `Key`='Player_Online'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$gm_online."' WHERE `Key`='GM_Online'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$gm_online_count."' WHERE `Key`='GM_Online_Count'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$hide_uptime."' WHERE `Key`='Hide_Uptime'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$hide_max_players."' WHERE `Key`='Hide_Max_Players'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$hide_avg_latency."' WHERE `Key`='Hide_Avg_Latency'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$hide_server_mem."' WHERE `Key`='Hide_Server_Mem'");
@@ -4132,11 +4167,19 @@ switch ( $err )
             </h1>';
     break;
   case 3:
-    $output .= '
+  {
+    if ( $current != "ERROR" )
+      $output .= '
             <h1>
               <font class="error">'.lang("admin", "newer_revision").' '.lang("admin", "current_rev").': '.$current.'; '.lang("admin", "latest_rev").': '.$latest.'</font>
             </h1>';
+    else
+      $output .= '
+            <h1>
+              <font class="error">'.lang("admin", "missing_svn").'</font>
+            </h1>';
     break;
+  }
   case 4:
     $output .= '
             <h1>

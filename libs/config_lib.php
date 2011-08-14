@@ -688,6 +688,16 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $hearthstone_credits = $misc_row["Value"];
       break;
     }
+    case "Player_Online":
+    {
+      $player_online = $misc_row["Value"];
+      break;
+    }
+    case "Hide_Uptime":
+    {
+      $hide_uptime = $misc_row["Value"];
+      break;
+    }
   }
 }
 

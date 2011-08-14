@@ -34,7 +34,7 @@ function front()
 {
   global $output, $realm_id, $world_db, $logon_db, $characters_db, $corem_db, $server,
     $action_permission, $user_lvl, $user_id, $site_encoding,
-    $showcountryflag, $gm_online_count, $gm_online, $itemperpage,
+    $showcountryflag, $gm_online_count, $gm_online, $itemperpage, $hide_uptime, $player_online,
     $hide_max_players, $hide_avg_latency, $hide_plr_latency, $hide_server_mem, $sql, $core;
 
   $output .= '
@@ -58,7 +58,11 @@ function front()
     {
       $stats = get_uptime($server[$realm_id]["stats.xml"]);
       
-      $staticUptime = ' <em>'.htmlentities(get_realm_name($realm_id), ENT_COMPAT, $site_encoding).'</em> <br />'.$stats["platform"][4].' '.$stats["platform"][5].' '.$stats["platform"][6].'<br />'.lang("index", "online").' for '.$stats["uptime"];
+      $staticUptime = ' <em>'.htmlentities(get_realm_name($realm_id), ENT_COMPAT, $site_encoding).'</em> <br />'.$stats["platform"][4].' '.$stats["platform"][5].' '.$stats["platform"][6];
+
+      if ( !$hide_uptime )
+        $staticUptime .= '<br />'.lang("index", "online").' for '.$stats["uptime"];
+
       $output .= '
             <div id="uptime">'.$msie.'
               <h1>
@@ -108,10 +112,10 @@ function front()
       $uptimetime = time() - $stats["starttime"];
 
       // a more reliable method of counting how many characters have been online since server start
-      $maxplayers_query = "SELECT COUNT(*) FROM characters WHERE logout_time>'".$stats["starttime"]."'";
-      $maxplayers_result = $sql["char"]->query($maxplayers_query);
-      $maxplayers_result = $sql["char"]->fetch_assoc($maxplayers_result);
-      $stats["maxplayers"] = $maxplayers_result["COUNT(*)"];
+      //$maxplayers_query = "SELECT COUNT(*) FROM `".$characters_db[$realm_id]["name"]."`.characters WHERE logout_time>='".$stats["starttime"]."' AND logout_time>=(SELECT UNIX_TIMESTAMP(last_login) FROM `".$logon_db["name"]."`.account WHERE id=`".$characters_db[$realm_id]["name"]."`.characters.account)";
+      //$maxplayers_result = $sql["char"]->query($maxplayers_query);
+      //$maxplayers_result = $sql["char"]->fetch_assoc($maxplayers_result);
+      //$stats["maxplayers"] = $maxplayers_result["COUNT(*)"];
 
       function format_uptime($seconds)
       {
@@ -168,10 +172,13 @@ function front()
 
       $staticUptime = ' <em>'.htmlentities(get_realm_name($realm_id), ENT_COMPAT, $site_encoding).'</em> ';
 
-      if ( $stats["starttime"] <> 0 )
-        $staticUptime .= '<br />'.lang("index", "online").' for '.format_uptime($uptimetime);
-      else
-        $staticUptime .= '<br /><span style="color:orange">The current time difference since the Unix Epoch is: <br>'.format_uptime($uptimetime).'</span><br><span style="color:red">(meaning: a minor server error has occured)</span>';
+      if ( !$hide_uptime )
+      {
+        if ( $stats["starttime"] <> 0 )
+          $staticUptime .= '<br />'.lang("index", "online").' for '.format_uptime($uptimetime);
+        else
+          $staticUptime .= '<br /><span style="color:orange">The current time difference since the Unix Epoch is: <br>'.format_uptime($uptimetime).'</span><br><span style="color:red">(meaning: a minor server error has occured)</span>';
+      }
 
       unset($uptimetime);
       $output .= '
@@ -181,11 +188,13 @@ function front()
                   .$staticUptime;
 
       if ( !$hide_max_players )
+      {
         $output .= '
                   <br />'
                   .lang("index", "maxplayers").
                   ': <font id="index_realm_info_value">'
                   .$stats["maxplayers"].'</font>';
+      }
       // this_is_junk: MaNGOS doesn't store player latency. :/
       if ( $core == 3 )
       {
@@ -580,7 +589,7 @@ function front()
             </table>';
 
   //print online chars
-  if ( $online )
+  if ( $online && ( $user_lvl >= $player_online ) )
   {
     //==========================$_GET and SECURE=================================
     $start = ( ( isset($_GET["start"]) ) ? $sql["char"]->quote_smart($_GET["start"]) : 0 );

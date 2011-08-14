@@ -93,6 +93,9 @@ if ( strpos($data[$i], "Changeset") <> false )
   }
 
   // compare
+  if ( !isset($current) )
+    $current = "ERROR";
+
   if ( $current <> $revision[$j] )
   {
     $_GET["error"] = 3; // force an error
