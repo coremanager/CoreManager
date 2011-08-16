@@ -29,98 +29,108 @@ function print_mail_form()
   valid_login($action_permission["update"]);
 
   $to = ( ( isset($_GET["to"]) ) ? $_GET["to"] : NULL );
-  $type = ( ( isset($_GET["type"]) ) ? $_GET["type"] : "email" );
+  $type = ( ( isset($_GET["type"]) ) ? $_GET["type"] : "ingame_mail" );
 
   $output .= '
         <center>
           <form action="mail.php" method="get" name="form">
             <input type="hidden" name="action" value="send_mail" />
-            <div id="mail_type_field" class="fieldset_border">
-              <span class="legend">'.lang("mail", "mail_type").'</span>
-              <br />
-              <table class="top_hidden" id="mail_type">
-                <tr>
-                  <td align="left" rowspan="2">'.lang("mail", "recipient").': 
-                    <input type="text" name="to" size="32" value="'.$to.'" maxlength="225" />
-                  </td>
-                  <td align="left" rowspan="2">'.lang("mail", "subject").': 
-                    <input type="text" name="subject" size="32" maxlength="50" />
-                  </td>
-                </tr>
-                <tr>
-                  <td width="15%" align="left">
-                    <input type="radio" name="type" value="email" '.( ( $type == "email" ) ? 'checked="checked"' : '' ).' />'.lang("mail", "email").'
-                    <br />
-                    <input type="radio" name="type" value="ingame_mail" '.( ( $type == "ingame_mail" ) ? 'checked="checked"' : '' ).' />'.lang("mail", "ingame_mail").'
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="3">
-                    <hr />
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="3">'.lang("mail", "dont_use_both_groupsend_and_to").'</td>
-                </tr>
-                <tr>
-                  <td colspan="3">'.lang("mail", "group_send").':
-                    <select name="group_send">
-                      <optgroup label="'.lang("mail", "both").'">
-                        <option value="gm_level">'.lang("mail", "gm_level").'</option>
-                      </optgroup>
-                      <optgroup label="'.lang("mail", "email").'">
-                        <option value="locked">'.lang("mail", "locked_accouns").'</option>
-                        <option value="banned">'.lang("mail", "banned_accounts").'</option>
-                      </optgroup>
-                      <optgroup label="'.lang("mail", "ingame_mail").'">
-                        <option value="char_level">'.lang("mail", "char_level").'</option>
-                        <option value="online">'.lang("mail", "online").'</option>
-                      </optgroup>
-                    </select>
-                    <select name="group_sign">
-                      <option value="=">=</option>
-                      <option value="&lt;">&lt;</option>
-                      <option value=">">&gt;</option>
-                      <option value="!=">!=</option>
-                    </select>
-                    <input type="text" name="group_value" size="20" maxlength="40" />
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="3">
-                    <hr />
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="3" align="left">'.lang("mail", "attachments").':</td>
-                </tr>
-                <tr>
-                  <td colspan="3" align="right">'
-                    .lang("mail", "money").' : <input type="text" name="money" value="0" size="10" maxlength="10" />'
-                    .lang("mail", "item").' : <input type="text" name="att_item" value="0" size="10" maxlength="10" />'
-                    .lang("mail", "stack").' : <input type="text" name="att_stack" value="0" size="10" maxlength="10" />
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="3">
-                  </td>
-                </tr>
-              </table>
+            <input type="hidden" name="type" value="'.$type.'" />
+            <div id="tab">
+              <ul>
+                <li '.( ( $type == "ingame_mail" ) ? 'id="selected"' : '' ).'><a href="mail.php?to='.$to.'&amp;type=ingame_mail">'.lang("mail", "ingame_mail").'</a></li>
+                <li '.( ( $type == "email" ) ? 'id="selected"' : '' ).'><a href="mail.php?to='.$to.'&amp;type=email">'.lang("mail", "email").'</a></li>
+              </ul>
             </div>
-            <div id="mail_body_field" class="fieldset_border">
-              <span class="legend">'.lang("mail", "mail_body").'</span>
-              <br />
-              <textarea name="body" rows="14" cols="92"></textarea>
-              <br />
-              <br />
-              <table>
-                <tr>
-                  <td>';
+            <div id="tab_content">
+              <div id="mail_type_field" class="fieldset_border">
+                <span class="legend">'.lang("mail", "mail_type").'</span>
+                <table class="top_hidden" id="mail_type">
+                  <tr>
+                    <td align="left">'.lang("mail", "recipient").': 
+                      <input type="text" name="to" size="32" value="'.$to.'" maxlength="225" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3">
+                      <hr />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3">'.lang("mail", "dont_use_both_groupsend_and_to").'</td>
+                  </tr>
+                  <tr>
+                    <td colspan="3">'.lang("mail", "group_send").':
+                      <select name="group_send">
+                          <option value="gm_level">'.lang("mail", "gm_level").'</option>';
+
+  if ( $type == "email" )
+    $output .= '
+                          <option value="locked">'.lang("mail", "locked_accouns").'</option>
+                          <option value="banned">'.lang("mail", "banned_accounts").'</option>';
+
+  if ( $type == "ingame_mail" )
+    $output .= '
+                          <option value="char_level">'.lang("mail", "char_level").'</option>
+                          <option value="online">'.lang("mail", "online").'</option>';
+
+  $output .= '
+                      </select>
+                      <select name="group_sign">
+                        <option value="=">=</option>
+                        <option value="&lt;">&lt;</option>
+                        <option value=">">&gt;</option>
+                        <option value="!=">!=</option>
+                      </select>
+                      <input type="text" name="group_value" size="20" maxlength="40" />
+                    </td>
+                  </tr>';
+
+  if ( $type == "ingame_mail" )
+    $output .= '
+                  <tr>
+                    <td colspan="3">
+                      <hr />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" align="left">'.lang("mail", "attachments").':</td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" align="right">'
+                      .lang("mail", "money").': <input type="text" name="money" value="0" size="10" maxlength="10" />'
+                      .lang("mail", "item").': <input type="text" name="att_item" value="0" size="10" maxlength="10" />'
+                      .lang("mail", "stack").': <input type="text" name="att_stack" value="0" size="10" maxlength="10" />
+                    </td>
+                  </tr>';
+
+  $output .= '
+                </table>
+                <br />
+              </div>
+              <div id="mail_body_field" class="fieldset_border">
+                <span class="legend">'.lang("mail", "mail_body").'</span>
+                <table class="top_hidden" id="mail_body_table">
+                  <tr>
+                    <td align="left">'.lang("mail", "subject").': 
+                      <input type="text" name="subject" size="32" maxlength="50" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <textarea name="body" rows="14" cols="92" id="mail_body"></textarea>
+                    </td>
+                  </tr>
+                </table>
+                <table>
+                  <tr>
+                    <td>';
   makebutton(lang("mail", "send"), "javascript:do_submit()",130);
   $output .= '
-                  </td>
-                </tr>
-              </table>
+                    </td>
+                  </tr>
+                </table>
+              </div>
             </div>
             <br />
           </form>
@@ -137,21 +147,23 @@ function send_mail()
 
   // if we came here from Quest Item Vendor or Ultra Vendor,
   // we need to bypass the normal permissions
-  if ( $_SESSION['vendor_permission'] )
+  if ( $_SESSION["vendor_permission"] )
   {
     valid_login($action_permission["view"]);
-    unset($_SESSION['vendor_permission']);
+    unset($_SESSION["vendor_permission"]);
   }
   else
     valid_login($action_permission["update"]);
 
-  if ( empty($_GET["body"]) || empty($_GET["subject"]) || empty($_GET["type"]) || empty($_GET["group_sign"]) || empty($_GET["group_send"]) )
+  $type = ( ( isset($_GET["type"]) ) ? $_GET["type"] : "ingame_mail" );
+
+  if ( empty($_GET["body"]) || empty($_GET["subject"]) || empty($_GET["group_sign"]) || empty($_GET["group_send"]) )
     redirect("mail.php?error=1");
 
-  $body = explode("\n",$_GET["body"]);
+  $body = explode("\n", $_GET["body"]);
   $subject = $sql["char"]->quote_smart($_GET["subject"]);
 
-  if ( isset($_GET["to"]) && ($_GET["to"] != '') )
+  if ( isset($_GET["to"]) && ( $_GET["to"] != "" ) )
     $to = $sql["char"]->quote_smart($_GET["to"]);
   else
   {
@@ -166,7 +178,7 @@ function send_mail()
     }
   }
 
-  $type = addslashes($_GET["type"]);
+  //$type = addslashes($type);
   $att_gold = $sql["char"]->quote_smart($_GET["money"]);
   $att_item = $sql["char"]->quote_smart($_GET["att_item"]);
   $att_stack = $sql["char"]->quote_smart($_GET["att_stack"]);
@@ -186,7 +198,7 @@ function send_mail()
       {
         $mail->Host = $smtp_cfg["host"];
         $mail->Port = $smtp_cfg["port"];
-        if ( $smtp_cfg["user"] != '' )
+        if ( $smtp_cfg["user"] != "" )
         {
           $mail->SMTPAuth  = true;
           $mail->Username  = $smtp_cfg["user"];
@@ -206,7 +218,7 @@ function send_mail()
 
       $body = str_replace("\n", "<br />", $body);
       $body = str_replace("\r", " ", $body);
-      $body = str_replace(array("\r\n", "\n", "\r"), '<br />', $body);
+      $body = str_replace(array("\r\n", "\n", "\r"), "<br />", $body);
       $body = preg_replace( "/([^\/=\"\]])((http|ftp)+(s)?:\/\/[^<>\s]+)/i", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>",  $body);
       $body = preg_replace('/([^\/=\"\]])(www\.)(\S+)/', '\\1<a href="http://\\2\\3" target="_blank">\\2\\3</a>', $body);
 
@@ -248,11 +260,11 @@ function send_mail()
         {
           case "gm_level":
             if ( $core == 1 )
-              $result = $sql["logon"]->query("SELECT email FROM accounts WHERE gm ".$group_sign." '".$group_value."'");
+              $result = $sql["logon"]->query("SELECT email FROM accounts WHERE gm".$group_sign."'".$group_value."'");
             else
               $result = $sql["logon"]->query("SELECT email FROM account
                   LEFT JOIN account_access ON account_access.id=account.id
-                WHERE IFNULL(gmlevel, 0) ".$group_sign." '".$group_value."'");
+                WHERE IFNULL(gmlevel, 0)".$group_sign."'".$group_value."'");
             while ( $user = $sql["logon"]->fetch_row($result) )
             {
               if ( $user[0] != "" )
@@ -262,9 +274,9 @@ function send_mail()
           case "locked":
             //this_is_junk: I'm going to pretend that locked is muted
             if ( $core == 1 )
-              $result = $sql["logon"]->query("SELECT email FROM accounts WHERE muted ".$group_sign." '".$group_value."'");
+              $result = $sql["logon"]->query("SELECT email FROM accounts WHERE muted".$group_sign."'".$group_value."'");
             else
-              $result = $sql["logon"]->query("SELECT email FROM accounts WHERE locked ".$group_sign." '".$group_value."'");
+              $result = $sql["logon"]->query("SELECT email FROM accounts WHERE locked".$group_sign."'".$group_value."'");
             while ( $user = $sql["logon"]->fetch_row($result) )
             {
               if ( $user[0] != "" )
@@ -276,9 +288,9 @@ function send_mail()
             $que = $sql["logon"]->query("SELECT id FROM account_banned");
             while ( $banned = $sql->fetch_row($que) )
             {
-              $result = $sql["logon"]->query("SELECT email FROM accounts WHERE acct = '".$banned[0]."'");
+              $result = $sql["logon"]->query("SELECT email FROM accounts WHERE acct='".$banned[0]."'");
               if ( $sqlr->result($result, 0, 'email') )
-                array_push($email_array, $sql->result($result, 0, 'email'));
+                array_push($email_array, $sql->result($result, 0, "email"));
             }
             break;
           default:
@@ -364,7 +376,7 @@ function send_mail()
             else
               $result = $sql["logon"]->query("SELECT account.id AS acct FROM account
                   LEFT JOIN account_access ON account_access.id=account.id
-                WHERE IFNULL(gmlevel, 0) ".$group_sign." '".$group_value."'");
+                WHERE IFNULL(gmlevel, 0)".$group_sign."'".$group_value."'");
             while ( $acc = $sql["char"]->fetch_row($result) )
             {
               if ( $core == 1 )

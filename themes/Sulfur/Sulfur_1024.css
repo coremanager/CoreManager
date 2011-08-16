@@ -1815,7 +1815,7 @@ tr td.rep0
 /* MAIL.PHP */
 #mail_type_field
 {
-  width: 770px;
+  width: 740px;
 }
 #mail_type
 {
@@ -1823,7 +1823,16 @@ tr td.rep0
 }
 #mail_body_field
 {
-  width: 770px;
+  width: 740px;
+}
+#mail_body_table
+{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+#mail_body
+{
+  width: 720px;
 }
 
 
