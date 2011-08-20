@@ -137,11 +137,11 @@ function front()
           // actually, it's probably because the server didn't write a useful
           // value to the uptime table's starttime field.
           $uptimeString .= $years;
-          $uptimeString .= ( ( $years == 1 ) ? ' year' : ' years' );
+          $uptimeString .= ( ( $years == 1 ) ? ' '.lang("index", "uptime_year") : ' '.lang("index", "uptime_years") );
           if ( $days )
           {
             $uptimeString .= ( ( $years > 0 ) ? ', ' : '' ).$days;
-            $uptimeString .= ( ( $days == 1 ) ? ' day' : ' days');
+            $uptimeString .= ( ( $days == 1 ) ? ' '.lang("index", "uptime_day") : ' '.lang("index", "uptime_days"));
           }
         }
         else
@@ -149,23 +149,23 @@ function front()
           if ( $days )
           {
             $uptimeString .= $days;
-            $uptimeString .= ( ( $days == 1 ) ? ' day' : ' days' );
+            $uptimeString .= ( ( $days == 1 ) ? ' '.lang("index", "uptime_day") : ' '.lang("index", "uptime_days") );
           }
         }
         if ( $hours )
         {
           $uptimeString .= ( ( $days > 0 ) ? ', ' : '' ).$hours;
-          $uptimeString .= ( ( $hours == 1 ) ? ' hour' : ' hours' );
+          $uptimeString .= ( ( $hours == 1 ) ? ' '.lang("index", "uptime_hour") : ' '.lang("index", "uptime_hours") );
         }
         if ( $mins )
         {
           $uptimeString .= ( ( $days > 0 || $hours > 0 ) ? ', ' : '' ).$mins;
-          $uptimeString .= ( ( $mins == 1) ? ' minute' : ' minutes' );
+          $uptimeString .= ( ( $mins == 1) ? ' '.lang("index", "uptime_minute") : ' '.lang("index", "uptime_minutes") );
         }
         if ( $secs )
         {
           $uptimeString .= ( ( $days > 0 || $hours > 0 || $mins > 0 ) ? ', ' : '' ).$secs;
-          $uptimeString .= ( ( $secs == 1 ) ? ' second' : ' seconds' );
+          $uptimeString .= ( ( $secs == 1 ) ? ' '.lang("index", "uptime_second") : ' '.lang("index", "uptime_seconds") );
         }
         return $uptimeString;
       }
@@ -175,9 +175,9 @@ function front()
       if ( !$hide_uptime )
       {
         if ( $stats["starttime"] <> 0 )
-          $staticUptime .= '<br />'.lang("index", "online").' for '.format_uptime($uptimetime);
+          $staticUptime .= '<br />'.lang("index", "online").format_uptime($uptimetime);
         else
-          $staticUptime .= '<br /><span style="color:orange">The current time difference since the Unix Epoch is: <br>'.format_uptime($uptimetime).'</span><br><span style="color:red">(meaning: a minor server error has occured)</span>';
+          $staticUptime .= '<br /><span style="color:orange">'.lang("index", "time_error1").': <br>'.format_uptime($uptimetime).'</span><br><span style="color:red">'.lang("index", "time_error2").'</span>';
       }
 
       unset($uptimetime);

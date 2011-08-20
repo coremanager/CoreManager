@@ -211,7 +211,7 @@ $GLOBALS['lang_register'] = array
 $GLOBALS['lang_index'] = array
 (
   'realm' => 'ریلم',
-  'online' => 'فعال',
+  'online' => 'Online for ',
   'offline_or_let_high' => 'غیر فعال است یا اشکال در ارتباط وجود دارد',
   'add_motd' => 'اضافه کردن پیغام روز',
   'delete' => 'حذف',
@@ -239,6 +239,18 @@ $GLOBALS['lang_index'] = array
   'motd' => 'پیام سرور',
   'pendingchanges' => 'Pending Character Changes',
   'explorer_warn' => 'Notice: This site will NOT function correctly on Microsoft Internet Explorer.',
+  'uptime_year' => 'year',
+  'uptime_years' => 'years',
+  'uptime_day' => 'day',
+  'uptime_days' => 'days',
+  'uptime_hour' => 'hour',
+  'uptime_hours' => 'hours',
+  'uptime_minute' => 'minute',
+  'uptime_minutes' => 'minutes',
+  'uptime_second' => 'second',
+  'uptime_seconds' => 'seconds',
+  'time_error1' => 'The current time difference since the Unix Epoch is',
+  'time_error2' => '(meaning: a minor server error has occured)',
 );
 
 

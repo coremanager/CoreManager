@@ -211,7 +211,7 @@ $GLOBALS['lang_register'] = array
 $GLOBALS['lang_index'] = array
 (
   'realm' => 'Reino',
-  'online' => 'Online',
+  'online' => 'Online for ',
   'offline_or_let_high' => 'esta Offline o en Mantenimiento.',
   'add_motd' => 'Agregar Mensaje',
   'delete' => 'Borrar',
@@ -239,6 +239,18 @@ $GLOBALS['lang_index'] = array
   'motd' => 'Mensaje del Servidor',
   'pendingchanges' => 'Cambios de Personajes Pendientes',
   'explorer_warn' => 'Aviso: Este sitio web no funciona correctamente en Microsoft Internet Explorer.',
+  'uptime_year' => 'year',
+  'uptime_years' => 'years',
+  'uptime_day' => 'day',
+  'uptime_days' => 'days',
+  'uptime_hour' => 'hour',
+  'uptime_hours' => 'hours',
+  'uptime_minute' => 'minute',
+  'uptime_minutes' => 'minutes',
+  'uptime_second' => 'second',
+  'uptime_seconds' => 'seconds',
+  'time_error1' => 'The current time difference since the Unix Epoch is',
+  'time_error2' => '(meaning: a minor server error has occured)',
 );
 
 

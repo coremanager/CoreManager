@@ -211,7 +211,7 @@ $GLOBALS['lang_register'] = array
 $GLOBALS['lang_index'] = array
 (
   'realm' => '服务器',
-  'online' => '在线',
+  'online' => 'Online for ',
   'offline_or_let_high' => '离线或延迟过高',
   'add_motd' => '添加服务器消息',
   'delete' => '删除',
@@ -239,6 +239,18 @@ $GLOBALS['lang_index'] = array
   'motd' => '服务器消息',
   'pendingchanges' => '等待处理的角色变更',
   'explorer_warn' => 'Notice: This site will NOT function correctly on Microsoft Internet Explorer.',
+  'uptime_year' => 'year',
+  'uptime_years' => 'years',
+  'uptime_day' => 'day',
+  'uptime_days' => 'days',
+  'uptime_hour' => 'hour',
+  'uptime_hours' => 'hours',
+  'uptime_minute' => 'minute',
+  'uptime_minutes' => 'minutes',
+  'uptime_second' => 'second',
+  'uptime_seconds' => 'seconds',
+  'time_error1' => 'The current time difference since the Unix Epoch is',
+  'time_error2' => '(meaning: a minor server error has occured)',
 );
 
 
