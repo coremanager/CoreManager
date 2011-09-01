@@ -690,6 +690,7 @@ function general()
                   <option value="mail" '.( ( $mail_mailer_type["Value"] == "mail" ) ? 'selected="selected" ' : '' ).'>'.lang("admin", "mail").'</option>
                   <option value="sendmail" '.( ( $mail_mailer_type["Value"] == "sendmail" ) ? 'selected="selected" ' : '' ).'>'.lang("admin", "sendmail").'</option>
                   <option value="smtp"'.( ( $mail_mailer_type["Value"] == "smtp" ) ? 'selected="selected" ' : '' ).'>'.lang("admin", "smtp").'</option>
+                  <option value="gmailsmtp"'.( ( $mail_gmailsender["Value"] == 1 ) ? 'selected="selected" ' : '' ).'>'.lang("admin", "gmailsmtp").'</option>
                 </select>
               </td>
             </tr>
@@ -701,14 +702,14 @@ function general()
                 <input type="text" name="fromemail" value="'.$mail_from_email["Value"].'" />
               </td>
             </tr>
-            <tr>
+            <!-- tr>
               <td class="help">
                 <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "usegmail_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "usegmail").'</a>:
               </td>
               <td>
                 <input type="checkbox" name="gmail" '.( ( $mail_gmailsender["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
               </td>
-            </tr>
+            </tr -->
             <tr>
               <td class="help">
                 <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "formathtml_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "formathtml").'</a>:
@@ -784,7 +785,12 @@ function general()
         $mail_admin_email = $sqlm->quote_smart($_GET["adminemail"]);
         $mail_mailer_type = $sqlm->quote_smart($_GET["mailertype"]);
         $mail_from_email = $sqlm->quote_smart($_GET["fromemail"]);
-        $mail_gmailsender = ( ( isset($_GET["gmail"]) ) ? 1 : 0 );
+
+        if ( $mail_mailer_type == "gmailsmtp" )
+          $mail_gmailsender = 1;
+        else
+          $mail_gmailsender = 0;
+
         $format_mail_html = ( ( isset($_GET["usehtml"]) ) ? 1 : 0 );
         $smtp_host = $sqlm->quote_smart($_GET["smtphost"]);
         $smtp_port = $sqlm->quote_smart($_GET["smtpport"]);
