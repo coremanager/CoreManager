@@ -1734,7 +1734,7 @@ $GLOBALS['lang_admin'] = array
   'shortname' => '缩略名',
 
   'bothfactions' => '允许双重阵营',
-  'bothfactions_tip' => '允许玩家查看对立阵营角色信息。(仅对 GM 等级为 0 的用户有效)',
+  'bothfactions_tip' => '允许玩家查看对立阵营角色信息。(仅对 Security 等级为 0 的用户有效)',
   'statsxml' => 'stats.xml',
   'statsxml_tip' => "服务器 stats.xml 文档的网络地址。<br>仅针对 ArcEmu 服务器！",
   'delserver' => '删除服务器',
@@ -2176,6 +2176,8 @@ $GLOBALS['lang_map'] = array
   'online' => '仅在线玩家',
   'offline' => '仅离线玩家',
   'both' => '所有玩家',
+  // translation note: %1 will be replaced with Horde or Alliance
+  'only' => 'Showing only %1 Characters',
 );
 
 // ----- ERROR.PHP -----

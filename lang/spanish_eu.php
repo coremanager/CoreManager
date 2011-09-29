@@ -1734,7 +1734,7 @@ $GLOBALS['lang_admin'] = array
   'shortname' => 'Nick corto',
 
   'bothFaccions' => 'Ambas Facciones',
-  'bothFaccions_tip' => 'Permitir al jugador ver a los personajes de Faccion contraria. (Afecta sólo los usuarios con nivel 0 de GM)',
+  'bothFaccions_tip' => 'Permitir al jugador ver a los personajes de Faccion contraria. (Afecta sólo los usuarios con nivel 0 de Seguridad)',
   'statsxml' => 'stats.xml',
   'statsxml_tip' => "URL to the server\'s stats.xml file.<br>ONLY for ArcEmu servers!",
   'delserver' => 'Borrar Servidor',
@@ -2176,6 +2176,8 @@ $GLOBALS['lang_map'] = array
   'online' => 'Solo Online',
   'offline' => 'Solo Offline',
   'both' => 'Ambos',
+  // translation note: %1 will be replaced with Horde or Alliance
+  'only' => 'Showing only %1 Characters',
 );
 
 // ----- ERROR.PHP -----

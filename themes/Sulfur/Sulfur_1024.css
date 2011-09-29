@@ -1842,7 +1842,18 @@ tr td.rep0
   width: 1002px;
   margin-left: -102px; /* half of the difference in width */
 }
-
+.map_horde
+{
+  color: #ff0000;
+}
+.map_alliance
+{
+  color: #0000ff;
+}
+.map_map
+{
+  position: relative;
+}
 #map_image
 {
   z-index: -1;

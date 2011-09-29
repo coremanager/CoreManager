@@ -176,7 +176,7 @@ else
     Array("character_spell_cooldown", "guid"),
     Array("character_stats", "guid"),
     Array("character_talent", "guid"),
-    Array("gm_tickets", "playerGuid"),
+    Array("gm_tickets", "guid"),
     Array("guild_member", "guid"),
     Array("guild", "leaderguid"),
     Array("instance", "id"),

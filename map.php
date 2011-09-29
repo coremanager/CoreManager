@@ -23,10 +23,10 @@ require_once 'libs/char_lib.php';
 require_once 'libs/map_zone_lib.php';
 valid_login($action_permission["view"]);
 
-
 function show_map()
 {
-  global $output, $map_status_gm_include_all, $map_gm_add_suffix, $logon_db, $sql, $core;
+  global $output, $map_status_gm_include_all, $map_gm_add_suffix, $user_id, $realm_id, $logon_db,
+    $sql, $core;
 
   // if the user selected a specific map, we'll show it, otherwise we show Azeroth
   $showmap = (isset($_GET["map"])) ? $_GET["map"] : -1;
@@ -34,6 +34,75 @@ function show_map()
   // get the user's selection for whether to view only characters that are online, offline, or both
   // (the default is online only)
   $online = (isset($_GET["online"])) ? $_GET["online"] : 1;
+
+  // get both factions for this realm
+  $bf_query = "SELECT Both_Factions FROM config_servers WHERE `Index`='".$realm_id."'";
+  $bf_result = $sql["mgr"]->query($bf_query);
+  $bf_result = $sql["mgr"]->fetch_assoc($bf_result);
+  $both_factions = $bf_result["Both_Factions"];
+
+  // if both factions is disabled then we need to know what faction the player is
+  // we'll count the number of characters of each faction the player has and base
+  // the players faction on the higher of the two
+  if ( !$both_factions )
+  {
+    if ( $core == 1 )
+    {
+      $q_horde = "SELECT COUNT(*) FROM characters WHERE race NOT IN (1, 3, 4, 7, 11) AND acct='".$user_id."'";
+      $q_alliance = "SELECT COUNT(*) FROM characters WHERE race IN (1, 3, 4, 7, 11) AND acct='".$user_id."'";
+    }
+    else
+    {
+      $q_horde = "SELECT COUNT(*) FROM characters WHERE race NOT IN (1, 3, 4, 7, 11) AND account='".$user_id."'";
+      $q_alliance = "SELECT COUNT(*) FROM characters WHERE race IN (1, 3, 4, 7, 11) AND account='".$user_id."'";
+    }
+
+    $r_horde = $sql["char"]->query($q_horde);
+    $r_alliance = $sql["char"]->query($q_alliance);
+
+    $c_horde = $sql["char"]->fetch_assoc($r_horde);
+    $c_alliance = $sql["char"]->fetch_assoc($r_alliance);
+
+    $c_horde = $c_horde["COUNT(*)"];
+    $c_alliance = $c_alliance["COUNT(*)"];
+
+    if ( $c_horde != $c_alliance )
+    {
+      if ( $c_horde < $c_alliance )
+        $faction = 0;
+      else
+        $faction = 1;
+    }
+    else
+    {
+      // if the player has an equal number of horde and alliance characters then the first character returned in this
+      // query will be the players faction
+      if ( $core == 1 )
+        $f_query = "SELECT race FROM characters WHERE acct='".$user_id."' LIMIT 1";
+      else
+        $f_query = "SELECT race FROM characters WHERE account='".$user_id."' LIMIT 1";
+
+      $f_result = $sql["char"]->query($f_query);
+      $f_result = $sql["char"]->fetch_assoc($f_result);
+      $race = $f_result["race"];
+
+      $alliance = array(1, 3, 4, 7, 11);
+
+      if ( in_array($race, $alliance) )
+        $faction = 0;
+      else
+        $faction = 1;
+    }
+  }
+
+  // if we created the faction variable then we need to insert a further limit on where clauses of the character queries below
+  if ( isset($faction) )
+  {
+    // horde = 1, alliance = 0
+    $faction_append = " AND race ".( ( $faction ) ? "NOT " : "" )."IN (1, 3, 4, 7, 11)";
+  }
+  else
+    $faction_append = ""; // otherwise, we'll just insert nothing
 
   $output .= '
           <table class="hidden">
@@ -182,11 +251,26 @@ function show_map()
     }
   }
 
+  // if we're only showing one faction, we should make the viewer aware of that fact
+  if ( isset($faction) )
+  {
+    $fact_color = ( ( $faction ) ? "map_horde" : "map_alliance" );
+
+    $limited = str_replace("%1", '<span class="'.$fact_color.'">'.char_get_side_name($faction).'</span>', lang("map", "only"));
+
+    $output .= '
+          <br />';
+    $output .= '<b>('.$limited.')</b>';
+    $output .= '
+          <br />';
+  }
+
   $output .= '
-          <br />
-          <img src="img/map/'.$mapfilename.'1.png" id="map_image" />
-          <img src="img/map/'.$mapfilename.'2.png" id="map_image" />
-          <img src="img/map/'.$mapfilename.'3.png" id="map_image" />';
+          <div class="map_map">
+            <br />
+            <img src="img/map/'.$mapfilename.'1.png" id="map_image" />
+            <img src="img/map/'.$mapfilename.'2.png" id="map_image" />
+            <img src="img/map/'.$mapfilename.'3.png" id="map_image" />';
 
   // generate the queries based on which map we're viewing
   // GM status here is based on the core's opinion of who is a GM, NOT on CoreManager's Security Level
@@ -200,20 +284,20 @@ function show_map()
       $query = "SELECT *, gm
         FROM characters
           LEFT JOIN `".$logon_db["name"]."`.accounts ON characters.acct=accounts.acct
-        WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."mapid IN (0,1,571) AND zoneid<>876";
+        WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."mapid IN (0,1,571) AND zoneid<>876".$faction_append;
     }
     else
       $query = "SELECT *, gm
         FROM characters
           LEFT JOIN `".$logon_db["name"]."`.accounts ON characters.acct=accounts.acct
-        WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."mapid='".$showmap."'".( ( $showmap == 1 ) ? " AND zoneid<>876" : "" ).( ( $showmap == 530 )  ? "  AND positionY>0"  : "" );
+        WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."mapid='".$showmap."'".( ( $showmap == 1 ) ? " AND zoneid<>876" : "" ).( ( $showmap == 530 )  ? "  AND positionY>0"  : "" ).$faction_append;
 
     // don't want this query at all if we're viewing Outland or Northrend
     if ( ( $showmap <> 530 ) && ( $showmap <> 571 ) )
       $out_query = "SELECT *, gm
         FROM characters
           LEFT JOIN `".$logon_db["name"]."`.accounts ON characters.acct=accounts.acct
-        WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."mapid='530' AND positionY<-5000".( ($showmap == 0) ? " AND positionX>0" : "" ).( ( $showmap == 1 ) ? " AND positionX<0" : "" );
+        WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."mapid='530' AND positionY<-5000".( ($showmap == 0) ? " AND positionX>0" : "" ).( ( $showmap == 1 ) ? " AND positionX<0" : "" ).$faction_append;
   }
   elseif ( $core == 2 )
   {
@@ -221,19 +305,19 @@ function show_map()
       $query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm
       FROM characters
         LEFT JOIN `".$logon_db["name"]."`.account ON characters.account=account.id
-      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map IN (0,1,571) AND zone<>876";
+      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map IN (0,1,571) AND zone<>876".$faction_append;
     else
       $query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm
       FROM characters
         LEFT JOIN `".$logon_db["name"]."`.account ON characters.account=account.id
-      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map='".$showmap."'".( ( $showmap == 1 ) ? " AND zone<>876" : "" ).( ( $showmap == 530 )  ? "  AND position_y>0"  : "" );
+      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map='".$showmap."'".( ( $showmap == 1 ) ? " AND zone<>876" : "" ).( ( $showmap == 530 )  ? "  AND position_y>0"  : "" ).$faction_append;
 
     // don't want this query at all if we're viewing Outland or Northrend
     if ( ( $showmap <> 530 ) && ( $showmap <> 571 ) )
       $out_query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm
       FROM characters
         LEFT JOIN `".$logon_db["name"]."`.account ON characters.account=account.id
-      WHERE ".( ($online <> -1) ? "online='".$online."' AND " : "" )."map='530' AND position_y<-5000".( ( $showmap == 0 ) ? " AND position_x>0" : "" ).( ( $showmap == 1 ) ? " AND position_x<0" : "" );
+      WHERE ".( ($online <> -1) ? "online='".$online."' AND " : "" )."map='530' AND position_y<-5000".( ( $showmap == 0 ) ? " AND position_x>0" : "" ).( ( $showmap == 1 ) ? " AND position_x<0" : "" ).$faction_append;
   }
   else
   {
@@ -241,19 +325,19 @@ function show_map()
       $query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm
       FROM characters
         LEFT JOIN `".$logon_db["name"]."`.account_access ON characters.account=account_access.id
-      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map IN (0,1,571) AND zone<>876";
+      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map IN (0,1,571) AND zone<>876".$faction_append;
     else
       $query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm
       FROM characters
         LEFT JOIN `".$logon_db["name"]."`.account_access ON characters.account=account_access.id
-      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map='".$showmap."'".( ( $showmap == 1 ) ? " AND zone<>876" : "" ).( ( $showmap == 530 )  ? "  AND position_y>0"  : "" );
+      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map='".$showmap."'".( ( $showmap == 1 ) ? " AND zone<>876" : "" ).( ( $showmap == 530 )  ? "  AND position_y>0"  : "" ).$faction_append;
 
     // don't want this query at all if we're viewing Outland or Northrend
     if ( ( $showmap <> 530 ) && ( $showmap <> 571 ) )
       $out_query = "SELECT *, position_x AS positionX, position_y AS positionY, gmlevel AS gm
       FROM characters
         LEFT JOIN `".$logon_db["name"]."`.account_access ON characters.account=account_access.id
-      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map='530' AND position_y<-5000".( ( $showmap == 0 ) ? " AND position_x>0" : "" ).( ( $showmap == 1 ) ? " AND position_x<0" : "" );
+      WHERE ".( ( $online <> -1 ) ? "online='".$online."' AND " : "" )."map='530' AND position_y<-5000".( ( $showmap == 0 ) ? " AND position_x>0" : "" ).( ( $showmap == 1 ) ? " AND position_x<0" : "" ).$faction_append;
   }
 
   // normal map characters
@@ -345,42 +429,42 @@ function show_map()
       
       // build the tooltip for this character
       $output .= '
-          <div class="map_tooltip" id="tooltip'.$row["guid"].'" style="left: '.($x_relative+10).'px; top:'.($y_relative+180).'px;">
-            <table>
-              <tr>
-                <td class="name_level" colspan="2">
-                  '.( ( $map_gm_add_suffix && $row["gm"] ) ? '<img src="img/star.png" /> ' : '' ).$row["name"].' ('.char_get_level_color($row["level"]).')
-                </td>
-              </tr>
-              <tr>
-                <td class="race">
-                  <img src="img/c_icons/'.$row["race"].'-'.$row["gender"].'.gif" />
-                </td>
-                <td>
-                  '.char_get_race_name($row["race"]).'
-                </td>
-              </tr>
-              <tr>
-                <td class="race">
-                  <img src="img/c_icons/'.$row["class"].'.gif" />
-                </td>
-                <td>
-                  '.char_get_class_name($row["class"]).'
-                </td>
-              </tr>
-              <tr>
-                <td class="zone" colspan="2">
-                  '.get_zone_name($row["zone"]).'
-                </td>
-              </tr>
-            </table>
-          </div>';
+            <div class="map_tooltip" id="tooltip'.$row["guid"].'" style="left: '.($x_relative+10).'px; top:'.($y_relative+10).'px;">
+              <table>
+                <tr>
+                  <td class="name_level" colspan="2">
+                    '.( ( $map_gm_add_suffix && $row["gm"] ) ? '<img src="img/star.png" /> ' : '' ).$row["name"].' ('.char_get_level_color($row["level"]).')
+                  </td>
+                </tr>
+                <tr>
+                  <td class="race">
+                    <img src="img/c_icons/'.$row["race"].'-'.$row["gender"].'.gif" />
+                  </td>
+                  <td>
+                    '.char_get_race_name($row["race"]).'
+                  </td>
+                </tr>
+                <tr>
+                  <td class="race">
+                    <img src="img/c_icons/'.$row["class"].'.gif" />
+                  </td>
+                  <td>
+                    '.char_get_class_name($row["class"]).'
+                  </td>
+                </tr>
+                <tr>
+                  <td class="zone" colspan="2">
+                    '.get_zone_name($row["zone"]).'
+                  </td>
+                </tr>
+              </table>
+            </div>';
 
       // draw a dot for the character
       $output .= '
-          <a href="char.php?id='.$row["guid"].'" onmouseover="ShowTooltip(this,'.$row["guid"].');" onmouseout="HideTooltip('.$row["guid"].');"><!-- X'.$x.' Y'.$y.' Map'.$map.' -->
-            <img src="img/map/'.( char_get_side_id($row["race"]) ? 'horde' : 'allia' ).'.gif" style="position: absolute; left: '.$x_relative.'px; top: '.($y_relative+180).'px;" />
-          </a>';
+            <a href="char.php?id='.$row["guid"].'" onmouseover="ShowTooltip(this,'.$row["guid"].');" onmouseout="HideTooltip('.$row["guid"].');"><!-- X'.$x.' Y'.$y.' Map'.$map.' -->
+              <img src="img/map/'.( char_get_side_id($row["race"]) ? 'horde' : 'allia' ).'.gif" style="position: absolute; left: '.$x_relative.'px; top: '.($y_relative+10).'px;" />
+            </a>';
     }
   }
 
@@ -452,44 +536,47 @@ function show_map()
       
       // build the tooltip for this character
       $output .= '
-          <div class="map_tooltip" id="tooltip'.$row["guid"].'" style="left: '.($x_relative+10).'px; top:'.($y_relative+180).'px;">
-            <table>
-              <tr>
-                <td class="name_level" colspan="2">
-                  '.( ( $map_gm_add_suffix && $row["gm"] ) ? '<img src="img/star.png" /> ' : '' ).$row["name"].' ('.char_get_level_color($row["level"]).')
-                </td>
-              </tr>
-              <tr>
-                <td class="race">
-                  <img src="img/c_icons/'.$row["race"].'-'.$row["gender"].'.gif" />
-                </td>
-                <td>
-                  '.char_get_race_name($row["race"]).'
-                </td>
-              </tr>
-              <tr>
-                <td class="race">
-                  <img src="img/c_icons/'.$row["class"].'.gif" />
-                </td>
-                <td>
-                  '.char_get_class_name($row["class"]).'
-                </td>
-              </tr>
-              <tr>
-                <td class="zone" colspan="2">
-                  '.get_zone_name($row["zone"]).'
-                </td>
-              </tr>
-            </table>
-          </div>';
+            <div class="map_tooltip" id="tooltip'.$row["guid"].'" style="left: '.($x_relative+10).'px; top:'.($y_relative+10).'px;">
+              <table>
+                <tr>
+                  <td class="name_level" colspan="2">
+                    '.( ( $map_gm_add_suffix && $row["gm"] ) ? '<img src="img/star.png" /> ' : '' ).$row["name"].' ('.char_get_level_color($row["level"]).')
+                  </td>
+                </tr>
+                <tr>
+                  <td class="race">
+                    <img src="img/c_icons/'.$row["race"].'-'.$row["gender"].'.gif" />
+                  </td>
+                  <td>
+                    '.char_get_race_name($row["race"]).'
+                  </td>
+                </tr>
+                <tr>
+                  <td class="race">
+                    <img src="img/c_icons/'.$row["class"].'.gif" />
+                  </td>
+                  <td>
+                    '.char_get_class_name($row["class"]).'
+                  </td>
+                </tr>
+                <tr>
+                  <td class="zone" colspan="2">
+                    '.get_zone_name($row["zone"]).'
+                  </td>
+                </tr>
+              </table>
+            </div>';
 
       // draw a dot for the character
       $output .= '
-          <a href="char.php?id='.$row["guid"].'" onmouseover="ShowTooltip(this,'.$row["guid"].');" onmouseout="HideTooltip('.$row["guid"].');"><!-- X'.$x.' Y'.$y.' Map'.$map.' -->
-            <img src="img/map/'.( char_get_side_id($row["race"]) ? 'horde' : 'allia' ).'.gif" style="position: absolute; left: '.$x_relative.'px; top: '.($y_relative+180).'px;" />
-          </a>';
+            <a href="char.php?id='.$row["guid"].'" onmouseover="ShowTooltip(this,'.$row["guid"].');" onmouseout="HideTooltip('.$row["guid"].');"><!-- X'.$x.' Y'.$y.' Map'.$map.' -->
+              <img src="img/map/'.( char_get_side_id($row["race"]) ? 'horde' : 'allia' ).'.gif" style="position: absolute; left: '.$x_relative.'px; top: '.($y_relative+10).'px;" />
+            </a>';
     }
   }
+
+  $output .= '
+          </div>';
 }
 
 

@@ -1734,7 +1734,7 @@ $GLOBALS['lang_admin'] = array
   'shortname' => 'Short Name',
 
   'bothfactions' => 'Both Factions',
-  'bothfactions_tip' => 'Allow player to see opponent faction characters. (Affects only users with GM Level 0)',
+  'bothfactions_tip' => 'Allow player to see opponent faction characters. (Affects only users with Security Level 0)',
   'statsxml' => 'stats.xml',
   'statsxml_tip' => "URL to the server\'s stats.xml file.<br>ONLY for ArcEmu servers!",
   'delserver' => 'Delete Server',
@@ -2176,6 +2176,8 @@ $GLOBALS['lang_map'] = array
   'online' => 'Solo Online',
   'offline' => 'Solo Offline',
   'both' => 'Ambos',
+  // translation note: %1 will be replaced with Horde or Alliance
+  'only' => 'Showing only %1 Characters',
 );
 
 // ----- ERROR.PHP -----
