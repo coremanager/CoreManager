@@ -1393,23 +1393,23 @@ function edit_user()
             <table class="flat">
               <tr>
                 <td>'.lang("user", "acct").':</td>
-                <td>'.$data["acct"].'</td>
+                <td colspan="2">'.$data["acct"].'</td>
               </tr>
               <tr>
                 <td>'.lang("user", "login").':</td>';
     if ( $user_lvl >= $action_permission["update"]) 
     {
       $output .= '
-                <td><input type="text" name="login" size="42" maxlength="15" value="'.$data["login"].'" /></td>';
+                <td colspan="2"><input type="text" name="login" size="42" maxlength="15" value="'.$data["login"].'" /></td>';
     }
     else
     {
       if ( $screenname["ScreenName"] )
         $output .= '
-                <td>********</td>';
+                <td colspan="2">********</td>';
       else
         $output .= '
-                <td>'.$data["login"].'</td>';
+                <td colspan="2">'.$data["login"].'</td>';
     }
     $output .= '
               </tr>
@@ -1418,12 +1418,12 @@ function edit_user()
     if ( $user_lvl >= $action_permission["update"] )
     {
       $output .= '
-                <td><input type="text" name="screenname" size="42" maxlength="15" value="'.$screenname["ScreenName"].'" /></td>';
+                <td colspan="2"><input type="text" name="screenname" size="42" maxlength="15" value="'.$screenname["ScreenName"].'" /></td>';
     }
     else
     {
       $output.= '
-                <td>'.$screenname["ScreenName"].'</td>';
+                <td colspan="2">'.$screenname["ScreenName"].'</td>';
     }
     $output .= '
               </tr>
@@ -1432,12 +1432,12 @@ function edit_user()
     if ( $user_lvl >= $action_permission["update"] )
     {
       $output .= '
-                <td><input type="text" name="new_pass" size="42" maxlength="40" value="******" /></td>';
+                <td colspan="2"><input type="text" name="new_pass" size="42" maxlength="40" value="******" /></td>';
     }
     else
     {
       $output.= '
-                <td>********</td>';
+                <td colspan="2">********</td>';
     }
     $output .= '
               </tr>
@@ -1447,26 +1447,26 @@ function edit_user()
     {
       if ( $screenname["TempEmail"] )
         $output .= '
-                    <td>
-                      <a href="user.php?action=cancel_email_change&username='.$data["login"].'&acct='.$data["acct"].'" >
-                        <img src="img/aff_warn.gif" onmousemove="oldtoolTip(\''.lang("edit", "email_changed").'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" />
-                      </a>
-                      <input type="text" name="mail" size="39" maxlength="225" value="'.$data["email"].'" />
-                    </td>';
+                <td colspan="2">
+                  <a href="user.php?action=cancel_email_change&username='.$data["login"].'&acct='.$data["acct"].'" >
+                    <img src="img/aff_warn.gif" onmousemove="oldtoolTip(\''.lang("edit", "email_changed").'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" />
+                  </a>
+                  <input type="text" name="mail" size="39" maxlength="225" value="'.$data["email"].'" />
+                </td>';
       else
         $output .= '
-                <td><input type="text" name="mail" size="42" maxlength="225" value="'.$data["email"].'" /></td>';
+                <td colspan="2"><input type="text" name="mail" size="42" maxlength="225" value="'.$data["email"].'" /></td>';
     }
     else
     {
       $output.= '
-                <td>***@***.***</td>';
+                <td colspan="2">***@***.***</td>';
     }
     $output .= '
               </tr>
               <tr>
                 <td>'.lang("user", "invited_by").':</td>
-                <td>';
+                <td colspan="2">';
     if ( ( $user_lvl >= $action_permission["update"] ) && ( !$referred_by != NULL ) )
     {
       $output .= '
@@ -1485,14 +1485,14 @@ function edit_user()
     if ( $user_lvl >= $action_permission["update"] )
     {
       $output .= '
-                <td>
+                <td colspan="2">
                   <input type="text" name="gm" value="'.$data["gm"].'">
                 </td>';
     }
     else
     {
       $output .= '
-                <td>'.$data["gm"].'</td>';
+                <td colspan="2">'.$data["gm"].'</td>';
     }
     $output .= '
               </tr>
@@ -1506,7 +1506,7 @@ function edit_user()
     if ( $user_lvl >= $action_permission["update"] )
     {
       $output .= '
-                <td>
+                <td colspan="2">
                   <!-- input type="text" name="seclvl" value="'.$screenname["SecurityLevel"].'" -->
                   <select name="seclvl">';
       $s_query = "SELECT * FROM config_gm_level_names";
@@ -1530,7 +1530,7 @@ function edit_user()
     else
     {
       $output .= '
-                <td>'.id_get_gm_level($screenname["SecurityLevel"]).'</td>';
+                <td colspan="2">'.id_get_gm_level($screenname["SecurityLevel"]).'</td>';
     }
     $output .= '
               </tr>
@@ -1539,12 +1539,12 @@ function edit_user()
     if ( $user_lvl >= $action_permission["update"] )
     {
       $output .= '
-                <td>'.$data["lastip"].'<a href="banned.php?action=do_add_entry&amp;entry='.$data["lastip"].'&amp;bantime=3600&amp;ban_type=ipbans"> &lt;- '.lang("user", "ban_this_ip").'</a></td>';
+                <td colspan="2">'.$data["lastip"].'<a href="banned.php?action=do_add_entry&amp;entry='.$data["lastip"].'&amp;bantime=3600&amp;ban_type=ipbans"> &lt;- '.lang("user", "ban_this_ip").'</a></td>';
     }
     else
     {
       $output .= '
-                <td>***.***.***.***</td>';
+                <td colspan="2">***.***.***.***</td>';
     }
     $output .= '
               </tr>
@@ -1572,12 +1572,12 @@ function edit_user()
     if ( $user_lvl >= $action_permission["update"] )
     {
       $output .= '
-                <td><input type="checkbox" name="banned" value="1" '.$ban_checked.' />'.$ban_info.'</td>';
+                <td colspan="2"><input type="checkbox" name="banned" value="1" '.$ban_checked.' />'.$ban_info.'</td>';
     }
     else
     {
       $output .= '
-                <td>'.$ban_info.'</td>';
+                <td colspan="2">'.$ban_info.'</td>';
     }
     $output .= '
               </tr>
@@ -1586,12 +1586,12 @@ function edit_user()
     if ( $user_lvl >= $action_permission["update"] )
     {
       $output .= '
-                <td><input type="text" name="banreason" size="42" maxlength="255" value="'.$banned[3].'" /></td>';
+                <td colspan="2"><input type="text" name="banreason" size="42" maxlength="255" value="'.$banned[3].'" /></td>';
     }
     else
     {
       $output .= '
-                <td>'.$banned[3].'</td>';
+                <td colspan="2">'.$banned[3].'</td>';
     }
     if ( $expansion_select )
     {
@@ -1603,7 +1603,7 @@ function edit_user()
         $output .= '
                 <td>'.lang("user", "client_type").':</td>';
         $output .= '
-                <td>
+                <td colspan="2">
                   <select name="expansion">';
         if ( $core == 1 )
         {
@@ -1634,19 +1634,19 @@ function edit_user()
           {
             case 0:
               $output .= '
-                <td>'.lang("user", "classic").'</td>';
+                <td colspan="2">'.lang("user", "classic").'</td>';
               break;
             case 8:
               $output .= '
-                <td>'.lang("user", "tbc").'</td>';
+                <td colspan="2">'.lang("user", "tbc").'</td>';
               break;
             case 16:
               $output .= '
-                <td>'.lang("user", "wotlk").'</td>';
+                <td colspan="2">'.lang("user", "wotlk").'</td>';
               break;
             case 24:
               $output .= '
-                <td>'.lang("user", "wotlktbc").'</td>';
+                <td colspan="2">'.lang("user", "wotlktbc").'</td>';
               break;
           }
         }
@@ -1656,15 +1656,15 @@ function edit_user()
           {
             case 0:
               $output .= '
-                <td>'.lang("user", "classic").'</td>';
+                <td colspan="2">'.lang("user", "classic").'</td>';
               break;
             case 1:
               $output .= '
-                <td>'.lang("user", "tbc").'</td>';
+                <td colspan="2">'.lang("user", "tbc").'</td>';
               break;
             case 2:
               $output .= '
-                <td>'.lang("user", "wotlktbc").'</td>';
+                <td colspan="2">'.lang("user", "wotlktbc").'</td>';
               break;
           }
         }
@@ -1677,24 +1677,24 @@ function edit_user()
     if ( $user_lvl >= $action_permission["update"] )
     {
       $output .= '
-                <td>
+                <td colspan="2">
                   <input type="checkbox" name="locked" value="1" '.( ( $data["muted"] ) ? ' checked="checked"' : '' ).' />
                 </td>';
     }
     else
     {
       $output .= '
-                <td></td>';
+                <td colspan="2"></td>';
     }
     $output.= '
               </tr>
               <tr>
                 <td>'.lang("user", "last_login").':</td>
-                <td>'.$lastlog.'</td>
+                <td colspan="2">'.$lastlog.'</td>
               </tr>
               <tr>
                 <td>'.lang("user", "online").':</td>
-                <td><img src="img/'.( ( $acct_online ) ? 'up' : 'down' ).'.gif" alt="" /></td>
+                <td colspan="2"><img src="img/'.( ( $acct_online ) ? 'up' : 'down' ).'.gif" alt="" /></td>
               </tr>';
 
     if ( $user_lvl >= $action_permission["update"] )
@@ -1702,7 +1702,7 @@ function edit_user()
       $output.= '
               <tr>
                 <td>'.lang("user", "credits").':</td>
-                <td>
+                <td colspan="2">
                   <input type="text" name="credits" value="'.(float)$screenname["Credits"].'" />
                   <img src="img/information.png" onmousemove="oldtoolTip(\''.lang("user", "credits_info").'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" />
                 </td>
@@ -1734,7 +1734,7 @@ function edit_user()
     $output .= '
               <tr>
                 <td>'.lang("user", "tot_chars").':</td>
-                <td>'.$tot_chars.'</td>
+                <td colspan="2">'.$tot_chars.'</td>
               </tr>';
     $realms = $sql["mgr"]->query("SELECT `Index` AS id, Name AS name FROM config_servers");
     if ( ( $sql["mgr"]->num_rows($realms) > 1 ) && ( count($server) > 1 ) && ( count($characters_db) > 1 ) )
@@ -1750,20 +1750,34 @@ function edit_user()
         $chars_on_realm = $sql["char"]->result($query, 0);
         $output .= '
               <tr>
-                <td>'.lang("user", "chars_on_realm").': '.get_realm_name($realm[0]).'</td>
-                <td>'.$chars_on_realm.'</td>
+                <td colspan="3">&nbsp;</td>
+              </tr>
+              <tr>
+                <td colspan="3">'.lang("index", "realm").': '.get_realm_name($realm[0]).'</td>
+              </tr>
+              <tr>
+                <td>'.lang("user", "chars_on_realm").':</td>
+                <td colspan="2">'.$chars_on_realm.'</td>
               </tr>';
         if ( $chars_on_realm )
         {
           if ( $core == 1 )
-            $char_array = $sql["char"]->query("SELECT guid, name, race, class, level, gender
+            $char_array = $sql["char"]->query("SELECT guid, name, race, class, level, gender, timestamp
               FROM `characters` WHERE acct=".$acct);
           else
-            $char_array = $sql["char"]->query("SELECT guid, name, race, class, level, gender
+            $char_array = $sql["char"]->query("SELECT guid, name, race, class, level, gender, logout_time AS timestamp
               FROM `characters` WHERE account=".$acct);
+      
+          // calculate timezone offset
+          $time_offset = $timezone * 3600;
               
           while ( $char = $sql["char"]->fetch_array($char_array) )
           {
+            if ( $char["timestamp"] <> 0 )
+              $lastseen = date("F j, Y @ Hi", $char["timestamp"] + $time_offset);
+            else
+              $lastseen = '-';
+
             $output .= '
               <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\'---></td>
@@ -1771,6 +1785,7 @@ function edit_user()
                       <a href="char.php?id='.$char[0].'&amp;realm='.$realm[0].'">'.$char[1].'</a> - <img src="img/c_icons/'.$char[2].'-'.$char[5].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char[2]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                       <img src="img/c_icons/'.$char[3].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char[3]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt=""/> - '.lang("char", "level_short").char_get_level_color($char[4]).'
                 </td>
+                <td>'.$lastseen.'</td>
               </tr>';
           }
         }
@@ -1784,40 +1799,59 @@ function edit_user()
         $query = $sql["char"]->query("SELECT COUNT(*) FROM `characters` WHERE account=".$acct);
       $chars_on_realm = $sql["char"]->result($query, 0);
       $output .= '
-              <tr>
+              <!-- tr>
                 <td>'.lang("user", "chars_on_realm").':</td>
-                <td>'.$chars_on_realm.'</td>
-              </tr>';
+                <td colspan="2">'.$chars_on_realm.'</td>
+              </tr -->';
       if ( $chars_on_realm )
       {
         if ( $core == 1 )
-          $char_array = $sql["char"]->query("SELECT guid, name, race, class, level, gender FROM `characters` WHERE acct=".$acct);
+          $char_array = $sql["char"]->query("SELECT guid, name, race, class, level, gender, timestamp
+          FROM `characters` WHERE acct=".$acct);
         else
-          $char_array = $sql["char"]->query("SELECT guid, name, race, class, level, gender FROM `characters` WHERE account=".$acct);
+          $char_array = $sql["char"]->query("SELECT guid, name, race, class, level, gender, logout_time AS timestamp
+          FROM `characters` WHERE account=".$acct);
+      
+        // calculate timezone offset
+        $time_offset = $timezone * 3600;
         
         while ( $char = $sql["char"]->fetch_array($char_array) )
         {
+          if ( $char["timestamp"] <> 0 )
+            $lastseen = date("F j, Y @ Hi", $char["timestamp"] + $time_offset);
+          else
+            $lastseen = '-';
+
           $output .= '
-                <tr>
-                  <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\'---></td>
-                  <td>
-                    <a href="char.php?id='.$char[0].'">'.$char[1].'</a> - <img src="img/c_icons/'.$char[2].'-'.$char[5].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char[2]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
-                    <img src="img/c_icons/'.$char[3].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char[3]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt=""/> - '.lang("char", "level_short").char_get_level_color($char[4]).'
-                  </td>
-                </tr>';
+              <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\'---></td>
+                <td>
+                  <a href="char.php?id='.$char[0].'">'.$char[1].'</a> - <img src="img/c_icons/'.$char[2].'-'.$char[5].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char[2]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
+                  <img src="img/c_icons/'.$char[3].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char[3]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt=""/> - '.lang("char", "level_short").char_get_level_color($char[4]).'
+                </td>
+                <td>'.$lastseen.'</td>
+              </tr>';
         }
       }
     }
+
     $output .= '
               <tr>
                 <td>';
+
     if ( $user_lvl >= $action_permission["delete"] )
       makebutton(lang("user", "del_acc"), "user.php?action=del_user&amp;check%5B%5D=".$acct."\" type=\"wrn", 130);
+
     $output .= '
                 </td>
                 <td>';
+
     if ( $user_lvl >= $action_permission["update"] )
       makebutton(lang("user", "update_data"), "javascript:do_submit_data()", 130);
+
+    $output .= '
+                </td>
+                <td>';
     makebutton(lang("global", "back"), "javascript:window.history.back()\" type=\"def", 130);
 
     $output .= '
