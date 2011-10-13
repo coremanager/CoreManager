@@ -403,6 +403,11 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $timezone = $misc_row["Value"];
       break;
     }
+    case "Timezone_Offset":
+    {
+      $timezone_offset = $misc_row["Value"];
+      break;
+    }
     case "GM_Online":
     {
       $gm_online = $misc_row["Value"];

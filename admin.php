@@ -1953,6 +1953,7 @@ function general()
         $default_theme = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Default_Theme'"));
         $default_language = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Default_Language'"));
         $timezone = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Timezone'"));
+        $timezone_offset = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Timezone_Offset'"));
         $player_online = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Player_Online'"));
         $gm_online = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='GM_Online'"));
         $gm_online_count = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='GM_Online_Count'"));
@@ -2110,6 +2111,14 @@ function general()
                   <option value="11.0" '.( ( $timezone["Value"] == "11.0" ) ? 'selected="selected"' : '' ).'>(UTC +11:00) Magadan, Solomon Islands, New Caledonia</option>
                   <option value="12.0" '.( ( $timezone["Value"] == "12.0" ) ? 'selected="selected"' : '' ).'>(UTC +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
                 </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "timezone_offset_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "timezone_offset").'</a>:
+              </td>
+              <td>
+                <input type="text" name="timezone_offset" value="'.$timezone_offset["Value"].'" />
               </td>
             </tr>
             <tr>
@@ -2360,6 +2369,7 @@ function general()
         $default_theme = $sqlm->quote_smart($_GET["defaulttheme"]);
         $default_language = $sqlm->quote_smart($_GET["defaultlanguage"]);
         $timezone = $sqlm->quote_smart($_GET["timezone"]);
+        $timezone_offset = $sqlm->quote_smart($_GET["timezone_offset"]);
         $player_online = $sqlm->quote_smart($_GET["playeronline"]);
         $gm_online = ( ( isset($_GET["gmonline"]) ) ? 1 : 0 );
         $gm_online_count = ( ( isset($_GET["gmonlinecount"]) ) ? 1 : 0 );
@@ -2392,6 +2402,7 @@ function general()
         $result = $sqlm->query("UPDATE config_misc SET Value='".$default_theme."' WHERE `Key`='Default_Theme'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$default_language."' WHERE `Key`='Default_Language'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$timezone."' WHERE `Key`='Timezone'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$timezone_offset."' WHERE `Key`='Timezone_Offset'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$player_online."' WHERE `Key`='Player_Online'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$gm_online."' WHERE `Key`='GM_Online'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$gm_online_count."' WHERE `Key`='GM_Online_Count'");

@@ -32,7 +32,7 @@ function browse_users()
 {
   global $output, $realm_id, $corem_db, $logon_db, $corem_db, $characters_db,
     $action_permission, $user_lvl, $user_name, $itemperpage, $showcountryflag, $expansion_select,
-    $timezone, $sql, $core;
+    $timezone_offset, $sql, $core;
 
   //-------------------SQL Injection Prevention--------------------------------
   $start = ( ( isset($_GET["start"]) ) ? $sql["logon"]->quote_smart($_GET["start"]) : 0 );
@@ -601,7 +601,7 @@ function browse_users()
         $o_temp += $c_result[0];
       }
 
-      $time_offset = $timezone * 3600;
+      $time_offset = $timezone_offset * 3600;
 
       if ( $data["lastlogin"] <> 0 )
         $lastlog = date("F j, Y @ Hi", $data["lastlogin"] + $time_offset);
@@ -1238,7 +1238,7 @@ function edit_user()
 {
   global $output, $logon_db, $characters_db, $realm_id, $corem_db, $corem_db, $realm_id,
     $user_lvl, $user_name, $gm_level_arr, $action_permission, $expansion_select, $developer_test_mode,
-    $multi_realm_mode, $server, $timezone, $recruit_reward_auto, $sql, $core;
+    $multi_realm_mode, $server, $timezone_offset, $recruit_reward_auto, $sql, $core;
 
   if ( empty($_GET["acct"]) )
     redirect("user.php?error=10");
@@ -1298,9 +1298,9 @@ function edit_user()
   $referred_by = $sql["char"]->fetch_assoc($sql["char"]->query("SELECT name FROM characters WHERE guid='".$refguid."'"));
   unset($refguid);
   $referred_by = $referred_by["name"];
-      
-  $time_offset = $timezone * 3600;
-      
+
+  $time_offset = $timezone_offset * 3600;
+
   if ( $data["lastlogin"] <> 0 )
     $lastlog = date("F j, Y @ Hi", $data["lastlogin"] + $time_offset);
   else
@@ -1767,10 +1767,10 @@ function edit_user()
           else
             $char_array = $sql["char"]->query("SELECT guid, name, race, class, level, gender, logout_time AS timestamp
               FROM `characters` WHERE account=".$acct);
-      
+
           // calculate timezone offset
-          $time_offset = $timezone * 3600;
-              
+          $time_offset = $timezone_offset * 3600;
+
           while ( $char = $sql["char"]->fetch_array($char_array) )
           {
             if ( $char["timestamp"] <> 0 )
@@ -1813,8 +1813,8 @@ function edit_user()
           FROM `characters` WHERE account=".$acct);
       
         // calculate timezone offset
-        $time_offset = $timezone * 3600;
-        
+        $time_offset = $timezone_offset * 3600;
+
         while ( $char = $sql["char"]->fetch_array($char_array) )
         {
           if ( $char["timestamp"] <> 0 )

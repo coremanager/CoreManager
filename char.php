@@ -32,7 +32,7 @@ function char_main()
   global $output,
     $realm_id, $logon_db, $characters_db, $world_db, $server, $corem_db, $site_encoding,
     $action_permission, $user_lvl, $user_name, $user_id, $locales_search_option,
-    $base_datasite, $item_datasite, $spell_datasite, $showcountryflag, $timezone, $sql, $core;
+    $base_datasite, $item_datasite, $spell_datasite, $showcountryflag, $timezone_offset, $sql, $core;
 
   // this page uses wowhead tooltops
   //wowhead_tt();
@@ -1721,7 +1721,7 @@ function char_main()
         $tot_time = $tot_time - ($total_hours*3600);
         $total_min = (int)($tot_time/60);
       
-        $time_offset = $timezone * 3600;
+        $time_offset = $timezone_offset * 3600;
       
         if ( $char["timestamp"] <> 0 )
           $lastseen = date("F j, Y @ Hi", $char["timestamp"] + $time_offset);

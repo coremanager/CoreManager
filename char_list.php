@@ -28,7 +28,7 @@ valid_login($action_permission["view"]);
 function browse_chars()
 {
   global $output, $logon_db, $corem_db, $corem_db, $characters_db, $realm_id, $site_encoding,
-    $action_permission, $user_lvl, $user_name, $showcountryflag, $itemperpage, $timezone, $sql, $core;
+    $action_permission, $user_lvl, $user_name, $showcountryflag, $itemperpage, $timezone_offset, $sql, $core;
 
   //==========================$_GET and SECURE========================
   $start = ( ( isset($_GET["start"]) ) ? $sql["logon"]->quote_smart($_GET["start"]) : 0 );
@@ -425,7 +425,7 @@ function browse_chars()
     if ( $owner_gmlvl >= 1073741824 )
       $owner_gmlvl -= 1073741824;
       
-    $time_offset = $timezone * 3600;
+    $time_offset = $timezone_offset * 3600;
       
     if ( $char["timestamp"] <> 0 )
       $lastseen = date("F j, Y @ Hi", $char["timestamp"] + $time_offset);

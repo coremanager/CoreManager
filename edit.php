@@ -29,7 +29,7 @@ valid_login($action_permission["view"]);
 //##############################################################################################################
 function edit_user()
 {
-  global $output, $corem_db, $logon_db, $characters_db, $corem_db, $realm_id, $invite_only,
+  global $output, $corem_db, $logon_db, $characters_db, $corem_db, $realm_id, $invite_only, $timezone_offset,
     $user_name, $user_id, $expansion_select, $server, $developer_test_mode, $multi_realm_mode,
     $remember_me_checked, $sql, $core;
 
@@ -237,7 +237,7 @@ function edit_user()
             FROM characters WHERE account='".$user_id."'");
       
         // calculate timezone offset
-        $time_offset = $timezone * 3600;
+        $time_offset = $timezone_offset * 3600;
 
         $output .= '
                     <tr>
@@ -282,7 +282,7 @@ function edit_user()
           FROM characters WHERE account='".$user_id."'");
       
       // calculate timezone offset
-      $time_offset = $timezone * 3600;
+      $time_offset = $timezone_offset * 3600;
 
       $output .= '
                   <!-- tr>
