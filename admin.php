@@ -754,7 +754,10 @@ function general()
               <td>
                 <input type="text" name="smtppass" value="'.$smtp_pass["Value"].'" />
               </td>
-            </tr>
+            </tr>';
+
+        if ( $core == 1 )
+          $output .= '
             <tr>
               <td colspan="2">
                 <b>'.lang("admin", "pm").'</b>
@@ -775,7 +778,9 @@ function general()
               <td>
                 <input type="text" name="stationary" value="'.$pm_stationary["Value"].'" />
               </td>
-            </tr>
+            </tr>';
+
+        $output .= '
           </table>
           <input type="submit" name="save" value="'.lang("admin", "save").'" />
         </form>';
@@ -796,8 +801,8 @@ function general()
         $smtp_port = $sqlm->quote_smart($_GET["smtpport"]);
         $smtp_user = $sqlm->quote_smart($_GET["smtpuser"]);
         $smtp_pass = $sqlm->quote_smart($_GET["smtppass"]);
-        $pm_from_char = $sqlm->quote_smart($_GET["fromchar"]);
-        $pm_stationary = $sqlm->quote_smart($_GET["stationary"]);
+        $pm_from_char = ( ( isset($_GET["fromchar"]) ) ? $sqlm->quote_smart($_GET["fromchar"]) : 1 );
+        $pm_stationary = ( ( isset($_GET["stationary"]) ) ? $sqlm->quote_smart($_GET["stationary"]) : 41 );
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$mail_admin_email."' WHERE `Key`='Mail_Admin_Email'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$mail_mailer_type."' WHERE `Key`='Mail_Mailer_Type'");
