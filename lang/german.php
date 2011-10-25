@@ -2031,6 +2031,8 @@ $GLOBALS['lang_admin'] = array
   'tool_hearth' => 'Tool: Hearthstone',
   'hearth_credits' => 'Credits Per Use',
   'hearth_credits_tip' => 'Cost to use the Hearthstone Tool.',
+  'basic' => 'Basic',
+  'coupons' => 'Coupons',
 
   'more' => 'Mehr',
   'sqlsearchlimit' => 'SQL Such-Limit',

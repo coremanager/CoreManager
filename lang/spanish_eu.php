@@ -2031,6 +2031,8 @@ $GLOBALS['lang_admin'] = array
   'tool_hearth' => 'Aplicacion: Piedra del Hogar',
   'hearth_credits' => 'Creditos por uso',
   'hearth_credits_tip' => 'Costo por usar la Piedra del Hogar.',
+  'basic' => 'Basic',
+  'coupons' => 'Coupons',
 
   'more' => 'Mas',
   'sqlsearchlimit' => 'SQL Limite de Busqueda',

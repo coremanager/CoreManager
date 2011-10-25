@@ -491,6 +491,11 @@ function general()
   $output .= '
         <table id="sidebar">
           <tr>
+            <td '.( ( $subsection == "more" ) ? 'class="current"' : '' ).'>
+              <a href="admin.php?section=general&amp;subsection=more">'.lang("admin", "more").'</a>
+            </td>
+          </tr>
+          <tr>
             <td '.( ( $subsection == "version" ) ? 'class="current"' : '' ).'>
               <a href="admin.php?section=general&amp;subsection=version">'.lang("admin", "version").'</a>
             </td>
@@ -543,16 +548,6 @@ function general()
           <tr>
             <td '.( ( $subsection == "ads" ) ? 'class="current"' : '' ).'>
               <a href="admin.php?section=general&amp;subsection=ads">'.lang("admin", "ads").'</a>
-            </td>
-          </tr>
-          <tr>
-            <td '.( ( $subsection == "points" ) ? 'class="current"' : '' ).'>
-              <a href="admin.php?section=general&amp;subsection=points">'.lang("admin", "pointsystem").'</a>
-            </td>
-          </tr>
-          <tr>
-            <td '.( ( $subsection == "more" ) ? 'class="current"' : '' ).'>
-              <a href="admin.php?section=general&amp;subsection=more">'.lang("admin", "more").'</a>
             </td>
           </tr>
         </table>';
@@ -1709,239 +1704,6 @@ function general()
         $result = $sqlm->query("UPDATE config_misc SET Value='".$page_bottom_ad_content."' WHERE `Key`='Page_Bottom_Ad_Content'");
 
         redirect("admin.php?section=general&subsection=ads");
-      }
-      break;
-    }
-    case "points":
-    {
-      if ( !$sub_action )
-      {
-        $allow_fractional = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Credits_Fractional'"));
-        $credits_per_recruit = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Credits_Per_Recruit'"));
-        $recruit_reward_auto = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Recruit_Reward_Auto'"));
-        $initial_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='New_Account_Credits'"));
-        $qiv_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='QIV_Credits'"));
-        $qiv_gold = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='QIV_Gold'"));
-        $uv_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='UV_Credits'"));
-        $uv_gold = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='UV_Gold'"));
-
-        // extract gold/silver/copper from single gold number
-        $qiv_gold["Value"] = str_pad($qiv_gold["Value"], 4, "0", STR_PAD_LEFT);
-        $qiv_g = substr($qiv_gold["Value"],  0, -4);
-        if ( $qiv_g == '' )
-          $qiv_g = 0;
-        $qiv_s = substr($qiv_gold["Value"], -4,  2);
-        if ( ( $qiv_s == '' ) || ( $qiv_s == '00' ) )
-          $qiv_s = 0;
-        $qiv_c = substr($qiv_gold["Value"], -2);
-        if ( ( $qiv_c == '' ) || ( $qiv_c == '00' ) )
-          $qiv_c = 0;
-
-        // extract gold/silver/copper from single gold number
-        $uv_gold["Value"] = str_pad($uv_gold["Value"], 4, "0", STR_PAD_LEFT);
-        $uv_g = substr($uv_gold["Value"],  0, -4);
-        if ( $uv_g == '' )
-          $uv_g = 0;
-        $uv_s = substr($uv_gold["Value"], -4,  2);
-        if ( ( $uv_s == '' ) || ( $uv_s == '00' ) )
-          $uv_s = 0;
-        $uv_c = substr($uv_gold["Value"], -2);
-        if ( ( $uv_c == '' ) || ( $uv_c == '00' ) )
-          $uv_c = 0;
-
-        $name_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Name_Change_Credits'"));
-        $race_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Race_Change_Credits'"));
-        $trans_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Transfer_Credits'"));
-        $hearth_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Hearthstone_Credits'"));
-
-        $output .= '
-        <form name="form" action="admin.php" method="get">
-          <input type="hidden" name="section" value="general" />
-          <input type="hidden" name="subaction" value="savepoints" />
-          <input type="hidden" name="subsection" value="points" />
-          <table class="simple" id="admin_more">
-            <tr>
-              <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "fractional_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "fractional").'</a>:
-              </td>
-              <td>
-                <input type="checkbox" name="allowfractional" '.( ( $allow_fractional["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <b>'.lang("admin", "recruitment").'</b>
-              </td>
-            </tr>
-            <tr>
-              <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "credits_per_recruit_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "credits_per_recruit").'</a>:
-              </td>
-              <td>
-                <input type="text" name="creditsperrecruit" value="'.$credits_per_recruit["Value"].'"/>
-              </td>
-            </tr>
-            <tr>
-              <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "recruit_reward_auto_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "recruit_reward_auto").'</a>:
-              </td>
-              <td>
-                <input type="checkbox" name="recruitrewardauto" '.( ( $recruit_reward_auto["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <b>'.lang("admin", "newaccounts").'</b>
-              </td>
-            </tr>
-            <tr>
-              <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "initial_credits_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "initial_credits").'</a>:
-              </td>
-              <td>
-                <input type="text" name="initialcredits" value="'.$initial_credits["Value"].'"/>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <b>'.lang("admin", "tool_qiv").'</b>
-              </td>
-            </tr>
-            <tr>
-              <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "qiv_credits_per_gold_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "qiv_credits_per_gold").'</a>:
-              </td>
-              <td>
-                <input type="text" name="qiv_creditspergold_credits" value="'.$qiv_credits["Value"].'" size="6"/>
-                '.lang("admin", "credits").'&nbsp;=&nbsp;
-                <input type="text" name="qiv_creditspergold_gold" value="'.$qiv_g.'" size="6"/>
-                <img src="../img/gold.gif" alt="gold" />
-                <input type="text" name="qiv_creditspergold_silver" value="'.$qiv_s.'" size="6"/>
-                <img src="../img/silver.gif" alt="gold" />
-                <input type="text" name="qiv_creditspergold_copper" value="'.$qiv_c.'" size="6"/>
-                <img src="../img/copper.gif" alt="gold" />
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <b>'.lang("admin", "tool_uv").'</b>
-              </td>
-            </tr>
-            <tr>
-              <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "uv_credits_per_gold_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "uv_credits_per_gold").'</a>:
-              </td>
-              <td>
-                <input type="text" name="uv_creditspergold_credits" value="'.$uv_credits["Value"].'" size="6"/>
-                '.lang("admin", "credits").'&nbsp;=&nbsp;
-                <input type="text" name="uv_creditspergold_gold" value="'.$uv_g.'" size="6"/>
-                <img src="../img/gold.gif" alt="gold" />
-                <input type="text" name="uv_creditspergold_silver" value="'.$uv_s.'" size="6"/>
-                <img src="../img/silver.gif" alt="gold" />
-                <input type="text" name="uv_creditspergold_copper" value="'.$uv_c.'" size="6"/>
-                <img src="../img/copper.gif" alt="gold" />
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <b>'.lang("admin", "tool_name").'</b>
-              </td>
-            </tr>
-            <tr>
-              <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "name_credits_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "name_credits").'</a>:
-              </td>
-              <td>
-                <input type="text" name="namecredits" value="'.$name_credits["Value"].'"/>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <b>'.lang("admin", "tool_race").'</b>
-              </td>
-            </tr>
-            <tr>
-              <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "race_credits_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "race_credits").'</a>:
-              </td>
-              <td>
-                <input type="text" name="racecredits" value="'.$race_credits["Value"].'"/>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <b>'.lang("admin", "tool_trans").'</b>
-              </td>
-            </tr>
-            <tr>
-              <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "trans_credits_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "trans_credits").'</a>:
-              </td>
-              <td>
-                <input type="text" name="transcredits" value="'.$trans_credits["Value"].'"/>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2">
-                <b>'.lang("admin", "tool_hearth").'</b>
-              </td>
-            </tr>
-            <tr>
-              <td class="help">
-                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "hearth_credits_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hearth_credits").'</a>:
-              </td>
-              <td>
-                <input type="text" name="hearthcredits" value="'.$hearth_credits["Value"].'"/>
-              </td>
-            </tr>
-          </table>
-          <input type="submit" name="save" value="'.lang("admin", "save").'" />
-        </form>';
-      }
-      else
-      {
-        $allow_fractional = ( ( isset($_GET["allowfractional"]) ) ? 1 : 0 );
-        $credits_per_recruit = $sqlm->quote_smart($_GET["creditsperrecruit"]);
-        $recruit_reward_auto = ( ( isset($_GET["recruitrewardauto"]) ) ? 1 : 0 );
-        $initial_credits = $sqlm->quote_smart($_GET["initialcredits"]);
-        $qiv_credits = $sqlm->quote_smart($_GET["qiv_creditspergold_credits"]);
-        $qiv_gold = $sqlm->quote_smart($_GET["qiv_creditspergold_gold"]);
-        $qiv_silver = $sqlm->quote_smart($_GET["qiv_creditspergold_silver"]);
-        $qiv_copper = $sqlm->quote_smart($_GET["qiv_creditspergold_copper"]);
-        $uv_credits = $sqlm->quote_smart($_GET["uv_creditspergold_credits"]);
-        $uv_gold = $sqlm->quote_smart($_GET["uv_creditspergold_gold"]);
-        $uv_silver = $sqlm->quote_smart($_GET["uv_creditspergold_silver"]);
-        $uv_copper = $sqlm->quote_smart($_GET["uv_creditspergold_copper"]);
-
-        // pad
-        $qiv_silver = str_pad($qiv_silver, 2, "0", STR_PAD_LEFT);
-        $qiv_copper = str_pad($qiv_copper, 2, "0", STR_PAD_LEFT);
-        $uv_silver = str_pad($uv_silver, 2, "0", STR_PAD_LEFT);
-        $uv_copper = str_pad($uv_copper, 2, "0", STR_PAD_LEFT);
-
-        // combine
-        $qiv_money = $qiv_gold.$qiv_silver.$qiv_copper;
-        $uv_money = $uv_gold.$uv_silver.$uv_copper;
-
-        $name_credits = $sqlm->quote_smart($_GET["namecredits"]);
-        $race_credits = $sqlm->quote_smart($_GET["racecredits"]);
-        $trans_credits = $sqlm->quote_smart($_GET["transcredits"]);
-        $hearth_credits = $sqlm->quote_smart($_GET["hearthcredits"]);
-
-        $result = $sqlm->query("UPDATE config_misc SET Value='".$allow_fractional."' WHERE `Key`='Credits_Fractional'");
-        $result = $sqlm->query("UPDATE config_misc SET Value='".$credits_per_recruit."' WHERE `Key`='Credits_Per_Recruit'");
-        $result = $sqlm->query("UPDATE config_misc SET Value='".$recruit_reward_auto."' WHERE `Key`='Recruit_Reward_Auto'");
-        $result = $sqlm->query("UPDATE config_misc SET Value='".$initial_credits."' WHERE `Key`='New_Account_Credits'");
-        $result = $sqlm->query("UPDATE config_misc SET Value='".$qiv_credits."' WHERE `Key`='QIV_Credits'");
-        $result = $sqlm->query("UPDATE config_misc SET Value='".$qiv_money."' WHERE `Key`='QIV_Gold'");
-        $result = $sqlm->query("UPDATE config_misc SET Value='".$uv_credits."' WHERE `Key`='UV_Credits'");
-        $result = $sqlm->query("UPDATE config_misc SET Value='".$uv_money."' WHERE `Key`='UV_Gold'");
-        $result = $sqlm->query("UPDATE config_misc SET Value='".$name_credits."' WHERE `Key`='Name_Change_Credits'");
-        $result = $sqlm->query("UPDATE config_misc SET Value='".$race_credits."' WHERE `Key`='Race_Change_Credits'");
-        $result = $sqlm->query("UPDATE config_misc SET Value='".$trans_credits."' WHERE `Key`='Transfer_Credits'");
-        $result = $sqlm->query("UPDATE config_misc SET Value='".$hearth_credits."' WHERE `Key`='Hearthstone_Credits'");
-
-        redirect("admin.php?section=general&subsection=points");
       }
       break;
     }
@@ -4149,6 +3911,299 @@ function saveacct()
   redirect("admin.php?section=accounts");
 }
 
+function pointsystem()
+{
+  global $output, $corem_db, $core;
+
+  // we need $core to be set
+  if ( $core == 0 )
+    $core = detectcore();
+
+  $sqlm = new SQL;
+  $sqlm->connect($corem_db["addr"], $corem_db["user"], $corem_db["pass"], $corem_db["name"], $corem_db["encoding"]);
+
+  $subsection = ( ( isset($_GET["subsection"]) ) ? $sqlm->quote_smart($_GET["subsection"]) : 1 );
+
+  $output .= '
+        <table id="sidebar">
+          <tr>
+            <td '.( ( $subsection == "basic" ) ? 'class="current"' : '' ).'>
+              <a href="admin.php?section=pointsystem&amp;subsection=basic">'.lang("admin", "basic").'</a>
+            </td>
+          </tr>
+          <tr>
+            <td '.( ( $subsection == "coupons" ) ? 'class="current"' : '' ).'>
+              <a href="admin.php?section=pointsystem&amp;subsection=coupons">'.lang("admin", "coupons").'</a>
+            </td>
+          </tr>
+        </table>';
+
+  $sub_action = ( ( isset($_GET["subaction"]) ) ? $_GET["subaction"] : '' );
+
+  if ( isset($_GET["error"]) )
+    $output .= '
+      <div id="misc_error">';
+  else
+    $output .= '
+      <div id="misc">';
+
+  switch ( $subsection )
+  {
+    case "basic":
+    {
+      if ( !$sub_action )
+      {
+        $allow_fractional = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Credits_Fractional'"));
+        $credits_per_recruit = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Credits_Per_Recruit'"));
+        $recruit_reward_auto = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Recruit_Reward_Auto'"));
+        $initial_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='New_Account_Credits'"));
+        $qiv_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='QIV_Credits'"));
+        $qiv_gold = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='QIV_Gold'"));
+        $uv_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='UV_Credits'"));
+        $uv_gold = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='UV_Gold'"));
+
+        // extract gold/silver/copper from single gold number
+        $qiv_gold["Value"] = str_pad($qiv_gold["Value"], 4, "0", STR_PAD_LEFT);
+        $qiv_g = substr($qiv_gold["Value"],  0, -4);
+        if ( $qiv_g == '' )
+          $qiv_g = 0;
+        $qiv_s = substr($qiv_gold["Value"], -4,  2);
+        if ( ( $qiv_s == '' ) || ( $qiv_s == '00' ) )
+          $qiv_s = 0;
+        $qiv_c = substr($qiv_gold["Value"], -2);
+        if ( ( $qiv_c == '' ) || ( $qiv_c == '00' ) )
+          $qiv_c = 0;
+
+        // extract gold/silver/copper from single gold number
+        $uv_gold["Value"] = str_pad($uv_gold["Value"], 4, "0", STR_PAD_LEFT);
+        $uv_g = substr($uv_gold["Value"],  0, -4);
+        if ( $uv_g == '' )
+          $uv_g = 0;
+        $uv_s = substr($uv_gold["Value"], -4,  2);
+        if ( ( $uv_s == '' ) || ( $uv_s == '00' ) )
+          $uv_s = 0;
+        $uv_c = substr($uv_gold["Value"], -2);
+        if ( ( $uv_c == '' ) || ( $uv_c == '00' ) )
+          $uv_c = 0;
+
+        $name_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Name_Change_Credits'"));
+        $race_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Race_Change_Credits'"));
+        $trans_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Transfer_Credits'"));
+        $hearth_credits = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='Hearthstone_Credits'"));
+
+        $output .= '
+        <form name="form" action="admin.php" method="get">
+          <input type="hidden" name="section" value="pointsystem" />
+          <input type="hidden" name="subaction" value="savepoints" />
+          <input type="hidden" name="subsection" value="basic" />
+          <table class="simple" id="admin_more">
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "fractional_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "fractional").'</a>:
+              </td>
+              <td>
+                <input type="checkbox" name="allowfractional" '.( ( $allow_fractional["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <b>'.lang("admin", "recruitment").'</b>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "credits_per_recruit_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "credits_per_recruit").'</a>:
+              </td>
+              <td>
+                <input type="text" name="creditsperrecruit" value="'.$credits_per_recruit["Value"].'"/>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "recruit_reward_auto_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "recruit_reward_auto").'</a>:
+              </td>
+              <td>
+                <input type="checkbox" name="recruitrewardauto" '.( ( $recruit_reward_auto["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <b>'.lang("admin", "newaccounts").'</b>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "initial_credits_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "initial_credits").'</a>:
+              </td>
+              <td>
+                <input type="text" name="initialcredits" value="'.$initial_credits["Value"].'"/>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <b>'.lang("admin", "tool_qiv").'</b>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "qiv_credits_per_gold_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "qiv_credits_per_gold").'</a>:
+              </td>
+              <td>
+                <input type="text" name="qiv_creditspergold_credits" value="'.$qiv_credits["Value"].'" size="6"/>
+                '.lang("admin", "credits").'&nbsp;=&nbsp;
+                <input type="text" name="qiv_creditspergold_gold" value="'.$qiv_g.'" size="6"/>
+                <img src="../img/gold.gif" alt="gold" />
+                <input type="text" name="qiv_creditspergold_silver" value="'.$qiv_s.'" size="6"/>
+                <img src="../img/silver.gif" alt="gold" />
+                <input type="text" name="qiv_creditspergold_copper" value="'.$qiv_c.'" size="6"/>
+                <img src="../img/copper.gif" alt="gold" />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <b>'.lang("admin", "tool_uv").'</b>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "uv_credits_per_gold_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "uv_credits_per_gold").'</a>:
+              </td>
+              <td>
+                <input type="text" name="uv_creditspergold_credits" value="'.$uv_credits["Value"].'" size="6"/>
+                '.lang("admin", "credits").'&nbsp;=&nbsp;
+                <input type="text" name="uv_creditspergold_gold" value="'.$uv_g.'" size="6"/>
+                <img src="../img/gold.gif" alt="gold" />
+                <input type="text" name="uv_creditspergold_silver" value="'.$uv_s.'" size="6"/>
+                <img src="../img/silver.gif" alt="gold" />
+                <input type="text" name="uv_creditspergold_copper" value="'.$uv_c.'" size="6"/>
+                <img src="../img/copper.gif" alt="gold" />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <b>'.lang("admin", "tool_name").'</b>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "name_credits_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "name_credits").'</a>:
+              </td>
+              <td>
+                <input type="text" name="namecredits" value="'.$name_credits["Value"].'"/>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <b>'.lang("admin", "tool_race").'</b>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "race_credits_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "race_credits").'</a>:
+              </td>
+              <td>
+                <input type="text" name="racecredits" value="'.$race_credits["Value"].'"/>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <b>'.lang("admin", "tool_trans").'</b>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "trans_credits_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "trans_credits").'</a>:
+              </td>
+              <td>
+                <input type="text" name="transcredits" value="'.$trans_credits["Value"].'"/>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <b>'.lang("admin", "tool_hearth").'</b>
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "hearth_credits_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "hearth_credits").'</a>:
+              </td>
+              <td>
+                <input type="text" name="hearthcredits" value="'.$hearth_credits["Value"].'"/>
+              </td>
+            </tr>
+          </table>
+          <input type="submit" name="save" value="'.lang("admin", "save").'" />
+        </form>';
+      }
+      else
+      {
+        $allow_fractional = ( ( isset($_GET["allowfractional"]) ) ? 1 : 0 );
+        $credits_per_recruit = $sqlm->quote_smart($_GET["creditsperrecruit"]);
+        $recruit_reward_auto = ( ( isset($_GET["recruitrewardauto"]) ) ? 1 : 0 );
+        $initial_credits = $sqlm->quote_smart($_GET["initialcredits"]);
+        $qiv_credits = $sqlm->quote_smart($_GET["qiv_creditspergold_credits"]);
+        $qiv_gold = $sqlm->quote_smart($_GET["qiv_creditspergold_gold"]);
+        $qiv_silver = $sqlm->quote_smart($_GET["qiv_creditspergold_silver"]);
+        $qiv_copper = $sqlm->quote_smart($_GET["qiv_creditspergold_copper"]);
+        $uv_credits = $sqlm->quote_smart($_GET["uv_creditspergold_credits"]);
+        $uv_gold = $sqlm->quote_smart($_GET["uv_creditspergold_gold"]);
+        $uv_silver = $sqlm->quote_smart($_GET["uv_creditspergold_silver"]);
+        $uv_copper = $sqlm->quote_smart($_GET["uv_creditspergold_copper"]);
+
+        // pad
+        $qiv_silver = str_pad($qiv_silver, 2, "0", STR_PAD_LEFT);
+        $qiv_copper = str_pad($qiv_copper, 2, "0", STR_PAD_LEFT);
+        $uv_silver = str_pad($uv_silver, 2, "0", STR_PAD_LEFT);
+        $uv_copper = str_pad($uv_copper, 2, "0", STR_PAD_LEFT);
+
+        // combine
+        $qiv_money = $qiv_gold.$qiv_silver.$qiv_copper;
+        $uv_money = $uv_gold.$uv_silver.$uv_copper;
+
+        $name_credits = $sqlm->quote_smart($_GET["namecredits"]);
+        $race_credits = $sqlm->quote_smart($_GET["racecredits"]);
+        $trans_credits = $sqlm->quote_smart($_GET["transcredits"]);
+        $hearth_credits = $sqlm->quote_smart($_GET["hearthcredits"]);
+
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$allow_fractional."' WHERE `Key`='Credits_Fractional'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$credits_per_recruit."' WHERE `Key`='Credits_Per_Recruit'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$recruit_reward_auto."' WHERE `Key`='Recruit_Reward_Auto'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$initial_credits."' WHERE `Key`='New_Account_Credits'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$qiv_credits."' WHERE `Key`='QIV_Credits'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$qiv_money."' WHERE `Key`='QIV_Gold'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$uv_credits."' WHERE `Key`='UV_Credits'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$uv_money."' WHERE `Key`='UV_Gold'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$name_credits."' WHERE `Key`='Name_Change_Credits'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$race_credits."' WHERE `Key`='Race_Change_Credits'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$trans_credits."' WHERE `Key`='Transfer_Credits'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$hearth_credits."' WHERE `Key`='Hearthstone_Credits'");
+
+        redirect("admin.php?section=pointsystem&subsection=basic");
+      }
+      break;
+    }
+    case "coupons":
+    {
+
+        $output .= '
+        <form name="form" action="admin.php" method="get">
+          <input type="hidden" name="section" value="pointsystem" />
+          <input type="hidden" name="subaction" value="savepoints" />
+          <input type="hidden" name="subsection" value="basic" />
+          <table class="simple" id="admin_more">
+            <tr>
+              <td>TODO</td>
+            </tr>
+          </table>
+        </form>';
+      break;
+    }
+  }
+
+  $output .= '
+      </div>';
+}
+
 
 //#############################################################################
 // Fix reditection error under MS-IIS fuckedup-servers.
@@ -4266,6 +4321,9 @@ switch ( $section )
     break;
   case "accounts":
     accounts();
+    break;
+  case "pointsystem":
+    pointsystem();
     break;
   default:
     general();

@@ -121,7 +121,7 @@ $output .= '
           <a href="admin.php?section=databases">'.lang("admin", "database").'</a>
         </li>
         <li'.( ( $section == "general" ) ? ' class="current" ' : '' ).'>
-          <a href="admin.php?section=general&amp;subsection=version">'.lang("admin", "general").'</a>
+          <a href="admin.php?section=general&amp;subsection=more">'.lang("admin", "general").'</a>
         </li>
         <li'.( ( $section == "servers" ) ? ' class="current" ' : '' ).'>
           <a href="admin.php?section=servers">'.lang("admin", "servers").'</a>
@@ -137,6 +137,9 @@ $output .= '
         </li>
         <li'.( ( $section == "accounts" ) ? ' class="current" ' : '' ).'>
           <a href="admin.php?section=accounts">'.lang("admin", "accounts").'</a>
+        </li>
+        <li'.( ( $section == "pointsystem" ) ? ' class="current" ' : '' ).'>
+          <a href="admin.php?section=pointsystem&amp;subsection=basic">'.lang("admin", "pointsystem").'</a>
         </li>
         <li>
           <a href="index.php">'.lang("admin", "main").'</a>
