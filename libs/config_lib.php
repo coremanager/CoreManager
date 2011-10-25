@@ -178,7 +178,7 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $from_char = $misc_row["Value"];
       break;
     }
-    case "Show_Version_Show":
+    case "PM_Stationary":
     {
       $stationary = $misc_row["Value"];
       break;

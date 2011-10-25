@@ -1834,6 +1834,10 @@ tr td.rep0
 {
   width: 720px;
 }
+#mail_items
+{
+  width: 100%;
+}
 
 
 /* MAP.PHP */

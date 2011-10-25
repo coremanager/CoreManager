@@ -87,6 +87,7 @@ function print_mail_form()
                   </tr>';
 
   if ( $type == "ingame_mail" )
+  {
     $output .= '
                   <tr>
                     <td colspan="3">
@@ -97,12 +98,77 @@ function print_mail_form()
                     <td colspan="3" align="left">'.lang("mail", "attachments").':</td>
                   </tr>
                   <tr>
-                    <td colspan="3" align="right">'
-                      .lang("mail", "money").': <input type="text" name="money" value="0" size="10" maxlength="10" />'
-                      .lang("mail", "item").': <input type="text" name="att_item" value="0" size="10" maxlength="10" />'
-                      .lang("mail", "stack").': <input type="text" name="att_stack" value="0" size="10" maxlength="10" />
+                    <td colspan="3">'
+                      .lang("mail", "money").': <input type="text" name="money" value="0" size="10" maxlength="10" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3">
+                      <table class="top_hidden" id="mail_items">
+                        <tr>
+                          <td>'
+                            .lang("mail", "item").': <input type="text" name="att_item1" value="0" size="10" maxlength="10" />'
+                            .lang("mail", "stack").': <input type="text" name="att_stack1" value="0" size="10" maxlength="10" />
+                          </td>
+                          <td>'
+                            .lang("mail", "item").': <input type="text" name="att_item2" value="0" size="10" maxlength="10" />'
+                            .lang("mail", "stack").': <input type="text" name="att_stack2" value="0" size="10" maxlength="10" />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>'
+                            .lang("mail", "item").': <input type="text" name="att_item3" value="0" size="10" maxlength="10" />'
+                            .lang("mail", "stack").': <input type="text" name="att_stack3" value="0" size="10" maxlength="10" />
+                          </td>
+                          <td>'
+                            .lang("mail", "item").': <input type="text" name="att_item4" value="0" size="10" maxlength="10" />'
+                            .lang("mail", "stack").': <input type="text" name="att_stack4" value="0" size="10" maxlength="10" />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>'
+                            .lang("mail", "item").': <input type="text" name="att_item5" value="0" size="10" maxlength="10" />'
+                            .lang("mail", "stack").': <input type="text" name="att_stack5" value="0" size="10" maxlength="10" />
+                          </td>
+                          <td>'
+                            .lang("mail", "item").': <input type="text" name="att_item6" value="0" size="10" maxlength="10" />'
+                            .lang("mail", "stack").': <input type="text" name="att_stack6" value="0" size="10" maxlength="10" />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>'
+                            .lang("mail", "item").': <input type="text" name="att_item7" value="0" size="10" maxlength="10" />'
+                            .lang("mail", "stack").': <input type="text" name="att_stack7" value="0" size="10" maxlength="10" />
+                          </td>
+                          <td>'
+                            .lang("mail", "item").': <input type="text" name="att_item8" value="0" size="10" maxlength="10" />'
+                            .lang("mail", "stack").': <input type="text" name="att_stack8" value="0" size="10" maxlength="10" />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>'
+                            .lang("mail", "item").': <input type="text" name="att_item9" value="0" size="10" maxlength="10" />'
+                            .lang("mail", "stack").': <input type="text" name="att_stack9" value="0" size="10" maxlength="10" />
+                          </td>
+                          <td>'
+                            .lang("mail", "item").': <input type="text" name="att_item10" value="0" size="10" maxlength="10" />'
+                            .lang("mail", "stack").': <input type="text" name="att_stack10" value="0" size="10" maxlength="10" />
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>'
+                            .lang("mail", "item").': <input type="text" name="att_item11" value="0" size="10" maxlength="10" />'
+                            .lang("mail", "stack").': <input type="text" name="att_stack11" value="0" size="10" maxlength="10" />
+                          </td>
+                          <td>'
+                            .lang("mail", "item").': <input type="text" name="att_item12" value="0" size="10" maxlength="10" />'
+                            .lang("mail", "stack").': <input type="text" name="att_stack12" value="0" size="10" maxlength="10" />
+                          </td>
+                        </tr>
+                      </table>
                     </td>
                   </tr>';
+  }
 
   $output .= '
                 </table>
@@ -180,11 +246,21 @@ function send_mail()
 
   //$type = addslashes($type);
   $att_gold = $sql["char"]->quote_smart($_GET["money"]);
-  $att_item = $sql["char"]->quote_smart($_GET["att_item"]);
-  $att_stack = $sql["char"]->quote_smart($_GET["att_stack"]);
 
-  if ( ( $att_item <> 0 ) && ( $att_stack == 0 ) )
-    $att_stack = 1;
+  for ( $i = 0; $i < 12; $i++ )
+  {
+    $temp_item = $sql["char"]->quote_smart($_GET["att_item".($i+1)]);
+    $temp_stack = $sql["char"]->quote_smart($_GET["att_stack".($i+1)]);
+
+    if ( ( $temp_item <> 0 ) && ( $temp_stack == 0 ) )
+      $temp_stack = 1;
+
+    if ( $temp_item != "0" )
+    {
+      $att_item[] = $temp_item;
+      $att_stack[] = $temp_stack;
+    }
+  }
 
   switch ( $type )
   {
@@ -448,8 +524,45 @@ function send_ingame_mail_A($realm_id, $massmails)
   $receivers = array();
   foreach ( $massmails as $mails )
   {
-    $sql["char"]->query("INSERT INTO mailbox_insert_queue (sender_guid, receiver_guid, subject, body, stationary, money, item_id, item_stack)
-                  VALUES ('".$from_char."', '".$mails["receiver"]."', '".$mails["subject"]."', '".$mails["body"]."', '".$stationary."', '".$mails["att_gold"]."', '".$mails["att_item"]."', '".$mails["att_stack"]."')");
+    if ( count($mails["att_item"]) < 1 )
+    {
+      $mails["att_item"] = array(0);
+      $mails["att_stack"] = array(0);
+    }
+
+    // build insert query
+    $query = "INSERT INTO mailbox_insert_queue (sender_guid, receiver_guid, subject, body, stationary, money, 
+              item_id, item_stack";
+
+    $att_item = $mails["att_item"];
+    $att_stack = $mails["att_stack"];
+
+    if ( count($att_item) > 1 )
+    {
+      for ( $i = 1; $i < count($att_item); $i++ )
+      {
+        $query .= ", item_id".($i+1).", item_stack".($i+1);
+      }
+    }
+
+    $query .= "
+              )
+              VALUES ('".$from_char."', '".$mails["receiver"]."', '".$mails["subject"]."', '".$mails["body"]."', '".$stationary."', '".$mails["att_gold"]."', 
+              '".$att_item[0]."', '".$att_stack[0]."'";
+
+    if ( count($att_item) > 1 )
+    {
+      for ( $i = 1; $i < count($att_item); $i++ )
+      {
+        $query .= ", '".$att_item[$i]."', '".$att_stack[$i]."'";
+      }
+    }
+
+    $query .= "
+              )";
+
+    $sql["char"]->query($query);
+
     if ( $sql["char"]->affected_rows() )
     {
       //$mess_str .= "Successfully sent message sent to ". $mails["receiver_name"]."<br />";
@@ -496,7 +609,7 @@ function send_ingame_mail_MT($realm_id, $massmails)
   global $server, $sql;
   $telnet = new telnet_lib();
 
-  $result = $telnet->Connect($server[$realm_id]['addr'], $server[$realm_id]['telnet_port'], $server[$realm_id]['telnet_user'], $server[$realm_id]['telnet_pass']);
+  $result = $telnet->Connect($server[$realm_id]["addr"], $server[$realm_id]["telnet_port"], $server[$realm_id]["telnet_user"], $server[$realm_id]["telnet_pass"]);
 
   if ( $result == 0 )
   {
@@ -505,7 +618,10 @@ function send_ingame_mail_MT($realm_id, $massmails)
     $receivers = array();
     foreach( $massmails as $mails )
     {
-      if ( $mails["att_gold"] && $mails["att_item"] )
+      $att_item = $mails["att_item"];
+      $att_stack = $mails["att_stack"];
+
+      if ( $mails["att_gold"] && ( count($att_item) > 0 ) )
       {
         $mess_str1 = "send money ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\" ".$mails["att_gold"]."";
         $telnet->DoCommand($mess_str1, $result1);
@@ -513,7 +629,11 @@ function send_ingame_mail_MT($realm_id, $massmails)
         $mess_str .= $mess_str1."<br >";
         $result .= $result1."";
 
-        $mess_str1 = "send item ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\" ".$mails["att_item"].( ( $mails["att_stack"] > 1 ) ? ":count".$mails["att_stack"] : " " );
+        $mess_str1 = "send item ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\" ";
+
+        for ( $i = 0; $i < count($att_item); $i++ )
+          $mess_str1 .= $att_item[$i].( ( $att_stack[$i] > 1 ) ? ":".$att_stack[$i]." " : " " );
+
         $telnet->DoCommand($mess_str1, $result1);
 
         $mess_str .= $mess_str1."<br >";
@@ -527,9 +647,13 @@ function send_ingame_mail_MT($realm_id, $massmails)
         $mess_str .= $mess_str1."<br >";
         $result .= $result1."";
       }
-      elseif ( $mails["att_item"] )
+      elseif ( count($att_item) > 0 )
       {
-        $mess_str1 = "send item ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\" ".$mails["att_item"].( ( $mails["att_stack"] > 1 ) ? ":count".$mails["att_stack"] : " " );
+        $mess_str1 = "send item ".$mails["receiver_name"]." \"".$mails["subject"]."\" \"".$mails["body"]."\" ";
+
+        for ( $i = 0; $i < count($att_item); $i++ )
+          $mess_str1 .= $att_item[$i].( ( $att_stack[$i] > 1 ) ? ":".$att_stack[$i]." " : " " );
+
         $telnet->DoCommand($mess_str1, $result1);
 
         $mess_str .= $mess_str1."<br >";
