@@ -56,13 +56,35 @@ $output .= '
   <body>';
 
 // get our current revision
-if ( is_readable('.svn/entries') )
+if ( is_readable(".svn/entries") )
 {
-  $file_obj = new SplFileObject('.svn/entries');
+  $file_obj = new SplFileObject(".svn/entries");
   // line 4 is where svn revision is stored
   $file_obj->seek(3);
   $current = rtrim($file_obj->current());
   unset($file_obj);
+}
+
+if ( strlen($current) == 0 )
+{
+  // if we didn't get a revision number from the entries file then we might be using SVN 1.7+
+  if ( is_readable(".svn/wc.db") )
+  {
+    class wcDB extends SQLite3
+    {
+      function __construct()
+      {
+        $this->open(".svn/wc.db");
+      }
+    }
+
+    $db = new wcDB();
+    $result = $db->query("SELECT MAX(revision) FROM `NODES`");
+    $result = $result->fetchArray();
+    $current = $result[0];
+
+    unset($db);
+  }
 }
 
 // detect latest revision

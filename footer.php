@@ -187,6 +187,28 @@
         unset($file_obj);
       }
 
+      if ( strlen($current) == 0 )
+      {
+        // if we didn't get a revision number from the entries file then we might be using SVN 1.7+
+        if ( is_readable(".svn/wc.db") )
+        {
+          class wcDB extends SQLite3
+          {
+            function __construct()
+            {
+              $this->open(".svn/wc.db");
+            }
+          }
+
+          $db = new wcDB();
+          $result = $db->query("SELECT MAX(revision) FROM `NODES`");
+          $result = $result->fetchArray();
+          $show_version["svnrev"] = $result[0];
+
+          unset($db);
+        }
+      }
+
       $output .= 
         $show_version["version"].lang("footer", "revision").': <a href="http://trac6.assembla.com/coremanager/changeset/'.$show_version["svnrev"].'">'.$show_version["svnrev"].'</a>';
     }
