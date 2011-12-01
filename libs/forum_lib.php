@@ -206,12 +206,12 @@ function get_side()
     return "NO";
 }
 
-function gen_avatar_panel($level, $sex, $race, $class, $info = 1, $gm = 0)
+function gen_avatar_panel($level, $sex, $race, $class, $info = 1, $gm = 0, $edit_user = 0)
 {
   require_once("libs/char_lib.php");
 
   $return = '
-                <div border="0" cellpadding="0" cellspacing="0" style=" background: transparent url(';
+                <div '.( ( $edit_user == 0 ) ? 'border="0" cellpadding="0" cellspacing="0" ' : '' ).'style="background: transparent url(';
   $return .= char_get_avatar_img($level, $sex, $race, $class, $gm);
   $return .= ') repeat scroll 0%; width: 64px; height: 64px;">';
 

@@ -1,0 +1,1 @@
+INSERT INTO config_menus (Menu, `Order`, Action, `Name`, `View`, `Insert`, `Update`, `Delete`, Enabled) VALUES ('1', '13', 'point_system.php', 'points', '0', '4', '4', '4', '1');

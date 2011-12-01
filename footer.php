@@ -187,7 +187,7 @@
         unset($file_obj);
       }
 
-      if ( strlen($current) == 0 )
+      if ( strlen($show_version["svnrev"]) == 0 )
       {
         // if we didn't get a revision number from the entries file then we might be using SVN 1.7+
         if ( is_readable(".svn/wc.db") )

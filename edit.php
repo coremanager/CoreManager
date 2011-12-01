@@ -20,6 +20,7 @@
 
 require_once 'header.php';
 require_once 'libs/char_lib.php';
+require_once 'libs/item_lib.php';
 require_once 'libs/forum_lib.php';
 require_once("libs/bb2html_lib.php");
 valid_login($action_permission["view"]);
@@ -709,6 +710,33 @@ function edit_user()
                     </table>
                   </td>
                 </tr>
+              </table>
+            </div>
+            <br />
+            <div id="edit_theme_fieldset" class="fieldset_border">
+              <span class="legend">'.lang("edit", "my_bags").'</span>
+              <table class="hidden" id="edit_theme_table">';
+
+    // 
+    $bag_query = "SELECT * FROM point_system_prize_bags WHERE owner='".$user_id."'";
+    $bag_result = $sql["mgr"]->query($bag_query);
+
+    while ( $bag = $sql["mgr"]->fetch_assoc($bag_result) )
+    {
+      $output .= '
+                <tr>
+                  <td align="right">
+                    <a href="point_system.php?action=view_bag&amp;bag_id='.$bag["entry"].'">
+                      <img src="'.get_item_icon(1725).'" alt="" />
+                    </a>
+                  </td>
+                  <td align="left">
+                    <span>&nbsp;'.$bag["slots"].' '.lang("edit", "bag_slots").'</span>
+                  </td>
+                </tr>';
+    }
+
+    $output .= '
               </table>
             </div>
             <br />

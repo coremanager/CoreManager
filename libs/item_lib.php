@@ -796,7 +796,7 @@ function get_item_tooltip($item, $ench, $prop, $creator, $durability, $flags)
       }
     }
 
-    $tooltip .= "</font>";
+    $tooltip .= '</font><font color="#ffffff">';
     
     if ( ( isset($durability) ) && ( $item["MaxDurability"] > 0 ) )
     {

@@ -703,6 +703,11 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $hide_uptime = $misc_row["Value"];
       break;
     }
+    case "Hide_Coupons_Main_Page":
+    {
+      $hide_coupons = $misc_row["Value"];
+      break;
+    }
   }
 }
 

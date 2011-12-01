@@ -113,7 +113,7 @@ function show_map()
               <td>';
 
   if ( $showmap <> -1 )
-    makebutton(lang("map", "azeroth"), 'map.php?map=-1&online='.$online, 150);
+    makebutton(lang("map", "azeroth"), 'map.php?map=-1&amp;online='.$online, 150);
   else
     $output .= '
               <div class="dis_button" style="width: 150px;">'
@@ -125,7 +125,7 @@ function show_map()
               <td>';
 
   if ( $showmap <> 530 )
-    makebutton(lang("map", "outland"), 'map.php?map=530&online='.$online, 150);
+    makebutton(lang("map", "outland"), 'map.php?map=530&amp;online='.$online, 150);
   else
     $output .= '
               <div class="dis_button" style="width: 150px;">'
@@ -139,7 +139,7 @@ function show_map()
               <td>';
 
   if ( $showmap <> 0 )
-    makebutton(lang("map", "ek"), 'map.php?map=0&online='.$online, 150);
+    makebutton(lang("map", "ek"), 'map.php?map=0&amp;online='.$online, 150);
   else
     $output .= '
               <div class="dis_button" style="width: 150px;">'
@@ -151,7 +151,7 @@ function show_map()
               <td>';
 
   if ( $showmap <> 1 )
-    makebutton(lang("map", "k"), 'map.php?map=1&online='.$online, 150);
+    makebutton(lang("map", "k"), 'map.php?map=1&amp;online='.$online, 150);
   else
     $output .= '
               <div class="dis_button" style="width: 150px;">'
@@ -163,7 +163,7 @@ function show_map()
               <td>';
 
   if ( $showmap <> 571 )
-    makebutton(lang("map", "nr"), 'map.php?map=571&online='.$online, 150);
+    makebutton(lang("map", "nr"), 'map.php?map=571&amp;online='.$online, 150);
   else
     $output .= '
               <div class="dis_button" style="width: 150px;">'
@@ -185,7 +185,7 @@ function show_map()
               <td>';
 
   if ( $online <> 1 )
-    makebutton(lang("map", "online"), 'map.php?map='.$showmap.'&online=1', 150);
+    makebutton(lang("map", "online"), 'map.php?map='.$showmap.'&amp;online=1', 150);
   else
     $output .= '
               <div class="dis_button" style="width: 150px;">'
@@ -197,7 +197,7 @@ function show_map()
               <td>';
 
   if ( $online <> 0 )
-    makebutton(lang("map", "offline"), 'map.php?map='.$showmap.'&online=0', 150);
+    makebutton(lang("map", "offline"), 'map.php?map='.$showmap.'&amp;online=0', 150);
   else
     $output .= '
               <div class="dis_button" style="width: 150px;">'
@@ -209,7 +209,7 @@ function show_map()
               <td>';
 
   if ( $online <> -1 )
-    makebutton(lang("map", "both"), 'map.php?map='.$showmap.'&online=-1', 150);
+    makebutton(lang("map", "both"), 'map.php?map='.$showmap.'&amp;online=-1', 150);
   else
     $output .= '
               <div class="dis_button" style="width: 150px;">'
@@ -268,9 +268,9 @@ function show_map()
   $output .= '
           <div class="map_map">
             <br />
-            <img src="img/map/'.$mapfilename.'1.png" id="map_image" />
-            <img src="img/map/'.$mapfilename.'2.png" id="map_image" />
-            <img src="img/map/'.$mapfilename.'3.png" id="map_image" />';
+            <img src="img/map/'.$mapfilename.'1.png" class="map_image" alt="" />
+            <img src="img/map/'.$mapfilename.'2.png" class="map_image" alt="" />
+            <img src="img/map/'.$mapfilename.'3.png" class="map_image" alt="" />';
 
   // generate the queries based on which map we're viewing
   // GM status here is based on the core's opinion of who is a GM, NOT on CoreManager's Security Level
@@ -433,12 +433,12 @@ function show_map()
               <table>
                 <tr>
                   <td class="name_level" colspan="2">
-                    '.( ( $map_gm_add_suffix && $row["gm"] ) ? '<img src="img/star.png" /> ' : '' ).$row["name"].' ('.char_get_level_color($row["level"]).')
+                    '.( ( $map_gm_add_suffix && $row["gm"] ) ? '<img src="img/star.png" alt="" /> ' : '' ).$row["name"].' ('.char_get_level_color($row["level"]).')
                   </td>
                 </tr>
                 <tr>
                   <td class="race">
-                    <img src="img/c_icons/'.$row["race"].'-'.$row["gender"].'.gif" />
+                    <img src="img/c_icons/'.$row["race"].'-'.$row["gender"].'.gif" alt="" />
                   </td>
                   <td>
                     '.char_get_race_name($row["race"]).'
@@ -446,7 +446,7 @@ function show_map()
                 </tr>
                 <tr>
                   <td class="race">
-                    <img src="img/c_icons/'.$row["class"].'.gif" />
+                    <img src="img/c_icons/'.$row["class"].'.gif" alt="" />
                   </td>
                   <td>
                     '.char_get_class_name($row["class"]).'
@@ -463,7 +463,7 @@ function show_map()
       // draw a dot for the character
       $output .= '
             <a href="char.php?id='.$row["guid"].'" onmouseover="ShowTooltip(this,'.$row["guid"].');" onmouseout="HideTooltip('.$row["guid"].');"><!-- X'.$x.' Y'.$y.' Map'.$map.' -->
-              <img src="img/map/'.( char_get_side_id($row["race"]) ? 'horde' : 'allia' ).'.gif" style="position: absolute; left: '.$x_relative.'px; top: '.($y_relative+10).'px;" />
+              <img src="img/map/'.( char_get_side_id($row["race"]) ? 'horde' : 'allia' ).'.gif" style="position: absolute; left: '.$x_relative.'px; top: '.($y_relative+10).'px;" alt="" />
             </a>';
     }
   }
@@ -540,12 +540,12 @@ function show_map()
               <table>
                 <tr>
                   <td class="name_level" colspan="2">
-                    '.( ( $map_gm_add_suffix && $row["gm"] ) ? '<img src="img/star.png" /> ' : '' ).$row["name"].' ('.char_get_level_color($row["level"]).')
+                    '.( ( $map_gm_add_suffix && $row["gm"] ) ? '<img src="img/star.png" alt="" /> ' : '' ).$row["name"].' ('.char_get_level_color($row["level"]).')
                   </td>
                 </tr>
                 <tr>
                   <td class="race">
-                    <img src="img/c_icons/'.$row["race"].'-'.$row["gender"].'.gif" />
+                    <img src="img/c_icons/'.$row["race"].'-'.$row["gender"].'.gif" alt="" />
                   </td>
                   <td>
                     '.char_get_race_name($row["race"]).'
@@ -553,7 +553,7 @@ function show_map()
                 </tr>
                 <tr>
                   <td class="race">
-                    <img src="img/c_icons/'.$row["class"].'.gif" />
+                    <img src="img/c_icons/'.$row["class"].'.gif" alt="" />
                   </td>
                   <td>
                     '.char_get_class_name($row["class"]).'
@@ -570,7 +570,7 @@ function show_map()
       // draw a dot for the character
       $output .= '
             <a href="char.php?id='.$row["guid"].'" onmouseover="ShowTooltip(this,'.$row["guid"].');" onmouseout="HideTooltip('.$row["guid"].');"><!-- X'.$x.' Y'.$y.' Map'.$map.' -->
-              <img src="img/map/'.( char_get_side_id($row["race"]) ? 'horde' : 'allia' ).'.gif" style="position: absolute; left: '.$x_relative.'px; top: '.($y_relative+10).'px;" />
+              <img src="img/map/'.( char_get_side_id($row["race"]) ? 'horde' : 'allia' ).'.gif" style="position: absolute; left: '.$x_relative.'px; top: '.($y_relative+10).'px;" alt="" />
             </a>';
     }
   }

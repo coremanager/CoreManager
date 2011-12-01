@@ -112,7 +112,7 @@ function stats($action)
     $up_results = $sql["logon"]->query($up_query);
     $uptime = $sql["logon"]->fetch_assoc($up_results);
     $stats["uptime"] = time() - $uptime["starttime"];
-    $stats["uptime"] = "    <uptime>".format_uptime($stats["uptime"])."</uptime>";
+    $stats["uptime"] = "    ".format_uptime($stats["uptime"]);
     $stat_uptime = explode(' ', $stats["uptime"]);
     
     $stats["peak"] = $uptime["maxplayers"];
@@ -120,17 +120,17 @@ function stats($action)
 
     $output .= '
           <center>
-            <div id="tab">
+            <div class="tab">
               <ul>
-                <li'.( ( $action ) ? '' : ' id="selected"' ).'>
+                <li'.( ( $action ) ? '' : ' class="selected"' ).'>
                   <a href="stat.php">'.lang("stat", "srv_statistics").'</a>
                 </li>
-                <li'.( ( $action ) ? ' id="selected"' : '' ).'>
+                <li'.( ( $action ) ? ' class="selected"' : '' ).'>
                   <a href="stat.php?action=true">'.lang("stat", "on_statistics").'</a>
                 </li>
               </ul>
             </div>
-            <div id="tab_content">
+            <div class="tab_content">
               <div class="top"><h1>'.( ( $action ) ? lang("stat", "on_statistics") : lang("stat", "srv_statistics") ).'</h1></div>
               <center>
                 <table class="hidden">
@@ -238,8 +238,8 @@ function stats($action)
     $output .= '
                       <table class="tot_bar">
                         <tr>
-                          <td width="'.$horde_pros.'%" background="img/bar_horde.gif" height="40"><a href="stat.php?action='.$action.'&amp;side=h">'.lang("stat", "horde").': '.$horde_chars.' ('.$horde_pros.'%)</a></td>
-                          <td width="'.$allies_pros.'%" background="img/bar_allie.gif" height="40"><a href="stat.php?action='.$action.'&amp;side=a">'.lang("stat", "alliance").': '.$allies_chars.' ('.$allies_pros.'%)</a></td>
+                          <td class="tot_bar_horde" style="width: '.$horde_pros.'%; height: 40px;"><a href="stat.php?action='.$action.'&amp;side=h">'.lang("stat", "horde").': '.$horde_chars.' ('.$horde_pros.'%)</a></td>
+                          <td class="tot_bar_alliance" style="width: '.$allies_pros.'%; height: 40px;"><a href="stat.php?action='.$action.'&amp;side=a">'.lang("stat", "alliance").': '.$allies_chars.' ('.$allies_pros.'%)</a></td>
                         </tr>
                       </table>
                       <hr/>

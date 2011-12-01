@@ -110,7 +110,7 @@ function browse_guilds()
               <tr>
                 <td>'.$data["gid"].'</td>
                 <td><a href="guild.php?action=view_guild&amp;error=3&amp;id='.$data["gid"].'">'.$data["gname"].'</a></td>';
-      $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '<td><a href="char.php?id='.$data["lguid"].'" onmousemove="oldtoolTip(\''.lang("char", "level_short").$data["llevel"].' '.char_get_race_name($data["lrace"]).' '.char_get_class_name($data["lclass"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($data["lname"], ENT_COMPAT, $site_encoding).'</td>' : '<td><spanonmousemove="oldtoolTip(\''.lang("char", "level_short").$data["llevel"].' '.char_get_race_name($data["lrace"]).' '.char_get_class_name($data["lclass"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($data["lname"], ENT_COMPAT, $site_encoding) ).'</span></td>';
+      $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '<td><a href="char.php?id='.$data["lguid"].'" onmousemove="oldtoolTip(\''.lang("char", "level_short").$data["llevel"].' '.char_get_race_name($data["lrace"]).' '.char_get_class_name($data["lclass"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($data["lname"], ENT_COMPAT, $site_encoding).'</a></td>' : '<td><spanonmousemove="oldtoolTip(\''.lang("char", "level_short").$data["llevel"].' '.char_get_race_name($data["lrace"]).' '.char_get_class_name($data["lclass"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">'.htmlentities($data["lname"], ENT_COMPAT, $site_encoding) );
       $output .= '
                 <td><img src="img/'.( ( $data["faction"]==0 ) ? "alliance" : "horde" ).'_small.gif" alt="" /></td>
                 <td>'.$data["gonline"].'/'.$data["mcount"].'</td>
@@ -450,7 +450,7 @@ function view_guild()
   $guild_data = $sql["char"]->fetch_assoc($query);
 
   $output .= '
-        <script type=\"text/javascript\">
+        <script type="text/javascript">
           answerbox.btn_ok="'.lang("global", "yes").'";
           answerbox.btn_cancel="'.lang("global", "no").'";
         </script>
@@ -473,22 +473,18 @@ function view_guild()
                 <td colspan="4" class="hidden">
                   <div id="guild_emblem">
                     <center>
-                      <img id="guild_view_background" src="img/emblems/Background_'.doubledigit($guild_data["BackgroundColor"]).'.png" />
-                      <img id="guild_view_emblem" src="img/emblems/Emblem_'.doubledigit($guild_data["EmblemStyle"]).'_'.doubledigit($guild_data["EmblemColor"]).'.png" />
-                      <img id="guild_view_border" src="img/emblems/Border_'.doubledigit($guild_data["BorderStyle"]).'_'.doubledigit($guild_data["BorderColor"]).'.png" />
-                      <img id="guild_emblem_border" src="img/EmblemBorder.png" />
+                      <img id="guild_view_background" src="img/emblems/Background_'.doubledigit($guild_data["BackgroundColor"]).'.png" alt="" />
+                      <img id="guild_view_emblem" src="img/emblems/Emblem_'.doubledigit($guild_data["EmblemStyle"]).'_'.doubledigit($guild_data["EmblemColor"]).'.png" alt="" />
+                      <img id="guild_view_border" src="img/emblems/Border_'.doubledigit($guild_data["BorderStyle"]).'_'.doubledigit($guild_data["BorderColor"]).'.png" alt="" />
+                      <img id="guild_emblem_border" src="img/EmblemBorder.png" alt="" />
                     </center>
                   </div>
                 </td>
               </tr>
+              <tr>
+                <td align="right">'.generate_pagination("guild.php?action=view_guild&amp;id=".$guild_id."&amp;order_by=".$order_by."&amp;dir=".( ( $dir ) ? 0 : 1 )."", $guildmemberCount, $itemperpage, $start).'</td>
+              </tr>
             </table>
-          </td>
-        </tr>
-        <tr>
-          <td align="right">'.generate_pagination("guild.php?action=view_guild&amp;id=".$guild_id."&amp;order_by=".$order_by."&amp;dir=".( ( $dir ) ? 0 : 1 )."", $guildmemberCount, $itemperpage, $start).'</td>
-        </tr>
-        <tr>
-          <td>
             <table class="lined">
               <tr>
                 <th width="1%">'.lang("guild", "remove").'</th>
@@ -556,7 +552,7 @@ function view_guild()
     $output .= '
               <tr>';
     // gm, guildleader or own account! are allowed to remove from guild
-    $output .= ( ( $user_lvl >= $action_permission["delete"] || $amIguildleader || $member["acct"] == $user_id ) ? '<td><img src="img/aff_cross.png" alt="" onclick="answerBox(\''.lang("global", "delete").': &lt;font color=white&gt;'.$member["cname"].'&lt;/font&gt;&lt;br /&gt;'.lang("global", "are_you_sure").'\', \'guild.php?action=rem_char_from_guild&amp;realm='.$realmid.'&amp;id='.$member["cguid"].'&amp;guld_id='.$guild_id.'\');" id="guild_edit_delete_cursor" /></td>' : '<td></td>' );
+    $output .= ( ( $user_lvl >= $action_permission["delete"] || $amIguildleader || $member["acct"] == $user_id ) ? '<td><img src="img/aff_cross.png" alt="" onclick="answerBox(\''.lang("global", "delete").': &lt;font color=white&gt;'.$member["cname"].'&lt;/font&gt;&lt;br /&gt;'.lang("global", "are_you_sure").'\', \'guild.php?action=rem_char_from_guild&amp;realm='.$realmid.'&amp;id='.$member["cguid"].'&amp;guld_id='.$guild_id.'\');" class="guild_edit_delete_cursor" /></td>' : '<td></td>' );
     $output .= ( ( $user_lvl >= $owner_gmlvl ) ? '<td><a href="char.php?id='.$member["cguid"].'">'.htmlentities($member["cname"], ENT_COMPAT, $site_encoding).'</a></td>' : '<td>'.htmlentities($member["cname"], ENT_COMPAT, $site_encoding).'</td>' );
     $output .= '
                 <td><img src="img/c_icons/'.$member["crace"].'-'.$member["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member["crace"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>

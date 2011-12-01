@@ -342,9 +342,9 @@ function char_pvp()
     {
       $output .= '
           <center>
-            <div id="tab">
+            <div class="tab">
               <ul>
-                <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
+                <li class="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
 
       if ( $view_inv_override )
         $output .= '
@@ -373,8 +373,8 @@ function char_pvp()
       $output .= '
               </ul>
             </div>
-            <div id="tab_content">
-              <div id="tab">
+            <div class="tab_content">
+              <div class="tab">
                 <ul>
                   <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
 
@@ -391,7 +391,7 @@ function char_pvp()
                   <li><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>';
 
       $output .= '
-                  <li id="selected"><a href="char_pvp.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pvp").'</a></li>';
+                  <li class="selected"><a href="char_pvp.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pvp").'</a></li>';
 
       if ( ( $owner_name == $user_name ) || ( $user_lvl >= get_page_permission("insert", "char_mail.php") ) )
         $output .= '
@@ -400,7 +400,7 @@ function char_pvp()
       $output .= '
                 </ul>
               </div>
-              <div id="tab_content2">
+              <div class="tab_content2">
                 <font class="bold">
                   '.htmlentities($char["name"], ENT_COMPAT, $site_encoding).' -
                   <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
@@ -408,9 +408,9 @@ function char_pvp()
                 </font>
                 <br />
                 <br />
-                <table class="lined" id="ch_pvp_main">
+                <table class="lined" id="ch_pvp_top">
                   <tr>
-                    <td colspan="4">'.lang("char", "honor").': <span id="ch_pvp_highlight">'.$char["honorPoints"].'</span> <img src="img/money_'.( ( char_get_side_id($char["race"]) ) ? 'horde' : 'alliance' ).'.gif" /></td>
+                    <td colspan="4">'.lang("char", "honor").': <span id="ch_pvp_highlight">'.$char["honorPoints"].'</span> <img src="img/money_'.( ( char_get_side_id($char["race"]) ) ? 'horde' : 'alliance' ).'.gif" alt="" /></td>
                   </tr>
                   <tr>
                     <td>&nbsp;</td>
@@ -434,7 +434,7 @@ function char_pvp()
                 <br />
                 <table class="lined" id="ch_pvp_main">
                   <tr>
-                    <td colspan="5">'.lang("char", "arena").': <span id="ch_pvp_highlight">'.$char["arenaPoints"].'</span> <img src="img/money_arena.gif" /></td>
+                    <td colspan="5">'.lang("char", "arena").': <span class="ch_pvp_highlight">'.$char["arenaPoints"].'</span> <img src="img/money_arena.gif" alt="" /></td>
                   </tr>';
       // ArcEmu's storage of Arena Team Members is a nightmare...
       // until this is fixed, they won't get to see the Arena Team stuff
@@ -444,43 +444,43 @@ function char_pvp()
         {
           $output .= '
                     <tr>
-                      <td rowspan="7" id="ch_pvp_banner_space">
+                      <td rowspan="7" class="ch_pvp_banner_space">
                         <div class="arena_banner">
-                          <img src="libs/banner_lib.php?action=banner&f='.$arenateam_data2["banner_style"].'&r='.$arenateam_data2["BackgroundColor"][1].'&g='.$arenateam_data2["BackgroundColor"][2].'&b='.$arenateam_data2["BackgroundColor"][3].'" class="banner_img" />
-                          <img src="libs/banner_lib.php?action=border&f='.$arenateam_data2["BorderStyle"].'&f2='.$arenateam_data2["banner_style"].'&r='.$arenateam_data2["BorderColor"][1].'&g='.$arenateam_data2["BorderColor"][2].'&b='.$arenateam_data2["BorderColor"][3].'" class="border_img" />
-                          <img src="libs/banner_lib.php?action=emblem&f='.$arenateam_data2["EmblemStyle"].'&r='.$arenateam_data2["EmblemColor"][1].'&g='.$arenateam_data2["EmblemColor"][2].'&b='.$arenateam_data2["EmblemColor"][3].'&s=0.55" class="emblem_img" />
+                          <img src="libs/banner_lib.php?action=banner&amp;f='.$arenateam_data2["banner_style"].'&amp;r='.$arenateam_data2["BackgroundColor"][1].'&amp;g='.$arenateam_data2["BackgroundColor"][2].'&amp;b='.$arenateam_data2["BackgroundColor"][3].'" class="banner_img" alt="" />
+                          <img src="libs/banner_lib.php?action=border&amp;f='.$arenateam_data2["BorderStyle"].'&amp;f2='.$arenateam_data2["banner_style"].'&amp;r='.$arenateam_data2["BorderColor"][1].'&amp;g='.$arenateam_data2["BorderColor"][2].'&amp;b='.$arenateam_data2["BorderColor"][3].'" class="border_img" alt="" />
+                          <img src="libs/banner_lib.php?action=emblem&amp;f='.$arenateam_data2["EmblemStyle"].'&amp;r='.$arenateam_data2["EmblemColor"][1].'&amp;g='.$arenateam_data2["EmblemColor"][2].'&amp;b='.$arenateam_data2["EmblemColor"][3].'&amp;s=0.55" class="emblem_img" alt="" />
                         </div>
                       </td>
                     </tr>
                     <tr>
-                      <td colspan="2"><a href="arenateam.php?action=view_team&error=3&id='.$arenateam_data2["id"].'">'.$arenateam_data2["name"].'</a></td>
-                      <td colspan="2">'.lang("char", "team").' '.lang("char", "rating").': <span id="ch_pvp_highlight">'.$arena_team2["rating"].'</span></td>
+                      <td colspan="2"><a href="arenateam.php?action=view_team&amp;error=3&amp;id='.$arenateam_data2["id"].'">'.$arenateam_data2["name"].'</a></td>
+                      <td colspan="2">'.lang("char", "team").' '.lang("char", "rating").': <span class="ch_pvp_highlight">'.$arena_team2["rating"].'</span></td>
                     </tr>
-                    </tr>
-                      <td><span id="ch_pvp_dim">'.lang("char", "team").'</span></td>
+                    <tr>
+                      <td><span class="ch_pvp_dim">'.lang("char", "team").'</span></td>
                       <td>'.lang("char", "games").'</td>
                       <td>'.lang("char", "winloss").'</td>
                       <td>'.lang("char", "played").'</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td>'.lang("char", "thisweek").'</td>
                       <td>'.$arena_team2["games"].'</td>
                       <td>'.$arena_team2["wins"].'-'.($arena_team2["games"]-$arena_team2["wins"]).'</td>
                       <td>'.$arena_team2["wins"].' ('.(($arena_team2["wins"]/$arena_team2["games"])*100).'%)</td>
                     </tr>
-                    </tr>
-                      <td><span id="ch_pvp_dim">'.$char["name"].'</span></td>
+                    <tr>
+                      <td><span class="ch_pvp_dim">'.$char["name"].'</span></td>
                       <td>'.lang("char", "played").'</td>
                       <td>'.lang("char", "winloss").'</td>
                       <td>'.lang("char", "rating").'</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td>'.lang("char", "thisweek").'</td>
                       <td>'.$arena_team2["played_week"].'</td>
                       <td>'.$arena_team2["wons_week"].'-'.($arena_team2["played_week"]-$arena_team2["wons_week"]).'</td>
                       <td>-</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td>'.lang("char", "thisseason").'</td>
                       <td>'.$arena_team2["played_season"].'</td>
                       <td>'.$arena_team2["wons_season"].'-'.($arena_team2["played_season"]-$arena_team2["wons_season"]).'</td>
@@ -491,30 +491,30 @@ function char_pvp()
         {
           $output .= '
                     <tr>
-                      <td rowspan="7" id="ch_pvp_banner_space">
+                      <td rowspan="7" class="ch_pvp_banner_space">
                         <div class="arena_banner">
-                          <img src="img/blank.gif" class="banner_img" />
-                          <img src="img/blank.gif" class="border_img" />
-                          <img src="img/blank.gif" class="emblem_img" />
+                          <img src="img/blank.gif" class="banner_img" alt="" />
+                          <img src="img/blank.gif" class="border_img" alt="" />
+                          <img src="img/blank.gif" class="emblem_img" alt="" />
                         </div>
                       </td>
                     </tr>
                     <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>
+                    <tr>
+                      <td colspan="4"><span class="ch_pvp_dim">('.lang("arenateam", "2MT").')</span></td>
                     </tr>
-                      <td colspan="4"><span id="ch_pvp_dim">('.lang("arenateam", "2MT").')</span></td>
-                    </tr>
-                    </tr>
+                    <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>';
         }
@@ -523,43 +523,43 @@ function char_pvp()
         {
           $output .= '
                     <tr>
-                      <td rowspan="7" id="ch_pvp_banner_space">
+                      <td rowspan="7" class="ch_pvp_banner_space">
                         <div class="arena_banner">
-                          <img src="libs/banner_lib.php?action=banner&f='.$arenateam_data3["banner_style"].'&r='.$arenateam_data3["BackgroundColor"][1].'&g='.$arenateam_data3["BackgroundColor"][2].'&b='.$arenateam_data3["BackgroundColor"][3].'" class="banner_img" />
-                          <img src="libs/banner_lib.php?action=border&f='.$arenateam_data3["BorderStyle"].'&f2='.$arenateam_data3["banner_style"].'&r='.$arenateam_data3["BorderColor"][1].'&g='.$arenateam_data3["BorderColor"][2].'&b='.$arenateam_data3["BorderColor"][3].'" class="border_img" />
-                          <img src="libs/banner_lib.php?action=emblem&f='.$arenateam_data3["EmblemStyle"].'&r='.$arenateam_data3["EmblemColor"][1].'&g='.$arenateam_data3["EmblemColor"][2].'&b='.$arenateam_data3["EmblemColor"][3].'&s=0.55" class="emblem_img" />
+                          <img src="libs/banner_lib.php?action=banner&amp;f='.$arenateam_data3["banner_style"].'&amp;r='.$arenateam_data3["BackgroundColor"][1].'&amp;g='.$arenateam_data3["BackgroundColor"][2].'&amp;b='.$arenateam_data3["BackgroundColor"][3].'" class="banner_img" alt="" />
+                          <img src="libs/banner_lib.php?action=border&amp;f='.$arenateam_data3["BorderStyle"].'&amp;f2='.$arenateam_data3["banner_style"].'&amp;r='.$arenateam_data3["BorderColor"][1].'&amp;g='.$arenateam_data3["BorderColor"][2].'&amp;b='.$arenateam_data3["BorderColor"][3].'" class="border_img" alt="" />
+                          <img src="libs/banner_lib.php?action=emblem&amp;f='.$arenateam_data3["EmblemStyle"].'&amp;r='.$arenateam_data3["EmblemColor"][1].'&amp;g='.$arenateam_data3["EmblemColor"][2].'&amp;b='.$arenateam_data3["EmblemColor"][3].'&amp;s=0.55" class="emblem_img" alt="" />
                         </div>
                       </td>
                     </tr>
                     <tr>
-                      <td colspan="2"><a href="arenateam.php?action=view_team&error=3&id='.$arenateam_data3["id"].'">'.$arenateam_data3["name"].'</a></td>
-                      <td colspan="2">'.lang("char", "team").' '.lang("char", "rating").': <span id="ch_pvp_highlight">'.$arena_team3["rating"].'</span></td>
+                      <td colspan="2"><a href="arenateam.php?action=view_team&amp;error=3&amp;id='.$arenateam_data3["id"].'">'.$arenateam_data3["name"].'</a></td>
+                      <td colspan="2">'.lang("char", "team").' '.lang("char", "rating").': <span class="ch_pvp_highlight">'.$arena_team3["rating"].'</span></td>
                     </tr>
-                    </tr>
-                      <td><span id="ch_pvp_dim">'.lang("char", "team").'</span></td>
+                    <tr>
+                      <td><span class="ch_pvp_dim">'.lang("char", "team").'</span></td>
                       <td>'.lang("char", "games").'</td>
                       <td>'.lang("char", "winloss").'</td>
                       <td>'.lang("char", "played").'</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td>'.lang("char", "thisweek").'</td>
                       <td>'.$arena_team3["games"].'</td>
                       <td>'.$arena_team3["wins"].'-'.($arena_team3["games"]-$arena_team3["wins"]).'</td>
                       <td>'.$arena_team3["wins"].' ('.(($arena_team3["wins"]/$arena_team3["games"])*100).'%)</td>
                     </tr>
-                    </tr>
-                      <td><span id="ch_pvp_dim">'.$char["name"].'</span></td>
+                    <tr>
+                      <td><span class="ch_pvp_dim">'.$char["name"].'</span></td>
                       <td>'.lang("char", "played").'</td>
                       <td>'.lang("char", "winloss").'</td>
                       <td>'.lang("char", "rating").'</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td>'.lang("char", "thisweek").'</td>
                       <td>'.$arena_team3["played_week"].'</td>
                       <td>'.$arena_team3["wons_week"].'-'.($arena_team3["played_week"]-$arena_team3["wons_week"]).'</td>
                       <td>-</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td>'.lang("char", "thisseason").'</td>
                       <td>'.$arena_team3["played_season"].'</td>
                       <td>'.$arena_team3["wons_season"].'-'.($arena_team3["played_season"]-$arena_team3["wons_season"]).'</td>
@@ -570,30 +570,30 @@ function char_pvp()
         {
           $output .= '
                     <tr>
-                      <td rowspan="7" id="ch_pvp_banner_space">
+                      <td rowspan="7" class="ch_pvp_banner_space">
                         <div class="arena_banner">
-                          <img src="img/blank.gif" class="banner_img" />
-                          <img src="img/blank.gif" class="border_img" />
-                          <img src="img/blank.gif" class="emblem_img" />
+                          <img src="img/blank.gif" class="banner_img" alt="" />
+                          <img src="img/blank.gif" class="border_img" alt="" />
+                          <img src="img/blank.gif" class="emblem_img" alt="" />
                         </div>
                       </td>
                     </tr>
                     <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>
+                    <tr>
+                      <td colspan="4"><span class="ch_pvp_dim">('.lang("arenateam", "3MT").')</span></td>
                     </tr>
-                      <td colspan="4"><span id="ch_pvp_dim">('.lang("arenateam", "3MT").')</span></td>
-                    </tr>
-                    </tr>
+                    <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>';
         }
@@ -602,43 +602,43 @@ function char_pvp()
         {
           $output .= '
                     <tr>
-                      <td rowspan="7" id="ch_pvp_banner_space">
+                      <td rowspan="7" class="ch_pvp_banner_space">
                         <div class="arena_banner">
-                          <img src="libs/banner_lib.php?action=banner&f='.$arenateam_data5["banner_style"].'&r='.$arenateam_data5["BackgroundColor"][1].'&g='.$arenateam_data5["BackgroundColor"][2].'&b='.$arenateam_data5["BackgroundColor"][3].'" class="banner_img" />
-                          <img src="libs/banner_lib.php?action=border&f='.$arenateam_data5["BorderStyle"].'&f2='.$arenateam_data5["banner_style"].'&r='.$arenateam_data5["BorderColor"][1].'&g='.$arenateam_data5["BorderColor"][2].'&b='.$arenateam_data5["BorderColor"][3].'" class="border_img" />
-                          <img src="libs/banner_lib.php?action=emblem&f='.$arenateam_data5["EmblemStyle"].'&r='.$arenateam_data5["EmblemColor"][1].'&g='.$arenateam_data5["EmblemColor"][2].'&b='.$arenateam_data5["EmblemColor"][3].'&s=0.55" class="emblem_img" />
+                          <img src="libs/banner_lib.php?action=banner&amp;f='.$arenateam_data5["banner_style"].'&amp;r='.$arenateam_data5["BackgroundColor"][1].'&amp;g='.$arenateam_data5["BackgroundColor"][2].'&amp;b='.$arenateam_data5["BackgroundColor"][3].'" class="banner_img" alt="" />
+                          <img src="libs/banner_lib.php?action=border&amp;f='.$arenateam_data5["BorderStyle"].'&amp;f2='.$arenateam_data5["banner_style"].'&amp;r='.$arenateam_data5["BorderColor"][1].'&amp;g='.$arenateam_data5["BorderColor"][2].'&amp;b='.$arenateam_data5["BorderColor"][3].'" class="border_img" alt="" />
+                          <img src="libs/banner_lib.php?action=emblem&amp;f='.$arenateam_data5["EmblemStyle"].'&amp;r='.$arenateam_data5["EmblemColor"][1].'&amp;g='.$arenateam_data5["EmblemColor"][2].'&amp;b='.$arenateam_data5["EmblemColor"][3].'&amp;s=0.55" class="emblem_img" alt="" />
                         </div>
                       </td>
                     </tr>
                     <tr>
-                      <td colspan="2"><a href="arenateam.php?action=view_team&error=3&id='.$arenateam_data5["id"].'">'.$arenateam_data5["name"].'</a></td>
-                      <td colspan="2">'.lang("char", "team").' '.lang("char", "rating").': <span id="ch_pvp_highlight">'.$arena_team5["rating"].'</span></td>
+                      <td colspan="2"><a href="arenateam.php?action=view_team&amp;error=3&amp;id='.$arenateam_data5["id"].'">'.$arenateam_data5["name"].'</a></td>
+                      <td colspan="2">'.lang("char", "team").' '.lang("char", "rating").': <span class="ch_pvp_highlight">'.$arena_team5["rating"].'</span></td>
                     </tr>
-                    </tr>
-                      <td><span id="ch_pvp_dim">'.lang("char", "team").'</span></td>
+                    <tr>
+                      <td><span class="ch_pvp_dim">'.lang("char", "team").'</span></td>
                       <td>'.lang("char", "games").'</td>
                       <td>'.lang("char", "winloss").'</td>
                       <td>'.lang("char", "played").'</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td>'.lang("char", "thisweek").'</td>
                       <td>'.$arena_team5["games"].'</td>
                       <td>'.$arena_team5["wins"].'-'.($arena_team5["games"]-$arena_team5["wins"]).'</td>
                       <td>'.$arena_team5["wins"].' ('.(($arena_team5["wins"]/$arena_team5["games"])*100).'%)</td>
                     </tr>
-                    </tr>
-                      <td><span id="ch_pvp_dim">'.$char["name"].'</span></td>
+                    <tr>
+                      <td><span class="ch_pvp_dim">'.$char["name"].'</span></td>
                       <td>'.lang("char", "played").'</td>
                       <td>'.lang("char", "winloss").'</td>
                       <td>'.lang("char", "rating").'</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td>'.lang("char", "thisweek").'</td>
                       <td>'.$arena_team5["played_week"].'</td>
                       <td>'.$arena_team5["wons_week"].'-'.($arena_team5["played_week"]-$arena_team5["wons_week"]).'</td>
                       <td>-</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td>'.lang("char", "thisseason").'</td>
                       <td>'.$arena_team5["played_season"].'</td>
                       <td>'.$arena_team5["wons_season"].'-'.($arena_team5["played_season"]-$arena_team5["wons_season"]).'</td>
@@ -649,30 +649,30 @@ function char_pvp()
         {
           $output .= '
                     <tr>
-                      <td rowspan="7" id="ch_pvp_banner_space">
+                      <td rowspan="7" class="ch_pvp_banner_space">
                         <div class="arena_banner">
-                          <img src="img/blank.gif" class="banner_img" />
-                          <img src="img/blank.gif" class="border_img" />
-                          <img src="img/blank.gif" class="emblem_img" />
+                          <img src="img/blank.gif" class="banner_img" alt="" />
+                          <img src="img/blank.gif" class="border_img" alt="" />
+                          <img src="img/blank.gif" class="emblem_img" alt="" />
                         </div>
                       </td>
                     </tr>
                     <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>
+                    <tr>
+                      <td colspan="4"><span class="ch_pvp_dim">('.lang("arenateam", "5MT").')</span></td>
                     </tr>
-                      <td colspan="4"><span id="ch_pvp_dim">('.lang("arenateam", "5MT").')</span></td>
-                    </tr>
-                    </tr>
+                    <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>
-                    </tr>
+                    <tr>
                       <td colspan="4">&nbsp;</td>
                     </tr>';
         }

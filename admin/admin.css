@@ -310,6 +310,74 @@ a:link, a:visited
 {
 	width: 310px;
 }
+/* POINT SYSTEM */
+#admin_point_coupon_list
+{
+	width: 1000px;
+}
+#admin_edit_coupon
+{
+	width: 450px;
+}
+.admin_edit_coupon_fields
+{
+	width: 260px;
+}
+#admin_point_bag_list
+{
+	width: 500px;
+}
+.bag
+{
+  position: relative;
+  border: 0px;
+  margin: 2px;
+  background-image: url(../../img/INV/Slot_Bag.gif);
+  background-repeat: repeat;
+  background-color: #242424;
+}
+.bag_slot
+{
+  position: absolute;
+  background: none;
+}
+.no_slot
+{
+  position: absolute;
+  margin: 0px;
+  width: 86px;
+  height: 41px;
+  background-image: url(../../img/INV/Slot_Bag_Out.gif);
+}
+.item_img
+{
+  border: 0px;
+  padding: 1px;
+  width: 35px; 
+  height: 35px;
+}
+.points_bag_padding
+{
+  padding: 2px;
+}
+.points_bag_quantity
+{
+  width: 25px;
+  margin: -18px 0px 0px 17px;
+  color: white;
+  font: 14px Verdana, sans-serif;
+  font-weight: bold;
+  pointer-events: none;
+}
+.points_bag_quantity_shadow
+{
+  width: 25px;
+  margin: -20px 0px 0px 19px;
+  color: black;
+  font: 14px Verdana, sans-serif;
+  font-weight: bold;
+  pointer-events: none;
+}
 
 /* End Tooltips */
 

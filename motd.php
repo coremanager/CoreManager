@@ -65,13 +65,13 @@ function browse_motd()
     $output .= '
             <tr>
               <td>
-                <a href="motd.php?action=delete_motd&id='.$motd["ID"].'&redirect=1"><img src="img/cross.png" /></a>
+                <a href="motd.php?action=delete_motd&amp;id='.$motd["ID"].'&amp;redirect=1"><img src="img/cross.png" alt="" /></a>
               </td>
               <td>
-                <a href="motd.php?action=edit_motd&id='.$motd["ID"].'&redirect=1"><img src="img/edit.png" /></a>
+                <a href="motd.php?action=edit_motd&amp;id='.$motd["ID"].'&amp;redirect=1"><img src="img/edit.png" alt="" /></a>
               </td>
               <td>
-                '.( $motd["Enabled"] ? '<img src="img/up.gif">' : '<img src="img/down.gif">' ).'
+                '.( $motd["Enabled"] ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'
               </td>
               <td>
                 '.bb2html($motd["Message"]).'
@@ -88,7 +88,7 @@ function browse_motd()
           </table>
           <br />
         </center>';
-  makebutton(lang("motd", "add_motd"), 'motd.php?action=add_motd&error=4&redirect=1" type="def', 180);
+  makebutton(lang("motd", "add_motd"), 'motd.php?action=add_motd&amp;error=4&amp;redirect=1" type="def', 180);
   $output .= '
         <br />
         <br />';

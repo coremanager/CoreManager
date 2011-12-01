@@ -38,7 +38,12 @@ function edit_char()
   if ( empty($_GET["id"]) )
     error(lang("global", "empty_fields"));
 
-  $id = $sql["char"]->quote_smart($_GET["id"]);
+  $id = $_GET["id"];
+  
+  // we need at least an id or we would have nothing to show
+  // also, make sure id is numeric to prevent SQL injection
+  if ( ( empty($_GET["id"]) ) || ( !is_numeric($id) ) )
+    error(lang("global", "empty_fields"));
 
   if ( $core == 1 )
     $result = $sql["char"]->query("SELECT acct FROM `characters` WHERE guid='".$id."'");

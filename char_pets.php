@@ -263,9 +263,9 @@ function char_pets()
     {
       $output .= '
           <center>
-            <div id="tab">
+            <div class="tab">
               <ul>
-                <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
+                <li class="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
 
       if ( $view_inv_override )
         $output .= '
@@ -294,13 +294,13 @@ function char_pets()
       $output .= '
               </ul>
             </div>
-            <div id="tab_content">
-              <div id="tab">
+            <div class="tab_content">
+              <div class="tab">
                 <ul>
                   <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
 
       $output .= '
-                  <li id="selected"><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pets").'</a></li>';
+                  <li class="selected"><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pets").'</a></li>';
 
       if ( $view_rep_override )
         $output .= '
@@ -321,7 +321,7 @@ function char_pets()
       $output .= '
                 </ul>
               </div>
-              <div id="tab_content2">
+              <div class="tab_content2">
               <font class="bold">
                 '.htmlentities($char["name"], ENT_COMPAT, $site_encoding).' -
                 <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
@@ -375,7 +375,7 @@ function char_pets()
           // this_is_junk: style left hardcoded because it's calculated.
           $output .= '
                 <font class="bold">'.$pet["name"].' - lvl '.char_get_level_color($pet["level"]).'
-                  <a id="ch_pet_padding" onmouseover="oldtoolTip(\''.$hap_text.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()"><img src="img/pet/happiness_'.$hap_val.'.jpg" alt="" /></a>
+                  <a class="ch_pet_padding" onmouseover="oldtoolTip(\''.$hap_text.'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()"><img src="img/pet/happiness_'.$hap_val.'.jpg" alt="" /></a>
                   <br /><br />
                 </font>
                 <table class="lined" id="ch_pet_xp">
@@ -398,7 +398,7 @@ function char_pets()
             while ( $ability = $sql["char"]->fetch_assoc($ability_results) )
             {
               $output .= '
-                      <a id="ch_pet_padding" href="'.$base_datasite.$spell_datasite.$ability["spellid"].'" target="_blank">
+                      <a class="ch_pet_padding" href="'.$base_datasite.$spell_datasite.$ability["spellid"].'" target="_blank">
                         <img src="'.spell_get_icon($ability["spellid"]).'" alt="'.$ability["spellid"].'" class="icon_border_0" />
                       </a>';
             }

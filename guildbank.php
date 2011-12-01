@@ -83,14 +83,14 @@ function guild_bank()
             <h1>'.$guild_name.' '.lang("guildbank", "guildbank").'</h1>
           </div>
           <center>
-            <div id="tab">
+            <div class="tab">
               <ul>';
     for( $i = 0; $i < 6; ++$i )
     {
       if ( isset($tabs[$i]) )
       {
         $output .= '
-                <li'.( ( $current_tab == $i ) ? ' id="selected"' : '' ).'>
+                <li'.( ( $current_tab == $i ) ? ' class="selected"' : '' ).'>
                   <a href="guildbank.php?id='.$guild_id.'&amp;tab='.$i.'&amp;realm='.$realmid.'">';
         if ( $tabs[$i]['TabIcon'] == '' )
         {
@@ -124,7 +124,7 @@ function guild_bank()
     $output .= '
               </ul>
             </div>
-            <div id="tab_content">';
+            <div class="tab_content">';
 
     if ( $core == 1 )
       $result = $sql["char"]->query("SELECT gbi.SlotId, gbi.itemGuid, ii.entry,
@@ -154,8 +154,8 @@ function guild_bank()
     $output .= '
               <table id="guildbank_tabs">
                 <tr>
-                  <td class="bag" align="center">
-                    <div style="width:'.((14*43)+2).'px; height:'.(7*41).'px;">';
+                  <td align="center">
+                    <div class="bag" style="width:'.((14*43)+2).'px; height:'.(7*41).'px;">';
 
     $item_position = 0;
     for ( $i = 0; $i < 7; ++$i )
@@ -169,12 +169,12 @@ function guild_bank()
           $stack = ( $gb_slots[$item_position]["stack_count"] == 1 ? '' : $gb_slots[$item_position]["stack_count"] );
           // this_is_junk: style left hardcoded because it's calculated.
           $output .= '
-                      <div style="left:'.($j*43).'px; top:'.($i*41).'px;">
-                        <a id="guildbank_padding" href="'.$base_datasite.$item_datasite.$gb_item_id.'">
-                          <img src="'.get_item_icon($gb_item_id).'" alt="" />
+                      <div class="bag_slot" style="left:'.(($j*43)+4).'px; top:'.(($i*41)+4).'px;">
+                        <a class="guildbank_padding" href="'.$base_datasite.$item_datasite.$gb_item_id.'">
+                          <img src="'.get_item_icon($gb_item_id).'" class="inv_icon" alt="" />
                         </a>
-                        <div id="guildbank_quanity_shadow">'.$stack.'</div>
-                        <div id="guildbank_quantity">'.$stack.'</div>
+                        <div class="guildbank_quantity_shadow">'.$stack.'</div>
+                        <div class="guildbank_quantity">'.$stack.'</div>
                       </div>';
         }
       }

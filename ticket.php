@@ -122,11 +122,11 @@ function browse_tickets()
                   <a href="ticket.php?order_by=opener&amp;start='.$start.'&amp;dir='.$dir.'">'.( ( $order_by == 'opener' ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '').''.lang("ticket", "sender").'</a>
                 </th>';
   $output .= '
-                <th width=\"40%\">'.lang("ticket", "message").'</th>
-                <th width=\"10%\">'.lang("ticket", "date").'</th>';
+                <th width="40%">'.lang("ticket", "message").'</th>
+                <th width="10%">'.lang("ticket", "date").'</th>';
   if ( $core == 3 )
     $output .= '
-                <th width=\"40%\">'.lang("ticket", "closedby").'</th>';
+                <th width="40%">'.lang("ticket", "closedby").'</th>';
   $output .= '
               </tr>';
   while ( $ticket = $sql["char"]->fetch_assoc($query) )
@@ -311,7 +311,7 @@ function edit_ticket()
     else
     {
       if ( !$ticket["status"] )
-        makebutton(lang("ticket", "abandon".( ( $core == 1 ) ? "A" : "MT" )), 'ticket.php?action=do_mark_ticket&amp;id='.$id.'" type="wrn"', 230);
+        makebutton(lang("ticket", "abandon".( ( $core == 1 ) ? "A" : "MT" )), 'ticket.php?action=do_mark_ticket&amp;id='.$id.'" type="wrn', 230);
       else
         makebutton(lang("ticket", "abandon".( ( $core == 1 ) ? "A" : "MT" )), 'ticket.php', 230);
     }

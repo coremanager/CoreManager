@@ -275,4 +275,29 @@ function checkValidUpload($code)
 }
 
 
+//#############################################################################
+// Get Item Icon For Point System Prize Bags
+function get_item_icon($itemid)
+{
+  global $dbc_db, $world_db, $realm_id, $proxy_cfg, $item_icons, $sql, $core;
+
+  $sqld = new SQL;
+  $sqld->connect($dbc_db["addr"], $dbc_db["user"], $dbc_db["pass"], $dbc_db["name"], $dbc_db["encoding"]);
+
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[1]["addr"], $world_db[1]["user"], $world_db[1]["pass"], $world_db[1]["name"], $world_db[1]["encoding"]);
+
+  if ( $core == 1 )
+    $result = $sqlw->query("SELECT `displayid` FROM `items` WHERE `entry`='".$itemid."' LIMIT 1");
+  else
+    $result = $sqlw->query("SELECT `displayid` FROM `item_template` WHERE `entry`='".$itemid."' LIMIT 1");
+  $displayid_record = $sqlw->fetch_assoc($result);
+  $displayid = $displayid_record["displayid"];
+
+  $result = $sqld->query("SELECT `IconName` FROM itemdisplayinfo WHERE id='".$displayid."'");
+  $icon_fields = $sqld->fetch_assoc($result);
+  return $item_icons."/".$icon_fields["IconName"].".png";
+}
+
+
 ?>

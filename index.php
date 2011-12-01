@@ -25,17 +25,22 @@ require_once "libs/map_zone_lib.php";
 require_once "libs/get_uptime_lib.php";
 require_once "libs/forum_lib.php";
 require_once "libs/data_lib.php";
+require_once "libs/item_lib.php";
 valid_login($action_permission["view"]);
 
 //#############################################################################
-// COREMANAGER FRONT PAGE
+// COREMANAGER MAIN PAGE
 //#############################################################################
-function front()
+function main()
 {
   global $output, $realm_id, $world_db, $logon_db, $characters_db, $corem_db, $server,
-    $action_permission, $user_lvl, $user_id, $site_encoding,
+    $action_permission, $user_lvl, $user_id, $site_encoding, $hide_coupons,
+    $locales_search_option, $base_datasite, $item_datasite,
     $showcountryflag, $gm_online_count, $gm_online, $itemperpage, $hide_uptime, $player_online,
     $hide_max_players, $hide_avg_latency, $hide_plr_latency, $hide_server_mem, $sql, $core;
+
+  // do any raffle drawings that are necessary
+  do_raffles();
 
   $output .= '
           <div class="top">';
@@ -73,13 +78,13 @@ function front()
         $output .= '
                   <br />'
                   .lang("index", "maxplayers").
-                  ': <font id="index_realm_info_value">'
+                  ': <font class="index_realm_info_value">'
                   .$stats["peak"].'</font>';
       if ( !$hide_avg_latency )
         $output .= '
                   <br />'
                   .lang("index", "avglat").
-                  ': <font id="index_realm_info_value">'
+                  ': <font class="index_realm_info_value">'
                   .$stats["avglat"].'</font>';
         $output .= '
                   <br />';
@@ -89,15 +94,15 @@ function front()
         {
           $output .= 
                   lang("index", "cpu").
-                  ': <font id="index_realm_info_value">'
+                  ': <font class="index_realm_info_value">'
                   .$stats["cpu"].'%</font>, ';
           $output .= 
                   lang("index", "ram").
-                  ': <font id="index_realm_info_value">'
+                  ': <font class="index_realm_info_value">'
                   .$stats["ram"].' MB</font>, ';
           $output .= 
                   lang("index", "threads").
-                  ': <font id="index_realm_info_value">'
+                  ': <font class="index_realm_info_value">'
                   .$stats["threads"].'</font>';
         }
       }
@@ -192,7 +197,7 @@ function front()
         $output .= '
                   <br />'
                   .lang("index", "maxplayers").
-                  ': <font id="index_realm_info_value">'
+                  ': <font class="index_realm_info_value">'
                   .$stats["maxplayers"].'</font>';
       }
       // this_is_junk: MaNGOS doesn't store player latency. :/
@@ -208,7 +213,7 @@ function front()
           $output .= '
                     <br />'
                     .lang("index", "avglat").
-                    ': <font id="index_realm_info_value">'
+                    ': <font class="index_realm_info_value">'
                     .$avglat.'</font>';
         }
       }
@@ -234,21 +239,7 @@ function front()
   $output .= '
           </div>';
 
-  // count pending character changes
-  $char_change_count = $sql["mgr"]->result($sql["mgr"]->query("SELECT COUNT(*) FROM char_changes"), 0);
-
-  //MOTD/GM Tickets part
-  $start_m = ( ( isset($_GET["start_m"]) ) ? $sql["char"]->quote_smart($_GET["start_m"]) : 0 );
-  if ( !is_numeric($start_m) )
-    $start_m = 0;
-
-  if ( $core == 1 )
-    $all_record_m = $sql["char"]->result($sql["char"]->query("SELECT COUNT(*) FROM gm_tickets WHERE deleted=0"), 0);
-  elseif ( $core == 2 )
-    $all_record_m = $sql["char"]->result($sql["char"]->query("SELECT COUNT(*) FROM character_ticket"), 0);
-  else
-    $all_record_m = $sql["char"]->result($sql["char"]->query("SELECT COUNT(*) FROM gm_tickets WHERE closedBy=0"), 0);
-
+  // MOTDs
   // get our MotDs...
   $motd = "";
   $motd_result = $sql["mgr"]->query("SELECT *, UNIX_TIMESTAMP(Created) AS Created, UNIX_TIMESTAMP(Last_Edited) AS Last_Edited FROM motd WHERE Enabled<>0 AND (Target='".$user_id."' OR Target=0) ORDER BY Priority ASC");
@@ -267,11 +258,14 @@ function front()
   $output .= '
           <center>';
 
-  $output .= '
-            <table class="lined">';
   if ( $sql["mgr"]->num_rows($motd_result) > 0 )
+  {
+    $output .= '
+            <table class="lined">';
+
     $output .= '
               <tr><th>'.lang("index", "motd").'</th></tr>';
+  }
 
   while ( $temp = $sql["mgr"]->fetch_assoc($motd_result) )
   {
@@ -311,7 +305,7 @@ function front()
         if ( $posted_screenname["ScreenName"] != NULL )
           $posted_name = htmlspecialchars($posted_screenname["ScreenName"]);
 
-        $output .= lang("motd", "posted_by").': '.( ( $user_lvl > -1 ) ? '<a href="user.php?action=edit_user&error=11&acct='.$temp["Created_By"].'">' : '' ).$posted_name.( ( $user_lvl > -1 ) ? '</a>' : '' ).' ('.date('m/d/Y H:i:s', $temp["Created"]).')';
+        $output .= lang("motd", "posted_by").': '.( ( $user_lvl > -1 ) ? '<a href="user.php?action=edit_user&amp;error=11&amp;acct='.$temp["Created_By"].'">' : '' ).$posted_name.( ( $user_lvl > -1 ) ? '</a>' : '' ).' ('.date('m/d/Y H:i:s', $temp["Created"]).')';
         
         // Get User Name for last editor
         if ( $core == 1 )
@@ -335,8 +329,9 @@ function front()
         {
           $output .= '
                     <br />';
-          $output .= lang("motd", "edited_by").': '.( ( $user_lvl > -1 ) ? '<a href="user.php?action=edit_user&error=11&acct='.$temp["Last_Edited_By"].'">' : '' ).$edited_name.( ( $user_lvl > -1 ) ? '</a>' : '' ).' ('.date('m/d/Y H:i:s', $temp["Last_Edited"]).')';
+          $output .= lang("motd", "edited_by").': '.( ( $user_lvl > -1 ) ? '<a href="user.php?action=edit_user&amp;error=11&amp;acct='.$temp["Last_Edited_By"].'">' : '' ).$edited_name.( ( $user_lvl > -1 ) ? '</a>' : '' ).' ('.date('m/d/Y H:i:s', $temp["Last_Edited"]).')';
         }
+
         $output .= '
                   </td>
                 </tr>';
@@ -345,21 +340,29 @@ function front()
           $output .= '
                 <tr>
                   <td align="right">
-                    <img src="img/cross.png" width="12" height="12" onclick="answerBox(\''.lang("global", "delete").': &lt;font color=white&gt;'.$temp["ID"].'&lt;/font&gt;&lt;br /&gt;'.lang("global", "are_you_sure").'\', del_motd + '.$temp["ID"].');" id="index_delete_cursor" alt="" />';
+                    <img src="img/aff_cross.png" width="16" height="16" onclick="answerBox(\''.lang("global", "delete").': &lt;font color=white&gt;'.$temp["ID"].'&lt;/font&gt;&lt;br /&gt;'.lang("global", "are_you_sure").'\', del_motd + '.$temp["ID"].');" alt="" />';
+
         if ( $user_lvl >= $action_permission["update"] )
           $output .= '
                     <a href="motd.php?action=edit_motd&amp;error=3&amp;id='.$temp["ID"].'">
-                      <img src="img/edit.png" width="14" height="14" alt="" />
+                      <img src="img/edit.png" width="16" height="16" alt="" />
                     </a>
                    </td>
                   </tr>';
         $output .= '
-                  <th></th>';
+                  <tr>
+                    <th></th>
+                  </tr>';
       }
     }
   }
+
   if ( $sql["mgr"]->num_rows($motd_result) )
-    $output = substr($output, 0, strlen($output) - 9);
+    $output = substr($output, 0, strlen($output) - 68);
+
+  if ( $sql["mgr"]->num_rows($motd_result) > 0 )
+    $output .= '
+                </table>';
 
   if ( $user_lvl >= $action_permission["insert"] )
   {
@@ -367,25 +370,269 @@ function front()
                 <table class="lined">
                   <tr>
                     <td align="right">
-                      <a href="motd.php?action=add_motd&error=4">'.lang("index", "add_motd").'</a>
+                      <a href="motd.php?action=add_motd&amp;error=4">'.lang("index", "add_motd").'</a>
                     </td>
                   </tr>
                 </table>';
   }
-  else
+  /*else
     $output .= '
+            </table>';*/
+
+  // Coupons
+  if ( !$hide_coupons )
+  {
+    $coupon_query = "SELECT * FROM point_system_coupons WHERE (target='0' OR target='".$user_id."') AND enabled='1'";
+    $coupon_result = $sql["mgr"]->query($coupon_query);
+
+    if ( $sql["mgr"]->num_rows($coupon_result) > 0 )
+    {
+      $output .= '
+            <br />
+            <table class="lined">';
+
+      $output .= '
+              <tr>
+                <th>'.lang("index", "avail_coupons").'</th>
+              </tr>';
+
+      while ( $coupon = $sql["mgr"]->fetch_assoc($coupon_result) )
+      {
+        $usage_query = "SELECT * FROM point_system_coupon_usage WHERE coupon='".$coupon["entry"]."' AND user='".$user_id."'";
+        $usage_result = $sql["mgr"]->query($usage_query);
+
+        if ( ( $sql["mgr"]->num_rows($usage_result) < $coupon["usage_limit"] ) || ( $coupon["usage_limit"] == -1 ) )
+        {
+          $output .= '
+              <tr>
+                <td align="left">'.$coupon["title"].'</td>
+              </tr>';
+
+          if ( $coupon["text"] != "" )
+            $output .= '
+              <tr>
+                <td align="left">'.$coupon["text"].'</td>
+              </tr>';
+
+          if ( ( $coupon["credits"] != 0 ) || ( $coupon["money"] != 0 ) || ( $coupon["item_id"] != 0 ) || ( $coupon["raffle_id"] != 0 ) )
+          {
+            $output .= '
+              <tr>
+                <td align="left">
+                  <span>'.lang("index", "coupon_value").':</span>';
+
+            if ( $coupon["credits"] != 0 )
+            {
+              if ( $coupon["credits"] > 1 )
+                $tip = lang("index", "coupon_credits");
+              else
+                $tip = lang("index", "coupon_credit");
+
+              $output .= '
+                  <br />
+                  <br />
+                  <span>'.$coupon["credits"].'</span>
+                  <span>'.$tip.'</span>';
+            }
+
+            if ( $coupon["money"] != 0 )
+            {
+              // extract gold/silver/copper from single gold number
+              $coupon["money"] = str_pad($coupon["money"], 4, "0", STR_PAD_LEFT);
+              $coupon_g = substr($coupon["money"],  0, -4);
+              if ( $coupon_g == '' )
+                $coupon_g = 0;
+              $coupon_s = substr($coupon["money"], -4,  2);
+              if ( ( $coupon_s == '' ) || ( $coupon_s == '00' ) )
+                $coupon_s = 0;
+              $coupon_c = substr($coupon["money"], -2);
+              if ( ( $coupon_c == '' ) || ( $coupon_c == '00' ) )
+                $coupon_c = 0;
+
+              $output .= '
+                  <br />
+                  <br />
+                  <span>'.$coupon_g.'</span>
+                  <img src="img/gold.gif" alt="gold" />
+                  <span>'.$coupon_s.'</span>
+                  <img src="img/silver.gif" alt="gold" />
+                  <span>'.$coupon_c.'</span>
+                  <img src="img/copper.gif" alt="gold" />';
+            }
+
+            if ( $coupon["item_id"] != 0 )
+            {
+              if ( $coupon["item_id"] > 0 )
+              {
+                // get item data
+                if ( $core == 1 )
+                {
+                  $i_query = "SELECT 
+                    *, description AS description1, name1 AS name, quality AS Quality, inventorytype AS InventoryType, 
+                    socket_color_1 AS socketColor_1, socket_color_2 AS socketColor_2, socket_color_3 AS socketColor_3,
+                    requiredlevel AS RequiredLevel, allowableclass AS AllowableClass,
+                    sellprice AS SellPrice, itemlevel AS ItemLevel
+                    FROM items "
+                      .( ( $locales_search_option != 0 ) ? "LEFT JOIN items_localized ON (items_localized.entry=items.entry AND language_code='".$locales_search_option."') " : " " ).
+                    "WHERE items.entry='".$coupon["item_id"]."'";
+                }
+                else
+                {
+                  $i_query = "SELECT *, description AS description1 FROM item_template "
+                      .( ( $locales_search_option != 0 ) ? "LEFT JOIN locales_item ON locales_item.entry=item_template.entry " : " " ).
+                    "WHERE item_template.entry='".$coupon["item_id"]."'";
+                }
+
+                $i_result = $sql["world"]->query($i_query);
+                $i = $sql["world"]->fetch_assoc($i_result);
+
+                $output .= '
+                    <br />
+                    <br />
+                    <div class="coupon_item">
+                      <div>
+                        <a href="'.$base_datasite.$item_datasite.$coupon["item_id"].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$coupon["entry"].'\');" onmouseout="HideTooltip(\'_b'.$coupon["entry"].'\');">
+                          <img src="'.get_item_icon($coupon["item_id"]).'" alt="" />
+                        </a>';
+
+                if ( $coupon["item_count"] > 1 )
+                  $output .= '
+                        <div class="ch_inv_quantity_shadow">'.$coupon["item_count"].'</div>
+                        <div class="ch_inv_quantity">'.$coupon["item_count"].'</div>';
+
+                $output .= '
+                      </div>';
+
+                // build a tooltip object for this item
+                $output .= '
+                      <div class="item_tooltip" id="tooltip_b'.$coupon["entry"].'" style="left: -129px; top: 42px;">
+                        <table>
+                          <tr>
+                            <td>'.get_item_tooltip($i, $item[4], $item[5], $item[6], $item[7], $item[8]).'</td>
+                          </tr>
+                        </table>
+                      </div>';
+
+                $output .= '
+                    </div>';
+              }
+              else
+              {
+                $output .= '
+                    <br />
+                    <br />
+                    <div class="coupon_item">
+                      <div>
+                        <a href="point_system.php?action=view_bag&amp;bag_id='.($coupon["item_id"]*-1).'" onmousemove="oldtoolTip(\''.lang("points", "prize_bag").'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()">
+                          <img src="'.get_item_icon(1725).'" alt="" />
+                        </a>
+                      </div>
+                    </div>';
+              }
+            }
+
+            if ( $coupon["raffle_id"] != 0 )
+            {
+              // find out how many entries per user the raffle allows and whether the raffle is enabled
+              if ( $coupon["raffle_id"] != -1 )
+              {
+                $query = "SELECT tickets_per_user, enabled FROM point_system_raffles WHERE entry='".$coupon["raffle_id"]."'";
+                $result = $sql["mgr"]->query($query);
+                $result = $sql["mgr"]->fetch_assoc($result);
+                $per_user = $result["tickets_per_user"];
+                $raffle_enabled = $result["enabled"];
+
+                // if tickets_per_user is -1 then its unlimited, fake it with a reasonably high number
+                $per_user = 999999999;
+              }
+              else
+              {
+                // if it allows any raffle, then fake it
+                $per_user = 999999999;
+                $raffle_enabled = 1;
+              }
+
+              if ( $raffle_enabled )
+              {
+                // find out how many time we've entered
+                $query = "SELECT COUNT(*) FROM point_system_raffle_tickets WHERE raffle='".$coupon["raffle_id"]."' AND user='".$user_id."'";
+                $result = $sql["mgr"]->query($query);
+                $result = $sql["mgr"]->fetch_assoc($result);
+                $tickets = $result["COUNT(*)"];
+
+                // if we haven't already purchased the maximum number of tickets
+                // or the raffle allows purchase of tickets from any raffle
+                if ( ( $tickets < $per_user ) || ( $coupon["raffle_id"] == -1 ) )
+                {
+                  if ( $coupon["redemption_option"] == 0 )
+                    $output .= '
+                    <br />
+                    <br />
+                    <span>'.lang("index", "and_raffle").'</span>';
+                  else
+                    $output .= '
+                    <br />
+                    <br />
+                    <span>'.lang("index", "or_raffle").'</span>';
+                }
+              }
+            }
+
+            $output .= '
+                  </td>
+                </tr>';
+          }
+
+          $output .= '
+              <tr>
+                <td align="right">
+                  <a href="point_system.php?action=redeem_coupon&amp;coupon_id='.$coupon["entry"].'">
+                    <span><img src="img/star.png" width="16" height="16" alt="" />&nbsp;'.lang("index", "use_coupon").'</span>
+                  </a>
+                </td>
+              </tr>';
+
+          $output .= '
+              <tr>
+                <th></th>
+              </tr>';
+        }
+      }
+
+      if ( $sql["mgr"]->num_rows($coupon_result) )
+        $output = substr($output, 0, strlen($output) - 68);
+
+      $output .= '
             </table>';
+    }
+  }
+
+  // GM Tickets
+  $start_m = ( ( isset($_GET["start_m"]) ) ? $sql["char"]->quote_smart($_GET["start_m"]) : 0 );
+  if ( !is_numeric($start_m) )
+    $start_m = 0;
+
+  if ( $core == 1 )
+    $all_record_m = $sql["char"]->result($sql["char"]->query("SELECT COUNT(*) FROM gm_tickets WHERE deleted=0"), 0);
+  elseif ( $core == 2 )
+    $all_record_m = $sql["char"]->result($sql["char"]->query("SELECT COUNT(*) FROM character_ticket"), 0);
+  else
+    $all_record_m = $sql["char"]->result($sql["char"]->query("SELECT COUNT(*) FROM gm_tickets WHERE closedBy=0"), 0);
 
   // show gm tickets
   $output .= '
-            <br />
-            <table class="lined">';
+            <br />';
+
   if ( $user_lvl >= $action_permission["insert"] )
   {
     if ( $all_record_m )
     {
       $output .= '
-              <th>'.lang("index", "tickets").'</th>';
+            <table class="lined">
+              <tr>
+                <th>'.lang("index", "tickets").'</th>
+              </tr>';
+
       if ( $core == 1 )
         $result = $sql["char"]->query("SELECT ticketid, level, message, name, deleted,
           timestamp, gm_tickets.playerGuid, acct
@@ -414,10 +661,12 @@ function front()
             $login_result = $sql["logon"]->query("SELECT * FROM accounts WHERE acct='".$post["acct"]."'");
           else
             $login_result = $sql["logon"]->query("SELECT *, username AS login FROM account WHERE id='".$post["acct"]."'");
+
           $login = $sql["logon"]->fetch_assoc($login_result);
           $gm_result = $sql["mgr"]->query("SELECT SecurityLevel FROM config_accounts WHERE Login='".$login["login"]."'");
           $gm = $sql["mgr"]->fetch_assoc($gm_result);
           $gm = $gm["SecurityLevel"];
+
           if ( ( $user_lvl > 0 ) && ( ( $user_lvl >= gmlevel($gm) ) || ( $user_lvl == $action_permission["delete"] ) ) )
             $output .= '<tr>
                   <td align="left">
@@ -433,6 +682,7 @@ function front()
               </tr>
               <tr>
                 <td align="right">';
+
           $output .= lang("index", "submitted").": ".date('G:i:s m-d-Y', $post["timestamp"]);
 
           $output .= '
@@ -440,11 +690,13 @@ function front()
               </tr>
               <tr>
                 <td align="right">';
+
           if ( $user_lvl >= $action_permission["update"] )
             $output .= '
                   <a href="ticket.php?action=edit_ticket&amp;error=4&amp;id='.$post["ticketid"].'">
-                    <img src="img/edit.png" width="14" height="14" alt="" />
+                    <img src="img/edit.png" width="16" height="16" alt="" />
                   </a>';
+
           $output .= '
                 </td>
               </tr>
@@ -453,6 +705,7 @@ function front()
               </tr>';
         }
       }
+
       if ( $online )
         $output .= '%%REPLACE_TAG%%';
       else
@@ -460,23 +713,30 @@ function front()
               <tr>
                 <td align="right" class="hidden">'.generate_pagination('index.php?start=0', $all_record_m, 3, $start_m, 'start_m').'</td>
               </tr>';
+
+      $output .= '
+            </table>';
     }
   }
-  $output .= '
-            </table>';
 
-  
+  // Character Changes
+  // count pending character changes
+  $char_change_count = $sql["mgr"]->result($sql["mgr"]->query("SELECT COUNT(*) FROM char_changes"), 0);
+
   // show pending character changes
   $output .= '
-            <br />
-            <table class="lined">';
+            <br />';
   if ( $user_lvl >= $action_permission["update"] )
   {
     if ( $char_change_count )
     {
       $output .= '
-              <th>'.lang("index", "pendingchanges").'</th>';
+            <table class="lined">
+              <tr>
+                <th>'.lang("index", "pendingchanges").'</th>
+              </tr>';
       $result = $sql["mgr"]->query("SELECT * FROM char_changes");
+
       while ( $change = $sql["mgr"]->fetch_assoc($result) )
       {
         if ( $core == 1 )
@@ -583,10 +843,11 @@ function front()
               <tr>
                 <td align="right" class="hidden">'.generate_pagination('index.php?start=0', $char_change_count, 3, $start_m, 'start_m').'</td>
               </tr>';
+
+      $output .= '
+            </table>';
     }
   }
-  $output .= '
-            </table>';
 
   //print online chars
   if ( $online && ( $user_lvl >= $player_online ) )
@@ -666,14 +927,15 @@ function front()
     unset($replace);
     $output .= '
             <font class="bold">'.lang("index", "tot_users_online").': '.$total_online.'</font>';
+
     if ( $total_online )
     {
-    $output .= '
+      $output .= '
             <table class="lined">
               <tr>
                 <td colspan="'.(9-$showcountryflag).'" align="right" class="hidden" width="25%">';
-    $output .= generate_pagination('index.php?start_m='.$start_m.'&amp;order_by='.$order_hold.'&amp;dir='.( ( $dir ) ? 0 : 1 ), $total_online, $itemperpage, $start);
-    $output .= '
+      $output .= generate_pagination('index.php?start_m='.$start_m.'&amp;order_by='.$order_hold.'&amp;dir='.( ( $dir ) ? 0 : 1 ), $total_online, $itemperpage, $start);
+      $output .= '
                 </td>
               </tr>
               <tr>
@@ -685,33 +947,33 @@ function front()
                 <th width="15%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=gname&amp;dir='.$dir.'"'.( ( $order_by === "gname" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "guild").'</a></th>
                 <th width="20%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=mapid&amp;dir='.$dir.'"'.( ( $order_by === "mapid, zoneid " ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "map").'</a></th>
                 <th width="25%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=zoneid&amp;dir='.$dir.'"'.( ( $order_by === "zoneid, mapid " ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "zone").'</a></th>';
-    if ( $core == 1 )
-      $output .= '
+      if ( $core == 1 )
+        $output .= '
                 <th width="25%">'.lang("index", "area").'</a></th>';
     
-    // this_is_junk: MaNGOS doesn't store player latency
-    if ( $core != 2 )
-    {
-      if ( !$hide_plr_latency )
+      // this_is_junk: MaNGOS doesn't store player latency
+      if ( $core != 2 )
       {
-        // this_is_junk: Trinity is the only core which can sort by Player Latency
-        if ( $core == 3 )
-          $output .= '
+        if ( !$hide_plr_latency )
+        {
+          // this_is_junk: Trinity is the only core which can sort by Player Latency
+          if ( $core == 3 )
+            $output .= '
                   <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=latency&amp;dir='.$dir.'"'.( ( $order_by === "latency" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("index", "latency").'</a></th>';
-        else
-          $output .= '
+          else
+            $output .= '
                   <th width="1%">'.lang("index", "latency").'</th>';
+        }
       }
-    }
 
-    if ( $showcountryflag )
-    {
-      require_once 'libs/misc_lib.php';
-      $output .= '
+      if ( $showcountryflag )
+      {
+        require_once 'libs/misc_lib.php';
+        $output .= '
                 <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=lastip&amp;dir='.$dir.'"'.( ( $order_by === "lastip" ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("global", "country").'</a></th>';
-    }
+      }
 
-    $output .= '
+      $output .= '
               </tr>';
     }
 
@@ -822,18 +1084,98 @@ function front()
       $output .='
               </tr>';
     }
-    $output .= '
+
+    if ( $total_online )
+    {
+      $output .= '
               <tr>';
-    $output .= '
+      $output .= '
                 <td colspan="'.(9-$showcountryflag).'" align="right" class="hidden" width="25%">';
-    $output .= generate_pagination('index.php?start_m='.$start_m.'&amp;order_by='.$order_by.'&amp;dir='.( ( $dir ) ? 0 : 1 ), $total_online, $itemperpage, $start);
-    unset($total_online);
-    $output .= '
+      $output .= generate_pagination('index.php?start_m='.$start_m.'&amp;order_by='.$order_by.'&amp;dir='.( ( $dir ) ? 0 : 1 ), $total_online, $itemperpage, $start);
+      $output .= '
                 </td>
               </tr>
-            </table>
+            </table>';
+    }
+    $output .= '
             <br />
           </center>';
+
+    unset($total_online);
+  }
+}
+
+function do_raffles()
+{
+  global $sql, $core;
+
+  // get any raffles that need to be completed
+  $r_query = "SELECT * FROM point_system_raffles WHERE enabled=1 AND completed=0 AND drawing <= NOW()";
+  $r_result = $sql["mgr"]->query($r_query);
+
+  while ( $raffle = $sql["mgr"]->fetch_assoc($r_result) )
+  {
+    // first, we make sure this raffle is still ready to process
+    $query = "SELECT * FROM point_system_raffles WHERE enabled=1 AND entry='".$raffle["entry"]."'";
+    $result = $sql["mgr"]->query($query);
+
+    if ( $sql["mgr"]->num_rows($result) )
+    {
+      // disable the raffle to make sure no one else tries to process it
+      $query = "UPDATE point_system_raffles SET enabled=0 WHERE entry='".$raffle["entry"]."'";
+      $result = $sql["mgr"]->query($query);
+
+      // get the entries
+      $e_query = "SELECT * FROM point_system_raffle_tickets WHERE raffle='".$raffle["entry"]."'";
+      $e_result = $sql["mgr"]->query($e_query);
+
+      // load entries into an array
+      $tickets = array();
+      while ( $ticket = $sql["mgr"]->fetch_assoc($e_result) )
+      {
+        $tickets[] = $ticket;
+      }
+
+      // randomize
+      shuffle($tickets);
+
+      // first entry is winner
+      $winner = $tickets[0]["user"];
+
+      // record the winner to the raffle
+      $query = "UPDATE point_system_raffles SET winner='".$winner."', completed=1 WHERE entry='".$raffle["entry"]."'";
+      $result = $sql["mgr"]->query($query);
+
+      // issue a coupon for the raffle prize(s)
+      $query = "INSERT INTO point_system_coupons (target, credits, money, item_id, item_count, title, text, usage_limit, redemption_option, raffle_id, enabled) VALUES ('".$winner."', '".$raffle["credits"]."', '".$raffle["money"]."', '".$raffle["item_id"]."', '".$raffle["item_count"]."', '".lang("points", "prize_coupon_title")."', '".str_replace("%1", $raffle["title"], lang("points", "prize_coupon_text"))."', '1', '0', '0', '1')";
+      $result = $sql["mgr"]->query($query);
+
+      // create an announcement server message
+      // get the winner's name
+      if ( $core == 1 )
+        $query = "SELECT login AS username FROM accounts WHERE acct='".$winner."'";
+      else
+        $query = "SELECT username FROM account WHERE id='".$winner."'";
+
+      $result = $sql["logon"]->query($query);
+      $acct = $sql["logon"]->fetch_assoc($result);
+
+      $query = "SELECT ScreenName FROM config_accounts WHERE Login='".$acct["username"]."'";
+      $result = $sql["mgr"]->query($query);
+      $winner_name = $sql["mgr"]->fetch_assoc($result);
+      $winner_name = $winner_name["ScreenName"];
+
+      // build the congrats message
+      $gratz = lang("points", "congrats");
+      $gratz = str_replace("%1", $raffle["title"], $gratz);
+      $gratz = str_replace("%2", $winner_name, $gratz);
+
+      $text = '[center][color="white"][b][size="16px"]'.$gratz.'[/size][/b][/color][/center]';
+
+      // post it
+      $query = "INSERT INTO motd (Message, Created, Created_By, Enabled) VALUES ('".$text."', NOW(), '".$raffle["announce_acct"]."', '1')";
+      $result = $sql["mgr"]->query($query);
+    }
   }
 }
 
@@ -844,7 +1186,7 @@ function front()
 $output .= '
         <div class="bubble">';
 
-front();
+main();
 
 unset($action_permission);
 

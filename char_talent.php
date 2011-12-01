@@ -271,7 +271,7 @@ function char_talent()
       
       $output .= '
           <center>
-              <div id="tab">
+              <div class="tab">
               <ul>
                 <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
 
@@ -280,7 +280,7 @@ function char_talent()
                 <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "inventory").'</a></li>';
 
       $output .= '
-                <li id="selected"><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "talents").'</a></li>';
+                <li class="selected"><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "talents").'</a></li>';
 
       if ( $view_achieve_override )
         $output .= '
@@ -301,17 +301,21 @@ function char_talent()
       $output .= '
               </ul>
             </div>
-            <div id="tab_content">
+            <div class="tab_content">
               <font class="bold">'.htmlentities($char["name"], ENT_COMPAT, $site_encoding).' -
               <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
               <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'</font>
-              <br /><br />';
+              <br />
+              <br />';
       if ( $cur_spec == 1 )
-        $output .= '<font class="bold">'.lang("char", "talentspec").': '.$cur_spec.'&nbsp;<a href="char_talent.php?id='.$id.'&realm='.$realm_id.'&curspec='.$opp_spec.'">'.$opp_spec.'</a></font><br />';
+        $output .= '
+              <font class="bold">'.lang("char", "talentspec").': '.$cur_spec.'&nbsp;<a href="char_talent.php?id='.$id.'&amp;realm='.$realm_id.'&amp;curspec='.$opp_spec.'">'.$opp_spec.'</a></font><br />';
       else
-        $output .= '<font class="bold">'.lang("char", "talentspec").': <a href="char_talent.php?id='.$id.'&realm='.$realm_id.'&curspec='.$opp_spec.'">'.$opp_spec.'</a>&nbsp;'.$cur_spec.'</font><br />';
+        $output .= '
+              <font class="bold">'.lang("char", "talentspec").': <a href="char_talent.php?id='.$id.'&amp;realm='.$realm_id.'&amp;curspec='.$opp_spec.'">'.$opp_spec.'</a>&nbsp;'.$cur_spec.'</font><br />';
 
-      $output .= '<table class="lined" id="ch_tal_main">
+      $output .= '
+              <table class="lined" id="ch_tal_main">
                 <tr valign="top" align="center">';
 
       if ( count($talents) > 1 )
@@ -416,8 +420,8 @@ function char_talent()
                           <a href="'.$base_datasite.$spell_datasite.$data[$i][$j][0].'" target="_blank">
                             <img src="'.spell_get_icon($data[$i][$j][0]).'" width="36" height="36" class="icon_border_'.$data[$i][$j][2].'" alt="" />
                           </a>
-                          <div id="ch_tal_level_shadow">'.$data[$i][$j][1].'</div>
-                          <div id="ch_tal_level">'.$data[$i][$j][1].'</div>
+                          <div class="ch_tal_level_shadow">'.$data[$i][$j][1].'</div>
+                          <div class="ch_tal_level">'.$data[$i][$j][1].'</div>
                         </td>';
                 $points += $data[$i][$j][1];
               }

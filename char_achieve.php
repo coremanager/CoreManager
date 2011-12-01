@@ -334,7 +334,7 @@ function char_achievements()
                 }
               }
             </script>
-            <div id="tab">
+            <div class="tab">
               <ul>
                 <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
 
@@ -347,7 +347,7 @@ function char_achievements()
                 '.( ( $char["level"] < 10 ) ? '' : '<li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "talents").'</a></li>' ).'';
 
       $output .= '
-                <li id="selected"><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "achievements").'</a></li>';
+                <li class="selected"><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "achievements").'</a></li>';
 
       if ( $view_quest_override )
         $output .= '
@@ -364,7 +364,7 @@ function char_achievements()
       $output .= '
               </ul>
             </div>
-            <div id="tab_content">
+            <div class="tab_content">
               <font class="bold">
                 '.htmlentities($char["name"], ENT_COMPAT, $site_encoding).' -
                 <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />

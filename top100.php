@@ -156,46 +156,46 @@ function top100($realmid)
   //==========================top tage navigaion starts here========================
   $output .= '
           <center>
-            <div id="tab">
+            <div class="tab">
               <ul>
-                <li'.( ( $type == 'level' ) ? ' id="selected"' : '' ).'>
+                <li'.( ( $type == 'level' ) ? ' class="selected"' : '' ).'>
                   <a href="top100.php?start='.$start.'">
                     '.lang("top", "general").'
                   </a>
                 </li>
-                <li'.( ( $type == 'stat' ) ? ' id="selected"' : '' ).'>
+                <li'.( ( $type == 'stat' ) ? ' class="selected"' : '' ).'>
                   <a href="top100.php?start='.$start.'&amp;type=stat&amp;order_by=health">
                     '.lang("top", "stats").'
                   </a>
                 </li>
-                <li'.( ( $type == 'defense' ) ? ' id="selected"' : '' ).'>
+                <li'.( ( $type == 'defense' ) ? ' class="selected"' : '' ).'>
                   <a href="top100.php?start='.$start.'&amp;type=defense&amp;order_by=armor">
                     '.lang("top", "defense").'
                   </a>
                 </li>
-                <li'.( ( $type == 'resist' ) ? ' id="selected"' : '' ).'>
+                <li'.( ( $type == 'resist' ) ? ' class="selected"' : '' ).'>
                   <a href="top100.php?start='.$start.'&amp;type=resist&amp;order_by=holy">
                     '.lang("top", "resist").'
                   </a>
                 </li>
-                <li'.( ( $type == 'attack' ) ? ' id="selected"' : '' ).'>
+                <li'.( ( $type == 'attack' ) ? ' class="selected"' : '' ).'>
                   <a href="top100.php?start='.$start.'&amp;type=attack&amp;order_by=ap">
                     '.lang("top", "melee").'
                   </a>
                 </li>
-                <li'.( ( $type == 'crit_hit' ) ? ' id="selected"' : '' ).'>
+                <li'.( ( $type == 'crit_hit' ) ? ' class="selected"' : '' ).'>
                   <a href="top100.php?start='.$start.'&amp;type=crit_hit&amp;order_by=ranged_ap">
                     '.lang("top", "ranged").'
                   </a>
                 </li>
-                <li'.( ( $type == 'pvp' ) ? ' id="selected"' : '' ).'>
+                <li'.( ( $type == 'pvp' ) ? ' class="selected"' : '' ).'>
                   <a href="top100.php?start='.$start.'&amp;type=pvp&amp;order_by=honor">
                     '.lang("top", "pvp").'
                   </a>
                 </li>
               </ul>
             </div>
-            <div id="tab_content">
+            <div class="tab_content">
             <table class="top_hidden" id="top100_realms">';
   if ( $developer_test_mode && $multi_realm_mode )
   {

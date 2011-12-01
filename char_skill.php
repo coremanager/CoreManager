@@ -293,9 +293,9 @@ function char_skill()
 
       $output .= '
           <center>
-            <div id="tab">
+            <div class="tab">
               <ul>
-                <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
+                <li class="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
 
       if ( $view_inv_override )
         $output .= '
@@ -324,8 +324,8 @@ function char_skill()
       $output .= '
               </ul>
             </div>
-            <div id="tab_content">
-              <div id="tab">
+            <div class="tab_content">
+              <div class="tab">
                 <ul>
                   <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
 
@@ -338,7 +338,7 @@ function char_skill()
                   <li><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "reputation").'</a></li>';
 
       $output .= '
-                  <li id="selected"><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>';
+                  <li class="selected"><a href="char_skill.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "skills").'</a></li>';
 
       if ( $view_pvp_override )
         $output .= '
@@ -351,7 +351,7 @@ function char_skill()
       $output .= '
                 </ul>
               </div>
-              <div id="tab_content2">
+              <div class="tab_content2">
                 <font class="bold">
                   '.htmlentities($char["name"], ENT_COMPAT, $site_encoding).' -
                   <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
@@ -442,7 +442,7 @@ function char_skill()
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '' ).'
                     <td align="right">'.$data[1].'</td>
-                    <td valign="center" class="bar skill_bar" style="background-position: '.(round(450*$data[2]/$max)-450).'px;">
+                    <td class="bar skill_bar" style="background-position: '.(round(450*$data[2]/$max)-450).'px;">
                       <span>'.$data[2].'/'.$max.'</span>
                     </td>
                   </tr>';
@@ -457,8 +457,8 @@ function char_skill()
         $output .= '
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '' ).'
-                    <td align="right"><a href="'.$base_datasite.$skill_datasite.'7.'.$char["class"].'.'.$data[0].'" target="_blank">'.$data[1].'</td>
-                    <td valign="center" class="bar skill_bar" id="ch_ski_bg_pos0">
+                    <td align="right"><a href="'.$base_datasite.$skill_datasite.'7.'.$char["class"].'.'.$data[0].'" target="_blank">'.$data[1].'</a></td>
+                    <td class="bar skill_bar" style="background-position: 0px;">
                     </td>
                   </tr>';
       }
@@ -474,7 +474,7 @@ function char_skill()
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '').'
                     <td align="right"><a href="'.$base_datasite.$skill_datasite.'11.'.$data[0].'" target="_blank">'.$data[1].'</a></td>
-                    <td valign="center" class="bar skill_bar" style="background-position: '.(round(450*$data[2]/$max)-450).'px;">
+                    <td class="bar skill_bar" style="background-position: '.(round(450*$data[2]/$max)-450).'px;">
                       <span>'.$data[2].'/'.$max.' ('.$skill_rank_array[$max].')</span>
                     </td>
                   </tr>';
@@ -491,7 +491,7 @@ function char_skill()
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '' ).'
                     <td align="right"><a href="'.$base_datasite.$skill_datasite.'9.'.$data[0].'" target="_blank">'.$data[1].'</a></td>
-                    <td valign="center" class="bar skill_bar" style="background-position: '.(round(450*$data[2]/$max)-450).'px;">
+                    <td class="bar skill_bar" style="background-position: '.(round(450*$data[2]/$max)-450).'px;">
                       <span>'.$data[2].'/'.$max.' ('.$skill_rank_array[$max].')</span>
                     </td>
                   </tr>';
@@ -508,7 +508,7 @@ function char_skill()
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '' ).'
                     <td align="right">'.$data[1].'</td>
-                    <td valign="center" class="bar skill_bar" style="background-position: '.(round(450*$data[2]/$max)-450).'px;">
+                    <td class="bar skill_bar" style="background-position: '.(round(450*$data[2]/$max)-450).'px;">
                       <span>'.$data[2].'/'.$max.'</span>
                     </td>
                   </tr>';
@@ -524,7 +524,7 @@ function char_skill()
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '' ).'
                     <td align="right">'.$data[1].'</td>
-                    <td valign="center" class="bar skill_bar" id="ch_ski_bg_pos0">
+                    <td class="bar skill_bar" style="background-position: 0px;">
                     </td>
                   </tr>';
       }
@@ -540,7 +540,7 @@ function char_skill()
                   <tr>
                     '.( ( $user_lvl ) ? '<td>'.$data[0].'</td>' : '' ).'
                     <td align="right">'.$data[1].'</td>
-                    <td valign="center" class="bar skill_bar" style="background-position: '.(round(450*$data[2]/$max)-450).'px;">
+                    <td class="bar skill_bar" style="background-position: '.(round(450*$data[2]/$max)-450).'px;">
                       <span>'.$data[2].'/'.$max.'</span>
                     </td>
                   </tr>';

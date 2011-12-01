@@ -66,9 +66,9 @@ $output .= '
           answerbox.btn_cancel="'.lang("global", "no").'";
         </script>
         <center>
-          <div id="honor_faction" class="fieldset_border">
-            <span class="legend" id="honor_faction_icon"><img src="img/alliance.gif" /></span>
-            <table class="lined" id="honor_faction_ranks">
+          <div class="fieldset_border honor_faction">
+            <span class="honor_faction_icon"><img src="img/alliance.gif" alt="" /></span>
+            <table class="lined" id="honor_alliance_ranks">
               <tr class="bold">
                 <td colspan="11" class="hidden">'.lang("honor", "allied").' '.lang("honor", "browse_honor").'</td>
               </tr>
@@ -114,15 +114,15 @@ while ( $char = $sql["char"]->fetch_assoc($query) )
                   <a href="char.php?id='.$char["guid"].'">'.htmlentities($char["name"], ENT_COMPAT, $site_encoding).'</a>
                 </td>
                 <td>
-                  <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" />
+                  <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                 </td>
                 <td>
-                  <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" />
+                  <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                 </td>
                 <td>'.char_get_level_color($char["level"]).'</td>
                 <td>
-                  <span onmouseover="oldtoolTip(\''.char_get_pvp_rank_name($char["honor"], char_get_side_id($char["race"])).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" id="honor_tooltip">
-                    <img src="img/ranks/rank'.char_get_pvp_rank_id($char["honor"], char_get_side_id($char["race"])).'.gif" />
+                  <span onmouseover="oldtoolTip(\''.char_get_pvp_rank_name($char["honor"], char_get_side_id($char["race"])).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" class="honor_tooltip">
+                    <img src="img/ranks/rank'.char_get_pvp_rank_id($char["honor"], char_get_side_id($char["race"])).'.gif" alt="" />
                   </span>
                 </td>
                 <td>'.$char["honor"].'</td>
@@ -170,9 +170,9 @@ $output .= '
           answerbox.btn_cancel="'.lang("global", "no").'";
         </script>
         <center>
-          <div id="honor_faction" class="fieldset_border">
-            <span class="legend" id="honor_faction_icon"><img src="img/horde.gif" /></span>
-            <table class="lined" id="honor_faction_ranks">
+          <div class="fieldset_border honor_faction">
+            <span class="honor_faction_icon"><img src="img/horde.gif" alt="" /></span>
+            <table class="lined" id="honor_horde_ranks">
               <tr class="bold">
                 <td colspan="11" class="hidden">'.lang("honor", "horde")." ".lang("honor", "browse_honor").'</td>
               </tr>
@@ -217,15 +217,15 @@ while ( $char = $sql["char"]->fetch_assoc($query) )
                   <a href="char.php?id='.$char["guid"].'">'.htmlentities($char["name"], ENT_COMPAT, $site_encoding).'</a>
                 </td>
                 <td>
-                  <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" />
+                  <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                 </td>
                 <td>
-                  <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" />
+                  <img src="img/c_icons/'.$char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                 </td>
                 <td>'.char_get_level_color($char["level"]).'</td>
                 <td>
-                  <span onmouseover="oldtoolTip(\''.char_get_pvp_rank_name($char["honor"], char_get_side_id($char["race"])).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" id="honor_tooltip">
-                    <img src="img/ranks/rank'.char_get_pvp_rank_id($char["honor"], char_get_side_id($char["race"])).'.gif" />
+                  <span onmouseover="oldtoolTip(\''.char_get_pvp_rank_name($char["honor"], char_get_side_id($char["race"])).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" class="honor_tooltip">
+                    <img src="img/ranks/rank'.char_get_pvp_rank_id($char["honor"], char_get_side_id($char["race"])).'.gif" alt="" />
                   </span>
                 </td>
                 <td>'.$char["honor"].'</td>

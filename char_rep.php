@@ -319,9 +319,9 @@ function char_rep()
 
       $output .= '
           <center>
-            <div id="tab">
+            <div class="tab">
               <ul>
-                <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
+                <li class="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
 
       if ( $view_inv_override )
         $output .= '
@@ -350,8 +350,8 @@ function char_rep()
       $output .= '
                </ul>
             </div>
-            <div id="tab_content">
-              <div id="tab">
+            <div class="tab_content">
+              <div class="tab">
                 <ul>
                   <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
 
@@ -360,7 +360,7 @@ function char_rep()
                   <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "pets").'</a></li>';
 
       $output .= '
-                  <li id="selected"><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "reputation").'</a></li>';
+                  <li class="selected"><a href="char_rep.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "reputation").'</a></li>';
 
       if ( $view_skill_override )
         $output .= '
@@ -377,7 +377,7 @@ function char_rep()
       $output .= '
                 </ul>
               </div>
-              <div id="tab_content2">
+              <div class="tab_content2">
                 <font class="bold">
                   '.htmlentities($char["name"], ENT_COMPAT, $site_encoding).' -
                   <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($char["race"]).'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
@@ -390,130 +390,130 @@ function char_rep()
       (
         // this_is_junk: style left hardcoded because it's insane.
         1 => array('
-                <table class="lined" id="ch_rep_rep">
+                <table class="lined" id="ch_rep_rep_alliance">
                   <tr>
                     <th colspan="3" align="left">
-                      <div id="divi1" onclick="expand(\'i1\', this, \'Alliance\')">[-] Alliance</div>
+                      <div id="divi1" onclick="expand(\'i1\', this, \'Alliance\')">[-] '.lang("char", "rep_alliance").'</div>
                     </th>
                   </tr>
                   <tr>
                     <td>
                       <table id="i1" class="lined" style="width: 535px; display: table;">', 0),
         2 => array('
-                <table class="lined" id="ch_rep_rep">
+                <table class="lined" id="ch_rep_rep_horde">
                   <tr>
                     <th colspan="3" align="left">
-                      <div id="divi2" onclick="expand(\'i2\', this, \'Horde\')">[-] Horde</div>
+                      <div id="divi2" onclick="expand(\'i2\', this, \'Horde\')">[-] '.lang("char", "rep_horde").'</div>
                     </th>
                   </tr>
                   <tr>
                     <td>
                       <table id="i2" class="lined" style="width: 535px; display: table;">', 0),
         3 => array('
-                <table class="lined" id="ch_rep_rep">
+                <table class="lined" id="ch_rep_rep_alliance_forces">
                   <tr>
                     <th colspan="3" align="left">
-                      <div id="divi3" onclick="expand(\'i3\', this, \'Alliance Forces\')">[-] Alliance Forces</div>
+                      <div id="divi3" onclick="expand(\'i3\', this, \'Alliance Forces\')">[-] '.lang("char", "rep_alliance_forces").'</div>
                     </th>
                   </tr>
                   <tr>
                     <td>
                       <table id="i3" class="lined" style="width: 535px; display: table;">', 0),
         4 => array('
-                <table class="lined" id="ch_rep_rep">
+                <table class="lined" id="ch_rep_rep_horde_forces">
                   <tr>
                     <th colspan="3" align="left">
-                      <div id="divi4" onclick="expand(\'i4\', this, \'Horde Forces\')">[-] Horde Forces</div>
+                      <div id="divi4" onclick="expand(\'i4\', this, \'Horde Forces\')">[-] '.lang("char", "rep_horde_forces").'</div>
                     </th>
                   </tr>
                   <tr>
                     <td>
                       <table id="i4" class="lined" style="width: 535px; display: table;">', 0),
         5 => array('
-                <table class="lined" id="ch_rep_rep">
+                <table class="lined" id="ch_rep_rep_steamwheedle_cartel">
                   <tr>
                     <th colspan="3" align="left">
-                      <div id="divi5" onclick="expand(\'i5\', this, \'Steamwheedle Cartels\')">[-] Steamwheedle Cartel</div>
+                      <div id="divi5" onclick="expand(\'i5\', this, \'Steamwheedle Cartels\')">[-] '.lang("char", "rep_steamwheedle_cartel").'</div>
                     </th>
                   </tr>
                   <tr>
                     <td>
                       <table id="i5" class="lined" style="width: 535px; display: table;">', 0),
         6 => array('
-                <table class="lined" id="ch_rep_rep">
+                <table class="lined" id="ch_rep_rep_the_burning_crusade">
                   <tr>
                     <th colspan="3" align="left">
-                      <div id="divi6" onclick="expand(\'i6\', this, \'The Burning Crusade\')">[-] The Burning Crusade</div>
+                      <div id="divi6" onclick="expand(\'i6\', this, \'The Burning Crusade\')">[-] '.lang("char", "rep_the_burning_crusade").'</div>
                     </th>
                   </tr>
                   <tr>
                     <td>
                       <table id="i6" class="lined" style="width: 535px; display: table;">', 0),
         7 => array('
-                <table class="lined" id="ch_rep_rep">
+                <table class="lined" id="ch_rep_rep_shattrath_city">
                   <tr>
                     <th colspan="3" align="left">
-                      <div id="divi7" onclick="expand(\'i7\', this, \'Shattrath City\')">[-] Shattrath City</div>
+                      <div id="divi7" onclick="expand(\'i7\', this, \'Shattrath City\')">[-] '.lang("char", "rep_shattrath_city").'</div>
                     </th>
                   </tr>
                   <tr>
                     <td>
                       <table id="i7" class="lined" style="width: 535px; display: table;">', 0),
         8 => array('
-                <table class="lined" id="ch_rep_rep">
+                <table class="lined" id="ch_rep_rep_alliance_vanguard">
                   <tr>
                     <th colspan="3" align="left">
-                      <div id="divi8" onclick="expand(\'i8\', this, \'Alliance Vanguard\')">[-] Alliance Vanguard</div>
+                      <div id="divi8" onclick="expand(\'i8\', this, \'Alliance Vanguard\')">[-] '.lang("char", "rep_alliance_vanguard").'</div>
                     </th>
                   </tr>
                   <tr>
                     <td>
                       <table id="i8" class="lined" style="width: 535px; display: table;">', 0),
         9 => array('
-                <table class="lined" id="ch_rep_rep">
+                <table class="lined" id="ch_rep_rep_horde_expedition">
                   <tr>
                     <th colspan="3" align="left">
-                      <div id="divi9" onclick="expand(\'i9\', this, \'Horde Expedition \')">[-] Horde Expedition </div>
+                      <div id="divi9" onclick="expand(\'i9\', this, \'Horde Expedition \')">[-] '.lang("char", "rep_horde_expedition").'</div>
                     </th>
                   </tr>
                   <tr>
                     <td>
                       <table id="i9" class="lined" style="width: 535px; display: table;">', 0),
        10 => array('
-                <table class="lined" id="ch_rep_rep">
+                <table class="lined" id="ch_rep_rep_sholazar_basin">
                   <tr>
                     <th colspan="3" align="left">
-                      <div id="divi10" onclick="expand(\'i10\', this, \'Sholazar Basin\')">[-] Sholazar Basin</div>
+                      <div id="divi10" onclick="expand(\'i10\', this, \'Sholazar Basin\')">[-] '.lang("char", "rep_sholazar_basin").'</div>
                     </th>
                   </tr>
                   <tr>
                     <td>
                       <table id="i10" class="lined" style="width: 535px; display: table;">', 0),
        11 => array('
-                <table class="lined" id="ch_rep_rep">
+                <table class="lined" id="ch_rep_rep_wrath_of_the_lich_king">
                   <tr>
                     <th colspan="3" align="left">
-                      <div id="divi11" onclick="expand(\'i11\', this, \'Wrath of the Lich King\')">[-] Wrath of the Lich King</div>
+                      <div id="divi11" onclick="expand(\'i11\', this, \'Wrath of the Lich King\')">[-] '.lang("char", "rep_wrath_of_the_lich_king").'</div>
                     </th>
                   </tr>
                   <tr>
                     <td>
                       <table id="i11" class="lined" style="width: 535px; display: table;">', 0),
        12 => array('
-                <table class="lined" id="ch_rep_rep">
+                <table class="lined" id="ch_rep_rep_other">
                   <tr>
                     <th colspan="3" align="left">
-                      <div id="divi12" onclick="expand(\'i12\', this, \'Other\')">[-] Other</div>
+                      <div id="divi12" onclick="expand(\'i12\', this, \'Other\')">[-] '.lang("char", "rep_other").'</div>
                     </th>
                   </tr>
                   <tr>
                     <td>
                       <table id="i12" class="lined" style="width: 535px; display: table;">', 0),
         0 => array('
-                <table class="lined" id="ch_rep_rep">
+                <table class="lined" id="ch_rep_rep_unknown">
                   <tr>
                     <th colspan="3" align="left">
-                      <div id="divi13" onclick="expand(\'i13\', this, \'Unknown\')">[-] Unknown</div>
+                      <div id="divi13" onclick="expand(\'i13\', this, \'Unknown\')">[-] '.lang("char", "rep_unknown").'</div>
                     </th>
                   </tr>
                   <tr>

@@ -587,8 +587,7 @@ function browse_auctions()
                   '.( $bidder_result <> '' ? $bid : '' ).'
                 </center>
               </td>
-            </tr>
-          </tr>';
+            </tr>';
   }
   $output .= '
             <tr>

@@ -148,9 +148,6 @@ $output .= '
         <li'.( ( $section == "servers" ) ? ' class="current" ' : '' ).'>
           <a href="admin.php?section=servers">'.lang("admin", "servers").'</a>
         </li>
-        <li'.( ( $section == "gmlevels" ) ? ' class="current" ' : '' ).'>
-          <a href="admin.php?section=gmlevels">'.lang("admin", "gm_levels").'</a>
-        </li>
         <li'.( ( $section == "menus" ) ? ' class="current" ' : '' ).'>
           <a href="admin.php?section=menus">'.lang("admin", "menus").'</a>
         </li>

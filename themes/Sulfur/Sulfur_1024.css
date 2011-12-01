@@ -189,6 +189,14 @@ a:hover, a:focus
   background-color: /submenu_hilite_background_color/ !important; /*submenu selected bg color*/
   color: /anchor_hover/ !important; /*submenu selected text color*/
 }
+.menubar_item_disabled
+{
+  display: block;
+  color: /default_text_color/;
+  padding: 5px 15px 5px 15px;
+  border-right: 1px solid /input_border_color/;
+  font-size: /font_size_5/;
+}
 /*********** MENU BAR END***********/
 
 #username
@@ -323,7 +331,7 @@ div.full_frame
 {
   width: 760px;
 }
-span.legend
+.legend
 {
   margin-top: -5px;
   color: /focus_color/;
@@ -450,7 +458,7 @@ img.bag_icon
   margin-left: 5px;
 }
 
-tr td.bag div, tr td.bank div
+.bag
 {
   position: relative;
   border: 0px;
@@ -459,34 +467,28 @@ tr td.bag div, tr td.bank div
   background-repeat: repeat;
   background-color: #242424;
 }
-tr td.bank div
+.bank
 {
-  background-image: url(../../img/INV/Slot_Bank.gif);
   background-color: #858585;
 }
-tr td.bag div div, tr td.bank div div
+.bag_slot, .bank_slot
 {
   position: absolute;
   background: none;
 }
-tr td.bag div div img, tr td.bank div div img
+.inv_icon
 {
   border: 0px;
-  padding: 1px;
   width: 35px; 
   height: 35px;
 }
-tr td.bag div.no_slot, tr td.bank div.no_slot
+.no_slot
 {
   position: absolute;
   margin: 0px;
   width: 86px;
   height: 41px;
   background-image: url(../../img/INV/Slot_Bag_Out.gif);
-}
-tr td.bank div.no_slot
-{
-  background-image: url(../../img/INV/Slot_Bank_Out.gif);
 }
 
 tr th a
@@ -780,6 +782,14 @@ table.stat_hidden
   color: /focus_color/;
   text-decoration: none
 }
+.tot_bar_horde
+{
+  background: url(../../img/bar_horde.gif);
+}
+.tot_bar_alliance
+{
+  background: url(../../img/bar_allie.gif);
+}
 
 tr td.bar
 {
@@ -896,33 +906,33 @@ tr td.rep0
 
 
 /*** link tabs ***/
-#tab ul
+.tab ul
 {
   padding: 0px 30px;
   margin: 0px;
   list-style: none;
 }
-#tab li
+.tab li
 {
   float: left;
   border: 1px solid /input_border_color/;
   border-bottom-width: 0;
 }
-#tab a
+.tab a
 {
   display: block;
   background: /table_background_color/;
   padding: 1em 2em;
 }
-#tab a:hover
+.tab a:hover
 {
   background: #484848;
 }  
-#tab  #selected
+.tab  .selected
 {
   border-color: /default_text_color/;
 }
-#tab #selected a
+.tab .selected a
 {
   position: relative;
   top: 1px;
@@ -930,7 +940,7 @@ tr td.rep0
   font-weight: bold;
   padding: 1em 1.5em;
 }
-#tab_content
+.tab_content
 {
   padding: 10px;
   border: 1px solid /default_text_color/;
@@ -939,7 +949,7 @@ tr td.rep0
   clear: both;
 }
 
-#tab_content2
+.tab_content2
 {
   padding: 10px;
   border: 1px solid /default_text_color/;
@@ -1287,7 +1297,7 @@ tr td.rep0
 {
   width: 550px;
 }
-#user_edit_account
+.user_edit_account
 {
   width: 550px;
 }
@@ -1326,7 +1336,7 @@ tr td.rep0
 }
 
 /* ARENATEAM.PHP */
-#arenateam_delete_cursor
+.arenateam_delete_cursor
 {
   cursor: pointer;
 }
@@ -1380,7 +1390,7 @@ tr td.rep0
 {
   width: 600px;
 }
-#char_icon_padding
+.char_icon_padding
 {
   padding: 2px;
 }
@@ -1466,34 +1476,38 @@ tr td.rep0
 {
   width: 700px;
 }
-#ch_inv_padding
+.ch_inv_padding
 {
-  padding: 2px;
+  /*padding: 2px;*/
 }
-#ch_inv_quantity
+.ch_inv_quantity
 {
+  position: absolute;
+  top: 20px;
+  left: 17px;
   width: 25px;
-  margin: -21px 0px 0px 17px;
   font-weight: bold;
   font-size: /font_size_6/;
   pointer-events: none;
 }
-#ch_inv_quantity_shadow
+.ch_inv_quantity_shadow
 {
+  position: absolute;
+  top: 21px;
+  left: 18px;
   width: 25px;
-  margin: -20px 0px 0px 18px;
   color: black;
   font-weight: bold;
   font-size: /font_size_6/;
   pointer-events: none;
 }
-#ch_inv_delete
+.ch_inv_delete
 {
   position: relative;
   width: 16px;
   height: 16px;
   top: -20px;
-  left: 20px;
+  left: 10px;
 }
 #ch_backpack_icon_margin
 {
@@ -1513,7 +1527,7 @@ tr td.rep0
 }
 
 /* CHAR_PETS.PHP */
-#ch_pet_padding
+.ch_pet_padding
 {
   padding: 2px;
 }
@@ -1529,7 +1543,9 @@ tr td.rep0
 }
 
 /* CHAR_REP.PHP */
-#ch_rep_rep
+#ch_rep_rep_alliance, #ch_rep_rep_horde, #ch_rep_rep_alliance_forces, #ch_rep_rep_horde_forces, #ch_rep_rep_steamwheedle_cartel,
+#ch_rep_rep_the_burning_crusade, #ch_rep_rep_shattrath_city, #ch_rep_rep_alliance_vanguard, #ch_rep_rep_horde_expedition,
+#ch_rep_rep_sholazar_basin, #ch_rep_rep_wrath_of_the_lich_king, #ch_rep_rep_other, #ch_rep_rep_unknown
 {
   width: 550px;
 }
@@ -1538,10 +1554,6 @@ tr td.rep0
 #ch_ski_main
 {
   width: 550px;
-}
-#ch_ski_bg_pos0
-{
-  background-position: 0px;
 }
 
 /* CHAR_TALENT.PHP */
@@ -1562,14 +1574,14 @@ tr td.rep0
   border-top-width: 0px;
   border-bottom-width: 0px;
 }
-#ch_tal_level_shadow
+.ch_tal_level_shadow
 {
   width: 0px;
   margin: -14px 0px 0px 30px;
   font-size: /font_size_6/;
   color: black
 }
-#ch_tal_level
+.ch_tal_level
 {
   width: 0px;
   margin: -14px 0px 0px 29px;
@@ -1707,7 +1719,7 @@ tr td.rep0
 {
   width: 100%;
 }
-#guild_edit_delete_cursor
+.guild_edit_delete_cursor
 {
   cursor: pointer;
 }
@@ -1752,39 +1764,56 @@ tr td.rep0
 }
 #guildbank_padding
 {
-  padding: 2px;
+  /*padding: 2px;*/
 }
-#guildbank_quanity_shadow
+.guildbank_quantity_shadow
 {
+  position: absolute;
+  top: 20px;
+  left: 17px;
   width: 25px;
-  margin: -15px 0px 0px 16px;
   color: black;
-  font-size: /font_size_3/;
+  font-weight: bold;
+  font-size: /font_size_6/;
+  pointer-events: none;
 }
-#guildbank_quantity
+.guildbank_quantity
 {
+  position: absolute;
+  top: 21px;
+  left: 18px;
   width: 25px;
-  margin: -16px 0px 0px 15px;
   color: white;
-  font-size: /font_size_3/;
+  font-weight: bold;
+  font-size: /font_size_6/;
+  pointer-events: none;
 }
 
 /* HONOR.PHP */
-#honor_faction
+.honor_faction
 {
   width: 776px;
 }
-#honor_faction_ranks
+#honor_alliance_ranks
 {
   width: 705px;
 }
-#honor_tooltip
+#honor_horde_ranks
+{
+  width: 705px;
+}
+.honor_tooltip
 {
   color: white;
 }
-#honor_faction_icon
+.honor_faction_icon
 {
+  margin-top: -5px;
+  background-color: /table_background_color/;
+  padding: 2px 6px;
+  position: absolute;
   top: -25px;
+  left: 5px;
 }
 
 /* INDEX.PHP */
@@ -1797,13 +1826,30 @@ tr td.rep0
 {
   color: #55aa55;
 }
-#index_realm_info_value
+.index_realm_info_value
 {
   color: YellowGreen;
 }
-#index_delete_cursor
+#coupon_item_quantity
 {
-  cursor: pointer;
+  width: 25px;
+  margin: -10px 0px 0px 20px;
+  font-weight: bold;
+  font-size: /font_size_6/;
+  pointer-events: none;
+}
+#coupon_item_quantity_shadow
+{
+  width: 25px;
+  margin: -20px 0px 0px 18px;
+  color: black;
+  font-weight: bold;
+  font-size: /font_size_6/;
+  pointer-events: none;
+}
+.coupon_item
+{
+  position: relative;
 }
 
 /* ITEM.PHP */
@@ -1858,7 +1904,7 @@ tr td.rep0
 {
   position: relative;
 }
-#map_image
+.map_image
 {
   z-index: -1;
 }
@@ -1887,19 +1933,23 @@ tr td.rep0
 }
 
 /* CHAR_PVP.PHP */
+#ch_pvp_top
+{
+  width: 550px;
+}
 #ch_pvp_main
 {
   width: 550px;
 }
-#ch_pvp_highlight
+.ch_pvp_highlight
 {
   color: /focus_color/;
 }
-#ch_pvp_dim
+.ch_pvp_dim
 {
   color: #909090;
 }
-#ch_pvp_banner_space
+.ch_pvp_banner_space
 {
   width: 140px;
 }
@@ -1967,4 +2017,57 @@ tr td.rep0
 {
   border-top: 1px solid  #F0D070;
   text-align: center;
+}
+
+/* POINT_SYSTEM.PHP */
+#coupon_table
+{
+  width: 720px;
+}
+.coupon_parts
+{
+  width: 100%;
+  text-align: left;
+  float: left;
+  margin-top: 3px;
+  margin-bottom: 5px;
+}
+.coupon_part_title
+{
+  width: 100%;
+  text-align: left;
+  float: left;
+  margin-top: 3px;
+  margin-bottom: 5px;
+  margin-left: 25px;
+}
+.coupon_part_chars
+{
+  width: 100%;
+  text-align: left;
+  float: left;
+  margin-top: 3px;
+  margin-bottom: 5px;
+  margin-left: 50px;
+}
+.prize_bag_check
+{
+  position: absolute;
+  top: -3px;
+  left: 22px;
+  width: 25px;
+}
+.fake_table
+{
+  width: 425px;
+}
+.fake_table_cell
+{
+  float: left;
+  width: 50%;
+  height: 28px;
+}
+.points_credit_highlight
+{
+  color: /focus_color/;
 }

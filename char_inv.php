@@ -37,11 +37,12 @@ function char_inv()
   // this page uses wowhead tooltops
   //wowhead_tt();
 
+  $cid = $_GET["id"];
+  
   // we need at least an id or we would have nothing to show
-  if ( empty($_GET["id"]) )
+  // also, make sure id is numeric to prevent SQL injection
+  if ( ( empty($_GET["id"]) ) || ( !is_numeric($cid) ) )
     error(lang("global", "empty_fields"));
-  else
-    $cid = $_GET["id"];
 
   // this is multi realm support, as of writing still under development
   //  this page is already implementing it
@@ -255,7 +256,7 @@ function char_inv()
         4=>array()
       );
 
-      // character bang, 1 main + 7 additional
+      // character bank, 1 main + 7 additional
       $bank = array
       (
         0=>array(),
@@ -462,12 +463,12 @@ function char_inv()
       $output .= '
           <!-- start of char_inv.php -->
           <center>
-            <div id="tab">
+            <div class="tab">
               <ul>
                 <li><a href="char.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang("char", "char_sheet").'</a></li>';
 
       $output .= '
-                <li id="selected"><a href="char_inv.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang("char", "inventory").'</a></li>';
+                <li class="selected"><a href="char_inv.php?id='.$cid.'&amp;realm='.$realmid.'">'.lang("char", "inventory").'</a></li>';
 
       if ( $view_talent_override )
         $output .= '
@@ -492,7 +493,7 @@ function char_inv()
       $output .= '
               </ul>
             </div>
-            <div id="tab_content">
+            <div class="tab_content">
               <font class="bold">
                 '.htmlentities($char["name"], ENT_COMPAT, $site_encoding).' -
                 <img src="img/c_icons/'.$char["race"].'-'.$char["gender"].'.gif"
@@ -500,7 +501,8 @@ function char_inv()
                 <img src="img/c_icons/'.$char["class"].'.gif"
                   onmousemove="oldtoolTip(\''.char_get_class_name($char["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /> - '.lang("char", "level_short").char_get_level_color($char["level"]).'
               </font>
-              <br /><br />
+              <br />
+              <br />
               <table class="lined" id="ch_inv_bags">
                 <tr>';
 
@@ -514,7 +516,7 @@ function char_inv()
         if ( $equiped_bag_id[$i] )
         {
           $output .= '
-                    <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$equiped_bag_id[$i][0].'" target="_blank">
+                    <a href="'.$base_datasite.$item_datasite.$equiped_bag_id[$i][0].'" target="_blank">
                       <img class="bag_icon" src="'.get_item_icon($equiped_bag_id[$i][0]).'" alt="" />
                     </a>
                     '.lang("item", "bag").' '.$i.'<br />
@@ -532,8 +534,8 @@ function char_inv()
       {
         // this_is_junk: style left hardcoded because it's calculated.
         $output .= '
-                  <td class="bag" valign="bottom" align="center">
-                    <div style="width:'.(4*43).'px;height:'.(ceil($equiped_bag_id[$t][1]/4)*41).'px;">';
+                  <td align="center">
+                    <div class="bag" style="width: '.(4*43).'px; height: '.(ceil($equiped_bag_id[$t][1]/4)*41).'px;">';
         $dsp = $equiped_bag_id[$t][1]%4;
 
         if ( $dsp )
@@ -545,30 +547,30 @@ function char_inv()
           // this_is_junk: style left hardcoded because it's calculated.
           $item[2] = ( ( $item[2] == 1 ) ? '' : $item[2] );
           $output .= '
-                      <div style="left:'.(($pos+$dsp)%4*42).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">
-                        <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');">
-                          <img src="'.get_item_icon($item[0]).'" alt="" />
+                      <div class="bag_slot" style="left: '.((($pos+$dsp)%4*43)+4).'px; top: '.((floor(($pos+$dsp)/4)*41)+4).'px;">
+                        <a href="'.$base_datasite.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'\');">
+                          <img src="'.get_item_icon($item[0]).'" alt="" class="inv_icon" />
                         </a>';
           if ( $mode )
             $output .= '
                         <div>
-                          <a href="char_inv.php?action=delete_item&id='.$cid.'&bag='.$item[9].'&slot='.$item[10].'&item='.$item[0].'&mode='.$mode.'">
-                            <img src="img/aff_cross.png" id="ch_inv_delete" />
+                          <a href="char_inv.php?action=delete_item&amp;id='.$cid.'&amp;bag='.$item[9].'&amp;slot='.$item[10].'&amp;item='.$item[0].'&amp;mode='.$mode.'">
+                            <img src="img/aff_cross.png" class="ch_inv_delete" alt="" />
                           </a>
                         </div>';
           else
             $output .= '
-                        <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
-                        <div id="ch_inv_quantity">'.$item[2].'</div>';
+                        <div class="ch_inv_quantity_shadow">'.$item[2].'</div>
+                        <div class="ch_inv_quantity">'.$item[2].'</div>';
           $output .= '
                       </div>';
           // build a tooltip object for this item
           $output .= '
-                      <div class="item_tooltip" id="tooltip_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'" style="left: '.((($pos+$dsp)%4*42)-129).'px; top:'.((floor(($pos+$dsp)/4)*41)+42).'px;">
+                      <div class="item_tooltip" id="tooltip_b'.$t.'p'.$pos.(($pos+$dsp)%4*42).'x'.(floor(($pos+$dsp)/4)*41).'" style="left: '.((($pos+$dsp)%4*42)-129).'px; top: '.((floor(($pos+$dsp)/4)*41)+42).'px;">
                         <table>
-                          <td>
-                            '.get_item_tooltip($item[3], $item[4], $item[5], $item[6], $item[7], $item[8]).'
-                          </td>
+                          <tr>
+                            <td>'.get_item_tooltip($item[3], $item[4], $item[5], $item[6], $item[7], $item[8]).'</td>
+                          </tr>
                         </table>
                       </div>';
         }
@@ -590,8 +592,8 @@ function char_inv()
                   </th>
                 </tr>
                 <tr>
-                  <td colspan="2" class="bag" align="center" height="220px">
-                    <div style="width:'.(4*43).'px;height:'.(ceil(16/4)*41).'px;">';
+                  <td colspan="2" align="center" height="220px">
+                    <div class="bag" style="width: '.(4*43).'px; height: '.(ceil(16/4)*41).'px;">';
 
       // inventory items
       foreach ( $bag[0] as $pos => $item )
@@ -599,30 +601,30 @@ function char_inv()
         // this_is_junk: style left hardcoded because it's calculated.
         $item[2] = ( ( $item[2] == 1 ) ? '' : $item[2] );
         $output .= '
-                      <div style="left:'.($pos%4*42).'px;top:'.(floor($pos/4)*41).'px;">
-                        <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');">
-                          <img src="'.get_item_icon($item[0]).'" alt="" />
+                      <div class="bag_slot" style="left: '.(($pos%4*43)+4).'px; top: '.((floor($pos/4)*41)+4).'px;">
+                        <a href="'.$base_datasite.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');" onmouseout="HideTooltip(\'_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'\');">
+                          <img src="'.get_item_icon($item[0]).'" class="inv_icon" alt="" />
                         </a>';
           if ( $mode )
             $output .= '
                         <div>
-                          <a href="char_inv.php?action=delete_item&id='.$cid.'&bag='.$item[9].'&slot='.$item[10].'&item='.$item[0].'&mode='.$mode.'">
-                            <img src="img/aff_cross.png" id="ch_inv_delete" />
+                          <a href="char_inv.php?action=delete_item&amp;id='.$cid.'&amp;bag='.$item[9].'&amp;slot='.$item[10].'&amp;item='.$item[0].'&amp;mode='.$mode.'">
+                            <img src="img/aff_cross.png" class="ch_inv_delete" alt="" />
                           </a>
                         </div>';
           else
             $output .= '
-                        <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
-                        <div id="ch_inv_quantity">'.$item[2].'</div>';
+                        <div class="ch_inv_quantity_shadow">'.$item[2].'</div>
+                        <div class="ch_inv_quantity">'.$item[2].'</div>';
           $output .= '
                       </div>';
         // build a tooltip object for this item
         $output .= '
-                      <div class="item_tooltip" id="tooltip_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'" style="left: '.(($pos%4*42)-129).'px; top:'.((floor($pos/4)*41)+42).'px;">
+                      <div class="item_tooltip" id="tooltip_b'.$t.'p'.$pos.($pos%4*42).'x'.(floor($pos/4)*41).'" style="left: '.(($pos%4*42)-129).'px; top: '.((floor($pos/4)*41)+42).'px;">
                         <table>
-                          <td>
-                            '.get_item_tooltip($item[3], $item[4], $item[5], $item[6], $item[7], $item[8]).'
-                          </td>
+                          <tr>
+                            <td>'.get_item_tooltip($item[3], $item[4], $item[5], $item[6], $item[7], $item[8]).'</td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -637,8 +639,8 @@ function char_inv()
                       </b>
                     </div>
                   </td>
-                  <td colspan="2" class="bank" align="center">
-                    <div style="width:'.((7*43)+2).'px;height:'.(ceil(24/7)*41).'px;">';
+                  <td colspan="2" align="center">
+                    <div class="bag bank" style="width: '.((7*43)+2).'px; height: '.(ceil(24/7)*41).'px;">';
 
       // bank items
       foreach ( $bank[0] as $pos => $item )
@@ -646,30 +648,30 @@ function char_inv()
         // this_is_junk: style left hardcoded because it's calculated.
         $item[2] = ( ( $item[2] == 1 ) ? '' : $item[2] );
         $output .= '
-                      <div style="left:'.($pos%7*43).'px;top:'.(floor($pos/7)*41).'px;">
-                        <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');" onmouseout="HideTooltip(\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');">
+                      <div class="bag_slot" style="left: '.(($pos%7*43)+4).'px; top: '.((floor($pos/7)*41)+4).'px;">
+                        <a href="'.$base_datasite.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');" onmouseout="HideTooltip(\'_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'\');">
                           <img src="'.get_item_icon($item[0]).'" class="inv_icon" alt="" />
                         </a>';
           if ( $mode )
             $output .= '
                         <div>
-                          <a href="char_inv.php?action=delete_item&id='.$cid.'&bag='.$item[9].'&slot='.$item[10].'&item='.$item[0].'&mode='.$mode.'">
-                            <img src="img/aff_cross.png" id="ch_inv_delete" />
+                          <a href="char_inv.php?action=delete_item&amp;id='.$cid.'&amp;bag='.$item[9].'&amp;slot='.$item[10].'&amp;item='.$item[0].'&amp;mode='.$mode.'">
+                            <img src="img/aff_cross.png" class="ch_inv_delete" alt="" />
                           </a>
                         </div>';
           else
             $output .= '
-                        <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
-                        <div id="ch_inv_quantity">'.$item[2].'</div>';
+                        <div class="ch_inv_quantity_shadow">'.$item[2].'</div>
+                        <div class="ch_inv_quantity">'.$item[2].'</div>';
            $output .= '
                       </div>';
         // build a tooltip object for this item
         $output .= '
-                      <div class="item_tooltip" id="tooltip_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'" style="left: '.(($pos%7*43)-129).'px; top:'.((floor($pos/7)*41)+42).'px;">
+                      <div class="item_tooltip" id="tooltip_bbp'.$pos.($pos%7*43).'x'.(floor($pos/7)*41).'" style="left: '.(($pos%7*43)-129).'px; top: '.((floor($pos/7)*41)+42).'px;">
                         <table>
-                          <td>
-                            '.get_item_tooltip($item[3], $item[4], $item[5], $item[6], $item[7], $item[8]).'
-                          </td>
+                          <tr>
+                            <td>'.get_item_tooltip($item[3], $item[4], $item[5], $item[6], $item[7], $item[8]).'</td>
+                          </tr>
                         </table>
                       </div>';
       }
@@ -687,7 +689,7 @@ function char_inv()
         if ( $equip_bnk_bag_id[$i] )
         {
           $output .= '
-                    <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
+                    <a href="'.$base_datasite.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
                       <img class="bag_icon" src="'.get_item_icon($equip_bnk_bag_id[$i][0]).'" alt="" />
                     </a>
                     '.lang("item", "bag").' '.$i.'<br />
@@ -716,7 +718,7 @@ function char_inv()
             if ( $equip_bnk_bag_id[$i] )
             {
               $output .= '
-                    <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
+                    <a href="'.$base_datasite.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
                       <img class="bag_icon" src="'.get_item_icon($equip_bnk_bag_id[$i][0]).'" alt="" />
                     </a>
                     '.lang("item", "bag").' '.$i.'<br />
@@ -733,8 +735,8 @@ function char_inv()
         }
         // this_is_junk: style left hardcoded because it's calculated.
         $output .= '
-                  <td class="bank" align="center">
-                    <div style="width:'.((4*43)+2).'px;height:'.(ceil($equip_bnk_bag_id[$t][1]/4)*41).'px;">';
+                  <td align="center">
+                    <div class="bag bank" style="width: '.((4*43)+2).'px; height: '.(ceil($equip_bnk_bag_id[$t][1]/4)*41).'px;">';
         $dsp = $equip_bnk_bag_id[$t][1]%4;
         if ( $dsp )
           $output .= '
@@ -744,30 +746,30 @@ function char_inv()
           // this_is_junk: style left hardcoded because it's calculated.
           $item[2] = ( ( $item[2] == 1 ) ? '' : $item[2] );
           $output .= '
-                      <div style="left:'.(($pos+$dsp)%4*43).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">
-                        <a id="ch_inv_padding" href="'.$base_datasite.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');">
-                          <img src="'.get_item_icon($item[0]).'" alt="" />
+                      <div class="bag_slot" style="left: '.((($pos+$dsp)%4*43)+4).'px; top: '.((floor(($pos+$dsp)/4)*41)+4).'px;">
+                        <a href="'.$base_datasite.$item_datasite.$item[0].'" target="_blank" onmouseover="ShowTooltip(this,\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');" onmouseout="HideTooltip(\'_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'\');">
+                          <img src="'.get_item_icon($item[0]).'" class="inv_icon" alt="" />
                         </a>';
           if ( $mode )
             $output .= '
                         <div>
-                          <a href="char_inv.php?action=delete_item&id='.$cid.'&bag='.$item[9].'&slot='.$item[10].'&item='.$item[0].'&mode='.$mode.'">
-                            <img src="img/aff_cross.png" id="ch_inv_delete" />
+                          <a href="char_inv.php?action=delete_item&amp;id='.$cid.'&amp;bag='.$item[9].'&amp;slot='.$item[10].'&amp;item='.$item[0].'&amp;mode='.$mode.'">
+                            <img src="img/aff_cross.png" class="ch_inv_delete" alt="" />
                           </a>
                         </div>';
           else
             $output .= '
-                        <div id="ch_inv_quantity_shadow">'.$item[2].'</div>
-                        <div id="ch_inv_quantity">'.$item[2].'</div>';
+                        <div class="ch_inv_quantity_shadow">'.$item[2].'</div>
+                        <div class="ch_inv_quantity">'.$item[2].'</div>';
           $output .= '
                       </div>';
                       // build a tooltip object for this item
                       $output .= '
-                      <div class="item_tooltip" id="tooltip_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'" style="left: '.((($pos+$dsp)%4*43)-129).'px; top:'.((floor(($pos+$dsp)/4)*41)+42).'px;">
+                      <div class="item_tooltip" id="tooltip_bb'.$t.'p'.$pos.(($pos+$dsp)%4*43).'x'.(floor(($pos+$dsp)/4)*41).'" style="left: '.((($pos+$dsp)%4*43)-129).'px; top: '.((floor(($pos+$dsp)/4)*41)+42).'px;">
                         <table>
-                          <td>
-                            '.get_item_tooltip($item[3], $item[4], $item[5], $item[6], $item[7], $item[8]).'
-                          </td>
+                          <tr>
+                            <td>'.get_item_tooltip($item[3], $item[4], $item[5], $item[6], $item[7], $item[8]).'</td>
+                          </tr>
                         </table>
                       </div>';
         }
@@ -779,7 +781,7 @@ function char_inv()
       unset($equip_bnk_bag_id);
       unset($bank);
       $output .= '
-                  <td class="bank"></td>';
+                  <td><div class="bag bank"></div></td>';
       //---------------Page Specific Data Ends here----------------------------
       //---------------Character Tabs Footer-----------------------------------
       $output .= '
@@ -798,9 +800,9 @@ function char_inv()
 
       // show Delete Mode / View Mode button depending on current mode
       if ( $mode )
-        makebutton(lang("char", "viewmode"), 'char_inv.php?id='.$cid.'&realm='.$realmid.'&mode=0" type="def', 130);
+        makebutton(lang("char", "viewmode"), 'char_inv.php?id='.$cid.'&amp;realm='.$realmid.'&amp;mode=0" type="def', 130);
       else
-        makebutton(lang("char", "deletemode"), 'char_inv.php?id='.$cid.'&realm='.$realmid.'&mode=1" type="def', 130);
+        makebutton(lang("char", "deletemode"), 'char_inv.php?id='.$cid.'&amp;realm='.$realmid.'&amp;mode=1" type="def', 130);
       $output .= '
                 </td>
                 <td>';
@@ -872,8 +874,8 @@ function delete_item()
               <table width="300" class="hidden">
                 <tr>
                   <td>';
-  makebutton(lang("global", "yes"), 'char_inv.php?action=dodelete_item&id='.$_GET["id"].'&bag='.$_GET["bag"].'&slot='.$_GET["slot"].'&item='.$_GET["item"].'&mode='.$_GET["mode"].'" type="wrn', 130);
-  makebutton(lang("global", "no"), 'char_inv.php?id='.$_GET["id"].'&mode='.$_GET["mode"].'" type="def', 130);
+  makebutton(lang("global", "yes"), 'char_inv.php?action=dodelete_item&amp;id='.$_GET["id"].'&amp;bag='.$_GET["bag"].'&amp;slot='.$_GET["slot"].'&amp;item='.$_GET["item"].'&amp;mode='.$_GET["mode"].'" type="wrn', 130);
+  makebutton(lang("global", "no"), 'char_inv.php?id='.$_GET["id"].'&amp;mode='.$_GET["mode"].'" type="def', 130);
   $output .= '
                   </td>
                 </tr>

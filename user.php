@@ -1308,7 +1308,7 @@ function edit_user()
 
   // only display an Avatar if the player has specified one or if they're a GM.
   if ( ( $screenname["Avatar"] != '' ) || $screenname["SecurityLevel"] )
-    $avatar = gen_avatar_panel($screenname["avatarlevel"], $screenname["avatarsex"], $screenname["avatarrace"], $screenname["avatarclass"], 0, $screenname["SecurityLevel"]);
+    $avatar = gen_avatar_panel($screenname["avatarlevel"], $screenname["avatarsex"], $screenname["avatarrace"], $screenname["avatarclass"], 0, $screenname["SecurityLevel"], 1);
   else
     $avatar = '';
 
@@ -1357,9 +1357,9 @@ function edit_user()
               }
             // ]]>
           </script>
-          <div id="user_edit_account" class="fieldset_border">
+          <div class="user_edit_account fieldset_border">
             <span class="legend">'.lang("edit", "profile_info").'</span>
-            <table class="flat" id="user_edit_account">';
+            <table class="flat user_edit_account">';
 
     if ( $avatar != '' )
       $output .= '
@@ -1382,7 +1382,7 @@ function edit_user()
             </table>
           </div>
           <br />
-          <div id="user_edit_account" class="fieldset_border">
+          <div class="user_edit_account fieldset_border">
             <span class="legend">'.lang("user", "edit_acc").'</span>
             <form method="post" action="user.php?action=doedit_user" name="form">
             <input type="hidden" name="pass" value="" maxlength="256" />
@@ -1486,7 +1486,7 @@ function edit_user()
     {
       $output .= '
                 <td colspan="2">
-                  <input type="text" name="gm" value="'.$data["gm"].'">
+                  <input type="text" name="gm" value="'.$data["gm"].'" />
                 </td>';
     }
     else
@@ -1704,7 +1704,7 @@ function edit_user()
                 <td>'.lang("user", "credits").':</td>
                 <td colspan="2">
                   <input type="text" name="credits" value="'.(float)$screenname["Credits"].'" />
-                  <img src="img/information.png" onmousemove="oldtoolTip(\''.lang("user", "credits_info").'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" />
+                  <img src="img/information.png" onmousemove="oldtoolTip(\''.lang("user", "credits_info").'\', \'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
                 </td>
               </tr>';
     }

@@ -72,7 +72,7 @@ function show_realm()
                 <th width="1%"><a href="realm.php?order_by=rid&amp;dir='.$dir.'"'.( ( $order_by==='rid' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("realm", "id").'</a></th>
                 <th width="40%"><a href="realm.php?order_by=name&amp;dir='.$dir.'"'.( ( $order_by==='name' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("realm", "name").'</a></th>
                 <th width="1%">'.lang("realm", "online").'</th>
-                <th width="10%">'.lang("realm", "tot_char").'</a></th>
+                <th width="10%">'.lang("realm", "tot_char").'</th>
                 <th width="10%"><a href="realm.php?order_by=address&amp;dir='.$dir.'"'.( ( $order_by==='address' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("realm", "address").'</a></th>
                 <th width="1%"><a href="realm.php?order_by=port&amp;dir='.$dir.'"'.( ( $order_by==='port' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("realm", "port").'</a></th>
                 <th width="1%"><a href="realm.php?order_by=icon&amp;dir='.$dir.'"'.( ( $order_by==='icon' ) ? ' class="'.$order_dir.'"' : '' ).'>'.lang("realm", "icon").'</a></th>

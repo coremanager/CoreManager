@@ -354,15 +354,15 @@ function browse_teams()
   $output .= '
           <table class="lined">
             <tr>
-              <th width="1%"><a href="arenateam.php?order_by=atid&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "atid" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "id").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=atname&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "atname" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "arenateam_name").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=lname&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "lname" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "captain").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=attype&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "attype" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "type").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=tot_chars&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "tot_chars" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "members").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=arenateam_online&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "arenateam_online" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "arenateam_online").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=rating&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "rating" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "rating").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=atgames&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "atgames" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "games").'</a></th>
-              <th width="1%"><a href="arenateam.php?order_by=atwins&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "atwins" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" /> ' : '' ).lang("arenateam", "wins").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=atid&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "atid" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '' ).lang("arenateam", "id").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=atname&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "atname" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '' ).lang("arenateam", "arenateam_name").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=lname&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "lname" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '' ).lang("arenateam", "captain").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=attype&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "attype" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '' ).lang("arenateam", "type").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=tot_chars&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "tot_chars" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '' ).lang("arenateam", "members").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=arenateam_online&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "arenateam_online" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '' ).lang("arenateam", "arenateam_online").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=rating&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "rating" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '' ).lang("arenateam", "rating").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=atgames&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "atgames" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '' ).lang("arenateam", "games").'</a></th>
+              <th width="1%"><a href="arenateam.php?order_by=atwins&amp;start='.$start.( ( $search_value && $search_by ) ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value : '' ).'&amp;dir='.$dir.'">'.( ( $order_by == "atwins" ) ? '<img src="img/arr_'.( ( $dir ) ? "dw" : "up" ).'.gif" alt="" /> ' : '' ).lang("arenateam", "wins").'</a></th>
             </tr>';
   while ( $data = $sql["char"]->fetch_assoc($query) )
   {
@@ -609,9 +609,9 @@ function view_team()
               <tr class="bold">
                 <td rowspan="'.$banner_span.'">
                   <div class="arena_banner">
-                    <img src="libs/banner_lib.php?action=banner&f='.$banner_style.'&r='.$background_color[1].'&g='.$background_color[2].'&b='.$background_color[3].'" class="banner_img" />
-                    <img src="libs/banner_lib.php?action=border&f='.$arenateam_data["BorderStyle"].'&f2='.$banner_style.'&r='.$border_color[1].'&g='.$border_color[2].'&b='.$border_color[3].'" class="border_img" />
-                    <img src="libs/banner_lib.php?action=emblem&f='.$arenateam_data["EmblemStyle"].'&r='.$emblem_color[1].'&g='.$emblem_color[2].'&b='.$emblem_color[3].'&s=0.55" class="emblem_img" />
+                    <img src="libs/banner_lib.php?action=banner&amp;f='.$banner_style.'&amp;r='.$background_color[1].'&amp;g='.$background_color[2].'&amp;b='.$background_color[3].'" class="banner_img" alt="" />
+                    <img src="libs/banner_lib.php?action=border&amp;f='.$arenateam_data["BorderStyle"].'&amp;f2='.$banner_style.'&amp;r='.$border_color[1].'&amp;g='.$border_color[2].'&amp;b='.$border_color[3].'" class="border_img" alt="" />
+                    <img src="libs/banner_lib.php?action=emblem&amp;f='.$arenateam_data["EmblemStyle"].'&amp;r='.$emblem_color[1].'&amp;g='.$emblem_color[2].'&amp;b='.$emblem_color[3].'&amp;s=0.55" class="emblem_img" alt="" />
                   </div>
                 </td>
                 <td colspan="'.( ( $showcountryflag ) ? 14 : 13 ).'">'.htmlentities($arenateam_data["name"], ENT_COMPAT, $site_encoding).'</td>
@@ -693,8 +693,8 @@ function view_team()
 
         $output .= '
                   <td><a href="char.php?id='.$member[0].'">'.htmlentities($member_char[1], ENT_COMPAT, $site_encoding).'</a></td>
-                  <td><img src="img/c_icons/'.$member_char[3].'-'.$member_char[7].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member_char[3]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>
-                  <td><img src="img/c_icons/'.$member_char[4].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member_char[4]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>
+                  <td><img src="img/c_icons/'.$member_char[3].'-'.$member_char[7].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member_char[3]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
+                  <td><img src="img/c_icons/'.$member_char[4].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member_char[4]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
                   <td>'.$member[5].'</td>
                   <td>'.get_days_with_color($member_char[6]).'</td>
                   <td>'.( ( $member_char[5] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>
@@ -732,7 +732,7 @@ function view_team()
                 <tr>';
         if ( $user_lvl >= $action_permission["delete"] || $accid == $user_id )
           $output .= '
-                  <td><img src="img/aff_cross.png" alt="" onclick="answerBox(\''.lang("global", "delete").'\': <font color=white>'.$member["name"].'</font><br />'.lang("global", "are_you_sure").'\', \'arenateam.php?action=rem_char_from_team&amp;id='.$member["guid"].'&amp;arenateam_id='.$arenateam_id.'\');" id="arenateam_delete_cursor" /></td>';
+                  <td><img src="img/aff_cross.png" alt="" onclick="answerBox(\''.lang("global", "delete").'\': <font color=white>'.$member["name"].'</font><br />'.lang("global", "are_you_sure").'\', \'arenateam.php?action=rem_char_from_team&amp;id='.$member["guid"].'&amp;arenateam_id='.$arenateam_id.'\');" class="arenateam_delete_cursor" /></td>';
         else
           $output .= '
                   <td>&nbsp;
@@ -750,8 +750,8 @@ function view_team()
 // arena team player structure [player_id] [week_played] [week_win] [season_played] [season_win] [rating]
         $output .= '
                   <td><a href="char.php?id='.$member["guid"].'">'.htmlentities($member_char["name"], ENT_COMPAT, $site_encoding).'</a></td>
-                  <td><img src="img/c_icons/'.$member_char["race"].'-'.$member_char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member_char["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>
-                  <td><img src="img/c_icons/'.$member_char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member_char["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" /></td>
+                  <td><img src="img/c_icons/'.$member_char["race"].'-'.$member_char["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($member_char["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
+                  <td><img src="img/c_icons/'.$member_char["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($member_char["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" /></td>
                   <td>'.$member["personal_rating"].'</td>
                   <td>'.get_days_with_color($member_char["timestamp"]).'</td>
                   <td>'.( ( $member_char["online"] ) ? '<img src="img/up.gif" alt="" />' : '<img src="img/down.gif" alt="" />' ).'</td>

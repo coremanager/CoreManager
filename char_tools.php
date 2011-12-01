@@ -151,13 +151,13 @@ function char_tools_form()
   $output .= '
                 </td>
                 <td>';
-  makebutton(lang("unstuck", "unstuck"), "hearthstone.php?action=approve&char=".$id, 150);
+  makebutton(lang("unstuck", "unstuck"), "hearthstone.php?action=approve&amp;char=".$id, 150);
   $output .= '
                 </td>
               </tr>
               <tr>
                 <td>';
-  makebutton(lang("char_list", "transfer"), "change_char_account.php?action=chooseacct&priority=1&char=".$id, 150);
+  makebutton(lang("char_list", "transfer"), "change_char_account.php?action=chooseacct&amp;priority=1&amp;char=".$id, 150);
   $output .= '
                 </td>
                 <td>';

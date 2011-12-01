@@ -69,11 +69,10 @@ if ( isset($_SESSION["user_lvl"]) )
   $user_lvl = $_SESSION["user_lvl"];
 
 // sets encoding defined in config for language support
-header('Content-Type: text/html; charset='.$site_encoding);
-header('Expires: Tue, 01 Jan 2000 00:00:00 GMT');
-header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Cache-Control: post-check=0, pre-check=0', false);
+// sets encoding defined in config for language support
+header("Content-Type: text/html; charset=".$site_encoding);
+// the webserver should be adding this directive, but just in case...
+header("Cache-Control: private, must-revalidate, post-check=0, pre-check=0");
 $output .= '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -81,8 +80,8 @@ $output .= '
     <title>'.$title.'</title>
     <meta http-equiv="Content-Type" content="text/html; charset='.$site_encoding.'" />
     <meta http-equiv="Content-Type" content="text/javascript; charset='.$site_encoding.'" />
-    <link rel="stylesheet" type="text/css" href="themes/'.$theme.'/'.$theme.'_1024.css" title="1024" />
-    <link rel="stylesheet" type="text/css" href="themes/'.$theme.'/'.$theme.'_1280.css" title="1280" />
+    <link rel="stylesheet" type="text/css" href="themes/'.$theme.'/'.$theme.'.php" title="1024" />
+    <!-- link rel="stylesheet" type="text/css" href="themes/'.$theme.'/'.$theme.'_1280.css" title="1280" / -->
     <link rel="SHORTCUT ICON" href="img/favicon.ico" />
     <script type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" src="libs/js/general.js"></script>
@@ -92,14 +91,15 @@ $output .= '
 $output .= '
   <body onload="dynamicLayout();">
     <center>
-      <table class="table_top">
+      <!-- table class="table_top">
         <tr>
           <td class="table_top_left" valign="top">
           </td>
           <td class="table_top_middle"></td>
           <td class="table_top_right"></td>
         </tr>
-      </table>
+      </table -->
+      <br />
       <div id="body_main">';
 // end of header
 
