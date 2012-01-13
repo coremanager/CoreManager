@@ -176,33 +176,50 @@ function del_acc($acc_id)
 
 
 //##########################################################################################
-//Delete Guild
-function del_guild($guid, $realm)
+// Delete Guild
+function del_guild($guild, $realm)
 {
-  global $characters_db, $sql;
+  global $characters_db, $sql, $core;
 
   require_once "libs/data_lib.php";
 
-  // clean data inside characters.data field
-  while ( $guild_member = $sql["char"]->result($sql["char"]->query("SELECT guid FROM guild_member WHERE guildid='".$guid."'"),0) )
+  // ArcEmu: clean data inside characters.data field
+  if ( $core == 1 )
   {
-    $data = $sql["char"]->result($sql["char"]->query("SELECT data FROM characters WHERE guid='".$guild_member."'"), 0);
-    $data = explode(" ", $data);
-    $data[CHAR_DATA_OFFSET_GUILD_ID] = 0;
-    $data[CHAR_DATA_OFFSET_GUILD_RANK] = 0;
-    $data = implode(" ", $data);
-    $sql["char"]->query("UPDATE characters SET data='".$data."' WHERE guid='".$guild_member."'");
+    while ( $guild_member = $sql["char"]->result($sql["char"]->query("SELECT guid FROM guild_member WHERE guildid='".$guild."'"), 0) )
+    {
+      $data = $sql["char"]->result($sql["char"]->query("SELECT data FROM characters WHERE guid='".$guild_member."'"), 0);
+      $data = explode(" ", $data);
+      $data[CHAR_DATA_OFFSET_GUILD_ID] = 0;
+      $data[CHAR_DATA_OFFSET_GUILD_RANK] = 0;
+      $data = implode(" ", $data);
+      $sql["char"]->query("UPDATE characters SET data='".$data."' WHERE guid='".$guild_member."'");
+    }
   }
 
-  $sql["char"]->query("DELETE FROM item_instance WHERE guid IN (SELECT item_guid FROM guild_bank_item WHERE guildid='".$guid."')");
-  $sql["char"]->query("DELETE FROM guild_bank_item WHERE guildid='".$guid."'");
-  $sql["char"]->query("DELETE FROM guild_bank_eventlog WHERE guildid='".$guid."'");
-  $sql["char"]->query("DELETE FROM guild_bank_right WHERE guildid='".$guid."'");
-  $sql["char"]->query("DELETE FROM guild_bank_tab WHERE guildid='".$guid."'");
-  $sql["char"]->query("DELETE FROM guild_eventlog WHERE guildid='".$guid."'");
-  $sql["char"]->query("DELETE FROM guild_rank WHERE guildid='".$guid."'");
-  $sql["char"]->query("DELETE FROM guild_member WHERE guildid='".$guid."'");
-  $sql["char"]->query("DELETE FROM guild WHERE guildid='".$guid."'");
+  if ( $core == 1 )
+  {
+    $sql["char"]->query("DELETE FROM playeritems WHERE guid IN (SELECT itemGuid FROM guild_bankitems WHERE guildId='".$guild."')");
+    $sql["char"]->query("DELETE FROM guild_bankitems WHERE guildId='".$guild."'");
+    $sql["char"]->query("DELETE FROM guild_banklogs WHERE guildid='".$guild."'");
+    $sql["char"]->query("DELETE FROM guild_banktabs WHERE guildId='".$guild."'");
+    $sql["char"]->query("DELETE FROM guild_logs WHERE guildid='".$guild."'");
+    $sql["char"]->query("DELETE FROM guild_ranks WHERE guildId='".$guild."'");
+    $sql["char"]->query("DELETE FROM guild_data WHERE guildid='".$guild."'");
+    $sql["char"]->query("DELETE FROM guilds WHERE guildId='".$guild."'");
+  }
+  else
+  {
+    $sql["char"]->query("DELETE FROM item_instance WHERE guid IN (SELECT item_guid FROM guild_bank_item WHERE guildid='".$guild."')");
+    $sql["char"]->query("DELETE FROM guild_bank_item WHERE guildid='".$guild."'");
+    $sql["char"]->query("DELETE FROM guild_bank_eventlog WHERE guildid='".$guild."'");
+    $sql["char"]->query("DELETE FROM guild_bank_right WHERE guildid='".$guild."'");
+    $sql["char"]->query("DELETE FROM guild_bank_tab WHERE guildid='".$guild."'");
+    $sql["char"]->query("DELETE FROM guild_eventlog WHERE guildid='".$guild."'");
+    $sql["char"]->query("DELETE FROM guild_rank WHERE guildid='".$guild."'");
+    $sql["char"]->query("DELETE FROM guild_member WHERE guildid='".$guild."'");
+    $sql["char"]->query("DELETE FROM guild WHERE guildid='".$guild."'");
+  }
 
   if ( $sql["char"]->affected_rows() )
     return true;
@@ -214,13 +231,25 @@ function del_guild($guid, $realm)
 
 //##########################################################################################
 //Delete Arena Team
-function del_arenateam($guid, $realm)
+function del_arenateam($team, $realm)
 {
-  global $characters_db, $sql;
+  global $characters_db, $sql, $core;
 
-  $sql["char"]->query("DELETE FROM arena_team WHERE arenateamid=".$guid."'");
-  $sql["char"]->query("DELETE FROM arena_team_stats WHERE arenateamid='".$guid."'");
-  $sql["char"]->query("DELETE FROM arena_team_member WHERE arenateamid='".$guid."'");
+  if ( $core == 1 )
+  {
+    $sql["char"]->query("DELETE FROM arenateams WHERE id='".$team."'");
+  }
+  elseif ( $core == 2 )
+  {
+    $sql["char"]->query("DELETE FROM arena_team WHERE arenateamid='".$team."'");
+    $sql["char"]->query("DELETE FROM arena_team_stats WHERE arenateamid='".$team."'");
+    $sql["char"]->query("DELETE FROM arena_team_member WHERE arenateamid='".$team."'");
+  }
+  else
+  {
+    $sql["char"]->query("DELETE FROM arena_team WHERE arenaTeamId='".$team."'");
+    $sql["char"]->query("DELETE FROM arena_team_member WHERE arenaTeamId='".$team."'");
+  }
 
   if ( $sql["char"]->affected_rows() )
     return true;

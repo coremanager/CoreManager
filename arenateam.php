@@ -781,14 +781,18 @@ function view_team()
             <br />
             <table class="hidden">
               <tr>
-                <!-- td>';
+                <td>';
+
     if ( $user_lvl >= $action_permission["delete"] )
     {
-      makebutton(lang("arenateam", "del_team"), "arenateam.php?action=del_team&amp;id=".$arenateam_id."\" type=\"wrn", 180);
+      makebutton(lang("arenateam", "del_team"), "arenateam.php?action=del_team&amp;id=".$arenateam_id."&amp;name=".$arenateam_data["name"]."\" type=\"wrn", 180);
+
       $output .= '
-                </td -->
+                </td>
                 <td>';
+
       makebutton(lang("arenateam", "arenateams"), "arenateam.php\" type=\"def", 130);
+
       $output .= '
                 </td>
               </tr>';
@@ -796,6 +800,7 @@ function view_team()
     else
     {
       makebutton(lang("arenateam", "arenateams"), "arenateam.php", 130);
+
       $output .= '
                 </td>
               </tr>';
@@ -820,28 +825,61 @@ function del_team()
   else
     redirect("arenateam.php?error=1");
 
-  $output .= "
+  $output .= '
         <center>
-          <h1><font class=\"error\">".lang("global", "are_you_sure")."</font></h1>
+          <h1><font class="error">'.lang("global", "are_you_sure").'</font></h1>
           <br />
-          <font class=\"bold\">".lang("arenateam", "arenateam_id").": $id ".lang("global", "will_be_erased")."</font><br /><br />
-          <form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
-            <input type=\"hidden\" name=\"type\" value=\"arenateam\" />
-            <input type=\"hidden\" name=\"check\" value=\"-$id\" />
-            <table class=\"hidden\">
+          <font class="bold">'.lang("arenateam", "arenateam_id").': '.$id.' "'.$_GET["name"].'"<br />'.lang("global", "will_be_erased").'</font>
+          <br />
+          <br />
+          <form action="arenateam.php?action=do_del_team" method="post" name="form">
+            <input type="hidden" name="check" value="'.(-$id).'" />
+            <table class="hidden">
               <tr>
-                <td>";
-                  makebutton(lang("global", "yes"), "javascript:do_submit()",130);
-                  makebutton(lang("global", "no"), "arenateam.php?action=view_team&amp;id=$id",130);
-  $output .= "
+                <td>';
+
+  makebutton(lang("global", "yes"), "javascript:do_submit()", 130);
+
+  $output .= '
+                </td>
+                <td>';
+
+  makebutton(lang("global", "no"), "arenateam.php?action=view_team&amp;id=".$id, 130);
+
+  $output .= '
                 </td>
               </tr>
             </table>
           </form>
-          <br />
-        </center>
-";
+        </center>';
+}
 
+
+//#############################################################################
+// REMOVE ARENA TEAM
+//#############################################################################
+function do_del_team()
+{
+  global $characters_db, $realm_id, $user_lvl, $user_id, $sql;
+
+  require_once("libs/del_lib.php");
+
+  if ( isset($_POST["check"]) && $_POST["check"] != "" )
+  {
+    $check = $sql["logon"]->quote_smart($_POST["check"]);
+    $check = explode("-", $check);
+  }
+
+  for ( $i = 1; $i < count($check); $i++ )
+  {
+    if ( $check[$i] != "" )
+    {
+      if ( del_arenateam($check[$i], $realm_id) )
+        $deleted_guilds++;
+    }
+  }
+
+  redirect("arenateam.php");
 }
 
 
@@ -907,6 +945,9 @@ switch ( $action )
     break;
   case "del_team":
     del_team();
+    break;
+  case "do_del_team":
+    do_del_team();
     break;
   case "rem_char_from_team":
     rem_char_from_team();

@@ -344,30 +344,37 @@ function do_cookie_login()
     $name = $sql["mgr"]->fetch_assoc($name_result);
   }
   // if we didn't find the name given for either entries, then the name will come up bad below
-  
+
+  // ArcEmu: Detect whether account uses clear or encrypted password
   if ( $core == 1 )
-    $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND password='".$user_pass."'";
-  else
   {
-    $pass_hash = sha1(strtoupper($user_name.":".$user_pass));
-    $query = "SELECT *, username AS login FROM account WHERE username='".$user_name."' AND sha_pass_hash='".$pass_hash ."'";
+    $pass_query = "SELECT * FROM accounts WHERE login='".$user_name."' AND encrypted_password<>''";
+    $pass_result = $sql["logon"]->query($pass_query);
+    $arc_encrypted = $sql["logon"]->num_rows($pass_result);
   }
+
+  if ( $core == 1 )
+  {
+    if ( $arc_encrypted )
+      $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND encrypted_password='".$user_pass."'";
+    else
+      $query = "SELECT * FROM accounts WHERE login='".$user_name."' AND SHA(CONCAT(UPPER(login), ':', UPPER(password)))='".$user_pass."'";
+  }
+  else
+    $query = "SELECT *, username AS login FROM account WHERE username='".$user_name."' AND sha_pass_hash='".$user_pass ."'";
 
   $result = $sql["logon"]->query($query);
 
-  $s_result = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE login='".$user_name."'");
+  $s_result = $sql["mgr"]->query("SELECT SecurityLevel AS gm FROM config_accounts WHERE Login='".$user_name."'");
   $temp = $sql["mgr"]->fetch_assoc($s_result);
+
+  if ( $temp["gm"] == NULL )
+    $temp["gm"] = 0;
+
+  if ( $temp["gm"] >= 1073741824 )
+    $temp["gm"] -= 1073741824;
+
   $_SESSION["gm_lvl"] = $temp["gm"];
-
-  /*$result = $sql["logon"]->query('SELECT login, gm, acct FROM accounts WHERE login = \''.$user_name.'\' AND password = \''.$user_pass.'\'');
-  $temp = $sql["logon"]->fetch_assoc($result);
-  //store the ArcEmu value for other functions
-  $_SESSION["gm_lvl"] = $temp["gm"];*/
-
-
-  //we need these later
-  //unset($user_name);
-  //unset($user_pass);
 
   if ( $sql["logon"]->num_rows($result) )
   {

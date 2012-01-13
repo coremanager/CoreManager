@@ -376,7 +376,7 @@ function count_days($a, $b)
 //#############################################################################
 function view_guild()
 {
-  global $output,  $logon_db, $characters_db, $arcm_db, $realm_id, $itemperpage,
+  global $output,  $logon_db, $characters_db, $corem_db, $realm_id, $itemperpage,
     $action_permission, $user_lvl, $user_id, $showcountryflag, $site_encoding,
     $show_guild_emblem, $sql, $core;
 
@@ -526,7 +526,7 @@ function view_guild()
       FROM guild_member AS gm LEFT OUTER JOIN characters AS c ON c.guid=gm.guid
       WHERE gm.guildid='".$guild_id."' ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
 
-  while ($member = $sql["char"]->fetch_assoc($members))
+  while ( $member = $sql["char"]->fetch_assoc($members) )
   {
     if ( $core == 1 )
     {
@@ -582,28 +582,33 @@ function view_guild()
               </tr>';
   }
   unset($member);
+
   $output .= '
               <tr>
                 <td align="right" class="hidden">'.generate_pagination("guild.php?action=view_guild&amp;error=3&amp;id=".$guild_id."&amp;order_by=".$order_by."&amp;dir=".!$dir, $guildmemberCount, $itemperpage, $start).'</td>
               </tr>
             </table>
             <br />';
+
   $output .= '
             <table class="hidden">
               <tr>
                 <td>';
+
   if ( $user_lvl >= $action_permission["delete"] || $amIguildleader )
   {
-                  //makebutton($lang_guild["del_guild"], "guild.php?action=del_guild&amp;realm=$realmid&amp;id=$guild_id\" type=\"wrn", 130);
+    makebutton(lang("guild", "del_guild"), "guild.php?action=del_guild&amp;realm=".$realm_id."&amp;id=".$guild_id."&amp;name=".$guild_data["name"]."\" type=\"wrn", 130);
     $output .= '
                 </td>
                 <td>';
   }
-                  makebutton(lang("guild", "guildbank"), "guildbank.php?id=".$guild_id, 130);
+
+  makebutton(lang("guild", "guildbank"), "guildbank.php?id=".$guild_id, 130);
   $output .= '
                 </td>
                 <td>';
-                  makebutton(lang("guild", "show_guilds"), "guild.php\" type=\"def", 130);
+
+  makebutton(lang("guild", "show_guilds"), "guild.php\" type=\"def", 130);
   $output .= '
                 </td>
               </tr>
@@ -616,7 +621,7 @@ function view_guild()
 //#############################################################################
 // ARE YOU SURE  YOU WOULD LIKE TO OPEN YOUR AIRBAG?
 //#############################################################################
-function del_guild()
+function show_del_guild()
 {
   global $output, $characters_db, $logon_db, $realm_id,
     $action_permission, $user_lvl, $user_id, $sql, $core;
@@ -630,40 +635,72 @@ function del_guild()
       $realmid = $realm_id;
   }
 
+  $id = $sql["logon"]->quote_smart($_GET["id"]);
+
   if ( $core == 1 )
-    $q_amIguildleader = $sql["char"]->query("SELECT 1 FROM guild WHERE guildid='".$id."' AND leaderguid IN (SELECT guid FROM characters WHERE account='".$user_id."')");
+    $q_amIguildleader = "SELECT 1 FROM guild WHERE guildid='".$id."' AND leaderguid IN (SELECT guid FROM characters WHERE acct='".$user_id."')";
   else
-    $q_amIguildleader = $sql["char"]->query("SELECT 1 FROM guild WHERE guildid='".$id."' AND leaderguid IN (SELECT guid FROM characters WHERE account='".$user_id."')");
-  $amIguildleader = $sql["char"]->result($q_amIguildleader, 0, '1');
+    $q_amIguildleader = "SELECT 1 FROM guild WHERE guildid='".$id."' AND leaderguid IN (SELECT guid FROM characters WHERE account='".$user_id."')";
+
+  $r_amIguildleader = $sql["char"]->query($q_amIguildleader);
+  $amIguildleader = $sql["char"]->result($r_amIguildleader, 0, '1');
+
   if ( $user_lvl < $action_permission["delete"] && !$amIguildleader )
     redirect("guild.php?error=6");
+
   $output .= '
         <center>
           <h1><font class="error">'.lang("global", "are_you_sure").'</font></h1>
           <br />
-          <font class="bold">'.lang("guild", "guild_id").': '.$id.' '.lang("global", "will_be_erased").'</font>
+          <font class="bold">'.lang("guild", "guild_id").': '.$id.' "'.$_GET["name"].'"<br />'.lang("global", "will_be_erased").'</font>
           <br />
           <br />
-          <form action="cleanup.php?action=docleanup" method="post" name="form">
-            <input type="hidden" name="type" value="guild" />
+          <form action="guild.php?action=do_del_guild" method="post" name="form">
             <input type="hidden" name="check" value="'.(-$id).'" />
-            <input type="hidden" name="override" value="1" />
             <table class="hidden">
               <tr>
                 <td>';
-                  makebutton(lang("global", "yes"), "javascript:do_submit()\" type=\"wrn",130);
+
+  makebutton(lang("global", "yes"), "javascript:do_submit()\" type=\"wrn",130);
   $output .= '
                 </td>
                 <td>';
-                  makebutton(lang("global", "no"), "guild.php?action=view_guild&amp;id=".$id."\" type=\"def",130);
+
+  makebutton(lang("global", "no"), "guild.php?action=view_guild&amp;id=".$id."\" type=\"def",130);
   $output .= '
                 </td>
               </tr>
             </table>
           </form>
-        </center>
-        <br />';
+        </center>';
+}
 
+
+//#############################################################################
+// REMOVE GUILD
+//#############################################################################
+function do_del_guild()
+{
+  global $characters_db, $realm_id, $user_lvl, $user_id, $sql;
+
+  require_once("libs/del_lib.php");
+
+  if ( isset($_POST["check"]) && $_POST["check"] != "" )
+  {
+    $check = $sql["logon"]->quote_smart($_POST["check"]);
+    $check = explode("-", $check);
+  }
+
+  for ( $i = 1; $i < count($check); $i++ )
+  {
+    if ( $check[$i] != "" )
+    {
+      if ( del_guild($check[$i], $realm_id) )
+        $deleted_guilds++;
+    }
+  }
+
+  redirect("guild.php");
 }
 
 
@@ -795,7 +832,9 @@ $action = ( ( isset($_GET["action"]) ) ? $_GET["action"] : NULL );
 if ( $action == "view_guild" )
   view_guild();
 elseif ( $action == "del_guild" )
-  del_guild();
+  show_del_guild();
+elseif ( $action == "do_del_guild" )
+  do_del_guild();
 elseif ( $action == "rem_char_from_guild" )
   rem_char_from_guild();
 else
