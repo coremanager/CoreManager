@@ -112,7 +112,7 @@ function chooseacct()
     $priority = 1;
 
   if ( $core == 1 )
-    $accts_query = "SELECT acct, login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '') AS ScreenName
+    $accts_query = "SELECT acct, accounts.login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '') AS ScreenName
     FROM accounts
       LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=accounts.login
     WHERE acct<>(SELECT acct FROM `".$characters_db[$realm_id]['name']."`.characters WHERE guid='".$guid."') ORDER BY ScreenName ASC";
@@ -293,7 +293,7 @@ function getapproval()
     if ( !is_numeric($new) )
     {
       if ( $core == 1 )
-        $acct_query = "SELECT acct, login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
+        $acct_query = "SELECT acct, accounts.login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
         FROM accounts
           LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=accounts.login
         WHERE accounts.login='".$new."' OR config_accounts.Login='".$new."'";
@@ -458,7 +458,7 @@ function saveacct_direct()
     if ( !is_numeric($new) )
     {
       if ( $core == 1 )
-        $acct_query = "SELECT acct, login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
+        $acct_query = "SELECT acct, accounts.login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
         FROM accounts
           LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=accounts.login
         WHERE accounts.login='".$new."' OR config_accounts.Login='".$new."'";
