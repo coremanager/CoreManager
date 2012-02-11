@@ -114,7 +114,7 @@ function chooseacct()
   if ( $core == 1 )
     $accts_query = "SELECT acct, accounts.login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '') AS ScreenName
     FROM accounts
-      LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=accounts.login
+      LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=accounts.login COLLATE utf8_general_ci
     WHERE acct<>(SELECT acct FROM `".$characters_db[$realm_id]['name']."`.characters WHERE guid='".$guid."') ORDER BY ScreenName ASC";
   else
     $accts_query = "SELECT id AS acct, username AS login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '') AS ScreenName
@@ -295,7 +295,7 @@ function getapproval()
       if ( $core == 1 )
         $acct_query = "SELECT acct, accounts.login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
         FROM accounts
-          LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=accounts.login
+          LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=accounts.login COLLATE utf8_general_ci
         WHERE accounts.login='".$new."' OR config_accounts.Login='".$new."'";
       else
         $acct_query = "SELECT id AS acct, username AS login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
@@ -460,7 +460,7 @@ function saveacct_direct()
       if ( $core == 1 )
         $acct_query = "SELECT acct, accounts.login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
         FROM accounts
-          LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=accounts.login
+          LEFT JOIN `".$corem_db["name"]."`.config_accounts ON config_accounts.Login=accounts.login COLLATE utf8_general_ci
         WHERE accounts.login='".$new."' OR config_accounts.Login='".$new."'";
       else
         $acct_query = "SELECT id AS acct, username AS login, IFNULL(`".$corem_db["name"]."`.config_accounts.ScreenName, '')
