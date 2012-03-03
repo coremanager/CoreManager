@@ -367,7 +367,13 @@ function forum_view_topic()
         (SELECT login FROM `".$logon_db["name"]."`.accounts WHERE `".$logon_db["name"]."`.accounts.acct=`".$characters_db[$realm_id]['name']."`.characters.acct) AS login
         FROM `".$characters_db[$realm_id]['name']."`.characters
         WHERE level IN (SELECT MAX(level) FROM `".$characters_db[$realm_id]['name']."`.characters WHERE acct IN (";
-    else
+    elseif ( $core == 2 )
+      $query = "SELECT account AS acct, name, gender, race, class, level,
+        (SELECT gmlevel FROM `".$logon_db["name"]."`.account WHERE `".$logon_db["name"]."`.account.id=`".$characters_db[$realm_id]['name']."`.characters.account) AS gmlevel,
+        (SELECT username FROM `".$logon_db["name"]."`.account WHERE `".$logon_db["name"]."`.account.id=`".$characters_db[$realm_id]['name']."`.characters.account) AS login
+        FROM `".$characters_db[$realm_id]['name']."`.characters
+        WHERE level IN (SELECT MAX(level) FROM `".$characters_db[$realm_id]['name']."`.characters WHERE account IN (";
+    elseif ( $core == 3 )
       $query = "SELECT account AS acct, name, gender, race, class, level,
         (SELECT gmlevel FROM `".$logon_db["name"]."`.account_access WHERE `".$logon_db["name"]."`.account_access.id=`".$characters_db[$realm_id]['name']."`.characters.account) AS gmlevel,
         (SELECT username FROM `".$logon_db["name"]."`.account WHERE `".$logon_db["name"]."`.account.id=`".$characters_db[$realm_id]['name']."`.characters.account) AS login
