@@ -105,7 +105,16 @@ function show_list()
       $output .= '
                         <tr>
                           <td>
-                            <input type="radio" name="charname" value="'.$field["name"].'" checked="true" />'.$field["name"].'
+                            <input type="radio" name="charname" value="'.$field["name"].'" checked="true" />
+                          </td>
+                          <td>'.$field["name"].'</td>
+                          <td>'.char_get_level_color($field["level"]).'</td>
+                          <td>
+                            <img src="img/c_icons/'.$field["race"].'-'.$field["gender"].'.gif" onmousemove="oldtoolTip(\''.char_get_race_name($field["race"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
+                          </td>
+                          <td>
+                            <img src="img/c_icons/'.$field["class"].'.gif" onmousemove="oldtoolTip(\''.char_get_class_name($field["class"]).'\',\'old_item_tooltip\')" onmouseout="oldtoolTip()" alt="" />
+                          </td>
                           </td>
                         </tr>';
     }

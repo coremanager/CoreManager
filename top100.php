@@ -109,6 +109,49 @@ function top100($realmid)
       FROM characters 
       ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage);
   }
+  elseif ( $core == 2 )
+  {
+    $query = "SELECT characters.guid, characters.name, characters.race, characters.class, characters.gender, characters.level, 
+              characters.totaltime, characters.online, characters.money AS gold, health,
+              power1 AS mana,
+              power2 AS rage,
+              power4 AS energy,
+              power7 AS runic,
+							characters.arenaPoints AS arena, characters.totalHonorPoints AS honor, characters.totalKills AS kills,
+              strength AS str,
+              agility AS agi,
+              stamina AS sta,
+              intellect AS intel,
+              spirit AS spi,
+              armor AS armor,
+              blockPct AS block,
+              dodgePct AS dodge,
+              parryPct AS parry,
+              attackPower AS ap,
+              rangedAttackPower AS ranged_ap,
+              power2 AS min_dmg,
+              power3 AS max_dmg,
+              power4 AS min_ranged_dmg,
+              power5 AS max_ranged_dmg,
+              power6 AS expertise,
+              power7 AS off_expertise,
+              resHoly AS holy,
+              resFire AS fire,
+              resNature AS nature,
+              resFrost AS frost,
+              resShadow AS shadow,
+              resArcane AS arcane,
+              critPct AS melee_crit,
+              rangedCritPct AS range_crit,
+              power1 AS melee_hit,
+              power2 AS range_hit,
+              power3 AS spell_hit,
+              IFNULL((SELECT SUM(points) FROM character_achievement LEFT JOIN `".$dbc_db["name"]."`.achievement ON `".$dbc_db["name"]."`.achievement.id=character_achievement.achievement WHERE character_achievement.guid=characters.guid),0) AS ach_points
+              FROM characters
+              LEFT JOIN character_stats ON character_stats.guid=characters.guid
+              ORDER BY ".$order_by." ".$order_dir." LIMIT ".$start.", ".$itemperpage;
+    $result = $sql["char"]->query($query);
+  }
   else
   {
     $query = "SELECT characters.guid, characters.name, race, class, gender, level, 
