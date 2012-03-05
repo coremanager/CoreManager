@@ -56,7 +56,7 @@
   {
     $result = $sql["mgr"]->query("SELECT `Index` AS id, Name AS name FROM `config_servers`");
 
-    if ( ( $sql["mgr"]->num_rows($result) > 1 ) && ( count($server) > 1 ) && ( $_SERVER["PHP_SELF"] == "/index.php" ) )
+    if ( ( $sql["mgr"]->num_rows($result) > 1 ) && ( count($server) > 1 ) && ( $cur_filename == "index.php" ) )
     {
       $output .= '
         <div class="bubble">

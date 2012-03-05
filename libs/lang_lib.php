@@ -20,9 +20,13 @@
 
 //#############################################################################
 // Language Pack handler
-function lang($section, $key)
+function lang($section, $key, $check = false)
 {
   global $lang;
+
+  // if we only want to check whether an entry exists
+  if ( $check )
+    return isset($GLOBALS["lang_".$section][$key]);
 
   if ( isset($GLOBALS["lang_".$section][$key]) )
     $lang_out = $GLOBALS["lang_".$section][$key];

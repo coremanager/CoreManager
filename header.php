@@ -273,7 +273,7 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
     else
     {
       $output .= '
-            <li><a href="'.$trunk[0].'">'.( ( lang("header", $trunk[1]) ) ? lang("header", $trunk[1]) : $trunk[1] ).'</a>';
+            <li><a href="'.$trunk[0].'">'.( ( lang("header", $trunk[1], true) ) ? lang("header", $trunk[1]) : $trunk[1] ).'</a>';
 
       if ( isset($trunk[2][0]) )
         $output .= '
@@ -291,10 +291,10 @@ if ( isset($_SESSION["user_lvl"]) && isset($_SESSION["login"]) && isset($_SESSIO
 
         if ( $user_lvl >= $branch[2] )
           $output .= '
-                  <li><a href="'.$branch[0].'">'.( ( lang("header", $branch[1]) ) ? lang("header", $branch[1]) : $branch[1] ).'</a></li>';
+                  <li><a href="'.$branch[0].'">'.( ( lang("header", $branch[1], true) ) ? lang("header", $branch[1]) : $branch[1] ).'</a></li>';
         else
           $output .= '
-                  <li><span class="menubar_item_disabled"><img src="img/lock.png" alt="" />&nbsp;'.( ( lang("header", $branch[1]) ) ? lang("header", $branch[1]) : $branch[1] ).'</span></li>';
+                  <li><span class="menubar_item_disabled"><img src="img/lock.png" alt="" />&nbsp;'.( ( lang("header", $branch[1], true) ) ? lang("header", $branch[1]) : $branch[1] ).'</span></li>';
       }
 
       if ( isset($trunk[2][0]) )
