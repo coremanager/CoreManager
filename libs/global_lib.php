@@ -475,7 +475,7 @@ function get_page_permission($restrict_lvl, $page)
 
 //#############################################################################
 // Create Invited By entry in point_system_invites table
-function doupdate_referral($referredby, $our_acct)
+function doupdate_referral($referredby, $our_acct = NULL)
 {
   global $corem_db, $logon_db, $recruit_reward_auto, $credits_per_recruit, $user_id, $sql;
 

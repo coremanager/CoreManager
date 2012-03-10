@@ -29,7 +29,7 @@ function doregister()
     $limit_acc_per_ip, $valid_ip_mask, $send_mail_on_creation, $create_acc_locked, $from_mail,
     $mailer_type, $smtp_cfg, $title, $expansion_select, $defaultoption, $GMailSender, $format_mail_html,
     $enable_captcha, $use_recaptcha, $recaptcha_private_key, $send_confirmation_mail_on_creation, $sql,
-    $initial_credits, $core;
+    $url_path, $initial_credits, $core;
 
   // ArcEmu: if one account has an encrypted password all new accounts will as well
   if ( $core == 1 )
@@ -362,6 +362,9 @@ function doregister()
 
       $server_addr = ( ( $_SERVER["SERVER_PORT"] != 80 ) ? $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"] : $_SERVER["SERVER_NAME"] );
 
+      // if we aren't installed in / then append the path to $server_addr
+      $server_addr .= ( ( $url_path != "" ) ? $url_path : "" );
+
       $body = str_replace("<base_url>", $server_addr, $body);
       if ( $core == 1 )
       {
@@ -441,6 +444,9 @@ function doregister()
 
         $server_addr = ( ( $_SERVER["SERVER_PORT"] != 80 ) ? $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"] : $_SERVER["SERVER_NAME"] );
 
+        // if we aren't installed in / then append the path to $server_addr
+        $server_addr .= ( ( $url_path != "" ) ? $url_path : "" );
+
         $body = str_replace("<base_url>", $server_addr, $body);
 
         if ( $GMailSender )
@@ -514,6 +520,11 @@ function register()
   // if we came here from an invitation email we'll have some values for our fields
   $by = ( ( isset($_GET["by"]) ) ? $_GET["by"] : NULL );
   $key = ( ( isset($_GET["key"]) ) ? $_GET["key"] : NULL );
+
+  // 
+  $invite_query = "SELECT * FROM invitations WHERE invitation_key='".$key."'";
+  $invite_result = $sql["mgr"]->query($invite_query);
+  $invite = $sql["mgr"]->fetch_assoc($invite_result);
 
   $output .= '
     <center>
@@ -613,7 +624,7 @@ function register()
             <tr>
               <td valign="top">'.lang("register", "email").':</td>
               <td>
-                <input type="text" name="email" id="reg_email" maxlength="225" />
+                <input type="text" name="email" id="reg_email" maxlength="225" value="'.( ( !$disable_reg_invite ) ? $invite["invited_email"] : '' ).'" />
                 <br />
                 '.lang("register", "use_valid_mail").'
               </td>
@@ -654,7 +665,7 @@ function register()
         if ( isset($lang_temp[1]) && ( $lang_temp[1] == 'php' ) )
         {
           $output .= '
-                    <option value="'.$lang_temp[0].'"'.( ( isset($_COOKIE["lang"]) && ( $_COOKIE["lang"] == $lang_temp[0] ) ) ? ' selected="selected"' : '' ).'>'.lang("edit", $lang_temp[0]).'</option>';
+                    <option value="'.$lang_temp[0].'"'.( ( isset($_COOKIE["corem_lang"]) && ( $_COOKIE["corem_lang"] == $lang_temp[0] ) ) ? ' selected="selected"' : '' ).'>'.lang("edit", $lang_temp[0]).'</option>';
         }
       }
       closedir($dh);
@@ -826,7 +837,7 @@ function pass_recovery()
 function do_pass_recovery()
 {
   global $logon_db, $from_mail, $mailer_type, $smtp_cfg, $title, $GMailSender, $lang,
-    $format_mail_html, $sql, $core;
+    $url_path, $format_mail_html, $sql, $core;
 
   if ( empty($_POST["username"]) || empty($_POST["email"]) )
     redirect("register.php?action=pass_recovery&err=1");
@@ -918,6 +929,9 @@ function do_pass_recovery()
     $body = str_replace("<password>", $pass["password"], $body);
 
     $server_addr = ( ( $_SERVER["SERVER_PORT"] != 80 ) ? $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"] : $_SERVER["SERVER_NAME"] );
+
+    // if we aren't installed in / then append the path to $server_addr
+    $server_addr .= ( ( $url_path != "" ) ? $url_path : "" );
 
     $body = str_replace("<base_url>", $server_addr, $body);
     $body = str_replace("<title>", $title, $body);

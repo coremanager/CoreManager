@@ -1893,6 +1893,8 @@ $GLOBALS['lang_admin'] = array
   'pmfrom_tip' => '用来充当 In-Game mail 发送人的角色。',
   'pmstation' => 'Stationary',
   'pmstation_tip' => 'Stationary to use for In-Game mail.',
+  'urlpath' => 'URL Path',
+  'urlpath_tip' => 'Specify the path to CoreManager.<br />Note: Leave empty when CoreManager is installed in &#47;<br />Note: If you specify a value it <b>must</b> begin with &#47;',
 
   'irc' => 'IRC',
   'irchost' => 'IRC 主机',

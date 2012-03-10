@@ -828,7 +828,7 @@ function edit_user()
 function doedit_user()
 {
   global $output, $user_name, $logon_db, $corem_db, $send_mail_on_email_change, $lang, $defaultoption,
-    $format_mail_html, $GMailSender, $smtp_cfg, $title, $sql, $core;
+    $url_path, $format_mail_html, $GMailSender, $smtp_cfg, $title, $sql, $core;
 
   if ( ( empty($_POST["pass"]) || ( $_POST["pass"] == '' ) )
     && ( empty($_POST["mail"]) || ( $_POST["mail"] == '' ) )
@@ -946,6 +946,9 @@ function doedit_user()
       $body = str_replace("<title>", $title, $body);
 
       $server_addr = ( ( $_SERVER["SERVER_PORT"] != 80 ) ? $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"] : $_SERVER["SERVER_NAME"] );
+
+      // if we aren't installed in / then append the path to $server_addr
+      $server_addr .= ( ( $url_path != "" ) ? $url_path : "" );
 
       $body = str_replace("<base_url>", $server_addr, $body);
 
@@ -1208,7 +1211,8 @@ function cancel_email_change()
 //###############################################################################################################
 function send_invite($resend = false)
 {
-  global $lang, $GMailSender, $smtp_cfg, $title, $format_mail_html, $user_name, $user_id, $sql, $core;
+  global $lang, $GMailSender, $smtp_cfg, $title, $format_mail_html, $user_name, $user_id,
+    $url_path, $sql, $core;
 
   if ( !$resend )
   {
@@ -1278,6 +1282,9 @@ function send_invite($resend = false)
     $body = str_replace("<core>", core_name($core), $body);
 
     $server_addr = ( ( $_SERVER["SERVER_PORT"] != 80 ) ? $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"] : $_SERVER["SERVER_NAME"] );
+
+    // if we aren't installed in / then append the path to $server_addr
+    $server_addr .= ( ( $url_path != "" ) ? $url_path : "" );
 
     $body = str_replace("<base_url>", $server_addr, $body);
 

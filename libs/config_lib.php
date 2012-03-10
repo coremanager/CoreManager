@@ -708,6 +708,11 @@ while ( $misc_row = $sqlm->fetch_assoc($misc) )
       $hide_coupons = $misc_row["Value"];
       break;
     }
+    case "URL_Path":
+    {
+      $url_path = $misc_row["Value"];
+      break;
+    }
   }
 }
 

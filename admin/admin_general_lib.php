@@ -206,6 +206,7 @@ function general()
         $smtp_pass = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='SMTP_Pass'"));
         $pm_from_char = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='PM_From_Char'"));
         $pm_stationary = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='PM_Stationary'"));
+        $url_path = $sqlm->fetch_assoc($sqlm->query("SELECT * FROM config_misc WHERE `Key`='URL_Path'"));
         $output .= '
         <form name="form" action="admin.php" method="get">
           <input type="hidden" name="section" value="general" />
@@ -258,6 +259,14 @@ function general()
               </td>
               <td>
                 <input type="checkbox" name="usehtml" '.( ( $format_mail_html["Value"] == 1 ) ? 'checked="checked"' : '' ).' />
+              </td>
+            </tr>
+            <tr>
+              <td class="help">
+                <a href="#" onmouseover="oldtoolTip(\''.lang("admin", "urlpath_tip").'\', \'info_tooltip\')" onmouseout="oldtoolTip()">'.lang("admin", "urlpath").'</a>:
+              </td>
+              <td>
+                <input type="text" name="urlpath" value="'.$url_path["Value"].'" />
               </td>
             </tr>
             <tr>
@@ -345,6 +354,14 @@ function general()
         $smtp_pass = $sqlm->quote_smart($_GET["smtppass"]);
         $pm_from_char = ( ( isset($_GET["fromchar"]) ) ? $sqlm->quote_smart($_GET["fromchar"]) : 1 );
         $pm_stationary = ( ( isset($_GET["stationary"]) ) ? $sqlm->quote_smart($_GET["stationary"]) : 41 );
+        $url_path = $sqlm->quote_smart($_GET["urlpath"]);
+
+        // clean up $url_path in case user can't read
+        if ( ( $url_path != "" ) && ( $url_path[0] != "/" ) )
+          $url_path = "/".$url_path;
+
+        if ( $url_path == "/" )
+          $url_path = "";
 
         $result = $sqlm->query("UPDATE config_misc SET Value='".$mail_admin_email."' WHERE `Key`='Mail_Admin_Email'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$mail_mailer_type."' WHERE `Key`='Mail_Mailer_Type'");
@@ -357,6 +374,7 @@ function general()
         $result = $sqlm->query("UPDATE config_misc SET Value='".$smtp_pass."' WHERE `Key`='SMTP_Pass'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$pm_from_char."' WHERE `Key`='PM_From_Char'");
         $result = $sqlm->query("UPDATE config_misc SET Value='".$pm_stationary."' WHERE `Key`='PM_Stationary'");
+        $result = $sqlm->query("UPDATE config_misc SET Value='".$url_path."' WHERE `Key`='URL_Path'");
 
         redirect("admin.php?section=general&subsection=mail");
       }
