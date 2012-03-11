@@ -38,31 +38,30 @@ require_once("lang/".$forumlang.".php");
 
 foreach ( $forum_skeleton as $cid => $category )
 {
-  if ( !isset($category["level_read"]) )
+  if ( $category["level_read"] == "" )
     $forum_skeleton[$cid]["level_read"] = 0;
 
-  if ( !isset($category["level_post"]) )
+  if ( $category["level_post"] == "" )
     $forum_skeleton[$cid]["level_post"] = 0;
 
-  if ( !isset($category["level_post_topic"]) )
+  if ( $category["level_post_topic"] == "" )
     $forum_skeleton[$cid]["level_post_topic"] = 0;
 
-  if ( !isset($category["side_access"]) )
+  if ( $category["side_access"] == "" )
     $forum_skeleton[$cid]["side_access"] = "ALL";
 
   foreach ( $category["forums"] as $id => $forum)
   {
-    if ( !isset($forum["level_read"]) )
+    if ( $forum["level_read"] == "" )
       $forum_skeleton[$cid]["forums"][$id]["level_read"] = 0;
-    if ( !isset($forum["level_post"]) )
+    if ( $forum["level_post"] == "" )
       $forum_skeleton[$cid]["forums"][$id]["level_post"] = 0;
-    if ( !isset($forum["level_post_topic"]) )
+    if ( $forum["level_post_topic"] == "" )
       $forum_skeleton[$cid]["forums"][$id]["level_post_topic"] = 0;
-    if ( !isset($forum["side_access"]) )
+    if ( $forum["side_access"] == "" )
       $forum_skeleton[$cid]["forums"][$id]["side_access"] = "ALL";
   }
 }
-
 
 // #######################################################################################################
 // Forum_Index: Display the forums in categories
@@ -92,6 +91,7 @@ function forum_index()
   {
     if ( ( $category["level_read"] > $user_lvl ) )
       continue;
+
     if ( ( $user_lvl == 0 ) && $enablesidecheck )
     {
       if ( $category["side_access"] != "ALL" )
@@ -113,6 +113,7 @@ function forum_index()
     {
       if ( $forum["level_read"] > $user_lvl )
         continue;
+
       if ( ( $user_lvl == 0 ) && $enablesidecheck )
       {
         if ( $forum["side_access"] != "ALL" )
