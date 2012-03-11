@@ -805,18 +805,18 @@ function char_main()
         if ( ( $owner_name == $user_name ) || ( $user_lvl >= get_page_permission("insert", "char_mail.php") ) )
           $output .= '
                   <li><a href="char_mail.php?id='.$id.'&amp;realm='.$realmid.'">'.lang("char", "mail").'</a></li>';
+
+        $output .= '
+                </ul>
+              </div>';
       }
       else
         $output .= '
-              </ul>
-            </div>
             <div class="tab_content">
               <div class="tab">
-                <ul>';
+              </div>';
 
       $output .= '
-                </ul>
-              </div>
               <div class="tab_content2">
                 <table class="lined" id="char_character_sheet">
                   <tr>
